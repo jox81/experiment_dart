@@ -7,6 +7,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0+2"
+  datgui:
+    description:
+      name: datgui
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   func:
     description:
       name: func

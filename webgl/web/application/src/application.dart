@@ -8,7 +8,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:async';
 import 'light.dart';
 import 'utils.dart';
-import 'debug/webgl_debug_js.dart';
+import 'dart_js/debug/webgl_debug_js.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 
 
