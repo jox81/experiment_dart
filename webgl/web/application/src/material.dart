@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'application.dart';
 import 'mesh.dart';
+import 'package:gl_enums/gl_enums.dart' as GL;
 
 abstract class Material {
 
@@ -23,12 +24,12 @@ abstract class Material {
 
   void _initShaderProgram(String vsSource, String fsSource) {
     // vertex shader compilation
-    Shader vs = gl.createShader(RenderingContext.VERTEX_SHADER);
+    Shader vs = gl.createShader(GL.VERTEX_SHADER);
     gl.shaderSource(vs, vsSource);
     gl.compileShader(vs);
 
     // fragment shader compilation
-    Shader fs = gl.createShader(RenderingContext.FRAGMENT_SHADER);
+    Shader fs = gl.createShader(GL.FRAGMENT_SHADER);
     gl.shaderSource(fs, fsSource);
     gl.compileShader(fs);
 
@@ -42,17 +43,17 @@ abstract class Material {
      * Check if shaders were compiled properly. This is probably the most painful part
      * since there's no way to "debug" shader compilation
      */
-    if (!gl.getShaderParameter(vs, RenderingContext.COMPILE_STATUS)) {
+    if (!gl.getShaderParameter(vs, GL.COMPILE_STATUS)) {
       print(gl.getShaderInfoLog(vs));
       return;
     }
 
-    if (!gl.getShaderParameter(fs, RenderingContext.COMPILE_STATUS)) {
+    if (!gl.getShaderParameter(fs, GL.COMPILE_STATUS)) {
       print(gl.getShaderInfoLog(fs));
       return;
     }
 
-    if (!gl.getProgramParameter(_program, RenderingContext.LINK_STATUS)) {
+    if (!gl.getProgramParameter(_program, GL.LINK_STATUS)) {
       print(gl.getProgramInfoLog(_program));
       window.alert("Could not initialise shaders");
       return;

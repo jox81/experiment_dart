@@ -9,6 +9,8 @@ import 'dart:async';
 import 'light.dart';
 import 'utils.dart';
 import 'debug/webgl_debug_js.dart';
+import 'package:gl_enums/gl_enums.dart' as GL;
+
 
 //Todo : Move elsewhere ?
 Matrix4 mvMatrix = new Matrix4.identity();
@@ -71,7 +73,10 @@ class Application {
     for (int i = 0; i < names.length; ++i) {
       try {
         _gl = canvas.getContext(names[i]);//Normal context
-        _gl = WebGLDebugUtils.makeDebugContext(_gl, throwOnGLError, logAndValidate); //Kronos debug context using .js
+        if(debugging) {
+          _gl = WebGLDebugUtils.makeDebugContext(_gl, throwOnGLError,
+              logAndValidate); //Kronos debug context using .js
+        }
       } catch (e) {}
       if (_gl != null) {
         break;
@@ -83,14 +88,14 @@ class Application {
     }
 
     _gl.clear(
-        RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
-    _gl.enable(RenderingContext.DEPTH_TEST);
+        GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    _gl.enable(DEPTH_TEST);
 
     /*
     //Hide backfaces
-    _gl.enable(RenderingContext.CULL_FACE);
-    _gl.frontFace(RenderingContext.CCW);
-    _gl.cullFace(RenderingContext.BACK);
+    _gl.enable(GL.CULL_FACE);
+    _gl.frontFace(GL.CCW);
+    _gl.cullFace(GL.BACK);
     */
   }
 
@@ -137,7 +142,7 @@ class Application {
 
     _gl.viewport(0, 0, _gl.drawingBufferWidth, _gl.drawingBufferHeight);
     _gl.clear(
-        RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+        GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
     for (Mesh model in meshes) {
       _mvPushMatrix();

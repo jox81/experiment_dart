@@ -1,7 +1,7 @@
 import 'dart:web_gl';
 import 'application.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:html';
+import 'package:gl_enums/gl_enums.dart' as GL;
 
 class TextureMap{
 

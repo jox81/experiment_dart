@@ -7,6 +7,7 @@ import 'package:vector_math/vector_math.dart';
 import 'texture.dart';
 import 'dart:async';
 import 'light.dart';
+import 'package:gl_enums/gl_enums.dart' as GL;
 
 class MaterialBase extends Material{
 
@@ -70,7 +71,7 @@ class MaterialBase extends Material{
 
     if(mesh.indices.length > 0) {
       gl.drawElements(
-      RenderingContext.TRIANGLES, mesh.indices.length, RenderingContext.UNSIGNED_SHORT,
+      GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
       0);
     }else{
       gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
@@ -86,14 +87,14 @@ class MaterialBase extends Material{
 
   _setShaderAttributs(Mesh mesh) {
     //vertices
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexPositionBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
-    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), RenderingContext.STATIC_DRAW);
+    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), GL.STATIC_DRAW);
 
     //indices
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
-    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
+    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
   }
 
   _setShaderUniforms(Mesh mesh) {
@@ -169,7 +170,7 @@ class MaterialBaseColor extends Material{
 
     if(mesh.indices.length > 0) {
       gl.drawElements(
-          RenderingContext.TRIANGLES, mesh.indices.length, RenderingContext.UNSIGNED_SHORT,
+          GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
           0);
     }else{
       gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
@@ -185,14 +186,14 @@ class MaterialBaseColor extends Material{
 
   _setShaderAttributs(Mesh mesh) {
     //vertices
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexPositionBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
-    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), RenderingContext.STATIC_DRAW);
+    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), GL.STATIC_DRAW);
 
     //indices
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
-    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
+    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
   }
 
   _setShaderUniforms(Mesh mesh) {
@@ -277,7 +278,7 @@ class MaterialBaseVertexColor extends Material{
 
     if(mesh.indices.length > 0) {
       gl.drawElements(
-          RenderingContext.TRIANGLES, mesh.indices.length, RenderingContext.UNSIGNED_SHORT,
+          GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
           0);
     }else{
       gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
@@ -291,20 +292,20 @@ class MaterialBaseVertexColor extends Material{
 
   _setShaderAttributs(Mesh mesh) {
     //vertices
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexPositionBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
-    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), RenderingContext.STATIC_DRAW);
+    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), GL.STATIC_DRAW);
 
     //colors
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexColorBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexColorBuffer);
     gl.enableVertexAttribArray(_attribVertexColor);
-    gl.vertexAttribPointer(_attribVertexColor, mesh.colorDimensions, RenderingContext.FLOAT, false, 0, 0);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.colors), RenderingContext.STATIC_DRAW);
+    gl.vertexAttribPointer(_attribVertexColor, mesh.colorDimensions, GL.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.colors), GL.STATIC_DRAW);
 
     //indices
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
-    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
+    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
   }
 
   _setShaderUniforms(Mesh mesh) {
@@ -397,7 +398,7 @@ class MaterialBaseTexture extends Material{
 
     if(mesh.indices.length > 0) {
       gl.drawElements(
-      RenderingContext.TRIANGLES, mesh.indices.length, RenderingContext.UNSIGNED_SHORT,
+      GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
       0);
     }else{
       gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
@@ -414,22 +415,22 @@ class MaterialBaseTexture extends Material{
 
   _setShaderAttributs(Mesh mesh) {
     //vertices
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexPositionBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), RenderingContext.STATIC_DRAW);
-    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), GL.STATIC_DRAW);
+    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
 
     //indices
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
-    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
+    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
 
     //Texture
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexTextureCoordBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexTextureCoordBuffer);
     gl.enableVertexAttribArray(_aTextureCoord);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.textureCoords), RenderingContext.STATIC_DRAW);
-    gl.vertexAttribPointer(_aTextureCoord, mesh.textureCoordsDimensions, RenderingContext.FLOAT, false, 0, 0);
-    gl.activeTexture(RenderingContext.TEXTURE0);
-    gl.bindTexture(RenderingContext.TEXTURE_2D, textureMap.texture);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.textureCoords), GL.STATIC_DRAW);
+    gl.vertexAttribPointer(_aTextureCoord, mesh.textureCoordsDimensions, GL.FLOAT, false, 0, 0);
+    gl.activeTexture(GL.TEXTURE0);
+    gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
   }
 
   _setShaderUniforms(Mesh mesh) {
@@ -588,7 +589,7 @@ class MaterialBaseTextureNormal extends Material{
 
     if(mesh.indices.length > 0) {
       gl.drawElements(
-      RenderingContext.TRIANGLES, mesh.indices.length, RenderingContext.UNSIGNED_SHORT,
+      GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
       0);
     }else{
       gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
@@ -606,29 +607,29 @@ class MaterialBaseTextureNormal extends Material{
 
   _setShaderAttributs(Mesh mesh) {
     //vertices
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexPositionBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), RenderingContext.STATIC_DRAW);
-    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), GL.STATIC_DRAW);
+    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
 
     //indices
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
-    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
+    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
 
     //Texture
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexTextureCoordBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexTextureCoordBuffer);
     gl.enableVertexAttribArray(_aTextureCoord);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.textureCoords), RenderingContext.STATIC_DRAW);
-    gl.vertexAttribPointer(_aTextureCoord, mesh.textureCoordsDimensions, RenderingContext.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.textureCoords), GL.STATIC_DRAW);
+    gl.vertexAttribPointer(_aTextureCoord, mesh.textureCoordsDimensions, GL.FLOAT, false, 0, 0);
 
-    gl.activeTexture(RenderingContext.TEXTURE0);
-    gl.bindTexture(RenderingContext.TEXTURE_2D, textureMap.texture);
+    gl.activeTexture(GL.TEXTURE0);
+    gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
 
     //Normals
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, _vertexNormalBuffer);
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexNormalBuffer);
     gl.enableVertexAttribArray(_aVertexNormal);
-    gl.bufferData(RenderingContext.ARRAY_BUFFER, new Float32List.fromList(mesh.vertexNormals), RenderingContext.STATIC_DRAW);
-    gl.vertexAttribPointer(_aVertexNormal, mesh.vertexNormalsDimensions, RenderingContext.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertexNormals), GL.STATIC_DRAW);
+    gl.vertexAttribPointer(_aVertexNormal, mesh.vertexNormalsDimensions, GL.FLOAT, false, 0, 0);
   }
 
   _setShaderUniforms(Mesh mesh) {

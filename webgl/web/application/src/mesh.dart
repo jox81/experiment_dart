@@ -12,7 +12,7 @@ class Mesh{
   RenderingContext get gl => Application.gl;
 
   //
-  int mode = RenderingContext.TRIANGLE_STRIP;
+  int mode = GL.TRIANGLE_STRIP;
 
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();
@@ -301,6 +301,6 @@ class _CubeMesh extends Mesh{
       -1.0,  0.0,  0.0,
     ];
 
-    mode = RenderingContext.TRIANGLES;
+    mode = GL.TRIANGLES;
   }
 }
