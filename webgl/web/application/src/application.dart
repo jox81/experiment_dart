@@ -1,0 +1,211 @@
+import 'mesh.dart';
+import 'dart:web_gl';
+import 'dart:html';
+import 'camera.dart';
+import 'material.dart';
+import 'dart:collection';
+import 'package:vector_math/vector_math.dart';
+import 'dart:async';
+import 'light.dart';
+import 'utils.dart';
+import 'debug/webgl_debug_js.dart';
+
+//Todo : Move elsewhere ?
+Matrix4 mvMatrix = new Matrix4.identity();
+
+class Application {
+  static RenderingContext _gl;
+  static RenderingContext get gl => _gl;
+
+  Camera mainCamera;
+
+  Vector4 _backgroundColor;
+  Vector4 get backgroundColor => _backgroundColor;
+  set backgroundColor(Vector4 color) {
+    _backgroundColor = color;
+    _gl.clearColor(color.r, color.g, color.b, color.a);
+  }
+
+  AmbientLight ambientLight = new AmbientLight();
+  Light light;
+
+  List<Material> materials = new List();
+  List<Mesh> meshes = new List();
+
+  num get viewAspectRatio => _gl.drawingBufferWidth / _gl.drawingBufferHeight;
+
+  //Animation
+  Queue<Matrix4> _mvMatrixStack = new Queue();
+
+  //Interaction with keyboard
+  List<bool> _currentlyPressedKeys;
+
+  //Debug div
+  Element elementDebugInfoText;
+  Element elementFPSText;
+
+  //Singleton
+  static Application _instance;
+  static Application get instance => _instance;
+  factory Application(CanvasElement canvas) {
+    if (_instance == null) {
+      _instance = new Application._internal(canvas);
+    }
+    return _instance;
+  }
+
+  Application._internal(CanvasElement canvas) {
+    _initGL(canvas);
+    _initEvents();
+  }
+
+  void _initGL(CanvasElement canvas) {
+    List<String> names = [
+      "webgl",
+      "experimental-webgl",
+      "webkit-3d",
+      "moz-webgl"
+    ];
+    RenderingContext ctx;
+    for (int i = 0; i < names.length; ++i) {
+      try {
+
+        ctx = canvas.getContext(names[i]);
+//        _gl = WebGLDebugUtils.makeDebugContext(ctx);
+        _gl = ctx;
+
+      } catch (e) {}
+      if (_gl != null) {
+        break;
+      }
+    }
+    if (_gl == null) {
+      window.alert("Could not initialise WebGL");
+      return null;
+    }
+
+    _gl.clear(
+        RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+    _gl.enable(RenderingContext.DEPTH_TEST);
+
+    /*
+    //Hide backfaces
+    _gl.enable(RenderingContext.CULL_FACE);
+    _gl.frontFace(RenderingContext.CCW);
+    _gl.cullFace(RenderingContext.BACK);
+    */
+  }
+
+  void _initEvents() {
+    //Without specifying size this array throws exception on []
+    _currentlyPressedKeys = new List<bool>(128);
+    for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
+
+    window.onKeyUp.listen(this._handleKeyUp);
+    window.onKeyDown.listen(this._handleKeyDown);
+
+    elementDebugInfoText = querySelector("#debugInfosText");
+    elementFPSText = querySelector("#fps");
+  }
+
+  Function _setupScene;
+  void setupScene(Function sceneSetupFunction) {
+    _setupScene = sceneSetupFunction;
+  }
+
+  Future render() async {
+    await _setupScene();
+    _renderFrame();
+  }
+
+  Function _updateScene;
+  void updateScene(Function updateSceneFunction) {
+    _updateScene = updateSceneFunction;
+  }
+
+  Future renderAnimation() async {
+    await _setupScene();
+    this._renderFrame(time: 0.0);
+  }
+
+  double renderTime;
+  void _renderFrame({num time}) {
+    //Fps
+    var t = new DateTime.now().millisecondsSinceEpoch;
+    if (renderTime != null) {
+      Utils.showFps(elementFPSText, (1000 / (t - renderTime)).round());
+    }
+    renderTime = t.toDouble();
+
+    _gl.viewport(0, 0, _gl.drawingBufferWidth, _gl.drawingBufferHeight);
+    _gl.clear(
+        RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+
+    for (Mesh model in meshes) {
+      _mvPushMatrix();
+
+      mvMatrix.multiply(model.transform);
+
+      model.render();
+
+      _mvPopMatrix();
+    }
+
+    if (time != null) {
+      // render animation
+      _updateScene(time);
+      _handleKeys();
+      window.requestAnimationFrame((num time) {
+        this._renderFrame(time: time);
+      });
+    }
+  }
+
+  void _mvPushMatrix() {
+    _mvMatrixStack.addFirst(mvMatrix.clone());
+  }
+
+  void _mvPopMatrix() {
+    if (0 == _mvMatrixStack.length) {
+      throw new Exception("Invalid popMatrix!");
+    }
+    mvMatrix = _mvMatrixStack.removeFirst();
+  }
+
+  ///
+  ///Keyboard
+  ///
+  void _handleKeyDown(KeyboardEvent event) {
+    if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
+      if ((elementDebugInfoText != null)) {
+        elementDebugInfoText.text = "Camera Position: ${mainCamera.position}";
+        print(event.keyCode);
+      }
+    } else {}
+    _currentlyPressedKeys[event.keyCode] = true;
+  }
+
+  void _handleKeyUp(KeyboardEvent event) {
+    if ((event.keyCode > 0) && (event.keyCode < 128))
+      _currentlyPressedKeys[event.keyCode] = false;
+  }
+
+  void _handleKeys() {
+    if (_currentlyPressedKeys[KeyCode.UP]) {
+      // Key Up
+      mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
+    }
+    if (_currentlyPressedKeys[KeyCode.DOWN]) {
+      // Key Down
+      mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
+    }
+    if (_currentlyPressedKeys[KeyCode.LEFT]) {
+      // Key Up
+      mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
+    }
+    if (_currentlyPressedKeys[KeyCode.RIGHT]) {
+      // Key Down
+      mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
+    }
+  }
+}
