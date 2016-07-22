@@ -14,6 +14,8 @@ import 'debug/webgl_debug_js.dart';
 Matrix4 mvMatrix = new Matrix4.identity();
 
 class Application {
+  static const bool debugging = true;
+
   static RenderingContext _gl;
   static RenderingContext get gl => _gl;
 
@@ -66,14 +68,10 @@ class Application {
       "webkit-3d",
       "moz-webgl"
     ];
-    RenderingContext ctx;
     for (int i = 0; i < names.length; ++i) {
       try {
-
-        ctx = canvas.getContext(names[i]);
-//        _gl = WebGLDebugUtils.makeDebugContext(ctx);
-        _gl = ctx;
-
+        _gl = canvas.getContext(names[i]);//Normal context
+        _gl = WebGLDebugUtils.makeDebugContext(_gl, throwOnGLError, logAndValidate); //Kronos debug context using .js
       } catch (e) {}
       if (_gl != null) {
         break;

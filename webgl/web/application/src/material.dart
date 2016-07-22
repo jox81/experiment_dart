@@ -5,11 +5,19 @@ import 'mesh.dart';
 
 abstract class Material {
 
+  /// GLSL Pragmas
+  static const String GLSL_PRAGMA_DEBUG_ON = "#pragma debug(on)\n";
+  static const String GLSL_PRAGMA_DEBUG_OFF = "#pragma debug(off)\n"; //Default
+  static const String GLSL_PRAGMA_OPTIMIZE_ON = "#pragma optimize(on)\n"; //Default
+  static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
+
   RenderingContext get gl => Application.gl;
 
   Program program;
 
   Material(vsSource, fsSource) {
+    vsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
+    fsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     _initShaderProgram(vsSource, fsSource);
   }
 

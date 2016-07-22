@@ -1,3 +1,4 @@
+//Base js from  : https://www.khronos.org/webgl/wiki/Debugging
 @JS()
 library WebGLDebugUtils;
 
@@ -7,13 +8,13 @@ import 'dart:web_gl';
 import 'dart:typed_data';
 
 //@anonymous
-//external WebGLDebugUtils();
-
-//@anonymous
 @JS()
 class WebGLDebugUtils {
   external factory WebGLDebugUtils();
   external static RenderingContextWrapper makeDebugContext(RenderingContext name, [Function opt_onErrorFunc, Function opt_onFunc, Function opt_err_ctx]);
+  external static glFunctionArgsToString(functionName, args);
+  external static glEnumToString(err);
+  external static init(ctx);
   external getError();
 }
 
@@ -274,8 +275,33 @@ class RenderingContextWrapper extends RenderingContext{
 
   external viewport(int x, int y, int width, int height) ;
 }
-//@JS()
-//@anonymous
-//class WebGLDebugUtilsInternal {
-//  external RenderingContext makeDebugContext(RenderingContext name, Function opt_onErrorFunc, Function opt_onFunc, Function opt_err_ctx);
-//}
+
+///
+/// Custom Kronos debug functions
+///
+
+void throwOnGLError(err, funcName, args) {
+  throw WebGLDebugUtils.glEnumToString(err) + " was caused by call to: " + funcName;
+}
+
+void logAndValidate(functionName, args) {
+
+
+
+  logGLCall(functionName, args);
+  validateNoneOfTheArgsAreUndefined (functionName, args);
+}
+
+void logGLCall(functionName, args) {
+  print("gl." + functionName + "(" +
+      WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ")");
+}
+
+void validateNoneOfTheArgsAreUndefined(functionName, args) {
+  for (var ii = 0; ii < args.length; ++ii) {
+    if (args[ii] == null) {
+      print("undefined passed to gl." + functionName + "(" +
+          WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ")");
+    }
+  }
+}
