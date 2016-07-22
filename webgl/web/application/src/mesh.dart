@@ -2,10 +2,7 @@ import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'application.dart';
 import 'material.dart';
-import 'utils.dart';
-import 'dart:html';
-import 'dart:async';
-import 'texture.dart';
+import 'package:gl_enums/gl_enums.dart' as GL;
 
 class Mesh{
 

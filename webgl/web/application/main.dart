@@ -12,8 +12,6 @@ import 'dart:async';
 Application application;
 
 main() {
-
-
   CanvasElement canvas = querySelector('#glCanvas');
   application = new Application(canvas);
   application.setupScene(setupScene);
@@ -104,7 +102,8 @@ setupScene() async {
   //Create Cube
   Mesh cube = Mesh.createCube();
   cube.transform.translate(-4.0, 1.0, 0.0);
-  await materialBaseTextureNormal.addTexture("images/crate.gif");
+//  await materialBaseTextureNormal.addTexture("images/crate.gif");
+  await materialBaseTextureNormal.addTexture("images/hdr/ronenbekerman/VizPeople_hdr_v1_Non_Commercial/VizPeople_non_commercial_hdr_v1_07_lowRes_1024.hdr");
   cube.material = materialBaseTextureNormal;
   application.meshes.add(cube);
 
