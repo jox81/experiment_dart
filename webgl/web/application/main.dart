@@ -17,6 +17,11 @@ main() {
   CanvasElement canvas = querySelector('#glCanvas');
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
+  //don't work
+//  canvas.onResize.listen((e){
+//    canvas.width = document.body.clientWidth;
+//    canvas.height = document.body.clientHeight;
+//  });
 
   //GUI
   guisetup = GuiSetup.setup();
