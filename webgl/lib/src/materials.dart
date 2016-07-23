@@ -1,12 +1,12 @@
 import 'dart:web_gl';
-import 'material.dart';
-import 'application.dart';
+import 'package:webgl/src/material.dart';
+import 'package:webgl/src/application.dart';
 import 'dart:typed_data';
-import 'mesh.dart';
+import 'package:webgl/src/mesh.dart';
 import 'package:vector_math/vector_math.dart';
-import 'texture.dart';
+import 'package:webgl/src/texture.dart';
 import 'dart:async';
-import 'light.dart';
+import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 
 class MaterialBase extends Material{
@@ -30,62 +30,22 @@ class MaterialBase extends Material{
     }
     """;
 
-  UniformLocation _uPMatrix;
-  UniformLocation _uMVMatrix;
+  final buffersNames = ['vertexPositionBuffer', 'vertexIndiceBuffer'];
+  final attributsNames = ['aVertexPosition'];
+  final uniformsNames = ["uPMatrix", "uMVMatrix"];
 
-  Buffer _vertexPositionBuffer;
-  int _aVertexPosition;
+  UniformLocation get _uPMatrix => uniforms["uPMatrix"];
+  UniformLocation get _uMVMatrix => uniforms["uMVMatrix"];
 
-  Buffer _vertexIndiceBuffer;
+  Buffer get _vertexPositionBuffer => buffers['vertexPositionBuffer'];
+  int get _aVertexPosition => attributes['aVertexPosition'];
+
+  Buffer get _vertexIndiceBuffer => buffers['vertexIndiceBuffer'];
 
   MaterialBase():super(_vsSource, _fsSource){
-    _initBuffers();
-    _getShaderSettings();
   }
 
-  void _initBuffers(){
-    _vertexPositionBuffer = gl.createBuffer();
-    _vertexIndiceBuffer = gl.createBuffer();
-  }
-
-  void _getShaderSettings() {
-    _getShaderAttributSettings();
-    _getShaderUniformSettings();
-  }
-
-  void _getShaderAttributSettings() {
-    _aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
-
-  }
-
-  void _getShaderUniformSettings(){
-    _uPMatrix = gl.getUniformLocation(program, "uPMatrix");
-    _uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
-  }
-
-  @override
-  render(Mesh mesh) {
-
-    gl.useProgram(program);
-    _setShaderSettings(mesh);
-
-    if(mesh.indices.length > 0) {
-      gl.drawElements(
-      GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
-      0);
-    }else{
-      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
-    }
-
-    gl.disableVertexAttribArray(_aVertexPosition);
-  }
-
-  _setShaderSettings(Mesh mesh){
-    _setShaderAttributs(mesh);
-    _setShaderUniforms(mesh);
-  }
-
-  _setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Mesh mesh) {
     //vertices
     gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
@@ -97,7 +57,7 @@ class MaterialBase extends Material{
     gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
   }
 
-  _setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Mesh mesh) {
     gl.uniformMatrix4fv(_uPMatrix, false, Application.instance.mainCamera.matrix.storage);
     gl.uniformMatrix4fv(_uMVMatrix, false, mvMatrix.storage);
   }
@@ -119,72 +79,32 @@ class MaterialBaseColor extends Material{
   static const String _fsSource = """
     precision mediump float;
 
-    uniform vec3 color;
+    uniform vec3 uColor;
 
     void main(void) {
-        gl_FragColor = vec4(color, 1.0);
+        gl_FragColor = vec4(uColor, 1.0);
     }
     """;
+  final  buffersNames = ['vertexPositionBuffer', 'vertexIndiceBuffer'];
+  final attributsNames = ['aVertexPosition'];
+  final uniformsNames = ["uPMatrix","uMVMatrix","uColor"];
+
+  UniformLocation get _uPMatrix => uniforms["uPMatrix"];
+  UniformLocation get _uMVMatrix => uniforms["uMVMatrix"];
+  UniformLocation get _uColor => uniforms["uColor"];
+
+  Buffer get _vertexPositionBuffer => buffers['vertexPositionBuffer'];
+  int get _aVertexPosition => attributes['aVertexPosition'];
+
+  Buffer get _vertexIndiceBuffer => buffers['vertexIndiceBuffer'];
+
+  //External Parameters
   final Vector3 color;
 
-  UniformLocation _uPMatrix;
-  UniformLocation _uMVMatrix;
-  UniformLocation _uColor;
-
-  Buffer _vertexPositionBuffer;
-  int _aVertexPosition;
-
-  Buffer _vertexIndiceBuffer;
-
   MaterialBaseColor(this.color ):super(_vsSource, _fsSource){
-    _initBuffers();
-    _getShaderSettings();
   }
 
-  void _initBuffers(){
-    _vertexPositionBuffer = gl.createBuffer();
-    _vertexIndiceBuffer = gl.createBuffer();
-  }
-
-  void _getShaderSettings() {
-    _getShaderAttributSettings();
-    _getShaderUniformSettings();
-  }
-
-  void _getShaderAttributSettings() {
-    _aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
-
-  }
-
-  void _getShaderUniformSettings(){
-    _uPMatrix = gl.getUniformLocation(program, "uPMatrix");
-    _uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
-    _uColor = gl.getUniformLocation(program, "color");
-  }
-
-  @override
-  render(Mesh mesh) {
-
-    gl.useProgram(program);
-    _setShaderSettings(mesh);
-
-    if(mesh.indices.length > 0) {
-      gl.drawElements(
-          GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
-          0);
-    }else{
-      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
-    }
-
-    gl.disableVertexAttribArray(_aVertexPosition);
-  }
-
-  _setShaderSettings(Mesh mesh){
-    _setShaderAttributs(mesh);
-    _setShaderUniforms(mesh);
-  }
-
-  _setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Mesh mesh) {
     //vertices
     gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
@@ -196,7 +116,7 @@ class MaterialBaseColor extends Material{
     gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
   }
 
-  _setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Mesh mesh) {
     gl.uniformMatrix4fv(_uPMatrix, false, Application.instance.mainCamera.matrix.storage);
     gl.uniformMatrix4fv(_uMVMatrix, false, mvMatrix.storage);
     gl.uniform3fv(_uColor, color.storage);
@@ -229,68 +149,25 @@ class MaterialBaseVertexColor extends Material{
       gl_FragColor = vColor;
     }
     """;
+  final  buffersNames = ['vertexPositionBuffer', 'vertexIndiceBuffer', 'vertexColorBuffer'];
+  final  attributsNames = ['aVertexPosition','aVertexColor'];
+  final uniformsNames = ["uPMatrix","uMVMatrix"];
 
-  UniformLocation _uPMatrix;
-  UniformLocation _uMVMatrix;
+  UniformLocation get _uPMatrix => uniforms["uPMatrix"];
+  UniformLocation get _uMVMatrix => uniforms["uMVMatrix"];
 
-  Buffer _vertexPositionBuffer;
-  int _aVertexPosition;
+  Buffer get _vertexPositionBuffer => buffers['vertexPositionBuffer'];
+  int get _aVertexPosition => attributes['aVertexPosition'];
 
-  Buffer _vertexColorBuffer;
-  int _attribVertexColor;
+  Buffer get _vertexColorBuffer => buffers['vertexColorBuffer'];
+  int get _aVertexColor => attributes['aVertexColor'];
 
-  Buffer _vertexIndiceBuffer;
+  Buffer get _vertexIndiceBuffer => buffers['vertexIndiceBuffer'];
 
   MaterialBaseVertexColor():super(_vsSource, _fsSource){
-    _initBuffers();
-    _getShaderSettings();
   }
 
-  void _initBuffers(){
-    _vertexPositionBuffer = gl.createBuffer();
-    _vertexColorBuffer = gl.createBuffer();
-    _vertexIndiceBuffer = gl.createBuffer();
-  }
-
-  void _getShaderSettings() {
-    _getShaderAttributSettings();
-    _getShaderUniformSettings();
-  }
-
-  void _getShaderAttributSettings() {
-    _aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
-
-
-    _attribVertexColor = gl.getAttribLocation(program, "aVertexColor");
-
-  }
-
-  void _getShaderUniformSettings() {
-    _uPMatrix = gl.getUniformLocation(program, "uPMatrix");
-    _uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
-  }
-
-  @override
-  render(Mesh mesh) {
-
-    gl.useProgram(program);
-    _setShaderSettings(mesh);
-
-    if(mesh.indices.length > 0) {
-      gl.drawElements(
-          GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
-          0);
-    }else{
-      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
-    }
-  }
-
-  _setShaderSettings(Mesh mesh){
-    _setShaderAttributs(mesh);
-    _setShaderUniforms(mesh);
-  }
-
-  _setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Mesh mesh) {
     //vertices
     gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
@@ -299,8 +176,8 @@ class MaterialBaseVertexColor extends Material{
 
     //colors
     gl.bindBuffer(GL.ARRAY_BUFFER, _vertexColorBuffer);
-    gl.enableVertexAttribArray(_attribVertexColor);
-    gl.vertexAttribPointer(_attribVertexColor, mesh.colorDimensions, GL.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(_aVertexColor);
+    gl.vertexAttribPointer(_aVertexColor, mesh.colorDimensions, GL.FLOAT, false, 0, 0);
     gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.colors), GL.STATIC_DRAW);
 
     //indices
@@ -308,7 +185,7 @@ class MaterialBaseVertexColor extends Material{
     gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
   }
 
-  _setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Mesh mesh) {
     gl.uniformMatrix4fv(_uPMatrix, false, Application.instance.mainCamera.matrix.storage);
     gl.uniformMatrix4fv(_uMVMatrix, false, mvMatrix.storage);
   }
@@ -343,77 +220,29 @@ class MaterialBaseTexture extends Material{
     }
     """;
 
-  UniformLocation _uPMatrix;
-  UniformLocation _uMVMatrix;
+  final buffersNames = ['vertexPositionBuffer', 'vertexIndiceBuffer', 'vertexTextureCoordBuffer'];
+  final attributsNames = ['aVertexPosition','aTextureCoord'];
+  final uniformsNames = ["uPMatrix","uMVMatrix","uSampler"];
 
-  Buffer _vertexPositionBuffer;
-  int _aVertexPosition;
+  UniformLocation get _uPMatrix => uniforms["uPMatrix"];
+  UniformLocation get _uMVMatrix => uniforms["uMVMatrix"];
 
-  Buffer _vertexIndiceBuffer;
+  Buffer get _vertexPositionBuffer => buffers['vertexPositionBuffer'];
+  int get _aVertexPosition => attributes['aVertexPosition'];
 
-  Buffer _vertexTextureCoordBuffer;
-  int _aTextureCoord;
-  UniformLocation _uSampler;
+  Buffer get _vertexIndiceBuffer => buffers['vertexIndiceBuffer'];
+
+  Buffer get _vertexTextureCoordBuffer => buffers['vertexTextureCoordBuffer'];
+  int get _aTextureCoord => attributes['aTextureCoord'];
+  UniformLocation get _uSampler => uniforms["uSampler"];
 
   //External parameters
   TextureMap textureMap;
 
   MaterialBaseTexture():super(_vsSource, _fsSource){
-    _initBuffers();
-    _getShaderSettings();
   }
 
-  void _initBuffers(){
-    _vertexPositionBuffer = gl.createBuffer();
-    _vertexIndiceBuffer = gl.createBuffer();
-    _vertexTextureCoordBuffer = gl.createBuffer();
-  }
-
-  void _getShaderSettings() {
-    _getShaderAttributSettings();
-    _getShaderUniformSettings();
-  }
-
-  void _getShaderAttributSettings() {
-    _aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
-
-
-    //Texture
-    _aTextureCoord = gl.getAttribLocation(program, "aTextureCoord");
-
-  }
-
-  void _getShaderUniformSettings() {
-    _uPMatrix = gl.getUniformLocation(program, "uPMatrix");
-    _uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
-
-    _uSampler = gl.getUniformLocation(program, "uSampler");
-  }
-
-  @override
-  render(Mesh mesh) {
-
-    gl.useProgram(program);
-    _setShaderSettings(mesh);
-
-    if(mesh.indices.length > 0) {
-      gl.drawElements(
-      GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
-      0);
-    }else{
-      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
-    }
-
-    gl.disableVertexAttribArray(_aVertexPosition);
-    gl.disableVertexAttribArray(_aTextureCoord);
-  }
-
-  _setShaderSettings(Mesh mesh){
-    _setShaderAttributs(mesh);
-    _setShaderUniforms(mesh);
-  }
-
-  _setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Mesh mesh) {
     //vertices
     gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
@@ -433,7 +262,7 @@ class MaterialBaseTexture extends Material{
     gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
   }
 
-  _setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Mesh mesh) {
     gl.uniform1i(_uSampler, 0);
 
     gl.uniformMatrix4fv(_uPMatrix, false, Application.instance.mainCamera.matrix.storage);
@@ -501,31 +330,35 @@ class MaterialBaseTextureNormal extends Material{
     }
     """;
 
-  UniformLocation _uPMatrix;
-  UniformLocation _uMVMatrix;
+  final buffersNames = ['vertexPositionBuffer', 'vertexIndiceBuffer', 'vertexTextureCoordBuffer', 'vertexNormalBuffer'];
+  final attributsNames = ['aVertexPosition','aTextureCoord','aVertexNormal'];
+  final uniformsNames = ["uPMatrix", "uMVMatrix", "uSampler", "uNMatrix", "uAmbientColor", "uUseLighting", "uLightingDirection", "uDirectionalColor"];
+
+  UniformLocation get _uPMatrix => uniforms["uPMatrix"];
+  UniformLocation get _uMVMatrix => uniforms["uMVMatrix"];
 
   //Vertices Position
-  Buffer _vertexPositionBuffer;
-  int _aVertexPosition;
+  Buffer get _vertexPositionBuffer => buffers['vertexPositionBuffer'];
+  int get _aVertexPosition => attributes['aVertexPosition'];
 
   //Indices
-  Buffer _vertexIndiceBuffer;
+  Buffer get _vertexIndiceBuffer => buffers['vertexIndiceBuffer'];
 
   //TextureCoords
-  Buffer _vertexTextureCoordBuffer;
-  int _aTextureCoord;
-  UniformLocation _uSampler;
+  Buffer get _vertexTextureCoordBuffer => buffers['vertexTextureCoordBuffer'];
+  int get _aTextureCoord => attributes['aTextureCoord'];
+  UniformLocation get _uSampler => uniforms["uSampler"];
 
   //Normals
-  UniformLocation _uNMatrix;
-  Buffer _vertexNormalBuffer;
-  int _aVertexNormal;
+  UniformLocation get _uNMatrix => uniforms["uNMatrix"];
+  Buffer get _vertexNormalBuffer => buffers['vertexNormalBuffer'];
+  int get _aVertexNormal => attributes['aVertexNormal'];
 
   //Lightings
-  UniformLocation _uUseLighting;
-  UniformLocation _uLightDirection;
-  UniformLocation _uAmbientColor;
-  UniformLocation _uDirectionalColor;
+  UniformLocation get _uAmbientColor => uniforms["uAmbientColor"];
+  UniformLocation get _uUseLighting => uniforms["uUseLighting"];
+  UniformLocation get _uLightDirection => uniforms["uLightingDirection"];
+  UniformLocation get _uDirectionalColor => uniforms["uDirectionalColor"];
 
   //External Parameters
   TextureMap textureMap;
@@ -534,78 +367,9 @@ class MaterialBaseTextureNormal extends Material{
   bool useLighting;
 
   MaterialBaseTextureNormal():super(_vsSource, _fsSource){
-    _initBuffers();
-    _getShaderSettings();
   }
 
-  void _initBuffers(){
-    _vertexPositionBuffer = gl.createBuffer();
-    _vertexIndiceBuffer = gl.createBuffer();
-    _vertexTextureCoordBuffer = gl.createBuffer();
-    _vertexNormalBuffer = gl.createBuffer();
-  }
-
-  void _getShaderSettings() {
-    _getShaderAttributSettings();
-    _getShaderUniformSettings();
-  }
-
-  void _getShaderUniformSettings(){
-    //ModelViewProjection
-    _uPMatrix = gl.getUniformLocation(program, "uPMatrix");
-    _uMVMatrix = gl.getUniformLocation(program, "uMVMatrix");
-
-    //Texture
-    _uSampler = gl.getUniformLocation(program, "uSampler");
-
-    //Normals
-    _uNMatrix = gl.getUniformLocation(program, "uNMatrix");
-
-    //Lighting
-    _uUseLighting = gl.getUniformLocation(program, "uUseLighting");
-    _uAmbientColor = gl.getUniformLocation(program, "uAmbientColor");
-    _uLightDirection = gl.getUniformLocation(program, "uLightingDirection");
-    _uDirectionalColor = gl.getUniformLocation(program, "uDirectionalColor");
-  }
-
-  void _getShaderAttributSettings(){
-    _aVertexPosition = gl.getAttribLocation(program, "aVertexPosition");
-
-
-    //Texture
-    _aTextureCoord = gl.getAttribLocation(program, "aTextureCoord");
-
-
-    //Normals
-    _aVertexNormal = gl.getAttribLocation(program, "aVertexNormal");
-
-  }
-
-  @override
-  render(Mesh mesh) {
-
-    gl.useProgram(program);
-    _setShaderSettings(mesh);
-
-    if(mesh.indices.length > 0) {
-      gl.drawElements(
-      GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
-      0);
-    }else{
-      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
-    }
-
-    gl.disableVertexAttribArray(_aTextureCoord);
-    gl.disableVertexAttribArray(_aTextureCoord);
-    gl.disableVertexAttribArray(_aVertexNormal);
-  }
-
-  _setShaderSettings(Mesh mesh){
-    _setShaderAttributs(mesh);
-    _setShaderUniforms(mesh);
-  }
-
-  _setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Mesh mesh) {
     //vertices
     gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
     gl.enableVertexAttribArray(_aVertexPosition);
@@ -632,7 +396,7 @@ class MaterialBaseTextureNormal extends Material{
     gl.vertexAttribPointer(_aVertexNormal, mesh.vertexNormalsDimensions, GL.FLOAT, false, 0, 0);
   }
 
-  _setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Mesh mesh) {
     gl.uniformMatrix4fv(_uPMatrix, false, Application.instance.mainCamera.matrix.storage);
     gl.uniformMatrix4fv(_uMVMatrix, false, mvMatrix.storage);
 
@@ -680,5 +444,69 @@ class MaterialBaseTextureNormal extends Material{
     });
 
     return completer.future;
+  }
+}
+
+
+///PBR's
+///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
+class MaterialPBR extends Material{
+
+  static const String _vsSource = """
+    attribute vec3 aVertexPosition;
+
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
+    void main(void) {
+        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    }
+    """;
+
+  static const String _fsSource = """
+    precision mediump float;
+
+    uniform vec3 uColor;
+
+    void main(void) {
+        gl_FragColor = vec4(uColor, 1.0);
+    }
+
+    """;
+  final buffersNames = ['vertexPositionBuffer', 'vertexIndiceBuffer'];
+  final attributsNames = ['aVertexPosition'];
+  final uniformsNames = ["uPMatrix", "uMVMatrix", "uColor"];
+
+  UniformLocation get _uPMatrix => uniforms["uPMatrix"];
+  UniformLocation get _uMVMatrix => uniforms["uMVMatrix"];
+  UniformLocation get _uColor => uniforms["uColor"];
+
+  Buffer get _vertexPositionBuffer => buffers['vertexPositionBuffer'];
+  int get _aVertexPosition => attributes['aVertexPosition'];
+
+  Buffer get _vertexIndiceBuffer => buffers['vertexIndiceBuffer'];
+
+  //External Parameters
+  final Vector3 color;
+
+  MaterialPBR(this.color ):super(_vsSource, _fsSource){
+  }
+
+  setShaderAttributs(Mesh mesh) {
+    //vertices
+    gl.bindBuffer(GL.ARRAY_BUFFER, _vertexPositionBuffer);
+    gl.enableVertexAttribArray(_aVertexPosition);
+    gl.vertexAttribPointer(_aVertexPosition, mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
+    gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(mesh.vertices), GL.STATIC_DRAW);
+
+    //indices
+    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, _vertexIndiceBuffer);
+    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(mesh.indices), GL.STATIC_DRAW);
+  }
+
+  setShaderUniforms(Mesh mesh) {
+    gl.uniformMatrix4fv(_uPMatrix, false, Application.instance.mainCamera.matrix.storage);
+    gl.uniformMatrix4fv(_uMVMatrix, false, mvMatrix.storage);
+    gl.uniform3fv(_uColor, color.storage);
   }
 }

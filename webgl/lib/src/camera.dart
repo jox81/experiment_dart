@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'dart:html';
-import 'application.dart';
+import 'package:webgl/src/application.dart';
 
 class Camera {
   Vector3 position;

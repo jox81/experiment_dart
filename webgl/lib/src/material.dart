@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl';
-import 'application.dart';
-import 'mesh.dart';
+import 'package:webgl/src/application.dart';
+import 'package:webgl/src/mesh.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 
 abstract class Material {
@@ -16,10 +16,21 @@ abstract class Material {
 
   Program program;
 
+  List<String> attributsNames = new List();
+  Map<String, int> attributes = new Map();
+
+  List<String> uniformsNames = [];
+  Map<String, UniformLocation> uniforms = new Map();
+
+  List<String> buffersNames = [];
+  Map<String, Buffer> buffers = new Map();
+
   Material(vsSource, fsSource) {
     vsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
     fsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     _initShaderProgram(vsSource, fsSource);
+    _initBuffers();
+    _getShaderSettings();
   }
 
   void _initShaderProgram(String vsSource, String fsSource) {
@@ -62,5 +73,53 @@ abstract class Material {
     program = _program;
   }
 
-  render(Mesh mesh);
+  void _initBuffers(){
+    for(String name in buffersNames) {
+      buffers[name] = gl.createBuffer();
+    }
+  }
+
+  void _getShaderSettings() {
+    _getShaderAttributSettings();
+    _getShaderUniformSettings();
+  }
+  void _getShaderAttributSettings(){
+    for(String name in attributsNames){
+      attributes[name] = gl.getAttribLocation(program, name);
+    }
+  }
+
+  void _getShaderUniformSettings(){
+    for(String name in uniformsNames){
+      uniforms[name] = gl.getUniformLocation(program, name);
+    }
+  }
+
+  render(Mesh mesh) {
+    gl.useProgram(program);
+    setShaderSettings(mesh);
+
+    if(mesh.indices.length > 0) {
+      gl.drawElements(
+          GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT,
+          0);
+    }else{
+      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
+    }
+    disableVertexAttributs();
+  }
+
+  setShaderSettings(Mesh mesh){
+    setShaderAttributs(mesh);
+    setShaderUniforms(mesh);
+  }
+
+  setShaderAttributs(Mesh mesh);
+  setShaderUniforms(Mesh mesh);
+
+  disableVertexAttributs(){
+    for(String name in attributsNames) {
+      gl.disableVertexAttribArray(attributes[name]);
+    }
+  }
 }

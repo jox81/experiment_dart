@@ -1,15 +1,15 @@
-import 'mesh.dart';
+import 'package:webgl/src/mesh.dart';
 import 'dart:web_gl';
 import 'dart:html';
-import 'camera.dart';
-import 'material.dart';
+import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/material.dart';
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'dart:async';
-import 'light.dart';
-import 'utils.dart';
-import 'dart_js/debug/webgl_debug_js.dart';
+import 'package:webgl/src/light.dart';
+import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/application/src/dart_js/debug/webgl_debug_js.dart';
 
 
 //Todo : Move elsewhere ?
@@ -86,6 +86,12 @@ class Application {
       window.alert("Could not initialise WebGL");
       return null;
     }
+
+    //don't work
+//  canvas.onResize.listen((e){
+//    canvas.width = document.body.clientWidth;
+//    canvas.height = document.body.clientHeight;
+//  });
 
     _gl.clear(
         GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);

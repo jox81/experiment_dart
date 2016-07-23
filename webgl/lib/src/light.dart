@@ -12,6 +12,16 @@ class AmbientLight extends Light{
   }
 }
 
+class PointLight extends Light{
+  Vector3 color;
+  Vector3 position;
+
+  PointLight() {
+    color = new Vector3(1.0, 1.0, 1.0);
+    position = new Vector3(0.0, 0.0, 0.0);
+  }
+}
+
 class DirectionalLight extends Light{
   Vector3 color;
   Vector3 direction;

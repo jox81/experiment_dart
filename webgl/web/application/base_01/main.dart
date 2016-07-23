@@ -1,14 +1,14 @@
 import 'dart:html';
-import 'src/application.dart';
-import 'src/camera.dart';
-import 'src/materials.dart';
-import 'package:vector_math/vector_math.dart';
-import 'src/mesh.dart';
-import 'src/light.dart';
-import 'src/texture.dart';
-import 'src/utils.dart';
 import 'dart:async';
+import 'package:vector_math/vector_math.dart';
 import 'packages/datgui/datgui.dart' as dat;
+import 'package:webgl/src/application.dart';
+import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/light.dart';
+import 'package:webgl/src/texture.dart';
+import 'package:webgl/src/utils.dart';
 
 Application application;
 GuiSetup guisetup;
@@ -17,11 +17,6 @@ main() {
   CanvasElement canvas = querySelector('#glCanvas');
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
-  //don't work
-//  canvas.onResize.listen((e){
-//    canvas.width = document.body.clientWidth;
-//    canvas.height = document.body.clientHeight;
-//  });
 
   //GUI
   guisetup = GuiSetup.setup();
@@ -116,7 +111,7 @@ setupScene() async {
   //Create Cube
   Mesh cube = Mesh.createCube();
   cube.transform.translate(-4.0, 1.0, 0.0);
-  await materialBaseTextureNormal.addTexture("images/crate.gif");
+  await materialBaseTextureNormal.addTexture("../images/crate.gif");
   cube.material = materialBaseTextureNormal;
   application.meshes.add(cube);
 
@@ -148,8 +143,8 @@ setupScene() async {
 
 Future createSusanModel() async {
   //SusanModel
-  TextureMap susanTexture = await Utils.loadTextureMap('objects/susan/susan_texture.png');
-  var susanJson = await Utils.loadJSONResource('objects/susan/susan.json');
+  TextureMap susanTexture = await Utils.loadTextureMap('../objects/susan/susan_texture.png');
+  var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   Mesh susanMesh = new Mesh();
   susanMesh.transform.translate(5.0, 0.0, 0.0);
   susanMesh.transform.rotateX(radians(90.0));
