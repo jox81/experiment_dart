@@ -8,6 +8,24 @@ import 'package:webgl/src/texture.dart';
 import 'dart:async';
 import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/utils_shader.dart';
+
+
+class MaterialCustom extends Material{
+
+  MaterialCustom(String vsSource, String fsSource):super(vsSource, fsSource){
+    ProgramInfo programInfo = UtilsShader.getProgramInfo(Application.gl, program);
+    attributsNames = programInfo.attributes.map((a)=> a.typeName).toList();
+    uniformsNames = programInfo.uniforms.map((a)=> a.typeName).toList();
+    getShaderSettings();
+  }
+
+  setShaderAttributs(Mesh mesh) {
+  }
+
+  setShaderUniforms(Mesh mesh) {
+  }
+}
 
 class MaterialBase extends Material{
 
@@ -458,15 +476,20 @@ class MaterialPBR extends Material{
     uniform mat4 uMVMatrix;
     uniform mat4 uPMatrix;
 
+    uniform mat3 uNormalMatrix;
+
     void main(void) {
         gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
     }
     """;
-
   static const String _fsSource = """
     precision mediump float;
 
     uniform vec3 uColor;
+
+    float lambertDiffuse(vec3 lightDirection, vec3 surfaceNormal) {
+      return max(0.0, dot(lightDirection, surfaceNormal));
+    }
 
     void main(void) {
         gl_FragColor = vec4(uColor, 1.0);

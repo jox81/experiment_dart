@@ -48,9 +48,6 @@ setupScene() async {
   application.light = pointlLight;
 
   //Materials
-  MaterialBaseColor materialBaseColor = new MaterialBaseColor(new Vector3(1.0, 1.0, 0.0));
-  application.materials.add(materialBaseColor);
-
   MaterialPBR materialPBR = new MaterialPBR(new Vector3.all(1.0));
   application.materials.add(materialPBR);
 
@@ -75,7 +72,6 @@ setupScene() async {
 
 Future createSusanModel() async {
   //SusanModel
-  TextureMap susanTexture = await Utils.loadTextureMap('../objects/susan/susan_texture.png');
   var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   Mesh susanMesh = new Mesh();
 

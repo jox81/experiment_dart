@@ -54,6 +54,20 @@ class Utils{
     return completer.future;
   }
 
+  ///Load a Glsl from a file url
+  static Future loadGlslShader(String url) async {
+    Completer completer = new Completer();
+    await loadTextResource(url).then((String result){
+      try {
+        completer.complete(result);
+      } catch (e) {
+        completer.completeError(e);
+      }
+    });
+
+    return completer.future;
+  }
+
   static Future loadJSONResource (url) async {
     Completer completer = new Completer();
     await loadTextResource(url).then((String result){
