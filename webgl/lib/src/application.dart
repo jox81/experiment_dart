@@ -11,17 +11,14 @@ import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/application/src/dart_js/debug/webgl_debug_js.dart';
 
-
-//Todo : Move elsewhere ?
-Matrix4 mvMatrix = new Matrix4.identity();
-
 class Application {
   static const bool debugging = true;
 
   static RenderingContext _gl;
   static RenderingContext get gl => _gl;
 
-  Camera mainCamera;
+  Camera mainCamera; //mainCamera.matrix.storage ==> projetion Matrix
+  Matrix4 mvMatrix = new Matrix4.identity();
 
   Vector4 _backgroundColor;
   Vector4 get backgroundColor => _backgroundColor;
@@ -72,8 +69,8 @@ class Application {
     ];
     for (int i = 0; i < names.length; ++i) {
       try {
-        _gl = canvas.getContext(names[i]);//Normal context
-        if(debugging) {
+        _gl = canvas.getContext(names[i]); //Normal context
+        if (debugging) {
           _gl = WebGLDebugUtils.makeDebugContext(_gl, throwOnGLError,
               logAndValidate); //Kronos debug context using .js
         }
@@ -93,8 +90,7 @@ class Application {
 //    canvas.height = document.body.clientHeight;
 //  });
 
-    _gl.clear(
-        GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    _gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
     _gl.enable(DEPTH_TEST);
 
     /*
@@ -134,11 +130,11 @@ class Application {
 
   Future renderAnimation() async {
     await _setupScene();
-    this._renderFrame(time: 0.0);
+    this._renderFrame();
   }
 
   double renderTime;
-  void _renderFrame({num time}) {
+  void _renderFrame({num time : 0.0}) {
     //Fps
     var t = new DateTime.now().millisecondsSinceEpoch;
     if (renderTime != null) {
@@ -147,8 +143,7 @@ class Application {
     renderTime = t.toDouble();
 
     _gl.viewport(0, 0, _gl.drawingBufferWidth, _gl.drawingBufferHeight);
-    _gl.clear(
-        GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    _gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
     for (Mesh model in meshes) {
       _mvPushMatrix();

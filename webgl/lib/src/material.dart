@@ -6,6 +6,7 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
 import 'dart:async';
 import 'package:webgl/src/utils_shader.dart';
+import 'dart:typed_data';
 
 abstract class Material {
   /// GLSL Pragmas
@@ -22,19 +23,16 @@ abstract class Material {
   List<String> attributsNames = new List();
   Map<String, int> attributes = new Map();
 
-  List<String> uniformsNames = [];
+  List<String> uniformsNames = new List();
   Map<String, UniformLocation> uniforms = new Map();
 
-  List<String> buffersNames = [];
+  List<String> buffersNames = new List();
   Map<String, Buffer> buffers = new Map();
 
   Material(vsSource, fsSource) {
-
     vsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
     fsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     initShaderProgram(vsSource, fsSource);
-    initBuffers();
-    getShaderSettings();
   }
 
   //Not working loading from an exetnal file
@@ -164,4 +162,38 @@ abstract class Material {
       gl.disableVertexAttribArray(attributes[name]);
     }
   }
+}
+
+abstract class MaterialCustom extends Material{
+
+  MaterialCustom(String vsSource, String fsSource):super(vsSource, fsSource){
+    ProgramInfo programInfo = UtilsShader.getProgramInfo(Application.gl, program);
+    attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
+    uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
+
+    initBuffers();
+
+    getShaderSettings();
+  }
+
+  void setShaderAttributsWithName(String uniformName, data, dimension) {
+    if(dimension != null) {
+      gl.bindBuffer(GL.ARRAY_BUFFER, buffers[uniformName]);
+      gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
+      gl.vertexAttribPointer(
+          attributes[uniformName], dimension, GL.FLOAT, false, 0, 0);
+      gl.enableVertexAttribArray(attributes[uniformName]);
+    }else{
+      gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[uniformName]);
+      gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data), GL.STATIC_DRAW);
+    }
+  }
+
+
+  setShaderAttributs(Mesh mesh) {
+  }
+
+  setShaderUniforms(Mesh mesh) {
+  }
+
 }
