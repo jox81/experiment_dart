@@ -14,9 +14,13 @@ class MaterialPoint extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
 
+    uniform float pointSize;
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
     void main(void) {
-        gl_Position = vec4(aVertexPosition, 1.0);
-        gl_PointSize = 10.0;
+      gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+      gl_PointSize = pointSize;
     }
     """;
 
@@ -27,12 +31,21 @@ class MaterialPoint extends MaterialCustom {
     """;
 
   final buffersNames = ['aVertexPosition'];
+  final num pointSize;
 
-  MaterialPoint() : super(_vsSource, _fsSource);
+  MaterialPoint(this.pointSize) : super(_vsSource, _fsSource);
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
         'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+  }
+
+  setShaderUniforms(Mesh mesh) {
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName("pointSize", pointSize);
   }
 }
 

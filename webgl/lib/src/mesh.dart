@@ -98,8 +98,8 @@ class Mesh {
     return new _CubeMesh();
   }
 
-  static createSphere({num radius : 1, int segment: 32}) {
-    return new _SphereMesh(radius : radius, segment:segment);
+  static createSphere({num radius : 1, int segmentV: 32, int segmentH: 32}) {
+    return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
   }
 }
 
@@ -303,7 +303,6 @@ class _CubeMesh extends Mesh {
 
 class _SphereMesh extends Mesh {
 
-  Matrix4 _matRotX = new Matrix4.identity();
   Matrix4 _matRotY = new Matrix4.identity();
   Matrix4 _matRotZ = new Matrix4.identity();
 
@@ -311,42 +310,46 @@ class _SphereMesh extends Mesh {
   Vector3 _up = new Vector3(0.0, 1.0, 0.0);
 
   List<int> faces = [];
-  List<Vector3> sphereVertices = [];
+  List<double> sphereVertices = [];
+  List<Vector3> sphereVerticesVector = [];
   List<Vector3> normals = [];
   List<Vector2> uvs = [];
 
-  _SphereMesh({num radius : 1, int segment: 32}) {
+  _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
 
-    int totalZRotationSteps = 2 + segment;
-    int totalYRotationSteps = 2 * totalZRotationSteps;
+    segmentV = max(1,segmentV--);
+
+    int totalZRotationSteps = 1 + segmentV;
+    int totalYRotationSteps = segmentH;
 
     for (int zRotationStep = 0;
         zRotationStep <= totalZRotationSteps;
         zRotationStep++) {
       num normalizedZ = zRotationStep / totalZRotationSteps;
-      num angleZ = (normalizedZ * PI);
+      num angleZ = (normalizedZ * PI);//part of vertical half circle
 
       for (int yRotationStep = 0;
           yRotationStep <= totalYRotationSteps;
           yRotationStep++) {
         num normalizedY = yRotationStep / totalYRotationSteps;
-        num angleY = normalizedY * PI * 2;
+        num angleY = normalizedY * PI * 2;//part of horizontal full circle
 
-        _matRotZ.setIdentity();
+        _matRotZ.setIdentity();//reset
         _matRotZ.rotateZ(-angleZ);
 
-        _matRotY.setIdentity();
+        _matRotY.setIdentity();//reset
         _matRotY.rotateY(angleY);
 
-        _tmpVec3 = _matRotY * _matRotZ * _up ;
+        _tmpVec3 = _matRotY * _matRotZ * _up ;//up vector transformed by the 2 rotations
 
-        _tmpVec3.scale(-radius);
-        sphereVertices.add(_tmpVec3);//.slice()
+        _tmpVec3.scale(-radius);// why - ?
+        sphereVertices.addAll(_tmpVec3.storage);
+        sphereVerticesVector.add(_tmpVec3);
 
         _tmpVec3.normalize();
-        normals.add(_tmpVec3);//.slice()
+        normals.add(_tmpVec3);
 
-        uvs.add(new Vector2.array([normalizedY, 1 - normalizedZ]));
+        uvs.add(new Vector2(normalizedY, 1 - normalizedZ));
       }
 
       if (zRotationStep > 0) {
@@ -369,7 +372,7 @@ class _SphereMesh extends Mesh {
       }
     }
 
-//    vertices = positions;
+    vertices = sphereVertices;
 //    _indices = indices;
 //    _vertexNormals = normals;
 //    _textureCoords = uvs;

@@ -53,7 +53,7 @@ setupScene() async {
   application.light = directionalLight;
 
   //Materials
-  MaterialPoint materialPoint = new MaterialPoint();
+  MaterialPoint materialPoint = new MaterialPoint(4.0);
   application.materials.add(materialPoint);
 
   MaterialBase materialBase = new MaterialBase();
@@ -125,11 +125,11 @@ setupScene() async {
   application.meshes.add(susanMesh);
 
   //Sphere
-  Mesh sphere = Mesh.createSphere(radius:2.0, segment :4);
+  Mesh sphere = Mesh.createSphere(radius:10.0, segmentV :1, segmentH: 3);
   sphere.transform.translate(0.0, 0.0, 0.0);
   sphere.material = materialPoint;
   sphere.mode = GL.POINTS;
-//  application.meshes.add(sphere);
+  application.meshes.add(sphere);
 
 
   // Animation

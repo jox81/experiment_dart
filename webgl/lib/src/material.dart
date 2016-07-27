@@ -206,6 +206,9 @@ abstract class MaterialCustom extends Material{
       case 'SAMPLER_2D':
         gl.uniform1i(uniforms[uniformName], data);
         break;
+      case 'FLOAT':
+        gl.uniform1f(uniforms[uniformName], data);
+        break;
       case 'FLOAT_MAT3':
         gl.uniformMatrix3fv(uniforms[uniformName], false, data);
         break;
@@ -213,7 +216,7 @@ abstract class MaterialCustom extends Material{
         gl.uniformMatrix4fv(uniforms[uniformName], false, data);
         break;
       default:
-        print(activeInfo.typeName);
+        print('setShaderUniformWithName not set for : ${activeInfo.typeName}');
         break;
     }
   }
