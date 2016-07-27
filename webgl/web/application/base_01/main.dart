@@ -9,6 +9,7 @@ import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/texture.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:gl_enums/gl_enums.dart' as GL;
 
 Application application;
 GuiSetup guisetup;
@@ -52,6 +53,9 @@ setupScene() async {
   application.light = directionalLight;
 
   //Materials
+  MaterialPoint materialPoint = new MaterialPoint();
+  application.materials.add(materialPoint);
+
   MaterialBase materialBase = new MaterialBase();
   application.materials.add(materialBase);
 
@@ -68,6 +72,7 @@ setupScene() async {
   new MaterialBaseTextureNormal()
     ..ambientColor = application.ambientLight.color
     ..directionalLight = directionalLight;
+  materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
   application.materials.add(materialBaseTextureNormal);
 
   //Meshes
@@ -115,11 +120,17 @@ setupScene() async {
   cube.material = materialBaseTextureNormal;
   application.meshes.add(cube);
 
-  materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
-
   // SusanModel
   Mesh susanMesh = await createSusanModel();
   application.meshes.add(susanMesh);
+
+  //Sphere
+  Mesh sphere = Mesh.createSphere(radius:2.0, segment :4);
+  sphere.transform.translate(0.0, 0.0, 0.0);
+  sphere.material = materialPoint;
+  sphere.mode = GL.POINTS;
+//  application.meshes.add(sphere);
+
 
   // Animation
   num _lastTime = 0.0;

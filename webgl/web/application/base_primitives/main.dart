@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:async';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
@@ -24,6 +23,7 @@ setupScene() async {
 
   //Material
   MaterialPoint materialPoint = new MaterialPoint();
+  application.materials.add(materialPoint);
 
   //Geom
   Mesh mesh = new Mesh()

@@ -3,9 +3,9 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/material.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'dart:math';
 
-class Mesh{
-
+class Mesh {
   RenderingContext get gl => Application.gl;
 
   //
@@ -17,7 +17,7 @@ class Mesh{
   //Vertices infos
   int _vertexDimensions = 3;
   int get vertexDimensions => _vertexDimensions;
-  set vertexDimensions(int d){
+  set vertexDimensions(int d) {
     _vertexDimensions = d;
   }
   //List<double> _vertices = new List();
@@ -38,6 +38,7 @@ class Mesh{
   set colors(List<double> value) {
     _colors = value;
   }
+
   int get colorCount => _colors.length ~/ _colorDimensions;
 
   //Indices Infos
@@ -46,6 +47,7 @@ class Mesh{
   set indices(List<int> value) {
     _indices = value;
   }
+
   int get indiceCount => _indices.length;
 
   //TextureCoords infos
@@ -56,7 +58,9 @@ class Mesh{
   set textureCoords(List<double> value) {
     _textureCoords = value;
   }
-  int get textureCoordsCount => _textureCoords.length ~/ _textureCoordsDimensions;
+
+  int get textureCoordsCount =>
+      _textureCoords.length ~/ _textureCoordsDimensions;
 
   //vertexNormals infos
   int _vertexNormalsDimensions = 3;
@@ -66,74 +70,70 @@ class Mesh{
   set vertexNormals(List<double> value) {
     _vertexNormals = value;
   }
-  int get vertexNormalsCount => _vertexNormals.length ~/ _vertexNormalsDimensions;
+
+  int get vertexNormalsCount =>
+      _vertexNormals.length ~/ _vertexNormalsDimensions;
 
   Material material;
 
   Mesh();
 
-  void render(){
+  void render() {
     material.render(this);
   }
 
-  static createRectangle(){
+  static createRectangle() {
     return new _SquareMesh();
   }
-  static createTriangle(){
+
+  static createTriangle() {
     return new _TriangleMesh();
   }
-  static createPyramid(){
+
+  static createPyramid() {
     return new _PyramidMesh();
   }
-  static createCube(){
+
+  static createCube() {
     return new _CubeMesh();
   }
 
+  static createSphere({num radius : 1, int segment: 32}) {
+    return new _SphereMesh(radius : radius, segment:segment);
+  }
 }
 
-class _TriangleMesh extends Mesh{
-
+class _TriangleMesh extends Mesh {
   _TriangleMesh() {
-    vertices = [
-      0.0, 0.0, 0.0,
-      2.0, 0.0, 0.0,
-      0.0, 2.0, 0.0
-    ];
+    vertices = [0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 2.0, 0.0];
   }
 }
 
-class _SquareMesh extends Mesh{
-
+class _SquareMesh extends Mesh {
   _SquareMesh() {
-    vertices = [
-      1.0,  1.0,  0.0,
-      -1.0,  1.0,  0.0,
-      1.0, -1.0,  0.0,
-      -1.0, -1.0,  0.0
-    ];
+    vertices = [1.0, 1.0, 0.0, -1.0, 1.0, 0.0, 1.0, -1.0, 0.0, -1.0, -1.0, 0.0];
   }
 }
 
-class _PyramidMesh extends Mesh{
-
+class _PyramidMesh extends Mesh {
   _PyramidMesh() {
     vertices = [
       // Front face
-      0.0,  1.0,  0.0,
-      -1.0, -1.0,  1.0,
-      1.0, -1.0,  1.0,
+      0.0, 1.0, 0.0,
+      -1.0, -1.0, 1.0,
+      1.0, -1.0, 1.0,
       // Right face
-      0.0,  1.0,  0.0,
-      1.0, -1.0,  1.0,
+      0.0, 1.0, 0.0,
+      1.0, -1.0, 1.0,
       1.0, -1.0, -1.0,
       // Back face
-      0.0,  1.0,  0.0,
+      0.0, 1.0, 0.0,
       1.0, -1.0, -1.0,
       -1.0, -1.0, -1.0,
       // Left face
-      0.0,  1.0,  0.0,
+      0.0, 1.0, 0.0,
       -1.0, -1.0, -1.0,
-      -1.0, -1.0,  1.0
+      -1.0, -1.0, 1.0
     ];
 
     _colors = [
@@ -157,54 +157,53 @@ class _PyramidMesh extends Mesh{
   }
 }
 
-class _CubeMesh extends Mesh{
-
+class _CubeMesh extends Mesh {
   _CubeMesh() {
     vertices = [
       // Front face
-      -1.0, -1.0,  1.0,
-      1.0, -1.0,  1.0,
-      1.0,  1.0,  1.0,
-      -1.0,  1.0,  1.0,
+      -1.0, -1.0, 1.0,
+      1.0, -1.0, 1.0,
+      1.0, 1.0, 1.0,
+      -1.0, 1.0, 1.0,
 
       // Back face
       -1.0, -1.0, -1.0,
-      -1.0,  1.0, -1.0,
-      1.0,  1.0, -1.0,
+      -1.0, 1.0, -1.0,
+      1.0, 1.0, -1.0,
       1.0, -1.0, -1.0,
 
       // Top face
-      -1.0,  1.0, -1.0,
-      -1.0,  1.0,  1.0,
-      1.0,  1.0,  1.0,
-      1.0,  1.0, -1.0,
+      -1.0, 1.0, -1.0,
+      -1.0, 1.0, 1.0,
+      1.0, 1.0, 1.0,
+      1.0, 1.0, -1.0,
 
       // Bottom face
       -1.0, -1.0, -1.0,
       1.0, -1.0, -1.0,
-      1.0, -1.0,  1.0,
-      -1.0, -1.0,  1.0,
+      1.0, -1.0, 1.0,
+      -1.0, -1.0, 1.0,
 
       // Right face
       1.0, -1.0, -1.0,
-      1.0,  1.0, -1.0,
-      1.0,  1.0,  1.0,
-      1.0, -1.0,  1.0,
+      1.0, 1.0, -1.0,
+      1.0, 1.0, 1.0,
+      1.0, -1.0, 1.0,
 
       // Left face
       -1.0, -1.0, -1.0,
-      -1.0, -1.0,  1.0,
-      -1.0,  1.0,  1.0,
-      -1.0,  1.0, -1.0,
+      -1.0, -1.0, 1.0,
+      -1.0, 1.0, 1.0,
+      -1.0, 1.0, -1.0,
     ];
 
     List<List<double>> _colorsFace = [
-      [1.0, 0.0, 0.0, 1.0],     // Front face
-      [1.0, 1.0, 0.0, 1.0],     // Back face
-      [0.0, 1.0, 0.0, 1.0],     // Top face
-      [1.0, 0.5, 0.5, 1.0],     // Bottom face
-      [1.0, 0.0, 1.0, 1.0],     // Right face
-      [0.0, 0.0, 1.0, 1.0],     // Left face
+      [1.0, 0.0, 0.0, 1.0], // Front face
+      [1.0, 1.0, 0.0, 1.0], // Back face
+      [0.0, 1.0, 0.0, 1.0], // Top face
+      [1.0, 0.5, 0.5, 1.0], // Bottom face
+      [1.0, 0.0, 1.0, 1.0], // Right face
+      [0.0, 0.0, 1.0, 1.0], // Left face
     ];
 
     _colors = new List.generate(4 * 4 * _colorsFace.length, (int index) {
@@ -214,12 +213,12 @@ class _CubeMesh extends Mesh{
     }, growable: false);
 
     _indices = [
-      0,  1,  2,    0,  2,  3, // Front face
-      4,  5,  6,    4,  6,  7, // Back face
-      8,  9, 10,    8, 10, 11, // Top face
-      12, 13, 14,   12, 14, 15, // Bottom face
-      16, 17, 18,   16, 18, 19, // Right face
-      20, 21, 22,   20, 22, 23  // Left face
+      0, 1, 2, 0, 2, 3, // Front face
+      4, 5, 6, 4, 6, 7, // Back face
+      8, 9, 10, 8, 10, 11, // Top face
+      12, 13, 14, 12, 14, 15, // Bottom face
+      16, 17, 18, 16, 18, 19, // Right face
+      20, 21, 22, 20, 22, 23 // Left face
     ];
 
     _textureCoords = [
@@ -262,41 +261,118 @@ class _CubeMesh extends Mesh{
 
     _vertexNormals = [
       // Front face
-      0.0,  0.0,  1.0,
-      0.0,  0.0,  1.0,
-      0.0,  0.0,  1.0,
-      0.0,  0.0,  1.0,
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
 
       // Back face
-      0.0,  0.0, -1.0,
-      0.0,  0.0, -1.0,
-      0.0,  0.0, -1.0,
-      0.0,  0.0, -1.0,
+      0.0, 0.0, -1.0,
+      0.0, 0.0, -1.0,
+      0.0, 0.0, -1.0,
+      0.0, 0.0, -1.0,
 
       // Top face
-      0.0,  1.0,  0.0,
-      0.0,  1.0,  0.0,
-      0.0,  1.0,  0.0,
-      0.0,  1.0,  0.0,
+      0.0, 1.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 1.0, 0.0,
 
       // Bottom face
-      0.0, -1.0,  0.0,
-      0.0, -1.0,  0.0,
-      0.0, -1.0,  0.0,
-      0.0, -1.0,  0.0,
+      0.0, -1.0, 0.0,
+      0.0, -1.0, 0.0,
+      0.0, -1.0, 0.0,
+      0.0, -1.0, 0.0,
 
       // Right face
-      1.0,  0.0,  0.0,
-      1.0,  0.0,  0.0,
-      1.0,  0.0,  0.0,
-      1.0,  0.0,  0.0,
+      1.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
 
       // Left face
-      -1.0,  0.0,  0.0,
-      -1.0,  0.0,  0.0,
-      -1.0,  0.0,  0.0,
-      -1.0,  0.0,  0.0,
+      -1.0, 0.0, 0.0,
+      -1.0, 0.0, 0.0,
+      -1.0, 0.0, 0.0,
+      -1.0, 0.0, 0.0,
     ];
+
+    mode = GL.TRIANGLES;
+  }
+}
+
+class _SphereMesh extends Mesh {
+
+  Matrix4 _matRotX = new Matrix4.identity();
+  Matrix4 _matRotY = new Matrix4.identity();
+  Matrix4 _matRotZ = new Matrix4.identity();
+
+  Vector3 _tmpVec3 = new Vector3.zero();
+  Vector3 _up = new Vector3(0.0, 1.0, 0.0);
+
+  List<int> faces = [];
+  List<Vector3> sphereVertices = [];
+  List<Vector3> normals = [];
+  List<Vector2> uvs = [];
+
+  _SphereMesh({num radius : 1, int segment: 32}) {
+
+    int totalZRotationSteps = 2 + segment;
+    int totalYRotationSteps = 2 * totalZRotationSteps;
+
+    for (int zRotationStep = 0;
+        zRotationStep <= totalZRotationSteps;
+        zRotationStep++) {
+      num normalizedZ = zRotationStep / totalZRotationSteps;
+      num angleZ = (normalizedZ * PI);
+
+      for (int yRotationStep = 0;
+          yRotationStep <= totalYRotationSteps;
+          yRotationStep++) {
+        num normalizedY = yRotationStep / totalYRotationSteps;
+        num angleY = normalizedY * PI * 2;
+
+        _matRotZ.setIdentity();
+        _matRotZ.rotateZ(-angleZ);
+
+        _matRotY.setIdentity();
+        _matRotY.rotateY(angleY);
+
+        _tmpVec3 = _matRotY * _matRotZ * _up ;
+
+        _tmpVec3.scale(-radius);
+        sphereVertices.add(_tmpVec3);//.slice()
+
+        _tmpVec3.normalize();
+        normals.add(_tmpVec3);//.slice()
+
+        uvs.add(new Vector2.array([normalizedY, 1 - normalizedZ]));
+      }
+
+      if (zRotationStep > 0) {
+        var verticesCount = sphereVertices.length;
+        var firstIndex = verticesCount - 2 * (totalYRotationSteps + 1);
+        for (;
+            (firstIndex + totalYRotationSteps + 2) < verticesCount;
+            firstIndex++) {
+          faces.addAll([
+            firstIndex,
+            firstIndex + 1,
+            firstIndex + totalYRotationSteps + 1
+          ]);
+          faces.addAll([
+            firstIndex + totalYRotationSteps + 1,
+            firstIndex + 1,
+            firstIndex + totalYRotationSteps + 2
+          ]);
+        }
+      }
+    }
+
+//    vertices = positions;
+//    _indices = indices;
+//    _vertexNormals = normals;
+//    _textureCoords = uvs;
 
     mode = GL.TRIANGLES;
   }
