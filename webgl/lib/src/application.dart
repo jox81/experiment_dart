@@ -14,8 +14,7 @@ import 'package:webgl/src/application/src/dart_js/debug/webgl_debug_js.dart';
 class Application {
   static const bool debugging = true;
 
-  static RenderingContext _gl;
-  static RenderingContext get gl => _gl;
+  static RenderingContext gl;
 
   Camera mainCamera; //mainCamera.matrix.storage ==> projetion Matrix
   Matrix4 mvMatrix = new Matrix4.identity();
@@ -24,7 +23,7 @@ class Application {
   Vector4 get backgroundColor => _backgroundColor;
   set backgroundColor(Vector4 color) {
     _backgroundColor = color;
-    _gl.clearColor(color.r, color.g, color.b, color.a);
+    gl.clearColor(color.r, color.g, color.b, color.a);
   }
 
   AmbientLight ambientLight = new AmbientLight();
@@ -33,7 +32,7 @@ class Application {
   List<Material> materials = new List();
   List<Mesh> meshes = new List();
 
-  num get viewAspectRatio => _gl.drawingBufferWidth / _gl.drawingBufferHeight;
+  num get viewAspectRatio => gl.drawingBufferWidth / gl.drawingBufferHeight;
 
   //Animation
   Queue<Matrix4> _mvMatrixStack = new Queue();
@@ -69,36 +68,51 @@ class Application {
     ];
     for (int i = 0; i < names.length; ++i) {
       try {
-        _gl = canvas.getContext(names[i]); //Normal context
+        gl = canvas.getContext(names[i]); //Normal context
         if (debugging) {
-          _gl = WebGLDebugUtils.makeDebugContext(_gl, throwOnGLError,
+          gl = WebGLDebugUtils.makeDebugContext(gl, throwOnGLError,
               logAndValidate); //Kronos debug context using .js
         }
       } catch (e) {}
-      if (_gl != null) {
+      if (gl != null) {
         break;
       }
     }
-    if (_gl == null) {
+    if (gl == null) {
       window.alert("Could not initialise WebGL");
       return null;
     }
 
-    //don't work
-//  canvas.onResize.listen((e){
-//    canvas.width = document.body.clientWidth;
-//    canvas.height = document.body.clientHeight;
-//  });
+    window.onResize.listen((e)=>resizeCanvas());
 
-    _gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
-    _gl.enable(DEPTH_TEST);
+    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    gl.enable(DEPTH_TEST);
 
     /*
     //Hide backfaces
-    _gl.enable(GL.CULL_FACE);
-    _gl.frontFace(GL.CCW);
-    _gl.cullFace(GL.BACK);
+    gl.enable(GL.CULL_FACE);
+    gl.frontFace(GL.CCW);
+    gl.cullFace(GL.BACK);
     */
+  }
+
+  void resizeCanvas() {
+    // Lookup the size the browser is displaying the canvas.
+    var displayWidth  = window.innerWidth;
+    var displayHeight = window.innerHeight;
+
+    // Check if the canvas is not the same size.
+    if (gl.canvas.width  != displayWidth ||
+        gl.canvas.height != displayHeight) {
+      // Make the canvas the same size
+      gl.canvas.width  = displayWidth;
+      gl.canvas.height = displayHeight;
+
+      if(mainCamera != null) {
+        mainCamera.aspectRatio = viewAspectRatio;
+      }
+      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    }
   }
 
   void _initEvents() {
@@ -142,8 +156,8 @@ class Application {
     }
     renderTime = t.toDouble();
 
-    _gl.viewport(0, 0, _gl.drawingBufferWidth, _gl.drawingBufferHeight);
-    _gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
     for (Mesh model in meshes) {
       _mvPushMatrix();

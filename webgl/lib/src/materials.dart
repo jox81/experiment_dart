@@ -10,8 +10,7 @@ import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils_shader.dart';
 
-class MaterialPoint extends MaterialCustom{
-
+class MaterialPoint extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
 
@@ -29,16 +28,15 @@ class MaterialPoint extends MaterialCustom{
 
   final buffersNames = ['aVertexPosition'];
 
-  MaterialPoint():super(_vsSource, _fsSource);
+  MaterialPoint() : super(_vsSource, _fsSource);
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
   }
 }
 
-class MaterialBase extends MaterialCustom{
-
+class MaterialBase extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
 
@@ -60,24 +58,23 @@ class MaterialBase extends MaterialCustom{
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
-  MaterialBase():super(_vsSource, _fsSource);
+  MaterialBase() : super(_vsSource, _fsSource);
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-
-    //indices
-    setShaderAttributsWithName('aVertexIndice', mesh.indices, null);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
   }
 
   setShaderUniforms(Mesh mesh) {
-    gl.uniformMatrix4fv(uniforms["uMVMatrix"], false, Application.instance.mvMatrix.storage);
-    gl.uniformMatrix4fv(uniforms["uPMatrix"], false, Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
   }
 }
 
-class MaterialBaseColor extends MaterialCustom{
-
+class MaterialBaseColor extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
 
@@ -98,31 +95,29 @@ class MaterialBaseColor extends MaterialCustom{
         gl_FragColor = vec4(uColor, 1.0);
     }
     """;
-  final  buffersNames = ['aVertexPosition', 'aVertexIndice'];
+  final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External Parameters
   final Vector3 color;
 
-  MaterialBaseColor(this.color ):super(_vsSource, _fsSource){
-  }
+  MaterialBaseColor(this.color) : super(_vsSource, _fsSource) {}
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-
-    //indices
-    setShaderAttributsWithName('aVertexIndice', mesh.indices, null);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
   }
 
   setShaderUniforms(Mesh mesh) {
-    gl.uniformMatrix4fv(uniforms["uMVMatrix"], false, Application.instance.mvMatrix.storage);
-    gl.uniformMatrix4fv(uniforms["uPMatrix"], false, Application.instance.mainCamera.matrix.storage);
-    gl.uniform3fv(uniforms["uColor"], color.storage);
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName("uColor", color.storage);
   }
 }
 
-class MaterialBaseVertexColor extends MaterialCustom{
-
+class MaterialBaseVertexColor extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
     attribute vec4 aVertexColor;
@@ -147,29 +142,27 @@ class MaterialBaseVertexColor extends MaterialCustom{
       gl_FragColor = vColor;
     }
     """;
-  final  buffersNames = ['aVertexPosition', 'aVertexIndice', 'aVertexColor'];
+  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aVertexColor'];
 
-  MaterialBaseVertexColor():super(_vsSource, _fsSource);
+  MaterialBaseVertexColor() : super(_vsSource, _fsSource);
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-
-    //indices
-    setShaderAttributsWithName('aVertexIndice', mesh.indices, null);
-
-    //colors
-    setShaderAttributsWithName('aVertexColor', mesh.colors, mesh.colorDimensions);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+    setShaderAttributWithName(
+        'aVertexColor', mesh.colors, mesh.colorDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
-    gl.uniformMatrix4fv(uniforms["uMVMatrix"],false, Application.instance.mvMatrix.storage);
-    gl.uniformMatrix4fv(uniforms["uPMatrix"],false, Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
   }
 }
 
-class MaterialBaseTexture extends MaterialCustom{
-
+class MaterialBaseTexture extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
     attribute vec2 aTextureCoord;
@@ -202,32 +195,30 @@ class MaterialBaseTexture extends MaterialCustom{
   //External parameters
   TextureMap textureMap;
 
-  MaterialBaseTexture():super(_vsSource, _fsSource){
-  }
+  MaterialBaseTexture() : super(_vsSource, _fsSource) {}
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
 
-    //indices
-    setShaderAttributsWithName('aVertexIndice', mesh.indices, null);
-
-    //Texture
     gl.activeTexture(GL.TEXTURE0);
     gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
-    setShaderAttributsWithName('aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
+    setShaderAttributWithName(
+        'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
-    gl.uniformMatrix4fv(uniforms["uMVMatrix"], false, Application.instance.mvMatrix.storage);
-    gl.uniformMatrix4fv(uniforms["uPMatrix"], false, Application.instance.mainCamera.matrix.storage);
-
-    gl.uniform1i(uniforms["uSampler"], 0);
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName('uSampler', 0);
   }
 
   Future addTexture(String fileName) {
     Completer completer = new Completer();
-    TextureMap.initTexture(fileName, (textureMapResult){
+    TextureMap.initTexture(fileName, (textureMapResult) {
       textureMap = textureMapResult;
       completer.complete();
     });
@@ -236,8 +227,7 @@ class MaterialBaseTexture extends MaterialCustom{
   }
 }
 
-class MaterialBaseTextureNormal extends MaterialCustom{
-
+class MaterialBaseTextureNormal extends MaterialCustom {
   static const String _vsSource = """
     attribute vec3 aVertexPosition;
     attribute vec2 aTextureCoord;
@@ -286,7 +276,12 @@ class MaterialBaseTextureNormal extends MaterialCustom{
     }
     """;
 
-  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord', 'aVertexNormal'];
+  final buffersNames = [
+    'aVertexPosition',
+    'aVertexIndice',
+    'aTextureCoord',
+    'aVertexNormal'
+  ];
 
   //External Parameters
   TextureMap textureMap;
@@ -294,48 +289,44 @@ class MaterialBaseTextureNormal extends MaterialCustom{
   DirectionalLight directionalLight;
   bool useLighting;
 
-  MaterialBaseTextureNormal():super(_vsSource, _fsSource){
-  }
+  MaterialBaseTextureNormal() : super(_vsSource, _fsSource) {}
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
 
-    //indices
-    setShaderAttributsWithName('aVertexIndice', mesh.indices, null);
-
-    //Texture
     gl.activeTexture(GL.TEXTURE0);
     gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
-    setShaderAttributsWithName('aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
+    setShaderAttributWithName(
+        'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
 
-    //Normals
-    setShaderAttributsWithName('aVertexNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
+    setShaderAttributWithName(
+        'aVertexNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
-    gl.uniformMatrix4fv(uniforms["uMVMatrix"], false, Application.instance.mvMatrix.storage);
-    gl.uniformMatrix4fv(uniforms["uPMatrix"], false, Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
 
     Matrix4 mvInverse = new Matrix4.identity();
     mvInverse.copyInverse(Application.instance.mvMatrix);
     Matrix3 normalMatrix = mvInverse.getRotation();
 
     normalMatrix.transpose();
-    gl.uniformMatrix3fv(uniforms["uNMatrix"], false, normalMatrix.storage);
+    setShaderUniformWithName("uNMatrix", normalMatrix.storage);
 
     //Light
 
     // draw lighting?
-    gl.uniform1i(uniforms["uUseLighting"], useLighting ? 1 : 0); // must be int, not bool
+    setShaderUniformWithName(
+        "uUseLighting", useLighting ? 1 : 0); // must be int, not bool
 
     if (useLighting) {
-      gl.uniform3f(
-          uniforms["uAmbientColor"],
-          ambientColor.r,
-          ambientColor.g,
-          ambientColor.b
-      );
+      setShaderUniformWithName(
+          "uAmbientColor", ambientColor.r, ambientColor.g, ambientColor.b);
 
       Vector3 adjustedLD = new Vector3.zero();
       directionalLight.direction.normalizeInto(adjustedLD);
@@ -345,17 +336,17 @@ class MaterialBaseTextureNormal extends MaterialCustom{
       //adjustedLD.copyIntoArray(f32LD);
       //_gl.uniform3fv(_uLightDirection, f32LD);
 
-      gl.uniform3f(uniforms["uLightingDirection"], adjustedLD.x, adjustedLD.y, adjustedLD.z);
+      setShaderUniformWithName(
+          "uLightingDirection", adjustedLD.x, adjustedLD.y, adjustedLD.z);
 
-      gl.uniform3f(
-          uniforms["uDirectionalColor"], directionalLight.color.r, directionalLight.color.g, directionalLight.color.b
-      );
+      setShaderUniformWithName("uDirectionalColor", directionalLight.color.r,
+          directionalLight.color.g, directionalLight.color.b);
     }
   }
 
   Future addTexture(String fileName) {
     Completer completer = new Completer();
-    TextureMap.initTexture(fileName, (textureMapResult){
+    TextureMap.initTexture(fileName, (textureMapResult) {
       textureMap = textureMapResult;
       completer.complete();
     });
@@ -364,56 +355,95 @@ class MaterialBaseTextureNormal extends MaterialCustom{
   }
 }
 
-
 ///PBR's
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
-class MaterialPBR extends MaterialCustom{
-
+class MaterialPBR extends MaterialCustom {
   static const String _vsSource = """
-    attribute vec3 aVertexPosition;
+    //vertex position in the model space
+    attribute vec4 aPosition;
+    //vertex normal in the model space
+    attribute vec3 aNormal;
 
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
+    //current transformation matrices coming from Context
+    uniform mat4 uProjectionMatrix;
+    uniform mat4 uViewMatrix;
+    uniform mat4 uModelMatrix;
     uniform mat3 uNormalMatrix;
 
-    void main(void) {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    //user supplied light position
+    uniform vec3 uLightPos;
+
+    //vertex position in the eye coordinates (view space)
+    varying vec3 ecPosition;
+    //normal in the eye coordinates (view space)
+    varying vec3 ecNormal;
+    //light position in the eye coordinates (view space)
+    varying vec3 ecLightPos;
+
+    void main() {
+        //transform vertex into the eye space
+        vec4 pos = uViewMatrix * uModelMatrix * aPosition;
+        ecPosition = pos.xyz;
+        ecNormal = uNormalMatrix * aNormal;
+
+        ecLightPos = vec3(uViewMatrix * uModelMatrix * vec4(uLightPos, 1.0));
+
+        //project the vertex, the rest is handled by WebGL
+        gl_Position = uProjectionMatrix * pos;
     }
     """;
+
   static const String _fsSource = """
     precision mediump float;
 
-    uniform vec3 uColor;
+    //vertex position, normal and light position in the eye/view space
+    varying vec3 ecPosition;
+    varying vec3 ecNormal;
+    varying vec3 ecLightPos;
 
-    float lambertDiffuse(vec3 lightDirection, vec3 surfaceNormal) {
+    float lambert(vec3 lightDirection, vec3 surfaceNormal) {
       return max(0.0, dot(lightDirection, surfaceNormal));
     }
 
-    void main(void) {
-        gl_FragColor = vec4(uColor, 1.0);
+    void main() {
+         //normalize the normal, we do it here instead of vertex
+         //shader for smoother gradients
+        vec3 N = normalize(ecNormal);
+
+        //calculate direction towards the light
+        vec3 L = normalize(ecLightPos - ecPosition);
+
+        //diffuse intensity
+        float Id = lambert(L, N);
+
+         //surface and light color, full white
+        vec4 baseColor = vec4(1.0);
+        vec4 lightColor = vec4(1.0);
+
+        vec4 finalColor = vec4(baseColor.rgb * lightColor.rgb * Id, 1.0);
+        gl_FragColor = finalColor;
     }
 
     """;
-  final buffersNames = ['aVertexPosition', 'aVertexIndice'];
+
+  final buffersNames = ['aPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
-  final Vector3 color;
+  final Vector3 lightPosition;
 
-  MaterialPBR(this.color ):super(_vsSource, _fsSource){
-  }
+  MaterialPBR(this.lightPosition) : super(_vsSource, _fsSource);
 
   setShaderAttributs(Mesh mesh) {
-    //vertices
-    setShaderAttributsWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-
-    //indices
-    setShaderAttributsWithName('aVertexIndice', mesh.indices, null);
+    setShaderAttributWithName('aPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+    setShaderAttributWithName('aNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
-    gl.uniformMatrix4fv(uniforms["uMVMatrix"], false, Application.instance.mvMatrix.storage);
-    gl.uniformMatrix4fv(uniforms["uPMatrix"], false, Application.instance.mainCamera.matrix.storage);
-    gl.uniform3fv(uniforms["uColor"], color.storage);
+    setShaderUniformWithName("uProjectionMatrix", Application.instance.mainCamera.projectionMatrix.storage);
+    setShaderUniformWithName("uViewMatrix", Application.instance.mainCamera.matrix.storage);
+    setShaderUniformWithName("uModelMatrix", mesh.transform.storage);
+    setShaderUniformWithName("uNormalMatrix", Application.instance.mvMatrix.getNormalMatrix().storage);
+    setShaderUniformWithName("uLightPos", lightPosition.storage);
   }
 }

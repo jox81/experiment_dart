@@ -44,11 +44,12 @@ setupScene() async {
   application.mainCamera = camera;
 
   //Lights
-  PointLight pointlLight = new PointLight();
+  PointLight pointlLight = new PointLight()
+  ..position = new Vector3(100.0,100.0,10.0);
   application.light = pointlLight;
 
   //Materials
-  MaterialPBR materialPBR = new MaterialPBR(new Vector3.all(1.0));
+  MaterialPBR materialPBR = new MaterialPBR(pointlLight.position);
   application.materials.add(materialPBR);
 
   //Meshes
