@@ -179,48 +179,50 @@ abstract class MaterialCustom extends Material{
   }
 
   void setShaderAttributWithName(String attributName, data, dimension) {
-    if(dimension != null) {
-      gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
-      gl.bufferData(GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
-      gl.vertexAttribPointer(
-          attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
-      gl.enableVertexAttribArray(attributes[attributName]);
-    }else{
-      gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-      gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data), GL.STATIC_DRAW);
-    }
+      if (dimension != null) {
+        gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
+        gl.enableVertexAttribArray(attributes[attributName]);
+        gl.bufferData(
+            GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
+        gl.vertexAttribPointer(
+            attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
+      } else {
+        gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
+        gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data),
+            GL.STATIC_DRAW);
+      }
   }
 
   void setShaderUniformWithName(String uniformName, data, [data1, data2]) {
 
     ActiveInfoCustom activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName);
-    switch(activeInfo.typeName){
-      case 'FLOAT_VEC3':
-        if(data1 == null && data2 == null){
-          gl.uniform3fv(uniforms[uniformName], data);
-        }else {
-          gl.uniform3f(uniforms[uniformName], data, data1, data2);
-        }
-        break;
-      case 'BOOL':
-      case 'SAMPLER_2D':
-        gl.uniform1i(uniforms[uniformName], data);
-        break;
-      case 'FLOAT':
-        gl.uniform1f(uniforms[uniformName], data);
-        break;
-      case 'FLOAT_MAT3':
-        gl.uniformMatrix3fv(uniforms[uniformName], false, data);
-        break;
-      case 'FLOAT_MAT4':
-        gl.uniformMatrix4fv(uniforms[uniformName], false, data);
-        break;
-      default:
-        print('setShaderUniformWithName not set for : ${activeInfo.typeName}');
-        break;
-    }
+      switch (activeInfo.typeName) {
+        case 'FLOAT_VEC3':
+          if (data1 == null && data2 == null) {
+            gl.uniform3fv(uniforms[uniformName], data);
+          } else {
+            gl.uniform3f(uniforms[uniformName], data, data1, data2);
+          }
+          break;
+        case 'BOOL':
+        case 'SAMPLER_2D':
+          gl.uniform1i(uniforms[uniformName], data);
+          break;
+        case 'FLOAT':
+          gl.uniform1f(uniforms[uniformName], data);
+          break;
+        case 'FLOAT_MAT3':
+          gl.uniformMatrix3fv(uniforms[uniformName], false, data);
+          break;
+        case 'FLOAT_MAT4':
+          gl.uniformMatrix4fv(uniforms[uniformName], false, data);
+          break;
+        default:
+          print(
+              'setShaderUniformWithName not set for : ${activeInfo.typeName}');
+          break;
+      }
   }
-
 
   setShaderAttributs(Mesh mesh) {
   }

@@ -309,10 +309,10 @@ class _SphereMesh extends Mesh {
   Vector3 _tmpVec3 = new Vector3.zero();
   Vector3 _up = new Vector3(0.0, 1.0, 0.0);
 
-  List<int> faces = [];
+  List<int> sphereIndices = [];
   List<double> sphereVertices = [];
   List<Vector3> sphereVerticesVector = [];
-  List<Vector3> normals = [];
+  List<double> normals = [];
   List<Vector2> uvs = [];
 
   _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
@@ -347,23 +347,23 @@ class _SphereMesh extends Mesh {
         sphereVerticesVector.add(_tmpVec3);
 
         _tmpVec3.normalize();
-        normals.add(_tmpVec3);
+        normals.addAll(_tmpVec3.storage);
 
         uvs.add(new Vector2(normalizedY, 1 - normalizedZ));
       }
 
       if (zRotationStep > 0) {
-        var verticesCount = sphereVertices.length;
+        var verticesCount = sphereVerticesVector.length;
         var firstIndex = verticesCount - 2 * (totalYRotationSteps + 1);
         for (;
             (firstIndex + totalYRotationSteps + 2) < verticesCount;
             firstIndex++) {
-          faces.addAll([
+          sphereIndices.addAll([
             firstIndex,
             firstIndex + 1,
             firstIndex + totalYRotationSteps + 1
           ]);
-          faces.addAll([
+          sphereIndices.addAll([
             firstIndex + totalYRotationSteps + 1,
             firstIndex + 1,
             firstIndex + totalYRotationSteps + 2
@@ -371,10 +371,9 @@ class _SphereMesh extends Mesh {
         }
       }
     }
-
     vertices = sphereVertices;
-//    _indices = indices;
-//    _vertexNormals = normals;
+    _indices = sphereIndices;
+   _vertexNormals = normals;
 //    _textureCoords = uvs;
 
     mode = GL.TRIANGLES;

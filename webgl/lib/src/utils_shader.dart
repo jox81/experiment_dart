@@ -47,13 +47,11 @@ class UtilsShader {
   };
 
   static ProgramInfo getProgramInfo(RenderingContext gl, program) {
-    var activeUniforms = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS);
-    var activeAttributes = gl.getProgramParameter(
-        program, GL.ACTIVE_ATTRIBUTES);
-
     ProgramInfo result = new ProgramInfo();
 
     // Loop through active attributes
+    var activeAttributes = gl.getProgramParameter(
+        program, GL.ACTIVE_ATTRIBUTES);
     for (var i = 0; i < activeAttributes; i++) {
       ActiveInfoCustom attribute = new ActiveInfoCustom(gl.getActiveAttrib(program, i));
       attribute.typeName = enumTypes[attribute.activeInfo.type];
@@ -62,6 +60,7 @@ class UtilsShader {
     }
 
     // Loop through active uniforms
+    var activeUniforms = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS);
     for (var i = 0; i < activeUniforms; i++) {
       ActiveInfoCustom uniform = new ActiveInfoCustom(gl.getActiveUniform(program, i));
       uniform.typeName = enumTypes[uniform.activeInfo.type];

@@ -52,6 +52,11 @@ setupScene() async {
     ..direction.setFrom(guisetup.getDirectionalPosition);
   application.light = directionalLight;
 
+  PointLight pointLight = new PointLight()
+  ..color.setFrom(guisetup.getDirectionalColor)
+  ..position = new Vector3(20.0,20.0,20.0);
+  application.light = pointLight;
+
   //Materials
   MaterialPoint materialPoint = new MaterialPoint(4.0);
   application.materials.add(materialPoint);
@@ -74,6 +79,9 @@ setupScene() async {
     ..directionalLight = directionalLight;
   materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
   application.materials.add(materialBaseTextureNormal);
+
+  MaterialPBR materialPBR = new MaterialPBR(pointLight);
+  application.materials.add(materialPBR);
 
   //Meshes
   // create triangle
@@ -125,10 +133,10 @@ setupScene() async {
   application.meshes.add(susanMesh);
 
   //Sphere
-  Mesh sphere = Mesh.createSphere(radius:10.0, segmentV :1, segmentH: 3);
-  sphere.transform.translate(0.0, 0.0, 0.0);
-  sphere.material = materialPoint;
-  sphere.mode = GL.POINTS;
+  Mesh sphere = Mesh.createSphere(radius:2.5, segmentV :48, segmentH: 48);
+  sphere.transform.translate(0.0, 0.0, 10.0);
+  sphere.material = materialPBR;
+  //sphere.mode = GL.LINES;
   application.meshes.add(sphere);
 
 
@@ -180,6 +188,7 @@ class GuiSetup {
     //GUI
     GuiSetup guisetup = new GuiSetup();
     dat.GUI gui = new dat.GUI();
+    gui.add(guisetup, 'message');
     gui.add(guisetup, 'getUseLighting');
 
     dat.GUI f2 = gui.addFolder("Lighting Position");
@@ -200,6 +209,7 @@ class GuiSetup {
     return guisetup;
   }
 
+  String message = '';
   bool getUseLighting = true;
 
   Vector3 getDirectionalPosition = new Vector3(-0.25,-0.125,-0.25);

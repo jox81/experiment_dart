@@ -371,16 +371,16 @@ class MaterialBaseTextureNormal extends MaterialCustom {
 ///PBR's
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 class MaterialPBR extends MaterialCustom {
+
   static const String _vsSource = """
-    //vertex position in the model space
-    attribute vec4 aPosition;
+    attribute vec4 aVertexPosition;
+
     //vertex normal in the model space
     attribute vec3 aNormal;
 
-    //current transformation matrices coming from Context
-    uniform mat4 uProjectionMatrix;
-    uniform mat4 uViewMatrix;
-    uniform mat4 uModelMatrix;
+    uniform mat4 uMVMatrix;
+    uniform mat4 uPMatrix;
+
     uniform mat3 uNormalMatrix;
 
     //user supplied light position
@@ -393,16 +393,16 @@ class MaterialPBR extends MaterialCustom {
     //light position in the eye coordinates (view space)
     varying vec3 ecLightPos;
 
-    void main() {
-        //transform vertex into the eye space
-        vec4 pos = uViewMatrix * uModelMatrix * aPosition;
-        ecPosition = pos.xyz;
-        ecNormal = uNormalMatrix * aNormal;
+    void main(void) {
+      //transform vertex into the eye space
+      vec4 pos = uMVMatrix * aVertexPosition;
 
-        ecLightPos = vec3(uViewMatrix * uModelMatrix * vec4(uLightPos, 1.0));
+      ecPosition = pos.xyz;
+      ecNormal = uNormalMatrix * aNormal;
+      ecLightPos = vec3(uMVMatrix * vec4(uLightPos, 1.0));
 
-        //project the vertex, the rest is handled by WebGL
-        gl_Position = uProjectionMatrix * pos;
+      //project the vertex, the rest is handled by WebGL
+      gl_Position = uPMatrix * pos;
     }
     """;
 
@@ -414,49 +414,54 @@ class MaterialPBR extends MaterialCustom {
     varying vec3 ecNormal;
     varying vec3 ecLightPos;
 
+    float lambert(vec3 lightDirection, vec3 surfaceNormal);
+
     float lambert(vec3 lightDirection, vec3 surfaceNormal) {
       return max(0.0, dot(lightDirection, surfaceNormal));
     }
 
+
     void main() {
-         //normalize the normal, we do it here instead of vertex
-         //shader for smoother gradients
-        vec3 N = normalize(ecNormal);
+      //normalize the normal, we do it here instead of vertex
+      //shader for smoother gradients
+      vec3 N = normalize(ecNormal);
 
-        //calculate direction towards the light
-        vec3 L = normalize(ecLightPos - ecPosition);
+      //calculate direction towards the light
+      vec3 L = normalize(ecLightPos - ecPosition);
 
-        //diffuse intensity
-        float Id = lambert(L, N);
+      //diffuse intensity
+      float Id = lambert(L, N);
 
-         //surface and light color, full white
-        vec4 baseColor = vec4(1.0);
-        vec4 lightColor = vec4(1.0);
+      //surface and light color, full white
+      vec4 baseColor = vec4(1.0);
+      vec4 lightColor = vec4(1.0);
 
-        vec4 finalColor = vec4(baseColor.rgb * lightColor.rgb * Id, 1.0);
-        gl_FragColor = finalColor;
+      vec4 finalColor = vec4(baseColor.rgb * lightColor.rgb * Id, 1.0);
+      gl_FragColor = finalColor;
     }
 
     """;
 
-  final buffersNames = ['aPosition', 'aVertexIndice', 'aNormal'];
+  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
-  final Vector3 lightPosition;
+  PointLight pointLight;
 
-  MaterialPBR(this.lightPosition) : super(_vsSource, _fsSource);
+  MaterialPBR(this.pointLight) : super(_vsSource, _fsSource);
 
   setShaderAttributs(Mesh mesh) {
-    setShaderAttributWithName('aPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
     setShaderAttributWithName('aVertexIndice', mesh.indices, null);
     setShaderAttributWithName('aNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
-    setShaderUniformWithName("uProjectionMatrix", Application.instance.mainCamera.projectionMatrix.storage);
-    setShaderUniformWithName("uViewMatrix", Application.instance.mainCamera.matrix.storage);
-    setShaderUniformWithName("uModelMatrix", mesh.transform.storage);
-    setShaderUniformWithName("uNormalMatrix", Application.instance.mvMatrix.getNormalMatrix().storage);
-    setShaderUniformWithName("uLightPos", lightPosition.storage);
+    setShaderUniformWithName(
+        "uMVMatrix", Application.instance.mvMatrix.storage);
+    setShaderUniformWithName(
+        "uPMatrix", Application.instance.mainCamera.matrix.storage);
+
+    setShaderUniformWithName("uNormalMatrix", new Matrix4.inverted(Application.instance.mvMatrix).transposed().getRotation().storage);
+    setShaderUniformWithName("uLightPos", pointLight.position.storage);
   }
 }

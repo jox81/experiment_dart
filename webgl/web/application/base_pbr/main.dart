@@ -45,21 +45,22 @@ setupScene() async {
 
   //Lights
   PointLight pointlLight = new PointLight()
-  ..position = new Vector3(100.0,100.0,10.0);
+  ..position = new Vector3(100.0,100.0,100.0);
   application.light = pointlLight;
 
   //Materials
+//  MaterialBase materialBase = new MaterialBase();
+//  application.materials.add(materialBase);
+
   MaterialPBR materialPBR = new MaterialPBR(pointlLight.position);
   application.materials.add(materialPBR);
 
-  //Meshes
-  ////SusanModel
-  Mesh susanMesh = await createSusanModel()
-  ..transform.translate(0.0, 0.0, 0.0)
-  ..transform.rotateX(radians(90.0))
-  ..transform.rotateY(radians(180.0));
-  susanMesh.material = materialPBR;
-  application.meshes.add(susanMesh);
+  //Sphere
+  Mesh sphere = Mesh.createSphere(radius:10.0, segmentV :64, segmentH: 64);
+  sphere.transform.translate(0.0, 0.0, 0.0);
+  sphere.material = materialPBR;
+  //sphere.mode = GL.LINES;
+  application.meshes.add(sphere);
 
   // Animation
   num _lastTime = 0.0;
@@ -69,20 +70,6 @@ setupScene() async {
     //... animation here
     _lastTime = time;
   });
-}
-
-Future createSusanModel() async {
-  //SusanModel
-  var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
-  Mesh susanMesh = new Mesh();
-
-  susanMesh.vertices = susanJson['meshes'][0]['vertices'];
-  susanMesh.indices = susanJson['meshes'][0]['faces']
-      .expand((i) => i)
-      .toList();
-  susanMesh.vertexNormals = susanJson['meshes'][0]['normals'];
-
-  return susanMesh;
 }
 
 class GuiSetup {
