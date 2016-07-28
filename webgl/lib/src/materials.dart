@@ -412,8 +412,6 @@ class MaterialPBR extends MaterialCustom {
     varying vec3 ecNormal;
     varying vec3 ecLightPos;
 
-    float lambert(vec3 lightDirection, vec3 surfaceNormal);
-
     float lambert(vec3 lightDirection, vec3 surfaceNormal) {
       return max(0.0, dot(lightDirection, surfaceNormal));
     }
@@ -421,22 +419,17 @@ class MaterialPBR extends MaterialCustom {
     const float gamma = 2.2;
 
     //gamma in
-    vec3 toLinear(vec3 v);
     vec3 toLinear(vec3 v) {
       return pow(v, vec3(gamma));
     }
-    vec4 toLinear(vec4 v);
     vec4 toLinear(vec4 v) {
       return vec4(toLinear(v.rgb), v.a);
     }
 
     // gamma out
-    vec3 toGamma(vec3 v);
     vec3 toGamma(vec3 v) {
       return pow(v, vec3(1.0 / gamma));
     }
-
-    vec4 toGamma(vec4 v);
     vec4 toGamma(vec4 v) {
       return vec4(toGamma(v.rgb), v.a);
     }
