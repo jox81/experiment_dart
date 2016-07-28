@@ -36,7 +36,7 @@ setupScene() async {
   new Camera(radians(45.0), application.viewAspectRatio, 0.1, 1000.0)
     ..aspectRatio = application.viewAspectRatio
     ..targetPosition = new Vector3.zero()
-    ..position = new Vector3(20.0, 30.0, -50.0);
+    ..position = new Vector3(0.0, 10.0, 5.0);
   CameraController cameraController = new CameraController()
     ..onChange = (num xRot, num yRot){
       camera.rotateCamera(xRot, yRot);
@@ -45,18 +45,18 @@ setupScene() async {
 
   //Lights
   PointLight pointlLight = new PointLight()
-  ..position = new Vector3(100.0,100.0,100.0);
+  ..position = new Vector3(10.0,10.0,10.0);
   application.light = pointlLight;
 
   //Materials
 //  MaterialBase materialBase = new MaterialBase();
 //  application.materials.add(materialBase);
 
-  MaterialPBR materialPBR = new MaterialPBR(pointlLight.position);
+  MaterialPBR materialPBR = new MaterialPBR(pointlLight);
   application.materials.add(materialPBR);
 
   //Sphere
-  Mesh sphere = Mesh.createSphere(radius:10.0, segmentV :64, segmentH: 64);
+  Mesh sphere = Mesh.createSphere(radius:1.0, segmentV :48, segmentH: 48);
   sphere.transform.translate(0.0, 0.0, 0.0);
   sphere.material = materialPBR;
   //sphere.mode = GL.LINES;

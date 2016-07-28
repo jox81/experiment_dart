@@ -386,12 +386,10 @@ class MaterialPBR extends MaterialCustom {
     //user supplied light position
     uniform vec3 uLightPos;
 
-    //vertex position in the eye coordinates (view space)
-    varying vec3 ecPosition;
-    //normal in the eye coordinates (view space)
-    varying vec3 ecNormal;
-    //light position in the eye coordinates (view space)
-    varying vec3 ecLightPos;
+
+    varying vec3 ecPosition;  //vertex position in the eye coordinates (view space)
+    varying vec3 ecNormal;    //normal in the eye coordinates (view space)
+    varying vec3 ecLightPos;  //light position in the eye coordinates (view space)
 
     void main(void) {
       //transform vertex into the eye space
@@ -419,7 +417,6 @@ class MaterialPBR extends MaterialCustom {
     float lambert(vec3 lightDirection, vec3 surfaceNormal) {
       return max(0.0, dot(lightDirection, surfaceNormal));
     }
-
 
     void main() {
       //normalize the normal, we do it here instead of vertex
