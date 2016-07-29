@@ -80,7 +80,7 @@ setupScene() async {
   materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
   application.materials.add(materialBaseTextureNormal);
 
-  MaterialPBR materialPBR = new MaterialPBR(pointLight);
+  MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
   application.materials.add(materialPBR);
 
   //Meshes

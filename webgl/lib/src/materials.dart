@@ -1,14 +1,12 @@
-import 'dart:web_gl';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/application.dart';
-import 'dart:typed_data';
 import 'package:webgl/src/mesh.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/texture.dart';
 import 'dart:async';
 import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/utils_shader.dart';
+import 'package:webgl/src/utils.dart';
 
 class MaterialPoint extends MaterialCustom {
   static const String _vsSource = """
@@ -372,95 +370,18 @@ class MaterialBaseTextureNormal extends MaterialCustom {
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 class MaterialPBR extends MaterialCustom {
 
-  static const String _vsSource = """
-    attribute vec4 aVertexPosition;
-
-    //vertex normal in the model space
-    attribute vec3 aNormal;
-
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    uniform mat3 uNormalMatrix;
-
-    //user supplied light position
-    uniform vec3 uLightPos;
-
-
-    varying vec3 ecPosition;  //vertex position in the eye coordinates (view space)
-    varying vec3 ecNormal;    //normal in the eye coordinates (view space)
-    varying vec3 ecLightPos;  //light position in the eye coordinates (view space)
-
-    void main(void) {
-      //transform vertex into the eye space
-      vec4 pos = uMVMatrix * aVertexPosition;
-
-      ecPosition = pos.xyz;
-      ecNormal = uNormalMatrix * aNormal;
-      ecLightPos = vec3(uMVMatrix * vec4(uLightPos, 1.0));
-
-      //project the vertex, the rest is handled by WebGL
-      gl_Position = uPMatrix * pos;
-    }
-    """;
-
-  static const String _fsSource = """
-    precision mediump float;
-
-    //vertex position, normal and light position in the eye/view space
-    varying vec3 ecPosition;
-    varying vec3 ecNormal;
-    varying vec3 ecLightPos;
-
-    float lambert(vec3 lightDirection, vec3 surfaceNormal) {
-      return max(0.0, dot(lightDirection, surfaceNormal));
-    }
-
-    const float gamma = 2.2;
-
-    //gamma in
-    vec3 toLinear(vec3 v) {
-      return pow(v, vec3(gamma));
-    }
-    vec4 toLinear(vec4 v) {
-      return vec4(toLinear(v.rgb), v.a);
-    }
-
-    // gamma out
-    vec3 toGamma(vec3 v) {
-      return pow(v, vec3(1.0 / gamma));
-    }
-    vec4 toGamma(vec4 v) {
-      return vec4(toGamma(v.rgb), v.a);
-    }
-
-    void main() {
-      //normalize the normal, we do it here instead of vertex
-      //shader for smoother gradients
-      vec3 N = normalize(ecNormal);
-
-      //calculate direction towards the light
-      vec3 L = normalize(ecLightPos - ecPosition);
-
-      //diffuse intensity
-      float Id = lambert(L, N);
-
-      //surface and light color, full white
-      vec4 baseColor = toLinear(vec4(1.0));
-      vec4 lightColor = toLinear(vec4(1.0));
-
-      vec4 finalColor = vec4(baseColor.rgb * lightColor.rgb * Id, 1.0);
-      gl_FragColor = toGamma(finalColor);
-    }
-
-    """;
-
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
-  PointLight pointLight;
+  final PointLight pointLight;
 
-  MaterialPBR(this.pointLight) : super(_vsSource, _fsSource);
+  MaterialPBR._internal(String vsSource, String fsSource, this.pointLight) : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialPBR> create(PointLight pointLight)async {
+    String vsCode = await Utils.loadGlslShader('../shaders/material_pbr/material_pbr.vs.glsl');
+    String fsCode = await Utils.loadGlslShader('../shaders/material_pbr/material_pbr.fs.glsl');
+    return new MaterialPBR._internal(vsCode, fsCode, pointLight);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
@@ -478,3 +399,38 @@ class MaterialPBR extends MaterialCustom {
     setShaderUniformWithName("uLightPos", pointLight.position.storage);
   }
 }
+
+/*
+//Loading glsl files....
+  //may be used to load code async
+  -1-
+
+  MaterialPBR._internal(String vsSource, String fsSource, this.pointLight) : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialPBR> create(PointLight pointLight)async {
+    String vsCode = await Utils.loadGlslShader('../shaders/material_pbr/material_pbr.vs.glsl');
+    String fsCode = await Utils.loadGlslShader('../shaders/material_pbr/material_pbr.fs.glsl');
+    return new MaterialPBR._internal(vsCode, fsCode, pointLight);
+  }
+
+  >> but need to change creation time to :
+  MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
+
+
+  //Or use sync getter
+  -2-
+
+  static String get vsCode {
+    return Utils.loadGlslShaderSync('../shaders/material_pbr/material_pbr.vs.glsl');
+  }
+
+  static String get fsCode {
+    return Utils.loadGlslShaderSync('../shaders/material_pbr/material_pbr.fs.glsl');
+  }
+
+  MaterialPBR(this.pointLight) : super(vsCode, fsCode);
+
+  >> But have warning message:
+  Synchronous XMLHttpRequest on the main thread is deprecated because of its detrimental effects to the end user's experience. For more help, check http://xhr.spec.whatwg.org/.
+
+ */

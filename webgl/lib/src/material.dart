@@ -7,6 +7,8 @@ import 'package:webgl/src/utils.dart';
 import 'dart:async';
 import 'package:webgl/src/utils_shader.dart';
 import 'dart:typed_data';
+import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/light.dart';
 
 abstract class Material {
   /// GLSL Pragmas

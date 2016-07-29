@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'packages/datgui/datgui.dart' as dat;
 import 'package:webgl/src/application.dart';
@@ -7,8 +6,6 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/texture.dart';
-import 'package:webgl/src/utils.dart';
 
 Application application;
 GuiSetup guisetup;
@@ -52,7 +49,7 @@ setupScene() async {
 //  MaterialBase materialBase = new MaterialBase();
 //  application.materials.add(materialBase);
 
-  MaterialPBR materialPBR = new MaterialPBR(pointlLight);
+  MaterialPBR materialPBR = await MaterialPBR.create(pointlLight);
   application.materials.add(materialPBR);
 
   //Sphere
