@@ -369,24 +369,28 @@ class MaterialBaseTextureNormal extends MaterialCustom {
 ///PBR's
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 class MaterialPBR extends MaterialCustom {
-
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
   final PointLight pointLight;
 
-  MaterialPBR._internal(String vsSource, String fsSource, this.pointLight) : super(vsSource, fsSource);
+  MaterialPBR._internal(String vsSource, String fsSource, this.pointLight)
+      : super(vsSource, fsSource);
   //>>
-  static Future<MaterialPBR> create(PointLight pointLight)async {
-    String vsCode = await Utils.loadGlslShader('../shaders/material_pbr/material_pbr.vs.glsl');
-    String fsCode = await Utils.loadGlslShader('../shaders/material_pbr/material_pbr.fs.glsl');
+  static Future<MaterialPBR> create(PointLight pointLight) async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_pbr/material_pbr.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_pbr/material_pbr.fs.glsl');
     return new MaterialPBR._internal(vsCode, fsCode, pointLight);
   }
 
   setShaderAttributs(Mesh mesh) {
-    setShaderAttributWithName('aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName(
+        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
     setShaderAttributWithName('aVertexIndice', mesh.indices, null);
-    setShaderAttributWithName('aNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
+    setShaderAttributWithName(
+        'aNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -395,7 +399,12 @@ class MaterialPBR extends MaterialCustom {
     setShaderUniformWithName(
         "uPMatrix", Application.instance.mainCamera.matrix.storage);
 
-    setShaderUniformWithName("uNormalMatrix", new Matrix4.inverted(Application.instance.mvMatrix).transposed().getRotation().storage);
+    setShaderUniformWithName(
+        "uNormalMatrix",
+        new Matrix4.inverted(Application.instance.mvMatrix)
+            .transposed()
+            .getRotation()
+            .storage);
     setShaderUniformWithName("uLightPos", pointLight.position.storage);
   }
 }
