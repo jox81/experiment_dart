@@ -58,7 +58,7 @@ setupScene() async {
   application.light = pointLight;
 
   //Materials
-  MaterialPoint materialPoint = new MaterialPoint(4.0);
+  MaterialPoint materialPoint = await MaterialPoint.create(4.0);
   application.materials.add(materialPoint);
 
   MaterialBase materialBase = new MaterialBase();

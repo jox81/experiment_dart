@@ -9,33 +9,26 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
 
 class MaterialPoint extends MaterialCustom {
-  static const String _vsSource = """
-    attribute vec3 aVertexPosition;
 
-    uniform float pointSize;
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    void main(void) {
-      gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-      gl_PointSize = pointSize;
-    }
-    """;
-
-  static const String _fsSource = """
-    void main(void) {
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-    """;
-
-  final buffersNames = ['aVertexPosition'];
+  final buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
 
-  MaterialPoint(this.pointSize) : super(_vsSource, _fsSource);
+  MaterialPoint._internal(String vsSource, String fsSource, this.pointSize)
+      : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialPoint> create(num pointSize) async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_point/material_point.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_point/material_point.fs.glsl');
+    return new MaterialPoint._internal(vsCode, fsCode, pointSize);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
         'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+    setShaderAttributWithName(
+        'aVertexColor', mesh.colors, mesh.colorDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
