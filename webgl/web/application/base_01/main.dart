@@ -61,7 +61,7 @@ setupScene() async {
   MaterialPoint materialPoint = await MaterialPoint.create(4.0);
   application.materials.add(materialPoint);
 
-  MaterialBase materialBase = new MaterialBase();
+  MaterialBase materialBase = await MaterialBase.create();
   application.materials.add(materialBase);
 
   MaterialBaseColor materialBaseColor = new MaterialBaseColor(new Vector3(1.0, 1.0, 0.0));

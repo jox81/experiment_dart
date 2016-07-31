@@ -41,28 +41,19 @@ class MaterialPoint extends MaterialCustom {
 }
 
 class MaterialBase extends MaterialCustom {
-  static const String _vsSource = """
-    attribute vec3 aVertexPosition;
-
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    void main(void) {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-    }
-    """;
-
-  static const String _fsSource = """
-    precision mediump float;
-
-    void main(void) {
-        gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-    }
-    """;
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
-  MaterialBase() : super(_vsSource, _fsSource);
+  MaterialBase._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialBase> create() async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_base/material_base.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_base/material_base.fs.glsl');
+    return new MaterialBase._internal(vsCode, fsCode);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(

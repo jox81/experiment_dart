@@ -40,11 +40,21 @@ setupScene() async {
   MaterialPoint materialPoint = await MaterialPoint.create(5.0);
   application.materials.add(materialPoint);
 
+  MaterialBase materialBase = await MaterialBase.create();
+  application.materials.add(materialBase);
+
   Mesh axis = await createAxis();
   Mesh points = await createPoints(materialPoint);
 
   Mesh axis2 = await createAxis()
   ..transform.translate(5.0,0.0,0.0);
+
+  // create cube
+  Mesh centerCube = Mesh.createCube()
+  ..mode = GL.LINE_STRIP;
+  centerCube.transform = axis2.transform;
+  centerCube.material = materialBase;
+  application.meshes.add(centerCube);
 
   //Animation
   num _lastTime = 0.0;

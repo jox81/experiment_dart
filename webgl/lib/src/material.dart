@@ -144,7 +144,7 @@ abstract class Material {
     setShaderSettings(mesh);
 
     if (mesh.indices.length > 0) {
-      gl.drawElements(GL.TRIANGLES, mesh.indices.length, GL.UNSIGNED_SHORT, 0);
+      gl.drawElements(mesh.mode, mesh.indices.length, GL.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
     }
