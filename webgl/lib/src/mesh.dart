@@ -82,23 +82,23 @@ class Mesh {
     material.render(this);
   }
 
-  static createRectangle() {
+  factory Mesh.Rectangle() {
     return new _SquareMesh();
   }
 
-  static createTriangle() {
+  factory Mesh.Triangle() {
     return new _TriangleMesh();
   }
 
-  static createPyramid() {
+  factory Mesh.Pyramid() {
     return new _PyramidMesh();
   }
 
-  static createCube() {
+  factory Mesh.Cube() {
     return new _CubeMesh();
   }
 
-  static createSphere({num radius : 1, int segmentV: 32, int segmentH: 32}) {
+  factory Mesh.Sphere({num radius : 1, int segmentV: 32, int segmentH: 32}) {
     return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
   }
 }

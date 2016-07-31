@@ -85,27 +85,27 @@ setupScene() async {
 
   //Meshes
   // create triangle
-  Mesh triangle = Mesh.createTriangle();
+  Mesh triangle = new Mesh.Triangle();
   triangle.transform.translate(0.0, 0.0, 4.0);
   triangle.material = materialBase;
   application.meshes.add(triangle);
 
   // create square
-  Mesh square = Mesh.createRectangle();
+  Mesh square = new Mesh.Rectangle();
   square.transform.translate(3.0, 0.0, 0.0);
   square.transform.rotateX(radians(90.0));
   square.material = materialBaseColor;
   application.meshes.add(square);
 
   // create cube
-  Mesh centerCube = Mesh.createCube();
+  Mesh centerCube = new Mesh.Cube();
   centerCube.transform.translate(0.0, 0.0, 0.0);
   centerCube.transform.scale(0.05, 0.05, 0.05);
   centerCube.material = materialBaseColor;
   application.meshes.add(centerCube);
 
   // create square
-  Mesh squareX = Mesh.createRectangle();
+  Mesh squareX = new Mesh.Rectangle();
   squareX.transform.translate(0.0, 3.0, 0.0);
   squareX.colors = new List();
   squareX.colors.addAll([1.0, 0.0, 0.0, 1.0]);
@@ -116,13 +116,13 @@ setupScene() async {
   application.meshes.add(squareX);
 
   //create Pyramide
-  Mesh pyramid = Mesh.createPyramid();
+  Mesh pyramid = new Mesh.Pyramid();
   pyramid.transform.translate(3.0, -2.0, 0.0);
   pyramid.material = materialBaseVertexColor;
   application.meshes.add(pyramid);
 
   //Create Cube
-  Mesh cube = Mesh.createCube();
+  Mesh cube = new Mesh.Cube();
   cube.transform.translate(-4.0, 1.0, 0.0);
   await materialBaseTextureNormal.addTexture("../images/crate.gif");
   cube.material = materialBaseTextureNormal;
@@ -133,7 +133,7 @@ setupScene() async {
   application.meshes.add(susanMesh);
 
   //Sphere
-  Mesh sphere = Mesh.createSphere(radius:2.5, segmentV :48, segmentH: 48);
+  Mesh sphere = new Mesh.Sphere(radius:2.5, segmentV :48, segmentH: 48);
   sphere.transform.translate(0.0, 0.0, 10.0);
   sphere.material = materialPBR;
   //sphere.mode = GL.LINES;

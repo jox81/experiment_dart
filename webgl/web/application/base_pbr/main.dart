@@ -53,7 +53,7 @@ setupScene() async {
   application.materials.add(materialPBR);
 
   //Sphere
-  Mesh sphere = Mesh.createSphere(radius:1.0, segmentV :48, segmentH: 48);
+  Mesh sphere = new Mesh.Sphere(radius:1.0, segmentV :48, segmentH: 48);
   sphere.transform.translate(0.0, 0.0, 0.0);
   sphere.material = materialPBR;
   //sphere.mode = GL.LINES;

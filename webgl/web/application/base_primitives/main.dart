@@ -50,7 +50,7 @@ setupScene() async {
   ..transform.translate(5.0,0.0,0.0);
 
   // create cube
-  Mesh centerCube = Mesh.createCube()
+  Mesh centerCube = new Mesh.Cube()
   ..mode = GL.LINE_STRIP;
   centerCube.transform = axis2.transform;
   centerCube.material = materialBase;
