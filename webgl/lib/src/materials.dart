@@ -70,32 +70,22 @@ class MaterialBase extends MaterialCustom {
 }
 
 class MaterialBaseColor extends MaterialCustom {
-  static const String _vsSource = """
-    attribute vec3 aVertexPosition;
 
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    void main(void) {
-        gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-    }
-    """;
-
-  static const String _fsSource = """
-    precision mediump float;
-
-    uniform vec3 uColor;
-
-    void main(void) {
-        gl_FragColor = vec4(uColor, 1.0);
-    }
-    """;
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External Parameters
   final Vector3 color;
 
-  MaterialBaseColor(this.color) : super(_vsSource, _fsSource) {}
+  MaterialBaseColor._internal(String vsSource, String fsSource, this.color)
+      : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialBaseColor> create(Vector3 color) async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_base_color/material_base_color.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_base_color/material_base_color.fs.glsl');
+    return new MaterialBaseColor._internal(vsCode, fsCode, color);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
