@@ -8,7 +8,7 @@ import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
 
-class MaterialPoint extends MaterialCustom {
+class MaterialPoint extends Material {
 
   final buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
@@ -40,7 +40,7 @@ class MaterialPoint extends MaterialCustom {
   }
 }
 
-class MaterialBase extends MaterialCustom {
+class MaterialBase extends Material {
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
@@ -69,7 +69,7 @@ class MaterialBase extends MaterialCustom {
   }
 }
 
-class MaterialBaseColor extends MaterialCustom {
+class MaterialBaseColor extends Material {
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
@@ -102,7 +102,7 @@ class MaterialBaseColor extends MaterialCustom {
   }
 }
 
-class MaterialBaseVertexColor extends MaterialCustom {
+class MaterialBaseVertexColor extends Material {
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aVertexColor'];
 
@@ -133,7 +133,7 @@ class MaterialBaseVertexColor extends MaterialCustom {
   }
 }
 
-class MaterialBaseTexture extends MaterialCustom {
+class MaterialBaseTexture extends Material {
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
@@ -181,7 +181,7 @@ class MaterialBaseTexture extends MaterialCustom {
   }
 }
 
-class MaterialBaseTextureNormal extends MaterialCustom {
+class MaterialBaseTextureNormal extends Material {
 
   final buffersNames = [
     'aVertexPosition',
@@ -273,7 +273,8 @@ class MaterialBaseTextureNormal extends MaterialCustom {
 
 ///PBR's
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
-class MaterialPBR extends MaterialCustom {
+///base
+class MaterialPBR extends Material {
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters

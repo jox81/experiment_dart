@@ -22,6 +22,8 @@ abstract class Material {
 
   Program program;
 
+  ProgramInfo programInfo;
+
   List<String> attributsNames = new List();
   Map<String, int> attributes = new Map();
 
@@ -35,46 +37,15 @@ abstract class Material {
     vsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
     fsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     initShaderProgram(vsSource, fsSource);
+
+    programInfo = UtilsShader.getProgramInfo(Application.gl, program);
+    attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
+    uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
+
+    initBuffers();
+
+    getShaderSettings();
   }
-
-  //Not working loading from an exetnal file
-
-//  Material(vsPath, fsPath) {
-//    Utils.loadGlslShader(vsPath)
-//        .then((vs) {
-//      String vsSource = vs;
-//      Utils.loadGlslShader(fsPath)
-//          .then((fs) {
-//        String fsSource = fs;
-//        {
-//          vsSource = ((Application.debugging)
-//              ? Material.GLSL_PRAGMA_DEBUG_ON + GLSL_PRAGMA_OPTIMIZE_OFF
-//              : "") +
-//              vsSource;
-//          fsSource = ((Application.debugging)
-//              ? Material.GLSL_PRAGMA_DEBUG_ON + GLSL_PRAGMA_OPTIMIZE_OFF
-//              : "") +
-//              fsSource;
-//          _initShaderProgram(vsSource, fsSource);
-//          _initBuffers();
-//          _getShaderSettings();
-//        }
-//      });
-//    });
-//  }
-
-
-//  static Future<Material> fromUrls(String vsPath, String fsPath) {
-//    String vsSource;
-//    String fsSource;
-//    return Utils.loadGlslShader(vsPath)
-//        .then((vs) {
-//      vsSource = vs;
-//      Utils.loadGlslShader(fsPath).then((fs) {
-//        return new Material(vsSource, fsSource);
-//      });
-//    });
-//  }
 
   void initShaderProgram(String vsSource, String fsSource) {
     // vertex shader compilation
@@ -151,6 +122,52 @@ abstract class Material {
     disableVertexAttributs();
   }
 
+  void setShaderAttributWithName(String attributName, data, dimension) {
+    if (dimension != null) {
+      gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
+      gl.enableVertexAttribArray(attributes[attributName]);
+      gl.bufferData(
+          GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
+      gl.vertexAttribPointer(
+          attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
+    } else {
+      gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
+      gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data),
+          GL.STATIC_DRAW);
+    }
+  }
+
+  void setShaderUniformWithName(String uniformName, data, [data1, data2]) {
+
+    ActiveInfoCustom activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName);
+    switch (activeInfo.typeName) {
+      case 'FLOAT_VEC3':
+        if (data1 == null && data2 == null) {
+          gl.uniform3fv(uniforms[uniformName], data);
+        } else {
+          gl.uniform3f(uniforms[uniformName], data, data1, data2);
+        }
+        break;
+      case 'BOOL':
+      case 'SAMPLER_2D':
+        gl.uniform1i(uniforms[uniformName], data);
+        break;
+      case 'FLOAT':
+        gl.uniform1f(uniforms[uniformName], data);
+        break;
+      case 'FLOAT_MAT3':
+        gl.uniformMatrix3fv(uniforms[uniformName], false, data);
+        break;
+      case 'FLOAT_MAT4':
+        gl.uniformMatrix4fv(uniforms[uniformName], false, data);
+        break;
+      default:
+        print(
+            'setShaderUniformWithName not set for : ${activeInfo.typeName}');
+        break;
+    }
+  }
+
   setShaderSettings(Mesh mesh) {
     setShaderAttributs(mesh);
     setShaderUniforms(mesh);
@@ -164,72 +181,4 @@ abstract class Material {
       gl.disableVertexAttribArray(attributes[name]);
     }
   }
-}
-
-abstract class MaterialCustom extends Material{
-
-  ProgramInfo programInfo;
-
-  MaterialCustom(String vsSource, String fsSource):super(vsSource, fsSource){
-    programInfo = UtilsShader.getProgramInfo(Application.gl, program);
-    attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
-    uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
-
-    initBuffers();
-
-    getShaderSettings();
-  }
-
-  void setShaderAttributWithName(String attributName, data, dimension) {
-      if (dimension != null) {
-        gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
-        gl.enableVertexAttribArray(attributes[attributName]);
-        gl.bufferData(
-            GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
-        gl.vertexAttribPointer(
-            attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
-      } else {
-        gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-        gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data),
-            GL.STATIC_DRAW);
-      }
-  }
-
-  void setShaderUniformWithName(String uniformName, data, [data1, data2]) {
-
-    ActiveInfoCustom activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName);
-      switch (activeInfo.typeName) {
-        case 'FLOAT_VEC3':
-          if (data1 == null && data2 == null) {
-            gl.uniform3fv(uniforms[uniformName], data);
-          } else {
-            gl.uniform3f(uniforms[uniformName], data, data1, data2);
-          }
-          break;
-        case 'BOOL':
-        case 'SAMPLER_2D':
-          gl.uniform1i(uniforms[uniformName], data);
-          break;
-        case 'FLOAT':
-          gl.uniform1f(uniforms[uniformName], data);
-          break;
-        case 'FLOAT_MAT3':
-          gl.uniformMatrix3fv(uniforms[uniformName], false, data);
-          break;
-        case 'FLOAT_MAT4':
-          gl.uniformMatrix4fv(uniforms[uniformName], false, data);
-          break;
-        default:
-          print(
-              'setShaderUniformWithName not set for : ${activeInfo.typeName}');
-          break;
-      }
-  }
-
-  setShaderAttributs(Mesh mesh) {
-  }
-
-  setShaderUniforms(Mesh mesh) {
-  }
-
 }
