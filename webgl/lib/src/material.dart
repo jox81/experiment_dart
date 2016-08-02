@@ -168,6 +168,12 @@ abstract class Material {
     }
   }
 
+  disableVertexAttributs() {
+    for (String name in attributsNames) {
+      gl.disableVertexAttribArray(attributes[name]);
+    }
+  }
+
   setShaderSettings(Mesh mesh) {
     setShaderAttributs(mesh);
     setShaderUniforms(mesh);
@@ -176,9 +182,6 @@ abstract class Material {
   setShaderAttributs(Mesh mesh);
   setShaderUniforms(Mesh mesh);
 
-  disableVertexAttributs() {
-    for (String name in attributsNames) {
-      gl.disableVertexAttribArray(attributes[name]);
-    }
-  }
+
 }
+

@@ -90,7 +90,7 @@ class Utils{
     return completer.future;
   }
 
-  ///Load a Glsl from a file url
+  ///Load a Glsl from a file url synchronously
   static String loadGlslShaderSync(String url) {
     String result;
     try {

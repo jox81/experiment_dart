@@ -10,6 +10,9 @@ import 'package:webgl/src/utils.dart';
 
 class MaterialPoint extends Material {
 
+  static const String vertexShaderPath = '../shaders/material_point/material_point.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_point/material_point.fs.glsl';
+
   final buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
 
@@ -18,9 +21,9 @@ class MaterialPoint extends Material {
   //>>
   static Future<MaterialPoint> create(num pointSize) async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_point/material_point.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_point/material_point.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialPoint._internal(vsCode, fsCode, pointSize);
   }
 
@@ -42,6 +45,9 @@ class MaterialPoint extends Material {
 
 class MaterialBase extends Material {
 
+  static const String vertexShaderPath = '../shaders/material_base/material_base.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_base/material_base.fs.glsl';
+
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   MaterialBase._internal(String vsSource, String fsSource)
@@ -49,9 +55,9 @@ class MaterialBase extends Material {
   //>>
   static Future<MaterialBase> create() async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_base/material_base.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_base/material_base.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialBase._internal(vsCode, fsCode);
   }
 
@@ -71,6 +77,9 @@ class MaterialBase extends Material {
 
 class MaterialBaseColor extends Material {
 
+  static const String vertexShaderPath = '../shaders/material_base_color/material_base_color.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_base_color/material_base_color.fs.glsl';
+
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External Parameters
@@ -81,9 +90,9 @@ class MaterialBaseColor extends Material {
   //>>
   static Future<MaterialBaseColor> create(Vector3 color) async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_base_color/material_base_color.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_base_color/material_base_color.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialBaseColor._internal(vsCode, fsCode, color);
   }
 
@@ -104,6 +113,9 @@ class MaterialBaseColor extends Material {
 
 class MaterialBaseVertexColor extends Material {
 
+  static const String vertexShaderPath = '../shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl';
+
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aVertexColor'];
 
   MaterialBaseVertexColor._internal(String vsSource, String fsSource)
@@ -111,9 +123,9 @@ class MaterialBaseVertexColor extends Material {
   //>>
   static Future<MaterialBaseVertexColor> create() async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialBaseVertexColor._internal(vsCode, fsCode);
   }
 
@@ -135,6 +147,9 @@ class MaterialBaseVertexColor extends Material {
 
 class MaterialBaseTexture extends Material {
 
+  static const String vertexShaderPath = '../shaders/material_base_texture/material_base_texture.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_base_texture/material_base_texture.fs.glsl';
+
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
   //External parameters
@@ -145,9 +160,9 @@ class MaterialBaseTexture extends Material {
   //>>
   static Future<MaterialBaseTexture> create() async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_base_texture/material_base_texture.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_base_texture/material_base_texture.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialBaseTexture._internal(vsCode, fsCode);
   }
 
@@ -183,6 +198,9 @@ class MaterialBaseTexture extends Material {
 
 class MaterialBaseTextureNormal extends Material {
 
+  static const String vertexShaderPath = '../shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl';
+
   final buffersNames = [
     'aVertexPosition',
     'aVertexIndice',
@@ -201,9 +219,9 @@ class MaterialBaseTextureNormal extends Material {
   //>>
   static Future<MaterialBaseTextureNormal> create() async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialBaseTextureNormal._internal(vsCode, fsCode);
   }
 
@@ -275,6 +293,10 @@ class MaterialBaseTextureNormal extends Material {
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 ///base
 class MaterialPBR extends Material {
+
+  static const String vertexShaderPath = '../shaders/material_pbr/material_pbr.vs.glsl';
+  static const String fragmentShaderPath = '../shaders/material_pbr/material_pbr.fs.glsl';
+
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
@@ -285,9 +307,9 @@ class MaterialPBR extends Material {
   //>>
   static Future<MaterialPBR> create(PointLight pointLight) async {
     String vsCode = await Utils
-        .loadGlslShader('../shaders/material_pbr/material_pbr.vs.glsl');
+        .loadGlslShader(vertexShaderPath);
     String fsCode = await Utils
-        .loadGlslShader('../shaders/material_pbr/material_pbr.fs.glsl');
+        .loadGlslShader(fragmentShaderPath);
     return new MaterialPBR._internal(vsCode, fsCode, pointLight);
   }
 
