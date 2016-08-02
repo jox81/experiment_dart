@@ -103,33 +103,19 @@ class MaterialBaseColor extends MaterialCustom {
 }
 
 class MaterialBaseVertexColor extends MaterialCustom {
-  static const String _vsSource = """
-    attribute vec3 aVertexPosition;
-    attribute vec4 aVertexColor;
 
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    varying vec4 vColor;
-
-    void main(void) {
-      gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-      vColor = aVertexColor;
-    }
-    """;
-
-  static const String _fsSource = """
-    precision mediump float;
-
-    varying vec4 vColor;
-
-    void main(void) {
-      gl_FragColor = vColor;
-    }
-    """;
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aVertexColor'];
 
-  MaterialBaseVertexColor() : super(_vsSource, _fsSource);
+  MaterialBaseVertexColor._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialBaseVertexColor> create() async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl');
+    return new MaterialBaseVertexColor._internal(vsCode, fsCode);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
@@ -148,39 +134,22 @@ class MaterialBaseVertexColor extends MaterialCustom {
 }
 
 class MaterialBaseTexture extends MaterialCustom {
-  static const String _vsSource = """
-    attribute vec3 aVertexPosition;
-    attribute vec2 aTextureCoord;
-
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-
-    varying vec2 vTextureCoord;
-
-    void main(void) {
-      gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-      vTextureCoord = aTextureCoord;
-    }
-    """;
-
-  static const String _fsSource = """
-    precision mediump float;
-
-    varying vec2 vTextureCoord;
-
-    uniform sampler2D uSampler;
-
-    void main(void) {
-      gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-    }
-    """;
 
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
   //External parameters
   TextureMap textureMap;
 
-  MaterialBaseTexture() : super(_vsSource, _fsSource) {}
+  MaterialBaseTexture._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialBaseTexture> create() async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_base_texture/material_base_texture.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_base_texture/material_base_texture.fs.glsl');
+    return new MaterialBaseTexture._internal(vsCode, fsCode);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
@@ -213,53 +182,6 @@ class MaterialBaseTexture extends MaterialCustom {
 }
 
 class MaterialBaseTextureNormal extends MaterialCustom {
-  static const String _vsSource = """
-    attribute vec3 aVertexPosition;
-    attribute vec2 aTextureCoord;
-    attribute vec3 aVertexNormal;
-
-    uniform mat4 uMVMatrix;
-    uniform mat4 uPMatrix;
-    uniform mat3 uNMatrix;
-
-    uniform vec3 uAmbientColor;
-
-    uniform vec3 uLightingDirection;
-    uniform vec3 uDirectionalColor;
-
-    uniform bool uUseLighting;
-
-    varying vec2 vTextureCoord;
-    varying vec3 vLightWeighting;
-
-    void main(void) {
-      gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-      vTextureCoord = aTextureCoord;
-      if(!uUseLighting)
-      {
-         vLightWeighting = vec3(1.0, 1.0, 1.0);
-      } else
-      {
-         vec3 transformedNormal = uNMatrix * aVertexNormal;
-         float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
-         vLightWeighting = uAmbientColor + uDirectionalColor*directionalLightWeighting;
-      }
-    }
-    """;
-
-  static const String _fsSource = """
-    precision mediump float;
-
-    varying vec2 vTextureCoord;
-    varying vec3 vLightWeighting;
-
-    uniform sampler2D uSampler;
-
-    void main(void) {
-      vec4 textureColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
-      gl_FragColor = vec4(textureColor.rgb * vLightWeighting, textureColor.a);
-    }
-    """;
 
   final buffersNames = [
     'aVertexPosition',
@@ -274,7 +196,16 @@ class MaterialBaseTextureNormal extends MaterialCustom {
   DirectionalLight directionalLight;
   bool useLighting;
 
-  MaterialBaseTextureNormal() : super(_vsSource, _fsSource) {}
+  MaterialBaseTextureNormal._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+  //>>
+  static Future<MaterialBaseTextureNormal> create() async {
+    String vsCode = await Utils
+        .loadGlslShader('../shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl');
+    String fsCode = await Utils
+        .loadGlslShader('../shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl');
+    return new MaterialBaseTextureNormal._internal(vsCode, fsCode);
+  }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(

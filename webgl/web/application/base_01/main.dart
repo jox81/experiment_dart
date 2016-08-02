@@ -67,14 +67,14 @@ setupScene() async {
   MaterialBaseColor materialBaseColor = await MaterialBaseColor.create(new Vector3(1.0, 1.0, 0.0));
   application.materials.add(materialBaseColor);
 
-  MaterialBaseVertexColor materialBaseVertexColor = new MaterialBaseVertexColor();
+  MaterialBaseVertexColor materialBaseVertexColor = await MaterialBaseVertexColor.create();
   application.materials.add(materialBaseVertexColor);
 
-  MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture();
+  MaterialBaseTexture materialBaseTexture = await MaterialBaseTexture.create();
   application.materials.add(materialBaseTexture);
 
   MaterialBaseTextureNormal materialBaseTextureNormal =
-  new MaterialBaseTextureNormal()
+  await MaterialBaseTextureNormal.create()
     ..ambientColor = application.ambientLight.color
     ..directionalLight = directionalLight;
   materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
@@ -174,7 +174,7 @@ Future createSusanModel() async {
       .toList();
   susanMesh.textureCoords = susanJson['meshes'][0]['texturecoords'][0];
   susanMesh.vertexNormals = susanJson['meshes'][0]['normals'];
-  MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
+  MaterialBaseTexture susanMaterialBaseTexture = await MaterialBaseTexture.create()
     ..textureMap = susanTexture;
   application.materials.add(susanMaterialBaseTexture);
   susanMesh.material = susanMaterialBaseTexture;
