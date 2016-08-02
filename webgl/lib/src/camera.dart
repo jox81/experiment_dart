@@ -4,23 +4,24 @@ import 'dart:html';
 import 'package:webgl/src/application.dart';
 
 class Camera {
+  final double fOV;
+  final double zNear;
+  final double zFar;
+
+  double aspectRatio;
   Vector3 position;
   Vector3 upDirection;
   Vector3 targetPosition;
-  double zNear;
-  double zFar;
-  double aspectRatio;
-  double fOV;
 
   Camera(this.fOV, this.aspectRatio, this.zNear, this.zFar) {
     position = new Vector3(0.0, 2.0, 0.0);
     targetPosition = new Vector3(1.0, 2.0, -1.0);
     upDirection = new Vector3(0.0, 1.0, 0.0);
 
-    fOV = 0.35;
-    zNear = 1.0;
-    zFar = 1000.0;
-    aspectRatio = 1.7777778;
+//    fOV = 0.35;
+//    zNear = 1.0;
+//    zFar = 1000.0;
+//    aspectRatio = 1.7777778;
   }
 
   void translate(Vector3 position) {

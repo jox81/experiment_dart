@@ -12,7 +12,7 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/application/src/dart_js/debug/webgl_debug_js.dart';
 
 class Application {
-  static const bool debugging = true;
+  static const bool debugging = false;
 
   static RenderingContext gl;
 
