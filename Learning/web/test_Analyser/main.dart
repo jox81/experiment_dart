@@ -1,6 +1,4 @@
-import 'Display.dart';
 import 'dart:io';
-import 'dart:mirrors';
 import 'package:analyzer/analyzer.dart';
 
 void main() {
@@ -29,12 +27,10 @@ void main() {
           if(m is MethodDeclaration){
             MethodDeclaration method = m;
             String params = "";
-            method.parameters.forEach((p){
+            method.parameters.parameters.forEach((p){
               params += p.runtimeType;
             });
             print('${method.isGetter?"<<get>> ":method.isSetter?"<<set>> ":""}${method.name}( $params ) ${(method.returnType != null)?": ${method.returnType}" : ""}');
-
-
 
           }
 

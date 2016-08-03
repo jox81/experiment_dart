@@ -14,6 +14,7 @@ dependencies:
   gl_enums: "^0.0.1"
   logging: "^0.11.2"
   js: ^0.6.0
+  analyzer: "^0.27.1+2"
   func: any
   datgui: any
   #dart_to_js_script_rewriter: '^0.1.0'
