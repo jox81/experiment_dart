@@ -48,12 +48,12 @@ void main(List<String> args) {
 
   CompilationUnit resolvedUnit = getAstResolved(resolvers, new JavaFile(args[1]));
 
-  String path2 = (resolvedUnit.directives[0] as ImportDirective).source.fullName;
-  CompilationUnit resolvedUnitMaterial = getAstResolved(resolvers, new JavaFile(path2));
+//  String path2 = (resolvedUnit.directives[0] as ImportDirective).source.fullName;
+//  CompilationUnit resolvedUnitMaterial = getAstResolved(resolvers, new JavaFile(path2));
 
 
   var visitor = new _ASTVisitor();
-  resolvedUnitMaterial.accept(visitor);
+  resolvedUnit.accept(visitor);
 }
 
 CompilationUnit getAstResolved(List resolvers, JavaFile javaFile) {
