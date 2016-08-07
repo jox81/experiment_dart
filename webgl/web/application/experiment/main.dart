@@ -5,6 +5,7 @@ import 'package:webgl/src/mesh.dart';
 import '000.dart' as exp000;
 import '001.dart' as exp001;
 import '002.dart' as exp002;
+import '003.dart' as exp003;
 
 Application application;
 
@@ -20,7 +21,7 @@ main() {
 setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  Mesh mesh = exp002.experiment();
+  Mesh mesh = exp003.experiment();
   application.materials.add(mesh.material);
   application.meshes.add(mesh);
 
