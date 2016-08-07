@@ -48,6 +48,10 @@ class Application {
   static Application _instance;
   static Application get instance => _instance;
   factory Application(CanvasElement canvas) {
+
+    canvas.width = document.body.clientWidth;
+    canvas.height = document.body.clientHeight;
+
     if (_instance == null) {
       _instance = new Application._internal(canvas);
     }

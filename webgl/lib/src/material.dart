@@ -139,32 +139,35 @@ abstract class Material {
 
   void setShaderUniformWithName(String uniformName, data, [data1, data2]) {
 
-    ActiveInfoCustom activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName);
-    switch (activeInfo.typeName) {
-      case 'FLOAT_VEC3':
-        if (data1 == null && data2 == null) {
-          gl.uniform3fv(uniforms[uniformName], data);
-        } else {
-          gl.uniform3f(uniforms[uniformName], data, data1, data2);
-        }
-        break;
-      case 'BOOL':
-      case 'SAMPLER_2D':
-        gl.uniform1i(uniforms[uniformName], data);
-        break;
-      case 'FLOAT':
-        gl.uniform1f(uniforms[uniformName], data);
-        break;
-      case 'FLOAT_MAT3':
-        gl.uniformMatrix3fv(uniforms[uniformName], false, data);
-        break;
-      case 'FLOAT_MAT4':
-        gl.uniformMatrix4fv(uniforms[uniformName], false, data);
-        break;
-      default:
-        print(
-            'setShaderUniformWithName not set for : ${activeInfo.typeName}');
-        break;
+    ActiveInfoCustom activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName, orElse:() => null);
+
+    if(activeInfo != null) {
+      switch (activeInfo.typeName) {
+        case 'FLOAT_VEC3':
+          if (data1 == null && data2 == null) {
+            gl.uniform3fv(uniforms[uniformName], data);
+          } else {
+            gl.uniform3f(uniforms[uniformName], data, data1, data2);
+          }
+          break;
+        case 'BOOL':
+        case 'SAMPLER_2D':
+          gl.uniform1i(uniforms[uniformName], data);
+          break;
+        case 'FLOAT':
+          gl.uniform1f(uniforms[uniformName], data);
+          break;
+        case 'FLOAT_MAT3':
+          gl.uniformMatrix3fv(uniforms[uniformName], false, data);
+          break;
+        case 'FLOAT_MAT4':
+          gl.uniformMatrix4fv(uniforms[uniformName], false, data);
+          break;
+        default:
+          print(
+              'setShaderUniformWithName not set for : ${activeInfo.typeName}');
+          break;
+      }
     }
   }
 

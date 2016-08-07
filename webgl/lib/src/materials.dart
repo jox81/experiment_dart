@@ -8,12 +8,34 @@ import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
 
+typedef void SetShaderVariables(Mesh mesh);
+
+class MaterialCustom extends Material {
+
+  List<String> buffersNames;
+
+  SetShaderVariables setShaderAttributsVariables;
+  SetShaderVariables setShaderUniformsVariables;
+
+  MaterialCustom(String vsSource, String fsSource, this.buffersNames): super(vsSource, fsSource);
+
+  @override
+  setShaderAttributs(Mesh mesh) {
+    setShaderAttributsVariables(mesh);
+  }
+
+  @override
+  setShaderUniforms(Mesh mesh) {
+    setShaderUniformsVariables(mesh);
+  }
+}
+
 class MaterialPoint extends Material {
 
   static const String vertexShaderPath = '../shaders/material_point/material_point.vs.glsl';
   static const String fragmentShaderPath = '../shaders/material_point/material_point.fs.glsl';
 
-  final buffersNames = ['aVertexPosition', 'aVertexColor'];
+  final List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
 
   MaterialPoint._internal(String vsSource, String fsSource, this.pointSize)
