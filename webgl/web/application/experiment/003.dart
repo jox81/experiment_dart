@@ -5,8 +5,10 @@ import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/texture.dart';
 import 'dart:async';
+import 'dart:web_gl';
+import 'dart:html';
 
-Mesh experiment() {
+Future<Mesh> experiment(RenderingContext gl) async {
 
   String vs = '''
     precision mediump float;
@@ -25,29 +27,19 @@ Mesh experiment() {
     precision mediump float;
 
     uniform float time;
+    uniform sampler2D sTexture;
 
     vec4 color = vec4(1.0, 1.0, 1.0, 1.0);
 
     void main(void) {
-        color.b = 1.0 - cos(time / 500.0);
+        color = texture2D(sTexture, gl_PointCoord);
         gl_FragColor = color;
     }
   ''';
 
   num shaderTime = 0.0;
 
-  TextureMap textureMap;
-  Future loadTexture(String fileName) {
-    Completer completer = new Completer();
-    TextureMap.initTexture(fileName, (textureMapResult) {
-      textureMap = textureMapResult;
-      completer.complete();
-    });
-
-    return completer.future;
-  }
-
-  loadTexture("../images/crate.gif");
+  TextureMap textureMap = await TextureMap.createTextureMap("../images/crate.gif");
 
   //Material
   List<String> buffersNames = ['aVertexPosition', 'aVertexIndice'];
@@ -60,15 +52,13 @@ Mesh experiment() {
     };
   materialCustom.setShaderUniformsVariables = (Mesh mesh) {
       materialCustom.setShaderUniformWithName("time", shaderTime);
-
       gl.activeTexture(GL.TEXTURE0);
       gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
-      materialCustom.setShaderUniformWithName(
-          'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
+      materialCustom.setShaderUniformWithName("sTexture", 0);
     };
 
   Mesh mesh = new Mesh()
-  ..mode = GL.TRIANGLE_STRIP
+  ..mode = GL.POINTS
   ..vertices = [
     0.0, 0.0, 0.0,
     -0.5, 0.5, 0.0,

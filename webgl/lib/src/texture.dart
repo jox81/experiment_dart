@@ -2,6 +2,7 @@ import 'dart:web_gl';
 import 'package:webgl/src/application.dart';
 import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'dart:async';
 
 class TextureMap{
 
@@ -9,7 +10,7 @@ class TextureMap{
 
   Texture texture;
 
-  TextureMap(ImageElement textureImage) {
+  TextureMap._(ImageElement textureImage) {
     _createTexture(textureImage);
   }
 
@@ -36,14 +37,24 @@ class TextureMap{
     return texture;
   }
 
-  static initTexture(String fileName, Function callBack) {
+  static _initTexture(String fileName, Function callBack) {
     ImageElement image = new Element.tag('img');
+    image.src = fileName;
     image.onLoad.listen((e) {
-      TextureMap textureMap = new TextureMap(image);
+      TextureMap textureMap = new TextureMap._(image);
       // callBack when texture is loaded
       callBack(textureMap);
     });
-    image.src = fileName;
+  }
+
+  static Future<TextureMap> createTextureMap(String fileName) {
+    Completer completer = new Completer();
+    TextureMap._initTexture(fileName, (textureMapResult) {
+      TextureMap textureMap = textureMapResult;
+      completer.complete(textureMap);
+    });
+
+    return completer.future;
   }
 
 }

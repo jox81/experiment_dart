@@ -21,7 +21,7 @@ main() {
 setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  Mesh mesh = exp003.experiment();
+  Mesh mesh = await exp003.experiment(Application.gl);
   application.materials.add(mesh.material);
   application.meshes.add(mesh);
 

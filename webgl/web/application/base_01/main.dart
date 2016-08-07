@@ -124,7 +124,7 @@ setupScene() async {
   //Create Cube
   Mesh cube = new Mesh.Cube();
   cube.transform.translate(-4.0, 1.0, 0.0);
-  await materialBaseTextureNormal.addTexture("../images/crate.gif");
+  materialBaseTextureNormal.textureMap = await TextureMap.createTextureMap("../images/crate.gif");
   cube.material = materialBaseTextureNormal;
   application.meshes.add(cube);
 
@@ -162,7 +162,7 @@ setupScene() async {
 
 Future createSusanModel() async {
   //SusanModel
-  TextureMap susanTexture = await Utils.loadTextureMap('../objects/susan/susan_texture.png');
+  TextureMap susanTexture = await TextureMap.createTextureMap('../objects/susan/susan_texture.png');
   var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   Mesh susanMesh = new Mesh();
   susanMesh.transform.translate(5.0, 0.0, 0.0);

@@ -65,17 +65,6 @@ class Utils{
     return request.responseText;
   }
 
-  ///Load a textureMap from a file url
-  static Future loadTextureMap(String textureImageFileName) async {
-    Completer completer = new Completer();
-    TextureMap.initTexture(textureImageFileName, (textureMapResult){
-      TextureMap textureMap = textureMapResult;
-      completer.complete(textureMap);
-    });
-
-    return completer.future;
-  }
-
   ///Load a Glsl from a file url
   static Future<String> loadGlslShader(String url) async {
     Completer completer = new Completer();

@@ -207,15 +207,6 @@ class MaterialBaseTexture extends Material {
     setShaderUniformWithName('uSampler', 0);
   }
 
-  Future addTexture(String fileName) {
-    Completer completer = new Completer();
-    TextureMap.initTexture(fileName, (textureMapResult) {
-      textureMap = textureMapResult;
-      completer.complete();
-    });
-
-    return completer.future;
-  }
 }
 
 class MaterialBaseTextureNormal extends Material {
@@ -298,16 +289,6 @@ class MaterialBaseTextureNormal extends Material {
       setShaderUniformWithName("uDirectionalColor", directionalLight.color.r,
           directionalLight.color.g, directionalLight.color.b);
     }
-  }
-
-  Future addTexture(String fileName) {
-    Completer completer = new Completer();
-    TextureMap.initTexture(fileName, (textureMapResult) {
-      textureMap = textureMapResult;
-      completer.complete();
-    });
-
-    return completer.future;
   }
 }
 

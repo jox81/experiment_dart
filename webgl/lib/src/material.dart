@@ -123,18 +123,19 @@ abstract class Material {
   }
 
   void setShaderAttributWithName(String attributName, data, dimension) {
-    if (dimension != null) {
-      gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
-      gl.enableVertexAttribArray(attributes[attributName]);
-      gl.bufferData(
-          GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
-      gl.vertexAttribPointer(
-          attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
-    } else {
-      gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-      gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data),
-          GL.STATIC_DRAW);
-    }
+
+      if (dimension != null) {
+        gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
+        gl.enableVertexAttribArray(attributes[attributName]);
+        gl.bufferData(
+            GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
+        gl.vertexAttribPointer(
+            attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
+      } else {
+        gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
+        gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data),
+            GL.STATIC_DRAW);
+      }
   }
 
   void setShaderUniformWithName(String uniformName, data, [data1, data2]) {
@@ -152,6 +153,7 @@ abstract class Material {
           break;
         case 'BOOL':
         case 'SAMPLER_2D':
+
           gl.uniform1i(uniforms[uniformName], data);
           break;
         case 'FLOAT':
