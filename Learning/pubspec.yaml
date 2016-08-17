@@ -15,8 +15,8 @@ dependencies:
   path: "^1.3.6"
   js: any
   func: any
-  threejs_facade:
-    git: https://github.com/blockforest/threejs-dart-facade
+#  threejs_facade:
+#    git: https://github.com/blockforest/threejs-dart-facade
 
 transformers:
 - dart_to_js_script_rewriter
