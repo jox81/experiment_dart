@@ -10,7 +10,7 @@ class Stats{
   external set dom(Element v);
 
   external Stats ();
-
+  external void update();
   external void begin();
   external void end();
 }

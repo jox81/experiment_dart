@@ -74,7 +74,7 @@ class Form extends Sprite /*implements Animatable*/{
   }
 
   _goToIndex(num deltaTime, int index) async {
-    await delayedFuture(deltaTime);
+    await juggler.delay(deltaTime);
 
     if(index > _trajectory.steps -1) return;
     coord = _trajectory.coords[_currentStep];

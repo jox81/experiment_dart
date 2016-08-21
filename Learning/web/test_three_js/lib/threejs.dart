@@ -1,3 +1,8 @@
+// Or use import 'package:threejs_facade/three.dart';
+// pubspec.yaml :
+// threejs_facade:
+// git: https://github.com/blockforest/threejs-dart-facade.git
+
 @JS('THREE')
 library threejs;
 

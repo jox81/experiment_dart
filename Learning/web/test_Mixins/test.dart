@@ -1,6 +1,6 @@
 abstract class Test{
-  String _message = "hello";
-  String _name;
+  String message = "hello";
+  String name;
 
   sayHello(String message){
     print(message);

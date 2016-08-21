@@ -97,6 +97,13 @@ packages:
     description: string_scanner
     source: hosted
     version: "0.1.4+1"
+  threejs_facade:
+    description:
+      ref: HEAD
+      resolved-ref: f97e1d8884cebec6e172754498ed4a5e0bad204b
+      url: "https://github.com/blockforest/threejs-dart-facade.git"
+    source: git
+    version: "0.1.0"
   utf:
     description: utf
     source: hosted

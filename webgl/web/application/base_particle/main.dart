@@ -6,9 +6,7 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
-import 'package:webgl/src/camera.dart';
 import 'dart:typed_data';
-import 'dart:async';
 
 Application application;
 RenderingContext gl;
@@ -26,41 +24,44 @@ main() {
 }
 
 setupScene() async {
-
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  gl.enable(GL.BLEND);
-  gl.blendFunc(GL.SRC_ALPHA,GL.ONE_MINUS_SRC_ALPHA);
-  gl.disable(GL.DEPTH_TEST);
+  Mesh mesh = await experiment(Application.gl);
+  application.materials.add(mesh.material);
+  application.meshes.add(mesh);
 
-  Math.Random random = new Math.Random();
-  int nump = 48000;
-  var pstart = new Float32List(nump*2);
-  var i = pstart.length;
-  while (i-- != 0) {
-    pstart[i] = 0.0;
-    while (pstart[i]*pstart[i] < .3) {
-      pstart[i] = random.nextDouble()*2-1;
-    }
-  }
+  //Animation
+  num _lastTime = 0.0;
+  application.updateScene((num time) {
+    double animationStep = time - _lastTime;
+    //... custom animation here
+    mesh.animation(time);
+    _lastTime = time;
+  });
+}
 
-  var startTime = new DateTime.now();
+Mesh experiment(RenderingContext gl) {
+
+  num shaderTime = 0.0;
 
   //Material
   String vShader = '''
     precision mediump float;
 
-    attribute vec2 Vertex;
+    attribute vec2 a_vertex;
 
-    uniform float T;
+    uniform float u_time;
 
-    varying vec2 V;
+    varying vec2 v_vertex;
 
     void main(void) {
-      gl_PointSize = 2.; V = Vertex;
-      vec2 v = Vertex*(mod(T+length(Vertex),1.));
-      float ct = (cos(v.x*30.+T*20.)+cos(v.y*30.+T*20.));
+      gl_PointSize = 2.;
+      v_vertex = a_vertex;
+
+      vec2 v = a_vertex*(mod(u_time+length(a_vertex),1.));
+      float ct = (cos(v.x*30.+u_time*20.)+cos(v.y*30.+u_time*20.));
       v = mat2(sin(v.x*(10.+ct)),cos(v.x*(10.+ct)),cos(v.y*(10.+ct)),sin(v.y*(10.+ct)))*v;
+
       gl_Position=vec4(v,0.,1.);
     }
   ''';
@@ -68,40 +69,48 @@ setupScene() async {
   String fShader = '''
     precision mediump float;
 
-    uniform float T;
+    uniform float u_time;
 
-    varying vec2 V;
+    varying vec2 v_vertex;
 
     void main(void) {
-      gl_FragColor = vec4(.7,.7,1.,.1);
+      gl_FragColor = vec4(.3,.7,1.,.1);
     }
   ''';
 
-  List<String> buffersNames = ['Vertex'];
+  List<String> buffersNames = ['a_vertex'];
 
-  SetShaderVariablesFunction setShaderAttributsCustom = (Mesh mesh) {
-    setShaderAttributWithName(
-        'Vertex',   pstart  );
-  };
-
-  SetShaderVariablesFunction setShaderUniformsCustom = (Mesh mesh) {
-    setShaderUniformWithName(
-        "T", (Date.now()-startTime)/30000.0);
-  };
-
-  MaterialCustom materialCustom = new MaterialCustom(vShader, fShader, buffersNames, setShaderAttributsCustom, setShaderUniformsCustom);
+  MaterialCustom materialCustom = new MaterialCustom(vShader, fShader, buffersNames);
+  materialCustom
+    ..setShaderAttributsVariables = (Mesh mesh) {
+      materialCustom.setShaderAttributWithName('a_vertex', mesh.vertices, mesh.vertexDimensions);
+    }
+    ..setShaderUniformsVariables = (Mesh mesh) {
+      materialCustom.setShaderUniformWithName('u_time', shaderTime);
+    };
   application.materials.add(materialCustom);
 
-  Mesh mesh = new Mesh();
-  mesh.material = materialCustom;
-  
-  //Animation
-  num _lastTime = 0.0;
 
-  application.updateScene((num time) {
-    // rotate
-    double animationStep = time - _lastTime;
-    //... animation here
-    _lastTime = time;
-  });
+  Math.Random random = new Math.Random();
+
+  int nump = 4800;
+  Float32List pstart = new Float32List(nump*2);
+  var i = pstart.length;
+  while (i-- != 0) {
+    pstart[i] = 0.0;
+    while (pstart[i]*pstart[i] < .3) {
+      pstart[i] = random.nextDouble()*2-1;
+    }
+  }
+  Mesh mesh = new Mesh()
+    ..mode = GL.POINTS
+    ..vertexDimensions = 2
+    ..vertices = pstart
+    ..material = materialCustom;
+
+  mesh.animation = (num time){
+    shaderTime = time / 20000;
+  };
+
+  return mesh;
 }

@@ -28,7 +28,6 @@ setupScene() async {
   //Animation
   num _lastTime = 0.0;
   application.updateScene((num time) {
-    // rotate
     double animationStep = time - _lastTime;
     //... custom animation here
     mesh.animation(time);

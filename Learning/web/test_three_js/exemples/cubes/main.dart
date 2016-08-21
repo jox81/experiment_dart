@@ -1,6 +1,6 @@
 import 'dart:html';
 import 'dart:math';
-import '../../lib/threejs.dart';
+import 'package:threejs_facade/three.dart' as THREE;
 import '../../lib/statsjs.dart';
 
 void main() {
@@ -8,29 +8,32 @@ void main() {
   Element container = document.createElement( 'div' );
   document.body.children.add(container);
 
-  Scene scene = new Scene();
-  PerspectiveCamera camera = new PerspectiveCamera(
+  THREE.Scene scene = new THREE.Scene();
+  THREE.PerspectiveCamera camera = new THREE.PerspectiveCamera(
       75,
       window.innerWidth / window.innerHeight,
       0.1,
       1000);
 
-  WebGLRenderer renderer = new WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight );
+  THREE.WebGLRenderer renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight, null);
 
   container.children.add(renderer.domElement);
 
   Random random = new Random();
 
-  List<Mesh> meshes = new List();
+  List<THREE.Mesh> meshes = new List();
 
   num boxZoneWidth = 20;
   int meshCount = 1000;
   for(int i = 0; i < meshCount; i++) {
-    BoxGeometry geometry = new BoxGeometry(1, 1, 1);
-    MeshBasicMaterial material =
-    new MeshBasicMaterial({'color': 0x00ff00});
-    Mesh cube = new Mesh(geometry, material);
+    THREE.BoxGeometry geometry = new THREE.BoxGeometry(1, 1, 1);
+    THREE.BufferGeometry bufferGeometry = new THREE.BufferGeometry().fromGeometry(geometry, null);
+
+    THREE.MeshBasicMaterial material =
+    new THREE.MeshBasicMaterial();
+
+    THREE.Mesh cube = new THREE.Mesh(bufferGeometry, material);
 
     cube.position.x = random.nextDouble() * boxZoneWidth;
     cube.position.y = random.nextDouble() * boxZoneWidth;
@@ -51,11 +54,11 @@ void main() {
   void render(num delta) {
     window.animationFrame.then(render);
 
-    for(Mesh mesh in meshes){
+    for(THREE.Mesh mesh in meshes){
       mesh.rotation.x += random.nextDouble() / 10;
       mesh.rotation.y += random.nextDouble() / 10;
     }
-    renderer.render(scene, camera);
+    renderer.render(scene, camera, null, null);
     stats.update();
   }
 
