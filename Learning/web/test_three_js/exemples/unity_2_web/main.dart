@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'package:threejs_facade/three.dart';
 import '../../lib/statsjs.dart';
-import '../../lib/J3D.dart' as J3D;
+import '../../lib/j3d.dart' as J3D;
 import 'package:js/js.dart';
 import 'dart:async';
 

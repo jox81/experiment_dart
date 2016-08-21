@@ -1,5 +1,5 @@
 library test;
-part 'Test.dart';
+part 'test.dart';
 
 class Display extends Test {
   Display() {

@@ -1,0 +1,14 @@
+@startuml
+A -> B
+'_time += time;
+alt _started == false
+else {if (_time > _delay) {_started = true; if (_onStart != null) _onStart();} else {return true;}}
+end
+alt _animatables.length > 0
+else {if (_animatables[0].advanceTime(time) == false) {_animatables.removeAt(0);}}
+end
+alt _animatables.length == 0
+else {return true;}
+else {_completed = true; if (_onComplete != null) _onComplete(); return false;}
+end
+@enduml
