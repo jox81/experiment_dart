@@ -5,7 +5,12 @@ import 'dart:math' hide Point;
 
 Juggler juggler;
 Stage stage;
+
 Random random = new Random();
+
+Item c1, c2;
+DisplayObject movingObject;
+DisplayObject targetObject;
 
 /// The idea is to move an element from a container to another container by using local and global positions
 Future main() async {
@@ -18,78 +23,92 @@ Future main() async {
 
   juggler = renderLoop.juggler;
 
-  Item c1 = new Item(itemWidth: 150, color: Color.Yellow)
-  ..x = 100
-  ..y = 150;
-  c1.createItem(itemWidth: 50, posX: 30, posY: -20, color: Color.Gray);
-  c1.item.createItem(itemWidth: 10, posX : 0, posY: 15, color: Color.Red);
-  stage.addChild(c1);
+  Sprite topContainer = new Sprite();
+  stage.addChild(topContainer);
 
-  Item c2 = new Item(itemWidth: 200, color: Color.YellowGreen)
-    ..x = 350
-    ..y = 250;
-  c2.createItem(itemWidth: 70, posX: -20, posY: 30, color: Color.Gold);
-  c2.item.createItem(itemWidth: 10, posX : -10, posY: -25, color: Color.Green);
-  stage.addChild(c2);
+  init(topContainer);
 
-  DisplayObject movingObject = c1.item.item;
-  DisplayObject targetObject = c2.item.item;
-
-  //
-  await juggler.delay(2);
-  await moveItem(movingObject, targetObject);
-
-  juggler.addChain([
-    //check if item is correctly added
-    new Tween(c2, 0.5, Transition.sine)
-    ..delay = 1
-    ..animate.y.by(20),
-
-    //check if item is still accessible
-    new Tween(movingObject, 0.5, Transition.sine)
-      ..delay = 1
-      ..animate.y.by(20)
-  ]);
-
+  await moveItem(movingObject, targetObject, topContainer);
 }
 
-Future moveItem(DisplayObject startObject, DisplayObject targetObject) async {
-  Point startPositionGlobal = startObject.parent.localToGlobal(new Point(startObject.x, startObject.y));
-  Point destinationPositionGlobal = targetObject.parent.localToGlobal(new Point(targetObject.x, targetObject.y));
+void init(DisplayObjectContainer topContainer){
+  c1 = new Item(itemWidth: 150, color: Color.Yellow)
+    ..x = 200
+    ..y = 200;
+  c1.createInnerItem(itemWidth: 50, color: Color.Gray)
+    ..x = 0
+    ..y = 0;
+  c1.innerItem.createInnerItem(itemWidth: 10, color: Color.Red)
+    ..x = 0
+    ..y = 0;
+  topContainer.addChild(c1);
 
-  startObject.parent.removeChild(startObject);
+  movingObject = c1.innerItem.innerItem;
 
-  await moveItemGlobal(startObject, startPositionGlobal, destinationPositionGlobal);
+  num targetWidth = 10;
+  targetObject = new Bitmap(new BitmapData(targetWidth,targetWidth, Color.Green))
+    ..pivotX = targetWidth / 2
+    ..pivotY = targetWidth / 2
+    ..x = 500
+    ..y = 500;
+  topContainer.addChild(targetObject);
+}
 
-  Point destinationPositionLocal = targetObject.parent.globalToLocal(new Point(startObject.x, startObject.y));
+Future moveItem(DisplayObject startObject, DisplayObject targetObject, DisplayObjectContainer topContainer) async {
+  await juggler.delay(2);
+
+  Point startPositionGlobal;
+  startPositionGlobal = startObject.parent.localToGlobal(new Point(startObject.x,startObject.y));
+  print(startPositionGlobal);
+  startObject.removeFromParent();
+
+  Point destinationPositionGlobal;
+  destinationPositionGlobal = targetObject.parent.localToGlobal(new Point(targetObject.x,targetObject.y));
+  print(destinationPositionGlobal);
+
+  Point pStart = topContainer.globalToLocal(startPositionGlobal);
+  startObject
+    ..x = pStart.x
+    ..y = pStart.y;
+  topContainer.addChild(startObject);
+
+  Point pEnd =  topContainer.globalToLocal(destinationPositionGlobal);
+
+  await moveTo(startObject, pEnd,topContainer);
+
+  //Add to target
+  Point destinationPositionLocal = targetObject.parent.globalToLocal(new Point(destinationPositionGlobal.x, destinationPositionGlobal.y));
   startObject
     ..x = destinationPositionLocal.x
     ..y = destinationPositionLocal.y;
   targetObject.parent.addChild(startObject);
 }
 
-Future moveItemGlobal(DisplayObject movingObject, Point startPositionGlobal, Point destinationPositionGlobal) async {
-  //
+Future moveTo(DisplayObject startObject, Point pEnd, DisplayObjectContainer topContainer) async {
+  //Should be in topContainerSpace
+
   Completer completer = new Completer();
 
-  movingObject
-      ..x = startPositionGlobal.x
-      ..y = startPositionGlobal.y;
-  stage.addChild(movingObject);
+  Point pMiddle = new Point(500,100); //Absolute position
 
-  juggler.addTween(movingObject, 2)
-  ..animate.x.to(destinationPositionGlobal.x)
-  ..animate.y.to(destinationPositionGlobal.y)
-  ..onComplete = ()async {
-    completer.complete();
-  };
+  AnimationChain ac = new AnimationChain()
+    ..add(new Tween(startObject, .5)
+      ..animate.x.to(pMiddle.x)
+      ..animate.y.to(pMiddle.y))
+    ..add(new Tween(startObject, 1)
+      ..animate.x.to(pEnd.x)
+      ..animate.y.to(pEnd.y))
+    ..onComplete = () async {
+      completer.complete();
+    };
+  juggler.add(ac);
 
   return completer.future;
 }
 
 class Item extends DisplayObjectContainer{
   Bitmap background;
-  Item item;
+  Item innerItem;
 
   Item({int itemWidth : 20, int color : Color.Blue}){
     background = new Bitmap(new BitmapData(itemWidth,itemWidth,color));
@@ -99,14 +118,13 @@ class Item extends DisplayObjectContainer{
     );
   }
 
-  void createItem({int posX : 0, int posY : 0, int itemWidth : 20, int color : Color.Gray}){
-    if(item == null) {
-      item = new Item(itemWidth: itemWidth, color: color)
-        ..x = posX
-        ..y = posY;
-      addChild(item);
+  Item createInnerItem({int itemWidth : 20, int color : Color.Gray}){
+    if(innerItem == null) {
+      innerItem = new Item(itemWidth: itemWidth, color: color);
+      addChild(innerItem);
     }else{
       throw new StateError("Item exist");
     }
+    return innerItem;
   }
 }
