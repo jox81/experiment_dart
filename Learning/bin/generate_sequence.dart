@@ -6,7 +6,7 @@ StringBuffer buffer = new StringBuffer();
 void main(){
 
   //Code from : stagexl-0.13.2/lib/src/animation/animation_chain.dart
-  String dartCode = """
+  String dartCode01 = """
   var a;
 
   @override
@@ -36,35 +36,103 @@ void main(){
     }
   }
   """;
+
+  String dartCode02 = """
+    bool advanceTime(num time) {
+
+    _averageFrameRate = 0.05 / time + 0.95 * _averageFrameRate;
+
+    var children = _container.children;
+    var childCount = max(1, children.length);
+    var deltaCount = (_averageFrameRate / targetFrameRate - 1.0) * childCount;
+    var speedCount = min(50, pow(deltaCount.abs().ceil(), 0.30));
+    var scale = pow(0.99, childCount / 512);
+
+    _container.rotation += time * 0.5;
+    _container.scaleX = _container.scaleY = scale;
+
+    // add a few bitmaps
+
+    if (deltaCount > 0) {
+      for(int i = 0; i < speedCount; i++) {
+        var bitmap = new Bitmap(bitmapData);
+        var bitmapScale = 1.0 / scale;
+        var angle  = _random.nextDouble() * PI * 2.0;
+        var distance = (50 + _random.nextInt(150)) * bitmapScale;
+        bitmap.x = cos(angle) * distance;
+        bitmap.y = sin(angle) * distance;
+        bitmap.pivotX = bitmapData.width / 2.0;
+        bitmap.pivotY = bitmapData.height / 2.0;
+        bitmap.rotation = angle + PI / 2.0;
+        bitmap.scaleX = bitmap.scaleY = bitmapScale;
+        children.add(bitmap);
+      }
+    }
+
+    // remove a few bitmaps
+
+    if (deltaCount < 0) {
+      speedCount = min(speedCount, children.length);
+      for(int i = 0; i < speedCount; i++) {
+        children.removeLast();
+      }
+    }
+
+    // check for steady state
+
+    _counterElement.text = children.length.toString();
+
+    if (_deltaToggleSign != deltaCount.sign) {
+      _deltaToggleSign = deltaCount.sign;
+      _deltaToggleCount += 1;
+    }
+
+    if (_deltaToggleCount >= 10) {
+      _container.removeFromParent();
+      _benchmarkComplete();
+      return false;
+    } else {
+      return true;
+    }
+  }
+  """;
+
+  generateSequence(dartCode02);
+}
+
+void generateSequence(String dartCode) {
   CompilationUnit compilationUnit = parseCompilationUnit(dartCode);
 
   buffer.writeln('@startuml');
-  buffer.writeln('start');
+
 
   /*
   partition Initialization {
     :read config file;
     :init internal variable;
-}
+  }
    */
   for (CompilationUnitMember declaration in compilationUnit.declarations) {
     if(declaration is FunctionDeclaration){
       buffer.writeln('partition ${declaration.name.toString()} {');//Todo : How to add parameters
+      buffer.writeln('start');
       if(declaration.functionExpression.body is BlockFunctionBody){
         Block block = (declaration.functionExpression.body as BlockFunctionBody).block;
         analyzeBlock(block);
       }else{
         buffer.writeln('!!BlockFunctionBody');
       }
+      if(declaration.returnType.toString() == 'void') {
+        buffer.writeln('stop');
+      }
       buffer.writeln('}');
     }else if (declaration is TopLevelVariableDeclaration){
-      buffer.writeln(':$declaration');
+      buffer.writeln('#CCCCCC:$declaration');
     }else{
       buffer.writeln('!!FunctionDeclaration');
     }
   }
 
-  buffer.writeln('stop');
   buffer.writeln('@enduml');
 
   print(buffer.toString());
@@ -90,7 +158,13 @@ void analyzeStatement(Statement statement) {
   }else if(statement is IfStatement){
     getIfStatementContent(statement, false);
   }else if(statement is ReturnStatement){
-    buffer.writeln('stop'); //Todo : How to set return value
+    buffer.writeln('stop'); //Return value
+  }else if(statement is VariableDeclarationStatement){
+    buffer.writeln('#AACCCC: ${statement}');
+  }else if(statement is ForStatement){
+    getForStatementContent(statement);
+  }else if(statement is ForEachStatement){
+    getForEachStatementContent(statement);
   }else{
     buffer.writeln('!!analyzeStatement');
   }
@@ -104,11 +178,11 @@ void getExpressionStatementContent(ExpressionStatement statement) {
     //buffer.writeln('!!AssignmentExpression');
   }
 
-  buffer.writeln(':$statement');
+  buffer.writeln('#CCFFCC:$statement');
 }
 
 void getIfStatementContent(IfStatement statement, bool withElse) {
-  buffer.writeln('${withElse?'else ':''}if(${statement.condition}) then');
+  buffer.writeln('${withElse?'else ':''}if(${statement.condition} ?) then (yes)');
 
   if(statement.thenStatement != null) {
     if(statement.thenStatement is Block){
@@ -121,12 +195,12 @@ void getIfStatementContent(IfStatement statement, bool withElse) {
   if(statement.elseStatement != null) {
     if(statement.elseStatement is Block) {
       Block elseStatement = statement.elseStatement;
-      buffer.writeln('else');
+      buffer.writeln('else (no)');
       analyzeBlock(elseStatement);
     }else if(statement.elseStatement is IfStatement){
       getIfStatementContent(statement.elseStatement, true);
     }else{
-      buffer.writeln('!statement.thenStatement IfStatement');
+      analyzeStatement(statement.elseStatement);
     }
   }
 
@@ -136,6 +210,30 @@ void getIfStatementContent(IfStatement statement, bool withElse) {
 
 }
 
-void getElseIfStatementContent(IfStatement statement) {
+void getForStatementContent(ForStatement statement) {
 
+  buffer.writeln('repeat');
+
+  if(statement.body is Block){
+    Block thenStatement = statement.body;
+    analyzeBlock(thenStatement);
+  }else{
+    buffer.writeln('!!getForStatementContent');
+  }
+
+  buffer.writeln('repeat while (${statement.condition} ?) -[#black,dotted]-> infos');
+}
+
+void getForEachStatementContent(ForEachStatement statement) {
+
+  buffer.writeln('repeat');
+
+  if(statement.body is Block){
+    Block blockStatement = statement.body;
+    analyzeBlock(blockStatement);
+  }else{
+    buffer.writeln('!!getForEachStatementContent');
+  }
+
+  buffer.writeln('repeat while (${statement.loopVariable.identifier} in ${statement.iterable} ?) -[#black,dotted]-> infos');
 }

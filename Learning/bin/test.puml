@@ -1,31 +1,46 @@
 @startuml
-start
-:var a;
 partition advanceTime {
-if(_started == false) then
-if(_time > _delay) then
-:_started = true;
-if(_onStart != null) then
-:_onStart();
+start
+#CCFFCC:_averageFrameRate = 0.05 / time + 0.95 * _averageFrameRate;
+#AACCCC: var children = _container.children;
+#AACCCC: var childCount = max(1, children.length);
+#AACCCC: var deltaCount = (_averageFrameRate / targetFrameRate - 1.0) * childCount;
+#AACCCC: var speedCount = min(50, pow(deltaCount.abs().ceil(), 0.30));
+#AACCCC: var scale = pow(0.99, childCount / 512);
+#CCFFCC:_container.rotation += time * 0.5;
+#CCFFCC:_container.scaleX = _container.scaleY = scale;
+if(deltaCount > 0 ?) then (yes)
+repeat
+#AACCCC: var bitmap = new Bitmap(bitmapData);
+#AACCCC: var bitmapScale = 1.0 / scale;
+#AACCCC: var angle = _random.nextDouble() * PI * 2.0;
+#AACCCC: var distance = (50 + _random.nextInt(150)) * bitmapScale;
+#CCFFCC:bitmap.x = cos(angle) * distance;
+#CCFFCC:bitmap.y = sin(angle) * distance;
+#CCFFCC:bitmap.pivotX = bitmapData.width / 2.0;
+#CCFFCC:bitmap.pivotY = bitmapData.height / 2.0;
+#CCFFCC:bitmap.rotation = angle + PI / 2.0;
+#CCFFCC:bitmap.scaleX = bitmap.scaleY = bitmapScale;
+#CCFFCC:children.add(bitmap);
+repeat while (i < speedCount ?) -[#black,dotted]-> infos
 endif
-else
+if(deltaCount < 0 ?) then (yes)
+#CCFFCC:speedCount = min(speedCount, children.length);
+repeat
+#CCFFCC:children.removeLast();
+repeat while (i < speedCount ?) -[#black,dotted]-> infos
+endif
+#CCFFCC:_counterElement.text = children.length.toString();
+if(_deltaToggleSign != deltaCount.sign ?) then (yes)
+#CCFFCC:_deltaToggleSign = deltaCount.sign;
+#CCFFCC:_deltaToggleCount += 1;
+endif
+if(_deltaToggleCount >= 10 ?) then (yes)
+#CCFFCC:_container.removeFromParent();
+#CCFFCC:_benchmarkComplete();
 stop
-endif
-endif
-if(_animatables.length > 0) then
-if(_animatables[0].advanceTime(time) == false) then
-:_animatables.removeAt(0);
-endif
-endif
-if(_animatables.length == 0) then
-:_completed = true;
-if(_onComplete != null) then
-:_onComplete();
-endif
-stop
-else
+else (no)
 stop
 endif
 }
-stop
 @enduml
