@@ -38,10 +38,7 @@ setupScene() async {
     ..aspectRatio = application.viewAspectRatio
     ..targetPosition = new Vector3.zero()
     ..position = new Vector3(20.0, 30.0, -50.0);
-  CameraController cameraController = new CameraController()
-    ..onChange = (num xRot, num yRot){
-      camera.rotateCamera(xRot, yRot);
-    };
+  CameraController cameraController = new CameraController(camera);//Todo : add controller to camera
   application.mainCamera = camera;
 
   //Lights

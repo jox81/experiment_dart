@@ -10,6 +10,7 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/application/src/dart_js/debug/webgl_debug_js.dart';
+import 'dart:math' as Math;
 
 class Application {
   static const bool debugging = false;
@@ -89,6 +90,8 @@ class Application {
 
     window.onResize.listen((e)=>resizeCanvas());
 
+
+
     gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
     gl.enable(DEPTH_TEST);
 
@@ -129,6 +132,7 @@ class Application {
 
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
+
   }
 
   Function _setupScene;

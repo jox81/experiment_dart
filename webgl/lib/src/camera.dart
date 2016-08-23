@@ -4,16 +4,20 @@ import 'dart:html';
 import 'package:webgl/src/application.dart';
 
 class Camera {
-  final double fOV;
   final double zNear;
   final double zFar;
+
+  double _fOV;
+  set fOV(num value){
+    _fOV = value;
+  }
 
   double aspectRatio;
   Vector3 position;
   Vector3 upDirection;
   Vector3 targetPosition;
 
-  Camera(this.fOV, this.aspectRatio, this.zNear, this.zFar) {
+  Camera(this._fOV, this.aspectRatio, this.zNear, this.zFar) {
     position = new Vector3(0.0, 2.0, 0.0);
     targetPosition = new Vector3(1.0, 2.0, -1.0);
     upDirection = new Vector3(0.0, 1.0, 0.0);
@@ -47,7 +51,7 @@ class Camera {
   }
 
   Matrix4 get projectionMatrix {
-    return makePerspectiveMatrix(fOV, aspectRatio, zNear, zFar);
+    return makePerspectiveMatrix(_fOV, aspectRatio, zNear, zFar);
   }
 
   Matrix4 get lookAtMatrix {
@@ -91,9 +95,12 @@ class Camera {
 //
 // The view matrix is computed elsewhere.
 
-typedef void OnChange(num xRot, num yRot);
+typedef void OnChange(num xRot, num yRot, num fov);
 
 class CameraController {
+
+  final Camera camera;
+
   num xRot = 0;
   num yRot = 0;
   num scaleFactor = 3.0;
@@ -101,11 +108,15 @@ class CameraController {
   int currentX = 0;
   int currentY = 0;
 
-  OnChange onChange;
+  //WheelEvent values
+  num fov = radians(45.0);
 
-  CameraController() {
+  OnChange _onChange;
+
+  CameraController(this.camera) {
     CanvasElement canvas = Application.gl.canvas;
 
+    _onChange = _onChangeHandler;
     // Assign a mouse down handler to the HTML element.
     canvas.onMouseDown.listen((ev) {
       dragging = true;
@@ -140,11 +151,26 @@ class CameraController {
           xRot = 90;
         }
 
-        // Send the onchange event to any listener.
-        if (onChange != null) {
-          onChange(yRot, xRot);
+        // Send the onChange event to any listener.
+        if (_onChange != null) {
+          _onChange(yRot, xRot, fov);
         }
       }
     });
+
+    canvas.onMouseWheel.listen((WheelEvent event) {
+      var delta = Math.max(-1, Math.min(1, -event.deltaY));
+      fov += delta / 50; //calcul du zoom
+
+      // Send the onChange event to any listener.
+      if (_onChange != null) {
+        _onChange(yRot, xRot, fov);
+      }
+    });
+  }
+
+  void _onChangeHandler(num xRot, num yRot, num fov) {
+    camera.rotateCamera(xRot, yRot);
+    camera.fOV = fov;
   }
 }
