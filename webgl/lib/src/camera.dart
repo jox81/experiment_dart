@@ -17,6 +17,12 @@ class Camera {
   Vector3 upDirection;
   Vector3 targetPosition;
 
+  CameraController _cameraController;
+  set cameraController(CameraController value){
+    _cameraController = value;
+    _cameraController.init(this);
+  }
+
   Camera(this._fOV, this.aspectRatio, this.zNear, this.zFar) {
     position = new Vector3(0.0, 2.0, 0.0);
     targetPosition = new Vector3(1.0, 2.0, -1.0);
@@ -95,11 +101,13 @@ class Camera {
 //
 // The view matrix is computed elsewhere.
 
-typedef void OnChange(num xRot, num yRot, num fov);
+typedef void OnChange(Camera camera, num xRot, num yRot, num fov);
 
-class CameraController {
+abstract class CameraController{
+  void init(Camera camera);
+}
 
-  final Camera camera;
+class CameraControllerOrbit extends CameraController {
 
   num xRot = 0;
   num yRot = 0;
@@ -113,7 +121,10 @@ class CameraController {
 
   OnChange _onChange;
 
-  CameraController(this.camera) {
+  CameraControllerOrbit() {}
+
+  void init(Camera camera){
+
     CanvasElement canvas = Application.gl.canvas;
 
     _onChange = _onChangeHandler;
@@ -153,7 +164,7 @@ class CameraController {
 
         // Send the onChange event to any listener.
         if (_onChange != null) {
-          _onChange(yRot, xRot, fov);
+          _onChange(camera, yRot, xRot, fov);
         }
       }
     });
@@ -164,12 +175,12 @@ class CameraController {
 
       // Send the onChange event to any listener.
       if (_onChange != null) {
-        _onChange(yRot, xRot, fov);
+        _onChange(camera, yRot, xRot, fov);
       }
     });
   }
 
-  void _onChangeHandler(num xRot, num yRot, num fov) {
+  void _onChangeHandler(Camera camera, num xRot, num yRot, num fov) {
     camera.rotateCamera(xRot, yRot);
     camera.fOV = fov;
   }
