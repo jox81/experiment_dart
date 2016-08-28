@@ -10,6 +10,7 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/texture.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/primitives.dart';
 
 Application application;
 GuiSetup guisetup;
@@ -34,11 +35,11 @@ setupScene() async {
   //Cameras
   // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
   Camera camera =
-  new Camera(radians(45.0), application.viewAspectRatio, 0.1, 1000.0)
+  new Camera(radians(37.0), application.viewAspectRatio, 0.1, 1000.0)
     ..aspectRatio = application.viewAspectRatio
     ..targetPosition = new Vector3.zero()
-    ..position = new Vector3(20.0, 30.0, -50.0)
-    ..cameraController = new CameraControllerOrbit();
+    ..position = new Vector3(50.0,50.0, 50.0)
+    ..cameraController = new CameraController();
   application.mainCamera = camera;
 
   //Lights
@@ -81,6 +82,8 @@ setupScene() async {
   application.materials.add(materialPBR);
 
   //Meshes
+  Mesh axis = await createAxis();
+
   // create triangle
   Mesh triangle = new Mesh.Triangle();
   triangle.transform.translate(0.0, 0.0, 4.0);
@@ -97,7 +100,7 @@ setupScene() async {
   // create cube
   Mesh centerCube = new Mesh.Cube();
   centerCube.transform.translate(0.0, 0.0, 0.0);
-  centerCube.transform.scale(0.05, 0.05, 0.05);
+  centerCube.transform.scale(0.1, 0.1, 0.1);
   centerCube.material = materialBaseColor;
   application.meshes.add(centerCube);
 
@@ -131,11 +134,10 @@ setupScene() async {
 
   //Sphere
   Mesh sphere = new Mesh.Sphere(radius:2.5, segmentV :48, segmentH: 48);
-  sphere.transform.translate(0.0, 0.0, 10.0);
+  sphere.transform.translate(0.0, 0.0, -10.0);
   sphere.material = materialPBR;
   //sphere.mode = GL.LINES;
   application.meshes.add(sphere);
-
 
   // Animation
   num _lastTime = 0.0;
@@ -162,9 +164,8 @@ Future createSusanModel() async {
   TextureMap susanTexture = await TextureMap.createTextureMap('../objects/susan/susan_texture.png');
   var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   Mesh susanMesh = new Mesh();
-  susanMesh.transform.translate(5.0, 0.0, 0.0);
-  susanMesh.transform.rotateX(radians(90.0));
-  susanMesh.transform.rotateY(radians(180.0));
+  susanMesh.transform.translate(10.0, 0.0, 0.0);
+  susanMesh.transform.rotateX(radians(-90.0));
   susanMesh.vertices = susanJson['meshes'][0]['vertices'];
   susanMesh.indices = susanJson['meshes'][0]['faces']
       .expand((i) => i)
