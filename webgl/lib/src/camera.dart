@@ -101,25 +101,27 @@ class Camera {
 //
 // The view matrix is computed elsewhere.
 
-typedef void OnChange(Camera camera, num xRot, num yRot, num fov);
-
 abstract class CameraController{
   void init(Camera camera);
 }
 
 class CameraControllerOrbit extends CameraController {
 
-  num xRot = 0;
-  num yRot = 0;
+  num xPos = 0.0;
+  num yPos = 0.0;
+  num zPos = 0.0;
+
+  num xRot = 0.0;
+  num yRot = 0.0;
   num scaleFactor = 3.0;
   bool dragging = false;
   int currentX = 0;
   int currentY = 0;
 
+  int mouseButton = 0;
+
   //WheelEvent values
   num fov = radians(45.0);
-
-  OnChange _onChange;
 
   CameraControllerOrbit() {}
 
@@ -127,7 +129,6 @@ class CameraControllerOrbit extends CameraController {
 
     CanvasElement canvas = Application.gl.canvas;
 
-    _onChange = _onChangeHandler;
     // Assign a mouse down handler to the HTML element.
     canvas.onMouseDown.listen((ev) {
       dragging = true;
@@ -136,13 +137,16 @@ class CameraControllerOrbit extends CameraController {
     });
 
     // Assign a mouse up handler to the HTML element.
-    canvas.onMouseUp.listen((ev) {
+    canvas.onMouseUp.listen((MouseEvent ev) {
       dragging = false;
     });
 
     // Assign a mouse move handler to the HTML element.
     canvas.onMouseMove.listen((MouseEvent ev) {
       if (dragging) {
+
+        //Todo : find current rotation form actual position
+
         // Determine how far we have moved since the last mouse move event.
         int tempCurX = ev.client.x;
         int tempCurY = ev.client.y;
@@ -151,20 +155,27 @@ class CameraControllerOrbit extends CameraController {
         currentX = tempCurX;
         currentY = tempCurY;
 
-        // Update the X and Y rotation angles based on the mouse motion.
-        yRot = (yRot + deltaX) % 360;
-        xRot = (xRot + deltaY);
+        
+        if(ev.button == 0) {
 
-        // Clamp the X rotation to prevent the camera from going upside down.
-        if (xRot < -90) {
-          xRot = -90;
-        } else if (xRot > 90) {
-          xRot = 90;
-        }
+          // Update the X and Y rotation angles based on the mouse motion.
+          yRot = (yRot + deltaX) % 360;
+		      xRot = (xRot + deltaY);
 
-        // Send the onChange event to any listener.
-        if (_onChange != null) {
-          _onChange(camera, yRot, xRot, fov);
+          // Clamp the X rotation to prevent the camera from going upside down.
+          if (xRot < -90) {
+            xRot = -90;
+          } else if (xRot > 90) {
+            xRot = 90;
+          }
+
+          camera.rotateCamera(yRot, xRot);//why inverted ?
+
+        }else if(ev.button == 1){
+          camera.position.x += deltaX;
+          camera.position.z += deltaY;
+          camera.targetPosition.x += deltaX;
+          camera.targetPosition.z += deltaY;
         }
       }
     });
@@ -173,15 +184,7 @@ class CameraControllerOrbit extends CameraController {
       var delta = Math.max(-1, Math.min(1, -event.deltaY));
       fov += delta / 50; //calcul du zoom
 
-      // Send the onChange event to any listener.
-      if (_onChange != null) {
-        _onChange(camera, yRot, xRot, fov);
-      }
+      camera.fOV = fov;
     });
-  }
-
-  void _onChangeHandler(Camera camera, num xRot, num yRot, num fov) {
-    camera.rotateCamera(xRot, yRot);
-    camera.fOV = fov;
   }
 }
