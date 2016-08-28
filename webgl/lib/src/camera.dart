@@ -69,6 +69,8 @@ class Camera {
   }
 
   Vector3 get frontDirection => targetPosition - position;
+  Vector3 get localXDirection => frontDirection.cross(new Vector3(0.0,0.0,1.0));
+  Vector3 get localYDirection => frontDirection.cross(localXDirection);
 
   void rotateCamera(num xAngleRot, num yAngleRot) {
     num distance = (-position + targetPosition)
@@ -172,6 +174,8 @@ class CameraControllerOrbit extends CameraController {
           camera.rotateCamera(yRot, xRot);//why inverted ?
 
         }else if(ev.button == 1){
+
+
           camera.position.x += deltaX;
           camera.position.z += deltaY;
           camera.targetPosition.x += deltaX;
