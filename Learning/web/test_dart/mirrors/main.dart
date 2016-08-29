@@ -33,14 +33,25 @@ main(){
   print(MyClass.s);
 
   setValue(myClass, #i, 10);
+
+  print(getValue(myClass, #i));
 }
 
 void setValue(MyClass myClass, Symbol symbol, int i) {
-
   InstanceMirror myClassInstanceMirror = reflect(myClass);
-  myClassInstanceMirror.setField(#i, 10);
-  InstanceMirror res = myClassInstanceMirror.invoke(#sum, []);
-  print('sum = ${res.reflectee}');
+  myClassInstanceMirror.setField(symbol, 10);
+
+  //Vérification
+  InstanceMirror res = myClassInstanceMirror.getField(symbol);
+  print('set = ${res.reflectee}');
+}
+
+dynamic getValue(MyClass myClass, Symbol symbol) {
+  InstanceMirror myClassInstanceMirror = reflect(myClass);
+  InstanceMirror res = myClassInstanceMirror.getField(symbol);
+  print('get = ${res.reflectee}');
+  print('type = ${res.reflectee.runtimeType}');
+  return res.reflectee;
 }
 
 class MyClass {
