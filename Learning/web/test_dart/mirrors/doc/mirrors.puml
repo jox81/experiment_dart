@@ -1,0 +1,17 @@
+@startuml
+
+abstract class Mirror
+abstract class ObjectMirror
+abstract class InstanceMirror
+abstract class DeclarationMirror
+abstract class TypeMirror
+abstract class ClassMirror
+
+Mirror <|.. ObjectMirror
+ObjectMirror <|.. InstanceMirror
+Mirror <|.. DeclarationMirror
+DeclarationMirror <|.. TypeMirror
+TypeMirror <|.. ClassMirror
+ObjectMirror <|.. ClassMirror
+
+@enduml
