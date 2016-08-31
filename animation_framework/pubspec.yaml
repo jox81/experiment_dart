@@ -1,9 +1,0 @@
-name: 'animation_framework'
-version: 0.0.1
-description: animation
-
-environment:
-  sdk: '>=1.0.0 <2.0.0'
-
-dependencies:
- test:
