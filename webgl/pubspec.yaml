@@ -17,6 +17,9 @@ dependencies:
   analyzer: "^0.27.1+2"
   func: any
   datgui: any
+  anime_engine:
+    git:
+        url: https://github.com/jox81/anime_engine.git
   #dart_to_js_script_rewriter: '^0.1.0'
 #transformers:
 #- dart_to_js_script_rewriter

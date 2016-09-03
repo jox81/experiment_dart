@@ -2,11 +2,12 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/texture.dart';
+import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
 import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
+import 'dart:web_gl';
 
 typedef void SetShaderVariables(Mesh mesh);
 
@@ -175,7 +176,7 @@ class MaterialBaseTexture extends Material {
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
   //External parameters
-  TextureMap textureMap;
+  Texture texture;
 
   MaterialBaseTexture._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);
@@ -194,7 +195,7 @@ class MaterialBaseTexture extends Material {
     setShaderAttributWithName('aVertexIndice', mesh.indices, null);
 
     gl.activeTexture(GL.TEXTURE0);
-    gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
+    gl.bindTexture(GL.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
   }
@@ -222,10 +223,10 @@ class MaterialBaseTextureNormal extends Material {
   ];
 
   //External Parameters
-  TextureMap textureMap;
+  Texture texture;
   Vector3 ambientColor;
   DirectionalLight directionalLight;
-  bool useLighting;
+  bool useLighting = true;
 
   MaterialBaseTextureNormal._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);
@@ -244,7 +245,7 @@ class MaterialBaseTextureNormal extends Material {
     setShaderAttributWithName('aVertexIndice', mesh.indices, null);
 
     gl.activeTexture(GL.TEXTURE0);
-    gl.bindTexture(GL.TEXTURE_2D, textureMap.texture);
+    gl.bindTexture(GL.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
 

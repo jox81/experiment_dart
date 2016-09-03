@@ -9,18 +9,18 @@ import 'dart:async';
 
 Application application;
 
-main() {
+main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
 
   //Application
   application = new Application(canvas);
-  application.setupScene(setupScene);
+  await setupScene();
   application.renderAnimation();
 }
 
-setupScene() async {
+Future setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
   //Cameras

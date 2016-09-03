@@ -6,19 +6,20 @@ import '000.dart' as exp000;
 import '001.dart' as exp001;
 import '002.dart' as exp002;
 import '003.dart' as exp003;
+import 'dart:async';
 
 Application application;
 
-main() {
+main() async {
   CanvasElement canvas = querySelector('#glCanvas');
 
   //Application
   application = new Application(canvas);
-  application.setupScene(setupScene);
+  await setupScene();
   application.renderAnimation();
 }
 
-setupScene() async {
+Future setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
   Mesh mesh = await exp003.experiment(Application.gl);

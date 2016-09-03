@@ -24,8 +24,7 @@ class Application {
   Vector4 get backgroundColor => _backgroundColor;
   set backgroundColor(Vector4 color) {
     _backgroundColor = color;
-    gl.clearColor(color.r, color.g, color.b, color.a);
-  }
+   }
 
   AmbientLight ambientLight = new AmbientLight();
   Light light;
@@ -132,18 +131,11 @@ class Application {
 
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
-
   }
 
-  Function _setupScene;
-  void setupScene(Function sceneSetupFunction) {
-    _setupScene = sceneSetupFunction;
-  }
-
-  Future render() async {
-    await _setupScene();
-    _renderFrame();
-  }
+//  Future setupScene(Function sceneSetupFunction) async {
+//    await sceneSetupFunction();
+//  }
 
   Function _updateScene;
   void updateScene(Function updateSceneFunction) {
@@ -151,7 +143,6 @@ class Application {
   }
 
   Future renderAnimation() async {
-    await _setupScene();
     this._renderFrame();
   }
 
@@ -165,16 +156,17 @@ class Application {
     renderTime = t.toDouble();
 
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.clearColor(_backgroundColor.r, _backgroundColor.g, _backgroundColor.b, _backgroundColor.a);
     gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
     for (Mesh model in meshes) {
-      _mvPushMatrix();
+      mvPushMatrix();
 
       mvMatrix.multiply(model.transform);
 
       model.render();
 
-      _mvPopMatrix();
+      mvPopMatrix();
     }
 
     if (time != null) {
@@ -187,11 +179,11 @@ class Application {
     }
   }
 
-  void _mvPushMatrix() {
+  void mvPushMatrix() {
     _mvMatrixStack.addFirst(mvMatrix.clone());
   }
 
-  void _mvPopMatrix() {
+  void mvPopMatrix() {
     if (0 == _mvMatrixStack.length) {
       throw new Exception("Invalid popMatrix!");
     }

@@ -1,13 +1,13 @@
 import 'dart:html';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
-import 'packages/datgui/datgui.dart' as dat;
+import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/texture.dart';
+import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
@@ -15,7 +15,7 @@ import 'dart:math';
 Application application;
 GuiSetup guisetup;
 
-main() {
+main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
@@ -25,11 +25,11 @@ main() {
 
   //Application
   application = new Application(canvas);
-  application.setupScene(setupScene);
+  await setupScene();
   application.renderAnimation();
 }
 
-setupScene() async {
+Future setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
   //Cameras

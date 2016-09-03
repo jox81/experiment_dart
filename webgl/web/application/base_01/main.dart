@@ -1,21 +1,22 @@
 import 'dart:html';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
-import 'packages/datgui/datgui.dart' as dat;
+import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/texture.dart';
+import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/primitives.dart';
+import 'dart:web_gl';
 
 Application application;
 GuiSetup guisetup;
 
-main() {
+main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
@@ -25,11 +26,11 @@ main() {
 
   //Application
   application = new Application(canvas);
-  application.setupScene(setupScene);
+  await setupScene();
   application.renderAnimation();
 }
 
-setupScene() async {
+Future setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
   //Cameras
@@ -124,7 +125,7 @@ setupScene() async {
   //Create Cube
   Mesh cube = new Mesh.Cube();
   cube.transform.translate(-4.0, 1.0, 0.0);
-  materialBaseTextureNormal.textureMap = await TextureMap.createTextureMap("../images/crate.gif");
+  materialBaseTextureNormal.texture = await TextureUtils.createTextureFromFile("../images/crate.gif");
   cube.material = materialBaseTextureNormal;
   application.meshes.add(cube);
 
@@ -161,7 +162,7 @@ setupScene() async {
 
 Future createSusanModel() async {
   //SusanModel
-  TextureMap susanTexture = await TextureMap.createTextureMap('../objects/susan/susan_texture.png');
+  Texture susanTexture = await TextureUtils.createTextureFromFile('../objects/susan/susan_texture.png');
   var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   Mesh susanMesh = new Mesh();
   susanMesh.transform.translate(10.0, 0.0, 0.0);
@@ -173,7 +174,7 @@ Future createSusanModel() async {
   susanMesh.textureCoords = susanJson['meshes'][0]['texturecoords'][0];
   susanMesh.vertexNormals = susanJson['meshes'][0]['normals'];
   MaterialBaseTexture susanMaterialBaseTexture = await MaterialBaseTexture.create()
-    ..textureMap = susanTexture;
+    ..texture = susanTexture;
   application.materials.add(susanMaterialBaseTexture);
   susanMesh.material = susanMaterialBaseTexture;
 

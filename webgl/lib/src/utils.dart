@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
-import 'package:webgl/src/texture.dart';
+import 'package:webgl/src/texture_utils.dart';
 
 class Utils{
 

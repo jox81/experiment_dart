@@ -7,23 +7,23 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:typed_data';
+import 'dart:async';
 
 Application application;
-RenderingContext gl;
+RenderingContext gl = Application.gl;
 
-main() {
+main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   canvas.width = document.body.clientWidth;
   canvas.height = document.body.clientHeight;
 
   //Application
   application = new Application(canvas);
-  gl = Application.gl;
-  application.setupScene(setupScene);
+  await setupScene();
   application.renderAnimation();
 }
 
-setupScene() async {
+Future setupScene() async {
   application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
   Mesh mesh = await experiment(Application.gl);
