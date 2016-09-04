@@ -9,6 +9,7 @@ import 'scene_views/scene_view_performance_test.dart';
 import 'scene_views/scene_view_primitives.dart';
 import 'scene_views/scene_view_experiment/scene_view_experiment.dart';
 import 'dart:async';
+import 'package:vector_math/vector_math.dart';
 
 Application application;
 
@@ -38,9 +39,9 @@ main() async {
     new SceneViewPrimitives(application.viewAspectRatio),
     new SceneViewPBR(application.viewAspectRatio),
     new SceneViewFrameBuffer(application.viewAspectRatio),
+    new SceneViewExperiment(application.viewAspectRatio),
     new SceneViewParticle(application.viewAspectRatio),
     new SceneViewPerformanceTest(application.viewAspectRatio),
-    new SceneViewExperiment(application.viewAspectRatio),
   ];
 
   int sceneId = 0;
@@ -55,6 +56,6 @@ main() async {
 }
 
 Future switchScene (Scene scene)async {
-  await scene.setupScene();
+  await scene.setup();
   application.render(scene);
 }

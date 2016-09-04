@@ -15,6 +15,8 @@ import 'package:webgl/src/interaction.dart';
 
 class SceneViewBase extends Scene {
 
+  bool isSetuped = false;
+
   num viewAspectRatio;
 
   Vector3 directionalPosition;
@@ -35,14 +37,12 @@ class SceneViewBase extends Scene {
 
     GuiSetup guisetup = GuiSetup.setup();
 
-    Interaction interaction = new Interaction(scene);
-
     //UserInput
     updateUserInputFunction = (){
-      ambientColor = guisetup.getAmbientColor;
-      directionalColor = guisetup.getDirectionalColor;
-      directionalPosition = guisetup.getDirectionalPosition;
-      useLighting = guisetup.getUseLighting;
+      ambientColor = guisetup.ambientColor;
+      directionalColor = guisetup.directionalColor;
+      directionalPosition = guisetup.directionalPosition;
+      useLighting = guisetup.useLighting;
 
       interaction.update();
     };
@@ -203,6 +203,8 @@ class SceneViewBase extends Scene {
       //
       _lastTime = time;
     };
+
+
   }
 
 }
@@ -214,51 +216,51 @@ class GuiSetup {
     GuiSetup guisetup = new GuiSetup();
     dat.GUI gui = new dat.GUI();
     gui.add(guisetup, 'message');
-    gui.add(guisetup, 'getUseLighting');
+    gui.add(guisetup, 'useLighting');
 
     dat.GUI f2 = gui.addFolder("Lighting Position");
-    f2.add(guisetup, 'getDirectionalPositionX',-100.0,100.0);
-    f2.add(guisetup, 'getDirectionalPositionY',-100.0,100.0);
-    f2.add(guisetup, 'getDirectionalPositionZ',-100.0,100.0);
+    f2.add(guisetup, 'directionalPositionX',-100.0,100.0);
+    f2.add(guisetup, 'directionalPositionY',-100.0,100.0);
+    f2.add(guisetup, 'directionalPositionZ',-100.0,100.0);
 
     dat.GUI directionalColor = gui.addFolder("Directionnal color");
-    directionalColor.add(guisetup, 'getDirectionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-    directionalColor.add(guisetup, 'getDirectionalColorG',0.001,1.001);
-    directionalColor.add(guisetup, 'getDirectionalColorB',0.001,1.001);
+    directionalColor.add(guisetup, 'directionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
+    directionalColor.add(guisetup, 'directionalColorG',0.001,1.001);
+    directionalColor.add(guisetup, 'directionalColorB',0.001,1.001);
 
     dat.GUI ambiantColor = gui.addFolder("Ambiant color");
-    ambiantColor.add(guisetup, 'getDirectionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-    ambiantColor.add(guisetup, 'getDirectionalColorG',0.001,1.001);
-    ambiantColor.add(guisetup, 'getDirectionalColorB',0.001,1.001);
+    ambiantColor.add(guisetup, 'directionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
+    ambiantColor.add(guisetup, 'directionalColorG',0.001,1.001);
+    ambiantColor.add(guisetup, 'directionalColorB',0.001,1.001);
 
     return guisetup;
   }
 
   String message = '';
-  bool getUseLighting = true;
+  bool useLighting = true;
 
-  Vector3 getDirectionalPosition = new Vector3(-0.25,-0.125,-0.25);
-  double get getDirectionalPositionX => getDirectionalPosition.x;
-  set getDirectionalPositionX(double value){ getDirectionalPosition.x = value;}
-  double get getDirectionalPositionY => getDirectionalPosition.y;
-  set getDirectionalPositionY(double value){ getDirectionalPosition.y = value;}
-  double get getDirectionalPositionZ => getDirectionalPosition.z;
-  set getDirectionalPositionZ(double value){ getDirectionalPosition.z = value;}
+  Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
+  double get directionalPositionX => directionalPosition.x;
+  set directionalPositionX(double value){ directionalPosition.x = value;}
+  double get directionalPositionY => directionalPosition.y;
+  set directionalPositionY(double value){ directionalPosition.y = value;}
+  double get directionalPositionZ => directionalPosition.z;
+  set directionalPositionZ(double value){ directionalPosition.z = value;}
 
-  Vector3 getDirectionalColor = new Vector3(0.8, 0.8, 0.8);
-  double get getDirectionalColorR => getDirectionalColor.r;
-  set getDirectionalColorR(double value){ getDirectionalColor.r = value;}
-  double get getDirectionalColorG => getDirectionalColor.g;
-  set getDirectionalColorG(double value){ getDirectionalColor.g = value;}
-  double get getDirectionalColorB => getDirectionalColor.b;
-  set getDirectionalColorB(double value){ getDirectionalColor.b = value;}
+  Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
+  double get directionalColorR => directionalColor.r;
+  set directionalColorR(double value){ directionalColor.r = value;}
+  double get directionalColorG => directionalColor.g;
+  set directionalColorG(double value){ directionalColor.g = value;}
+  double get directionalColorB => directionalColor.b;
+  set directionalColorB(double value){ directionalColor.b = value;}
 
-  Vector3 getAmbientColor = new Vector3(0.2,0.2,0.2);
-  double get getAmbientColorR => getAmbientColor.r;
-  set getAmbientColorR(double value){ getAmbientColor.r = value;}
-  double get getAmbientColorG => getAmbientColor.g;
-  set getAmbientColorG(double value){ getAmbientColor.g = value;}
-  double get getAmbientColorB => getAmbientColor.b;
-  set getAmbientColorB(double value){ getAmbientColor.b = value;}
+  Vector3 ambientColor = new Vector3(0.2,0.2,0.2);
+  double get ambientColorR => ambientColor.r;
+  set ambientColorR(double value){ ambientColor.r = value;}
+  double get ambientColorG => ambientColor.g;
+  set ambientColorG(double value){ ambientColor.g = value;}
+  double get ambientColorB => ambientColor.b;
+  set ambientColorB(double value){ ambientColor.b = value;}
 
 }

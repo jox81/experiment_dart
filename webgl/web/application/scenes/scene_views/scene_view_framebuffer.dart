@@ -23,11 +23,9 @@ class SceneViewFrameBuffer extends Scene {
   @override
   UpdateUserInput updateUserInputFunction;
 
+  @override
   setupUserInput() {
 
-    Interaction interaction = new Interaction(scene);
-
-    //UserInput
     updateUserInputFunction = (){
       interaction.update();
     };
@@ -36,6 +34,7 @@ class SceneViewFrameBuffer extends Scene {
 
   }
 
+  @override
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
@@ -82,6 +81,8 @@ class SceneViewFrameBuffer extends Scene {
       //
       _lastTime = time;
     };
+
+
   }
 
 

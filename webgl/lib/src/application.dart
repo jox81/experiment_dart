@@ -4,6 +4,7 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
+import 'package:vector_math/vector_math.dart';
 
 RenderingContext get gl => Application._gl;
 Scene get scene => Application._instance._currentScene;
@@ -12,6 +13,8 @@ class Application {
   static const bool debugging = false;
 
   static RenderingContext _gl;
+
+  CanvasElement _canvas;
 
   IUpdatableScene _currentScene;
 
@@ -30,8 +33,8 @@ class Application {
     return _instance;
   }
 
-  Application._internal(CanvasElement canvas) {
-    _initGL(canvas);
+  Application._internal(this._canvas) {
+    _initGL(_canvas);
     _initEvents();
   }
 
@@ -96,10 +99,10 @@ class Application {
     _currentScene = scene;
     _render();
   }
+
   void _render({num time : 0.0}) {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clearColor(_currentScene.backgroundColor.r, _currentScene.backgroundColor.g, _currentScene.backgroundColor.b, _currentScene.backgroundColor.a);
-    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    clear(_currentScene.backgroundColor);
 
     _currentScene.updateUserInput();
     _currentScene.update(time);
@@ -108,6 +111,11 @@ class Application {
     window.requestAnimationFrame((num time) {
       this._render(time: time);
     });
+  }
+
+  void clear(Vector4 color){
+    gl.clearColor(color.r, color.g, color.b, color.a);
+    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
   }
 
 }

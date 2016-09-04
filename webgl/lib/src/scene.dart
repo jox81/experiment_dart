@@ -6,6 +6,8 @@ import 'package:webgl/src/mesh.dart';
 import 'dart:collection';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/interface/IScene.dart';
+import 'dart:async';
+import 'package:webgl/src/interaction.dart';
 
 abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
@@ -24,9 +26,25 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
   Matrix4 mvMatrix = new Matrix4.identity();
 
+  Interaction interaction;
 
   Scene(){
-    setupUserInput();
+  }
+
+  bool isSetuped = false;
+
+  Future setup() async{
+    Future future = new Future.value();
+
+    interaction = new Interaction(scene);
+
+    if(!isSetuped){
+      isSetuped = true;
+      setupUserInput();
+      future = setupScene();
+    }
+
+    return future;
   }
 
   void updateUserInput() {
@@ -48,7 +66,6 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
       _mvPopMatrix();
     }
   }
-
 
   //Animation
   Queue<Matrix4> _mvMatrixStack = new Queue();

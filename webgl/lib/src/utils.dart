@@ -9,7 +9,7 @@ class Utils{
   static double fpsAverage;
 
   ///Display the animation's FPS in a div.
-  static void showFps(Element element, int fps) {
+  static void showFps(Element element, num fps) {
     if(element == null) return;
 
     if (fpsAverage == null) {

@@ -7,7 +7,6 @@ class Interaction{
 
   final Scene scene;
 
-
   //Debug div
   Element elementDebugInfoText;
   Element elementFPSText;
@@ -36,18 +35,8 @@ class Interaction{
       _currentlyPressedKeys[event.keyCode] = false;
   }
 
-  double renderTime;
-
   void update() {
-
     _handleKeys();
-
-    var t = new DateTime.now().millisecondsSinceEpoch;
-    if (renderTime != null) {
-      //Fps
-      Utils.showFps(elementFPSText, (1000 / (t - renderTime)).round());
-    }
-    renderTime = t.toDouble();
   }
 
   void _handleKeys() {
@@ -82,5 +71,6 @@ class Interaction{
     elementFPSText = querySelector("#fps");
 
   }
+
 
 }

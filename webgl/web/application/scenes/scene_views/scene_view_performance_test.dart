@@ -27,13 +27,11 @@ class SceneViewPerformanceTest extends Scene {
   @override
   UpdateUserInput updateUserInputFunction;
 
+  @override
   setupUserInput() {
 
     GuiSetup guisetup = GuiSetup.setup();
 
-    Interaction interaction = new Interaction(scene);
-
-    //UserInput
     updateUserInputFunction = (){
       ambientColor = guisetup.getAmbientColor;
       directionalColor = guisetup.getDirectionalColor;
@@ -47,6 +45,7 @@ class SceneViewPerformanceTest extends Scene {
 
   }
 
+  @override
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);

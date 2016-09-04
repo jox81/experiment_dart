@@ -8,6 +8,7 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/interaction.dart';
 
 class SceneViewParticle extends Scene {
 
@@ -21,9 +22,9 @@ class SceneViewParticle extends Scene {
   @override
   UpdateUserInput updateUserInputFunction;
 
+  @override
   setupUserInput() {
 
-    //UserInput
     updateUserInputFunction = (){
     };
 
@@ -31,7 +32,9 @@ class SceneViewParticle extends Scene {
 
   }
 
+  @override
   Future setupScene() async {
+
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     Mesh mesh = await experiment(scene);
