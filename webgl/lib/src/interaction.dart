@@ -7,6 +7,7 @@ class Interaction{
 
   final Scene scene;
 
+
   //Debug div
   Element elementDebugInfoText;
   Element elementFPSText;
@@ -37,7 +38,7 @@ class Interaction{
 
   double renderTime;
 
-  void update(num time) {
+  void update() {
 
     _handleKeys();
 

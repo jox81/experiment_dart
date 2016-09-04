@@ -9,12 +9,14 @@ import 'package:webgl/src/mesh.dart';
 import 'dart:typed_data';
 import 'dart:async';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/interface/IScene.dart';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   Application application = new Application(canvas);
 
   SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupUserInput();
   await sceneView.setupScene();
 
   application.render(sceneView);
@@ -25,6 +27,22 @@ class SceneView extends Scene {
   num viewAspectRatio;
 
   SceneView(this.viewAspectRatio):super();
+
+  @override
+  UpdateFunction updateFunction;
+
+  @override
+  UpdateUserInput updateUserInputFunction;
+
+  setupUserInput() {
+
+    //UserInput
+    updateUserInputFunction = (){
+    };
+
+    updateUserInputFunction();
+
+  }
 
   Future setupScene() async {
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);

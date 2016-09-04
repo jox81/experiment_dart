@@ -14,12 +14,14 @@ import 'dart:math';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'dart:web_gl';
+import 'package:webgl/src/interface/IScene.dart';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   Application application = new Application(canvas);
 
   SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupUserInput();
   await sceneView.setupScene();
 
   application.render(sceneView);
@@ -29,12 +31,40 @@ class SceneView extends Scene {
 
   num viewAspectRatio;
 
+  GuiSetup guisetup;
+  Vector3 directionalPosition;
+  Vector3 ambientColor, directionalColor;
+  bool useLighting;
+
   SceneView(this.viewAspectRatio):super();
 
-  Future setupScene() async {
+  @override
+  UpdateFunction updateFunction;
+
+  @override
+  UpdateUserInput updateUserInputFunction;
+
+  setupUserInput() {
+
+    guisetup = GuiSetup.setup();
+
     Interaction interaction = new Interaction(scene);
-    //GUI
-    GuiSetup guisetup = GuiSetup.setup();
+
+    //UserInput
+    updateUserInputFunction = (){
+      ambientColor = guisetup.getAmbientColor;
+      directionalColor = guisetup.getDirectionalColor;
+      directionalPosition = guisetup.getDirectionalPosition;
+      useLighting = guisetup.getUseLighting;
+
+      interaction.update();
+    };
+
+    updateUserInputFunction();
+
+  }
+
+  Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
@@ -94,7 +124,6 @@ class SceneView extends Scene {
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       // Do animation
-      interaction.update(time);
 //    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
       _lastTime = time;
 

@@ -3,8 +3,7 @@ import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/scene.dart';
-
-typedef void UpdateFunction(num time);
+import 'package:webgl/src/interface/IScene.dart';
 
 RenderingContext get gl => Application._gl;
 Scene get scene => Application._instance._currentScene;
@@ -14,7 +13,7 @@ class Application {
 
   static RenderingContext _gl;
 
-  Scene _currentScene;
+  IUpdatableScene _currentScene;
 
   num get viewAspectRatio => gl.drawingBufferWidth / gl.drawingBufferHeight;
 
@@ -93,7 +92,7 @@ class Application {
     }
   }
 
-  void render(Scene scene){
+  void render(IUpdatableScene scene){
     _currentScene = scene;
     _render();
   }
@@ -102,6 +101,7 @@ class Application {
     gl.clearColor(_currentScene.backgroundColor.r, _currentScene.backgroundColor.g, _currentScene.backgroundColor.b, _currentScene.backgroundColor.a);
     gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
+    _currentScene.updateUserInput();
     _currentScene.update(time);
     _currentScene.render();
 

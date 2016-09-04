@@ -9,12 +9,14 @@ import 'dart:async';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'dart:web_gl';
+import 'package:webgl/src/interface/IScene.dart';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   Application application = new Application(canvas);
 
   SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupUserInput();
   await sceneView.setupScene();
 
   application.render(sceneView);
@@ -26,8 +28,26 @@ class SceneView extends Scene {
 
   SceneView(this.viewAspectRatio):super();
 
-  Future setupScene() async {
+  @override
+  UpdateFunction updateFunction;
+
+  @override
+  UpdateUserInput updateUserInputFunction;
+
+  setupUserInput() {
+
     Interaction interaction = new Interaction(scene);
+
+    //UserInput
+    updateUserInputFunction = (){
+      interaction.update();
+    };
+
+    updateUserInputFunction();
+
+  }
+
+  Future setupScene() async {
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
@@ -66,7 +86,6 @@ class SceneView extends Scene {
       // rotate
       double animationStep = time - _lastTime;
       //... animation here
-      interaction.update(time);
       _lastTime = time;
     };
   }

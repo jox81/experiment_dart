@@ -1,9 +1,8 @@
-import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/material.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
+import 'package:webgl/src/interface/IScene.dart';
 
 class Mesh {
 
@@ -12,7 +11,7 @@ class Mesh {
 
   //Animation
   //todo : place elsewhere ? outside mesh ?
-  UpdateFunction updateFunction = (num time){};
+  UpdateFunction updateFunction;
 
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();

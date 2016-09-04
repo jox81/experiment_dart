@@ -5,8 +5,9 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:collection';
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/interface/IScene.dart';
 
-class Scene{
+abstract class Scene implements IUpdatableScene, IUpdatableSceneFunction{
 
   Vector4 _backgroundColor;
   Vector4 get backgroundColor => _backgroundColor;
@@ -14,7 +15,7 @@ class Scene{
     _backgroundColor = color;
   }
 
-  Camera mainCamera; //mainCamera.matrix.storage ==> projection Matrix
+  Camera mainCamera;
   Light light;
   AmbientLight ambientLight = new AmbientLight();
 
@@ -23,31 +24,35 @@ class Scene{
 
   Matrix4 mvMatrix = new Matrix4.identity();
 
+  void updateUserInput() {
+    updateUserInputFunction();
+  }
+
+  void update(num time) {
+    updateFunction(time);
+  }
+
   void render(){
     for (Mesh model in meshes) {
-      mvPushMatrix();
+      _mvPushMatrix();
 
       mvMatrix.multiply(model.transform);
 
       model.render();
 
-      mvPopMatrix();
+      _mvPopMatrix();
     }
   }
 
-  UpdateFunction updateFunction;
-  void update(num time) {
-    updateFunction(time);
-  }
 
   //Animation
   Queue<Matrix4> _mvMatrixStack = new Queue();
 
-  void mvPushMatrix() {
+  void _mvPushMatrix() {
     _mvMatrixStack.addFirst(mvMatrix.clone());
   }
 
-  void mvPopMatrix() {
+  void _mvPopMatrix() {
     if (0 == _mvMatrixStack.length) {
       throw new Exception("Invalid popMatrix!");
     }

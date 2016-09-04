@@ -9,10 +9,9 @@ import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/primitives.dart';
-import 'dart:web_gl';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
 main() async {
@@ -20,6 +19,7 @@ main() async {
   Application application = new Application(canvas);
 
   SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupUserInput();
   await sceneView.setupScene();
 
   application.render(sceneView);
@@ -29,12 +29,41 @@ class SceneView extends Scene {
 
   num viewAspectRatio;
 
+  GuiSetup guisetup;
+  Vector3 directionalPosition;
+  Vector3 ambientColor, directionalColor;
+
+  bool useLighting;
+
   SceneView(this.viewAspectRatio):super();
 
-  Future setupScene() async {
+  @override
+  UpdateFunction updateFunction;
+
+  @override
+  UpdateUserInput updateUserInputFunction;
+
+  setupUserInput() {
+
+    guisetup = GuiSetup.setup();
+
     Interaction interaction = new Interaction(scene);
-    //GUI
-    GuiSetup guisetup = GuiSetup.setup();
+
+    //UserInput
+    updateUserInputFunction = (){
+      ambientColor = guisetup.getAmbientColor;
+      directionalColor = guisetup.getDirectionalColor;
+      directionalPosition = guisetup.getDirectionalPosition;
+      useLighting = guisetup.getUseLighting;
+
+      interaction.update();
+    };
+
+    updateUserInputFunction();
+
+  }
+
+  Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
@@ -49,15 +78,15 @@ class SceneView extends Scene {
     mainCamera = camera;
 
     //Lights
-    ambientLight.color.setFrom(guisetup.getAmbientColor);
+    ambientLight.color.setFrom(ambientColor);
 
     DirectionalLight directionalLight = new DirectionalLight()
-      ..color.setFrom(guisetup.getDirectionalColor)
-      ..direction.setFrom(guisetup.getDirectionalPosition);
+      ..color.setFrom(directionalColor)
+      ..direction.setFrom(directionalColor);
     light = directionalLight;
 
     PointLight pointLight = new PointLight()
-      ..color.setFrom(guisetup.getDirectionalColor)
+      ..color.setFrom(directionalColor)
       ..position = new Vector3(20.0, 20.0, 20.0);
     light = pointLight;
 
@@ -84,7 +113,7 @@ class SceneView extends Scene {
     await MaterialBaseTextureNormal.create()
       ..ambientColor = ambientLight.color
       ..directionalLight = directionalLight;
-    materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
+    materialBaseTextureNormal..useLighting = useLighting;
     materials.add(materialBaseTextureNormal);
 
     MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
@@ -164,29 +193,29 @@ class SceneView extends Scene {
     //sphere.mode = GL.LINES;
     meshes.add(sphere);
 
-    // Animation
+    //Animation
     num _lastTime = 0.0;
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //Do Animation here
 
-      interaction.update(time);
       triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
       squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
       pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
       cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
 
-      materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
+      materialBaseTextureNormal..useLighting = useLighting;
 
-      ambientLight..color.setFrom(guisetup.getAmbientColor);
+      ambientLight..color.setFrom(ambientColor);
       directionalLight
-        ..direction.setFrom(guisetup.getDirectionalPosition)
-        ..color.setFrom(guisetup.getDirectionalColor);
+        ..direction.setFrom(directionalPosition)
+        ..color.setFrom(directionalColor);
 
       //
       _lastTime = time;
     };
   }
+
 }
 
 class GuiSetup {
