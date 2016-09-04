@@ -1,5 +1,4 @@
-﻿import 'dart:html';
-import 'package:vector_math/vector_math.dart';
+﻿import 'package:vector_math/vector_math.dart';
 import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
@@ -11,23 +10,11 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-main() async {
-  CanvasElement canvas = querySelector('#glCanvas');
-  Application application = new Application(canvas);
-
-  SceneView sceneView = new SceneView(application.viewAspectRatio);
-  await sceneView.setupUserInput();
-  await sceneView.setupScene();
-
-  application.render(sceneView);
-}
-
-class SceneView extends Scene {
+class SceneViewPBR extends Scene {
 
   num viewAspectRatio;
-  GuiSetup guisetup;
 
-  SceneView(this.viewAspectRatio):super();
+  SceneViewPBR(this.viewAspectRatio):super();
 
   @override
   UpdateFunction updateFunction;
@@ -37,7 +24,7 @@ class SceneView extends Scene {
 
   setupUserInput() {
 
-    guisetup = GuiSetup.setup();
+    GuiSetup guisetup = GuiSetup.setup();
 
     Interaction interaction = new Interaction(scene);
 

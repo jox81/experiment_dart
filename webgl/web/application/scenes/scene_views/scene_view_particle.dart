@@ -1,6 +1,4 @@
-import 'dart:html';
 import 'dart:math' as Math;
-import 'dart:web_gl';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
@@ -11,22 +9,11 @@ import 'dart:async';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-main() async {
-  CanvasElement canvas = querySelector('#glCanvas');
-  Application application = new Application(canvas);
-
-  SceneView sceneView = new SceneView(application.viewAspectRatio);
-  await sceneView.setupUserInput();
-  await sceneView.setupScene();
-
-  application.render(sceneView);
-}
-
-class SceneView extends Scene {
+class SceneViewParticle extends Scene {
 
   num viewAspectRatio;
 
-  SceneView(this.viewAspectRatio):super();
+  SceneViewParticle(this.viewAspectRatio):super();
 
   @override
   UpdateFunction updateFunction;

@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:datgui/datgui.dart' as dat;
@@ -14,28 +13,16 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-main() async {
-  CanvasElement canvas = querySelector('#glCanvas');
-  Application application = new Application(canvas);
-
-  SceneView sceneView = new SceneView(application.viewAspectRatio);
-  await sceneView.setupUserInput();
-  await sceneView.setupScene();
-
-  application.render(sceneView);
-}
-
-class SceneView extends Scene {
+class SceneViewBase extends Scene {
 
   num viewAspectRatio;
 
-  GuiSetup guisetup;
   Vector3 directionalPosition;
   Vector3 ambientColor, directionalColor;
 
   bool useLighting;
 
-  SceneView(this.viewAspectRatio):super();
+  SceneViewBase(this.viewAspectRatio):super();
 
   @override
   UpdateFunction updateFunction;
@@ -43,9 +30,10 @@ class SceneView extends Scene {
   @override
   UpdateUserInput updateUserInputFunction;
 
+  @override
   setupUserInput() {
 
-    guisetup = GuiSetup.setup();
+    GuiSetup guisetup = GuiSetup.setup();
 
     Interaction interaction = new Interaction(scene);
 
@@ -63,6 +51,7 @@ class SceneView extends Scene {
 
   }
 
+  @override
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);

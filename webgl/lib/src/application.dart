@@ -86,7 +86,7 @@ class Application {
       gl.canvas.width  = displayWidth;
       gl.canvas.height = displayHeight;
 
-      _currentScene?.mainCamera?.aspectRatio = viewAspectRatio;
+      _currentScene?.mainCamera?.aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
 
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     }

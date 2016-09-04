@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:datgui/datgui.dart' as dat;
@@ -7,36 +6,20 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/texture_utils.dart';
-import 'package:webgl/src/utils.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
-import 'dart:web_gl';
 import 'package:webgl/src/interface/IScene.dart';
 
-main() async {
-  CanvasElement canvas = querySelector('#glCanvas');
-  Application application = new Application(canvas);
-
-  SceneView sceneView = new SceneView(application.viewAspectRatio);
-  await sceneView.setupUserInput();
-  await sceneView.setupScene();
-
-  application.render(sceneView);
-}
-
-class SceneView extends Scene {
+class SceneViewPerformanceTest extends Scene {
 
   num viewAspectRatio;
 
-  GuiSetup guisetup;
   Vector3 directionalPosition;
   Vector3 ambientColor, directionalColor;
   bool useLighting;
 
-  SceneView(this.viewAspectRatio):super();
+  SceneViewPerformanceTest(this.viewAspectRatio):super();
 
   @override
   UpdateFunction updateFunction;
@@ -46,7 +29,7 @@ class SceneView extends Scene {
 
   setupUserInput() {
 
-    guisetup = GuiSetup.setup();
+    GuiSetup guisetup = GuiSetup.setup();
 
     Interaction interaction = new Interaction(scene);
 
@@ -79,15 +62,15 @@ class SceneView extends Scene {
     mainCamera = camera;
 
     //Lights
-    ambientLight.color.setFrom(guisetup.getAmbientColor);
+    ambientLight.color.setFrom(ambientColor);
 
     DirectionalLight directionalLight = new DirectionalLight()
-      ..color.setFrom(guisetup.getDirectionalColor)
-      ..direction.setFrom(guisetup.getDirectionalPosition);
+      ..color.setFrom(directionalColor)
+      ..direction.setFrom(directionalPosition);
     light = directionalLight;
 
     PointLight pointLight = new PointLight()
-      ..color.setFrom(guisetup.getDirectionalColor)
+      ..color.setFrom(directionalColor)
       ..position = new Vector3(20.0, 20.0, 20.0);
     light = pointLight;
 

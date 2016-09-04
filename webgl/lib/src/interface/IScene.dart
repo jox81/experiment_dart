@@ -1,5 +1,6 @@
 import 'package:webgl/src/camera.dart';
 import 'package:vector_math/vector_math.dart';
+import 'dart:async';
 
 typedef void UpdateFunction(num time);
 typedef void UpdateUserInput();
@@ -16,4 +17,9 @@ abstract class IUpdatableScene{
 abstract class IUpdatableSceneFunction{
   UpdateUserInput updateUserInputFunction;
   UpdateFunction updateFunction;
+}
+
+abstract class ISetupScene{
+  setupUserInput();
+  Future setupScene();
 }

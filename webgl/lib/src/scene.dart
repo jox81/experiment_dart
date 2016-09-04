@@ -7,7 +7,7 @@ import 'dart:collection';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-abstract class Scene implements IUpdatableScene, IUpdatableSceneFunction{
+abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
   Vector4 _backgroundColor;
   Vector4 get backgroundColor => _backgroundColor;
@@ -23,6 +23,11 @@ abstract class Scene implements IUpdatableScene, IUpdatableSceneFunction{
   List<Mesh> meshes = new List();
 
   Matrix4 mvMatrix = new Matrix4.identity();
+
+
+  Scene(){
+    setupUserInput();
+  }
 
   void updateUserInput() {
     updateUserInputFunction();
