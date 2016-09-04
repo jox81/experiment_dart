@@ -58,7 +58,7 @@ Mesh experiment() {
   ..material = materialCustom;
 
   Vector3 position = new Vector3(0.0, 0.0, 0.0);
-  mesh.animation = (num time){
+  mesh.updateFunction = (num time){
     pointSize = 100 * cos(time / 100);
   };
 

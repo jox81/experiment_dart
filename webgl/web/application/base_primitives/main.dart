@@ -6,119 +6,129 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/camera.dart';
 import 'dart:async';
-
-Application application;
+import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/interaction.dart';
+import 'dart:web_gl';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
-  canvas.width = document.body.clientWidth;
-  canvas.height = document.body.clientHeight;
+  Application application = new Application(canvas);
 
-  //Application
-  application = new Application(canvas);
-  await setupScene();
-  application.renderAnimation();
+  SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupScene();
+
+  application.render(sceneView.scene);
 }
 
-Future setupScene() async {
-  application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+class SceneView {
 
-  //Cameras
-  // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-  Camera camera =
-  new Camera(radians(45.0), application.viewAspectRatio, 0.1, 1000.0)
-    ..aspectRatio = application.viewAspectRatio
-    ..targetPosition = new Vector3.zero()
-    ..position = new Vector3(20.0, 30.0, 50.0)
-    ..cameraController = new CameraController();
-  application.mainCamera = camera;
+  Scene scene;
+  num viewAspectRatio;
 
-  //Material
-  MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-  application.materials.add(materialPoint);
+  SceneView(this.viewAspectRatio) {
+    scene = new Scene();
+  }
 
-  MaterialBase materialBase = await MaterialBase.create();
-  application.materials.add(materialBase);
+  Future setupScene() async {
+    Interaction interaction = new Interaction(scene);
+    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  Mesh axis = await createAxis();
-  Mesh points = await createPoints(materialPoint);
+    //Cameras
+    // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
+    Camera camera =
+    new Camera(radians(45.0), 0.1, 1000.0)
+      ..aspectRatio = viewAspectRatio
+      ..targetPosition = new Vector3.zero()
+      ..position = new Vector3(20.0, 30.0, 50.0)
+      ..cameraController = new CameraController();
+    scene.mainCamera = camera;
 
-  Mesh axis2 = await createAxis()
-  ..transform.translate(5.0,0.0,0.0);
+    //Material
+    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
+    scene.materials.add(materialPoint);
 
-  // create cube
-  Mesh centerCube = new Mesh.Cube()
-  ..mode = GL.LINE_STRIP;
-  centerCube.transform = axis2.transform;
-  centerCube.material = materialBase;
-  application.meshes.add(centerCube);
+    MaterialBase materialBase = await MaterialBase.create();
+    scene.materials.add(materialBase);
 
-  //Animation
-  num _lastTime = 0.0;
-  application.updateScene((num time) {
-    // rotate
-    double animationStep = time - _lastTime;
-    //... animation here
-    _lastTime = time;
-  });
-}
+    Mesh axis = await createAxis();
+    Mesh points = await createPoints(materialPoint);
 
-//Points
-Future<Mesh> createPoints(MaterialPoint materialPoint) async {
+    Mesh axis2 = await createAxis()
+      ..transform.translate(5.0, 0.0, 0.0);
 
-  //Material
-  MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-  application.materials.add(materialPoint);
+    // create cube
+    Mesh centerCube = new Mesh.Cube()
+      ..mode = GL.LINE_STRIP;
+    centerCube.transform = axis2.transform;
+    centerCube.material = materialBase;
+    scene.meshes.add(centerCube);
 
-  Mesh mesh = new Mesh()
-  ..mode = GL.POINTS
-  ..vertices = [
-    0.0,0.0,0.0,
-    1.0,0.0,0.0,
-    0.0,1.0,0.0,
-    0.0,0.0,1.0,
-  ]
-  ..colors = [
-    1.0,1.0,0.0,1.0,
-    1.0,0.0,0.0,1.0,
-    0.0,1.0,0.0,1.0,
-    0.0,0.0,1.0,1.0,
-  ]
-  ..material = materialPoint;
+    //Animation
+    num _lastTime = 0.0;
+    scene.updateFunction = (num time) {
+      // rotate
+      double animationStep = time - _lastTime;
+      //... animation here
+      interaction.update(time);
+      _lastTime = time;
+    };
+  }
 
-  application.meshes.add(mesh);
+  //Points
+  Future<Mesh> createPoints(MaterialPoint materialPoint) async {
+    //Material
+    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
+    scene.materials.add(materialPoint);
 
-  return mesh;
-}
+    Mesh mesh = new Mesh()
+      ..mode = GL.POINTS
+      ..vertices = [
+        0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0,
+      ]
+      ..colors = [
+        1.0, 1.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+      ]
+      ..material = materialPoint;
 
-Future<Mesh> createAxis() async {
+    scene.meshes.add(mesh);
 
-  //Material
-  MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-  application.materials.add(materialPoint);
+    return mesh;
+  }
 
-  Mesh mesh = new Mesh()
-    ..mode = GL.LINES
-    ..vertices = [
-      0.0,0.0,0.0,
-      1.0,0.0,0.0,
-      0.0,0.0,0.0,
-      0.0,1.0,0.0,
-      0.0,0.0,0.0,
-      0.0,0.0,1.0,
-    ]
-    ..colors = [
-      1.0,0.0,0.0,1.0,
-      1.0,0.0,0.0,1.0,
-      0.0,1.0,0.0,1.0,
-      0.0,1.0,0.0,1.0,
-      0.0,0.0,1.0,1.0,
-      0.0,0.0,1.0,1.0,
-    ]
-    ..material = materialPoint;
+  Future<Mesh> createAxis() async {
+    //Material
+    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
+    scene.materials.add(materialPoint);
 
-  application.meshes.add(mesh);
+    Mesh mesh = new Mesh()
+      ..mode = GL.LINES
+      ..vertices = [
+        0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 1.0,
+      ]
+      ..colors = [
+        1.0, 0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 1.0, 0.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+      ]
+      ..material = materialPoint;
 
-  return mesh;
+    scene.meshes.add(mesh);
+
+    return mesh;
+  }
 }
 

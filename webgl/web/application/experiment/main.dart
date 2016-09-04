@@ -7,31 +7,41 @@ import '001.dart' as exp001;
 import '002.dart' as exp002;
 import '003.dart' as exp003;
 import 'dart:async';
-
-Application application;
+import 'package:webgl/src/scene.dart';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
+  Application application = new Application(canvas);
 
-  //Application
-  application = new Application(canvas);
-  await setupScene();
-  application.renderAnimation();
+  SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupScene();
+
+  application.render(sceneView.scene);
 }
 
-Future setupScene() async {
-  application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+class SceneView {
 
-  Mesh mesh = await exp003.experiment(Application.gl);
-  application.materials.add(mesh.material);
-  application.meshes.add(mesh);
+  Scene scene;
+  num viewAspectRatio;
 
-  //Animation
-  num _lastTime = 0.0;
-  application.updateScene((num time) {
-    double animationStep = time - _lastTime;
-    //... custom animation here
-    mesh.animation(time);
-    _lastTime = time;
-  });
+  SceneView(this.viewAspectRatio) {
+    scene = new Scene();
+  }
+
+  Future setupScene() async {
+    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+
+    Mesh mesh = await exp003.experiment();
+    scene.materials.add(mesh.material);
+    scene.meshes.add(mesh);
+
+    //Animation
+    num _lastTime = 0.0;
+    scene.updateFunction = (num time) {
+      double animationStep = time - _lastTime;
+      //... custom animation here
+      mesh.updateFunction(time);
+      _lastTime = time;
+    };
+  }
 }

@@ -12,173 +12,184 @@ import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/primitives.dart';
 import 'dart:web_gl';
-
-Application application;
-GuiSetup guisetup;
+import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/interaction.dart';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
-  canvas.width = document.body.clientWidth;
-  canvas.height = document.body.clientHeight;
+  Application application = new Application(canvas);
 
-  //GUI
-  guisetup = GuiSetup.setup();
+  SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupScene();
 
-  //Application
-  application = new Application(canvas);
-  await setupScene();
-  application.renderAnimation();
+  application.render(sceneView.scene);
 }
 
-Future setupScene() async {
-  application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+class SceneView {
 
-  //Cameras
-  // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-  Camera camera =
-  new Camera(radians(37.0), application.viewAspectRatio, 0.1, 1000.0)
-    ..aspectRatio = application.viewAspectRatio
-    ..targetPosition = new Vector3.zero()
-    ..position = new Vector3(50.0,50.0, 50.0)
-    ..cameraController = new CameraController();
-  application.mainCamera = camera;
+  Scene scene;
+  num viewAspectRatio;
 
-  //Lights
-  application.ambientLight.color.setFrom(guisetup.getAmbientColor);
+  SceneView(this.viewAspectRatio) {
+    scene = new Scene();
+  }
 
-  DirectionalLight directionalLight = new DirectionalLight()
-    ..color.setFrom(guisetup.getDirectionalColor)
-    ..direction.setFrom(guisetup.getDirectionalPosition);
-  application.light = directionalLight;
+  Future setupScene() async {
+    Interaction interaction = new Interaction(scene);
+    //GUI
+    GuiSetup guisetup = GuiSetup.setup();
 
-  PointLight pointLight = new PointLight()
-  ..color.setFrom(guisetup.getDirectionalColor)
-  ..position = new Vector3(20.0,20.0,20.0);
-  application.light = pointLight;
+    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  //Materials
-  MaterialPoint materialPoint = await MaterialPoint.create(4.0);
-  application.materials.add(materialPoint);
+    //Cameras
+    // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
+    Camera camera =
+    new Camera(radians(37.0), 0.1, 1000.0)
+      ..aspectRatio = viewAspectRatio
+      ..targetPosition = new Vector3.zero()
+      ..position = new Vector3(50.0, 50.0, 50.0)
+      ..cameraController = new CameraController();
+    scene.mainCamera = camera;
 
-  MaterialBase materialBase = await MaterialBase.create();
-  application.materials.add(materialBase);
+    //Lights
+    scene.ambientLight.color.setFrom(guisetup.getAmbientColor);
 
-  MaterialBaseColor materialBaseColor = await MaterialBaseColor.create(new Vector3(1.0, 1.0, 0.0));
-  application.materials.add(materialBaseColor);
+    DirectionalLight directionalLight = new DirectionalLight()
+      ..color.setFrom(guisetup.getDirectionalColor)
+      ..direction.setFrom(guisetup.getDirectionalPosition);
+    scene.light = directionalLight;
 
-  MaterialBaseVertexColor materialBaseVertexColor = await MaterialBaseVertexColor.create();
-  application.materials.add(materialBaseVertexColor);
+    PointLight pointLight = new PointLight()
+      ..color.setFrom(guisetup.getDirectionalColor)
+      ..position = new Vector3(20.0, 20.0, 20.0);
+    scene.light = pointLight;
 
-  MaterialBaseTexture materialBaseTexture = await MaterialBaseTexture.create();
-  application.materials.add(materialBaseTexture);
+    //Materials
+    MaterialPoint materialPoint = await MaterialPoint.create(4.0);
+    scene.materials.add(materialPoint);
 
-  MaterialBaseTextureNormal materialBaseTextureNormal =
-  await MaterialBaseTextureNormal.create()
-    ..ambientColor = application.ambientLight.color
-    ..directionalLight = directionalLight;
-  materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
-  application.materials.add(materialBaseTextureNormal);
+    MaterialBase materialBase = await MaterialBase.create();
+    scene.materials.add(materialBase);
 
-  MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
-  application.materials.add(materialPBR);
+    MaterialBaseColor materialBaseColor = await MaterialBaseColor.create(
+        new Vector3(1.0, 1.0, 0.0));
+    scene.materials.add(materialBaseColor);
 
-  //Meshes
-  Mesh axis = await createAxis();
+    MaterialBaseVertexColor materialBaseVertexColor = await MaterialBaseVertexColor
+        .create();
+    scene.materials.add(materialBaseVertexColor);
 
-  // create triangle
-  Mesh triangle = new Mesh.Triangle();
-  triangle.transform.translate(0.0, 0.0, 4.0);
-  triangle.material = materialBase;
-  application.meshes.add(triangle);
+    MaterialBaseTexture materialBaseTexture = await MaterialBaseTexture
+        .create();
+    scene.materials.add(materialBaseTexture);
 
-  // create square
-  Mesh square = new Mesh.Rectangle();
-  square.transform.translate(3.0, 0.0, 0.0);
-  square.transform.rotateX(radians(90.0));
-  square.material = materialBaseColor;
-  application.meshes.add(square);
-
-  // create cube
-  Mesh centerCube = new Mesh.Cube();
-  centerCube.transform.translate(0.0, 0.0, 0.0);
-  centerCube.transform.scale(0.1, 0.1, 0.1);
-  centerCube.material = materialBaseColor;
-  application.meshes.add(centerCube);
-
-  // create square
-  Mesh squareX = new Mesh.Rectangle();
-  squareX.transform.translate(0.0, 3.0, 0.0);
-  squareX.colors = new List();
-  squareX.colors.addAll([1.0, 0.0, 0.0, 1.0]);
-  squareX.colors.addAll([1.0, 1.0, 0.0, 1.0]);
-  squareX.colors.addAll([1.0, 0.0, 1.0, 1.0]);
-  squareX.colors.addAll([0.0, 1.0, 1.0, 1.0]);
-  squareX.material = materialBaseVertexColor;
-  application.meshes.add(squareX);
-
-  //create Pyramide
-  Mesh pyramid = new Mesh.Pyramid();
-  pyramid.transform.translate(3.0, -2.0, 0.0);
-  pyramid.material = materialBaseVertexColor;
-  application.meshes.add(pyramid);
-
-  //Create Cube
-  Mesh cube = new Mesh.Cube();
-  cube.transform.translate(-4.0, 1.0, 0.0);
-  materialBaseTextureNormal.texture = await TextureUtils.createTextureFromFile("../images/crate.gif");
-  cube.material = materialBaseTextureNormal;
-  application.meshes.add(cube);
-
-  // SusanModel
-  Mesh susanMesh = await createSusanModel();
-  application.meshes.add(susanMesh);
-
-  //Sphere
-  Mesh sphere = new Mesh.Sphere(radius:2.5, segmentV :48, segmentH: 48);
-  sphere.transform.translate(0.0, 0.0, -10.0);
-  sphere.material = materialPBR;
-  //sphere.mode = GL.LINES;
-  application.meshes.add(sphere);
-
-  // Animation
-  num _lastTime = 0.0;
-  application.updateScene((num time) {
-    // rotate
-    double animationStep = time - _lastTime;
-    triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
-    squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
-    pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
-    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
-    _lastTime = time;
-
+    MaterialBaseTextureNormal materialBaseTextureNormal =
+    await MaterialBaseTextureNormal.create()
+      ..ambientColor = scene.ambientLight.color
+      ..directionalLight = directionalLight;
     materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
+    scene.materials.add(materialBaseTextureNormal);
 
-    application.ambientLight..color.setFrom(guisetup.getAmbientColor);
-    directionalLight
-      ..direction.setFrom(guisetup.getDirectionalPosition)
-      ..color.setFrom(guisetup.getDirectionalColor);
-  });
-}
+    MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
+    scene.materials.add(materialPBR);
 
-Future createSusanModel() async {
-  //SusanModel
-  Texture susanTexture = await TextureUtils.createTextureFromFile('../objects/susan/susan_texture.png');
-  var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
-  Mesh susanMesh = new Mesh();
-  susanMesh.transform.translate(10.0, 0.0, 0.0);
-  susanMesh.transform.rotateX(radians(-90.0));
-  susanMesh.vertices = susanJson['meshes'][0]['vertices'];
-  susanMesh.indices = susanJson['meshes'][0]['faces']
-      .expand((i) => i)
-      .toList();
-  susanMesh.textureCoords = susanJson['meshes'][0]['texturecoords'][0];
-  susanMesh.vertexNormals = susanJson['meshes'][0]['normals'];
-  MaterialBaseTexture susanMaterialBaseTexture = await MaterialBaseTexture.create()
-    ..texture = susanTexture;
-  application.materials.add(susanMaterialBaseTexture);
-  susanMesh.material = susanMaterialBaseTexture;
+    //Meshes
+    Mesh axis = await createAxis(scene);
 
-  return susanMesh;
+    // create triangle
+    Mesh triangle = new Mesh.Triangle();
+    triangle.transform.translate(0.0, 0.0, 4.0);
+    triangle.material = materialBase;
+    scene.meshes.add(triangle);
+
+    // create square
+    Mesh square = new Mesh.Rectangle();
+    square.transform.translate(3.0, 0.0, 0.0);
+    square.transform.rotateX(radians(90.0));
+    square.material = materialBaseColor;
+    scene.meshes.add(square);
+
+    // create cube
+    Mesh centerCube = new Mesh.Cube();
+    centerCube.transform.translate(0.0, 0.0, 0.0);
+    centerCube.transform.scale(0.1, 0.1, 0.1);
+    centerCube.material = materialBaseColor;
+    scene.meshes.add(centerCube);
+
+    // create square
+    Mesh squareX = new Mesh.Rectangle();
+    squareX.transform.translate(0.0, 3.0, 0.0);
+    squareX.colors = new List();
+    squareX.colors.addAll([1.0, 0.0, 0.0, 1.0]);
+    squareX.colors.addAll([1.0, 1.0, 0.0, 1.0]);
+    squareX.colors.addAll([1.0, 0.0, 1.0, 1.0]);
+    squareX.colors.addAll([0.0, 1.0, 1.0, 1.0]);
+    squareX.material = materialBaseVertexColor;
+    scene.meshes.add(squareX);
+
+    //create Pyramide
+    Mesh pyramid = new Mesh.Pyramid();
+    pyramid.transform.translate(3.0, -2.0, 0.0);
+    pyramid.material = materialBaseVertexColor;
+    scene.meshes.add(pyramid);
+
+    //Create Cube
+    Mesh cube = new Mesh.Cube();
+    cube.transform.translate(-4.0, 1.0, 0.0);
+    materialBaseTextureNormal.texture =
+    await TextureUtils.createTextureFromFile("../images/crate.gif");
+    cube.material = materialBaseTextureNormal;
+    scene.meshes.add(cube);
+
+    //SusanModel
+    var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
+    Mesh susanMesh = new Mesh();
+    susanMesh.transform.translate(10.0, 0.0, 0.0);
+    susanMesh.transform.rotateX(radians(-90.0));
+    susanMesh.vertices = susanJson['meshes'][0]['vertices'];
+    susanMesh.indices = susanJson['meshes'][0]['faces']
+        .expand((i) => i)
+        .toList();
+    susanMesh.textureCoords = susanJson['meshes'][0]['texturecoords'][0];
+    susanMesh.vertexNormals = susanJson['meshes'][0]['normals'];
+    MaterialBaseTexture susanMaterialBaseTexture = await MaterialBaseTexture
+        .create()
+      ..texture = await TextureUtils.createTextureFromFile(
+          '../objects/susan/susan_texture.png');
+    susanMesh.material = susanMaterialBaseTexture;
+    scene.materials.add(susanMaterialBaseTexture);
+    scene.meshes.add(susanMesh);
+
+    //Sphere
+    Mesh sphere = new Mesh.Sphere(radius: 2.5, segmentV: 48, segmentH: 48);
+    sphere.transform.translate(0.0, 0.0, -10.0);
+    sphere.material = materialPBR;
+    //sphere.mode = GL.LINES;
+    scene.meshes.add(sphere);
+
+    // Animation
+    num _lastTime = 0.0;
+    scene.updateFunction = (num time) {
+      double animationStep = time - _lastTime;
+      //Do Animation here
+
+      interaction.update(time);
+      triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
+      squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
+      pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
+      cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
+
+      materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
+
+      scene.ambientLight..color.setFrom(guisetup.getAmbientColor);
+      directionalLight
+        ..direction.setFrom(guisetup.getDirectionalPosition)
+        ..color.setFrom(guisetup.getDirectionalColor);
+
+      //
+      _lastTime = time;
+    };
+  }
 }
 
 class GuiSetup {

@@ -54,7 +54,7 @@ Mesh experiment() {
   ..material = materialCustom;
 
   Vector4 position = new Vector4(0.0, 0.0, 0.0, 1.0);
-  mesh.animation = (num time){
+  mesh.updateFunction = (num time){
     pointSize = 100 * cos(time / 500);
     position.x = cos(time / 1000) * .4;
     print(cos(time / 1000));

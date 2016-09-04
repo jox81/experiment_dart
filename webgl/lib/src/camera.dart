@@ -23,7 +23,7 @@ class Camera {
     _cameraController.init(this);
   }
 
-  Camera(this._fOV, this.aspectRatio, this.zNear, this.zFar){
+  Camera(this._fOV, this.zNear, this.zFar){
   }
 
   void translate(Vector3 position) {
@@ -135,7 +135,7 @@ class CameraController {
     xRot = 90 - camera.pitch;
     yRot = camera.phiAngle;
 
-    CanvasElement canvas = Application.gl.canvas;
+    CanvasElement canvas = gl.canvas;
 
     // Assign a mouse down handler to the HTML element.
     canvas.onMouseDown.listen((ev) {

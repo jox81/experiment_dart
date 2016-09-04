@@ -18,8 +18,6 @@ abstract class Material {
       "#pragma optimize(on)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
 
-  RenderingContext get gl => Application.gl;
-
   Program program;
 
   ProgramInfo programInfo;
@@ -38,7 +36,7 @@ abstract class Material {
     fsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     initShaderProgram(vsSource, fsSource);
 
-    programInfo = UtilsShader.getProgramInfo(Application.gl, program);
+    programInfo = UtilsShader.getProgramInfo(program);
     attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
     uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
 

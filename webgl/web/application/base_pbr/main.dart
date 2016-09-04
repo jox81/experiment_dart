@@ -1,4 +1,4 @@
-import 'dart:html';
+﻿import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/application.dart';
@@ -7,64 +7,73 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:async';
-
-Application application;
-GuiSetup guisetup;
+import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/interaction.dart';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
-  canvas.width = document.body.clientWidth;
-  canvas.height = document.body.clientHeight;
+  Application application = new Application(canvas);
 
-  //GUI
-  guisetup = GuiSetup.setup();
+  SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupScene();
 
-  //Application
-  application = new Application(canvas);
-  await setupScene();
-  application.renderAnimation();
+  application.render(sceneView.scene);
 }
 
-Future setupScene() async {
-  application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+class SceneView {
 
-  //Cameras
-  // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-  Camera camera =
-  new Camera(radians(45.0), application.viewAspectRatio, 0.1, 1000.0)
-    ..aspectRatio = application.viewAspectRatio
-    ..targetPosition = new Vector3.zero()
-    ..position = new Vector3(0.0, 10.0, 5.0)
-    ..cameraController = new CameraController();
-  application.mainCamera = camera;
+  Scene scene;
+  num viewAspectRatio;
 
-  //Lights
-  PointLight pointlLight = new PointLight()
-  ..position = new Vector3(10.0,10.0,10.0);
-  application.light = pointlLight;
+  SceneView(this.viewAspectRatio) {
+    scene = new Scene();
+  }
 
-  //Materials
+  Future setupScene() async {
+    Interaction interaction = new Interaction(scene);
+    //GUI
+    GuiSetup guisetup = GuiSetup.setup();
+    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+
+    //Cameras
+    // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
+    Camera camera =
+    new Camera(radians(45.0), 0.1, 1000.0)
+      ..aspectRatio = viewAspectRatio
+      ..targetPosition = new Vector3.zero()
+      ..position = new Vector3(0.0, 10.0, 5.0)
+      ..cameraController = new CameraController();
+    scene.mainCamera = camera;
+
+    //Lights
+    PointLight pointlLight = new PointLight()
+      ..position = new Vector3(10.0, 10.0, 10.0);
+    scene.light = pointlLight;
+
+    //Materials
 //  MaterialBase materialBase = new MaterialBase();
 //  application.materials.add(materialBase);
 
-  MaterialPBR materialPBR = await MaterialPBR.create(pointlLight);
-  application.materials.add(materialPBR);
+    MaterialPBR materialPBR = await MaterialPBR.create(pointlLight);
+    scene.materials.add(materialPBR);
 
-  //Sphere
-  Mesh sphere = new Mesh.Sphere(radius:1.0, segmentV :48, segmentH: 48);
-  sphere.transform.translate(0.0, 0.0, 0.0);
-  sphere.material = materialPBR;
-  //sphere.mode = GL.LINES;
-  application.meshes.add(sphere);
+    //Sphere
+    Mesh sphere = new Mesh.Sphere(radius: 1.0, segmentV: 48, segmentH: 48);
+    sphere.transform.translate(0.0, 0.0, 0.0);
+    sphere.material = materialPBR;
+    //sphere.mode = GL.LINES;
+    scene.meshes.add(sphere);
 
-  // Animation
-  num _lastTime = 0.0;
-  application.updateScene((num time) {
-    // rotate
-    double animationStep = time - _lastTime;
-    //... animation here
-    _lastTime = time;
-  });
+    // Animation
+    num _lastTime = 0.0;
+    scene.updateFunction = (num time) {
+      // rotate
+      double animationStep = time - _lastTime;
+      //... animation here
+      interaction.update(time);
+      _lastTime = time;
+    };
+  }
 }
 
 class GuiSetup {

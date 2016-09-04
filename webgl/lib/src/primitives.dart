@@ -1,14 +1,14 @@
 import 'package:webgl/src/mesh.dart';
 import 'dart:async';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/scene.dart';
 
-Future<Mesh> createAxis() async {
+Future<Mesh> createAxis(Scene scene) async {
 
   //Material
   MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-  Application.instance.materials.add(materialPoint);
+  scene.materials.add(materialPoint);
 
   Mesh mesh = new Mesh()
     ..mode = GL.LINES
@@ -30,7 +30,7 @@ Future<Mesh> createAxis() async {
     ]
     ..material = materialPoint;
 
-  Application.instance.meshes.add(mesh);
+  scene.meshes.add(mesh);
 
   return mesh;
 }

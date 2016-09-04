@@ -11,51 +11,60 @@ import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
-
-Application application;
-GuiSetup guisetup;
+import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/interaction.dart';
+import 'dart:web_gl';
 
 main() async {
   CanvasElement canvas = querySelector('#glCanvas');
-  canvas.width = document.body.clientWidth;
-  canvas.height = document.body.clientHeight;
+  Application application = new Application(canvas);
 
-  //GUI
-  guisetup = GuiSetup.setup();
+  SceneView sceneView = new SceneView(application.viewAspectRatio);
+  await sceneView.setupScene();
 
-  //Application
-  application = new Application(canvas);
-  await setupScene();
-  application.renderAnimation();
+  application.render(sceneView.scene);
 }
 
-Future setupScene() async {
-  application.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+class SceneView {
 
-  //Cameras
-  // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-  Camera camera =
-  new Camera(radians(37.0), application.viewAspectRatio, 0.1, 1000.0)
-    ..aspectRatio = application.viewAspectRatio
-    ..targetPosition = new Vector3.zero()
-    ..position = new Vector3(20.0, 30.0, -50.0)
-    ..cameraController = new CameraController();
-  application.mainCamera = camera;
+  Scene scene;
+  num viewAspectRatio;
 
-  //Lights
-  application.ambientLight.color.setFrom(guisetup.getAmbientColor);
+  SceneView(this.viewAspectRatio) {
+    scene = new Scene();
+  }
 
-  DirectionalLight directionalLight = new DirectionalLight()
-    ..color.setFrom(guisetup.getDirectionalColor)
-    ..direction.setFrom(guisetup.getDirectionalPosition);
-  application.light = directionalLight;
+  Future setupScene() async {
+    Interaction interaction = new Interaction(scene);
+    //GUI
+    GuiSetup guisetup = GuiSetup.setup();
 
-  PointLight pointLight = new PointLight()
-  ..color.setFrom(guisetup.getDirectionalColor)
-  ..position = new Vector3(20.0,20.0,20.0);
-  application.light = pointLight;
+    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  //Materials
+    //Cameras
+    // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
+    Camera camera =
+    new Camera(radians(37.0), 0.1, 1000.0)
+      ..aspectRatio = viewAspectRatio
+      ..targetPosition = new Vector3.zero()
+      ..position = new Vector3(20.0, 30.0, -50.0)
+      ..cameraController = new CameraController();
+    scene.mainCamera = camera;
+
+    //Lights
+    scene.ambientLight.color.setFrom(guisetup.getAmbientColor);
+
+    DirectionalLight directionalLight = new DirectionalLight()
+      ..color.setFrom(guisetup.getDirectionalColor)
+      ..direction.setFrom(guisetup.getDirectionalPosition);
+    scene.light = directionalLight;
+
+    PointLight pointLight = new PointLight()
+      ..color.setFrom(guisetup.getDirectionalColor)
+      ..position = new Vector3(20.0, 20.0, 20.0);
+    scene.light = pointLight;
+
+    //Materials
 
 //  MaterialBaseTextureNormal materialBaseTextureNormal =
 //  await MaterialBaseTextureNormal.create()
@@ -65,29 +74,32 @@ Future setupScene() async {
 //  await materialBaseTextureNormal.addTexture("../images/crate.gif");
 //  application.materials.add(materialBaseTextureNormal);
 
-  MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
-  application.materials.add(materialPBR);
+    MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
+    scene.materials.add(materialPBR);
 
-  //Meshes
+    //Meshes
 
-  Random random = new Random();
-  int count = 1;
-  int randomWidth = 20;
+    Random random = new Random();
+    int count = 1;
+    int randomWidth = 20;
 
-  for(int i = 0; i < count; i++) {
-    //Create Cube
-    Mesh cube = new Mesh.Cube();
-    cube.transform.translate(random.nextInt(randomWidth) - randomWidth/2, random.nextInt(randomWidth) - randomWidth/2, random.nextInt(randomWidth) - randomWidth/2);
-    cube.material = materialPBR;
-    application.meshes.add(cube);
-  }
-  // Animation
-  num _lastTime = 0.0;
-  application.updateScene((num time) {
-    // rotate
-    double animationStep = time - _lastTime;
+    for (int i = 0; i < count; i++) {
+      //Create Cube
+      Mesh cube = new Mesh.Cube();
+      cube.transform.translate(random.nextInt(randomWidth) - randomWidth / 2,
+          random.nextInt(randomWidth) - randomWidth / 2,
+          random.nextInt(randomWidth) - randomWidth / 2);
+      cube.material = materialPBR;
+      scene.meshes.add(cube);
+    }
+    // Animation
+    num _lastTime = 0.0;
+    scene.updateFunction = (num time) {
+      double animationStep = time - _lastTime;
+      // Do animation
+      interaction.update(time);
 //    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
-    _lastTime = time;
+      _lastTime = time;
 
 //    materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
 //
@@ -95,9 +107,10 @@ Future setupScene() async {
 //    directionalLight
 //      ..direction.setFrom(guisetup.getDirectionalPosition)
 //      ..color.setFrom(guisetup.getDirectionalColor);
-  });
-}
+    };
+  }
 
+}
 
 class GuiSetup {
 

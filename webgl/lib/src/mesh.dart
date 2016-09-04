@@ -5,17 +5,14 @@ import 'package:webgl/src/material.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
 
-typedef void Animation(num time);
-
 class Mesh {
-  RenderingContext get gl => Application.gl;
 
   //
   int mode = GL.TRIANGLE_STRIP;
 
   //Animation
   //todo : place elsewhere ? outside mesh ?
-  Animation animation = (num time){};
+  UpdateFunction updateFunction = (num time){};
 
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();

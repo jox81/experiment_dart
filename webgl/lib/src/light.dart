@@ -1,19 +1,17 @@
 import 'package:vector_math/vector_math.dart';
 
 class Light{
+  Vector3 color;
   Light();
 }
 
 class AmbientLight extends Light{
-  Vector3 color;
-
   AmbientLight() {
     color = new Vector3(1.0, 1.0, 1.0);
   }
 }
 
 class PointLight extends Light{
-  Vector3 color;
   Vector3 position;
 
   PointLight() {
@@ -23,7 +21,6 @@ class PointLight extends Light{
 }
 
 class DirectionalLight extends Light{
-  Vector3 color;
   Vector3 direction;
 
   DirectionalLight() {

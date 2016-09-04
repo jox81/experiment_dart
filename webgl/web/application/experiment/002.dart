@@ -59,7 +59,7 @@ Mesh experiment() {
   ]
   ..material = materialCustom;
 
-  mesh.animation = (num time){
+  mesh.updateFunction = (num time){
     shaderTime = time;
 //    print(10.0 + 100.0 * cos(time / 500.0));
   };

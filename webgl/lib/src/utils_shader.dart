@@ -1,5 +1,6 @@
 import 'dart:web_gl';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/application.dart';
 
 class ActiveInfoCustom{
   String typeName;
@@ -46,7 +47,7 @@ class UtilsShader {
     0x1406: 'FLOAT'
   };
 
-  static ProgramInfo getProgramInfo(RenderingContext gl, program) {
+  static ProgramInfo getProgramInfo(program) {
     ProgramInfo result = new ProgramInfo();
 
     // Loop through active attributes
