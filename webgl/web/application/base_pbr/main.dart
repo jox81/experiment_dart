@@ -17,23 +17,20 @@ main() async {
   SceneView sceneView = new SceneView(application.viewAspectRatio);
   await sceneView.setupScene();
 
-  application.render(sceneView.scene);
+  application.render(sceneView);
 }
 
-class SceneView {
+class SceneView extends Scene {
 
-  Scene scene;
   num viewAspectRatio;
 
-  SceneView(this.viewAspectRatio) {
-    scene = new Scene();
-  }
+  SceneView(this.viewAspectRatio):super();
 
   Future setupScene() async {
     Interaction interaction = new Interaction(scene);
     //GUI
     GuiSetup guisetup = GuiSetup.setup();
-    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
@@ -43,30 +40,30 @@ class SceneView {
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0, 10.0, 5.0)
       ..cameraController = new CameraController();
-    scene.mainCamera = camera;
+    mainCamera = camera;
 
     //Lights
     PointLight pointlLight = new PointLight()
       ..position = new Vector3(10.0, 10.0, 10.0);
-    scene.light = pointlLight;
+    light = pointlLight;
 
     //Materials
 //  MaterialBase materialBase = new MaterialBase();
 //  application.materials.add(materialBase);
 
     MaterialPBR materialPBR = await MaterialPBR.create(pointlLight);
-    scene.materials.add(materialPBR);
+    materials.add(materialPBR);
 
     //Sphere
     Mesh sphere = new Mesh.Sphere(radius: 1.0, segmentV: 48, segmentH: 48);
     sphere.transform.translate(0.0, 0.0, 0.0);
     sphere.material = materialPBR;
     //sphere.mode = GL.LINES;
-    scene.meshes.add(sphere);
+    meshes.add(sphere);
 
     // Animation
     num _lastTime = 0.0;
-    scene.updateFunction = (num time) {
+    updateFunction = (num time) {
       // rotate
       double animationStep = time - _lastTime;
       //... animation here

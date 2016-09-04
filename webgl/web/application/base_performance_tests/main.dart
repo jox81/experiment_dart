@@ -22,24 +22,21 @@ main() async {
   SceneView sceneView = new SceneView(application.viewAspectRatio);
   await sceneView.setupScene();
 
-  application.render(sceneView.scene);
+  application.render(sceneView);
 }
 
-class SceneView {
+class SceneView extends Scene {
 
-  Scene scene;
   num viewAspectRatio;
 
-  SceneView(this.viewAspectRatio) {
-    scene = new Scene();
-  }
+  SceneView(this.viewAspectRatio):super();
 
   Future setupScene() async {
     Interaction interaction = new Interaction(scene);
     //GUI
     GuiSetup guisetup = GuiSetup.setup();
 
-    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
@@ -49,20 +46,20 @@ class SceneView {
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, -50.0)
       ..cameraController = new CameraController();
-    scene.mainCamera = camera;
+    mainCamera = camera;
 
     //Lights
-    scene.ambientLight.color.setFrom(guisetup.getAmbientColor);
+    ambientLight.color.setFrom(guisetup.getAmbientColor);
 
     DirectionalLight directionalLight = new DirectionalLight()
       ..color.setFrom(guisetup.getDirectionalColor)
       ..direction.setFrom(guisetup.getDirectionalPosition);
-    scene.light = directionalLight;
+    light = directionalLight;
 
     PointLight pointLight = new PointLight()
       ..color.setFrom(guisetup.getDirectionalColor)
       ..position = new Vector3(20.0, 20.0, 20.0);
-    scene.light = pointLight;
+    light = pointLight;
 
     //Materials
 
@@ -75,7 +72,7 @@ class SceneView {
 //  application.materials.add(materialBaseTextureNormal);
 
     MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
-    scene.materials.add(materialPBR);
+    materials.add(materialPBR);
 
     //Meshes
 
@@ -90,11 +87,11 @@ class SceneView {
           random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2);
       cube.material = materialPBR;
-      scene.meshes.add(cube);
+      meshes.add(cube);
     }
     // Animation
     num _lastTime = 0.0;
-    scene.updateFunction = (num time) {
+    updateFunction = (num time) {
       double animationStep = time - _lastTime;
       // Do animation
       interaction.update(time);

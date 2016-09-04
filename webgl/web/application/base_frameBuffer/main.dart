@@ -18,22 +18,19 @@ main() async {
   SceneView sceneView = new SceneView(application.viewAspectRatio);
   await sceneView.setupScene();
 
-  application.render(sceneView.scene);
+  application.render(sceneView);
 }
 
-class SceneView {
+class SceneView extends Scene {
 
-  Scene scene;
   num viewAspectRatio;
 
-  SceneView(this.viewAspectRatio) {
-    scene = new Scene();
-  }
+  SceneView(this.viewAspectRatio):super();
 
   Future setupScene() async {
     Interaction interaction = new Interaction(scene);
 
-    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
@@ -43,18 +40,18 @@ class SceneView {
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(50.0, 50.0, 50.0)
       ..cameraController = new CameraController();
-    scene.mainCamera = camera;
+    mainCamera = camera;
 
     //
     DirectionalLight directionalLight = new DirectionalLight();
-    scene.light = directionalLight;
+    light = directionalLight;
 
     //
     MaterialBaseTextureNormal materialBaseTextureNormal =
     await MaterialBaseTextureNormal.create()
-      ..ambientColor = scene.ambientLight.color
+      ..ambientColor = ambientLight.color
       ..directionalLight = directionalLight;
-    scene.materials.add(materialBaseTextureNormal);
+    materials.add(materialBaseTextureNormal);
 
     Texture newTexture = TextureUtils.createRenderedTexture();
 
@@ -64,12 +61,12 @@ class SceneView {
     materialBaseTextureNormal.texture = newTexture;
     cube.material = materialBaseTextureNormal;
 //  cube.material = materialBase;
-    scene.meshes.add(cube);
+    meshes.add(cube);
 
     // Animation
     num _lastTime = 0.0;
 
-    scene.updateFunction = (num time) {
+    updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //Do Animation here
       interaction.update(time);

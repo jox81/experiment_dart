@@ -17,21 +17,18 @@ main() async {
   SceneView sceneView = new SceneView(application.viewAspectRatio);
   await sceneView.setupScene();
 
-  application.render(sceneView.scene);
+  application.render(sceneView);
 }
 
-class SceneView {
+class SceneView extends Scene {
 
-  Scene scene;
   num viewAspectRatio;
 
-  SceneView(this.viewAspectRatio) {
-    scene = new Scene();
-  }
+  SceneView(this.viewAspectRatio):super();
 
   Future setupScene() async {
     Interaction interaction = new Interaction(scene);
-    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
@@ -41,14 +38,14 @@ class SceneView {
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
       ..cameraController = new CameraController();
-    scene.mainCamera = camera;
+    mainCamera = camera;
 
     //Material
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-    scene.materials.add(materialPoint);
+    materials.add(materialPoint);
 
     MaterialBase materialBase = await MaterialBase.create();
-    scene.materials.add(materialBase);
+    materials.add(materialBase);
 
     Mesh axis = await createAxis();
     Mesh points = await createPoints(materialPoint);
@@ -61,11 +58,11 @@ class SceneView {
       ..mode = GL.LINE_STRIP;
     centerCube.transform = axis2.transform;
     centerCube.material = materialBase;
-    scene.meshes.add(centerCube);
+    meshes.add(centerCube);
 
     //Animation
     num _lastTime = 0.0;
-    scene.updateFunction = (num time) {
+    updateFunction = (num time) {
       // rotate
       double animationStep = time - _lastTime;
       //... animation here
@@ -78,7 +75,7 @@ class SceneView {
   Future<Mesh> createPoints(MaterialPoint materialPoint) async {
     //Material
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-    scene.materials.add(materialPoint);
+    materials.add(materialPoint);
 
     Mesh mesh = new Mesh()
       ..mode = GL.POINTS
@@ -96,7 +93,7 @@ class SceneView {
       ]
       ..material = materialPoint;
 
-    scene.meshes.add(mesh);
+    meshes.add(mesh);
 
     return mesh;
   }
@@ -104,7 +101,7 @@ class SceneView {
   Future<Mesh> createAxis() async {
     //Material
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-    scene.materials.add(materialPoint);
+    materials.add(materialPoint);
 
     Mesh mesh = new Mesh()
       ..mode = GL.LINES
@@ -126,7 +123,7 @@ class SceneView {
       ]
       ..material = materialPoint;
 
-    scene.meshes.add(mesh);
+    meshes.add(mesh);
 
     return mesh;
   }

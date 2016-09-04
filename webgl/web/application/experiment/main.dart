@@ -16,28 +16,25 @@ main() async {
   SceneView sceneView = new SceneView(application.viewAspectRatio);
   await sceneView.setupScene();
 
-  application.render(sceneView.scene);
+  application.render(sceneView);
 }
 
-class SceneView {
+class SceneView extends Scene {
 
-  Scene scene;
   num viewAspectRatio;
 
-  SceneView(this.viewAspectRatio) {
-    scene = new Scene();
-  }
+  SceneView(this.viewAspectRatio):super();
 
   Future setupScene() async {
-    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     Mesh mesh = await exp003.experiment();
-    scene.materials.add(mesh.material);
-    scene.meshes.add(mesh);
+    materials.add(mesh.material);
+    meshes.add(mesh);
 
     //Animation
     num _lastTime = 0.0;
-    scene.updateFunction = (num time) {
+    updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
       mesh.updateFunction(time);
