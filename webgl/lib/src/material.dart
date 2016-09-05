@@ -18,6 +18,7 @@ abstract class Material {
       "#pragma optimize(on)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
 
+  String name;
   Program program;
 
   ProgramInfo programInfo;

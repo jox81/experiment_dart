@@ -3,8 +3,9 @@ import 'package:webgl/src/material.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
 import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/object3d.dart';
 
-class Mesh {
+class Mesh extends Object3d {
 
   //
   int mode = GL.TRIANGLE_STRIP;

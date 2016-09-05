@@ -11,7 +11,6 @@ import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/interaction.dart';
 
 class SceneViewBase extends Scene {
 
@@ -109,43 +108,45 @@ class SceneViewBase extends Scene {
     materials.add(materialPBR);
 
     //Meshes
-    Mesh axis = await createAxis(this);
+    Mesh axis = await createAxis(this)
+      ..name = 'origin';
 
     // create triangle
-    Mesh triangle = new Mesh.Triangle();
-    triangle.transform.translate(0.0, 0.0, 4.0);
-    triangle.material = materialBase;
+    Mesh triangle = new Mesh.Triangle()
+      ..name = 'triangle'
+      ..transform.translate(0.0, 0.0, 4.0)
+      ..material = materialBase;
     meshes.add(triangle);
 
     // create square
-    Mesh square = new Mesh.Rectangle();
-    square.transform.translate(3.0, 0.0, 0.0);
-    square.transform.rotateX(radians(90.0));
-    square.material = materialBaseColor;
+    Mesh square = new Mesh.Rectangle()
+      ..transform.translate(3.0, 0.0, 0.0)
+      ..transform.rotateX(radians(90.0))
+      ..material = materialBaseColor;
     meshes.add(square);
 
     // create cube
-    Mesh centerCube = new Mesh.Cube();
-    centerCube.transform.translate(0.0, 0.0, 0.0);
-    centerCube.transform.scale(0.1, 0.1, 0.1);
-    centerCube.material = materialBaseColor;
+    Mesh centerCube = new Mesh.Cube()
+      ..transform.translate(0.0, 0.0, 0.0)
+      ..transform.scale(0.1, 0.1, 0.1)
+      ..material = materialBaseColor;
     meshes.add(centerCube);
 
     // create square
-    Mesh squareX = new Mesh.Rectangle();
-    squareX.transform.translate(0.0, 3.0, 0.0);
-    squareX.colors = new List();
-    squareX.colors.addAll([1.0, 0.0, 0.0, 1.0]);
-    squareX.colors.addAll([1.0, 1.0, 0.0, 1.0]);
-    squareX.colors.addAll([1.0, 0.0, 1.0, 1.0]);
-    squareX.colors.addAll([0.0, 1.0, 1.0, 1.0]);
-    squareX.material = materialBaseVertexColor;
+    Mesh squareX = new Mesh.Rectangle()
+      ..transform.translate(0.0, 3.0, 0.0)
+      ..colors = new List()
+      ..colors.addAll([1.0, 0.0, 0.0, 1.0])
+      ..colors.addAll([1.0, 1.0, 0.0, 1.0])
+      ..colors.addAll([1.0, 0.0, 1.0, 1.0])
+      ..colors.addAll([0.0, 1.0, 1.0, 1.0])
+      ..material = materialBaseVertexColor;
     meshes.add(squareX);
 
     //create Pyramide
-    Mesh pyramid = new Mesh.Pyramid();
-    pyramid.transform.translate(3.0, -2.0, 0.0);
-    pyramid.material = materialBaseVertexColor;
+    Mesh pyramid = new Mesh.Pyramid()
+      ..transform.translate(3.0, -2.0, 0.0)
+      ..material = materialBaseVertexColor;
     meshes.add(pyramid);
 
     //Create Cube
@@ -158,15 +159,15 @@ class SceneViewBase extends Scene {
 
     //SusanModel
     var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
-    Mesh susanMesh = new Mesh();
-    susanMesh.transform.translate(10.0, 0.0, 0.0);
-    susanMesh.transform.rotateX(radians(-90.0));
-    susanMesh.vertices = susanJson['meshes'][0]['vertices'];
-    susanMesh.indices = susanJson['meshes'][0]['faces']
+    Mesh susanMesh = new Mesh()
+      ..transform.translate(10.0, 0.0, 0.0)
+      ..transform.rotateX(radians(-90.0))
+      ..vertices = susanJson['meshes'][0]['vertices']
+      ..indices = susanJson['meshes'][0]['faces']
         .expand((i) => i)
-        .toList();
-    susanMesh.textureCoords = susanJson['meshes'][0]['texturecoords'][0];
-    susanMesh.vertexNormals = susanJson['meshes'][0]['normals'];
+        .toList()
+      ..textureCoords = susanJson['meshes'][0]['texturecoords'][0]
+      ..vertexNormals = susanJson['meshes'][0]['normals'];
     MaterialBaseTexture susanMaterialBaseTexture = await MaterialBaseTexture
         .create()
       ..texture = await TextureUtils.createTextureFromFile(
@@ -176,9 +177,9 @@ class SceneViewBase extends Scene {
     meshes.add(susanMesh);
 
     //Sphere
-    Mesh sphere = new Mesh.Sphere(radius: 2.5, segmentV: 48, segmentH: 48);
-    sphere.transform.translate(0.0, 0.0, -10.0);
-    sphere.material = materialPBR;
+    Mesh sphere = new Mesh.Sphere(radius: 2.5, segmentV: 48, segmentH: 48)
+      ..transform.translate(0.0, 0.0, -10.0)
+      ..material = materialPBR;
     //sphere.mode = GL.LINES;
     meshes.add(sphere);
 

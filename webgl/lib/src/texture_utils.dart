@@ -78,6 +78,11 @@ class TextureUtils {
           GL.FRAMEBUFFER, GL.DEPTH_ATTACHMENT, GL.RENDERBUFFER, depthRenderbuffer);
       gl.bindFramebuffer(GL.FRAMEBUFFER, null);
 
+      if (gl.checkFramebufferStatus(GL.FRAMEBUFFER) != GL.FRAMEBUFFER_COMPLETE) {
+        print("createRenderBuffer : this combination of attachments does not work");
+        return null;
+      }
+
       return framebuffer;
     }
 

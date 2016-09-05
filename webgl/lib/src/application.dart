@@ -45,9 +45,12 @@ class Application {
       "webkit-3d",
       "moz-webgl"
     ];
+    var options = {
+      'preserveDrawingBuffer': true,
+    };
     for (int i = 0; i < names.length; ++i) {
       try {
-        _gl = canvas.getContext(names[i]); //Normal context
+        _gl = canvas.getContext(names[i], options); //Normal context
         if (debugging) {
           _gl = WebGLDebugUtils.makeDebugContext(gl, throwOnGLError,
               logAndValidate); //Kronos debug context using .js

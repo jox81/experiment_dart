@@ -2,8 +2,9 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'dart:html';
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/object3d.dart';
 
-class Camera {
+class Camera extends Object3d{
   final double zNear;
   final double zFar;
 

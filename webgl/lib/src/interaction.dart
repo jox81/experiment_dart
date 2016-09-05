@@ -1,7 +1,9 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils.dart';
+import 'dart:typed_data';
+import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/application.dart';
 
 class Interaction{
 
@@ -70,7 +72,20 @@ class Interaction{
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
 
+    gl.canvas.onMouseMove.listen((e) {
+      // do something with mouse coordinates
+      // e.client.x, e.client.y
+      debugInfo(e.client.x, e.client.y);
+    });
+
   }
 
+
+  void debugInfo(int posX, int posY){
+    var colorPicked = new Uint8List(4);
+    //Todo : doesn't work...
+    gl.readPixels(posX, posY, 1, 1, GL.RGBA, GL.UNSIGNED_BYTE, colorPicked);
+    elementDebugInfoText.text = '[$posX, $posY] : $colorPicked';
+  }
 
 }
