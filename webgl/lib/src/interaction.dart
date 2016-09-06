@@ -80,7 +80,6 @@ class Interaction{
 
   }
 
-
   void debugInfo(int posX, int posY){
     var colorPicked = new Uint8List(4);
     //Todo : doesn't work...
