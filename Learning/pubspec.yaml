@@ -17,6 +17,14 @@ dependencies:
   func: any
   threejs_facade:
     git: https://github.com/blockforest/threejs-dart-facade.git
+  anime_engine:
+        git:
+            url: https://github.com/jox81/anime_engine.git
 
 transformers:
 - dart_to_js_script_rewriter
+
+
+dependency_overrides:
+  anime_engine:
+    path: ../../anime_engine
