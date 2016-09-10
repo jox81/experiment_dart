@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:stagexl/stagexl.dart' hide Timeline;
 import 'package:anime_engine/core/animation_manager.dart';
 import 'package:anime_engine/core/animator.dart';
-import 'package:anime_engine/core/timeline.dart';
+import 'package:anime_engine/core/animation_controller.dart';
 import 'package:anime_engine/core/animation_property.dart';
 import 'package:anime_engine/core/keyframe.dart';
 
@@ -39,14 +39,14 @@ _main() async {
 }
 
 void animate(StageObject stageObject) {
-  Timeline timeline = new Timeline()
+  AnimationProperty animationPropertyX = new AnimationProperty(()=> stageObject.x, (num v)=> stageObject.x = v);
+
+  NumController numController = new NumController(animationPropertyX)
   ..addKeyframe(new Keyframe(time:0, value: 0))
   ..addKeyframe(new Keyframe(time:50, value: 20))
   ..addKeyframe(new Keyframe(time:200, value: 0));
 
-  AnimationProperty animationPropertyX = new AnimationProperty(()=> stageObject.x, (num v)=> stageObject.x = v);
-
-  Animator animator = new Animator(animationPropertyX, timeline);
+  Animator animator = new Animator(numController);
   AnimeManager.manager.add(animator);
 }
 
