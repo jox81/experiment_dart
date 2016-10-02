@@ -12,9 +12,9 @@ import 'package:webgl/src/interaction.dart';
 
 class SceneViewExperiment extends Scene {
 
-  num viewAspectRatio;
+  final num viewAspectRatio;
 
-  SceneViewExperiment(this.viewAspectRatio):super();
+  SceneViewExperiment(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
 
   @override
   UpdateFunction updateFunction;

@@ -13,13 +13,13 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPerformanceTest extends Scene {
 
-  num viewAspectRatio;
+  final num viewAspectRatio;
 
   Vector3 directionalPosition;
   Vector3 ambientColor, directionalColor;
   bool useLighting;
 
-  SceneViewPerformanceTest(this.viewAspectRatio):super();
+  SceneViewPerformanceTest(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
 
   @override
   UpdateFunction updateFunction;

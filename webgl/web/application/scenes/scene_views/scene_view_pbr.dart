@@ -12,9 +12,9 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPBR extends Scene {
 
-  num viewAspectRatio;
+  final num viewAspectRatio;
 
-  SceneViewPBR(this.viewAspectRatio):super();
+  SceneViewPBR(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
 
   @override
   UpdateFunction updateFunction;

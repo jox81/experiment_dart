@@ -11,9 +11,9 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPrimitives extends Scene {
 
-  num viewAspectRatio;
+  final num viewAspectRatio;
 
-  SceneViewPrimitives(this.viewAspectRatio):super();
+  SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
 
   @override
   UpdateFunction updateFunction;

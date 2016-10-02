@@ -10,11 +10,11 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-class SceneViewParticle extends Scene {
+class SceneViewParticleSimple extends Scene {
 
   final num viewAspectRatio;
 
-  SceneViewParticle(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewParticleSimple(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
 
   @override
   UpdateFunction updateFunction;
@@ -54,7 +54,6 @@ class SceneViewParticle extends Scene {
   Mesh experiment(Scene scene) {
     num shaderTime = 0.0;
 
-    //Material
     String vShader = '''
     precision mediump float;
 
@@ -65,15 +64,15 @@ class SceneViewParticle extends Scene {
     varying vec2 v_vertex;
 
     void main(void) {
-      gl_PointSize = 2.;
+      gl_PointSize = 2.0;
       v_vertex = a_vertex;
 
-      vec2 v = a_vertex*(mod(u_time+length(a_vertex),1.));
-      float ct = (cos(v.x*30.+u_time*20.)+cos(v.y*30.+u_time*20.));
-      v = mat2(sin(v.x*(10.+ct)),cos(v.x*(10.+ct)),cos(v.y*(10.+ct)),sin(v.y*(10.+ct)))*v;
+      vec2 v = a_vertex;
+      v.y = 0.5 * sin(20.0 * u_time);
 
       gl_Position=vec4(v,0.,1.);
     }
+
   ''';
 
     String fShader = '''
@@ -103,16 +102,11 @@ class SceneViewParticle extends Scene {
     materials.add(materialCustom);
 
 
-    Math.Random random = new Math.Random();
-
-    int nump = 4800;
-    Float32List pstart = new Float32List(nump * 2);
+    int particleCount = 1;
+    Float32List pstart = new Float32List(particleCount * 2);
     var i = pstart.length;
     while (i-- != 0) {
       pstart[i] = 0.0;
-      while (pstart[i] * pstart[i] < .3) {
-        pstart[i] = random.nextDouble() * 2 - 1;
-      }
     }
     Mesh mesh = new Mesh()
       ..mode = GL.POINTS

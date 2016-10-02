@@ -16,14 +16,14 @@ class SceneViewBase extends Scene {
 
   bool isSetuped = false;
 
-  num viewAspectRatio;
+  final num viewAspectRatio;
 
   Vector3 directionalPosition;
   Vector3 ambientColor, directionalColor;
 
   bool useLighting;
 
-  SceneViewBase(this.viewAspectRatio):super();
+  SceneViewBase(Application application):this.viewAspectRatio = application.viewAspectRatio, super();
 
   @override
   UpdateFunction updateFunction;

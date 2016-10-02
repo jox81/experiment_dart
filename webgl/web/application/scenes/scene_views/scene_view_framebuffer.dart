@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
@@ -11,9 +12,9 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewFrameBuffer extends Scene {
 
-  num viewAspectRatio;
+  final num viewAspectRatio;
 
-  SceneViewFrameBuffer(this.viewAspectRatio):super();
+  SceneViewFrameBuffer(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
 
   @override
   UpdateFunction updateFunction;

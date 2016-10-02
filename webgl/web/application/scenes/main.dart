@@ -4,12 +4,14 @@ import 'package:webgl/src/scene.dart';
 import 'scene_views/scene_view_base.dart';
 import 'scene_views/scene_view_framebuffer.dart';
 import 'scene_views/scene_view_particle.dart';
+import 'scene_views/scene_view_particle_simple.dart';
 import 'scene_views/scene_view_pbr.dart';
 import 'scene_views/scene_view_performance_test.dart';
 import 'scene_views/scene_view_primitives.dart';
 import 'scene_views/scene_view_experiment/scene_view_experiment.dart';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
+import 'scene_views/scene_view_shader_learning_glsl.dart';
 
 Application application;
 
@@ -35,13 +37,15 @@ main() async {
   application = new Application(canvas);
 
   List<Scene> scenes = [
-    new SceneViewBase(application.viewAspectRatio),
-    new SceneViewPrimitives(application.viewAspectRatio),
-    new SceneViewPBR(application.viewAspectRatio),
-    new SceneViewFrameBuffer(application.viewAspectRatio),
-    new SceneViewExperiment(application.viewAspectRatio),
-    new SceneViewParticle(application.viewAspectRatio),
-    new SceneViewPerformanceTest(application.viewAspectRatio),
+//    new SceneViewBase(application),
+//    new SceneViewPrimitives(application),
+//    new SceneViewPBR(application),
+//    new SceneViewFrameBuffer(application),
+//    new SceneViewExperiment(application),
+//    new SceneViewParticleSimple(application),
+//    new SceneViewParticle(application),
+//    new SceneViewPerformanceTest(application),
+    new SceneViewShaderLearning01(application),
   ];
 
   int sceneId = 0;
