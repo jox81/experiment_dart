@@ -143,6 +143,11 @@ abstract class Material {
 
     if(activeInfo != null) {
       switch (activeInfo.typeName) {
+        case 'FLOAT_VEC2':
+          if (data1 == null && data2 == null) {
+            gl.uniform2fv(uniforms[uniformName], data);
+          }
+          break;
         case 'FLOAT_VEC3':
           if (data1 == null && data2 == null) {
             gl.uniform3fv(uniforms[uniformName], data);
@@ -166,7 +171,7 @@ abstract class Material {
           break;
         default:
           print(
-              'setShaderUniformWithName not set for : ${activeInfo.typeName}');
+              'setShaderUniformWithName not set in material.dart for : ${activeInfo.typeName}');
           break;
       }
     }
