@@ -25,6 +25,6 @@ transformers:
 - dart_to_js_script_rewriter
 
 
-dependency_overrides:
-  anime_engine:
-    path: ../../anime_engine
+#dependency_overrides:
+#  anime_engine:
+#    path: ../../anime_engine

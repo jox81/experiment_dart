@@ -9,9 +9,10 @@ packages:
     version: "0.27.6"
   anime_engine:
     description:
-      path: "..\\..\\anime_engine"
-      relative: true
-    source: path
+      ref: HEAD
+      resolved-ref: e962c1e11fbb1094bed1768206b38729267dc2de
+      url: "https://github.com/jox81/anime_engine.git"
+    source: git
     version: "0.0.1"
   args:
     description:
@@ -199,4 +200,5 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.10"
-sdk: ">=1.17.0-dev.6.2 <2.0.0"
+sdks:
+  dart: ">=1.17.0-dev.6.2 <2.0.0"
