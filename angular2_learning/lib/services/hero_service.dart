@@ -8,4 +8,7 @@ import 'package:angular2_learning/models/hero.dart';
 class HeroService {
   Future<List<Hero>> getHeroes() async => mockHeroes;
 
+  Future<Hero> getHero(int id) async =>
+      (await getHeroes()).firstWhere((hero) => hero.id == id);
+
 }
