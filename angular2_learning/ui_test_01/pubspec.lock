@@ -6,20 +6,19 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.27.6"
+    version: "0.29.0"
   angular2:
     description:
       name: angular2
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  anime_engine:
+  angular2_components:
     description:
-      ref: HEAD
-      resolved-ref: "9edc32bacf50cd2e2501d6dd477f551593898125"
-      url: "https://github.com/jox81/anime_engine.git"
-    source: git
-    version: "0.0.1"
+      name: angular2_components
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.1"
   args:
     description:
       name: args
@@ -67,7 +66,7 @@ packages:
       name: code_transformers
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2+3"
+    version: "0.5.0"
   collection:
     description:
       name: collection
@@ -80,13 +79,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  core_engine:
-    description:
-      ref: HEAD
-      resolved-ref: "22ac0986ceb758009afaf2b1bf6cb1977c2444df"
-      url: "https://github.com/jox81/core_engine.git"
-    source: git
-    version: "0.0.1"
   crypto:
     description:
       name: crypto
@@ -111,30 +103,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  datgui:
-    description:
-      name: datgui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0+1"
   fixnum:
     description:
       name: fixnum
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.5"
-  func:
-    description:
-      name: func
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
-  gl_enums:
-    description:
-      name: gl_enums
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   glob:
     description:
       name: glob
@@ -183,6 +157,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.3+1"
+  matcher:
+    description:
+      name: matcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.0+2"
   meta:
     description:
       name: meta
@@ -213,12 +193,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
-  petitparser:
+  perf_api:
     description:
-      name: petitparser
+      name: perf_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.4"
+    version: "0.1.0"
   plugin:
     description:
       name: plugin
@@ -237,6 +217,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.3"
+  quiver:
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.23.0"
   shelf:
     description:
       name: shelf
@@ -267,12 +253,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.8"
-  stagexl:
-    description:
-      name: stagexl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.13.12"
   stream_channel:
     description:
       name: stream_channel
@@ -303,12 +283,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.0+3"
-  vector_math:
+  uuid:
     description:
-      name: vector_math
+      name: uuid
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.3"
+    version: "0.5.3"
   watcher:
     description:
       name: watcher
@@ -327,12 +307,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
-  xml:
-    description:
-      name: xml
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.4.3"
   yaml:
     description:
       name: yaml

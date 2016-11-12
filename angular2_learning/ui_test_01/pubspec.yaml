@@ -1,4 +1,4 @@
-name: angular2_learning
+name: ui_test_01
 description: learning
 version: 0.0.1
 environment:
@@ -7,6 +7,7 @@ dependencies:
   angular2: ^2.0.0
   http: ^0.11.0
   stream_transformers: ^0.3.0
+  angular2_components:
 dev_dependencies:
   browser: ^0.10.0
   dart_to_js_script_rewriter: ^1.0.1

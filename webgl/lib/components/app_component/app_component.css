@@ -1,0 +1,13 @@
+#canvasApp{
+    position: relative;
+    width: 90%;
+}
+#properties{
+    position: relative;
+    width:10%;
+}
+
+#mainPage{
+    position: relative;
+    width: 100%;
+}

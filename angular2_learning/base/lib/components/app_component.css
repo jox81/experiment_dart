@@ -1,0 +1,27 @@
+#MainLayout{
+    height: 100%;
+    display:flex;
+    align-items: stretch;
+    flex-flow: column;
+}
+.row.topBar{
+    display:flex;
+    flex-flow: row;
+    align-items: stretch;
+    height: 10%;
+}
+.row{
+    display:flex;
+    flex-flow: row;
+    align-items: stretch;
+    height: 100%;
+}
+.test01{
+    width:15%;
+}
+.test02{
+    width:70%;
+}
+.test03{
+    width:15%;
+}

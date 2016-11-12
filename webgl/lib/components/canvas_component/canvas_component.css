@@ -1,0 +1,9 @@
+section{
+    position:relative;
+    background-color: #336699;
+    width:inherit;
+}
+canvas{
+    width:100%;
+    height:100%;
+}

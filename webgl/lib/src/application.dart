@@ -23,8 +23,6 @@ class Application {
   //Singleton
   static Application _instance;
   factory Application(CanvasElement canvas) {
-    canvas.width = document.body.clientWidth;
-    canvas.height = document.body.clientHeight;
 
     if (_instance == null) {
       _instance = new Application._internal(canvas);
@@ -82,7 +80,7 @@ class Application {
 
   void _resizeCanvas() {
     // Lookup the size the browser is displaying the canvas.
-    var displayWidth  = window.innerWidth;
+    var displayWidth  = _canvas.parent.offsetWidth;
     var displayHeight = window.innerHeight;
 
     // Check if the canvas is not the same size.
