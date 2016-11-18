@@ -34,6 +34,8 @@ class Application {
   Application._internal(this._canvas) {
     _initGL(_canvas);
     _initEvents();
+    _resizeCanvas();
+
   }
 
   void _initGL(CanvasElement canvas) {
@@ -98,6 +100,7 @@ class Application {
 
   void render(IUpdatableScene scene){
     _currentScene = scene;
+    _resizeCanvas();
     _render();
   }
 

@@ -1,5 +1,11 @@
+*{
+    margin:0;
+}
 #properties{
     position: relative;
     background-color: aquamarine;
-    width:10%;
+}
+
+h1{
+    color:#b26d31;
 }

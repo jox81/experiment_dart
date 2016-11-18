@@ -12,7 +12,18 @@ import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewBase extends Scene {
+
+abstract class ISceneViewBase{
+  bool useLighting;
+}
+
+class SceneViewBase extends Scene implements ISceneViewBase{
+
+  /// implements ISceneViewBase
+  @override
+  bool useLighting = true;
+
+  //
 
   bool isSetuped = false;
 
@@ -21,7 +32,7 @@ class SceneViewBase extends Scene {
   Vector3 directionalPosition;
   Vector3 ambientColor, directionalColor;
 
-  bool useLighting;
+
 
   SceneViewBase(Application application):this.viewAspectRatio = application.viewAspectRatio, super();
 
@@ -31,17 +42,18 @@ class SceneViewBase extends Scene {
   @override
   UpdateUserInput updateUserInputFunction;
 
+  GuiSetup guisetup;
+
   @override
   setupUserInput() {
 
-    GuiSetup guisetup = GuiSetup.setup();
+    guisetup = GuiSetup.setup(this);
 
     //UserInput
     updateUserInputFunction = (){
       ambientColor = guisetup.ambientColor;
       directionalColor = guisetup.directionalColor;
       directionalPosition = guisetup.directionalPosition;
-      useLighting = guisetup.useLighting;
 
       interaction.update();
     };
@@ -212,12 +224,15 @@ class SceneViewBase extends Scene {
 
 class GuiSetup {
 
-  static GuiSetup setup() {
+  static SceneViewBase _scene;
+
+  static GuiSetup setup(SceneViewBase scene) {
+    _scene = scene;
+
     //GUI
     GuiSetup guisetup = new GuiSetup();
     dat.GUI gui = new dat.GUI();
     gui.add(guisetup, 'message');
-    gui.add(guisetup, 'useLighting');
 
     dat.GUI f2 = gui.addFolder("Lighting Position");
     f2.add(guisetup, 'directionalPositionX',-100.0,100.0);
@@ -238,7 +253,6 @@ class GuiSetup {
   }
 
   String message = '';
-  bool useLighting = true;
 
   Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
   double get directionalPositionX => directionalPosition.x;

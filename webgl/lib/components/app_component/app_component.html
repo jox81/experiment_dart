@@ -1,10 +1,17 @@
-<div id="MainLayout">
-    <div class="row topBar">
-        <toolbar (onSwitchScene) = switchScene()></toolbar>
+<div class="container-fluid">
+    <div class="row">
+        <toolbar (onSwitchScene) = switchScene()>
+        </toolbar>
     </div>
     <div class="row">
-        <canvas_app id="canvasApp"></canvas_app>
-        <properties id="properties"></properties>
+        <div class="col-sm-2 first">
+            <properties [scene] = "currentScene"></properties>
+        </div>
+        <div class="col-sm-8 second">
+            <canvas_app id="canvasApp"></canvas_app>
+        </div>
+        <div class="col-sm-2 third">
+        </div>
     </div>
 </div>
 

@@ -1,13 +1,24 @@
-#canvasApp{
-    position: relative;
-    width: 90%;
-}
-#properties{
-    position: relative;
-    width:10%;
+:host{
 }
 
-#mainPage{
-    position: relative;
-    width: 100%;
+.row{
+    display: flex;
+}
+
+.first{
+    background-color: #2196F3;
+    flex-flow: column;
+    padding:0;
+}
+
+.second{
+    background-color: #b2ac55;
+    flex-flow: column;
+    padding:0;
+}
+
+.third{
+    background-color: #6bb284;
+    flex-flow: column;
+    padding:0;
 }

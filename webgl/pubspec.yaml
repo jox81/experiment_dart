@@ -5,7 +5,7 @@ description: An absolute bare-bones web app.
 #homepage: https://www.example.com
 
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: '>=1.19.0 <2.0.0'
 
 dependencies:
   angular2: ^2.0.0
