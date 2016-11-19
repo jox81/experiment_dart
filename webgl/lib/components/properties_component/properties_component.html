@@ -1,6 +1,38 @@
 <section id="properties">
     <h1>properties</h1>
-    <div class="checkbox">
-        <label><input type="checkbox" [(ngModel)]="useLighting">useLighting</label>
-    </div>
+
+    <template [ngIf]="iEditScene != null">
+        <div *ngFor="let key of iEditScene.properties.keys">
+            <br/>
+            <!--{{iEditScene.properties[key].type}} {{key}} <br/> {{iEditScene.properties[key]}}<br/>-->
+
+            <template [ngIf]="iEditScene.properties[key].type.toString() == 'String'">
+                <label>{{key}} : <input type="text"
+                                        [ngModel]="iEditScene.properties[key].getter()"
+                                        (change) = "setStringValue(iEditScene.properties[key], $event)"></label>
+            </template>
+
+            <template [ngIf]="iEditScene.properties[key].type.toString() == 'bool'">
+                <label><input type="checkbox"
+                              [ngModel]="iEditScene.properties[key].getter()"
+                              (change) = "setBoolValue(iEditScene.properties[key], $event)">{{key}}</label>
+            </template>
+
+            <template [ngIf]="iEditScene.properties[key].type.toString() == 'num'">
+                <label>{{key}} : <input type="number" step="0.05"
+                              [ngModel]="iEditScene.properties[key].getter().toStringAsFixed(2)"
+                              (change) = "setNumValue(iEditScene.properties[key], $event)"></label>
+            </template>
+
+            <template [ngIf]="iEditScene.properties[key].type.toString() == 'int'">
+                <label>{{key}} : <input type="number" step="1"
+                              [ngModel]="iEditScene.properties[key].getter()"
+                              (change) = "setIntValue(iEditScene.properties[key], $event)"></label>
+            </template>
+
+
+
+        </div>
+    </template>
+
 </section>

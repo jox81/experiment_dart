@@ -1,5 +1,6 @@
 import 'package:angular2/core.dart';
 import 'package:webgl/scene_views/scene_view_base.dart';
+import 'package:webgl/src/animation_property.dart';
 
 @Component(
     selector: 'properties',
@@ -8,9 +9,22 @@ import 'package:webgl/scene_views/scene_view_base.dart';
 class PropertiesComponent{
 
   @Input()
-  ISceneViewBase scene;
+  IEditScene iEditScene;
 
-  bool get useLighting => scene != null ? scene.useLighting : false;
-  set useLighting(bool value) => scene.useLighting = value;
+  setStringValue(AnimationProperty animationProperty, event){
+    animationProperty.setter(event.target.value);
+  }
+
+  setBoolValue(AnimationProperty animationProperty, event){
+    animationProperty.setter(event.target.checked);
+  }
+
+  setIntValue(AnimationProperty animationProperty, event){
+    animationProperty.setter(int.parse(event.target.value));
+  }
+
+  setNumValue(AnimationProperty animationProperty, event){
+    animationProperty.setter(double.parse(event.target.value));
+  }
 
 }

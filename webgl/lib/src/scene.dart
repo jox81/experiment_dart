@@ -31,15 +31,15 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   Scene(){
   }
 
-  bool isSetuped = false;
+  bool _isSetuped = false;
 
   Future setup() async{
     Future future = new Future.value();
 
     interaction = new Interaction(scene);
 
-    if(!isSetuped){
-      isSetuped = true;
+    if(!_isSetuped){
+      _isSetuped = true;
       setupUserInput();
       future = setupScene();
     }

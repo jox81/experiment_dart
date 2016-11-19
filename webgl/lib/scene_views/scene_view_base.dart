@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
-import 'package:datgui/datgui.dart' as dat;
+//import 'package:datgui/datgui.dart' as dat;
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
@@ -12,27 +13,39 @@ import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-
-abstract class ISceneViewBase{
-  bool useLighting;
+abstract class IEditScene{
+  Map<String, AnimationProperty> get properties;
 }
 
-class SceneViewBase extends Scene implements ISceneViewBase{
+class SceneViewBase extends Scene implements IEditScene{
 
   /// implements ISceneViewBase
-  @override
-  bool useLighting = true;
+  String message = 'test';
+  int count = 0;
+  Map<String, AnimationProperty> get properties =>{
+    'message' : new AnimationProperty<String>(()=> message, (String v)=> message = v),
+    'count' : new AnimationProperty<int>(()=> count, (int v)=> count = v),
+    'useLighting' : new AnimationProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
+    'ambientColorR' : new AnimationProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
+    'ambientColorG' : new AnimationProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
+    'ambientColorB' : new AnimationProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'directionalPositionX' : new AnimationProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
+    'directionalPositionY' : new AnimationProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
+    'directionalPositionZ' : new AnimationProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
+    'directionalColorR' : new AnimationProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
+    'directionalColorG' : new AnimationProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
+    'directionalColorB' : new AnimationProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
+  };
 
   //
 
-  bool isSetuped = false;
+
+  bool useLighting = true;
+  Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
+  Vector3 ambientColor = new Vector3.all(0.0);
+  Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
   final num viewAspectRatio;
-
-  Vector3 directionalPosition;
-  Vector3 ambientColor, directionalColor;
-
-
 
   SceneViewBase(Application application):this.viewAspectRatio = application.viewAspectRatio, super();
 
@@ -42,19 +55,15 @@ class SceneViewBase extends Scene implements ISceneViewBase{
   @override
   UpdateUserInput updateUserInputFunction;
 
-  GuiSetup guisetup;
+//  GuiSetup guisetup;
 
   @override
   setupUserInput() {
 
-    guisetup = GuiSetup.setup(this);
+//    guisetup = GuiSetup.setup(this);
 
     //UserInput
     updateUserInputFunction = (){
-      ambientColor = guisetup.ambientColor;
-      directionalColor = guisetup.directionalColor;
-      directionalPosition = guisetup.directionalPosition;
-
       interaction.update();
     };
 
@@ -222,60 +231,30 @@ class SceneViewBase extends Scene implements ISceneViewBase{
 
 }
 
-class GuiSetup {
-
-  static SceneViewBase _scene;
-
-  static GuiSetup setup(SceneViewBase scene) {
-    _scene = scene;
-
-    //GUI
-    GuiSetup guisetup = new GuiSetup();
-    dat.GUI gui = new dat.GUI();
-    gui.add(guisetup, 'message');
-
-    dat.GUI f2 = gui.addFolder("Lighting Position");
-    f2.add(guisetup, 'directionalPositionX',-100.0,100.0);
-    f2.add(guisetup, 'directionalPositionY',-100.0,100.0);
-    f2.add(guisetup, 'directionalPositionZ',-100.0,100.0);
-
-    dat.GUI directionalColor = gui.addFolder("Directionnal color");
-    directionalColor.add(guisetup, 'directionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-    directionalColor.add(guisetup, 'directionalColorG',0.001,1.001);
-    directionalColor.add(guisetup, 'directionalColorB',0.001,1.001);
-
-    dat.GUI ambiantColor = gui.addFolder("Ambiant color");
-    ambiantColor.add(guisetup, 'directionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-    ambiantColor.add(guisetup, 'directionalColorG',0.001,1.001);
-    ambiantColor.add(guisetup, 'directionalColorB',0.001,1.001);
-
-    return guisetup;
-  }
-
-  String message = '';
-
-  Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
-  double get directionalPositionX => directionalPosition.x;
-  set directionalPositionX(double value){ directionalPosition.x = value;}
-  double get directionalPositionY => directionalPosition.y;
-  set directionalPositionY(double value){ directionalPosition.y = value;}
-  double get directionalPositionZ => directionalPosition.z;
-  set directionalPositionZ(double value){ directionalPosition.z = value;}
-
-  Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
-  double get directionalColorR => directionalColor.r;
-  set directionalColorR(double value){ directionalColor.r = value;}
-  double get directionalColorG => directionalColor.g;
-  set directionalColorG(double value){ directionalColor.g = value;}
-  double get directionalColorB => directionalColor.b;
-  set directionalColorB(double value){ directionalColor.b = value;}
-
-  Vector3 ambientColor = new Vector3(0.2,0.2,0.2);
-  double get ambientColorR => ambientColor.r;
-  set ambientColorR(double value){ ambientColor.r = value;}
-  double get ambientColorG => ambientColor.g;
-  set ambientColorG(double value){ ambientColor.g = value;}
-  double get ambientColorB => ambientColor.b;
-  set ambientColorB(double value){ ambientColor.b = value;}
-
-}
+//class GuiSetup {
+//
+//  static SceneViewBase _scene;
+//
+//  static GuiSetup setup(SceneViewBase scene) {
+//    _scene = scene;
+//
+//    //GUI
+//    GuiSetup guisetup = new GuiSetup();
+//    dat.GUI gui = new dat.GUI();
+//    gui.add(guisetup, 'message');
+//
+//    dat.GUI f2 = gui.addFolder("Lighting Position");
+//    f2.add(guisetup, 'directionalPositionX',-100.0,100.0);
+//    f2.add(guisetup, 'directionalPositionY',-100.0,100.0);
+//    f2.add(guisetup, 'directionalPositionZ',-100.0,100.0);
+//
+//    dat.GUI directionalColor = gui.addFolder("Directionnal color");
+//    directionalColor.add(guisetup, 'directionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
+//    directionalColor.add(guisetup, 'directionalColorG',0.001,1.001);
+//    directionalColor.add(guisetup, 'directionalColorB',0.001,1.001);
+//
+//    return guisetup;
+//  }
+//
+//
+//}
