@@ -1,3 +1,4 @@
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:async';
 import 'package:webgl/src/materials.dart';
@@ -34,3 +35,4 @@ Future<Mesh> createAxis(Scene scene) async {
 
   return mesh;
 }
+

@@ -1,3 +1,4 @@
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
@@ -9,11 +10,13 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewPrimitives extends Scene {
+class SceneViewPrimitives extends Scene implements IEditScene{
+
+  Map<String, AnimationProperty> get properties =>{};
 
   final num viewAspectRatio;
 
-  SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;

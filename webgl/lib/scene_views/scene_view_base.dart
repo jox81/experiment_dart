@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:vector_math/vector_math.dart';
-//import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
@@ -13,41 +13,35 @@ import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-abstract class IEditScene{
-  Map<String, AnimationProperty> get properties;
-}
-
 class SceneViewBase extends Scene implements IEditScene{
 
   /// implements ISceneViewBase
-  String message = 'test';
-  int count = 0;
   Map<String, AnimationProperty> get properties =>{
-    'message' : new AnimationProperty<String>(()=> message, (String v)=> message = v),
-    'count' : new AnimationProperty<int>(()=> count, (int v)=> count = v),
     'useLighting' : new AnimationProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
     'ambientColorR' : new AnimationProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
     'ambientColorG' : new AnimationProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
     'ambientColorB' : new AnimationProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'ambientColor' : new AnimationProperty<Vector3>(()=> ambientColor, (Vector3 v)=> ambientColor = v),
     'directionalPositionX' : new AnimationProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
     'directionalPositionY' : new AnimationProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
     'directionalPositionZ' : new AnimationProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
     'directionalColorR' : new AnimationProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
     'directionalColorG' : new AnimationProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
     'directionalColorB' : new AnimationProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
+    'addMesh' : new AnimationProperty<Function>(()=> addMesh, null),
   };
-
-  //
-
 
   bool useLighting = true;
   Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
   Vector3 ambientColor = new Vector3.all(0.0);
   Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
-  final num viewAspectRatio;
+  //
 
-  SceneViewBase(Application application):this.viewAspectRatio = application.viewAspectRatio, super();
+  num get viewAspectRatio => application.viewAspectRatio;
+
+
+  SceneViewBase(Application application): super(application);
 
   @override
   UpdateFunction updateFunction;
@@ -55,12 +49,8 @@ class SceneViewBase extends Scene implements IEditScene{
   @override
   UpdateUserInput updateUserInputFunction;
 
-//  GuiSetup guisetup;
-
   @override
   setupUserInput() {
-
-//    guisetup = GuiSetup.setup(this);
 
     //UserInput
     updateUserInputFunction = (){
@@ -132,12 +122,15 @@ class SceneViewBase extends Scene implements IEditScene{
     Mesh axis = await createAxis(this)
       ..name = 'origin';
 
-    // create triangle
-    Mesh triangle = new Mesh.Triangle()
-      ..name = 'triangle'
-      ..transform.translate(0.0, 0.0, 4.0)
-      ..material = materialBase;
-    meshes.add(triangle);
+    //Line
+    Mesh line = new Mesh.Line([
+      new Vector3.all(0.0),
+      new Vector3(10.0, 0.0, 0.0),
+      new Vector3(10.0, 0.0, 10.0),
+      new Vector3(10.0, 10.0, 10.0),
+    ])
+    ..material = materialBaseColor;
+    meshes.add(line);
 
     // create square
     Mesh square = new Mesh.Rectangle()
@@ -145,6 +138,13 @@ class SceneViewBase extends Scene implements IEditScene{
       ..transform.rotateX(radians(90.0))
       ..material = materialBaseColor;
     meshes.add(square);
+
+    // create triangle
+    Mesh triangle = new Mesh.Triangle()
+      ..name = 'triangle'
+      ..transform.translate(0.0, 0.0, 4.0)
+      ..material = materialBase;
+    meshes.add(triangle);
 
     // create cube
     Mesh centerCube = new Mesh.Cube()
@@ -229,32 +229,28 @@ class SceneViewBase extends Scene implements IEditScene{
 
   }
 
-}
+  void addMesh(){
 
-//class GuiSetup {
-//
-//  static SceneViewBase _scene;
-//
-//  static GuiSetup setup(SceneViewBase scene) {
-//    _scene = scene;
-//
-//    //GUI
-//    GuiSetup guisetup = new GuiSetup();
-//    dat.GUI gui = new dat.GUI();
-//    gui.add(guisetup, 'message');
-//
-//    dat.GUI f2 = gui.addFolder("Lighting Position");
-//    f2.add(guisetup, 'directionalPositionX',-100.0,100.0);
-//    f2.add(guisetup, 'directionalPositionY',-100.0,100.0);
-//    f2.add(guisetup, 'directionalPositionZ',-100.0,100.0);
-//
-//    dat.GUI directionalColor = gui.addFolder("Directionnal color");
-//    directionalColor.add(guisetup, 'directionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-//    directionalColor.add(guisetup, 'directionalColorG',0.001,1.001);
-//    directionalColor.add(guisetup, 'directionalColorB',0.001,1.001);
-//
-//    return guisetup;
-//  }
-//
-//
-//}
+    Random random = new Random();
+
+    // create cube
+    Mesh centerCube = new Mesh.Cube()
+      ..transform.translate(random.nextDouble() * 10, random.nextDouble() * 10, random.nextDouble() * 10)
+      ..transform.scale(0.1, 0.1, 0.1)
+      ..material = materials.firstWhere((m)=> m is MaterialBaseColor );
+    meshes.add(centerCube);
+  }
+
+  void addMeshScaled(){
+
+    Random random = new Random();
+
+    // create cube
+    Mesh centerCube = new Mesh.Cube()
+      ..transform.translate(random.nextDouble() * 10, random.nextDouble() * 10, random.nextDouble() * 10)
+      ..transform.scale(0.1, 0.1, 0.1)
+      ..material = materials.firstWhere((m)=> m is MaterialBaseColor );
+    meshes.add(centerCube);
+  }
+
+}

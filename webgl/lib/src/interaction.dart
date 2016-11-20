@@ -5,8 +5,7 @@ import 'dart:typed_data';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/application.dart';
 
-class Interaction{
-
+class Interaction {
   final Scene scene;
 
   //Debug div
@@ -15,7 +14,7 @@ class Interaction{
   //Interaction with keyboard
   List<bool> _currentlyPressedKeys;
 
-  Interaction(this.scene){
+  Interaction(this.scene) {
     _initEvents();
   }
 
@@ -25,7 +24,8 @@ class Interaction{
   void _onKeyDown(KeyboardEvent event) {
     if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
       if ((elementDebugInfoText != null)) {
-        elementDebugInfoText.text = "Camera Position: ${scene.mainCamera.position}";
+        elementDebugInfoText.text =
+            "Camera Position: ${scene.mainCamera.position}";
         print(event.keyCode);
       }
     } else {}
@@ -61,7 +61,6 @@ class Interaction{
   }
 
   void _initEvents() {
-
     //Without specifying size this array throws exception on []
     _currentlyPressedKeys = new List<bool>(128);
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
@@ -72,19 +71,29 @@ class Interaction{
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
 
-    gl.canvas.onMouseMove.listen((e) {
-      // do something with mouse coordinates
-      // e.client.x, e.client.y
-      debugInfo(e.client.x, e.client.y);
+    gl.canvas.onMouseMove.listen((MouseEvent e) {
+      Vector3 worldPick = getWorldInfo(e);
+      debugInfo(worldPick.x, worldPick.y, worldPick.z);
     });
 
+    gl.canvas.onMouseUp.listen((MouseEvent e) {
+      Vector3 worldPick = getWorldInfo(e);
+      scene.createLine(new Vector3.all(0.0), worldPick);
+    });
   }
 
-  void debugInfo(int posX, int posY){
+  Vector3 getWorldInfo(MouseEvent e) {
+    Vector3 worldPick = new Vector3.all(0.0);
+    unproject(scene.mainCamera.matrix, 0, scene.application.width, 0,
+        scene.application.height, e.offset.x, e.offset.y, 1.0, worldPick);
+    debugInfo(worldPick.x, worldPick.y, worldPick.z);
+    return worldPick;
+  }
+
+  void debugInfo(num posX, num posY, num posZ) {
     var colorPicked = new Uint8List(4);
-    //Todo : doesn't work...
-    gl.readPixels(posX, posY, 1, 1, GL.RGBA, GL.UNSIGNED_BYTE, colorPicked);
-    elementDebugInfoText.text = '[$posX, $posY] : $colorPicked';
+    //Todo : readPixels doesn't work in dartium...
+    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, GL.RGBA, GL.UNSIGNED_BYTE, colorPicked);
+    elementDebugInfoText.text = '[$posX, $posY, $posZ] : $colorPicked';
   }
-
 }

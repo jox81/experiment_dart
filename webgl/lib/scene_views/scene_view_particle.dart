@@ -1,4 +1,5 @@
 import 'dart:math' as Math;
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
@@ -10,11 +11,22 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-class SceneViewParticle extends Scene {
+class SceneViewParticle extends Scene implements IEditScene{
+
+  /// implements ISceneViewBase
+  num varA = 30;
+  num varB = 20;
+  num varCt = 0;
+
+  Map<String, AnimationProperty> get properties =>{
+    'varA' : new AnimationProperty<num>(()=> varA, (num v)=> varA = v),
+    'varB' : new AnimationProperty<num>(()=> varB, (num v)=> varB = v),
+    'varCt' : new AnimationProperty<num>(()=> varCt, (num v)=> varCt = v),
+  };
 
   final num viewAspectRatio;
 
-  SceneViewParticle(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewParticle(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;
@@ -58,6 +70,8 @@ class SceneViewParticle extends Scene {
     String vShader = '''
     precision mediump float;
 
+    attribute float varA, varB, varCt;
+
     attribute vec2 a_vertex;
 
     uniform float u_time;
@@ -69,8 +83,8 @@ class SceneViewParticle extends Scene {
       v_vertex = a_vertex;
 
       vec2 v = a_vertex*(mod(u_time+length(a_vertex),1.));
-      float ct = (cos(v.x*30.+u_time*20.)+cos(v.y*30.+u_time*20.));
-      v = mat2(sin(v.x*(10.+ct)),cos(v.x*(10.+ct)),cos(v.y*(10.+ct)),sin(v.y*(10.+ct)))*v;
+      float ct = varCt;//(cos(v.x * 30. + u_time * 20.)+cos(v.y*30.+u_time*20.));
+      v = mat2(sin(v.x*(varA+ct)),cos(v.x*(varB+ct)),cos(v.y*(varA+ct)),sin(v.y*(varB+ct)))*v;
 
       gl_Position=vec4(v,0.,1.);
     }
@@ -95,7 +109,13 @@ class SceneViewParticle extends Scene {
     materialCustom
       ..setShaderAttributsVariables = (Mesh mesh) {
         materialCustom.setShaderAttributWithName(
-            'a_vertex', mesh.vertices, mesh.vertexDimensions);
+            'varA', data : varA);
+        materialCustom.setShaderAttributWithName(
+            'varB', data : varB);
+        materialCustom.setShaderAttributWithName(
+            'varCt', data : varCt);
+        materialCustom.setShaderAttributWithName(
+            'a_vertex', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
       }
       ..setShaderUniformsVariables = (Mesh mesh) {
         materialCustom.setShaderUniformWithName('u_time', shaderTime);

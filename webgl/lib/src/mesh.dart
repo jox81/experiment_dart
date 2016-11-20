@@ -85,6 +85,10 @@ class Mesh extends Object3d {
     material.render(this);
   }
 
+  factory Mesh.Line(List<Vector3> points) {
+    return new _LineMesh(points);
+  }
+
   factory Mesh.Rectangle() {
     return new _SquareMesh();
   }
@@ -103,6 +107,27 @@ class Mesh extends Object3d {
 
   factory Mesh.Sphere({num radius : 1, int segmentV: 32, int segmentH: 32}) {
     return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
+  }
+}
+
+class _LineMesh extends Mesh {
+  _LineMesh(List<Vector3> points) {
+    assert(points.length >= 2);
+
+    mode = GL.LINES;
+
+    vertices = [];
+    colors = [];
+
+    for(int i = 0; i < points.length - 1; i++){
+      Vector3 point1 = points[i];
+      vertices.addAll(point1.storage);
+
+      Vector3 point2 = points[i+1];
+      vertices.addAll(point2.storage);
+
+      colors.addAll([1.0, 0.0, 0.0, 1.0]);
+    }
   }
 }
 

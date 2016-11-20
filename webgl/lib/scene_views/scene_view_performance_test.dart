@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:datgui/datgui.dart' as dat;
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
@@ -11,15 +12,34 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewPerformanceTest extends Scene {
+class SceneViewPerformanceTest extends Scene implements IEditScene{
+
+  /// implements ISceneViewBase
+  String message = 'test';
+  int count = 0;
+  Map<String, AnimationProperty> get properties =>{
+    'message' : new AnimationProperty<String>(()=> message, (String v)=> message = v),
+    'count' : new AnimationProperty<int>(()=> count, (int v)=> count = v),
+    'useLighting' : new AnimationProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
+    'ambientColorR' : new AnimationProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
+    'ambientColorG' : new AnimationProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
+    'ambientColorB' : new AnimationProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'directionalPositionX' : new AnimationProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
+    'directionalPositionY' : new AnimationProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
+    'directionalPositionZ' : new AnimationProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
+    'directionalColorR' : new AnimationProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
+    'directionalColorG' : new AnimationProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
+    'directionalColorB' : new AnimationProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
+  };
+
+  bool useLighting = true;
+  Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
+  Vector3 ambientColor = new Vector3.all(0.0);
+  Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
   final num viewAspectRatio;
 
-  Vector3 directionalPosition;
-  Vector3 ambientColor, directionalColor;
-  bool useLighting;
-
-  SceneViewPerformanceTest(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewPerformanceTest(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;
@@ -30,14 +50,7 @@ class SceneViewPerformanceTest extends Scene {
   @override
   setupUserInput() {
 
-    GuiSetup guisetup = GuiSetup.setup();
-
     updateUserInputFunction = (){
-      ambientColor = guisetup.getAmbientColor;
-      directionalColor = guisetup.getDirectionalColor;
-      directionalPosition = guisetup.getDirectionalPosition;
-      useLighting = guisetup.getUseLighting;
-
       interaction.update();
     };
 
@@ -79,7 +92,7 @@ class SceneViewPerformanceTest extends Scene {
 //  await MaterialBaseTextureNormal.create()
 //    ..ambientColor = application.ambientLight.color
 //    ..directionalLight = directionalLight;
-//  materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
+//  materialBaseTextureNormal..useLighting = useLighting;
 //  await materialBaseTextureNormal.addTexture("../images/crate.gif");
 //  application.materials.add(materialBaseTextureNormal);
 
@@ -109,69 +122,14 @@ class SceneViewPerformanceTest extends Scene {
 //    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
       _lastTime = time;
 
-//    materialBaseTextureNormal..useLighting = guisetup.getUseLighting;
+//    materialBaseTextureNormal..useLighting = useLighting;
 //
-//    application.ambientLight..color.setFrom(guisetup.getAmbientColor);
+//    application.ambientLight..color.setFrom(ambientColor);
 //    directionalLight
-//      ..direction.setFrom(guisetup.getDirectionalPosition)
-//      ..color.setFrom(guisetup.getDirectionalColor);
+//      ..direction.setFrom(directionalPosition)
+//      ..color.setFrom(directionalColor);
     };
   }
 
 }
 
-class GuiSetup {
-
-  static GuiSetup setup() {
-    //GUI
-    GuiSetup guisetup = new GuiSetup();
-    dat.GUI gui = new dat.GUI();
-    gui.add(guisetup, 'message');
-    gui.add(guisetup, 'getUseLighting');
-
-    dat.GUI f2 = gui.addFolder("Lighting Position");
-    f2.add(guisetup, 'getDirectionalPositionX',-100.0,100.0);
-    f2.add(guisetup, 'getDirectionalPositionY',-100.0,100.0);
-    f2.add(guisetup, 'getDirectionalPositionZ',-100.0,100.0);
-
-    dat.GUI directionalColor = gui.addFolder("Directionnal color");
-    directionalColor.add(guisetup, 'getDirectionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-    directionalColor.add(guisetup, 'getDirectionalColorG',0.001,1.001);
-    directionalColor.add(guisetup, 'getDirectionalColorB',0.001,1.001);
-
-    dat.GUI ambiantColor = gui.addFolder("Ambiant color");
-    ambiantColor.add(guisetup, 'getDirectionalColorR',0.001,1.001);//needed until now to round 0 int or 1 int to double
-    ambiantColor.add(guisetup, 'getDirectionalColorG',0.001,1.001);
-    ambiantColor.add(guisetup, 'getDirectionalColorB',0.001,1.001);
-
-    return guisetup;
-  }
-
-  String message = '';
-  bool getUseLighting = true;
-
-  Vector3 getDirectionalPosition = new Vector3(-0.25,-0.125,-0.25);
-  double get getDirectionalPositionX => getDirectionalPosition.x;
-  set getDirectionalPositionX(double value){ getDirectionalPosition.x = value;}
-  double get getDirectionalPositionY => getDirectionalPosition.y;
-  set getDirectionalPositionY(double value){ getDirectionalPosition.y = value;}
-  double get getDirectionalPositionZ => getDirectionalPosition.z;
-  set getDirectionalPositionZ(double value){ getDirectionalPosition.z = value;}
-
-  Vector3 getDirectionalColor = new Vector3(0.8, 0.8, 0.8);
-  double get getDirectionalColorR => getDirectionalColor.r;
-  set getDirectionalColorR(double value){ getDirectionalColor.r = value;}
-  double get getDirectionalColorG => getDirectionalColor.g;
-  set getDirectionalColorG(double value){ getDirectionalColor.g = value;}
-  double get getDirectionalColorB => getDirectionalColor.b;
-  set getDirectionalColorB(double value){ getDirectionalColor.b = value;}
-
-  Vector3 getAmbientColor = new Vector3(0.2,0.2,0.2);
-  double get getAmbientColorR => getAmbientColor.r;
-  set getAmbientColorR(double value){ getAmbientColor.r = value;}
-  double get getAmbientColorG => getAmbientColor.g;
-  set getAmbientColorG(double value){ getAmbientColor.g = value;}
-  double get getAmbientColorB => getAmbientColor.b;
-  set getAmbientColorB(double value){ getAmbientColor.b = value;}
-
-}

@@ -2,6 +2,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material.dart';
+import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:collection';
 import 'package:webgl/src/application.dart';
@@ -28,15 +29,23 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
   Interaction interaction;
 
-  Scene(){
+  final Application application;
+
+  Scene(this.application){
   }
 
   bool _isSetuped = false;
 
+  MaterialBaseColor debugMaterialBaseColor;
+
   Future setup() async{
+    debugMaterialBaseColor = await MaterialBaseColor.create(
+        new Vector3(1.0, 1.0, 0.0));
+    materials.add(debugMaterialBaseColor);
+
     Future future = new Future.value();
 
-    interaction = new Interaction(scene);
+    interaction = new Interaction(this);
 
     if(!_isSetuped){
       _isSetuped = true;
@@ -79,5 +88,11 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
       throw new Exception("Invalid popMatrix!");
     }
     mvMatrix = _mvMatrixStack.removeFirst();
+  }
+
+  void createLine(Vector3 point1, Vector3 point2) {
+    Mesh debugLine = new Mesh.Line([point1, point2])
+        ..material = debugMaterialBaseColor;
+    meshes.add(debugLine);
   }
 }

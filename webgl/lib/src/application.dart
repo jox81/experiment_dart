@@ -10,7 +10,7 @@ RenderingContext get gl => Application._gl;
 Scene get scene => Application._instance._currentScene;
 
 class Application {
-  static const bool debugging = false;
+  static const bool debugging = true;
 
   static RenderingContext _gl;
 
@@ -18,6 +18,8 @@ class Application {
 
   IUpdatableScene _currentScene;
 
+  num get width => gl.drawingBufferWidth;
+  num get height => gl.drawingBufferHeight;
   num get viewAspectRatio => gl.drawingBufferWidth / gl.drawingBufferHeight;
 
   //Singleton

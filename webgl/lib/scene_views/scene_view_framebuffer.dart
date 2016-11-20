@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
@@ -10,11 +11,13 @@ import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewFrameBuffer extends Scene {
+class SceneViewFrameBuffer extends Scene implements IEditScene{
+
+  Map<String, AnimationProperty> get properties =>{};
 
   final num viewAspectRatio;
 
-  SceneViewFrameBuffer(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewFrameBuffer(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;

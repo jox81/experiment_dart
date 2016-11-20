@@ -1,5 +1,6 @@
 ﻿import 'package:vector_math/vector_math.dart';
 import 'package:datgui/datgui.dart' as dat;
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
@@ -10,11 +11,13 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewPBR extends Scene {
+class SceneViewPBR extends Scene implements IEditScene{
+
+  Map<String, AnimationProperty> get properties =>{};
 
   final num viewAspectRatio;
 
-  SceneViewPBR(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewPBR(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;
@@ -77,19 +80,4 @@ class SceneViewPBR extends Scene {
       _lastTime = time;
     };
   }
-}
-
-class GuiSetup {
-
-  static GuiSetup setup() {
-    //GUI
-    GuiSetup guisetup = new GuiSetup();
-    dat.GUI gui = new dat.GUI();
-
-    //Setup
-    //...
-
-    return guisetup;
-  }
-
 }

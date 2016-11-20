@@ -1,24 +1,26 @@
 :host{
 }
-
+*{
+    color: #c2c19a;
+}
 .row{
     display: flex;
 }
 
 .first{
-    background-color: #2196F3;
+    background-color: #504f3b;
     flex-flow: column;
     padding:0;
 }
 
 .second{
-    background-color: #b2ac55;
+    background-color: #504f3b;
     flex-flow: column;
     padding:0;
 }
 
 .third{
-    background-color: #6bb284;
+    background-color: #504f3b;
     flex-flow: column;
     padding:0;
 }

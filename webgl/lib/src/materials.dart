@@ -51,9 +51,9 @@ class MaterialPoint extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
+        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
     setShaderAttributWithName(
-        'aVertexColor', mesh.colors, mesh.colorDimensions);
+        'aVertexColor', arrayBuffer:  mesh.colors, dimension : mesh.colorDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -85,8 +85,8 @@ class MaterialBase extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : mesh.indices);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -120,8 +120,8 @@ class MaterialBaseColor extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  mesh.indices);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -153,10 +153,10 @@ class MaterialBaseVertexColor extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
     setShaderAttributWithName(
-        'aVertexColor', mesh.colors, mesh.colorDimensions);
+        'aVertexColor', arrayBuffer: mesh.colors, dimension : mesh.colorDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -190,13 +190,13 @@ class MaterialBaseTexture extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
     gl.activeTexture(GL.TEXTURE0);
     gl.bindTexture(GL.TEXTURE_2D, texture);
     setShaderAttributWithName(
-        'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
+        'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -240,16 +240,16 @@ class MaterialBaseTextureNormal extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
     gl.activeTexture(GL.TEXTURE0);
     gl.bindTexture(GL.TEXTURE_2D, texture);
     setShaderAttributWithName(
-        'aTextureCoord', mesh.textureCoords, mesh.textureCoordsDimensions);
+        'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
 
     setShaderAttributWithName(
-        'aVertexNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
+        'aVertexNormal', arrayBuffer: mesh.vertexNormals, dimension : mesh.vertexNormalsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
@@ -318,10 +318,10 @@ class MaterialPBR extends Material {
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
-        'aVertexPosition', mesh.vertices, mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', mesh.indices, null);
+        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
     setShaderAttributWithName(
-        'aNormal', mesh.vertexNormals, mesh.vertexNormalsDimensions);
+        'aNormal', arrayBuffer: mesh.vertexNormals, dimension : mesh.vertexNormalsDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {

@@ -1,3 +1,4 @@
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:vector_math/vector_math.dart';
 import 'dart:async';
@@ -22,4 +23,8 @@ abstract class IUpdatableSceneFunction{
 abstract class ISetupScene{
   setupUserInput();
   Future setupScene();
+}
+
+abstract class IEditScene{
+  Map<String, AnimationProperty> get properties;
 }

@@ -35,7 +35,7 @@ class Camera extends Object3d{
     return '$position -> $targetPosition';
   }
 
-  //y
+  //roll on y
   double get yaw {
     Vector3 z = new Vector3(0.0, 0.0, 1.0);
     Vector3 forward = frontDirection;
@@ -43,7 +43,7 @@ class Camera extends Object3d{
     return degrees(Math.acos(forward.dot(z)));
   }
 
-  //x
+  //roll on x
   //Form up 0 to bottom 180°
   double get pitch {
     Vector3 y = new Vector3(0.0, 1.0, 0.0);

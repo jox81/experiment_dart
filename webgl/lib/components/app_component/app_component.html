@@ -1,13 +1,12 @@
 <div class="container-fluid">
     <div class="row">
-        <toolbar (onSwitchScene) = switchScene()>
-        </toolbar>
+        <toolbar (onSwitchScene) = switchScene()></toolbar>
     </div>
     <div class="row">
-        <div class="col-sm-4 first">
+        <div class="col-sm-3 first">
             <properties [iEditScene] = "currentScene"></properties>
         </div>
-        <div class="col-sm-8 second">
+        <div class="col-sm-9 second">
             <canvas_app id="canvasApp"></canvas_app>
         </div>
         <div class="col-sm-0 third">

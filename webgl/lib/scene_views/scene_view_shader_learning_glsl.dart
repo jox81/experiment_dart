@@ -1,4 +1,5 @@
 import 'dart:math' as Math;
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
@@ -11,11 +12,13 @@ import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
-class SceneViewShaderLearning01 extends Scene {
+class SceneViewShaderLearning01 extends Scene implements IEditScene{
+
+  Map<String, AnimationProperty> get properties =>{};
 
   final num viewAspectRatio;
 
-  SceneViewShaderLearning01(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewShaderLearning01(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;
@@ -192,7 +195,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     materialCustom
       ..setShaderAttributsVariables = (Mesh mesh) {
         materialCustom.setShaderAttributWithName(
-            'a_vertex', mesh.vertices, mesh.vertexDimensions);
+            'a_vertex', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
       }
       ..setShaderUniformsVariables = (Mesh mesh) {
         materialCustom.setShaderUniformWithName('iGlobalTime', shaderTime);

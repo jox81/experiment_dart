@@ -121,20 +121,41 @@ abstract class Material {
     disableVertexAttributs();
   }
 
-  void setShaderAttributWithName(String attributName, data, dimension) {
+  void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elemetArrayBuffer, data}) {
 
-      if (dimension != null) {
-        gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
-        gl.enableVertexAttribArray(attributes[attributName]);
-        gl.bufferData(
-            GL.ARRAY_BUFFER, new Float32List.fromList(data), GL.STATIC_DRAW);
-        gl.vertexAttribPointer(
-            attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
-      } else {
+    if (arrayBuffer!= null && dimension != null) {
+      gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
+      gl.enableVertexAttribArray(attributes[attributName]);
+      gl.bufferData(
+          GL.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), GL.STATIC_DRAW);
+      gl.vertexAttribPointer(
+          attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
+    } else if(elemetArrayBuffer != null){
         gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-        gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(data),
+        gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
             GL.STATIC_DRAW);
+    }else{
+      ActiveInfoCustom activeInfo = programInfo.attributes.firstWhere((a)=> a.activeInfo.name == attributName, orElse:() => null);
+
+      if(activeInfo != null) {
+        switch (activeInfo.typeName) {
+          case 'FLOAT_VEC3':
+
+            break;
+          case 'FLOAT':
+              gl.vertexAttrib1f(attributes[attributName], data);
+            break;
+
+          default:
+            print(
+                'setShaderAttributWithName not set in material.dart for : ${activeInfo.typeName}');
+            break;
+        }
       }
+
+
+
+    }
   }
 
   void setShaderUniformWithName(String uniformName, data, [data1, data2]) {

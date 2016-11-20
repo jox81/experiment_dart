@@ -1,4 +1,5 @@
 import 'dart:math' as Math;
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
@@ -10,11 +11,13 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-class SceneViewParticleSimple extends Scene {
+class SceneViewParticleSimple extends Scene implements IEditScene{
+
+  Map<String, AnimationProperty> get properties =>{};
 
   final num viewAspectRatio;
 
-  SceneViewParticleSimple(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewParticleSimple(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;
@@ -94,7 +97,7 @@ class SceneViewParticleSimple extends Scene {
     materialCustom
       ..setShaderAttributsVariables = (Mesh mesh) {
         materialCustom.setShaderAttributWithName(
-            'a_vertex', mesh.vertices, mesh.vertexDimensions);
+            'a_vertex', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
       }
       ..setShaderUniformsVariables = (Mesh mesh) {
         materialCustom.setShaderUniformWithName('u_time', shaderTime);

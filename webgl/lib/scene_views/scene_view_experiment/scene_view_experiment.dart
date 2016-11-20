@@ -14,7 +14,7 @@ class SceneViewExperiment extends Scene {
 
   final num viewAspectRatio;
 
-  SceneViewExperiment(Application application):this.viewAspectRatio = application.viewAspectRatio,super();
+  SceneViewExperiment(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
 
   @override
   UpdateFunction updateFunction;
