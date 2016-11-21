@@ -10,7 +10,7 @@ RenderingContext get gl => Application._gl;
 Scene get scene => Application._instance._currentScene;
 
 class Application {
-  static const bool debugging = true;
+  static const bool debugging = false;
 
   static RenderingContext _gl;
 

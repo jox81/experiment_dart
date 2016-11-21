@@ -18,10 +18,10 @@ class SceneViewParticle extends Scene implements IEditScene{
   num varB = 20;
   num varCt = 0;
 
-  Map<String, AnimationProperty> get properties =>{
-    'varA' : new AnimationProperty<num>(()=> varA, (num v)=> varA = v),
-    'varB' : new AnimationProperty<num>(()=> varB, (num v)=> varB = v),
-    'varCt' : new AnimationProperty<num>(()=> varCt, (num v)=> varCt = v),
+  Map<String, EditableProperty> get properties =>{
+    'varA' : new EditableProperty<num>(()=> varA, (num v)=> varA = v),
+    'varB' : new EditableProperty<num>(()=> varB, (num v)=> varB = v),
+    'varCt' : new EditableProperty<num>(()=> varCt, (num v)=> varCt = v),
   };
 
   final num viewAspectRatio;

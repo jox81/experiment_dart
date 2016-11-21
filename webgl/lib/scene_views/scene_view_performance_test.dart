@@ -17,19 +17,19 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
   /// implements ISceneViewBase
   String message = 'test';
   int count = 0;
-  Map<String, AnimationProperty> get properties =>{
-    'message' : new AnimationProperty<String>(()=> message, (String v)=> message = v),
-    'count' : new AnimationProperty<int>(()=> count, (int v)=> count = v),
-    'useLighting' : new AnimationProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
-    'ambientColorR' : new AnimationProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
-    'ambientColorG' : new AnimationProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
-    'ambientColorB' : new AnimationProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
-    'directionalPositionX' : new AnimationProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
-    'directionalPositionY' : new AnimationProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
-    'directionalPositionZ' : new AnimationProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
-    'directionalColorR' : new AnimationProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
-    'directionalColorG' : new AnimationProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
-    'directionalColorB' : new AnimationProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
+  Map<String, EditableProperty> get properties =>{
+    'message' : new EditableProperty<String>(()=> message, (String v)=> message = v),
+    'count' : new EditableProperty<int>(()=> count, (int v)=> count = v),
+    'useLighting' : new EditableProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
+    'ambientColorR' : new EditableProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
+    'ambientColorG' : new EditableProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
+    'ambientColorB' : new EditableProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'directionalPositionX' : new EditableProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
+    'directionalPositionY' : new EditableProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
+    'directionalPositionZ' : new EditableProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
+    'directionalColorR' : new EditableProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
+    'directionalColorG' : new EditableProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
+    'directionalColorB' : new EditableProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
   };
 
   bool useLighting = true;

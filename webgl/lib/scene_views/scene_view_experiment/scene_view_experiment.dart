@@ -1,3 +1,4 @@
+import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/mesh.dart';
@@ -10,7 +11,10 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-class SceneViewExperiment extends Scene {
+class SceneViewExperiment extends Scene implements IEditScene{
+
+  /// implements ISceneViewBase
+  Map<String, EditableProperty> get properties =>{};
 
   final num viewAspectRatio;
 

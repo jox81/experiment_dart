@@ -26,5 +26,5 @@ abstract class ISetupScene{
 }
 
 abstract class IEditScene{
-  Map<String, AnimationProperty> get properties;
+  Map<String, EditableProperty> get properties;
 }

@@ -72,19 +72,20 @@ class Interaction {
     elementFPSText = querySelector("#fps");
 
     gl.canvas.onMouseMove.listen((MouseEvent e) {
+//      debugInfo(e.offset.x, e.offset.y,0);
       Vector3 worldPick = getWorldInfo(e);
       debugInfo(worldPick.x, worldPick.y, worldPick.z);
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-      Vector3 worldPick = getWorldInfo(e);
-      scene.createLine(new Vector3.all(0.0), worldPick);
+//      Vector3 worldPick = getWorldInfo(e);
+//      scene.createLine(new Vector3.all(0.0), worldPick);
     });
   }
 
   Vector3 getWorldInfo(MouseEvent e) {
     Vector3 worldPick = new Vector3.all(0.0);
-    unproject(scene.mainCamera.matrix, 0, scene.application.width, 0,
+    unproject(scene.mainCamera.mvMatrix, 0, scene.application.width, 0,
         scene.application.height, e.offset.x, e.offset.y, 1.0, worldPick);
     debugInfo(worldPick.x, worldPick.y, worldPick.z);
     return worldPick;

@@ -16,19 +16,23 @@ import 'package:webgl/src/interface/IScene.dart';
 class SceneViewBase extends Scene implements IEditScene{
 
   /// implements ISceneViewBase
-  Map<String, AnimationProperty> get properties =>{
-    'useLighting' : new AnimationProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
-    'ambientColorR' : new AnimationProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
-    'ambientColorG' : new AnimationProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
-    'ambientColorB' : new AnimationProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
-    'ambientColor' : new AnimationProperty<Vector3>(()=> ambientColor, (Vector3 v)=> ambientColor = v),
-    'directionalPositionX' : new AnimationProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
-    'directionalPositionY' : new AnimationProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
-    'directionalPositionZ' : new AnimationProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
-    'directionalColorR' : new AnimationProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
-    'directionalColorG' : new AnimationProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
-    'directionalColorB' : new AnimationProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
-    'addMesh' : new AnimationProperty<Function>(()=> addMesh, null),
+  Map<String, EditableProperty> get properties =>{
+    'fov' : new EditableProperty<num>(()=> mainCamera.fOV, (num v)=> mainCamera.fOV = v),
+    'camera Pos x' : new EditableProperty<num>(()=> mainCamera.position.x, (num v)=> mainCamera.position.x = v),
+    'camera Pos y' : new EditableProperty<num>(()=> mainCamera.position.y, (num v)=> mainCamera.position.y = v),
+    'camera Pos z' : new EditableProperty<num>(()=> mainCamera.position.z, (num v)=> mainCamera.position.z = v),
+    'useLighting' : new EditableProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
+    'ambientColorR' : new EditableProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
+    'ambientColorG' : new EditableProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
+    'ambientColorB' : new EditableProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'ambientColor' : new EditableProperty<Vector3>(()=> ambientColor, (Vector3 v)=> ambientColor = v),
+    'directionalPositionX' : new EditableProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
+    'directionalPositionY' : new EditableProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
+    'directionalPositionZ' : new EditableProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
+    'directionalColorR' : new EditableProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
+    'directionalColorG' : new EditableProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
+    'directionalColorB' : new EditableProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
+    'addMesh' : new EditableProperty<Function>(()=> addMesh, null),
   };
 
   bool useLighting = true;
@@ -39,7 +43,6 @@ class SceneViewBase extends Scene implements IEditScene{
   //
 
   num get viewAspectRatio => application.viewAspectRatio;
-
 
   SceneViewBase(Application application): super(application);
 
@@ -72,8 +75,8 @@ class SceneViewBase extends Scene implements IEditScene{
     new Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(50.0, 50.0, 50.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(100.0, 50.0, 0.0)/*
+      ..cameraController = new CameraController()*/;
     mainCamera = camera;
 
     //Lights
@@ -182,7 +185,7 @@ class SceneViewBase extends Scene implements IEditScene{
     var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
     Mesh susanMesh = new Mesh()
       ..transform.translate(10.0, 0.0, 0.0)
-      ..transform.rotateX(radians(-90.0))
+//      ..transform.rotateX(radians(-90.0))
       ..vertices = susanJson['meshes'][0]['vertices']
       ..indices = susanJson['meshes'][0]['faces']
         .expand((i) => i)

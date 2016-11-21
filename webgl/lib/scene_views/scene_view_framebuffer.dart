@@ -13,7 +13,7 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewFrameBuffer extends Scene implements IEditScene{
 
-  Map<String, AnimationProperty> get properties =>{};
+  Map<String, EditableProperty> get properties =>{};
 
   final num viewAspectRatio;
 

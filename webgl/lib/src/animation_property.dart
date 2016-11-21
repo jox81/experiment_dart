@@ -1,15 +1,15 @@
-typedef T AnimationSetter<T>(T value);
-typedef T AnimationGetter<T>();
+typedef T PropertyGetter<T>();
+typedef T PropertySetter<T>(T value);
 
-class AnimationProperty<T>{
+class EditableProperty<T>{
 
   Type get type => T;
 
-  AnimationGetter _getter;
-  AnimationSetter _setter;
+  PropertyGetter _getter;
+  PropertySetter _setter;
 
-  AnimationGetter get getter => _getter;
-  AnimationSetter get setter => _setter;
+  PropertyGetter get getter => _getter;
+  PropertySetter get setter => _setter;
 
-  AnimationProperty(this._getter, this._setter);
+  EditableProperty(this._getter, this._setter);
 }

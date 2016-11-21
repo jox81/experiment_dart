@@ -9,16 +9,24 @@ class Camera extends Object3d{
   final double zFar;
 
   double aspectRatio;
-  Vector3 position;
-  Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
+  Vector3 position = new Vector3(0.0, 1.0, 0.0);
   Vector3 targetPosition;
 
+  Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
+  Vector3 get frontDirection => targetPosition - position;
+
+  Vector3 get zAxis => frontDirection.normalized();
+  Vector3 get xAxis => zAxis.cross(upDirection);
+  Vector3 get yAxis => zAxis.cross(xAxis);
+
   double _fOV;
+  double get fOV => _fOV;
   set fOV(num value) {
     _fOV = value;
   }
 
   CameraController _cameraController;
+
   set cameraController(CameraController value) {
     _cameraController = value;
     _cameraController.init(this);
@@ -71,15 +79,9 @@ class Camera extends Object3d{
     return makeViewMatrix(position, targetPosition, upDirection);
   }
 
-  Matrix4 get matrix {
+  Matrix4 get mvMatrix {
     return projectionMatrix * lookAtMatrix;
   }
-
-  Vector3 get frontDirection => targetPosition - position;
-
-  Vector3 get zAxis => frontDirection.normalized();
-  Vector3 get xAxis => zAxis.cross(upDirection);
-  Vector3 get yAxis => zAxis.cross(xAxis);
 
   void rotateOrbitCamera(num xAngleRot, num yAngleRot) {
     num distance = frontDirection
