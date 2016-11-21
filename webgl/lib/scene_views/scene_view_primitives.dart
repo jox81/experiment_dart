@@ -46,7 +46,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
-      ..cameraController = new CameraController();
+      ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
     //Material

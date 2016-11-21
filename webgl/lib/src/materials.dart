@@ -60,7 +60,7 @@ class MaterialPoint extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
     setShaderUniformWithName("pointSize", pointSize);
   }
 }
@@ -93,7 +93,7 @@ class MaterialBase extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
   }
 }
 
@@ -128,7 +128,7 @@ class MaterialBaseColor extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
     setShaderUniformWithName("uColor", color.storage);
   }
 }
@@ -163,7 +163,7 @@ class MaterialBaseVertexColor extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
   }
 }
 
@@ -203,7 +203,7 @@ class MaterialBaseTexture extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
     setShaderUniformWithName('uSampler', 0);
   }
 
@@ -256,7 +256,7 @@ class MaterialBaseTextureNormal extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
 
     Matrix4 mvInverse = new Matrix4.identity();
     mvInverse.copyInverse(scene.mvMatrix);
@@ -328,7 +328,7 @@ class MaterialPBR extends Material {
     setShaderUniformWithName(
         "uMVMatrix", scene.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.mvMatrix.storage);
+        "uPMatrix", scene.mainCamera.vpMatrix.storage);
 
     setShaderUniformWithName(
         "uNormalMatrix",

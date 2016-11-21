@@ -48,7 +48,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
     Future future = new Future.value();
 
-    interaction = new Interaction(this);
+    interaction = new Interaction(this, gl);
 
     if(!_isSetuped){
       _isSetuped = true;

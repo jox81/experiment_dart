@@ -48,7 +48,7 @@ class SceneViewPBR extends Scene implements IEditScene{
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0, 10.0, 5.0)
-      ..cameraController = new CameraController();
+      ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
     //Lights

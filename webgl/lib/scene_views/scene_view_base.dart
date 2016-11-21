@@ -75,8 +75,8 @@ class SceneViewBase extends Scene implements IEditScene{
     new Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(100.0, 50.0, 0.0)/*
-      ..cameraController = new CameraController()*/;
+      ..position = new Vector3(100.0, 50.0, 0.0)
+      ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
     //Lights

@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/scene.dart';
 import 'dart:typed_data';
@@ -6,6 +7,8 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/application.dart';
 
 class Interaction {
+
+  RenderingContext gl;
   final Scene scene;
 
   //Debug div
@@ -14,7 +17,7 @@ class Interaction {
   //Interaction with keyboard
   List<bool> _currentlyPressedKeys;
 
-  Interaction(this.scene) {
+  Interaction(this.scene, this.gl) {
     _initEvents();
   }
 
@@ -78,14 +81,14 @@ class Interaction {
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-//      Vector3 worldPick = getWorldInfo(e);
-//      scene.createLine(new Vector3.all(0.0), worldPick);
+      Vector3 worldPick = getWorldInfo(e);
+      scene.createLine(new Vector3.all(0.0), worldPick);
     });
   }
 
   Vector3 getWorldInfo(MouseEvent e) {
     Vector3 worldPick = new Vector3.all(0.0);
-    unproject(scene.mainCamera.mvMatrix, 0, scene.application.width, 0,
+    unproject(scene.mainCamera.vpMatrix, 0, scene.application.width, 0,
         scene.application.height, e.offset.x, e.offset.y, 1.0, worldPick);
     debugInfo(worldPick.x, worldPick.y, worldPick.z);
     return worldPick;

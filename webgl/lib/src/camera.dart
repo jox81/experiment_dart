@@ -79,7 +79,7 @@ class Camera extends Object3d{
     return makeViewMatrix(position, targetPosition, upDirection);
   }
 
-  Matrix4 get mvMatrix {
+  Matrix4 get vpMatrix {
     return projectionMatrix * lookAtMatrix;
   }
 
@@ -131,14 +131,14 @@ class CameraController {
   //WheelEvent values
   num fov = radians(45.0);
 
-  CameraController();
+  CanvasElement canvas;
+
+  CameraController(this.canvas);
 
   void init(Camera camera) {
 
     xRot = 90 - camera.pitch;
     yRot = camera.phiAngle;
-
-    CanvasElement canvas = gl.canvas;
 
     // Assign a mouse down handler to the HTML element.
     canvas.onMouseDown.listen((ev) {
