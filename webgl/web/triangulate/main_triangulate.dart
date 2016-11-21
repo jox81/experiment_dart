@@ -15,7 +15,7 @@ void main() {
 
 void buildMeshData() {
 
-//  mesh.vertices = [
+//  List<num> vertices = [
 //    0.0,  0.0,  0.0,
 //    -2.0,  1.0,  0.0,
 //    -1.0,  2.0,  0.0,
@@ -42,7 +42,10 @@ void buildMeshData() {
 //    0.0,  2.0,  0.0,
 //    -1.0,  1.0,  0.0,
 //    1.0,  0.0,  0.0
+//
 //  ];
+//
+//  List<int> indices = triangulateShape(vertices);
 
   Mesh mesh = new Mesh();
   mesh.vertices = [
@@ -51,7 +54,11 @@ void buildMeshData() {
     2.0,  2.0,  0.0,
     2.0,  0.0,  0.0
     ];
-  mesh.triangulateMesh();
+//  mesh.triangulateMesh();
+  mesh.indices = [
+    0,1,2,
+    0,2,3
+  ];
   mesh.color = Colors.red;
 
   meshes.add(mesh);
