@@ -50,7 +50,7 @@ class Webgl01 {
     Mesh mesh = new Mesh()
     ..vertices = [
       0.0, 0.0, 0.0,
-      0.0, 0.0, 2.0,
+      0.0, 0.0, 3.0,
       2.0, 0.0, 0.0,
     ]
     ..vertexDimensions = 3
