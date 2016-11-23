@@ -3,6 +3,7 @@ import 'dart:math' as Math;
 import 'dart:html';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/object3d.dart';
+import 'package:webgl/src/utils.dart';
 
 class Camera extends Object3d{
   final double zNear;
@@ -179,10 +180,15 @@ class CameraController {
           //Todo : create first person eye Rotation with ctrl key
           camera.rotateOrbitCamera(yRot, xRot); //why inverted ?
 
+
         } else if (ev.button == 1) {
           camera.pan(deltaX, deltaY);
         }
       }
+
+      Vector3 v3w = Utils.screenToWorld(camera.lookAtMatrix, canvas.width, canvas.height, ev.offset.x, ev.offset.y);
+
+      print(v3w);
     });
 
     canvas.onMouseWheel.listen((WheelEvent event) {

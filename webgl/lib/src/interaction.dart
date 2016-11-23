@@ -2,9 +2,9 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/utils.dart';
 import 'dart:typed_data';
 import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/application.dart';
 
 class Interaction {
 
@@ -76,22 +76,14 @@ class Interaction {
 
     gl.canvas.onMouseMove.listen((MouseEvent e) {
 //      debugInfo(e.offset.x, e.offset.y,0);
-      Vector3 worldPick = getWorldInfo(e);
+      Vector3 worldPick = Utils.screenToWorld(scene.mainCamera.lookAtMatrix, scene.application.width, scene.application.height, e.offset.x, e.offset.y);
       debugInfo(worldPick.x, worldPick.y, worldPick.z);
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-      Vector3 worldPick = getWorldInfo(e);
+      Vector3 worldPick = Utils.screenToWorld(scene.mainCamera.lookAtMatrix, scene.application.width, scene.application.height, e.offset.x, e.offset.y);
       scene.createLine(new Vector3.all(0.0), worldPick);
     });
-  }
-
-  Vector3 getWorldInfo(MouseEvent e) {
-    Vector3 worldPick = new Vector3.all(0.0);
-    unproject(scene.mainCamera.vpMatrix, 0, scene.application.width, 0,
-        scene.application.height, e.offset.x, e.offset.y, 1.0, worldPick);
-    debugInfo(worldPick.x, worldPick.y, worldPick.z);
-    return worldPick;
   }
 
   void debugInfo(num posX, num posY, num posZ) {
