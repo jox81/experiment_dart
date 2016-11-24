@@ -125,6 +125,10 @@ class SceneViewBase extends Scene implements IEditScene{
     Mesh axis = await createAxis(this)
       ..name = 'origin';
 
+    Mesh point = await createPoint(materialPoint)
+      ..transform.translate(8.0, 5.0, 10.0);
+    meshes.add(point);
+
     //Line
     Mesh line = new Mesh.Line([
       new Vector3.all(0.0),
@@ -233,18 +237,6 @@ class SceneViewBase extends Scene implements IEditScene{
   }
 
   void addMesh(){
-
-    Random random = new Random();
-
-    // create cube
-    Mesh centerCube = new Mesh.Cube()
-      ..transform.translate(random.nextDouble() * 10, random.nextDouble() * 10, random.nextDouble() * 10)
-      ..transform.scale(0.1, 0.1, 0.1)
-      ..material = materials.firstWhere((m)=> m is MaterialBaseColor );
-    meshes.add(centerCube);
-  }
-
-  void addMeshScaled(){
 
     Random random = new Random();
 

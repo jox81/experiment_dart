@@ -6,6 +6,7 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/camera.dart';
 import 'dart:async';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -49,6 +50,10 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
+
+    addFrustrumCorners();
+
+
     //Material
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
     materials.add(materialPoint);
@@ -57,7 +62,8 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     materials.add(materialBase);
 
     Mesh axis = await createAxis();
-    Mesh points = await createPoints(materialPoint);
+    Mesh points = await createAxisPoints(materialPoint);
+    meshes.add(points);
 
     Mesh axis2 = await createAxis()
       ..transform.translate(5.0, 0.0, 0.0);
@@ -81,31 +87,38 @@ class SceneViewPrimitives extends Scene implements IEditScene{
 
   }
 
-  //Points
-  Future<Mesh> createPoints(MaterialPoint materialPoint) async {
-    //Material
+  ///Test point frusturm corner
+  Future addFrustrumCorners() async {
+
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
     materials.add(materialPoint);
 
-    Mesh mesh = new Mesh()
-      ..mode = GL.POINTS
-      ..vertices = [
-        0.0, 0.0, 0.0,
-        1.0, 0.0, 0.0,
-        0.0, 1.0, 0.0,
-        0.0, 0.0, 1.0,
-      ]
-      ..colors = [
-        1.0, 1.0, 0.0, 1.0,
-        1.0, 0.0, 0.0, 1.0,
-        0.0, 1.0, 0.0, 1.0,
-        0.0, 0.0, 1.0, 1.0,
-      ]
-      ..material = materialPoint;
+    Camera camera2 =
+    new Camera(radians(45.0), 1.0, 10.0)
+      ..aspectRatio = viewAspectRatio
+      ..targetPosition = new Vector3.zero()
+      ..position = new Vector3(20.0, 30.0, 50.0);
 
-    meshes.add(mesh);
+    final c0 = new Vector3.zero();
+    final c1 = new Vector3.zero();
+    final c2 = new Vector3.zero();
+    final c3 = new Vector3.zero();
+    final c4 = new Vector3.zero();
+    final c5 = new Vector3.zero();
+    final c6 = new Vector3.zero();
+    final c7 = new Vector3.zero();
 
-    return mesh;
+    List<Vector3> frustrumCorners = [c0,c1,c2,c3,c4,c5,c6,c7];
+
+    Frustum frustum =
+    new Frustum.matrix(camera2.vpMatrix);
+    frustum.calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
+
+    for(Vector3 corner in frustrumCorners){
+      Mesh points = await createPoint(materialPoint)
+        ..transform.translate(corner);
+      meshes.add(points);
+    }
   }
 
   Future<Mesh> createAxis() async {

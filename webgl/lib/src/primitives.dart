@@ -36,3 +36,41 @@ Future<Mesh> createAxis(Scene scene) async {
   return mesh;
 }
 
+//Points
+Future<Mesh> createAxisPoints(MaterialPoint materialPoint) async {
+
+  Mesh mesh = new Mesh()
+    ..mode = GL.POINTS
+    ..vertices = [
+      0.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0,
+    ]
+    ..colors = [
+      1.0, 1.0, 0.0, 1.0,
+      1.0, 0.0, 0.0, 1.0,
+      0.0, 1.0, 0.0, 1.0,
+      0.0, 0.0, 1.0, 1.0,
+    ]
+    ..material = materialPoint;
+
+  return mesh;
+}
+
+Future<Mesh> createPoint(MaterialPoint materialPoint) async {
+
+  Mesh mesh = new Mesh()
+    ..mode = GL.POINTS
+    ..vertices = [
+      0.0, 0.0, 0.0,
+    ]
+    ..colors = [
+      1.0, 1.0, 0.0, 1.0,
+    ]
+    ..material = materialPoint;
+
+  return mesh;
+}
+
+
