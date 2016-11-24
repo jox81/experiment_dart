@@ -72,7 +72,7 @@ class Camera extends Object3d{
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
   }
 
-  Matrix4 get projectionMatrix {
+  Matrix4 get perspectiveMatrix {
     return makePerspectiveMatrix(_fOV, aspectRatio, zNear, zFar);
   }
 
@@ -81,7 +81,7 @@ class Camera extends Object3d{
   }
 
   Matrix4 get vpMatrix {
-    return projectionMatrix * lookAtMatrix;
+    return perspectiveMatrix * lookAtMatrix;
   }
 
   void rotateOrbitCamera(num xAngleRot, num yAngleRot) {

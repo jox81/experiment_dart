@@ -165,7 +165,7 @@ class Webgl01 {
   /// Rendering part
   ///
   void _setMatrixUniforms() {
-    gl.uniformMatrix4fv(pMatrixUniform, false, camera.projectionMatrix.storage);
+    gl.uniformMatrix4fv(pMatrixUniform, false, camera.perspectiveMatrix.storage);
     gl.uniformMatrix4fv(mvMatrixUniform, false, _mvMatrix.storage);
   }
 

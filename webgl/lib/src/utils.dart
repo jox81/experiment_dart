@@ -123,9 +123,9 @@ class Utils{
     }
   }
 
-  static Vector3 screenToWorld(Matrix4 projectionMatrix, int screenWidth, int screenHeight, int screenX, int screenY) {
+  static Vector3 screenToWorld(Matrix4 cameraMatrix, int screenWidth, int screenHeight, int screenX, int screenY) {
     Vector3 worldPick = new Vector3.all(0.0);
-    unproject(projectionMatrix, 0, screenWidth, 0, screenHeight, screenX, screenY, 0.0, worldPick);
-    return new Vector3(worldPick.x, worldPick.y, worldPick.z);
+    unproject(cameraMatrix, 0, screenWidth, 0, screenHeight, screenX, screenY, 0.0, worldPick);
+    return new Vector3(-worldPick.x, worldPick.y, worldPick.z);
   }
 }

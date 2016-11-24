@@ -55,4 +55,17 @@ void main() {
         viewportY, viewportHeight, pickX, pickY, pickZ, pickWorld);
     print('$i : $pickWorld');
   }
+
+  final c0 = new Vector3.zero();
+  final c1 = new Vector3.zero();
+  final c2 = new Vector3.zero();
+  final c3 = new Vector3.zero();
+  final c4 = new Vector3.zero();
+  final c5 = new Vector3.zero();
+  final c6 = new Vector3.zero();
+  final c7 = new Vector3.zero();
+
+  Frustum frustum =
+  new Frustum.matrix(frustrumMatrix);
+  frustum.calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
 }
