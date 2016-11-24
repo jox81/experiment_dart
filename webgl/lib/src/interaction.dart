@@ -79,7 +79,7 @@ class Interaction {
       Matrix4 cameraMatix = scene.mainCamera.vpMatrix;
       Vector3 worldPick = Utils.screenToWorld(cameraMatix, scene.application.width, scene.application.height, e.offset.x, e.offset.y);
 
-      debugInfo(worldPick.x, worldPick.y, worldPick.z);
+//      debugInfo(worldPick.x, worldPick.y, worldPick.z);
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {

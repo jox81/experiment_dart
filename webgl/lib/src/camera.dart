@@ -186,9 +186,6 @@ class CameraController {
         }
       }
 
-      Vector3 v3w = Utils.screenToWorld(camera.lookAtMatrix, canvas.width, canvas.height, ev.offset.x, ev.offset.y);
-
-      print(v3w);
     });
 
     canvas.onMouseWheel.listen((WheelEvent event) {

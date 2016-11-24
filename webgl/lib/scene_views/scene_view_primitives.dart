@@ -13,11 +13,28 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPrimitives extends Scene implements IEditScene{
 
-  Map<String, EditableProperty> get properties =>{};
+  Camera camera2;
+  Map<String, EditableProperty> get properties =>{
+    'fov' : new EditableProperty<num>(()=> degrees(camera2.fOV), (num v)=> camera2.fOV = radians(v)),
+    'camera Pos x' : new EditableProperty<num>(()=> camera2.position.x, (num v)=> camera2.position.x = v),
+    'camera Pos y' : new EditableProperty<num>(()=> camera2.position.y, (num v)=> camera2.position.y = v),
+    'camera Pos z' : new EditableProperty<num>(()=> camera2.position.z, (num v)=> camera2.position.z = v),
+    'camera target Pos x' : new EditableProperty<num>(()=> camera2.targetPosition.x, (num v)=> camera2.targetPosition.x = v),
+    'camera target Pos y' : new EditableProperty<num>(()=> camera2.targetPosition.y, (num v)=> camera2.targetPosition.y = v),
+    'camera target Pos z' : new EditableProperty<num>(()=> camera2.targetPosition.z, (num v)=> camera2.targetPosition.z = v),
+    'updateCamera' : new EditableProperty<Function>(()=> updateCamera2, null),
+  };
 
   final num viewAspectRatio;
 
-  SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application){
+    camera2 =
+    new Camera(radians(37.0), 1.0, 5.0)
+      ..aspectRatio = viewAspectRatio
+      ..targetPosition = new Vector3(0.0, 0.0, -10.0)
+      ..position = new Vector3.zero();
+
+  }
 
   @override
   UpdateFunction updateFunction;
@@ -50,22 +67,20 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
-
-    addFrustrumCorners();
+    //frustrum
+    frustrumModel = await FrustrumModel.create(camera2.vpMatrix);
+    meshes.addAll(frustrumModel.frustrumCorners);
 
 
     //Material
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-    materials.add(materialPoint);
-
     MaterialBase materialBase = await MaterialBase.create();
-    materials.add(materialBase);
 
-    Mesh axis = await createAxis();
+    Mesh axis = await createAxis(this);
     Mesh points = await createAxisPoints(materialPoint);
     meshes.add(points);
 
-    Mesh axis2 = await createAxis()
+    Mesh axis2 = await createAxis(this)
       ..transform.translate(5.0, 0.0, 0.0);
 
     // create cube
@@ -84,71 +99,15 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       _lastTime = time;
     };
 
-
   }
 
-  ///Test point frusturm corner
-  Future addFrustrumCorners() async {
-
-    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-    materials.add(materialPoint);
-
-    Camera camera2 =
-    new Camera(radians(45.0), 1.0, 10.0)
-      ..aspectRatio = viewAspectRatio
-      ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 30.0, 50.0);
-
-    final c0 = new Vector3.zero();
-    final c1 = new Vector3.zero();
-    final c2 = new Vector3.zero();
-    final c3 = new Vector3.zero();
-    final c4 = new Vector3.zero();
-    final c5 = new Vector3.zero();
-    final c6 = new Vector3.zero();
-    final c7 = new Vector3.zero();
-
-    List<Vector3> frustrumCorners = [c0,c1,c2,c3,c4,c5,c6,c7];
-
-    Frustum frustum =
-    new Frustum.matrix(camera2.vpMatrix);
-    frustum.calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
-
-    for(Vector3 corner in frustrumCorners){
-      Mesh points = await createPoint(materialPoint)
-        ..transform.translate(corner);
-      meshes.add(points);
-    }
+  FrustrumModel frustrumModel;
+  updateCamera2() {
+    print('updateCamera');
+    frustrumModel.update(camera2.vpMatrix);
   }
 
-  Future<Mesh> createAxis() async {
-    //Material
-    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
-    materials.add(materialPoint);
-
-    Mesh mesh = new Mesh()
-      ..mode = GL.LINES
-      ..vertices = [
-        0.0, 0.0, 0.0,
-        1.0, 0.0, 0.0,
-        0.0, 0.0, 0.0,
-        0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 1.0,
-      ]
-      ..colors = [
-        1.0, 0.0, 0.0, 1.0,
-        1.0, 0.0, 0.0, 1.0,
-        0.0, 1.0, 0.0, 1.0,
-        0.0, 1.0, 0.0, 1.0,
-        0.0, 0.0, 1.0, 1.0,
-        0.0, 0.0, 1.0, 1.0,
-      ]
-      ..material = materialPoint;
-
-    meshes.add(mesh);
-
-    return mesh;
-  }
 }
+
+
 
