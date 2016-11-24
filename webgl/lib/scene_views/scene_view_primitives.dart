@@ -103,7 +103,6 @@ class SceneViewPrimitives extends Scene implements IEditScene{
 
   FrustrumModel frustrumModel;
   updateCamera2() {
-    print('updateCamera');
     frustrumModel.update(camera2.vpMatrix);
   }
 

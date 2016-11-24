@@ -101,8 +101,6 @@ class FrustrumModel{
 
   ///Test point frusturm corner
   Future _createFrustrumModel(Matrix4 cameraMatrix) async {
-
-    print('_createFrustrumModel');
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
 
     for(int i = 0; i < frustrumCornersVectors.length; i++){
@@ -114,14 +112,12 @@ class FrustrumModel{
   }
 
   void update(Matrix4 matrix) {
-    print('update');
     frustum = new Frustum.matrix(matrix);
     frustum.calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
 
     for(int i = 0; i < frustrumCornersVectors.length; i++){
       frustrumCorners[i]
         ..transform.setTranslation(frustrumCornersVectors[i]);
-      print(frustrumCorners[i].transform.getTranslation());
     }
   }
 }
