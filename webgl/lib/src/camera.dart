@@ -1,17 +1,39 @@
+import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'dart:html';
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/object3d.dart';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/utils.dart';
 
 class Camera extends Object3d{
+  double _fOV;
+  double get fOV => _fOV;
+  set fOV(num value) {
+    _fOV = value;
+    updateGizmo();
+  }
+
+  Vector3 _position = new Vector3(0.0, 1.0, 0.0);
+  Vector3 get position => _position;
+  set position(Vector3 value) {
+    _position = value;
+    updateGizmo();
+  }
+
+  Vector3 _targetPosition;
+  Vector3 get targetPosition => _targetPosition;
+  set targetPosition(Vector3 value) {
+    _targetPosition = value;
+    updateGizmo();
+  }
+
   final double zNear;
   final double zFar;
 
   double aspectRatio;
-  Vector3 position = new Vector3(0.0, 1.0, 0.0);
-  Vector3 targetPosition;
 
   Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
   Vector3 get frontDirection => targetPosition - position;
@@ -20,12 +42,6 @@ class Camera extends Object3d{
   Vector3 get xAxis => zAxis.cross(upDirection);
   Vector3 get yAxis => zAxis.cross(xAxis);
 
-  double _fOV;
-  double get fOV => _fOV;
-  set fOV(num value) {
-    _fOV = value;
-  }
-
   CameraController _cameraController;
 
   set cameraController(CameraController value) {
@@ -33,7 +49,10 @@ class Camera extends Object3d{
     _cameraController.init(this);
   }
 
-  Camera(this._fOV, this.zNear, this.zFar){
+  Camera._internal(this._fOV, this.zNear, this.zFar);
+
+  static  Future<Camera> create(num _fOV, num zNear, num zFar)async {
+    return new Camera._internal(_fOV, zNear, zFar);
   }
 
   void translate(Vector3 position) {
@@ -108,6 +127,12 @@ class Camera extends Object3d{
     position += yAxis * deltaY;
     targetPosition += xAxis * deltaX;
     targetPosition += yAxis * deltaY;
+  }
+
+  //FrustrumGizmo
+  IGizmo gizmo;
+  updateGizmo(){
+    gizmo?.updateGizmo();
   }
 }
 

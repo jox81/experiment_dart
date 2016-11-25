@@ -13,27 +13,26 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPrimitives extends Scene implements IEditScene{
 
+  //Todo : créer une liste déroulante de choix des meshes dans angular
   Camera camera2;
   Map<String, EditableProperty> get properties =>{
     'fov' : new EditableProperty<num>(()=> degrees(camera2.fOV), (num v)=> camera2.fOV = radians(v)),
-    'camera Pos x' : new EditableProperty<num>(()=> camera2.position.x, (num v)=> camera2.position.x = v),
-    'camera Pos y' : new EditableProperty<num>(()=> camera2.position.y, (num v)=> camera2.position.y = v),
-    'camera Pos z' : new EditableProperty<num>(()=> camera2.position.z, (num v)=> camera2.position.z = v),
-    'camera target Pos x' : new EditableProperty<num>(()=> camera2.targetPosition.x, (num v)=> camera2.targetPosition.x = v),
-    'camera target Pos y' : new EditableProperty<num>(()=> camera2.targetPosition.y, (num v)=> camera2.targetPosition.y = v),
-    'camera target Pos z' : new EditableProperty<num>(()=> camera2.targetPosition.z, (num v)=> camera2.targetPosition.z = v),
-    'updateCamera' : new EditableProperty<Function>(()=> updateCamera2, null),
+    'camera Pos x' : new EditableProperty<num>(()=> camera2.position.x, (num v)=> camera2.position = new Vector3(v, camera2.position.y, camera2.position.z)),
+    'camera Pos y' : new EditableProperty<num>(()=> camera2.position.y, (num v)=> camera2.position = new Vector3(camera2.position.x, v, camera2.position.z)),
+    'camera Pos z' : new EditableProperty<num>(()=> camera2.position.z, (num v)=> camera2.position = new Vector3(camera2.position.x, camera2.position.y, v)),
+    'camera target Pos x' : new EditableProperty<num>(()=> camera2.targetPosition.x, (num v)=> camera2.targetPosition = new Vector3(v, camera2.targetPosition.y, camera2.targetPosition.z)),
+    'camera target Pos y' : new EditableProperty<num>(()=> camera2.targetPosition.y, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, v, camera2.targetPosition.z)),
+    'camera target Pos z' : new EditableProperty<num>(()=> camera2.targetPosition.z, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, camera2.targetPosition.y, v)),
   };
 
   final num viewAspectRatio;
 
   SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application){
-    camera2 =
-    new Camera(radians(37.0), 1.0, 5.0)
+    camera2 = await
+    Camera.create(radians(37.0), 1.0, 5.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3(0.0, 0.0, -10.0)
       ..position = new Vector3.zero();
-
   }
 
   @override
@@ -59,18 +58,18 @@ class SceneViewPrimitives extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    Camera camera =
-    new Camera(radians(45.0), 0.1, 1000.0)
+    Camera camera =await
+    Camera.create(radians(45.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
       ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
-    //frustrum
-    frustrumModel = await FrustrumModel.create(camera2.vpMatrix);
-    meshes.addAll(frustrumModel.frustrumCorners);
 
+    //frustrum
+    camera2.gizmo = await FrustrumGizmo.create(camera2);
+    meshes.addAll(camera2.gizmo.gizmoMeshes);
 
     //Material
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
@@ -98,14 +97,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       //... animation here
       _lastTime = time;
     };
-
   }
-
-  FrustrumModel frustrumModel;
-  updateCamera2() {
-    frustrumModel.update(camera2.vpMatrix);
-  }
-
 }
 
 

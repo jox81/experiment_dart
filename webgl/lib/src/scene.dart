@@ -32,7 +32,9 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   final Application application;
 
   Scene(this.application){
-    mainCamera = new Camera(radians(37.0), 0.1, 1000.0)
+
+    mainCamera = await
+    Camera.create(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = application.viewAspectRatio
       ..targetPosition = new Vector3.zero();
   }

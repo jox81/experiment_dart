@@ -1,4 +1,6 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:async';
 import 'package:webgl/src/materials.dart';
@@ -73,9 +75,10 @@ Future<Mesh> createPoint(MaterialPoint materialPoint) async {
   return mesh;
 }
 
-class FrustrumModel{
+class FrustrumGizmo implements IGizmo{
 
-  Frustum frustum;
+  Camera _camera;
+  Matrix4 get _vpmatrix => _camera.vpMatrix;
 
   final c0 = new Vector3.zero();
   final c1 = new Vector3.zero();
@@ -85,39 +88,38 @@ class FrustrumModel{
   final c5 = new Vector3.zero();
   final c6 = new Vector3.zero();
   final c7 = new Vector3.zero();
-  List<Vector3> get frustrumCornersVectors => [c0,c1,c2,c3,c4,c5,c6,c7];
+  List<Vector3> get _frustrumCornersVectors => [c0,c1,c2,c3,c4,c5,c6,c7];
 
-  List<Mesh> frustrumCorners = [];
+  @override
+  List<Mesh> gizmoMeshes = [];
 
-  FrustrumModel._internal(Matrix4 matrix){
-    frustum = new Frustum.matrix(matrix);
-  }
+  FrustrumGizmo._internal();
 
-  static  Future<FrustrumModel> create(Matrix4 cameraMatrix)async {
-    FrustrumModel model = new FrustrumModel._internal(cameraMatrix);
-    await model._createFrustrumModel(cameraMatrix);
+  static  Future<FrustrumGizmo> create(Camera camera)async {
+    FrustrumGizmo model = new FrustrumGizmo._internal()
+    .._camera = camera;
+    await model._createFrustrumModel(camera.vpMatrix);
     return model;
   }
 
-  ///Test point frusturm corner
   Future _createFrustrumModel(Matrix4 cameraMatrix) async {
     MaterialPoint materialPoint = await MaterialPoint.create(5.0);
 
-    for(int i = 0; i < frustrumCornersVectors.length; i++){
-      frustrumCorners.add(await createPoint(materialPoint));
+    for(int i = 0; i < _frustrumCornersVectors.length; i++){
+      gizmoMeshes.add(await createPoint(materialPoint));
     }
 
-    update(cameraMatrix);
-
+    updateGizmo();
   }
 
-  void update(Matrix4 matrix) {
-    frustum = new Frustum.matrix(matrix);
-    frustum.calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
+  @override
+  void updateGizmo() {
+    new Frustum.matrix(_vpmatrix)
+      ..calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
 
-    for(int i = 0; i < frustrumCornersVectors.length; i++){
-      frustrumCorners[i]
-        ..transform.setTranslation(frustrumCornersVectors[i]);
+    for(int i = 0; i < _frustrumCornersVectors.length; i++){
+      gizmoMeshes[i]
+        ..transform.setTranslation(_frustrumCornersVectors[i]);
     }
   }
 }
