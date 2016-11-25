@@ -33,8 +33,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
   Scene(this.application){
 
-    mainCamera = await
-    Camera.create(radians(37.0), 0.1, 1000.0)
+    mainCamera = new Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = application.viewAspectRatio
       ..targetPosition = new Vector3.zero();
   }
@@ -44,7 +43,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   MaterialBaseColor debugMaterialBaseColor;
 
   Future setup() async{
-    debugMaterialBaseColor = await MaterialBaseColor.create(
+    debugMaterialBaseColor = new MaterialBaseColor(
         new Vector3(1.0, 1.0, 0.0));
     materials.add(debugMaterialBaseColor);
 

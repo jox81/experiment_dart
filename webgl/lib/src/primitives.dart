@@ -7,7 +7,7 @@ import 'package:webgl/src/materials.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/scene.dart';
 
-Future<Mesh> createAxis(Scene scene) async {
+Mesh createAxis(Scene scene) {
 
   //Material
   MaterialPoint materialPoint = new MaterialPoint(5.0);
@@ -39,7 +39,7 @@ Future<Mesh> createAxis(Scene scene) async {
 }
 
 //Points
-Future<Mesh> createAxisPoints(MaterialPoint materialPoint) async {
+Mesh createAxisPoints(MaterialPoint materialPoint) {
 
   Mesh mesh = new Mesh()
     ..mode = GL.POINTS
@@ -60,7 +60,7 @@ Future<Mesh> createAxisPoints(MaterialPoint materialPoint) async {
   return mesh;
 }
 
-Future<Mesh> createPoint(MaterialPoint materialPoint) async {
+Mesh createPoint(MaterialPoint materialPoint) {
 
   Mesh mesh = new Mesh()
     ..mode = GL.POINTS
@@ -93,20 +93,16 @@ class FrustrumGizmo implements IGizmo{
   @override
   List<Mesh> gizmoMeshes = [];
 
-  FrustrumGizmo._internal();
-
-  static  Future<FrustrumGizmo> create(Camera camera)async {
-    FrustrumGizmo model = new FrustrumGizmo._internal()
-    .._camera = camera;
-    await model._createFrustrumModel(camera.vpMatrix);
-    return model;
+  FrustrumGizmo(Camera camera) {
+    _camera = camera;
+    _createFrustrumModel(camera.vpMatrix);
   }
 
-  Future _createFrustrumModel(Matrix4 cameraMatrix) async {
+  _createFrustrumModel(Matrix4 cameraMatrix) {
     MaterialPoint materialPoint = new MaterialPoint(5.0);
 
     for(int i = 0; i < _frustrumCornersVectors.length; i++){
-      gizmoMeshes.add(await createPoint(materialPoint));
+      gizmoMeshes.add(createPoint(materialPoint));
     }
 
     updateGizmo();

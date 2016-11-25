@@ -28,11 +28,11 @@ class SceneViewPrimitives extends Scene implements IEditScene{
   final num viewAspectRatio;
 
   SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application){
-    camera2 = await
-    Camera.create(radians(37.0), 1.0, 5.0)
+    camera2 = new Camera(radians(37.0), 1.0, 5.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3(0.0, 0.0, -10.0)
       ..position = new Vector3.zero();
+    meshes.addAll(camera2.gizmo.gizmoMeshes);
   }
 
   @override
@@ -58,28 +58,22 @@ class SceneViewPrimitives extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    Camera camera =await
-    Camera.create(radians(45.0), 0.1, 1000.0)
+    Camera camera = new Camera(radians(45.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
       ..cameraController = new CameraController(gl.canvas);
     mainCamera = camera;
 
-
-    //frustrum
-    camera2.gizmo = await FrustrumGizmo.create(camera2);
-    meshes.addAll(camera2.gizmo.gizmoMeshes);
-
     //Material
     MaterialPoint materialPoint = new MaterialPoint(5.0);
-    MaterialBase materialBase = await MaterialBase.create();
+    MaterialBase materialBase = new MaterialBase();
 
-    Mesh axis = await createAxis(this);
-    Mesh points = await createAxisPoints(materialPoint);
+    Mesh axis = createAxis(this);
+    Mesh points = createAxisPoints(materialPoint);
     meshes.add(points);
 
-    Mesh axis2 = await createAxis(this)
+    Mesh axis2 = createAxis(this)
       ..transform.translate(5.0, 0.0, 0.0);
 
     // create cube

@@ -13,21 +13,21 @@ class Camera extends Object3d{
   double get fOV => _fOV;
   set fOV(num value) {
     _fOV = value;
-    updateGizmo();
+    _updateGizmo();
   }
 
   Vector3 _position = new Vector3(0.0, 1.0, 0.0);
   Vector3 get position => _position;
   set position(Vector3 value) {
     _position = value;
-    updateGizmo();
+    _updateGizmo();
   }
 
   Vector3 _targetPosition;
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
-    updateGizmo();
+    _updateGizmo();
   }
 
   final double zNear;
@@ -49,11 +49,7 @@ class Camera extends Object3d{
     _cameraController.init(this);
   }
 
-  Camera._internal(this._fOV, this.zNear, this.zFar);
-
-  static  Future<Camera> create(num _fOV, num zNear, num zFar)async {
-    return new Camera._internal(_fOV, zNear, zFar);
-  }
+  Camera(this._fOV, this.zNear, this.zFar);
 
   void translate(Vector3 position) {
     this.position = position;
@@ -130,8 +126,15 @@ class Camera extends Object3d{
   }
 
   //FrustrumGizmo
-  IGizmo gizmo;
-  updateGizmo(){
+  IGizmo _gizmo;
+  IGizmo get gizmo {
+    if(_gizmo == null){
+      _gizmo = new FrustrumGizmo(this);
+    }
+
+    return _gizmo;
+  }
+  _updateGizmo(){
     gizmo?.updateGizmo();
   }
 }

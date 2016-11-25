@@ -71,8 +71,8 @@ class SceneViewBase extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    Camera camera = await
-    Camera.create(radians(37.0), 0.1, 1000.0)
+    Camera camera = new
+    Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(100.0, 50.0, 0.0)
@@ -96,36 +96,34 @@ class SceneViewBase extends Scene implements IEditScene{
     MaterialPoint materialPoint = new MaterialPoint(4.0);
     materials.add(materialPoint);
 
-    MaterialBase materialBase = await MaterialBase.create();
+    MaterialBase materialBase = new MaterialBase();
     materials.add(materialBase);
 
-    MaterialBaseColor materialBaseColor = await MaterialBaseColor.create(
+    MaterialBaseColor materialBaseColor = new MaterialBaseColor(
         new Vector3(1.0, 1.0, 0.0));
     materials.add(materialBaseColor);
 
-    MaterialBaseVertexColor materialBaseVertexColor = await MaterialBaseVertexColor
-        .create();
+    MaterialBaseVertexColor materialBaseVertexColor = new MaterialBaseVertexColor();
     materials.add(materialBaseVertexColor);
 
-    MaterialBaseTexture materialBaseTexture = await MaterialBaseTexture
-        .create();
+    MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture();
     materials.add(materialBaseTexture);
 
     MaterialBaseTextureNormal materialBaseTextureNormal =
-    await MaterialBaseTextureNormal.create()
+    new MaterialBaseTextureNormal()
       ..ambientColor = ambientLight.color
       ..directionalLight = directionalLight;
     materialBaseTextureNormal..useLighting = useLighting;
     materials.add(materialBaseTextureNormal);
 
-    MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
+    MaterialPBR materialPBR = new MaterialPBR(pointLight);
     materials.add(materialPBR);
 
     //Meshes
-    Mesh axis = await createAxis(this)
+    Mesh axis = createAxis(this)
       ..name = 'origin';
 
-    Mesh point = await createPoint(materialPoint)
+    Mesh point = createPoint(materialPoint)
       ..transform.translate(8.0, 5.0, 10.0);
     meshes.add(point);
 
@@ -196,8 +194,7 @@ class SceneViewBase extends Scene implements IEditScene{
         .toList()
       ..textureCoords = susanJson['meshes'][0]['texturecoords'][0]
       ..vertexNormals = susanJson['meshes'][0]['normals'];
-    MaterialBaseTexture susanMaterialBaseTexture = await MaterialBaseTexture
-        .create()
+    MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
       ..texture = await TextureUtils.createTextureFromFile(
           '../objects/susan/susan_texture.png');
     susanMesh.material = susanMaterialBaseTexture;

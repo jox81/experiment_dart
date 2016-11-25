@@ -66,7 +66,7 @@ class Webgl01 {
   }
 
   Future setupCamera() async {
-    camera =await Camera.create(radians(45.0), 0.1, 100.0)
+    camera = new Camera(radians(45.0), 0.1, 100.0)
       ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0,5.0,10.0)

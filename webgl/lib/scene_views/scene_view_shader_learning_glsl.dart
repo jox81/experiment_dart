@@ -40,7 +40,7 @@ class SceneViewShaderLearning01 extends Scene implements IEditScene{
 
     backgroundColor = new Vector4(0.0, 0.0, 0.0, 1.0);
 
-    Mesh mesh = await baseSurface();
+    Mesh mesh = baseSurface();
     materials.add(mesh.material);
     meshes.add(mesh);
 

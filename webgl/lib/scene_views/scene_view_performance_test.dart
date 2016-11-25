@@ -65,8 +65,7 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    Camera camera = await
-    Camera.create(radians(37.0), 0.1, 1000.0)
+    Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, -50.0)
@@ -96,7 +95,7 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
 //  await materialBaseTextureNormal.addTexture("../images/crate.gif");
 //  application.materials.add(materialBaseTextureNormal);
 
-    MaterialPBR materialPBR = await MaterialPBR.create(pointLight);
+    MaterialPBR materialPBR = new MaterialPBR(pointLight);
     materials.add(materialPBR);
 
     //Meshes

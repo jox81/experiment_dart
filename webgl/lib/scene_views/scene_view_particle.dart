@@ -49,7 +49,7 @@ class SceneViewParticle extends Scene implements IEditScene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    Mesh mesh = await experiment(scene);
+    Mesh mesh = experiment(scene);
     materials.add(mesh.material);
     meshes.add(mesh);
 

@@ -43,8 +43,7 @@ class SceneViewFrameBuffer extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    Camera camera = await
-    Camera.create(radians(37.0), 0.1, 1000.0)
+    Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(50.0, 50.0, 50.0)
@@ -57,7 +56,7 @@ class SceneViewFrameBuffer extends Scene implements IEditScene{
 
     //
     MaterialBaseTextureNormal materialBaseTextureNormal =
-    await MaterialBaseTextureNormal.create()
+    new MaterialBaseTextureNormal()
       ..ambientColor = ambientLight.color
       ..directionalLight = directionalLight;
     materials.add(materialBaseTextureNormal);
