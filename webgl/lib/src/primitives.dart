@@ -80,6 +80,9 @@ class FrustrumGizmo implements IGizmo{
   Camera _camera;
   Matrix4 get _vpmatrix => _camera.vpMatrix;
 
+  Vector4 positionColor = new Vector4(0.0,128.0,255.0,1.0);
+  Vector4 frustrumColor = new Vector4(0.0,0.0,255.0,1.0);
+
   final c0 = new Vector3.zero();
   final c1 = new Vector3.zero();
   final c2 = new Vector3.zero();
@@ -99,11 +102,14 @@ class FrustrumGizmo implements IGizmo{
   }
 
   _createFrustrumModel(Matrix4 cameraMatrix) {
-    MaterialPoint materialPoint = new MaterialPoint(5.0);
+    MaterialPoint materialPoint = new MaterialPoint(5.0, color:frustrumColor);
 
     for(int i = 0; i < _frustrumCornersVectors.length; i++){
       gizmoMeshes.add(createPoint(materialPoint));
     }
+
+    gizmoMeshes.add(createPoint(new MaterialPoint(5.0, color:positionColor)));//position
+    gizmoMeshes.add(createPoint(new MaterialPoint(5.0, color:positionColor)));//target
 
     updateGizmo();
   }
@@ -117,5 +123,9 @@ class FrustrumGizmo implements IGizmo{
       gizmoMeshes[i]
         ..transform.setTranslation(_frustrumCornersVectors[i]);
     }
+
+    gizmoMeshes[8].transform.setTranslation(_camera.position);
+    gizmoMeshes[9].transform.setTranslation(_camera.targetPosition);
+
   }
 }

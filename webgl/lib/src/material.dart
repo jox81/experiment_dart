@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:web_gl';
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
@@ -140,21 +141,20 @@ abstract class Material {
       if(activeInfo != null) {
         switch (activeInfo.typeName) {
           case 'FLOAT_VEC3':
-
+            break;
+          case 'FLOAT_VEC4':
+            Vector4 vector4Value = data;
+            gl.vertexAttrib4f(attributes[attributName], vector4Value.x, vector4Value.y, vector4Value.z, vector4Value.w);
             break;
           case 'FLOAT':
               gl.vertexAttrib1f(attributes[attributName], data);
             break;
-
           default:
             print(
                 'setShaderAttributWithName not set in material.dart for : ${activeInfo.typeName}');
             break;
         }
       }
-
-
-
     }
   }
 

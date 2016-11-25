@@ -2,10 +2,8 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:vector_math/vector_math.dart';
-import 'dart:async';
 import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/utils.dart';
 import 'dart:web_gl';
 import 'package:webgl/src/utils_shader.dart';
 
@@ -35,20 +33,24 @@ class MaterialPoint extends Material {
 
   final List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
+  final Vector4 color;
 
-  MaterialPoint._internal(String vsSource, String fsSource, this.pointSize)
+  MaterialPoint._internal(String vsSource, String fsSource, this.pointSize, this.color)
       : super(vsSource, fsSource);
 
-  factory MaterialPoint(num pointSize){
+  factory MaterialPoint(num pointSize,{Vector4 color:null}){
     ShaderSource shaderSource = Application.shadersSources['material_point'];
-    return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize);
+    return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize, color);
   }
 
   setShaderAttributs(Mesh mesh) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
     setShaderAttributWithName(
-        'aVertexColor', arrayBuffer:  mesh.colors, dimension : mesh.colorDimensions);
+        'aVertexColor',
+        arrayBuffer: color == null ? mesh.colors : null,
+        data: color,
+        dimension : mesh.colorDimensions);
   }
 
   setShaderUniforms(Mesh mesh) {
