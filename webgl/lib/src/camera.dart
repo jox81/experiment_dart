@@ -7,6 +7,10 @@ import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/primitives.dart';
 
+
+//Remember
+//Matrix4  _mvMatrix = mainCamera.lookAtMatrix * mesh.transform;
+
 class Camera extends Object3d{
   double _fOV;
   double get fOV => _fOV;
