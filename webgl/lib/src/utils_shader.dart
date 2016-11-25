@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:web_gl';
 import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/utils.dart';
 
 class ActiveInfoCustom{
@@ -49,7 +48,7 @@ class UtilsShader {
     0x1406: 'FLOAT'
   };
 
-  static ProgramInfo getProgramInfo(program) {
+  static ProgramInfo getProgramInfo(RenderingContext gl, Program program) {
     ProgramInfo result = new ProgramInfo();
 
     // Loop through active attributes
@@ -77,6 +76,52 @@ class UtilsShader {
 }
 
 class ShaderSource{
+  static Map<String , List<String>> shadersPath = {
+    'material_point' :[
+      '/application/shaders/material_point/material_point.vs.glsl',
+      '/application/shaders/material_point/material_point.fs.glsl'
+    ],
+    'material_base' :[
+      '/application/shaders/material_base/material_base.vs.glsl',
+      '/application/shaders/material_base/material_base.fs.glsl'
+    ],
+    'material_base_color' :[
+      '/application/shaders/material_base_color/material_base_color.vs.glsl',
+      '/application/shaders/material_base_color/material_base_color.fs.glsl'
+    ],
+    'material_base_vertex_color' :[
+      '/application/shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl',
+      '/application/shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl'
+    ],
+    'material_base_texture' :[
+      '/application/shaders/material_base_texture/material_base_texture.vs.glsl',
+      '/application/shaders/material_base_texture/material_base_texture.fs.glsl'
+    ],
+    'material_base_texture_normal' :[
+      '/application/shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl',
+      '/application/shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl'
+    ],
+    'material_pbr' :[
+      '/application/shaders/material_pbr/material_pbr.vs.glsl',
+      '/application/shaders/material_pbr/material_pbr.fs.glsl'
+    ]
+  };
+  static Map<String, ShaderSource> sources = new Map();
+
+  static Future loadShaders() async {
+
+    for(String key in shadersPath.keys){
+
+      ShaderSource shaderSource = new ShaderSource()
+        ..shaderType = key
+        ..vertexShaderPath = shadersPath[key][0]
+        ..fragmentShaderPath = shadersPath[key][1];
+      await shaderSource._loadShader();
+
+      sources[shaderSource.shaderType] = shaderSource;
+    }
+  }
+
   String shaderType;
 
   String vertexShaderPath;
@@ -87,9 +132,10 @@ class ShaderSource{
 
   ShaderSource();
 
-  Future loadShader()async {
+  Future _loadShader()async {
     vsCode = await Utils.loadGlslShader(vertexShaderPath);
     fsCode = await Utils.loadGlslShader(fragmentShaderPath);
   }
 
 }
+

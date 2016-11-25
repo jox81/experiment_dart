@@ -1,12 +1,11 @@
-import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'dart:html';
-import 'package:webgl/src/application.dart';
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
+import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/primitives.dart';
-import 'package:webgl/src/utils.dart';
 
 class Camera extends Object3d{
   double _fOV;
@@ -125,6 +124,13 @@ class Camera extends Object3d{
     targetPosition += yAxis * deltaY;
   }
 
+  @override
+  void render() {
+    for(Mesh mesh in _gizmo.gizmoMeshes){
+      mesh.render();
+    }
+  }
+
   //FrustrumGizmo
   IGizmo _gizmo;
   IGizmo get gizmo {
@@ -137,6 +143,7 @@ class Camera extends Object3d{
   _updateGizmo(){
     gizmo?.updateGizmo();
   }
+
 }
 
 // A simple camera controller which uses an HTML element as the event
@@ -160,9 +167,8 @@ class CameraController {
   //WheelEvent values
   num fov = radians(45.0);
 
-  CanvasElement canvas;
 
-  CameraController(this.canvas);
+  CameraController();
 
   void init(Camera camera) {
 
@@ -170,19 +176,19 @@ class CameraController {
     yRot = camera.phiAngle;
 
     // Assign a mouse down handler to the HTML element.
-    canvas.onMouseDown.listen((ev) {
+    gl.canvas.onMouseDown.listen((ev) {
       dragging = true;
       currentX = ev.client.x;
       currentY = ev.client.y;
     });
 
     // Assign a mouse up handler to the HTML element.
-    canvas.onMouseUp.listen((MouseEvent ev) {
+    gl.canvas.onMouseUp.listen((MouseEvent ev) {
       dragging = false;
     });
 
     // Assign a mouse move handler to the HTML element.
-    canvas.onMouseMove.listen((MouseEvent ev) {
+    gl.canvas.onMouseMove.listen((MouseEvent ev) {
       if (dragging) {
         // Determine how far we have moved since the last mouse move event.
         int tempCurX = ev.client.x;
@@ -216,7 +222,7 @@ class CameraController {
 
     });
 
-    canvas.onMouseWheel.listen((WheelEvent event) {
+    gl.canvas.onMouseWheel.listen((WheelEvent event) {
       //Todo add zAxis translation
 
       //Todo with ctrl key..May switch behaviors

@@ -5,6 +5,7 @@ import 'package:webgl/src/mesh.dart';
 import 'dart:async';
 import 'package:webgl/src/materials.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/scene.dart';
 
 Mesh createAxis(Scene scene) {
@@ -131,5 +132,35 @@ class FrustrumGizmo implements IGizmo{
     gizmoMeshes[8].transform.setTranslation(_camera.position);
     gizmoMeshes[9].transform.setTranslation(_camera.targetPosition);
 
+  }
+}
+
+
+class CutomObject extends Object3d{
+
+  CutomObject(Mesh mesh){
+    super.mesh = mesh;
+  }
+
+  @override
+  void render() {
+    mesh.render();
+  }
+
+}
+
+class Line extends Object3d{
+
+  Vector3 point1, point2;
+
+  Line(this.point1, this.point2){
+    mesh = new Mesh.Line([point1, point2])
+    ..material = new MaterialBaseColor(
+        new Vector3(1.0, 0.0, 1.0));
+  }
+
+  @override
+  void render() {
+    mesh.render();
   }
 }

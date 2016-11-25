@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils.dart';
 import 'dart:typed_data';
@@ -28,7 +29,7 @@ class Interaction {
     if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
       if ((elementDebugInfoText != null)) {
         elementDebugInfoText.text =
-            "Camera Position: ${scene.mainCamera.position}";
+            "Camera Position: ${mainCamera.position}";
         print(event.keyCode);
       }
     } else {}
@@ -47,19 +48,19 @@ class Interaction {
   void _handleKeys() {
     if (_currentlyPressedKeys[KeyCode.UP]) {
       // Key Up
-      scene.mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
+      mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
     }
     if (_currentlyPressedKeys[KeyCode.DOWN]) {
       // Key Down
-      scene.mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
+      mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
     }
     if (_currentlyPressedKeys[KeyCode.LEFT]) {
       // Key Up
-      scene.mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
+      mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
     }
     if (_currentlyPressedKeys[KeyCode.RIGHT]) {
       // Key Down
-      scene.mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
+      mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
     }
   }
 
@@ -76,14 +77,14 @@ class Interaction {
 
     gl.canvas.onMouseMove.listen((MouseEvent e) {
 //      debugInfo(e.offset.x, e.offset.y,0);
-      Matrix4 cameraMatix = scene.mainCamera.vpMatrix;
+      Matrix4 cameraMatix = mainCamera.vpMatrix;
       Vector3 worldPick = Utils.screenToWorld(cameraMatix, scene.application.width, scene.application.height, e.offset.x, e.offset.y);
 
 //      debugInfo(worldPick.x, worldPick.y, worldPick.z);
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-      Matrix4 cameraMatix = scene.mainCamera.vpMatrix;
+      Matrix4 cameraMatix = mainCamera.vpMatrix;
       Vector3 worldPick = Utils.screenToWorld(cameraMatix, scene.application.width, scene.application.height, e.offset.x, e.offset.y);
 //      scene.createLine(new Vector3.all(0.0), worldPick);
     });

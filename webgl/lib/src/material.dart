@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/application.dart';
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
@@ -12,11 +12,13 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
 
 abstract class Material {
+  static bool debugging = false;
+
   /// GLSL Pragmas
   static const String GLSL_PRAGMA_DEBUG_ON = "#pragma debug(on)\n";
   static const String GLSL_PRAGMA_DEBUG_OFF = "#pragma debug(off)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_ON =
-      "#pragma optimize(on)\n"; //Default
+  "#pragma optimize(on)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
 
   String name;
@@ -34,11 +36,11 @@ abstract class Material {
   Map<String, Buffer> buffers = new Map();
 
   Material(vsSource, fsSource) {
-    vsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
-    fsSource = ((Application.debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
+    vsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
+    fsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     initShaderProgram(vsSource, fsSource);
 
-    programInfo = UtilsShader.getProgramInfo(program);
+    programInfo = UtilsShader.getProgramInfo(gl, program);
     attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
     uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
 

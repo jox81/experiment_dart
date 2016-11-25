@@ -1,5 +1,5 @@
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/material.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
@@ -39,7 +39,7 @@ class MaterialPoint extends Material {
       : super(vsSource, fsSource);
 
   factory MaterialPoint(num pointSize,{Vector4 color:null}){
-    ShaderSource shaderSource = Application.shadersSources['material_point'];
+    ShaderSource shaderSource = ShaderSource.sources['material_point'];
     return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize, color);
   }
 
@@ -55,9 +55,9 @@ class MaterialPoint extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
     setShaderUniformWithName("pointSize", pointSize);
   }
 }
@@ -70,7 +70,7 @@ class MaterialBase extends Material {
       : super(vsSource, fsSource);
 
   factory MaterialBase(){
-    ShaderSource shaderSource = Application.shadersSources['material_base'];
+    ShaderSource shaderSource = ShaderSource.sources['material_base'];
     return new MaterialBase._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
@@ -82,9 +82,9 @@ class MaterialBase extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
   }
 }
 
@@ -99,7 +99,7 @@ class MaterialBaseColor extends Material {
       : super(vsSource, fsSource);
 
   factory MaterialBaseColor(Vector3 color){
-    ShaderSource shaderSource = Application.shadersSources['material_base_color'];
+    ShaderSource shaderSource = ShaderSource.sources['material_base_color'];
     return new MaterialBaseColor._internal(shaderSource.vsCode, shaderSource.fsCode, color);
   }
 
@@ -111,9 +111,9 @@ class MaterialBaseColor extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
     setShaderUniformWithName("uColor", color.storage);
   }
 }
@@ -126,7 +126,7 @@ class MaterialBaseVertexColor extends Material {
       : super(vsSource, fsSource);
 
  factory MaterialBaseVertexColor(){
-   ShaderSource shaderSource = Application.shadersSources['material_base_vertex_color'];
+   ShaderSource shaderSource = ShaderSource.sources['material_base_vertex_color'];
    return new MaterialBaseVertexColor._internal(shaderSource.vsCode, shaderSource.fsCode);
  }
 
@@ -140,9 +140,9 @@ class MaterialBaseVertexColor extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
   }
 }
 
@@ -157,7 +157,7 @@ class MaterialBaseTexture extends Material {
       : super(vsSource, fsSource);
 
   factory MaterialBaseTexture(){
-    ShaderSource shaderSource = Application.shadersSources['material_base_texture'];
+    ShaderSource shaderSource = ShaderSource.sources['material_base_texture'];
     return new MaterialBaseTexture._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
@@ -174,9 +174,9 @@ class MaterialBaseTexture extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
     setShaderUniformWithName('uSampler', 0);
   }
 
@@ -201,7 +201,7 @@ class MaterialBaseTextureNormal extends Material {
       : super(vsSource, fsSource);
 
   factory MaterialBaseTextureNormal(){
-    ShaderSource shaderSource = Application.shadersSources['material_base_texture_normal'];
+    ShaderSource shaderSource = ShaderSource.sources['material_base_texture_normal'];
     return new MaterialBaseTextureNormal._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
@@ -221,12 +221,12 @@ class MaterialBaseTextureNormal extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
 
     Matrix4 mvInverse = new Matrix4.identity();
-    mvInverse.copyInverse(scene.mvMatrix);
+    mvInverse.copyInverse(mvMatrix);
     Matrix3 normalMatrix = mvInverse.getRotation();
 
     normalMatrix.transpose();
@@ -273,7 +273,7 @@ class MaterialPBR extends Material {
       : super(vsSource, fsSource);
 
   factory MaterialPBR(PointLight pointLight){
-    ShaderSource shaderSource = Application.shadersSources['material_pbr'];
+    ShaderSource shaderSource = ShaderSource.sources['material_pbr'];
     return new MaterialPBR._internal(shaderSource.vsCode, shaderSource.fsCode, pointLight);
   }
 
@@ -287,13 +287,13 @@ class MaterialPBR extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", scene.mvMatrix.storage);
+        "uMVMatrix", mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", scene.mainCamera.vpMatrix.storage);
+        "uPMatrix", mainCamera.vpMatrix.storage);
 
     setShaderUniformWithName(
         "uNormalMatrix",
-        new Matrix4.inverted(scene.mvMatrix)
+        new Matrix4.inverted(mvMatrix)
             .transposed()
             .getRotation()
             .storage);

@@ -4,6 +4,11 @@ import 'package:webgl/src/object3d.dart';
 class Light extends Object3d{
   Vector3 color;
   Light();
+
+  @override
+  void render() {
+    // TODO: implement render
+  }
 }
 
 class AmbientLight extends Light{

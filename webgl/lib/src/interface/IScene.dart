@@ -7,7 +7,6 @@ typedef void UpdateFunction(num time);
 typedef void UpdateUserInput();
 
 abstract class IUpdatableScene{
-  Camera get mainCamera; //mainCamera.matrix.storage ==> projection Matrix
   Vector4 get backgroundColor;
 
   updateUserInput();

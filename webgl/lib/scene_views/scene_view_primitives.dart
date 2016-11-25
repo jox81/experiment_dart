@@ -2,6 +2,7 @@ import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/camera.dart';
@@ -62,7 +63,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       ..aspectRatio = viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
-      ..cameraController = new CameraController(gl.canvas);
+      ..cameraController = new CameraController();
     mainCamera = camera;
 
     //Material

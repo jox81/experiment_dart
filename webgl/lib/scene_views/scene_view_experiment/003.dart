@@ -1,13 +1,11 @@
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
-import 'package:webgl/src/application.dart';
-import 'dart:math';
-import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
 import 'dart:web_gl';
-import 'dart:html';
+
 Future<Mesh> experiment() async {
 
   String vs = '''

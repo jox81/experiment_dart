@@ -2,22 +2,17 @@ import 'dart:async';
 import 'dart:web_gl';
 import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/utils_shader.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
 
-RenderingContext get gl => Application._gl;
 Scene get scene => Application._instance._currentScene;
 
 class Application {
   static const bool debugging = false;
-
-  static RenderingContext _gl;
-
-  static Map<String, ShaderSource> shadersSources = new Map();
 
   CanvasElement _canvas;
 
@@ -33,63 +28,16 @@ class Application {
 
     if (_instance == null) {
       _instance = new Application._internal(canvas);
-      await _instance.loadShaders();
+      await ShaderSource.loadShaders();
     }
 
     return _instance;
-  }
-
-  Future loadShaders() async {
-
-    Map<String , List<String>> shadersPath = {
-      'material_point' :[
-        '../shaders/material_point/material_point.vs.glsl',
-        '../shaders/material_point/material_point.fs.glsl'
-      ],
-      'material_base' :[
-        '../shaders/material_base/material_base.vs.glsl',
-        '../shaders/material_base/material_base.fs.glsl'
-      ],
-      'material_base_color' :[
-        '../shaders/material_base_color/material_base_color.vs.glsl',
-        '../shaders/material_base_color/material_base_color.fs.glsl'
-      ],
-      'material_base_vertex_color' :[
-        '../shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl',
-        '../shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl'
-      ],
-      'material_base_texture' :[
-        '../shaders/material_base_texture/material_base_texture.vs.glsl',
-        '../shaders/material_base_texture/material_base_texture.fs.glsl'
-      ],
-      'material_base_texture_normal' :[
-        '../shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl',
-        '../shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl'
-      ],
-      'material_pbr' :[
-        '../shaders/material_pbr/material_pbr.vs.glsl',
-        '../shaders/material_pbr/material_pbr.fs.glsl'
-      ]
-    };
-
-    for(String key in shadersPath.keys){
-
-      ShaderSource shaderSource = new ShaderSource()
-        ..shaderType = key
-        ..vertexShaderPath = shadersPath[key][0]
-        ..fragmentShaderPath = shadersPath[key][1];
-      await shaderSource.loadShader();
-
-      shadersSources[shaderSource.shaderType] = shaderSource;
-    }
-
   }
 
   Application._internal(this._canvas) {
     _initGL(_canvas);
     _initEvents();
     _resizeCanvas();
-
   }
 
   void _initGL(CanvasElement canvas) {
@@ -104,9 +52,9 @@ class Application {
     };
     for (int i = 0; i < names.length; ++i) {
       try {
-        _gl = canvas.getContext(names[i], options); //Normal context
+        gl = canvas.getContext(names[i], options); //Normal context
         if (debugging) {
-          _gl = WebGLDebugUtils.makeDebugContext(gl, throwOnGLError,
+          gl = WebGLDebugUtils.makeDebugContext(gl, throwOnGLError,
               logAndValidate); //Kronos debug context using .js
         }
       } catch (e) {}
@@ -146,7 +94,7 @@ class Application {
       gl.canvas.width  = displayWidth;
       gl.canvas.height = displayHeight;
 
-      _currentScene?.mainCamera?.aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
+      mainCamera?.aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
 
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     }

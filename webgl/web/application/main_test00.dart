@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/mesh.dart';
 
 void main() {
@@ -14,8 +14,6 @@ void main() {
 }
 
 class Webgl01 {
-
-  RenderingContext gl;
 
   Buffer vertexBuffer;
   Buffer indicesBuffer;
@@ -70,7 +68,8 @@ class Webgl01 {
       ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0,5.0,10.0)
-      ..cameraController = new CameraController(gl.canvas);
+      ..cameraController = new CameraController();
+    mainCamera = camera;
   }
 
   void buildMeshData() {
