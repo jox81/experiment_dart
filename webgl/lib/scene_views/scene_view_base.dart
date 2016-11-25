@@ -93,7 +93,7 @@ class SceneViewBase extends Scene implements IEditScene{
     light = pointLight;
 
     //Materials
-    MaterialPoint materialPoint = await MaterialPoint.create(4.0);
+    MaterialPoint materialPoint = new MaterialPoint(4.0);
     materials.add(materialPoint);
 
     MaterialBase materialBase = await MaterialBase.create();

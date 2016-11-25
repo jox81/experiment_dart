@@ -72,7 +72,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     meshes.addAll(camera2.gizmo.gizmoMeshes);
 
     //Material
-    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
+    MaterialPoint materialPoint = new MaterialPoint(5.0);
     MaterialBase materialBase = await MaterialBase.create();
 
     Mesh axis = await createAxis(this);

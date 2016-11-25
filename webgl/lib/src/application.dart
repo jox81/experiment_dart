@@ -1,6 +1,9 @@
+import 'dart:async';
 import 'dart:web_gl';
 import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_shader.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -14,6 +17,8 @@ class Application {
 
   static RenderingContext _gl;
 
+  static Map<String, ShaderSource> shadersSources = new Map();
+
   CanvasElement _canvas;
 
   IUpdatableScene _currentScene;
@@ -24,13 +29,26 @@ class Application {
 
   //Singleton
   static Application _instance;
-  factory Application(CanvasElement canvas) {
+  static Future<Application> create(CanvasElement canvas) async{
 
     if (_instance == null) {
       _instance = new Application._internal(canvas);
+      await _instance.loadShaders();
     }
 
     return _instance;
+  }
+
+  Future loadShaders() async {
+
+    ShaderSource shaderSource = new ShaderSource()
+    ..shaderType = "material_point"
+    ..vertexShaderPath = '../shaders/material_point/material_point.vs.glsl'
+    ..fragmentShaderPath = '../shaders/material_point/material_point.fs.glsl';
+    await shaderSource.loadShader();
+
+    shadersSources[shaderSource.shaderType] = shaderSource;
+
   }
 
   Application._internal(this._canvas) {

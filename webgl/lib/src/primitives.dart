@@ -10,7 +10,7 @@ import 'package:webgl/src/scene.dart';
 Future<Mesh> createAxis(Scene scene) async {
 
   //Material
-  MaterialPoint materialPoint = await MaterialPoint.create(5.0);
+  MaterialPoint materialPoint = new MaterialPoint(5.0);
   scene.materials.add(materialPoint);
 
   Mesh mesh = new Mesh()
@@ -103,7 +103,7 @@ class FrustrumGizmo implements IGizmo{
   }
 
   Future _createFrustrumModel(Matrix4 cameraMatrix) async {
-    MaterialPoint materialPoint = await MaterialPoint.create(5.0);
+    MaterialPoint materialPoint = new MaterialPoint(5.0);
 
     for(int i = 0; i < _frustrumCornersVectors.length; i++){
       gizmoMeshes.add(await createPoint(materialPoint));

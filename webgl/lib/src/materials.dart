@@ -7,6 +7,7 @@ import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/utils.dart';
 import 'dart:web_gl';
+import 'package:webgl/src/utils_shader.dart';
 
 typedef void SetShaderVariables(Mesh mesh);
 
@@ -32,21 +33,15 @@ class MaterialCustom extends Material {
 
 class MaterialPoint extends Material {
 
-  static const String vertexShaderPath = '../shaders/material_point/material_point.vs.glsl';
-  static const String fragmentShaderPath = '../shaders/material_point/material_point.fs.glsl';
-
   final List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
 
   MaterialPoint._internal(String vsSource, String fsSource, this.pointSize)
       : super(vsSource, fsSource);
-  //>>
-  static Future<MaterialPoint> create(num pointSize) async {
-    String vsCode = await Utils
-        .loadGlslShader(vertexShaderPath);
-    String fsCode = await Utils
-        .loadGlslShader(fragmentShaderPath);
-    return new MaterialPoint._internal(vsCode, fsCode, pointSize);
+
+  factory MaterialPoint(num pointSize){
+    ShaderSource shaderSource = Application.shadersSources['material_point'];
+    return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize);
   }
 
   setShaderAttributs(Mesh mesh) {

@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:web_gl';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/utils.dart';
 
 class ActiveInfoCustom{
   String typeName;
@@ -72,4 +74,22 @@ class UtilsShader {
     return result;
   }
   
+}
+
+class ShaderSource{
+  String shaderType;
+
+  String vertexShaderPath;
+  String fragmentShaderPath;
+
+  String vsCode;
+  String fsCode;
+
+  ShaderSource();
+
+  Future loadShader()async {
+    vsCode = await Utils.loadGlslShader(vertexShaderPath);
+    fsCode = await Utils.loadGlslShader(fragmentShaderPath);
+  }
+
 }

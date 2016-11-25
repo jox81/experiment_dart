@@ -10,6 +10,7 @@ import 'package:webgl/scene_views/scene_view_pbr.dart';
 import 'package:webgl/scene_views/scene_view_performance_test.dart';
 import 'package:webgl/scene_views/scene_view_primitives.dart';
 
+//Todo : créer un vrai service angular
 class ServiceScene {
  static  List<Scene> getSceneViews(Application application) => [
 //    new SceneViewBase(application),
