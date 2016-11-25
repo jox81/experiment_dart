@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
@@ -64,8 +65,8 @@ class Webgl01 {
     }
   }
 
-  void setupCamera() {
-    camera = new Camera(radians(45.0), 0.1, 100.0)
+  Future setupCamera() async {
+    camera =await Camera.create(radians(45.0), 0.1, 100.0)
       ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0,5.0,10.0)
