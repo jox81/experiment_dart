@@ -218,7 +218,7 @@ packages:
       name: petitparser
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.4"
+    version: "1.5.3"
   plugin:
     description:
       name: plugin
@@ -272,7 +272,7 @@ packages:
       name: stagexl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.13.12"
+    version: "0.13.11+1"
   stream_channel:
     description:
       name: stream_channel
@@ -340,4 +340,4 @@ packages:
     source: hosted
     version: "2.1.12"
 sdks:
-  dart: ">=1.20.0 <2.0.0"
+  dart: ">=1.19.0 <2.0.0"
