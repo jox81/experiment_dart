@@ -1,25 +1,19 @@
-import 'dart:math' as Math;
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/application.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
-import 'dart:typed_data';
 import 'dart:async';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/interaction.dart';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
 class SceneViewShaderLearning01 extends Scene implements IEditScene{
 
   Map<String, EditableProperty> get properties =>{};
 
-  final num viewAspectRatio;
-
-  SceneViewShaderLearning01(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewShaderLearning01();
 
   @override
   UpdateFunction updateFunction;
@@ -41,21 +35,21 @@ class SceneViewShaderLearning01 extends Scene implements IEditScene{
 
     backgroundColor = new Vector4(0.0, 0.0, 0.0, 1.0);
 
-    Mesh mesh = baseSurface();
-    materials.add(mesh.material);
-    meshes.add(mesh);
+    CustomObject customObject = baseSurface();
+    materials.add(customObject.material);
+    meshes.add(customObject);
 
     //Animation
     num _lastTime = 0.0;
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      mesh.updateFunction(time);
+      customObject.mesh.updateFunction(time);
       _lastTime = time;
     };
   }
 
-  Mesh baseSurface() {
+  CustomObject baseSurface() {
     num shaderTime = 0.0;
 
     String vShader = '''
@@ -204,13 +198,14 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
       };
     materials.add(materialCustom);
 
-    Mesh mesh = new Mesh.Rectangle()
+    CustomObject customObject = new CustomObject()
+      ..mesh = new Mesh.Rectangle()
       ..material = materialCustom;
 
-    mesh.updateFunction = (num time) {
+    customObject.mesh.updateFunction = (num time) {
       shaderTime = time / 10000;
     };
 
-    return mesh;
+    return customObject;
   }
 }

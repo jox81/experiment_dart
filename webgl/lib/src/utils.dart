@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/texture_utils.dart';
 
 class Utils{
 

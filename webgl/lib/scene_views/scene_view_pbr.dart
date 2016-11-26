@@ -1,24 +1,20 @@
 ﻿import 'package:vector_math/vector_math.dart';
-import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:async';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPBR extends Scene implements IEditScene{
 
   Map<String, EditableProperty> get properties =>{};
 
-  final num viewAspectRatio;
-
-  SceneViewPBR(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewPBR();
 
   @override
   UpdateFunction updateFunction;
@@ -45,11 +41,11 @@ class SceneViewPBR extends Scene implements IEditScene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(45.0), 0.1, 1000.0)
-      ..aspectRatio = viewAspectRatio
+      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0, 10.0, 5.0)
       ..cameraController = new CameraController();
-    mainCamera = camera;
+    Context.mainCamera = camera;
 
     //Lights
     PointLight pointlLight = new PointLight()
@@ -64,7 +60,7 @@ class SceneViewPBR extends Scene implements IEditScene{
     materials.add(materialPBR);
 
     //Sphere
-    Mesh sphere = new Mesh.Sphere(radius: 1.0, segmentV: 48, segmentH: 48);
+    SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 48, segmentH: 48);
     sphere.transform.translate(0.0, 0.0, 0.0);
     sphere.material = materialPBR;
     //sphere.mode = GL.LINES;

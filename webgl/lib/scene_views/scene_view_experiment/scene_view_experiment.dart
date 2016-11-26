@@ -16,9 +16,7 @@ class SceneViewExperiment extends Scene implements IEditScene{
   /// implements ISceneViewBase
   Map<String, EditableProperty> get properties =>{};
 
-  final num viewAspectRatio;
-
-  SceneViewExperiment(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewExperiment();
 
   @override
   UpdateFunction updateFunction;

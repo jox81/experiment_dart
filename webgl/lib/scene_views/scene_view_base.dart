@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
@@ -18,10 +17,10 @@ class SceneViewBase extends Scene implements IEditScene{
 
   /// implements ISceneViewBase
   Map<String, EditableProperty> get properties =>{
-    'fov' : new EditableProperty<num>(()=> mainCamera.fOV, (num v)=> mainCamera.fOV = v),
-    'camera Pos x' : new EditableProperty<num>(()=> mainCamera.position.x, (num v)=> mainCamera.position.x = v),
-    'camera Pos y' : new EditableProperty<num>(()=> mainCamera.position.y, (num v)=> mainCamera.position.y = v),
-    'camera Pos z' : new EditableProperty<num>(()=> mainCamera.position.z, (num v)=> mainCamera.position.z = v),
+    'fov' : new EditableProperty<num>(()=> Context.mainCamera.fOV, (num v)=> Context.mainCamera.fOV = v),
+    'camera Pos x' : new EditableProperty<num>(()=> Context.mainCamera.position.x, (num v)=> Context.mainCamera.position.x = v),
+    'camera Pos y' : new EditableProperty<num>(()=> Context.mainCamera.position.y, (num v)=> Context.mainCamera.position.y = v),
+    'camera Pos z' : new EditableProperty<num>(()=> Context.mainCamera.position.z, (num v)=> Context.mainCamera.position.z = v),
     'useLighting' : new EditableProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
     'ambientColorR' : new EditableProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
     'ambientColorG' : new EditableProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
@@ -43,9 +42,7 @@ class SceneViewBase extends Scene implements IEditScene{
 
   //
 
-  num get viewAspectRatio => application.viewAspectRatio;
-
-  SceneViewBase(Application application): super(application);
+  SceneViewBase();
 
   @override
   UpdateFunction updateFunction;
@@ -74,11 +71,11 @@ class SceneViewBase extends Scene implements IEditScene{
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new
     Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = viewAspectRatio
+      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(100.0, 50.0, 0.0)
       ..cameraController = new CameraController();
-    mainCamera = camera;
+    Context.mainCamera = camera;
 
     //Lights
     ambientLight.color.setFrom(ambientColor);
@@ -121,63 +118,63 @@ class SceneViewBase extends Scene implements IEditScene{
     materials.add(materialPBR);
 
     //Meshes
-    Mesh axis = createAxis(this)
-      ..name = 'origin';
+    Mesh axis = createAxisMesh();
 
-    Mesh point = createPoint(materialPoint)
-      ..transform.translate(8.0, 5.0, 10.0);
+    PointModel point = new PointModel()
+        ..position.setValues(8.0, 5.0, 10.0);
     meshes.add(point);
 
     //Line
-    Mesh line = new Mesh.Line([
+    MultiLineModel line = new MultiLineModel([
       new Vector3.all(0.0),
       new Vector3(10.0, 0.0, 0.0),
       new Vector3(10.0, 0.0, 10.0),
       new Vector3(10.0, 10.0, 10.0),
-    ])
-    ..material = materialBaseColor;
+    ]);
     meshes.add(line);
 
     // create square
-    Mesh square = new Mesh.Rectangle()
+    QuadModel square = new QuadModel()
       ..transform.translate(3.0, 0.0, 0.0)
       ..transform.rotateX(radians(90.0))
       ..material = materialBaseColor;
     meshes.add(square);
 
     // create triangle
-    Mesh triangle = new Mesh.Triangle()
+    TriangleModel triangle = new TriangleModel()
       ..name = 'triangle'
       ..transform.translate(0.0, 0.0, 4.0)
       ..material = materialBase;
     meshes.add(triangle);
 
     // create cube
-    Mesh centerCube = new Mesh.Cube()
+    CubeModel centerCube = new CubeModel()
       ..transform.translate(0.0, 0.0, 0.0)
       ..transform.scale(0.1, 0.1, 0.1)
       ..material = materialBaseColor;
     meshes.add(centerCube);
 
     // create square
-    Mesh squareX = new Mesh.Rectangle()
+    QuadModel squareX = new QuadModel()
       ..transform.translate(0.0, 3.0, 0.0)
+      ..material = materialBaseVertexColor;
+    squareX.mesh
       ..colors = new List()
       ..colors.addAll([1.0, 0.0, 0.0, 1.0])
       ..colors.addAll([1.0, 1.0, 0.0, 1.0])
       ..colors.addAll([1.0, 0.0, 1.0, 1.0])
-      ..colors.addAll([0.0, 1.0, 1.0, 1.0])
-      ..material = materialBaseVertexColor;
+      ..colors.addAll([0.0, 1.0, 1.0, 1.0]);
+
     meshes.add(squareX);
 
     //create Pyramide
-    Mesh pyramid = new Mesh.Pyramid()
+    PyramidModel pyramid = new PyramidModel()
       ..transform.translate(3.0, -2.0, 0.0)
       ..material = materialBaseVertexColor;
     meshes.add(pyramid);
 
     //Create Cube
-    Mesh cube = new Mesh.Cube();
+    CubeModel cube = new CubeModel();
     cube.transform.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
     await TextureUtils.createTextureFromFile("../images/crate.gif");
@@ -186,9 +183,10 @@ class SceneViewBase extends Scene implements IEditScene{
 
     //SusanModel
     var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
-    Mesh susanMesh = new Mesh()
-      ..transform.translate(10.0, 0.0, 0.0)
+    CustomObject susanMesh = new CustomObject()
+      ..transform.translate(10.0, 0.0, 0.0);
 //      ..transform.rotateX(radians(-90.0))
+    susanMesh.mesh
       ..vertices = susanJson['meshes'][0]['vertices']
       ..indices = susanJson['meshes'][0]['faces']
         .expand((i) => i)
@@ -203,7 +201,7 @@ class SceneViewBase extends Scene implements IEditScene{
     meshes.add(susanMesh);
 
     //Sphere
-    Mesh sphere = new Mesh.Sphere(radius: 2.5, segmentV: 48, segmentH: 48)
+    SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
       ..transform.translate(0.0, 0.0, -10.0)
       ..material = materialPBR;
     //sphere.mode = GL.LINES;
@@ -239,7 +237,7 @@ class SceneViewBase extends Scene implements IEditScene{
     Random random = new Random();
 
     // create cube
-    Mesh centerCube = new Mesh.Cube()
+    CubeModel centerCube = new CubeModel()
       ..transform.translate(random.nextDouble() * 10, random.nextDouble() * 10, random.nextDouble() * 10)
       ..transform.scale(0.1, 0.1, 0.1)
       ..material = materials.firstWhere((m)=> m is MaterialBaseColor );

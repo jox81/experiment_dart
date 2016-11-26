@@ -26,11 +26,9 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     'camera target Pos z' : new EditableProperty<num>(()=> camera2.targetPosition.z, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, camera2.targetPosition.y, v)),
   };
 
-  final num viewAspectRatio;
-
-  SceneViewPrimitives(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application){
+  SceneViewPrimitives(){
     camera2 = new Camera(radians(37.0), 1.0, 5.0)
-      ..aspectRatio = viewAspectRatio
+      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(10.0, 10.0, 10.0);
     meshes.addAll(camera2.gizmo.gizmoMeshes);
@@ -60,26 +58,27 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(45.0), 0.1, 1000.0)
-      ..aspectRatio = viewAspectRatio
+      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
       ..cameraController = new CameraController();
-    mainCamera = camera;
+    Context.mainCamera = camera;
 
     //Material
     MaterialPoint materialPoint = new MaterialPoint(5.0);
     MaterialBase materialBase = new MaterialBase();
 
-    Mesh axis = createAxis(this);
-    Mesh points = createAxisPoints(materialPoint);
+    AxisModel axis = new AxisModel();
+    meshes.add(axis);
+    AxisPointsModel points = new AxisPointsModel();
     meshes.add(points);
 
-    Mesh axis2 = createAxis(this)
+    AxisModel axis2 = new AxisModel()
       ..transform.translate(5.0, 0.0, 0.0);
 
     // create cube
-    Mesh centerCube = new Mesh.Cube()
-      ..mode = GL.LINE_STRIP;
+    CubeModel centerCube = new CubeModel()
+    ..mesh.mode = GL.LINE_STRIP;
     centerCube.transform = axis2.transform;
     centerCube.material = materialBase;
     meshes.add(centerCube);

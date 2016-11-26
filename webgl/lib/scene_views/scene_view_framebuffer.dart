@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -16,9 +16,7 @@ class SceneViewFrameBuffer extends Scene implements IEditScene{
 
   Map<String, EditableProperty> get properties =>{};
 
-  final num viewAspectRatio;
-
-  SceneViewFrameBuffer(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewFrameBuffer();
 
   @override
   UpdateFunction updateFunction;
@@ -45,11 +43,11 @@ class SceneViewFrameBuffer extends Scene implements IEditScene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = viewAspectRatio
+      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(50.0, 50.0, 50.0)
       ..cameraController = new CameraController();
-    mainCamera = camera;
+    Context.mainCamera = camera;
 
     //
     DirectionalLight directionalLight = new DirectionalLight();
@@ -65,7 +63,7 @@ class SceneViewFrameBuffer extends Scene implements IEditScene{
     Texture newTexture = TextureUtils.createRenderedTexture();
 
     //Create Cube
-    Mesh cube = new Mesh.Cube();
+    CubeModel cube = new CubeModel();
     cube.transform.translate(0.0, 0.0, 0.0);
     materialBaseTextureNormal.texture = newTexture;
     cube.material = materialBaseTextureNormal;

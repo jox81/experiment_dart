@@ -5,10 +5,11 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:collection';
-import 'package:webgl/src/application.dart';
+//import 'package:webgl/src/application.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
 import 'package:webgl/src/interaction.dart';
+import 'package:webgl/src/primitives.dart';
 
 abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
@@ -22,17 +23,13 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   AmbientLight ambientLight = new AmbientLight();
 
   List<Material> materials = new List();
-  List<Mesh> meshes = new List();
-
-
+  List<Object3d> meshes = new List();
 
   Interaction interaction;
 
-  final Application application;
-
-  Scene(this.application){
-    mainCamera = new Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = application.viewAspectRatio
+  Scene(){
+    Context.mainCamera = new Camera(radians(37.0), 0.1, 1000.0)
+      ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero();
   }
 
@@ -62,10 +59,10 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   }
 
   void render(){
-    for (Mesh model in meshes) {
+    for (Object3d model in meshes) {
       _mvPushMatrix();
 
-      mvMatrix.multiply(model.transform);
+      Context.mvMatrix.multiply(model.transform);
 
       model.render();
 
@@ -77,14 +74,14 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   Queue<Matrix4> _mvMatrixStack = new Queue();
 
   void _mvPushMatrix() {
-    _mvMatrixStack.addFirst(mvMatrix.clone());
+    _mvMatrixStack.addFirst(Context.mvMatrix.clone());
   }
 
   void _mvPopMatrix() {
     if (0 == _mvMatrixStack.length) {
       throw new Exception("Invalid popMatrix!");
     }
-    mvMatrix = _mvMatrixStack.removeFirst();
+    Context.mvMatrix = _mvMatrixStack.removeFirst();
   }
 
 }

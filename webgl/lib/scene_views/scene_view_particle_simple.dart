@@ -7,6 +7,7 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:typed_data';
 import 'dart:async';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
@@ -15,9 +16,7 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
 
   Map<String, EditableProperty> get properties =>{};
 
-  final num viewAspectRatio;
-
-  SceneViewParticleSimple(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewParticleSimple();
 
   @override
   UpdateFunction updateFunction;
@@ -40,21 +39,21 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    Mesh mesh = experiment(scene);
-    materials.add(mesh.material);
-    meshes.add(mesh);
+    CustomObject customObject = experiment(Application.currentScene);
+    materials.add(customObject.material);
+    meshes.add(customObject);
 
     //Animation
     num _lastTime = 0.0;
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      mesh.updateFunction(time);
+      customObject.mesh.updateFunction(time);
       _lastTime = time;
     };
   }
 
-  Mesh experiment(Scene scene) {
+  Object3d experiment(Scene scene) {
     num shaderTime = 0.0;
 
     String vShader = '''
@@ -111,16 +110,18 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
     while (i-- != 0) {
       pstart[i] = 0.0;
     }
-    Mesh mesh = new Mesh()
-      ..mode = GL.POINTS
-      ..vertexDimensions = 2
-      ..vertices = pstart
-      ..material = materialCustom;
 
-    mesh.updateFunction = (num time) {
+    CustomObject customObject = new CustomObject()
+    ..mesh = new Mesh()
+    ..mesh.mode = GL.POINTS
+    ..mesh.vertexDimensions = 2
+    ..mesh.vertices = pstart
+    ..material = materialCustom;
+
+    customObject.mesh.updateFunction = (num time) {
       shaderTime = time / 20000;
     };
 
-    return mesh;
+    return customObject;
   }
 }

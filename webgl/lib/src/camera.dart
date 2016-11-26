@@ -3,10 +3,7 @@ import 'dart:math' as Math;
 import 'dart:html';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
-import 'package:webgl/src/mesh.dart';
-import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/primitives.dart';
-
 
 //Remember
 //Matrix4  _mvMatrix = mainCamera.lookAtMatrix * mesh.transform;
@@ -16,21 +13,21 @@ class Camera extends Object3d{
   double get fOV => _fOV;
   set fOV(num value) {
     _fOV = value;
-    _updateGizmo();
+    if(showGizmo) _updateGizmo();
   }
 
   Vector3 _position = new Vector3(0.0, 1.0, 0.0);
   Vector3 get position => _position;
   set position(Vector3 value) {
     _position = value;
-    _updateGizmo();
+    if(showGizmo) _updateGizmo();
   }
 
   Vector3 _targetPosition;
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
-    _updateGizmo();
+    if(showGizmo) _updateGizmo();
   }
 
   final double zNear;
@@ -130,12 +127,16 @@ class Camera extends Object3d{
 
   @override
   void render() {
-    for(Mesh mesh in _gizmo.gizmoMeshes){
-      mesh.render();
+    if(showGizmo) {
+      _gizmo == null ? _gizmo = new FrustrumGizmo(this):null;
+      for (Object3d object3d in _gizmo.gizmoMeshes) {
+        object3d.render();
+      }
     }
   }
 
   //FrustrumGizmo
+  bool showGizmo = false;
   IGizmo _gizmo;
   IGizmo get gizmo {
     if(_gizmo == null){

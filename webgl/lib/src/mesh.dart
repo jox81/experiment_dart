@@ -1,21 +1,15 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/material.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/object3d.dart';
 
-class Mesh extends Object3d {
+class Mesh {
 
-  //
   int mode = GL.TRIANGLE_STRIP;
 
   //Animation
   //todo : place elsewhere ? outside mesh ?
   UpdateFunction updateFunction;
-
-  //Transform : position, rotation, scale
-  Matrix4 transform = new Matrix4.identity();
 
   //Vertices infos
   int _vertexDimensions = 3;
@@ -77,12 +71,10 @@ class Mesh extends Object3d {
   int get vertexNormalsCount =>
       _vertexNormals.length ~/ _vertexNormalsDimensions;
 
-  Material material;
-
   Mesh();
 
-  void render() {
-    material.render(this);
+  factory Mesh.Point() {
+    return new _PointMesh();
   }
 
   factory Mesh.Line(List<Vector3> points) {
@@ -108,8 +100,29 @@ class Mesh extends Object3d {
   factory Mesh.Sphere({num radius : 1, int segmentV: 32, int segmentH: 32}) {
     return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
   }
+
+  factory Mesh.Axis() {
+    return new _AxisMesh();
+  }
+
+  factory Mesh.AxisPoints() {
+    return new _AxisPointMesh();
+  }
 }
 
+class _PointMesh extends Mesh {
+  _PointMesh() {
+
+    mode = GL.POINTS;
+    vertices = [
+      0.0, 0.0, 0.0,
+    ];
+    colors = [
+      1.0, 1.0, 0.0, 1.0,
+    ];
+
+  }
+}
 class _LineMesh extends Mesh {
   _LineMesh(List<Vector3> points) {
     assert(points.length >= 2);
@@ -405,5 +418,46 @@ class _SphereMesh extends Mesh {
 //    _textureCoords = uvs;
 
     mode = GL.TRIANGLES;
+  }
+}
+
+class _AxisMesh extends Mesh {
+  _AxisMesh() {
+    mode = GL.LINES;
+    vertices = [
+      0.0,0.0,0.0,
+      1.0,0.0,0.0,
+      0.0,0.0,0.0,
+      0.0,1.0,0.0,
+      0.0,0.0,0.0,
+      0.0,0.0,1.0,
+    ];
+    colors = [
+      1.0,0.0,0.0,1.0,
+      1.0,0.0,0.0,1.0,
+      0.0,1.0,0.0,1.0,
+      0.0,1.0,0.0,1.0,
+      0.0,0.0,1.0,1.0,
+      0.0,0.0,1.0,1.0,
+    ];
+  }
+}
+
+//Points
+class _AxisPointMesh extends Mesh {
+  _AxisPointMesh() {
+    mode = GL.POINTS;
+    vertices = [
+      0.0, 0.0, 0.0,
+      1.0, 0.0, 0.0,
+      0.0, 1.0, 0.0,
+      0.0, 0.0, 1.0,
+    ];
+    colors = [
+      1.0, 1.0, 0.0, 1.0,
+      1.0, 0.0, 0.0, 1.0,
+      0.0, 1.0, 0.0, 1.0,
+      0.0, 0.0, 1.0, 1.0,
+    ];
   }
 }

@@ -9,6 +9,7 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:math';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -38,9 +39,7 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
   Vector3 ambientColor = new Vector3.all(0.0);
   Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
-  final num viewAspectRatio;
-
-  SceneViewPerformanceTest(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewPerformanceTest();
 
   @override
   UpdateFunction updateFunction;
@@ -67,11 +66,11 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = viewAspectRatio
+      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, -50.0)
       ..cameraController = new CameraController();
-    mainCamera = camera;
+    Context.mainCamera = camera;
 
     //Lights
     ambientLight.color.setFrom(ambientColor);
@@ -107,7 +106,7 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
 
     for (int i = 0; i < count; i++) {
       //Create Cube
-      Mesh cube = new Mesh.Cube();
+      CubeModel cube = new CubeModel();
       cube.transform.translate(random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2);

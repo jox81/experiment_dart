@@ -1,15 +1,15 @@
 import 'dart:math' as Math;
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:typed_data';
 import 'dart:async';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/interaction.dart';
 
 class SceneViewParticle extends Scene implements IEditScene{
 
@@ -24,9 +24,7 @@ class SceneViewParticle extends Scene implements IEditScene{
     'varCt' : new EditableProperty<num>(()=> varCt, (num v)=> varCt = v),
   };
 
-  final num viewAspectRatio;
-
-  SceneViewParticle(Application application):this.viewAspectRatio = application.viewAspectRatio,super(application);
+  SceneViewParticle();
 
   @override
   UpdateFunction updateFunction;
@@ -49,21 +47,21 @@ class SceneViewParticle extends Scene implements IEditScene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    Mesh mesh = experiment(scene);
-    materials.add(mesh.material);
-    meshes.add(mesh);
+    CustomObject customObject = experiment(Application.currentScene);
+    materials.add(customObject.material);
+    meshes.add(customObject);
 
     //Animation
     num _lastTime = 0.0;
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      mesh.updateFunction(time);
+      customObject.mesh.updateFunction(time);
       _lastTime = time;
     };
   }
 
-  Mesh experiment(Scene scene) {
+  Object3d experiment(Scene scene) {
     num shaderTime = 0.0;
 
     //Material
@@ -134,16 +132,18 @@ class SceneViewParticle extends Scene implements IEditScene{
         pstart[i] = random.nextDouble() * 2 - 1;
       }
     }
-    Mesh mesh = new Mesh()
-      ..mode = GL.POINTS
-      ..vertexDimensions = 2
-      ..vertices = pstart
-      ..material = materialCustom;
 
-    mesh.updateFunction = (num time) {
+    CustomObject customObject = new CustomObject()
+    ..mesh = new Mesh()
+    ..mesh.mode = GL.POINTS
+    ..mesh.vertexDimensions = 2
+    ..mesh.vertices = pstart
+    ..material = materialCustom;
+
+    customObject.mesh.updateFunction = (num time) {
       shaderTime = time / 20000;
     };
 
-    return mesh;
+    return customObject;
   }
 }

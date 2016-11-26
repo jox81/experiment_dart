@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:web_gl';
-import 'package:webgl/src/utils_shader.dart';
+import 'package:webgl/src/shaders.dart';
 
 typedef void SetShaderVariables(Mesh mesh);
 
@@ -55,9 +55,9 @@ class MaterialPoint extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
     setShaderUniformWithName("pointSize", pointSize);
   }
 }
@@ -82,9 +82,9 @@ class MaterialBase extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
   }
 }
 
@@ -111,9 +111,9 @@ class MaterialBaseColor extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
     setShaderUniformWithName("uColor", color.storage);
   }
 }
@@ -140,9 +140,9 @@ class MaterialBaseVertexColor extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
   }
 }
 
@@ -174,9 +174,9 @@ class MaterialBaseTexture extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
     setShaderUniformWithName('uSampler', 0);
   }
 
@@ -221,12 +221,12 @@ class MaterialBaseTextureNormal extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
 
     Matrix4 mvInverse = new Matrix4.identity();
-    mvInverse.copyInverse(mvMatrix);
+    mvInverse.copyInverse(Context.mvMatrix);
     Matrix3 normalMatrix = mvInverse.getRotation();
 
     normalMatrix.transpose();
@@ -287,13 +287,13 @@ class MaterialPBR extends Material {
 
   setShaderUniforms(Mesh mesh) {
     setShaderUniformWithName(
-        "uMVMatrix", mvMatrix.storage);
+        "uMVMatrix", Context.mvMatrix.storage);
     setShaderUniformWithName(
-        "uPMatrix", mainCamera.vpMatrix.storage);
+        "uPMatrix", Context.mainCamera.vpMatrix.storage);
 
     setShaderUniformWithName(
         "uNormalMatrix",
-        new Matrix4.inverted(mvMatrix)
+        new Matrix4.inverted(Context.mvMatrix)
             .transposed()
             .getRotation()
             .storage);

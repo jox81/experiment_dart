@@ -3,24 +3,18 @@ import 'dart:web_gl';
 import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/globals/context.dart';
-import 'package:webgl/src/utils_shader.dart';
+import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
-import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
-
-Scene get scene => Application._instance._currentScene;
 
 class Application {
   static const bool debugging = false;
 
+  static IUpdatableScene _currentScene;
+  static IUpdatableScene get currentScene => _currentScene;
+
   CanvasElement _canvas;
-
-  IUpdatableScene _currentScene;
-
-  num get width => gl.drawingBufferWidth;
-  num get height => gl.drawingBufferHeight;
-  num get viewAspectRatio => gl.drawingBufferWidth / gl.drawingBufferHeight;
 
   //Singleton
   static Application _instance;
@@ -94,7 +88,7 @@ class Application {
       gl.canvas.width  = displayWidth;
       gl.canvas.height = displayHeight;
 
-      mainCamera?.aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
+      Context.mainCamera?.aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight;
 
       gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     }

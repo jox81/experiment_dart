@@ -37,7 +37,7 @@ class AppComponent implements AfterViewInit{
   @override
   ngAfterViewInit() async {
     application = await Application.create(canvasComponent.canvas);
-    scenes = ServiceScene.getSceneViews(application);
+    scenes = ServiceScene.getSceneViews();
     switchScene ();
   }
 

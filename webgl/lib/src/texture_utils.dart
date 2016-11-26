@@ -1,5 +1,4 @@
 import 'dart:web_gl';
-import 'package:webgl/src/application.dart';
 import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:async';

@@ -4,12 +4,8 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/utils.dart';
-import 'dart:async';
-import 'package:webgl/src/utils_shader.dart';
+import 'package:webgl/src/shaders.dart';
 import 'dart:typed_data';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/light.dart';
 
 abstract class Material {
   static bool debugging = false;
