@@ -18,7 +18,7 @@ Future main() async {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
 
   await ShaderSource.loadShaders();
-  susanJson = await Utils.loadJSONResource('../models/susan/susan.json');
+  susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   webgl01.setup();
   webgl01.render();
 }
@@ -70,23 +70,23 @@ class Webgl01 {
     Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
       ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(0.0,0.0,10.0)
+      ..position = new Vector3(10.0,10.0,10.0)
       ..cameraController = new CameraController();
   }
 
   void setupMeshes() {
 
-    CustomObject customObject = new CustomObject()
-      ..mesh.vertices = [
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 3.0,
-        2.0, 0.0, 0.0,
-      ]
-      ..mesh.vertexDimensions = 3
-      ..mesh.indices = [0, 1, 2]
-      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(0.0,0.0,0.0)))
-      ..material = new MaterialBase();
-    models.add(customObject);
+//    CustomObject customObject = new CustomObject()
+//      ..mesh.vertices = [
+//        0.0, 0.0, 0.0,
+//        0.0, 0.0, 3.0,
+//        2.0, 0.0, 0.0,
+//      ]
+//      ..mesh.vertexDimensions = 3
+//      ..mesh.indices = [0, 1, 2]
+//      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(0.0,0.0,0.0)))
+//      ..material = new MaterialBase();
+//    models.add(customObject);
 
 //    PointModel pointModel = new PointModel();
 //    models.add(pointModel);
@@ -132,13 +132,17 @@ class Webgl01 {
 //    AxisPointsModel axisPointsModel = new AxisPointsModel();
 //    models.add(axisPointsModel);
 
-//    FrustrumGizmo frustrumGizmo = new FrustrumGizmo(
-//        new Camera(radians(37.0), 1.0, 5.0)
-//          ..aspectRatio = Context.viewAspectRatio
-//          ..position = new Vector3(0.0, 0.0, 0.0)
-//          ..targetPosition = new Vector3(0.0, 0.0, 5.0)
-//    );
-//    models.addAll(frustrumGizmo.gizmoMeshes);
+//    JsonObject jsonModel = new JsonObject(susanJson)
+//      ..transform.rotateX(radians(-90.0));
+//    models.add(jsonModel);
+
+    FrustrumGizmo frustrumGizmo = new FrustrumGizmo(
+        new Camera(radians(45.0), 1.0, 5.0)
+          ..aspectRatio = Context.viewAspectRatio
+          ..position = new Vector3(2.0, 2.0, 2.0)
+          ..targetPosition = new Vector3(0.0, 0.0, 0.0)
+    );
+    models.addAll(frustrumGizmo.gizmoMeshes);
 
 //    Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
 //      ..aspectRatio = Context.viewAspectRatio
@@ -148,9 +152,7 @@ class Webgl01 {
 //    models.add(camera2);
 //    models.addAll(camera2.gizmo.gizmoMeshes);
 
-//    JsonObject jsonModel = new JsonObject(susanJson)
-//      ..transform.rotateX(radians(-90.0));
-//    models.add(jsonModel);
+
   }
 
   void render({num time : 0.0}) {

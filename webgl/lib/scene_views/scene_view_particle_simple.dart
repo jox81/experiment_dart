@@ -48,7 +48,7 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      customObject.mesh.updateFunction(time);
+      customObject.updateFunction(time);
       _lastTime = time;
     };
   }
@@ -118,7 +118,7 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
     ..mesh.vertices = pstart
     ..material = materialCustom;
 
-    customObject.mesh.updateFunction = (num time) {
+    customObject.updateFunction = (num time) {
       shaderTime = time / 20000;
     };
 

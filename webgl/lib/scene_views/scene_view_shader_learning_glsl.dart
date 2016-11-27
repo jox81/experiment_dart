@@ -44,7 +44,7 @@ class SceneViewShaderLearning01 extends Scene implements IEditScene{
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      customObject.mesh.updateFunction(time);
+      customObject.updateFunction(time);
       _lastTime = time;
     };
   }
@@ -172,9 +172,6 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
 	fragColor = vec4(pixel, 1.0);
 }
 
-
-
-
     void main(void) {
       mainImage(gl_FragColor, gl_FragCoord.xy);
     }
@@ -202,7 +199,7 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
       ..mesh = new Mesh.Rectangle()
       ..material = materialCustom;
 
-    customObject.mesh.updateFunction = (num time) {
+    customObject.updateFunction = (num time) {
       shaderTime = time / 10000;
     };
 

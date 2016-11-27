@@ -1,6 +1,7 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
+import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/materials.dart';
@@ -18,6 +19,9 @@ abstract class Model {
   Vector3 position = new Vector3.zero(); //needed ?
 
   Material material;
+
+  //Animation
+  UpdateFunction updateFunction;
 
   void render() {
     if (material == null) {
@@ -50,6 +54,18 @@ class PointModel extends Model {
   PointModel() {
     mesh = new Mesh.Point();
     material = new MaterialPoint(pointSize:5.0 ,color:_defaultModelColor);
+  }
+
+  @override
+  void render() {
+    _update();
+    super.render();
+  }
+
+  _update(){
+    mesh.vertices = [];
+    mesh.vertices
+      ..addAll(position.storage);
   }
 }
 
@@ -175,8 +191,40 @@ class FrustrumGizmo implements IGizmo {
         new MaterialBaseColor(new Vector3(0.0, 1.0, 1.0));
 
     for (int i = 0; i < _frustrumCornersVectors.length; i++) {
-      gizmoMeshes.add(new PointModel()..material = frustrumPointMaterial);
+      gizmoMeshes.add(new PointModel()
+        ..material = frustrumPointMaterial
+      );
     }
+
+    //near plane
+    gizmoMeshes.add(new LineModel(c0, c1)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c1, c2)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c2, c3)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c3, c0)
+      ..material = frustrumDirestionLineMaterial);
+
+    //far plane
+    gizmoMeshes.add(new LineModel(c4, c5)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c5, c6)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c6, c7)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c7, c4)
+      ..material = frustrumDirestionLineMaterial);
+
+    //sides
+    gizmoMeshes.add(new LineModel(c0, c4)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c1, c5)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c2, c6)
+      ..material = frustrumDirestionLineMaterial);
+    gizmoMeshes.add(new LineModel(c3, c7)
+      ..material = frustrumDirestionLineMaterial);
 
     gizmoMeshes
         .add(positionModel = new PointModel()..material = frustrumPositionPointMaterial); //position
@@ -193,14 +241,14 @@ class FrustrumGizmo implements IGizmo {
   @override
   void updateGizmo() {
     new Frustum.matrix(_vpmatrix)
-      ..calculateCorners(c0, c1, c2, c3, c4, c5, c6, c7);
+      ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
 
     for (int i = 0; i < _frustrumCornersVectors.length; i++) {
       gizmoMeshes[i].transform.setTranslation(_frustrumCornersVectors[i]);
     }
 
-    positionModel.position = _camera.position;
-    targetPositionModel.position = _camera.targetPosition;
+    positionModel.transform.setTranslation(_camera.position);
+    targetPositionModel.transform.setTranslation(_camera.targetPosition);
 
     diretionLine.point1.setFrom(_camera.position);
     diretionLine.point2.setFrom(_camera.targetPosition);

@@ -7,10 +7,6 @@ class Mesh {
 
   int mode = GL.TRIANGLE_STRIP;
 
-  //Animation
-  //todo : place elsewhere ? outside mesh ?
-  UpdateFunction updateFunction;
-
   //Vertices infos
   int _vertexDimensions = 3;
   int get vertexDimensions => _vertexDimensions;

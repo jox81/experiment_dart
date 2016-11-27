@@ -30,7 +30,9 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     camera2 = new Camera(radians(37.0), 1.0, 5.0)
       ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-      ..position = new Vector3(10.0, 10.0, 10.0);
+      ..position = new Vector3(10.0, 10.0, 10.0)
+      ..showGizmo = true;
+
     models.addAll(camera2.gizmo.gizmoMeshes);
   }
 

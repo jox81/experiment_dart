@@ -60,7 +60,7 @@ Model experiment() {
   ..mesh = mesh
   ..material = materialCustom;
 
-  mesh.updateFunction = (num time){
+  customObject.updateFunction = (num time){
     pointSize = 100 * cos(time / 100);
   };
 

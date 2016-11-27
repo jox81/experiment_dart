@@ -60,7 +60,7 @@ Model experiment() {
     ..mesh = mesh
     ..material = materialCustom;
 
-  mesh.updateFunction = (num time){
+  customObject.updateFunction = (num time){
     shaderTime = time;
 //    print(10.0 + 100.0 * cos(time / 500.0));
   };

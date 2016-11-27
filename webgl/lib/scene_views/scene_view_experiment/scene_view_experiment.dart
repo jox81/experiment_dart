@@ -50,7 +50,7 @@ class SceneViewExperiment extends Scene implements IEditScene{
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      model.mesh.updateFunction(time);
+      model.updateFunction(time);
       _lastTime = time;
     };
   }

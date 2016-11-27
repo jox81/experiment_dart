@@ -19,7 +19,7 @@
             </label>
 
             <label *ngIf="isNum(iEditScene.properties[key])">{{key}} :
-                <input type="number" step="0.05"
+                <input type="number" step="0.5"
                     [ngModel]="iEditScene.properties[key].getter().toStringAsFixed(2)"
                     (change) = "setNumValue(iEditScene.properties[key], $event)">
             </label>
