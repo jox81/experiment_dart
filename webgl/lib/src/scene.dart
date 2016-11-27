@@ -60,28 +60,9 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
   void render(){
     for (Object3d model in meshes) {
-      _mvPushMatrix();
-
-      Context.mvMatrix.multiply(model.transform);
-
       model.render();
-
-      _mvPopMatrix();
     }
   }
 
-  //Animation
-  Queue<Matrix4> _mvMatrixStack = new Queue();
-
-  void _mvPushMatrix() {
-    _mvMatrixStack.addFirst(Context.mvMatrix.clone());
-  }
-
-  void _mvPopMatrix() {
-    if (0 == _mvMatrixStack.length) {
-      throw new Exception("Invalid popMatrix!");
-    }
-    Context.mvMatrix = _mvMatrixStack.removeFirst();
-  }
 
 }

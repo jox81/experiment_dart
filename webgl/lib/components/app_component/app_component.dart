@@ -23,7 +23,7 @@ class AppComponent implements AfterViewInit{
   CanvasComponent canvasComponent;
 
   List<Scene> scenes;
-  int sceneId = 0;
+  int sceneId = -1;
 
   switchScene () async {
     sceneId++;

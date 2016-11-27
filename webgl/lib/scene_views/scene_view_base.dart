@@ -69,13 +69,12 @@ class SceneViewBase extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    Camera camera = new
+    Context.mainCamera = new
     Camera(radians(37.0), 0.1, 1000.0)
       ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(100.0, 50.0, 0.0)
+      ..position = new Vector3(20.0, 20.0, 20.0)
       ..cameraController = new CameraController();
-    Context.mainCamera = camera;
 
     //Lights
     ambientLight.color.setFrom(ambientColor);
@@ -91,7 +90,7 @@ class SceneViewBase extends Scene implements IEditScene{
     light = pointLight;
 
     //Materials
-    MaterialPoint materialPoint = new MaterialPoint(4.0);
+    MaterialPoint materialPoint = new MaterialPoint(pointSize:4.0);
     materials.add(materialPoint);
 
     MaterialBase materialBase = new MaterialBase();
@@ -118,7 +117,8 @@ class SceneViewBase extends Scene implements IEditScene{
     materials.add(materialPBR);
 
     //Meshes
-    Mesh axis = createAxisMesh();
+    AxisModel axis = new AxisModel();
+    meshes.add(axis);
 
     PointModel point = new PointModel()
         ..position.setValues(8.0, 5.0, 10.0);
@@ -169,7 +169,7 @@ class SceneViewBase extends Scene implements IEditScene{
 
     //create Pyramide
     PyramidModel pyramid = new PyramidModel()
-      ..transform.translate(3.0, -2.0, 0.0)
+      ..transform.translate(7.0, 1.0, 0.0)
       ..material = materialBaseVertexColor;
     meshes.add(pyramid);
 
@@ -183,22 +183,14 @@ class SceneViewBase extends Scene implements IEditScene{
 
     //SusanModel
     var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
-    CustomObject susanMesh = new CustomObject()
-      ..transform.translate(10.0, 0.0, 0.0);
-//      ..transform.rotateX(radians(-90.0))
-    susanMesh.mesh
-      ..vertices = susanJson['meshes'][0]['vertices']
-      ..indices = susanJson['meshes'][0]['faces']
-        .expand((i) => i)
-        .toList()
-      ..textureCoords = susanJson['meshes'][0]['texturecoords'][0]
-      ..vertexNormals = susanJson['meshes'][0]['normals'];
     MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
       ..texture = await TextureUtils.createTextureFromFile(
           '../objects/susan/susan_texture.png');
-    susanMesh.material = susanMaterialBaseTexture;
-    materials.add(susanMaterialBaseTexture);
-    meshes.add(susanMesh);
+    JsonObject jsonModel = new JsonObject(susanJson)
+      ..transform.translate(10.0, 0.0, -5.0)
+      ..transform.rotateX(radians(-90.0))
+      ..material = susanMaterialBaseTexture;
+    meshes.add(jsonModel);
 
     //Sphere
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)

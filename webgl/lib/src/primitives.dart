@@ -7,15 +7,17 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:webgl/src/materials.dart';
 
+Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
+
 abstract class Object3d {
-  String name; //Todo : S'assurer que les noms sont uniques ?!
+  String name; //Todo : S'assurer que les noms soient uniques ?!
   Mesh mesh;
   IGizmo gizmo;
 
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();
 
-  Vector3 position = new Vector3.zero();
+  Vector3 position = new Vector3.zero(); //needed ?
 
   Material material;
 
@@ -24,27 +26,8 @@ abstract class Object3d {
       throw new Exception(
           "Can't render object : the material mustn't be null to render the mesh in ${this.runtimeType}");
     }
-    _mvPushMatrix();
 
-    Context.mvMatrix.multiply(transform);
-
-    material.render(mesh);
-
-    _mvPopMatrix();
-  }
-
-  //Animation
-  Queue<Matrix4> _mvMatrixStack = new Queue();
-
-  void _mvPushMatrix() {
-    _mvMatrixStack.addFirst(Context.mvMatrix.clone());
-  }
-
-  void _mvPopMatrix() {
-    if (0 == _mvMatrixStack.length) {
-      throw new Exception("Invalid popMatrix!");
-    }
-    Context.mvMatrix = _mvMatrixStack.removeFirst();
+    material.render(this);
   }
 }
 
@@ -52,19 +35,23 @@ class CustomObject extends Object3d {
   CustomObject();
 }
 
+class JsonObject extends Object3d {
+  JsonObject(Map jsonFile){
+    mesh = new Mesh()
+      ..vertices = jsonFile['meshes'][0]['vertices']
+      ..indices = jsonFile['meshes'][0]['faces']
+          .expand((i) => i)
+          .toList()
+      ..textureCoords = jsonFile['meshes'][0]['texturecoords'][0]
+      ..vertexNormals = jsonFile['meshes'][0]['normals'];
+    material = new MaterialBase();
+  }
+}
+
 class PointModel extends Object3d {
   PointModel() {
     mesh = new Mesh.Point();
-  }
-
-//  @override
-//  void render() {
-//    _update();
-//    super.render();
-//  }
-
-  _update() {
-    transform.setTranslation(position);
+    material = new MaterialPoint(pointSize:5.0 ,color:_defaultModelColor);
   }
 }
 
@@ -73,49 +60,55 @@ class LineModel extends Object3d {
 
   LineModel(this.point1, this.point2) {
     mesh = new Mesh.Line([point1, point2]);
+    material = new MaterialBase();
   }
 
-//  @override
-//  void render() {
-//    _update();
-//    super.render();
-//  }
-//
-//  _update(){
-//    mesh.vertices = [];
-//    mesh.vertices
-//      ..addAll(point1.storage)
-//      ..addAll(point2.storage);
-//  }
+  @override
+  void render() {
+    _update();
+    super.render();
+  }
+
+  _update(){
+    mesh.vertices = [];
+    mesh.vertices
+      ..addAll(point1.storage)
+      ..addAll(point2.storage);
+  }
 }
 
 class MultiLineModel extends Object3d {
   MultiLineModel(List<Vector3> points) {
     mesh = new Mesh.Line(points);
+    material = new MaterialBase();
   }
 }
 
 class TriangleModel extends Object3d {
   TriangleModel() {
     mesh = new Mesh.Triangle();
+    material = new MaterialBase();
   }
 }
 
 class QuadModel extends Object3d {
   QuadModel() {
     mesh = new Mesh.Rectangle();
+    material = new MaterialBase();
   }
 }
 
 class PyramidModel extends Object3d {
   PyramidModel() {
     mesh = new Mesh.Pyramid();
+    material = new MaterialBase();
   }
 }
 
 class CubeModel extends Object3d {
   CubeModel() {
     mesh = new Mesh.Cube();
+    material = new MaterialBase();
   }
 }
 
@@ -123,18 +116,23 @@ class SphereModel extends Object3d {
   SphereModel({num radius: 1, int segmentV: 32, int segmentH: 32}) {
     mesh =
         new Mesh.Sphere(radius: radius, segmentV: segmentV, segmentH: segmentH);
+    material = new MaterialBase();
   }
 }
+
+//Todo : create a CompoundObjectModel
 
 class AxisModel extends Object3d {
   AxisModel() {
     mesh = new Mesh.Axis();
+    material = new MaterialPoint();
   }
 }
 
 class AxisPointsModel extends Object3d {
   AxisPointsModel() {
     mesh = new Mesh.AxisPoints();
+    material = new MaterialPoint(pointSize:5.0);
   }
 }
 
@@ -172,9 +170,9 @@ class FrustrumGizmo implements IGizmo {
 
   _createFrustrumModel(Matrix4 cameraMatrix) {
     MaterialPoint frustrumPointMaterial =
-        new MaterialPoint(frustrumPointSize, color: frustrumColor);
+        new MaterialPoint(pointSize:frustrumPointSize, color: frustrumColor);
     MaterialPoint frustrumPositionPointMaterial =
-        new MaterialPoint(positionPointSize, color: frustrumColor);
+        new MaterialPoint(pointSize:positionPointSize, color: frustrumColor);
     MaterialBaseColor frustrumDirestionLineMaterial =
         new MaterialBaseColor(new Vector3(0.0, 1.0, 1.0));
 

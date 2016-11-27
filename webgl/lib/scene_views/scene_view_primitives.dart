@@ -65,7 +65,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     Context.mainCamera = camera;
 
     //Material
-    MaterialPoint materialPoint = new MaterialPoint(5.0);
+    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
     MaterialBase materialBase = new MaterialBase();
 
     AxisModel axis = new AxisModel();

@@ -3,8 +3,9 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/primitives.dart';
 
-Mesh experiment() {
+Object3d experiment() {
 
   String vs = '''
     attribute vec3 aVertexPosition;
@@ -50,8 +51,10 @@ Mesh experiment() {
   Mesh mesh = new Mesh()
   ..mode = GL.POINTS
   ..vertices = [
-  ]
-  ..material = materialCustom;
+  ];
+  CustomObject customObject = new CustomObject()
+    ..mesh = mesh
+    ..material = materialCustom;
 
   Vector4 position = new Vector4(0.0, 0.0, 0.0, 1.0);
   mesh.updateFunction = (num time){
@@ -61,7 +64,7 @@ Mesh experiment() {
     mesh.vertices = position.storage;
   };
 
-  return mesh;
+  return customObject;
 }
 
 

@@ -1,9 +1,11 @@
+import 'dart:collection';
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/mesh.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/shaders.dart';
 import 'dart:typed_data';
 
@@ -108,16 +110,37 @@ abstract class Material {
     }
   }
 
-  render(Mesh mesh) {
-    gl.useProgram(program);
-    setShaderSettings(mesh);
+  render(Object3d model) {
 
-    if (mesh.indices.length > 0) {
-      gl.drawElements(mesh.mode, mesh.indices.length, GL.UNSIGNED_SHORT, 0);
+    _mvPushMatrix();
+
+    Context.mvMatrix.multiply(model.transform);
+
+    gl.useProgram(program);
+    setShaderSettings(model.mesh);
+
+    if (model.mesh.indices.length > 0) {
+      gl.drawElements(model.mesh.mode, model.mesh.indices.length, GL.UNSIGNED_SHORT, 0);
     } else {
-      gl.drawArrays(mesh.mode, 0, mesh.vertexCount);
+      gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
     disableVertexAttributs();
+
+    _mvPopMatrix();
+  }
+
+  //Animation
+  Queue<Matrix4> _mvMatrixStack = new Queue();
+
+  void _mvPushMatrix() {
+    _mvMatrixStack.addFirst(Context.mvMatrix.clone());
+  }
+
+  void _mvPopMatrix() {
+    if (0 == _mvMatrixStack.length) {
+      throw new Exception("Invalid popMatrix!");
+    }
+    Context.mvMatrix = _mvMatrixStack.removeFirst();
   }
 
   void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elemetArrayBuffer, data}) {

@@ -117,9 +117,6 @@ class _PointMesh extends Mesh {
     vertices = [
       0.0, 0.0, 0.0,
     ];
-    colors = [
-      1.0, 1.0, 0.0, 1.0,
-    ];
 
   }
 }
@@ -130,7 +127,6 @@ class _LineMesh extends Mesh {
     mode = GL.LINES;
 
     vertices = [];
-    colors = [];
 
     for(int i = 0; i < points.length - 1; i++){
       Vector3 point1 = points[i];
@@ -159,41 +155,28 @@ class _SquareMesh extends Mesh {
 class _PyramidMesh extends Mesh {
   _PyramidMesh() {
     vertices = [
-      // Front face
-      0.0, 1.0, 0.0,
+      0.0, 1.0, 0.0, //top vertex
+      1.0, -1.0, 1.0,
+      1.0, -1.0, -1.0,
+      -1.0, -1.0, -1.0,
       -1.0, -1.0, 1.0,
-      1.0, -1.0, 1.0,
-      // Right face
-      0.0, 1.0, 0.0,
-      1.0, -1.0, 1.0,
-      1.0, -1.0, -1.0,
-      // Back face
-      0.0, 1.0, 0.0,
-      1.0, -1.0, -1.0,
-      -1.0, -1.0, -1.0,
-      // Left face
-      0.0, 1.0, 0.0,
-      -1.0, -1.0, -1.0,
-      -1.0, -1.0, 1.0
     ];
 
-    _colors = [
-      // Front face
-      1.0, 0.0, 0.0, 1.0,
+    indices = [
+      0, 1, 2, // right face
+      0, 2, 3, // front face
+      0, 3, 4, // left face
+      0, 4, 1, // back face
+      1, 2, 3, // bottom face
+      1, 3, 4, // bottom face
+    ];
+
+    colors = [
+      1.0, 0.0, 0.0, 1.0,//top vertex
+      0.0, 0.0, 1.0, 1.0,
       0.0, 1.0, 0.0, 1.0,
       0.0, 0.0, 1.0, 1.0,
-      // Right face
-      1.0, 0.0, 0.0, 1.0,
-      0.0, 0.0, 1.0, 1.0,
       0.0, 1.0, 0.0, 1.0,
-      // Back face
-      1.0, 0.0, 0.0, 1.0,
-      0.0, 1.0, 0.0, 1.0,
-      0.0, 0.0, 1.0, 1.0,
-      // Left face
-      1.0, 0.0, 0.0, 1.0,
-      0.0, 0.0, 1.0, 1.0,
-      0.0, 1.0, 0.0, 1.0
     ];
   }
 }
@@ -247,13 +230,13 @@ class _CubeMesh extends Mesh {
       [0.0, 0.0, 1.0, 1.0], // Left face
     ];
 
-    _colors = new List.generate(4 * 4 * _colorsFace.length, (int index) {
+    colors = new List.generate(4 * 4 * _colorsFace.length, (int index) {
       // index ~/ 16 returns 0-5, that's color index
       // index % 4 returns 0-3 that's color component for each color
       return _colorsFace[index ~/ 16][index % 4];
     }, growable: false);
 
-    _indices = [
+    indices = [
       0, 1, 2, 0, 2, 3, // Front face
       4, 5, 6, 4, 6, 7, // Back face
       8, 9, 10, 8, 10, 11, // Top face
@@ -262,7 +245,7 @@ class _CubeMesh extends Mesh {
       20, 21, 22, 20, 22, 23 // Left face
     ];
 
-    _textureCoords = [
+    textureCoords = [
       // Front face
       0.0, 0.0,
       1.0, 0.0,
@@ -300,7 +283,7 @@ class _CubeMesh extends Mesh {
       0.0, 1.0,
     ];
 
-    _vertexNormals = [
+    vertexNormals = [
       // Front face
       0.0, 0.0, 1.0,
       0.0, 0.0, 1.0,
@@ -413,7 +396,7 @@ class _SphereMesh extends Mesh {
       }
     }
     vertices = sphereVertices;
-    _indices = sphereIndices;
+    indices = sphereIndices;
    _vertexNormals = normals;
 //    _textureCoords = uvs;
 

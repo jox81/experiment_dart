@@ -1,10 +1,9 @@
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
-import 'dart:math';
-import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/primitives.dart';
 
-Mesh experiment() {
+Object3d experiment() {
 
   String vs = '''
     precision mediump float;
@@ -56,15 +55,17 @@ Mesh experiment() {
   ]
   ..indices = [
     0,1,2
-  ]
-  ..material = materialCustom;
+  ];
+  CustomObject customObject = new CustomObject()
+    ..mesh = mesh
+    ..material = materialCustom;
 
   mesh.updateFunction = (num time){
     shaderTime = time;
 //    print(10.0 + 100.0 * cos(time / 500.0));
   };
 
-  return mesh;
+  return customObject;
 }
 
 

@@ -2,11 +2,12 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
 import 'dart:web_gl';
 
-Future<Mesh> experiment() async {
+Future<Object3d> experiment() async {
 
   String vs = '''
     precision mediump float;
@@ -64,15 +65,17 @@ Future<Mesh> experiment() async {
   ]
   ..indices = [
     0,1,2
-  ]
-  ..material = materialCustom;
+  ];
+  CustomObject customObject = new CustomObject()
+    ..mesh = mesh
+    ..material = materialCustom;
 
   mesh.updateFunction = (num time){
     shaderTime = time;
 //    print(10.0 + 100.0 * cos(time / 500.0));
   };
 
-  return mesh;
+  return customObject;
 }
 
 

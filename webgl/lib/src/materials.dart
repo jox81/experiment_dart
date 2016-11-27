@@ -38,7 +38,7 @@ class MaterialPoint extends Material {
   MaterialPoint._internal(String vsSource, String fsSource, this.pointSize, this.color)
       : super(vsSource, fsSource);
 
-  factory MaterialPoint(num pointSize,{Vector4 color:null}){
+  factory MaterialPoint({num pointSize:1.0,Vector4 color:null}){
     ShaderSource shaderSource = ShaderSource.sources['material_point'];
     return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize, color);
   }

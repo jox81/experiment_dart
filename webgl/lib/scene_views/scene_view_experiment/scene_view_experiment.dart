@@ -7,6 +7,7 @@ import '001.dart' as exp001;
 import '002.dart' as exp002;
 import '003.dart' as exp003;
 import 'dart:async';
+import 'package:webgl/src/primitives.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
@@ -40,16 +41,16 @@ class SceneViewExperiment extends Scene implements IEditScene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    Mesh mesh = await exp003.experiment();
-    materials.add(mesh.material);
-    meshes.add(mesh);
+    Object3d model = await exp003.experiment();
+    materials.add(model.material);
+    meshes.add(model);
 
     //Animation
     num _lastTime = 0.0;
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //... custom animation here
-      mesh.updateFunction(time);
+      model.mesh.updateFunction(time);
       _lastTime = time;
     };
   }

@@ -3,8 +3,9 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/mesh.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/primitives.dart';
 
-Mesh experiment() {
+Object3d experiment() {
 
   String vs = '''
     attribute vec3 aVertexPosition;
@@ -54,15 +55,16 @@ Mesh experiment() {
   ]
   ..colors = [
     1.0,1.0,1.0,1.0,
-  ]
+  ];
+  CustomObject customObject = new CustomObject()
+  ..mesh = mesh
   ..material = materialCustom;
 
-  Vector3 position = new Vector3(0.0, 0.0, 0.0);
   mesh.updateFunction = (num time){
     pointSize = 100 * cos(time / 100);
   };
 
-  return mesh;
+  return customObject;
 }
 
 
