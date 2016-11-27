@@ -154,7 +154,6 @@ class FrustrumGizmo implements IGizmo {
   Camera _camera;
   Matrix4 get _vpmatrix => _camera.vpMatrix;
 
-  num frustrumPointSize = 3.0;
   Vector4 frustrumColor = new Vector4(0.0, 0.7, 1.0, 1.0);
 
   num positionPointSize = 6.0;
@@ -170,7 +169,6 @@ class FrustrumGizmo implements IGizmo {
   final c5 = new Vector3.zero();
   final c6 = new Vector3.zero();
   final c7 = new Vector3.zero();
-  List<Vector3> get _frustrumCornersVectors => [c0, c1, c2, c3, c4, c5, c6, c7];
 
   LineModel diretionLine;
 
@@ -183,18 +181,10 @@ class FrustrumGizmo implements IGizmo {
   }
 
   _createFrustrumModel(Matrix4 cameraMatrix) {
-    MaterialPoint frustrumPointMaterial =
-        new MaterialPoint(pointSize:frustrumPointSize, color: frustrumColor);
     MaterialPoint frustrumPositionPointMaterial =
         new MaterialPoint(pointSize:positionPointSize, color: frustrumColor);
     MaterialBaseColor frustrumDirestionLineMaterial =
         new MaterialBaseColor(new Vector3(0.0, 1.0, 1.0));
-
-    for (int i = 0; i < _frustrumCornersVectors.length; i++) {
-      gizmoMeshes.add(new PointModel()
-        ..material = frustrumPointMaterial
-      );
-    }
 
     //near plane
     gizmoMeshes.add(new LineModel(c0, c1)
@@ -242,10 +232,6 @@ class FrustrumGizmo implements IGizmo {
   void updateGizmo() {
     new Frustum.matrix(_vpmatrix)
       ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
-
-    for (int i = 0; i < _frustrumCornersVectors.length; i++) {
-      gizmoMeshes[i].transform.setTranslation(_frustrumCornersVectors[i]);
-    }
 
     positionModel.transform.setTranslation(_camera.position);
     targetPositionModel.transform.setTranslation(_camera.targetPosition);
