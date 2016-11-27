@@ -8,26 +8,29 @@ import 'package:webgl/src/models.dart';
 //Remember
 //Matrix4  _mvMatrix = mainCamera.lookAtMatrix * mesh.transform;
 
-class Camera extends Model{
+class Camera extends Model {
   double _fOV;
+
+  bool active = false;
+
   double get fOV => _fOV;
   set fOV(num value) {
     _fOV = value;
-    if(showGizmo) _updateGizmo();
+    if (showGizmo) _updateGizmo();
   }
 
   Vector3 _position = new Vector3(0.0, 1.0, 0.0);
   Vector3 get position => _position;
   set position(Vector3 value) {
     _position = value;
-    if(showGizmo) _updateGizmo();
+    if (showGizmo) _updateGizmo();
   }
 
   Vector3 _targetPosition;
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
-    if(showGizmo) _updateGizmo();
+    if (showGizmo) _updateGizmo();
   }
 
   final double zNear;
@@ -81,7 +84,9 @@ class Camera extends Model{
   //Angle phi/horizontal en coordonée polaire
   double get phiAngle {
     Vector3 z = new Vector3(0.0, 0.0, 1.0);
-    Vector3 forwardHorizontal = new Vector3(targetPosition.x, 0.0, targetPosition.z) - new Vector3(position.x, 0.0, position.z);
+    Vector3 forwardHorizontal =
+        new Vector3(targetPosition.x, 0.0, targetPosition.z) -
+            new Vector3(position.x, 0.0, position.z);
     forwardHorizontal.normalize();
     num mirrorFactor = forwardHorizontal.x > 0 ? 1.0 : -1.0;
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
@@ -127,9 +132,9 @@ class Camera extends Model{
 
   @override
   void render() {
-    if(showGizmo) {
-      _gizmo == null ? _gizmo = new FrustrumGizmo(this):null;
-      for (Model object3d in _gizmo.gizmoMeshes) {
+    if (showGizmo) {
+      _gizmo == null ? _gizmo = new FrustrumGizmo(this) : null;
+      for (Model object3d in _gizmo.gizmoModels) {
         object3d.render();
       }
     }
@@ -139,16 +144,16 @@ class Camera extends Model{
   bool showGizmo = false;
   IGizmo _gizmo;
   IGizmo get gizmo {
-    if(_gizmo == null){
+    if (_gizmo == null) {
       _gizmo = new FrustrumGizmo(this);
     }
 
     return _gizmo;
   }
-  _updateGizmo(){
+
+  _updateGizmo() {
     gizmo?.updateGizmo();
   }
-
 }
 
 // A simple camera controller which uses an HTML element as the event
@@ -172,66 +177,68 @@ class CameraController {
   //WheelEvent values
   num fov = radians(45.0);
 
-
   CameraController();
 
   void init(Camera camera) {
-
     xRot = 90 - camera.pitch;
     yRot = camera.phiAngle;
 
     // Assign a mouse down handler to the HTML element.
     gl.canvas.onMouseDown.listen((ev) {
-      dragging = true;
-      currentX = ev.client.x;
-      currentY = ev.client.y;
+      if (camera.active) {
+        dragging = true;
+        currentX = ev.client.x;
+        currentY = ev.client.y;
+      }
     });
 
     // Assign a mouse up handler to the HTML element.
     gl.canvas.onMouseUp.listen((MouseEvent ev) {
-      dragging = false;
+      if (camera.active) {
+        dragging = false;
+      }
     });
 
     // Assign a mouse move handler to the HTML element.
     gl.canvas.onMouseMove.listen((MouseEvent ev) {
-      if (dragging) {
-        // Determine how far we have moved since the last mouse move event.
-        int tempCurX = ev.client.x;
-        int tempCurY = ev.client.y;
-        var deltaX = (currentX - tempCurX) / scaleFactor;
-        var deltaY = (currentY - tempCurY) / scaleFactor;
-        currentX = tempCurX;
-        currentY = tempCurY;
+      if (camera.active) {
+        if (dragging) {
+          // Determine how far we have moved since the last mouse move event.
+          int tempCurX = ev.client.x;
+          int tempCurY = ev.client.y;
+          var deltaX = (currentX - tempCurX) / scaleFactor;
+          var deltaY = (currentY - tempCurY) / scaleFactor;
+          currentX = tempCurX;
+          currentY = tempCurY;
 
-        if (ev.button == 0) {
+          if (ev.button == 0) {
+            // Update the X and Y rotation angles based on the mouse motion.
+            yRot = (yRot + deltaX) % 360;
+            xRot = (xRot + deltaY);
 
-          // Update the X and Y rotation angles based on the mouse motion.
-          yRot = (yRot + deltaX) % 360;
-          xRot = (xRot + deltaY);
+            // Clamp the X rotation to prevent the camera from going upside down.
+            if (xRot < -90) {
+              xRot = -90;
+            } else if (xRot > 90) {
+              xRot = 90;
+            }
 
-          // Clamp the X rotation to prevent the camera from going upside down.
-          if (xRot < -90) {
-            xRot = -90;
-          } else if (xRot > 90) {
-            xRot = 90;
+            //Todo : create first person eye Rotation with ctrl key
+            camera.rotateOrbitCamera(yRot, xRot); //why inverted ?
+
+          } else if (ev.button == 1) {
+            camera.pan(deltaX, deltaY);
           }
-
-          //Todo : create first person eye Rotation with ctrl key
-          camera.rotateOrbitCamera(yRot, xRot); //why inverted ?
-
-
-        } else if (ev.button == 1) {
-          camera.pan(deltaX, deltaY);
         }
       }
-
     });
 
     gl.canvas.onMouseWheel.listen((WheelEvent event) {
       //Todo add zAxis translation
 
       //Todo with ctrl key..May switch behaviors
-      {
+
+      if (camera.active) {
         var delta = Math.max(-1, Math.min(1, -event.deltaY));
         fov += delta / 50; //calcul du zoom
 

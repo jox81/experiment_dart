@@ -6,7 +6,14 @@ RenderingContext gl;
 
 class Context{
 
-  static Camera mainCamera;
+  static Camera _mainCamera;
+  static Camera get mainCamera => _mainCamera;
+  static set mainCamera(Camera value) {
+    _mainCamera?.active = false;
+    _mainCamera = value;
+    _mainCamera.active = true;
+  }
+
   static Matrix4 mvMatrix = new Matrix4.identity();
 
   static num get width => gl.drawingBufferWidth;

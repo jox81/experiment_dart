@@ -142,7 +142,7 @@ class Webgl01 {
           ..position = new Vector3(2.0, 2.0, 2.0)
           ..targetPosition = new Vector3(0.0, 0.0, 0.0)
     );
-    models.addAll(frustrumGizmo.gizmoMeshes);
+    models.addAll(frustrumGizmo.gizmoModels);
 
 //    Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
 //      ..aspectRatio = Context.viewAspectRatio
@@ -150,7 +150,7 @@ class Webgl01 {
 //      ..position = new Vector3(2.0, 3.0, -5.0)
 //      ..showGizmo = true;
 //    models.add(camera2);
-//    models.addAll(camera2.gizmo.gizmoMeshes);
+//    models.addAll(camera2.gizmo.gizmoModels);
 
 
   }

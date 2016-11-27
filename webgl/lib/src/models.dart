@@ -154,89 +154,91 @@ class FrustrumGizmo implements IGizmo {
   Camera _camera;
   Matrix4 get _vpmatrix => _camera.vpMatrix;
 
-  Vector4 frustrumColor = new Vector4(0.0, 0.7, 1.0, 1.0);
+  Vector4 _positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
+  Vector4 _frustrumColor = new Vector4(0.0, 0.7, 1.0, 1.0);
 
-  num positionPointSize = 6.0;
-  Vector4 positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
-  PointModel positionModel;
-  PointModel targetPositionModel;
+  num _positionPointSize = 6.0;
 
-  final c0 = new Vector3.zero();
-  final c1 = new Vector3.zero();
-  final c2 = new Vector3.zero();
-  final c3 = new Vector3.zero();
-  final c4 = new Vector3.zero();
-  final c5 = new Vector3.zero();
-  final c6 = new Vector3.zero();
-  final c7 = new Vector3.zero();
+  final Vector3 _cameraPosition = new Vector3.zero();
+  final Vector3 _targetPosition = new Vector3.zero();
 
-  LineModel diretionLine;
+  //near
+  final Vector3 c0 = new Vector3.zero();
+  final Vector3 c1 = new Vector3.zero();
+  final Vector3 c2 = new Vector3.zero();
+  final Vector3 c3 = new Vector3.zero();
+  //far
+  final Vector3 c4 = new Vector3.zero();
+  final Vector3 c5 = new Vector3.zero();
+  final Vector3 c6 = new Vector3.zero();
+  final Vector3 c7 = new Vector3.zero();
 
   @override
-  List<Model> gizmoMeshes = [];
+  List<Model> gizmoModels = [];
 
-  FrustrumGizmo(Camera camera) {
-    _camera = camera;
-    _createFrustrumModel(camera.vpMatrix);
+  FrustrumGizmo(this._camera) {
+    _createFrustrumModel(_camera.vpMatrix);
   }
 
   _createFrustrumModel(Matrix4 cameraMatrix) {
     MaterialPoint frustrumPositionPointMaterial =
-        new MaterialPoint(pointSize:positionPointSize, color: frustrumColor);
-    MaterialBaseColor frustrumDirestionLineMaterial =
-        new MaterialBaseColor(new Vector3(0.0, 1.0, 1.0));
+        new MaterialPoint(pointSize:_positionPointSize, color: _positionColor);
+
+    MaterialBaseColor frustrumDirectionLineMaterial =
+        new MaterialBaseColor(_frustrumColor.rgb);
 
     //near plane
-    gizmoMeshes.add(new LineModel(c0, c1)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c1, c2)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c2, c3)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c3, c0)
-      ..material = frustrumDirestionLineMaterial);
+    gizmoModels.add(new LineModel(c0, c1)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c1, c2)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c2, c3)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c3, c0)
+      ..material = frustrumDirectionLineMaterial);
 
     //far plane
-    gizmoMeshes.add(new LineModel(c4, c5)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c5, c6)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c6, c7)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c7, c4)
-      ..material = frustrumDirestionLineMaterial);
+    gizmoModels.add(new LineModel(c4, c5)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c5, c6)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c6, c7)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c7, c4)
+      ..material = frustrumDirectionLineMaterial);
 
     //sides
-    gizmoMeshes.add(new LineModel(c0, c4)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c1, c5)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c2, c6)
-      ..material = frustrumDirestionLineMaterial);
-    gizmoMeshes.add(new LineModel(c3, c7)
-      ..material = frustrumDirestionLineMaterial);
+    gizmoModels.add(new LineModel(c0, c4)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c1, c5)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c2, c6)
+      ..material = frustrumDirectionLineMaterial);
+    gizmoModels.add(new LineModel(c3, c7)
+      ..material = frustrumDirectionLineMaterial);
 
-    gizmoMeshes
-        .add(positionModel = new PointModel()..material = frustrumPositionPointMaterial); //position
-    gizmoMeshes
-        .add(targetPositionModel = new PointModel()..material = frustrumPositionPointMaterial); //target
+    gizmoModels.add(new LineModel(_cameraPosition, _targetPosition)
+          ..material = frustrumDirectionLineMaterial);
 
-    gizmoMeshes.add(
-        diretionLine = new LineModel(_camera.position, _camera.targetPosition)
-          ..material = frustrumDirestionLineMaterial);
+    gizmoModels
+        .add(new PointModel()
+        ..position = _cameraPosition
+        ..material = frustrumPositionPointMaterial); //position
+    gizmoModels
+        .add(new PointModel()
+          ..position = _targetPosition
+          ..material = frustrumPositionPointMaterial); //target
 
     updateGizmo();
   }
 
   @override
   void updateGizmo() {
+    //Update only final positions
     new Frustum.matrix(_vpmatrix)
       ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
 
-    positionModel.transform.setTranslation(_camera.position);
-    targetPositionModel.transform.setTranslation(_camera.targetPosition);
-
-    diretionLine.point1.setFrom(_camera.position);
-    diretionLine.point2.setFrom(_camera.targetPosition);
+    _cameraPosition.setFrom(_camera.position);
+    _targetPosition.setFrom(_camera.targetPosition);
   }
 }
