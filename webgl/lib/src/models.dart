@@ -13,6 +13,8 @@ abstract class Model {
   Mesh mesh = new Mesh();
   IGizmo gizmo;
 
+  bool visible = true;
+
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();
 
@@ -28,6 +30,8 @@ abstract class Model {
       throw new Exception(
           "Can't render object : the material mustn't be null to render the mesh in ${this.runtimeType}");
     }
+
+    if(!visible)return;
 
     material.render(this);
   }
@@ -150,7 +154,11 @@ class AxisPointsModel extends Model {
   }
 }
 
-class FrustrumGizmo implements IGizmo {
+class FrustrumGizmo extends Model implements IGizmo {
+
+  @override
+  bool visible = false;
+
   Camera _camera;
   Matrix4 get _vpmatrix => _camera.vpMatrix;
 
@@ -241,4 +249,13 @@ class FrustrumGizmo implements IGizmo {
     _cameraPosition.setFrom(_camera.position);
     _targetPosition.setFrom(_camera.targetPosition);
   }
+
+  @override
+  void render(){
+    if(!visible)return;
+    for(Model model in gizmoModels){
+      model.render();
+    }
+  }
+
 }

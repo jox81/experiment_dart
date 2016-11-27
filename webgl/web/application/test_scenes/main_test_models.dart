@@ -91,10 +91,11 @@ class Webgl01 {
 //    PointModel pointModel = new PointModel();
 //    models.add(pointModel);
 
-//    PointModel pointModel2 = new PointModel()
-//      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(1.0,0.0,0.0)))
-//      ..material = new MaterialPoint(7.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0));
-//    models.add(pointModel2);
+    PointModel pointModel2 = new PointModel()
+      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(1.0,0.0,0.0)))
+      ..material = new MaterialPoint(pointSize:7.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+      ..visible = true;
+    models.add(pointModel2);
 
 //    LineModel line = new LineModel(new Vector3.all(0.0), new Vector3(5.0,5.0,-3.0));
 //    models.add(line);
@@ -136,21 +137,21 @@ class Webgl01 {
 //      ..transform.rotateX(radians(-90.0));
 //    models.add(jsonModel);
 
-    FrustrumGizmo frustrumGizmo = new FrustrumGizmo(
-        new Camera(radians(45.0), 1.0, 5.0)
-          ..aspectRatio = Context.viewAspectRatio
-          ..position = new Vector3(2.0, 2.0, 2.0)
-          ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-    );
-    models.addAll(frustrumGizmo.gizmoModels);
+//    FrustrumGizmo frustrumGizmo = new FrustrumGizmo(
+//        new Camera(radians(45.0), 1.0, 5.0)
+//          ..aspectRatio = Context.viewAspectRatio
+//          ..position = new Vector3(2.0, 2.0, 2.0)
+//          ..targetPosition = new Vector3(0.0, 0.0, 0.0)
+//    )
+//    ..visible = true;
+//    models.add(frustrumGizmo);
 
-//    Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
-//      ..aspectRatio = Context.viewAspectRatio
-//      ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-//      ..position = new Vector3(2.0, 3.0, -5.0)
-//      ..showGizmo = true;
-//    models.add(camera2);
-//    models.addAll(camera2.gizmo.gizmoModels);
+    Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
+      ..aspectRatio = Context.viewAspectRatio
+      ..targetPosition = new Vector3(0.0, 0.0, 0.0)
+      ..position = new Vector3(2.0, 3.0, -5.0)
+      ..showGizmo = true;
+    models.add(camera2);
 
 
   }

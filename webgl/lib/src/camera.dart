@@ -11,26 +11,30 @@ import 'package:webgl/src/models.dart';
 class Camera extends Model {
   double _fOV;
 
-  bool active = false;
+  bool _active = false;
+  bool get active => _active;
+  set active(bool value) {
+    _active = value;
+  }
 
   double get fOV => _fOV;
   set fOV(num value) {
     _fOV = value;
-    if (showGizmo) _updateGizmo();
+    _updateGizmo();
   }
 
   Vector3 _position = new Vector3(0.0, 1.0, 0.0);
   Vector3 get position => _position;
   set position(Vector3 value) {
     _position = value;
-    if (showGizmo) _updateGizmo();
+    _updateGizmo();
   }
 
   Vector3 _targetPosition;
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
-    if (showGizmo) _updateGizmo();
+    _updateGizmo();
   }
 
   final double zNear;
@@ -52,7 +56,9 @@ class Camera extends Model {
     _cameraController.init(this);
   }
 
-  Camera(this._fOV, this.zNear, this.zFar);
+  Camera(this._fOV, this.zNear, this.zFar) {
+
+  }
 
   void translate(Vector3 position) {
     this.position = position;
@@ -132,27 +138,25 @@ class Camera extends Model {
 
   @override
   void render() {
-    if (showGizmo) {
-      _gizmo == null ? _gizmo = new FrustrumGizmo(this) : null;
-      for (Model object3d in _gizmo.gizmoModels) {
-        object3d.render();
-      }
+    if (_gizmo.visible && !_active) {
+      _gizmo.render();
     }
   }
 
   //FrustrumGizmo
-  bool showGizmo = false;
-  IGizmo _gizmo;
-  IGizmo get gizmo {
-    if (_gizmo == null) {
+  FrustrumGizmo _gizmo;
+  IGizmo get gizmo => _gizmo;
+
+  bool get showGizmo => _gizmo.visible;
+  set showGizmo(bool value) {
+    if(_gizmo == null){
       _gizmo = new FrustrumGizmo(this);
     }
-
-    return _gizmo;
+    _gizmo.visible = value;
   }
 
   _updateGizmo() {
-    gizmo?.updateGizmo();
+    if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
   }
 }
 
@@ -211,7 +215,7 @@ class CameraController {
           currentX = tempCurX;
           currentY = tempCurY;
 
-          if (ev.button == 0) {
+          if (ev.button == 0) {//LMB
             // Update the X and Y rotation angles based on the mouse motion.
             yRot = (yRot + deltaX) % 360;
             xRot = (xRot + deltaY);
@@ -226,7 +230,9 @@ class CameraController {
             //Todo : create first person eye Rotation with ctrl key
             camera.rotateOrbitCamera(yRot, xRot); //why inverted ?
 
-          } else if (ev.button == 1) {
+          } else if (ev.button == 1) {//MMB
+            deltaX *= 0.5;
+            deltaY *= 0.5;
             camera.pan(deltaX, deltaY);
           }
         }

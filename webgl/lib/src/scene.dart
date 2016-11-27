@@ -24,6 +24,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
   List<Material> materials = new List();
   List<Model> models = new List();
+  List<Camera> get cameras => models.where((m)=> m is Camera).toList();
 
   Interaction interaction;
 

@@ -28,10 +28,10 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     'camera target Pos x' : new EditableProperty<num>(()=> camera2.targetPosition.x, (num v)=> camera2.targetPosition = new Vector3(v, camera2.targetPosition.y, camera2.targetPosition.z)),
     'camera target Pos y' : new EditableProperty<num>(()=> camera2.targetPosition.y, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, v, camera2.targetPosition.z)),
     'camera target Pos z' : new EditableProperty<num>(()=> camera2.targetPosition.z, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, camera2.targetPosition.y, v)),
+    'show Gizmo' : new EditableProperty<bool>(()=> camera2.showGizmo, (bool v)=> camera2.showGizmo = v),
     'switchCamera' : new EditableProperty<Function>(()=> switchCamera, null),
   };
 
-  List<Camera> cameras = new List();
   int cameraIndex = 0;
   void switchCamera(){
     cameraIndex += 1;
@@ -66,31 +66,30 @@ class SceneViewPrimitives extends Scene implements IEditScene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    camera = new Camera(radians(45.0), 0.1, 1000.0)
+    camera = new Camera(radians(45.0), 5.0, 1000.0)
       ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
-      ..cameraController = new CameraController();
-    cameras.add(camera);
+      ..cameraController = new CameraController()
+      ..showGizmo = true;
+    models.add(camera);
     Context.mainCamera = camera;
 
-    camera2 = new Camera(radians(37.0), 1.0, 100.0)
+    camera2 = new Camera(radians(37.0), 5.0, 100.0)
       ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(10.0, 10.0, 10.0)
       ..cameraController = new CameraController()
       ..showGizmo = true;
-    models.addAll(camera2.gizmo.gizmoModels);
-    cameras.add(camera2);
+    models.add(camera2);
 
-    camera3 = new Camera(radians(37.0), 1.0, 100.0)
-      ..aspectRatio = Context.viewAspectRatio
-      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-      ..position = new Vector3(10.0, 10.0, 10.0)
-      ..cameraController = new CameraController()
-      ..showGizmo = true;
-    models.addAll(camera3.gizmo.gizmoModels);
-    cameras.add(camera3);
+//    camera3 = new Camera(radians(37.0), 1.0, 100.0)
+//      ..aspectRatio = Context.viewAspectRatio
+//      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
+//      ..position = new Vector3(10.0, 10.0, 10.0)
+//      ..cameraController = new CameraController()
+//      ..showGizmo = true;
+//    models.add(camera3);
 
     //Material
     MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
