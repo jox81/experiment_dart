@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 
-class Light extends Object3d{
+class Light extends Model{
   Vector3 color;
   Light();
 

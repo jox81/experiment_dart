@@ -6,8 +6,8 @@ import 'dart:typed_data';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
-import 'package:webgl/src/mesh.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/models.dart';
 
 void main() {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
@@ -19,7 +19,7 @@ class Webgl01 {
   Buffer vertexBuffer;
   Buffer indicesBuffer;
 
-  List<Object3d> objects = new List();
+  List<Model> models = new List();
 
   Program shaderProgram;
 
@@ -79,7 +79,7 @@ class Webgl01 {
       ..mesh.vertexDimensions = 3
       ..mesh.indices = [0, 1, 2]
       ..transform = (new Matrix4.identity()..setTranslation(new Vector3(2.0,0.0,0.0)));
-    objects.add(customObject);
+    models.add(customObject);
   }
 
   void initShaders() {
@@ -134,8 +134,8 @@ class Webgl01 {
   }
 
   void initBuffers() {
-    List<num> vertices = objects[0].mesh.vertices;
-    List<int> indices = objects[0].mesh.indices;
+    List<num> vertices = models[0].mesh.vertices;
+    List<int> indices = models[0].mesh.indices;
 
     vertexBuffer = gl.createBuffer();
     gl.bindBuffer(GL.ARRAY_BUFFER, vertexBuffer);
@@ -161,18 +161,18 @@ class Webgl01 {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
-    Context.mvMatrix = Context.mainCamera.lookAtMatrix * objects[0].transform;
+    Context.mvMatrix = Context.mainCamera.lookAtMatrix * models[0].transform;
 
     gl.bindBuffer(GL.ARRAY_BUFFER, vertexBuffer);
     gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
     gl.vertexAttribPointer(
-        vertexPositionAttribute, objects[0].mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
+        vertexPositionAttribute, models[0].mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
 
     _setMatrixUniforms();
 
     gl.drawElements(
-        GL.TRIANGLES, objects[0].mesh.indices.length, GL.UNSIGNED_SHORT, 0);
+        GL.TRIANGLES, models[0].mesh.indices.length, GL.UNSIGNED_SHORT, 0);
 
     window.requestAnimationFrame((num time) {
       this.render(time: time);

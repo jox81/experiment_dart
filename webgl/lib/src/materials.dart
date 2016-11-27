@@ -1,6 +1,6 @@
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/material.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;

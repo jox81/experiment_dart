@@ -5,7 +5,8 @@ import 'package:vector_math/vector_math.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/utils.dart';
 
@@ -17,7 +18,7 @@ Future main() async {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
 
   await ShaderSource.loadShaders();
-  susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
+  susanJson = await Utils.loadJSONResource('../models/susan/susan.json');
   webgl01.setup();
   webgl01.render();
 }
@@ -27,7 +28,7 @@ class Webgl01 {
   Buffer vertexBuffer;
   Buffer indicesBuffer;
 
-  List<Object3d> objects = new List();
+  List<Model> models = new List();
 
   Program shaderProgram;
 
@@ -75,29 +76,28 @@ class Webgl01 {
 
   void setupMeshes() {
 
-//    CustomObject customObject = new CustomObject()
-//      ..mesh = new Mesh()
-//      ..mesh.vertices = [
-//        0.0, 0.0, 0.0,
-//        0.0, 0.0, 3.0,
-//        2.0, 0.0, 0.0,
-//      ]
-//      ..mesh.vertexDimensions = 3
-//      ..mesh.indices = [0, 1, 2]
-//      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(0.0,0.0,0.0)))
-//      ..material = new MaterialBase();
-//    objects.add(customObject);
+    CustomObject customObject = new CustomObject()
+      ..mesh.vertices = [
+        0.0, 0.0, 0.0,
+        0.0, 0.0, 3.0,
+        2.0, 0.0, 0.0,
+      ]
+      ..mesh.vertexDimensions = 3
+      ..mesh.indices = [0, 1, 2]
+      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(0.0,0.0,0.0)))
+      ..material = new MaterialBase();
+    models.add(customObject);
 
 //    PointModel pointModel = new PointModel();
-//    objects.add(pointModel);
+//    models.add(pointModel);
 
 //    PointModel pointModel2 = new PointModel()
 //      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(1.0,0.0,0.0)))
 //      ..material = new MaterialPoint(7.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0));
-//    objects.add(pointModel2);
+//    models.add(pointModel2);
 
 //    LineModel line = new LineModel(new Vector3.all(0.0), new Vector3(5.0,5.0,-3.0));
-//    objects.add(line);
+//    models.add(line);
 
 //    MultiLineModel multiLineModel = new MultiLineModel([
 //      new Vector3.all(0.0),
@@ -106,31 +106,31 @@ class Webgl01 {
 //      new Vector3(1.0,1.0,-1.0),
 //      new Vector3(-2.0,1.0,-1.0),
 //    ]);
-//    objects.add(multiLineModel);
+//    models.add(multiLineModel);
 
 //    TriangleModel triangleModel = new TriangleModel()
 //      ..name = 'triangle'
 //      ..transform.translate(0.0, 0.0, 4.0);
-//    objects.add(triangleModel);
+//    models.add(triangleModel);
 
 //    QuadModel quad = new QuadModel()
 //      ..transform.translate(2.0, 0.0, 0.0);
-//    objects.add(quad);
+//    models.add(quad);
 
 //    PyramidModel pyramid = new PyramidModel();
-//    objects.add(pyramid);
+//    models.add(pyramid);
 
 //    CubeModel cube = new CubeModel();
-//    objects.add(cube);
+//    models.add(cube);
 
 //    SphereModel sphere = new SphereModel();
-//    objects.add(sphere);
+//    models.add(sphere);
 
 //    AxisModel axisModel = new AxisModel();
-//    objects.add(axisModel);
+//    models.add(axisModel);
 
 //    AxisPointsModel axisPointsModel = new AxisPointsModel();
-//    objects.add(axisPointsModel);
+//    models.add(axisPointsModel);
 
 //    FrustrumGizmo frustrumGizmo = new FrustrumGizmo(
 //        new Camera(radians(37.0), 1.0, 5.0)
@@ -138,26 +138,26 @@ class Webgl01 {
 //          ..position = new Vector3(0.0, 0.0, 0.0)
 //          ..targetPosition = new Vector3(0.0, 0.0, 5.0)
 //    );
-//    objects.addAll(frustrumGizmo.gizmoMeshes);
+//    models.addAll(frustrumGizmo.gizmoMeshes);
 
 //    Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
 //      ..aspectRatio = Context.viewAspectRatio
 //      ..targetPosition = new Vector3(0.0, 0.0, 0.0)
 //      ..position = new Vector3(2.0, 3.0, -5.0)
 //      ..showGizmo = true;
-//    objects.add(camera2);
-//    objects.addAll(camera2.gizmo.gizmoMeshes);
+//    models.add(camera2);
+//    models.addAll(camera2.gizmo.gizmoMeshes);
 
-    JsonObject jsonModel = new JsonObject(susanJson)
-      ..transform.rotateX(radians(-90.0));
-    objects.add(jsonModel);
+//    JsonObject jsonModel = new JsonObject(susanJson)
+//      ..transform.rotateX(radians(-90.0));
+//    models.add(jsonModel);
   }
 
   void render({num time : 0.0}) {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
 
-    for(Object3d model in objects){
+    for(Model model in models){
       model.render();
     }
 

@@ -1,9 +1,9 @@
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/models.dart';
 
-Object3d experiment() {
+Model experiment() {
 
   String vs = '''
     precision mediump float;

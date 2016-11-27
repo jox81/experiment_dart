@@ -5,9 +5,9 @@ import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -68,7 +68,7 @@ class SceneViewFrameBuffer extends Scene implements IEditScene{
     materialBaseTextureNormal.texture = newTexture;
     cube.material = materialBaseTextureNormal;
 //  cube.material = materialBase;
-    meshes.add(cube);
+    models.add(cube);
 
     // Animation
     num _lastTime = 0.0;

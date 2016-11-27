@@ -4,10 +4,10 @@ import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'dart:typed_data';
 import 'dart:async';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
@@ -41,7 +41,7 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
 
     CustomObject customObject = experiment(Application.currentScene);
     materials.add(customObject.material);
-    meshes.add(customObject);
+    models.add(customObject);
 
     //Animation
     num _lastTime = 0.0;
@@ -53,7 +53,7 @@ class SceneViewParticleSimple extends Scene implements IEditScene{
     };
   }
 
-  Object3d experiment(Scene scene) {
+  Model experiment(Scene scene) {
     num shaderTime = 0.0;
 
     String vShader = '''

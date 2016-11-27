@@ -4,10 +4,10 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/camera.dart';
 import 'dart:async';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -31,7 +31,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
       ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(10.0, 10.0, 10.0);
-    meshes.addAll(camera2.gizmo.gizmoMeshes);
+    models.addAll(camera2.gizmo.gizmoMeshes);
   }
 
   @override
@@ -69,9 +69,9 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     MaterialBase materialBase = new MaterialBase();
 
     AxisModel axis = new AxisModel();
-    meshes.add(axis);
+    models.add(axis);
     AxisPointsModel points = new AxisPointsModel();
-    meshes.add(points);
+    models.add(points);
 
     AxisModel axis2 = new AxisModel()
       ..transform.translate(5.0, 0.0, 0.0);
@@ -81,7 +81,7 @@ class SceneViewPrimitives extends Scene implements IEditScene{
     ..mesh.mode = GL.LINE_STRIP;
     centerCube.transform = axis2.transform;
     centerCube.material = materialBase;
-    meshes.add(centerCube);
+    models.add(centerCube);
 
     //Animation
     num _lastTime = 0.0;

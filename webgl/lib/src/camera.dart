@@ -3,12 +3,12 @@ import 'dart:math' as Math;
 import 'dart:html';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 
 //Remember
 //Matrix4  _mvMatrix = mainCamera.lookAtMatrix * mesh.transform;
 
-class Camera extends Object3d{
+class Camera extends Model{
   double _fOV;
   double get fOV => _fOV;
   set fOV(num value) {
@@ -129,7 +129,7 @@ class Camera extends Object3d{
   void render() {
     if(showGizmo) {
       _gizmo == null ? _gizmo = new FrustrumGizmo(this):null;
-      for (Object3d object3d in _gizmo.gizmoMeshes) {
+      for (Model object3d in _gizmo.gizmoMeshes) {
         object3d.render();
       }
     }

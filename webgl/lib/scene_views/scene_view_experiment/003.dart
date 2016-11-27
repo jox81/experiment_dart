@@ -1,13 +1,13 @@
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
 import 'dart:web_gl';
 
-Future<Object3d> experiment() async {
+Future<Model> experiment() async {
 
   String vs = '''
     precision mediump float;

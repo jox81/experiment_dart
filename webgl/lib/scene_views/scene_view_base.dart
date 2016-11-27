@@ -5,11 +5,11 @@ import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
@@ -118,11 +118,11 @@ class SceneViewBase extends Scene implements IEditScene{
 
     //Meshes
     AxisModel axis = new AxisModel();
-    meshes.add(axis);
+    models.add(axis);
 
     PointModel point = new PointModel()
         ..position.setValues(8.0, 5.0, 10.0);
-    meshes.add(point);
+    models.add(point);
 
     //Line
     MultiLineModel line = new MultiLineModel([
@@ -131,28 +131,28 @@ class SceneViewBase extends Scene implements IEditScene{
       new Vector3(10.0, 0.0, 10.0),
       new Vector3(10.0, 10.0, 10.0),
     ]);
-    meshes.add(line);
+    models.add(line);
 
     // create square
     QuadModel square = new QuadModel()
       ..transform.translate(3.0, 0.0, 0.0)
       ..transform.rotateX(radians(90.0))
       ..material = materialBaseColor;
-    meshes.add(square);
+    models.add(square);
 
     // create triangle
     TriangleModel triangle = new TriangleModel()
       ..name = 'triangle'
       ..transform.translate(0.0, 0.0, 4.0)
       ..material = materialBase;
-    meshes.add(triangle);
+    models.add(triangle);
 
     // create cube
     CubeModel centerCube = new CubeModel()
       ..transform.translate(0.0, 0.0, 0.0)
       ..transform.scale(0.1, 0.1, 0.1)
       ..material = materialBaseColor;
-    meshes.add(centerCube);
+    models.add(centerCube);
 
     // create square
     QuadModel squareX = new QuadModel()
@@ -165,13 +165,13 @@ class SceneViewBase extends Scene implements IEditScene{
       ..colors.addAll([1.0, 0.0, 1.0, 1.0])
       ..colors.addAll([0.0, 1.0, 1.0, 1.0]);
 
-    meshes.add(squareX);
+    models.add(squareX);
 
     //create Pyramide
     PyramidModel pyramid = new PyramidModel()
       ..transform.translate(7.0, 1.0, 0.0)
       ..material = materialBaseVertexColor;
-    meshes.add(pyramid);
+    models.add(pyramid);
 
     //Create Cube
     CubeModel cube = new CubeModel();
@@ -179,7 +179,7 @@ class SceneViewBase extends Scene implements IEditScene{
     materialBaseTextureNormal.texture =
     await TextureUtils.createTextureFromFile("../images/crate.gif");
     cube.material = materialBaseTextureNormal;
-    meshes.add(cube);
+    models.add(cube);
 
     //SusanModel
     var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
@@ -190,14 +190,14 @@ class SceneViewBase extends Scene implements IEditScene{
       ..transform.translate(10.0, 0.0, -5.0)
       ..transform.rotateX(radians(-90.0))
       ..material = susanMaterialBaseTexture;
-    meshes.add(jsonModel);
+    models.add(jsonModel);
 
     //Sphere
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
       ..transform.translate(0.0, 0.0, -10.0)
       ..material = materialPBR;
     //sphere.mode = GL.LINES;
-    meshes.add(sphere);
+    models.add(sphere);
 
     //Animation
     num _lastTime = 0.0;
@@ -233,7 +233,7 @@ class SceneViewBase extends Scene implements IEditScene{
       ..transform.translate(random.nextDouble() * 10, random.nextDouble() * 10, random.nextDouble() * 10)
       ..transform.scale(0.1, 0.1, 0.1)
       ..material = materials.firstWhere((m)=> m is MaterialBaseColor );
-    meshes.add(centerCube);
+    models.add(centerCube);
   }
 
 }

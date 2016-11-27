@@ -1,17 +1,15 @@
-import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/material.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/materials.dart';
 
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
-abstract class Object3d {
+abstract class Model {
   String name; //Todo : S'assurer que les noms soient uniques ?!
-  Mesh mesh;
+  Mesh mesh = new Mesh();
   IGizmo gizmo;
 
   //Transform : position, rotation, scale
@@ -31,13 +29,13 @@ abstract class Object3d {
   }
 }
 
-class CustomObject extends Object3d {
+class CustomObject extends Model {
   CustomObject();
 }
 
-class JsonObject extends Object3d {
+class JsonObject extends Model {
   JsonObject(Map jsonFile){
-    mesh = new Mesh()
+    mesh
       ..vertices = jsonFile['meshes'][0]['vertices']
       ..indices = jsonFile['meshes'][0]['faces']
           .expand((i) => i)
@@ -48,14 +46,14 @@ class JsonObject extends Object3d {
   }
 }
 
-class PointModel extends Object3d {
+class PointModel extends Model {
   PointModel() {
     mesh = new Mesh.Point();
     material = new MaterialPoint(pointSize:5.0 ,color:_defaultModelColor);
   }
 }
 
-class LineModel extends Object3d {
+class LineModel extends Model {
   Vector3 point1, point2;
 
   LineModel(this.point1, this.point2) {
@@ -77,42 +75,42 @@ class LineModel extends Object3d {
   }
 }
 
-class MultiLineModel extends Object3d {
+class MultiLineModel extends Model {
   MultiLineModel(List<Vector3> points) {
     mesh = new Mesh.Line(points);
     material = new MaterialBase();
   }
 }
 
-class TriangleModel extends Object3d {
+class TriangleModel extends Model {
   TriangleModel() {
     mesh = new Mesh.Triangle();
     material = new MaterialBase();
   }
 }
 
-class QuadModel extends Object3d {
+class QuadModel extends Model {
   QuadModel() {
     mesh = new Mesh.Rectangle();
     material = new MaterialBase();
   }
 }
 
-class PyramidModel extends Object3d {
+class PyramidModel extends Model {
   PyramidModel() {
     mesh = new Mesh.Pyramid();
     material = new MaterialBase();
   }
 }
 
-class CubeModel extends Object3d {
+class CubeModel extends Model {
   CubeModel() {
     mesh = new Mesh.Cube();
     material = new MaterialBase();
   }
 }
 
-class SphereModel extends Object3d {
+class SphereModel extends Model {
   SphereModel({num radius: 1, int segmentV: 32, int segmentH: 32}) {
     mesh =
         new Mesh.Sphere(radius: radius, segmentV: segmentV, segmentH: segmentH);
@@ -122,14 +120,14 @@ class SphereModel extends Object3d {
 
 //Todo : create a CompoundObjectModel
 
-class AxisModel extends Object3d {
+class AxisModel extends Model {
   AxisModel() {
     mesh = new Mesh.Axis();
     material = new MaterialPoint();
   }
 }
 
-class AxisPointsModel extends Object3d {
+class AxisPointsModel extends Model {
   AxisPointsModel() {
     mesh = new Mesh.AxisPoints();
     material = new MaterialPoint(pointSize:5.0);
@@ -161,7 +159,7 @@ class FrustrumGizmo implements IGizmo {
   LineModel diretionLine;
 
   @override
-  List<Object3d> gizmoMeshes = [];
+  List<Model> gizmoMeshes = [];
 
   FrustrumGizmo(Camera camera) {
     _camera = camera;

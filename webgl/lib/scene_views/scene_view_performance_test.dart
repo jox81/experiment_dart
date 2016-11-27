@@ -6,10 +6,10 @@ import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:math';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -111,7 +111,7 @@ class SceneViewPerformanceTest extends Scene implements IEditScene{
           random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2);
       cube.material = materialPBR;
-      meshes.add(cube);
+      models.add(cube);
     }
     // Animation
     num _lastTime = 0.0;

@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 
 void main() {
   num viewportX = 0.0;

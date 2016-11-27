@@ -3,13 +3,13 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'dart:collection';
 //import 'package:webgl/src/application.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
 import 'package:webgl/src/interaction.dart';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 
 abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
@@ -23,7 +23,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   AmbientLight ambientLight = new AmbientLight();
 
   List<Material> materials = new List();
-  List<Object3d> meshes = new List();
+  List<Model> models = new List();
 
   Interaction interaction;
 
@@ -59,7 +59,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
   }
 
   void render(){
-    for (Object3d model in meshes) {
+    for (Model model in models) {
       model.render();
     }
   }

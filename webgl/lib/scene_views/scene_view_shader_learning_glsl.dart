@@ -2,9 +2,9 @@ import 'package:webgl/src/animation_property.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/mesh.dart';
+import 'package:webgl/src/meshes.dart';
 import 'dart:async';
-import 'package:webgl/src/primitives.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
@@ -37,7 +37,7 @@ class SceneViewShaderLearning01 extends Scene implements IEditScene{
 
     CustomObject customObject = baseSurface();
     materials.add(customObject.material);
-    meshes.add(customObject);
+    models.add(customObject);
 
     //Animation
     num _lastTime = 0.0;
