@@ -91,11 +91,11 @@ class Webgl01 {
 //    PointModel pointModel = new PointModel();
 //    models.add(pointModel);
 
-    PointModel pointModel2 = new PointModel()
-      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(1.0,0.0,0.0)))
-      ..material = new MaterialPoint(pointSize:7.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
-      ..visible = true;
-    models.add(pointModel2);
+//    PointModel pointModel2 = new PointModel()
+//      ..transform = (new Matrix4.identity()..setTranslation(new Vector3(1.0,0.0,0.0)))
+//      ..material = new MaterialPoint(pointSize:7.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+//      ..visible = true;
+//    models.add(pointModel2);
 
 //    LineModel line = new LineModel(new Vector3.all(0.0), new Vector3(5.0,5.0,-3.0));
 //    models.add(line);
@@ -111,7 +111,7 @@ class Webgl01 {
 
 //    TriangleModel triangleModel = new TriangleModel()
 //      ..name = 'triangle'
-//      ..transform.translate(0.0, 0.0, 4.0);
+//      ..transform.translate(0.0, 0.0, 0.0);
 //    models.add(triangleModel);
 
 //    QuadModel quad = new QuadModel()
@@ -149,10 +149,95 @@ class Webgl01 {
     Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
       ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-      ..position = new Vector3(2.0, 3.0, -5.0)
+      ..position = new Vector3(5.0, 5.0, -5.0)
       ..showGizmo = true;
     models.add(camera2);
 
+//    unProjectMultiScreenPoints(camera2);
+
+//    gl.canvas.onMouseUp.listen((MouseEvent e) {
+//      Vector3 outRayNear = new Vector3.zero();
+//      Utils.unProjectScreenPoint(camera2, outRayNear, e.offset.x, e.offset.y);
+//      models.add(new PointModel()
+//        ..transform = (new Matrix4.identity()..setTranslation(outRayNear))
+//        ..material = new MaterialPoint(pointSize:6.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+//        ..visible = true);
+//    });
+
+//    gl.canvas.onMouseUp.listen((MouseEvent e) {
+//      Vector3 outRayNear = new Vector3.zero();
+//      Vector3 outRayFar = new Vector3.zero();
+//      Utils.pickRayFromScreenPoint(camera2, outRayNear, outRayFar, e.offset.x, e.offset.y);
+//      models.add(new PointModel()
+//        ..transform = (new Matrix4.identity()..setTranslation(outRayNear))
+//        ..material = new MaterialPoint(pointSize:6.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+//        ..visible = true);
+//      models.add(new PointModel()
+//        ..transform = (new Matrix4.identity()..setTranslation(outRayFar))
+//        ..material = new MaterialPoint(pointSize:6.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+//        ..visible = true);
+//    });
+
+//    Sphere sphere = new Sphere.centerRadius(new Vector3.zero(), .5);
+//
+//    gl.canvas.onMouseUp.listen((MouseEvent e) {
+//
+//      Vector3 outRayNear = new Vector3.zero();
+//      Utils.unProjectScreenPoint(camera2, outRayNear, e.offset.x, e.offset.y);
+//
+//      models.add(new PointModel()
+//        ..transform = (new Matrix4.identity()..setTranslation(outRayNear))
+//        ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+//        ..visible = true);
+//
+//      Vector3 direction = outRayNear - camera2.position;
+//      Ray ray = new Ray.originDirection(outRayNear, direction);
+//
+//      num distance = ray.intersectsWithSphere(sphere);
+//      print(distance);
+//
+//      if(distance != null) {
+//        models.add(new PointModel()
+//          ..transform = (new Matrix4.identity()
+//            ..setTranslation(ray.at(distance)))
+//          ..material = new MaterialPoint(
+//              pointSize: 5.0, color: new Vector4(1.0, 0.0, 0.0, 1.0))
+//          ..visible = true);
+//      }
+//    });
+
+    TriangleModel triangleModelToIntersect = new TriangleModel()
+      ..name = 'triangle'
+      ..transform.translate(0.0, 0.0, 0.0);
+    models.add(triangleModelToIntersect);
+
+    List<Triangle> faces = triangleModelToIntersect.mesh.faces;
+
+    gl.canvas.onMouseUp.listen((MouseEvent e) {
+
+      Vector3 outRayNear = new Vector3.zero();
+      Utils.unProjectScreenPoint(camera2, outRayNear, e.offset.x, e.offset.y);
+
+      Vector3 direction = outRayNear - camera2.position;
+      Ray ray = new Ray.originDirection(outRayNear, direction);
+
+      num distance = ray.intersectsWithTriangle(faces[0]);
+      print(distance);
+
+      if(distance != null) {
+        models.add(new PointModel()
+          ..transform = (new Matrix4.identity()..setTranslation(outRayNear))
+          ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+          ..visible = true);
+
+        models.add(new PointModel()
+          ..transform = (new Matrix4.identity()
+            ..setTranslation(ray.at(distance)))
+          ..material = new MaterialPoint(
+              pointSize: 5.0, color: new Vector4(1.0, 0.0, 0.0, 1.0))
+          ..visible = true);
+      }
+    });
 
   }
 
@@ -167,6 +252,24 @@ class Webgl01 {
     window.requestAnimationFrame((num time) {
       this.render(time: time);
     });
+  }
+
+  void unProjectMultiScreenPoints(Camera camera2) {
+    num pickX = 0.0;
+    num pickY = Context.height * 0.25;
+    num pickZ = 0.0;
+
+    Vector3 pickWorld = new Vector3.zero();
+
+    for (num i = 0.0; i < 1.0; i += 0.1) {
+      pickX = i * Context.width;
+      Utils.unProjectScreenPoint(camera2, pickWorld, pickX, pickY, pickZ:pickZ);
+
+      models.add(new PointModel()
+        ..transform = (new Matrix4.identity()..setTranslation(pickWorld))
+        ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+        ..visible = true);
+    }
   }
 
 }

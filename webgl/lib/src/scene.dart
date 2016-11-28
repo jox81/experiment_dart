@@ -64,6 +64,4 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
       model.render();
     }
   }
-
-
 }

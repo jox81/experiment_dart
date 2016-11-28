@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/globals/context.dart';
 
 class Utils{
 
@@ -122,9 +124,31 @@ class Utils{
     }
   }
 
-  static Vector3 screenToWorld(Matrix4 cameraMatrix, int screenWidth, int screenHeight, int screenX, int screenY) {
-    Vector3 worldPick = new Vector3.all(0.0);
-    unproject(cameraMatrix, 0, screenWidth, 0, screenHeight, screenX, screenY, 0.0, worldPick);
-    return new Vector3(-worldPick.x, worldPick.y, worldPick.z);
+  /// Permet de retorver un point en WORLD depuis un point en SREEN
+  /// il faut concidérer l'origine de screen en haut à gauche, y pointant vers le bas
+  /// ! les coordonnées screen webgl sont en y inversé
+  ///Les coordonnées x et y se trouvent sur le plan near de la camera
+  ///Le pick Z indique la profondeur à laquelle il faut place le point dé-projeté, z ayant un range de 0.0 à 1.0
+  ///En webgl, l'origine en screen se trouve en bas à gauche du plan near
+  ///En webgl, l'axe y pointant vers le haut, x vers la droite
+  static bool unProjectScreenPoint(Camera camera, pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
+    num pickX = screenX;
+    num pickY = Context.height - screenY;
+
+    bool unProjected = unproject(camera.vpMatrix, 0, Context.width,
+        0, Context.height, pickX, pickY, pickZ, pickWorld);
+
+    return unProjected;
+  }
+
+  static bool pickRayFromScreenPoint(Camera camera, Vector3 outRayNear,
+    Vector3 outRayFar, num screenX, num screenY) {
+    num pickX = screenX;
+    num pickY = screenY;
+
+    bool rayPicked = pickRay(camera.vpMatrix, 0, Context.width,
+        0, Context.height, pickX, pickY, outRayNear, outRayFar);
+
+    return rayPicked;
   }
 }

@@ -35,6 +35,13 @@ abstract class Model {
 
     material.render(this);
   }
+
+  List<Triangle> get faces {
+    List<Triangle> _facesTransformed = mesh.faces.toList();
+    _facesTransformed.forEach((t)=> t.transform(this.transform));
+    return _facesTransformed;
+  }
+
 }
 
 class CustomObject extends Model {

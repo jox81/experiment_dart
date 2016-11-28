@@ -67,6 +67,41 @@ class Mesh {
   int get vertexNormalsCount =>
       _vertexNormals.length ~/ _vertexNormalsDimensions;
 
+  List<Triangle> _faces;
+  List<Triangle> get faces {
+
+    /*
+    référence pour la construction
+    vertices = [
+      0.0, 1.0, 0.0, //top vertex
+      1.0, -1.0, 1.0,
+      1.0, -1.0, -1.0,
+      -1.0, -1.0, -1.0,
+      -1.0, -1.0, 1.0,
+    ];
+
+    indices = [
+      0, 1, 2, // right face
+      0, 2, 3, // front face
+      0, 3, 4, // left face
+      0, 4, 1, // back face
+      1, 2, 3, // bottom face
+      1, 3, 4, // bottom face
+    ];
+     */
+
+    if(_faces == null){
+      _faces = [];
+      for(int indice = 0; indice< _indices.length; indice += 3){
+        Vector3 p1 = new Vector3(vertices[indice + 0 + 0], vertices[indice + 0 + 1], vertices[indice + 0 + 2]);
+        Vector3 p2 = new Vector3(vertices[indice + 1 + 0], vertices[indice + 1 + 1], vertices[indice + 1 + 2]);
+        Vector3 p3 = new Vector3(vertices[indice + 2 + 0], vertices[indice + 2 + 1], vertices[indice + 2 + 2]);
+        _faces.add(new Triangle.points(p1, p2, p3));
+      }
+    }
+    return _faces;
+  }
+
   Mesh();
 
   factory Mesh.Point() {
@@ -138,13 +173,23 @@ class _LineMesh extends Mesh {
 
 class _TriangleMesh extends Mesh {
   _TriangleMesh() {
-    vertices = [0.0, 0.0, 0.0, 2.0, 0.0, 0.0, 0.0, 2.0, 0.0];
+    vertices = [
+      0.0, 0.0, 0.0,
+      2.0, 0.0, 0.0,
+      0.0, 2.0, 0.0
+    ];
+    indices = [0,1,2];
   }
 }
 
 class _SquareMesh extends Mesh {
   _SquareMesh() {
-    vertices = [1.0, 1.0, 0.0, -1.0, 1.0, 0.0, 1.0, -1.0, 0.0, -1.0, -1.0, 0.0];
+    vertices = [
+      1.0, 1.0, 0.0,
+      -1.0, 1.0, 0.0,
+      1.0, -1.0, 0.0,
+      -1.0, -1.0, 0.0
+    ];
   }
 }
 
