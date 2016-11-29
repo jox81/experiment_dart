@@ -78,14 +78,14 @@ class Interaction {
     gl.canvas.onMouseMove.listen((MouseEvent e) {
 //      debugInfo(e.offset.x, e.offset.y,0);
       Matrix4 cameraMatix = Context.mainCamera.vpMatrix;
-      Vector3 worldPick = Utils.screenToWorld(cameraMatix, Context.width, Context.height, e.offset.x, e.offset.y);
+//      Vector3 worldPick = Utils.unProjectScreenPoint(cameraMatix, Context.width, Context.height, e.offset.x, e.offset.y);
 
 //      debugInfo(worldPick.x, worldPick.y, worldPick.z);
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
       Matrix4 cameraMatix = Context.mainCamera.vpMatrix;
-      Vector3 worldPick = Utils.screenToWorld(cameraMatix, Context.width, Context.height, e.offset.x, e.offset.y);
+//      Vector3 worldPick = Utils.screenToWorld(cameraMatix, Context.width, Context.height, e.offset.x, e.offset.y);
 //      scene.createLine(new Vector3.all(0.0), worldPick);
     });
   }

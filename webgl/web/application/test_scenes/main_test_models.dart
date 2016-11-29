@@ -5,6 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/material.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
@@ -127,8 +128,8 @@ class Webgl01 {
 //    SphereModel sphere = new SphereModel();
 //    models.add(sphere);
 
-//    AxisModel axisModel = new AxisModel();
-//    models.add(axisModel);
+    AxisModel axisModel = new AxisModel();
+    models.add(axisModel);
 
 //    AxisPointsModel axisPointsModel = new AxisPointsModel();
 //    models.add(axisPointsModel);
@@ -153,7 +154,7 @@ class Webgl01 {
       ..showGizmo = true;
     models.add(camera2);
 
-//    unProjectMultiScreenPoints(camera2);
+    models.addAll(Utils.unProjectMultiScreenPoints(camera2));
 
 //    gl.canvas.onMouseUp.listen((MouseEvent e) {
 //      Vector3 outRayNear = new Vector3.zero();
@@ -206,37 +207,25 @@ class Webgl01 {
 //      }
 //    });
 
-    TriangleModel triangleModelToIntersect = new TriangleModel()
+    TriangleModel triangleModel = new TriangleModel()
       ..name = 'triangle'
-      ..transform.translate(0.0, 0.0, 0.0);
-    models.add(triangleModelToIntersect);
+      ..transform.translate(1.0, 0.0, 3.0);
+    models.add(triangleModel);
 
-    List<Triangle> faces = triangleModelToIntersect.mesh.faces;
+    TriangleModel triangleModel2 = new TriangleModel()
+      ..name = 'triangle2'
+      ..transform.translate(-3.0, 0.0, 0.0);
+    models.add(triangleModel2);
+
+    List<Model> modelsHit = [triangleModel, triangleModel2];
+
+    models.addAll(Utils.drawModelVertices(triangleModel));
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
+      Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
 
-      Vector3 outRayNear = new Vector3.zero();
-      Utils.unProjectScreenPoint(camera2, outRayNear, e.offset.x, e.offset.y);
-
-      Vector3 direction = outRayNear - camera2.position;
-      Ray ray = new Ray.originDirection(outRayNear, direction);
-
-      num distance = ray.intersectsWithTriangle(faces[0]);
-      print(distance);
-
-      if(distance != null) {
-        models.add(new PointModel()
-          ..transform = (new Matrix4.identity()..setTranslation(outRayNear))
-          ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
-          ..visible = true);
-
-        models.add(new PointModel()
-          ..transform = (new Matrix4.identity()
-            ..setTranslation(ray.at(distance)))
-          ..material = new MaterialPoint(
-              pointSize: 5.0, color: new Vector4(1.0, 0.0, 0.0, 1.0))
-          ..visible = true);
-      }
+      models.addAll(Utils.findModelHitPoint(modelsHit[1],ray));
+      print(Utils.findModelHit(modelsHit, ray)?.name);
     });
 
   }
@@ -252,24 +241,6 @@ class Webgl01 {
     window.requestAnimationFrame((num time) {
       this.render(time: time);
     });
-  }
-
-  void unProjectMultiScreenPoints(Camera camera2) {
-    num pickX = 0.0;
-    num pickY = Context.height * 0.25;
-    num pickZ = 0.0;
-
-    Vector3 pickWorld = new Vector3.zero();
-
-    for (num i = 0.0; i < 1.0; i += 0.1) {
-      pickX = i * Context.width;
-      Utils.unProjectScreenPoint(camera2, pickWorld, pickX, pickY, pickZ:pickZ);
-
-      models.add(new PointModel()
-        ..transform = (new Matrix4.identity()..setTranslation(pickWorld))
-        ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
-        ..visible = true);
-    }
   }
 
 }

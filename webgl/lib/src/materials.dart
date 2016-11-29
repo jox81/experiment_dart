@@ -93,12 +93,12 @@ class MaterialBaseColor extends Material {
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External Parameters
-  final Vector3 color;
+  final Vector4 color;
 
   MaterialBaseColor._internal(String vsSource, String fsSource, this.color)
       : super(vsSource, fsSource);
 
-  factory MaterialBaseColor(Vector3 color){
+  factory MaterialBaseColor(Vector4 color){
     ShaderSource shaderSource = ShaderSource.sources['material_base_color'];
     return new MaterialBaseColor._internal(shaderSource.vsCode, shaderSource.fsCode, color);
   }

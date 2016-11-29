@@ -5,6 +5,9 @@ import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/material.dart';
+import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/models.dart';
 
 class Utils{
 
@@ -150,5 +153,102 @@ class Utils{
         0, Context.height, pickX, pickY, outRayNear, outRayFar);
 
     return rayPicked;
+  }
+
+  /// Experiment with unProject
+  static List<PointModel> unProjectMultiScreenPoints(Camera camera) {
+    List<PointModel> resultPoints = [];
+
+    num pickX = 0.0;
+    num pickY = Context.height * 0.25;
+    num pickZ = 0.0;
+
+    Vector3 pickWorld = new Vector3.zero();
+
+    for (num i = 0.0; i < 1.0; i += 0.1) {
+      pickX = i * Context.width;
+      Utils.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
+
+      resultPoints.add(new PointModel()
+        ..transform = (new Matrix4.identity()..setTranslation(pickWorld))
+        ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+        ..visible = true);
+    }
+    return resultPoints;
+  }
+
+  /// Maybe buggy for some models like the sphere mesh
+  /// How to hide vertices after shown ?
+  static List<PointModel> drawModelVertices(Model model) {
+    List<PointModel> resultPoints = [];
+    Material material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
+
+    for(Triangle triangle in model.faces){
+      resultPoints.addAll(drawTriangleVertices(triangle, material));
+    }
+    return resultPoints;
+  }
+
+  /// Draw a point for each vertex of the triangle
+  static List<PointModel> drawTriangleVertices(Triangle triangle, MaterialPoint material) {
+    List<PointModel> resultPoints = [];
+
+    List<Vector3> vertices = [triangle.point0, triangle.point1, triangle.point2];
+
+    for(Vector3 vertex in vertices){
+      resultPoints.add(new PointModel()
+        ..transform = (new Matrix4.identity()..setTranslation(vertex))
+        ..material = material);
+    }
+    return resultPoints;
+  }
+
+  /// Find ray with mouse coord in the camera
+  static Ray findRay(Camera camera, num screenX, num screenY) {
+    Vector3 outRayNear = new Vector3.zero();
+    Utils.unProjectScreenPoint(camera, outRayNear, screenX, screenY);
+
+    Vector3 direction = outRayNear - camera.position;
+    return new Ray.originDirection(outRayNear, direction);
+  }
+
+
+  /// Draw a point on the model intersected with the ray
+  static List<PointModel> findModelHitPoint(Model model, Ray ray) {
+    List<PointModel> resultPoints = [];
+    Material material = new MaterialPoint(pointSize:8.0 ,color: new Vector4(1.0, 0.0, 0.0, 1.0));
+
+    for(Triangle triangle in model.faces) {
+      num distance = ray.intersectsWithTriangle(triangle);
+
+      if(distance != null) {
+        resultPoints.add(new PointModel()
+          ..transform = (new Matrix4.identity()..setTranslation(ray.at(distance)))
+          ..material = material);
+      }
+    }
+
+    return resultPoints;
+  }
+
+  /// Find the first hit model in the list using the ray
+  static Model findModelHit(List<Model> models, Ray ray) {
+    Model modelHit;
+    num distanceHit;
+
+    for(Model model in models){
+      for(Triangle triangle in model.faces) {
+        num distance = ray.intersectsWithTriangle(triangle);
+
+        if(distance != null) {
+          if(modelHit == null || distance < distanceHit) {
+            modelHit = model;
+            distanceHit = distance;
+          }
+        }
+      }
+    }
+
+    return modelHit;
   }
 }

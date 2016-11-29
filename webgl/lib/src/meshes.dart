@@ -73,29 +73,19 @@ class Mesh {
     /*
     référence pour la construction
     vertices = [
-      0.0, 1.0, 0.0, //top vertex
-      1.0, -1.0, 1.0,
-      1.0, -1.0, -1.0,
-      -1.0, -1.0, -1.0,
-      -1.0, -1.0, 1.0,
+      0.0, 0.0, 0.0,
+      2.0, 0.0, 0.0,
+      0.0, 2.0, 0.0
     ];
-
-    indices = [
-      0, 1, 2, // right face
-      0, 2, 3, // front face
-      0, 3, 4, // left face
-      0, 4, 1, // back face
-      1, 2, 3, // bottom face
-      1, 3, 4, // bottom face
-    ];
+    indices = [0,1,2];
      */
 
     if(_faces == null){
       _faces = [];
-      for(int indice = 0; indice< _indices.length; indice += 3){
+      for(int indice = 0; indice < _indices.length; indice += 9){
         Vector3 p1 = new Vector3(vertices[indice + 0 + 0], vertices[indice + 0 + 1], vertices[indice + 0 + 2]);
-        Vector3 p2 = new Vector3(vertices[indice + 1 + 0], vertices[indice + 1 + 1], vertices[indice + 1 + 2]);
-        Vector3 p3 = new Vector3(vertices[indice + 2 + 0], vertices[indice + 2 + 1], vertices[indice + 2 + 2]);
+        Vector3 p2 = new Vector3(vertices[indice + 3 + 0], vertices[indice + 3 + 1], vertices[indice + 3 + 2]);
+        Vector3 p3 = new Vector3(vertices[indice + 6 + 0], vertices[indice + 6 + 1], vertices[indice + 6 + 2]);
         _faces.add(new Triangle.points(p1, p2, p3));
       }
     }

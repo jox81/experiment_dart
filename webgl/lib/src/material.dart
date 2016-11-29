@@ -179,7 +179,7 @@ abstract class Material {
     }
   }
 
-  void setShaderUniformWithName(String uniformName, data, [data1, data2]) {
+  void setShaderUniformWithName(String uniformName, data, [data1, data2, data3]) {
 
     ActiveInfoCustom activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName, orElse:() => null);
 
@@ -195,6 +195,13 @@ abstract class Material {
             gl.uniform3fv(uniforms[uniformName], data);
           } else {
             gl.uniform3f(uniforms[uniformName], data, data1, data2);
+          }
+          break;
+        case 'FLOAT_VEC4':
+          if (data1 == null && data2 == null && data3 == null) {
+            gl.uniform4fv(uniforms[uniformName], data);
+          } else {
+            gl.uniform4f(uniforms[uniformName], data, data1, data2, data3);
           }
           break;
         case 'BOOL':

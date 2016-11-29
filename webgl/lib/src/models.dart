@@ -36,10 +36,13 @@ abstract class Model {
     material.render(this);
   }
 
+  List<Triangle> _faces;
   List<Triangle> get faces {
-    List<Triangle> _facesTransformed = mesh.faces.toList();
-    _facesTransformed.forEach((t)=> t.transform(this.transform));
-    return _facesTransformed;
+    if(_faces == null){
+      _faces = mesh.faces.toList();
+      _faces.forEach((t)=> t.transform(this.transform));
+    }
+    return _faces;
   }
 
 }
@@ -200,7 +203,7 @@ class FrustrumGizmo extends Model implements IGizmo {
         new MaterialPoint(pointSize:_positionPointSize, color: _positionColor);
 
     MaterialBaseColor frustrumDirectionLineMaterial =
-        new MaterialBaseColor(_frustrumColor.rgb);
+        new MaterialBaseColor(_frustrumColor);
 
     //near plane
     gizmoModels.add(new LineModel(c0, c1)

@@ -97,7 +97,7 @@ class SceneViewBase extends Scene implements IEditScene{
     materials.add(materialBase);
 
     MaterialBaseColor materialBaseColor = new MaterialBaseColor(
-        new Vector3(1.0, 1.0, 0.0));
+        new Vector4(1.0, 1.0, 0.0, 1.0));
     materials.add(materialBaseColor);
 
     MaterialBaseVertexColor materialBaseVertexColor = new MaterialBaseVertexColor();
