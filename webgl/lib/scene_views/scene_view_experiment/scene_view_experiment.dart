@@ -12,7 +12,7 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-class SceneViewExperiment extends Scene implements IEditScene{
+class SceneViewExperiment extends Scene implements IEditElement{
 
   /// implements ISceneViewBase
   Map<String, EditableProperty> get properties =>{};

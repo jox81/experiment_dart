@@ -12,7 +12,7 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewPrimitives extends Scene implements IEditScene{
+class SceneViewPrimitives extends Scene{
 
   //Todo : créer une liste déroulante de choix des meshes dans angular
 
@@ -92,23 +92,33 @@ class SceneViewPrimitives extends Scene implements IEditScene{
 //    models.add(camera3);
 
     //Material
-    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
-    MaterialBase materialBase = new MaterialBase();
+//    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
+//    MaterialBase materialBase = new MaterialBase();
+//
+//    AxisModel axis = new AxisModel();
+//    models.add(axis);
+//    AxisPointsModel points = new AxisPointsModel();
+//    models.add(points);
+//
+//    AxisModel axis2 = new AxisModel()
+//      ..transform.translate(5.0, 0.0, 0.0);
+//
+//    // create cube
+//    CubeModel centerCube = new CubeModel()
+//    ..mesh.mode = GL.LINE_STRIP;
+//    centerCube.transform = axis2.transform;
+//    centerCube.material = materialBase;
+//    models.add(centerCube);
 
-    AxisModel axis = new AxisModel();
-    models.add(axis);
-    AxisPointsModel points = new AxisPointsModel();
-    models.add(points);
+    TriangleModel triangleModel = new TriangleModel()
+      ..name = 'triangle'
+      ..transform.translate(1.0, 0.0, 3.0);
+    models.add(triangleModel);
 
-    AxisModel axis2 = new AxisModel()
-      ..transform.translate(5.0, 0.0, 0.0);
-
-    // create cube
-    CubeModel centerCube = new CubeModel()
-    ..mesh.mode = GL.LINE_STRIP;
-    centerCube.transform = axis2.transform;
-    centerCube.material = materialBase;
-    models.add(centerCube);
+    TriangleModel triangleModel2 = new TriangleModel()
+      ..name = 'triangle2'
+      ..transform.translate(-3.0, 0.0, 0.0);
+    models.add(triangleModel2);
 
     //Animation
     num _lastTime = 0.0;

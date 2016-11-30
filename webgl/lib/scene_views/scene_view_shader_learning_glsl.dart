@@ -9,7 +9,7 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
-class SceneViewShaderLearning01 extends Scene implements IEditScene{
+class SceneViewShaderLearning01 extends Scene{
 
   Map<String, EditableProperty> get properties =>{};
 

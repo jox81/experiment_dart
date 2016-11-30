@@ -12,7 +12,7 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/interaction.dart';
 
-class SceneViewParticleSimple extends Scene implements IEditScene{
+class SceneViewParticleSimple extends Scene{
 
   Map<String, EditableProperty> get properties =>{};
 

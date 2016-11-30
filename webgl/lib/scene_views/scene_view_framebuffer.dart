@@ -12,7 +12,7 @@ import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewFrameBuffer extends Scene implements IEditScene{
+class SceneViewFrameBuffer extends Scene{
 
   Map<String, EditableProperty> get properties =>{};
 

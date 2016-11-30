@@ -10,7 +10,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewPBR extends Scene implements IEditScene{
+class SceneViewPBR extends Scene{
 
   Map<String, EditableProperty> get properties =>{};
 

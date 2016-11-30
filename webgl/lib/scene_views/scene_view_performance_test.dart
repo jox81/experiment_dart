@@ -14,7 +14,7 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewPerformanceTest extends Scene implements IEditScene{
+class SceneViewPerformanceTest extends Scene{
 
   /// implements ISceneViewBase
   String message = 'test';

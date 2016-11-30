@@ -11,7 +11,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewParticle extends Scene implements IEditScene{
+class SceneViewParticle extends Scene{
 
   /// implements ISceneViewBase
   num varA = 30;

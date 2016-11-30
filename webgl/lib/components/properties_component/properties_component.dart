@@ -9,7 +9,7 @@ import 'package:webgl/src/interface/IScene.dart';
 class PropertiesComponent{
 
   @Input()
-  IEditScene iEditScene;
+  IEditElement iEditElement;
 
   //String
   bool isString(EditableProperty animationProperty){

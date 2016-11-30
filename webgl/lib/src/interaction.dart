@@ -1,7 +1,7 @@
 import 'dart:html';
-import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils.dart';
 import 'dart:typed_data';
@@ -9,7 +9,6 @@ import 'package:gl_enums/gl_enums.dart' as GL;
 
 class Interaction {
 
-  RenderingContext gl;
   final Scene scene;
 
   //Debug div
@@ -18,7 +17,7 @@ class Interaction {
   //Interaction with keyboard
   List<bool> _currentlyPressedKeys;
 
-  Interaction(this.scene, this.gl) {
+  Interaction(this.scene) {
     _initEvents();
   }
 
@@ -84,9 +83,11 @@ class Interaction {
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-      Matrix4 cameraMatix = Context.mainCamera.vpMatrix;
-//      Vector3 worldPick = Utils.screenToWorld(cameraMatix, Context.width, Context.height, e.offset.x, e.offset.y);
-//      scene.createLine(new Vector3.all(0.0), worldPick);
+      Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
+
+      Model modelHit = Utils.findModelHit(scene.models, ray);
+      scene.currentSelection = modelHit;
+      print(modelHit?.name);
     });
   }
 

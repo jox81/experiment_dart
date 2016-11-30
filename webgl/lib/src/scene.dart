@@ -11,7 +11,9 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/models.dart';
 
-abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
+abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction, IEditElement{
+
+  IEditElement currentSelection;
 
   Vector4 _backgroundColor;
   Vector4 get backgroundColor => _backgroundColor;
@@ -40,7 +42,7 @@ abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFun
 
     Future future = new Future.value();
 
-    interaction = new Interaction(this, gl);
+    interaction = new Interaction(this);
 
     if(!_isSetuped){
       _isSetuped = true;

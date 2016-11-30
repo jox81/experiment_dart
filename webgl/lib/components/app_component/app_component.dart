@@ -5,6 +5,7 @@ import 'package:webgl/components/properties_component/properties_component.dart'
 import 'package:webgl/components/toolbar_component/toolbar_component.dart';
 import 'package:webgl/scene_views/scene_view.dart';
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/scene.dart';
 
 
@@ -18,6 +19,18 @@ class AppComponent implements AfterViewInit{
 
   Application application;
   Scene currentScene;
+
+  IEditElement _currentElement;
+  IEditElement get currentElement {
+    if(currentScene != null) {
+      if (currentScene.currentSelection != null) {
+        _currentElement = currentScene.currentSelection;
+      }else{
+        _currentElement = currentScene;
+      }
+    }
+    return _currentElement;
+  }
 
   @ViewChild(CanvasComponent)
   CanvasComponent canvasComponent;
@@ -39,6 +52,9 @@ class AppComponent implements AfterViewInit{
     application = await Application.create(canvasComponent.canvas);
     scenes = ServiceScene.getSceneViews();
     switchScene ();
+
+    //Todo : ajouter la selection...
+//    currentElement =
   }
 
 }

@@ -6,7 +6,10 @@ import 'dart:async';
 typedef void UpdateFunction(num time);
 typedef void UpdateUserInput();
 
-abstract class IUpdatableScene{
+abstract class IUpdatable{
+
+}
+abstract class IUpdatableScene implements IUpdatable{
   Vector4 get backgroundColor;
 
   updateUserInput();
@@ -24,6 +27,6 @@ abstract class ISetupScene{
   Future setupScene();
 }
 
-abstract class IEditScene{
+abstract class IEditElement{
   Map<String, EditableProperty> get properties;
 }
