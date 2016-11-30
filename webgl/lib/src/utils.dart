@@ -170,7 +170,7 @@ class Utils{
       Utils.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
       resultPoints.add(new PointModel()
-        ..transform = (new Matrix4.identity()..setTranslation(pickWorld))
+        ..position = pickWorld
         ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
         ..visible = true);
     }
@@ -197,7 +197,7 @@ class Utils{
 
     for(Vector3 vertex in vertices){
       resultPoints.add(new PointModel()
-        ..transform = (new Matrix4.identity()..setTranslation(vertex))
+        ..position = vertex
         ..material = material);
     }
     return resultPoints;

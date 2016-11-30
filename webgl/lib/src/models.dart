@@ -10,10 +10,11 @@ import 'package:webgl/src/materials.dart';
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
 abstract class Model implements IEditElement {
-  Map<String, EditableProperty> properties = {
-//    'Pos x' : new EditableProperty<num>(()=> Context.mainCamera.position.x, (num v)=> this.transform.setTranslation( v,y, this.transform.z),
-//    'Pos y' : new EditableProperty<num>(()=> Context.mainCamera.position.y, (num v)=> Context.mainCamera.position.y = v),
-//    'Pos z' : new EditableProperty<num>(()=> Context.mainCamera.position.z, (num v)=> Context.mainCamera.position.z = v),
+  Map<String, EditableProperty> get properties => {
+    'Name' : new EditableProperty<String>(()=> name, (String v)=> name = v),
+    'Pos x' : new EditableProperty<num>(()=> position.x, (num v)=> position = new Vector3(v,position.y, position.z)),
+    'Pos y' : new EditableProperty<num>(()=> position.y, (num v)=> position = new Vector3(position.x,v, position.z)),
+    'Pos z' : new EditableProperty<num>(()=> position.z, (num v)=> position = new Vector3(position.x,position.y, v)),
   };
 
   String name; //Todo : S'assurer que les noms soient uniques ?!
@@ -25,7 +26,8 @@ abstract class Model implements IEditElement {
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();
 
-  Vector3 position = new Vector3.zero(); //needed ?
+  Vector3 get position => transform.getTranslation();
+  set position(Vector3 value) => transform.setTranslation(value);
 
   Material material;
 
@@ -43,11 +45,10 @@ abstract class Model implements IEditElement {
     material.render(this);
   }
 
-  List<Triangle> _faces;
   List<Triangle> get faces {
-    if(_faces == null){
-      _faces = mesh.faces.toList();
-      _faces.forEach((t)=> t.transform(this.transform));
+    List<Triangle> _faces = [];
+    for(Triangle triangle in mesh.faces){
+      _faces.add(new Triangle.points(transform * triangle.point0, transform * triangle.point1, transform * triangle.point2));
     }
     return _faces;
   }
@@ -75,18 +76,6 @@ class PointModel extends Model {
   PointModel() {
     mesh = new Mesh.Point();
     material = new MaterialPoint(pointSize:5.0 ,color:_defaultModelColor);
-  }
-
-  @override
-  void render() {
-    _update();
-    super.render();
-  }
-
-  _update(){
-    mesh.vertices = [];
-    mesh.vertices
-      ..addAll(position.storage);
   }
 }
 

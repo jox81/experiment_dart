@@ -19,7 +19,7 @@ class Mesh {
   //  _vertices = value;
   //}
 
-  List<double> vertices;
+  List<double> vertices = [];
 
   int get vertexCount => vertices.length ~/ _vertexDimensions;
 
@@ -174,11 +174,16 @@ class _TriangleMesh extends Mesh {
 
 class _SquareMesh extends Mesh {
   _SquareMesh() {
+    mode = GL.TRIANGLES;
     vertices = [
       1.0, 1.0, 0.0,
-      -1.0, 1.0, 0.0,
       1.0, -1.0, 0.0,
+      -1.0, 1.0, 0.0,
       -1.0, -1.0, 0.0
+    ];
+    indices = [
+      0,1,2,
+      2,1,3
     ];
   }
 }
@@ -364,10 +369,7 @@ class _SphereMesh extends Mesh {
   Vector3 _tmpVec3 = new Vector3.zero();
   Vector3 _up = new Vector3(0.0, 1.0, 0.0);
 
-  List<int> sphereIndices = [];
-  List<double> sphereVertices = [];
   List<Vector3> sphereVerticesVector = [];
-  List<double> normals = [];
   List<Vector2> uvs = [];
 
   _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
@@ -398,11 +400,11 @@ class _SphereMesh extends Mesh {
         _tmpVec3 = _matRotY * _matRotZ * _up ;//up vector transformed by the 2 rotations
 
         _tmpVec3.scale(-radius);// why - ?
-        sphereVertices.addAll(_tmpVec3.storage);
+        vertices.addAll(_tmpVec3.storage);
         sphereVerticesVector.add(_tmpVec3);
 
         _tmpVec3.normalize();
-        normals.addAll(_tmpVec3.storage);
+        vertexNormals.addAll(_tmpVec3.storage);
 
         uvs.add(new Vector2(normalizedY, 1 - normalizedZ));
       }
@@ -413,12 +415,12 @@ class _SphereMesh extends Mesh {
         for (;
             (firstIndex + totalYRotationSteps + 2) < verticesCount;
             firstIndex++) {
-          sphereIndices.addAll([
+          indices.addAll([
             firstIndex,
             firstIndex + 1,
             firstIndex + totalYRotationSteps + 1
           ]);
-          sphereIndices.addAll([
+          indices.addAll([
             firstIndex + totalYRotationSteps + 1,
             firstIndex + 1,
             firstIndex + totalYRotationSteps + 2
@@ -426,9 +428,6 @@ class _SphereMesh extends Mesh {
         }
       }
     }
-    vertices = sphereVertices;
-    indices = sphereIndices;
-   _vertexNormals = normals;
 //    _textureCoords = uvs;
 
     mode = GL.TRIANGLES;

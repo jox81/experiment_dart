@@ -21,6 +21,8 @@ class Interaction {
     _initEvents();
   }
 
+  bool dragging = false;
+
   ///
   ///Keyboard
   ///
@@ -74,20 +76,21 @@ class Interaction {
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
 
-    gl.canvas.onMouseMove.listen((MouseEvent e) {
-//      debugInfo(e.offset.x, e.offset.y,0);
-      Matrix4 cameraMatix = Context.mainCamera.vpMatrix;
-//      Vector3 worldPick = Utils.unProjectScreenPoint(cameraMatix, Context.width, Context.height, e.offset.x, e.offset.y);
+    gl.canvas.onMouseDown.listen((MouseEvent e) {
+      dragging = false;
+    });
 
-//      debugInfo(worldPick.x, worldPick.y, worldPick.z);
+    gl.canvas.onMouseMove.listen((MouseEvent e) {
+      dragging = true;
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-      Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
+        Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
 
-      Model modelHit = Utils.findModelHit(scene.models, ray);
-      scene.currentSelection = modelHit;
-      print(modelHit?.name);
+        Model modelHit = Utils.findModelHit(scene.models, ray);
+        scene.currentSelection = modelHit;
+        print(modelHit?.name);
+        dragging = false;
     });
   }
 

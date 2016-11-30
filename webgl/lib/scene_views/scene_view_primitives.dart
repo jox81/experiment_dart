@@ -11,6 +11,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/utils.dart';
 
 class SceneViewPrimitives extends Scene{
 
@@ -94,31 +95,40 @@ class SceneViewPrimitives extends Scene{
     //Material
 //    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
 //    MaterialBase materialBase = new MaterialBase();
-//
-//    AxisModel axis = new AxisModel();
-//    models.add(axis);
-//    AxisPointsModel points = new AxisPointsModel();
-//    models.add(points);
-//
-//    AxisModel axis2 = new AxisModel()
-//      ..transform.translate(5.0, 0.0, 0.0);
-//
-//    // create cube
-//    CubeModel centerCube = new CubeModel()
-//    ..mesh.mode = GL.LINE_STRIP;
-//    centerCube.transform = axis2.transform;
-//    centerCube.material = materialBase;
-//    models.add(centerCube);
 
-    TriangleModel triangleModel = new TriangleModel()
-      ..name = 'triangle'
-      ..transform.translate(1.0, 0.0, 3.0);
-    models.add(triangleModel);
 
-    TriangleModel triangleModel2 = new TriangleModel()
-      ..name = 'triangle2'
-      ..transform.translate(-3.0, 0.0, 0.0);
-    models.add(triangleModel2);
+//    TriangleModel triangleModel = new TriangleModel()
+//      ..name = 'triangle'
+//      ..position = new Vector3(1.0, 0.0, 3.0);
+//    models.add(triangleModel);
+
+
+//    QuadModel quad = new QuadModel()
+//      ..name = "quad"
+//      ..position = new Vector3(2.0, 0.0, 0.0);
+//    models.add(quad);
+
+//    PyramidModel pyramid = new PyramidModel()
+//      ..name = "pyramid"
+//      ..position = new Vector3(5.0, 5.0, 0.0);
+//    models.add(pyramid);
+
+    CubeModel cube = new CubeModel()
+      ..name = "cube"
+      ..position = new Vector3(-5.0, 5.0, 0.0);
+    models.add(cube);
+
+    SphereModel sphere = new SphereModel()
+      ..name = "sphere"
+      ..position = new Vector3(-5.0, -5.0, 0.0);
+    models.add(sphere);
+
+//    Map susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
+//
+//    JsonObject jsonModel = new JsonObject(susanJson)
+//      ..name = "jsonModel"
+//      ..transform.rotateX(radians(-90.0));
+//    models.add(jsonModel);
 
     //Animation
     num _lastTime = 0.0;

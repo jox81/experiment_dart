@@ -154,7 +154,7 @@ class Webgl01 {
       ..showGizmo = true;
     models.add(camera2);
 
-    models.addAll(Utils.unProjectMultiScreenPoints(camera2));
+//    models.addAll(Utils.unProjectMultiScreenPoints(camera2));
 
 //    gl.canvas.onMouseUp.listen((MouseEvent e) {
 //      Vector3 outRayNear = new Vector3.zero();
@@ -209,17 +209,17 @@ class Webgl01 {
 
     TriangleModel triangleModel = new TriangleModel()
       ..name = 'triangle'
-      ..transform.translate(1.0, 0.0, 3.0);
+      ..position = new Vector3(1.0, 0.0, 0.0);
     models.add(triangleModel);
 
     TriangleModel triangleModel2 = new TriangleModel()
       ..name = 'triangle2'
-      ..transform.translate(-3.0, 0.0, 0.0);
+      ..position = new Vector3(-3.0, 0.0, 0.0);
     models.add(triangleModel2);
 
     List<Model> modelsHit = [triangleModel, triangleModel2];
 
-    models.addAll(Utils.drawModelVertices(triangleModel));
+    models.addAll(Utils.drawModelVertices(modelsHit[0]));
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
       Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
