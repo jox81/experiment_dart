@@ -85,11 +85,13 @@ class Interaction {
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
+      if(!dragging) {
         Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
 
         Model modelHit = Utils.findModelHit(scene.models, ray);
         scene.currentSelection = modelHit;
         print(modelHit?.name);
+      }
         dragging = false;
     });
   }
