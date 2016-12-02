@@ -19,9 +19,9 @@ class SceneViewParticle extends Scene{
   num varCt = 0;
 
   Map<String, EditableProperty> get properties =>{
-    'varA' : new EditableProperty<num>(()=> varA, (num v)=> varA = v),
-    'varB' : new EditableProperty<num>(()=> varB, (num v)=> varB = v),
-    'varCt' : new EditableProperty<num>(()=> varCt, (num v)=> varCt = v),
+    'varA' : new EditableProperty<num>(num, ()=> varA, (num v)=> varA = v),
+    'varB' : new EditableProperty<num>(num, ()=> varB, (num v)=> varB = v),
+    'varCt' : new EditableProperty<num>(num, ()=> varCt, (num v)=> varCt = v),
   };
 
   SceneViewParticle();

@@ -17,22 +17,22 @@ class SceneViewBase extends Scene{
 
   /// implements ISceneViewBase
   Map<String, EditableProperty> get properties =>{
-    'fov' : new EditableProperty<num>(()=> Context.mainCamera.fOV, (num v)=> Context.mainCamera.fOV = v),
-    'camera Pos x' : new EditableProperty<num>(()=> Context.mainCamera.position.x, (num v)=> Context.mainCamera.position.x = v),
-    'camera Pos y' : new EditableProperty<num>(()=> Context.mainCamera.position.y, (num v)=> Context.mainCamera.position.y = v),
-    'camera Pos z' : new EditableProperty<num>(()=> Context.mainCamera.position.z, (num v)=> Context.mainCamera.position.z = v),
-    'useLighting' : new EditableProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
-    'ambientColorR' : new EditableProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
-    'ambientColorG' : new EditableProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
-    'ambientColorB' : new EditableProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
-    'ambientColor' : new EditableProperty<Vector3>(()=> ambientColor, (Vector3 v)=> ambientColor = v),
-    'directionalPositionX' : new EditableProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
-    'directionalPositionY' : new EditableProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
-    'directionalPositionZ' : new EditableProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
-    'directionalColorR' : new EditableProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
-    'directionalColorG' : new EditableProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
-    'directionalColorB' : new EditableProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
-    'addMesh' : new EditableProperty<Function>(()=> addMesh, null),
+    'fov' : new EditableProperty<num>(num, ()=> Context.mainCamera.fOV, (num v)=> Context.mainCamera.fOV = v),
+    'camera Pos x' : new EditableProperty<num>(num, ()=> Context.mainCamera.position.x, (num v)=> Context.mainCamera.position.x = v),
+    'camera Pos y' : new EditableProperty<num>(num, ()=> Context.mainCamera.position.y, (num v)=> Context.mainCamera.position.y = v),
+    'camera Pos z' : new EditableProperty<num>(num, ()=> Context.mainCamera.position.z, (num v)=> Context.mainCamera.position.z = v),
+    'useLighting' : new EditableProperty<bool>(bool, ()=> useLighting, (bool v)=> useLighting = v),
+    'ambientColorR' : new EditableProperty<num>(num, ()=> ambientColor.r, (num v)=> ambientColor.r = v),
+    'ambientColorG' : new EditableProperty<num>(num, ()=> ambientColor.g, (num v)=> ambientColor.g = v),
+    'ambientColorB' : new EditableProperty<num>(num, ()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'ambientColor' : new EditableProperty<Vector3>(Vector3, ()=> ambientColor, (Vector3 v)=> ambientColor = v),
+    'directionalPositionX' : new EditableProperty<num>(num, ()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
+    'directionalPositionY' : new EditableProperty<num>(num, ()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
+    'directionalPositionZ' : new EditableProperty<num>(num, ()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
+    'directionalColorR' : new EditableProperty<num>(num, ()=> directionalColor.r, (num v)=> directionalColor.r = v),
+    'directionalColorG' : new EditableProperty<num>(num, ()=> directionalColor.g, (num v)=> directionalColor.g = v),
+    'directionalColorB' : new EditableProperty<num>(num, ()=> directionalColor.b, (num v)=> directionalColor.b = v),
+    'addMesh' : new EditableProperty<Function>(Function, ()=> addMesh, null),
   };
 
   bool useLighting = true;

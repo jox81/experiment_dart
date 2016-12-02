@@ -29,41 +29,42 @@ abstract class ISetupScene{
 }
 
 abstract class IEditElement{
-  Map<String, EditableProperty> get properties;
-
   Map<String, EditableProperty> getPropertiesInfos(){
     Map<String, EditableProperty> propertiesInfos = {};
 
     InstanceMirror instance_mirror = reflect(this);
     var class_mirror = instance_mirror.type;
 
-    Map<String, MethodMirror> getters = new Map();
-    Map<String, MethodMirror> setters = new Map();
+    Map<String, MethodMirror> instance_mirror_getters = new Map();
+    Map<String, MethodMirror> instance_mirror_setters = new Map();
 
-    print('### $class_mirror');
     for (var v in class_mirror.instanceMembers.values) {
-
       String name = MirrorSystem.getName(v.simpleName);
 
       if (v is VariableMirror) {
-//        print("Variable: $name => info : ${v.type}, Static: ${v.isStatic}, Private: ${v.isPrivate}, Final: ${v.isFinal}, Const: ${v.isConst}");
-      } else if (v is MethodMirror && v.isGetter ) {
-//        print("Method: $name => isGetter : ${v.isGetter}, ${MirrorSystem.getName(v.returnType.simpleName)}, Static: ${v.isStatic}, Private: ${v.isPrivate}, Abstract: ${v.isAbstract}");
-        getters[name] = v;
-      } else if (v is MethodMirror && v.isSetter ) {
-//        print("Method: $name => isSetter : ${v.isSetter}, ${MirrorSystem.getName(v.returnType.simpleName)}, Static: ${v.isStatic}, Private: ${v.isPrivate}, Abstract: ${v.isAbstract}");
-        setters[name] = v;
+      } else if (v is MethodMirror && v.isGetter && !v.isPrivate) {
+        instance_mirror_getters[name] = v;
+      } else if (v is MethodMirror && v.isSetter && !v.isPrivate ) {
+        instance_mirror_setters[name] = v;
       }
-
     }
 
-    getters.forEach((String key, MethodMirror getter){
-      if(setters.containsKey('$key=')){
-        propertiesInfos[key] = new EditableProperty(() => class_mirror.invoke(MirrorSystem.getSymbol('$key'), []), (v) => class_mirror.invoke(MirrorSystem.getSymbol('$key'), [v]));
+    instance_mirror_getters.forEach((String key, MethodMirror getter){
+      if(instance_mirror_setters.containsKey('$key=')){
+        Symbol fieldSymbol = getter.simpleName;
+        propertiesInfos[key] = new EditableProperty(instance_mirror.getField(fieldSymbol).reflectee.runtimeType,() => instance_mirror.getField(fieldSymbol).reflectee, (v) => instance_mirror.setField(fieldSymbol, v).reflectee);
       }
     });
 
     return propertiesInfos;
+  }
+
+  Map<String, EditableProperty> _properties;
+  Map<String, EditableProperty> get properties {
+    if(_properties == null){
+      _properties = getPropertiesInfos();
+    }
+    return _properties;
   }
 
 }

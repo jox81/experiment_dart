@@ -20,18 +20,18 @@ class SceneViewPerformanceTest extends Scene{
   String message = 'test';
   int count = 0;
   Map<String, EditableProperty> get properties =>{
-    'message' : new EditableProperty<String>(()=> message, (String v)=> message = v),
-    'count' : new EditableProperty<int>(()=> count, (int v)=> count = v),
-    'useLighting' : new EditableProperty<bool>(()=> useLighting, (bool v)=> useLighting = v),
-    'ambientColorR' : new EditableProperty<num>(()=> ambientColor.r, (num v)=> ambientColor.r = v),
-    'ambientColorG' : new EditableProperty<num>(()=> ambientColor.g, (num v)=> ambientColor.g = v),
-    'ambientColorB' : new EditableProperty<num>(()=> ambientColor.b, (num v)=> ambientColor.b = v),
-    'directionalPositionX' : new EditableProperty<num>(()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
-    'directionalPositionY' : new EditableProperty<num>(()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
-    'directionalPositionZ' : new EditableProperty<num>(()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
-    'directionalColorR' : new EditableProperty<num>(()=> directionalColor.r, (num v)=> directionalColor.r = v),
-    'directionalColorG' : new EditableProperty<num>(()=> directionalColor.g, (num v)=> directionalColor.g = v),
-    'directionalColorB' : new EditableProperty<num>(()=> directionalColor.b, (num v)=> directionalColor.b = v),
+    'message' : new EditableProperty<String>(String, ()=> message, (String v)=> message = v),
+    'count' : new EditableProperty<int>(int, ()=> count, (int v)=> count = v),
+    'useLighting' : new EditableProperty<bool>(bool, ()=> useLighting, (bool v)=> useLighting = v),
+    'ambientColorR' : new EditableProperty<num>(num, ()=> ambientColor.r, (num v)=> ambientColor.r = v),
+    'ambientColorG' : new EditableProperty<num>(num, ()=> ambientColor.g, (num v)=> ambientColor.g = v),
+    'ambientColorB' : new EditableProperty<num>(num, ()=> ambientColor.b, (num v)=> ambientColor.b = v),
+    'directionalPositionX' : new EditableProperty<num>(num,()=> directionalPosition.x, (num v)=> directionalPosition.x = v),
+    'directionalPositionY' : new EditableProperty<num>(num,()=> directionalPosition.y, (num v)=> directionalPosition.y = v),
+    'directionalPositionZ' : new EditableProperty<num>(num,()=> directionalPosition.z, (num v)=> directionalPosition.z = v),
+    'directionalColorR' : new EditableProperty<num>(num,()=> directionalColor.r, (num v)=> directionalColor.r = v),
+    'directionalColorG' : new EditableProperty<num>(num,()=> directionalColor.g, (num v)=> directionalColor.g = v),
+    'directionalColorB' : new EditableProperty<num>(num,()=> directionalColor.b, (num v)=> directionalColor.b = v),
   };
 
   bool useLighting = true;

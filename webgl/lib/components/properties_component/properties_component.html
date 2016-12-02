@@ -4,7 +4,7 @@
     <template [ngIf]="iEditElement != null">
         <div *ngFor="let key of iEditElement.properties.keys">
             <br/>
-            <!--{{iEditElement.properties[key].type}} {{key}} <br/> {{iEditElement.properties[key]}}<br/>-->
+            {{key}} : {{iEditElement.properties[key].type}}<br/>
 
             <label *ngIf="isString(iEditElement.properties[key])">{{key}} :
                 <input type="text"

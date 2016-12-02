@@ -3,7 +3,7 @@ typedef T PropertySetter<T>(T value);
 
 class EditableProperty<T>{
 
-  Type get type => T;
+  Type type;
 
   PropertyGetter _getter;
   PropertySetter _setter;
@@ -11,5 +11,5 @@ class EditableProperty<T>{
   PropertyGetter get getter => _getter;
   PropertySetter get setter => _setter;
 
-  EditableProperty(this._getter, this._setter);
+  EditableProperty(this.type, this._getter, this._setter);
 }

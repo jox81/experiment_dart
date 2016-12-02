@@ -10,7 +10,7 @@ import 'package:webgl/src/materials.dart';
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
 abstract class Model extends IEditElement {
-  Map<String, EditableProperty> get properties =>  getPropertiesInfos();
+
 //      {
 //    'Name' : new EditableProperty<String>(()=> name, (String v)=> name = v),
 //    'Pos x' : new EditableProperty<num>(()=> position.x, (num v)=> position = new Vector3(v,position.y, position.z)),
