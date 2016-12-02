@@ -1,6 +1,7 @@
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/components/vector3_component/vector3_component.dart';
+import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
+import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
@@ -8,7 +9,7 @@ import 'package:webgl/src/interface/IScene.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector3Component]
+    directives: const [Vector3Component, Vector4Component]
 )
 class PropertiesComponent{
 
@@ -59,6 +60,13 @@ class PropertiesComponent{
     return animationProperty.getter() is Vector3;
   }
   setVector3Value(EditableProperty animationProperty, event){
+    animationProperty.setter(event);
+  }
+  //Vector4
+  bool isVector4(EditableProperty animationProperty){
+    return animationProperty.getter() is Vector4;
+  }
+  setVector4Value(EditableProperty animationProperty, event){
     animationProperty.setter(event);
   }
 

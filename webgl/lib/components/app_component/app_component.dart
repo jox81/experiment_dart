@@ -3,7 +3,6 @@ import 'package:webgl/components/canvas_component/canvas_component.dart';
 import 'package:webgl/components/layout_component/layout_component.dart';
 import 'package:webgl/components/properties_component/properties_component.dart';
 import 'package:webgl/components/toolbar_component/toolbar_component.dart';
-import 'package:webgl/components/vector3_component/vector3_component.dart';
 import 'package:webgl/scene_views/scene_view.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/interface/IScene.dart';

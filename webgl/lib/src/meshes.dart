@@ -1,7 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
-import 'package:webgl/src/interface/IScene.dart';
 
 class Mesh {
 

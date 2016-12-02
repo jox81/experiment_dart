@@ -1,5 +1,3 @@
-import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/scene_views/scene_view_base.dart';
 import 'package:webgl/scene_views/scene_view_experiment/scene_view_experiment.dart';

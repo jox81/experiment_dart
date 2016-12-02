@@ -1,6 +1,5 @@
 import 'dart:mirrors';
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/camera.dart';
 import 'package:vector_math/vector_math.dart';
 import 'dart:async';
 

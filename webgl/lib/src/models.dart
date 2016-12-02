@@ -1,5 +1,4 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -11,22 +10,11 @@ Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
 abstract class Model extends IEditElement {
 
-//      {
-//    'Name' : new EditableProperty<String>(()=> name, (String v)=> name = v),
-//    'Pos x' : new EditableProperty<num>(()=> position.x, (num v)=> position = new Vector3(v,position.y, position.z)),
-//    'Pos y' : new EditableProperty<num>(()=> position.y, (num v)=> position = new Vector3(position.x,v, position.z)),
-//    'Pos z' : new EditableProperty<num>(()=> position.z, (num v)=> position = new Vector3(position.x,position.y, v)),
-//  };
-
   String name; //Todo : S'assurer que les noms soient uniques ?!
   Mesh mesh = new Mesh();
   IGizmo gizmo;
 
   bool visible = true;
-
-  Model(){
-
-  }
 
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();

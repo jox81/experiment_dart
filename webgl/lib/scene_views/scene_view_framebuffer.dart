@@ -5,7 +5,6 @@ import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';

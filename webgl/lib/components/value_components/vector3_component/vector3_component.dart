@@ -9,21 +9,21 @@ import 'package:vector_math/vector_math.dart';
 class Vector3Component {
 
   @Input()
-  Vector3 vec;
+  Vector3 vector;
 
   @Output()
   EventEmitter change = new EventEmitter<Vector3>();
 
   updateX(event){
-    vec.setValues(double.parse(event.target.value), vec.y, vec.z);
-    change.emit(vec);
+    vector.setValues(double.parse(event.target.value), vector.y, vector.z);
+    change.emit(vector);
   }
   updateY(event){
-    vec.setValues(vec.x, double.parse(event.target.value), vec.z);
-    change.emit(vec);
+    vector.setValues(vector.x, double.parse(event.target.value), vector.z);
+    change.emit(vector);
   }
   updateZ(event){
-    vec.setValues(vec.x, vec.y, double.parse(event.target.value));
-    change.emit(vec);
+    vector.setValues(vector.x, vector.y, double.parse(event.target.value));
+    change.emit(vector);
   }
 }

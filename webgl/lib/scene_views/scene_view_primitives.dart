@@ -17,7 +17,7 @@ class SceneViewPrimitives extends Scene{
 
   //Todo : créer une liste déroulante de choix des meshes dans angular
 
-  num test = 1.2;
+  Vector4 test = new Vector4.all(1.0);
 
   Camera camera;
   Camera camera2;

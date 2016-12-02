@@ -39,10 +39,17 @@
 
             <label *ngIf="isVector3(iEditElement.properties[key])">{{key}} :
                 <vector3
-                    [vec]="iEditElement.properties[key].getter()"
+                    [vector]="iEditElement.properties[key].getter()"
                     (change) = "setVector3Value(iEditElement.properties[key], $event)">
                 </vector3>
             </label>
+
+            <!--<label *ngIf="isVector4(iEditElement.properties[key])">{{key}} :-->
+                <!--<vector4-->
+                    <!--[vector]="iEditElement.properties[key].getter()"-->
+                    <!--(change) = "setVector4Value(iEditElement.properties[key], $event)">-->
+                <!--</vector4>-->
+            <!--</label>-->
 
         </div>
     </template>

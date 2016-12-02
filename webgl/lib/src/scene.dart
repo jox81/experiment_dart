@@ -3,9 +3,6 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material.dart';
-import 'package:webgl/src/meshes.dart';
-import 'dart:collection';
-//import 'package:webgl/src/application.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
 import 'package:webgl/src/interaction.dart';
@@ -15,11 +12,7 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
 
   IEditElement currentSelection;
 
-  Vector4 _backgroundColor;
-  Vector4 get backgroundColor => _backgroundColor;
-  set backgroundColor(Vector4 color) {
-    _backgroundColor = color;
-  }
+  Vector4 backgroundColor;
 
   Light light;
   AmbientLight ambientLight = new AmbientLight();

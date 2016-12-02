@@ -1,8 +1,4 @@
-import 'dart:async';
 import 'package:angular2/core.dart';
-import 'package:webgl/scene_views/scene_view_base.dart';
-import 'package:webgl/src/application.dart';
-import 'package:webgl/src/scene.dart';
 
 @Component(
     selector: 'toolbar',

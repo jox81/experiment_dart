@@ -46,8 +46,6 @@ Model experiment() {
       materialCustom.setShaderUniformWithName("pointSize", pointSize);
     };
 
-  List<Vector3> verticesV3= new List();
-
   Mesh mesh = new Mesh()
   ..mode = GL.POINTS
   ..vertices = [
