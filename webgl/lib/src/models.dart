@@ -9,19 +9,24 @@ import 'package:webgl/src/materials.dart';
 
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
-abstract class Model implements IEditElement {
-  Map<String, EditableProperty> get properties => {
-    'Name' : new EditableProperty<String>(()=> name, (String v)=> name = v),
-    'Pos x' : new EditableProperty<num>(()=> position.x, (num v)=> position = new Vector3(v,position.y, position.z)),
-    'Pos y' : new EditableProperty<num>(()=> position.y, (num v)=> position = new Vector3(position.x,v, position.z)),
-    'Pos z' : new EditableProperty<num>(()=> position.z, (num v)=> position = new Vector3(position.x,position.y, v)),
-  };
+abstract class Model extends IEditElement {
+  Map<String, EditableProperty> get properties =>  getPropertiesInfos();
+//      {
+//    'Name' : new EditableProperty<String>(()=> name, (String v)=> name = v),
+//    'Pos x' : new EditableProperty<num>(()=> position.x, (num v)=> position = new Vector3(v,position.y, position.z)),
+//    'Pos y' : new EditableProperty<num>(()=> position.y, (num v)=> position = new Vector3(position.x,v, position.z)),
+//    'Pos z' : new EditableProperty<num>(()=> position.z, (num v)=> position = new Vector3(position.x,position.y, v)),
+//  };
 
   String name; //Todo : S'assurer que les noms soient uniques ?!
   Mesh mesh = new Mesh();
   IGizmo gizmo;
 
   bool visible = true;
+
+  Model(){
+
+  }
 
   //Transform : position, rotation, scale
   Matrix4 transform = new Matrix4.identity();
@@ -35,6 +40,7 @@ abstract class Model implements IEditElement {
   UpdateFunction updateFunction;
 
   void render() {
+
     if (material == null) {
       throw new Exception(
           "Can't render object : the material mustn't be null to render the mesh in ${this.runtimeType}");

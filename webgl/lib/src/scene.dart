@@ -11,7 +11,7 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/models.dart';
 
-abstract class Scene implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction, IEditElement{
+abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
   IEditElement currentSelection;
 
