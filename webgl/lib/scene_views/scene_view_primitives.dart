@@ -17,25 +17,12 @@ class SceneViewPrimitives extends Scene{
 
   //Todo : créer une liste déroulante de choix des meshes dans angular
 
-  Vector4 test = new Vector4.all(1.0);
-
   Camera camera;
   Camera camera2;
   Camera camera3;
 
-//  Map<String, EditableProperty> get properties =>{
-//    'fov' : new EditableProperty<num>(num,()=> degrees(camera2.fOV), (num v)=> camera2.fOV = radians(v)),
-//    'camera Pos x' : new EditableProperty<num>(num,()=> camera2.position.x, (num v)=> camera2.position = new Vector3(v, camera2.position.y, camera2.position.z)),
-//    'camera Pos y' : new EditableProperty<num>(num,()=> camera2.position.y, (num v)=> camera2.position = new Vector3(camera2.position.x, v, camera2.position.z)),
-//    'camera Pos z' : new EditableProperty<num>(num,()=> camera2.position.z, (num v)=> camera2.position = new Vector3(camera2.position.x, camera2.position.y, v)),
-//    'camera target Pos x' : new EditableProperty<num>(num,()=> camera2.targetPosition.x, (num v)=> camera2.targetPosition = new Vector3(v, camera2.targetPosition.y, camera2.targetPosition.z)),
-//    'camera target Pos y' : new EditableProperty<num>(num,()=> camera2.targetPosition.y, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, v, camera2.targetPosition.z)),
-//    'camera target Pos z' : new EditableProperty<num>(num,()=> camera2.targetPosition.z, (num v)=> camera2.targetPosition = new Vector3(camera2.targetPosition.x, camera2.targetPosition.y, v)),
-//    'show Gizmo' : new EditableProperty<bool>(bool,()=> camera2.showGizmo, (bool v)=> camera2.showGizmo = v),
-//    'switchCamera' : new EditableProperty<Function>(Function,()=> switchCamera, null),
-//  };
-
   int cameraIndex = 0;
+
   void switchCamera(){
     cameraIndex += 1;
     cameraIndex %= cameras.length;

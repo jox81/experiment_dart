@@ -18,7 +18,7 @@ class PropertiesComponent{
 
   //String
   bool isString(EditableProperty animationProperty){
-    return animationProperty.getter() is String;
+    return animationProperty.type == String;
   }
   setStringValue(EditableProperty animationProperty, event){
     animationProperty.setter(event.target.value);
@@ -26,7 +26,7 @@ class PropertiesComponent{
 
   //bool
   bool isBool(EditableProperty animationProperty){
-    return animationProperty.getter() is bool;
+    return animationProperty.type == bool;
   }
   setBoolValue(EditableProperty animationProperty, event){
     animationProperty.setter(event.target.checked);
@@ -34,7 +34,7 @@ class PropertiesComponent{
 
   //int
   bool isInt(EditableProperty animationProperty){
-    return animationProperty.getter() is int;
+    return animationProperty.type == int;
   }
   setIntValue(EditableProperty animationProperty, event){
     animationProperty.setter(int.parse(event.target.value));
@@ -42,7 +42,7 @@ class PropertiesComponent{
 
   //num
   bool isNum(EditableProperty animationProperty){
-    return animationProperty.getter() is num;
+    return animationProperty.type == num;
   }
   setNumValue(EditableProperty animationProperty, event){
     animationProperty.setter(double.parse(event.target.value));
@@ -50,24 +50,24 @@ class PropertiesComponent{
 
   //Function
   bool isFunction(EditableProperty animationProperty){
-    return animationProperty.getter() is Function;
+    return animationProperty.type == Function;
   }
 
   //Custom components
 
   //Vector3
   bool isVector3(EditableProperty animationProperty){
-    return animationProperty.getter() is Vector3;
+    return animationProperty.type == Vector3;
   }
   setVector3Value(EditableProperty animationProperty, event){
-    animationProperty.setter(event);
+    animationProperty.setter(event as Vector3);
   }
   //Vector4
   bool isVector4(EditableProperty animationProperty){
-    return animationProperty.getter() is Vector4;
+    return animationProperty.type == Vector4;
   }
   setVector4Value(EditableProperty animationProperty, event){
-    animationProperty.setter(event);
+    animationProperty.setter(event as Vector4);
   }
 
 }
