@@ -14,8 +14,6 @@ import 'package:webgl/src/interaction.dart';
 
 class SceneViewParticleSimple extends Scene{
 
-  Map<String, EditableProperty> get properties =>{};
-
   SceneViewParticleSimple();
 
   @override

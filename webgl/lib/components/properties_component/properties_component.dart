@@ -1,5 +1,6 @@
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/components/value_components/matrix4_component/matrix4_component.dart';
 import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/src/animation_property.dart';
@@ -9,7 +10,7 @@ import 'package:webgl/src/interface/IScene.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector3Component, Vector4Component]
+    directives: const [Vector3Component, Vector4Component, Matrix4Component]
 )
 class PropertiesComponent{
 
@@ -68,6 +69,13 @@ class PropertiesComponent{
   }
   setVector4Value(EditableProperty animationProperty, event){
     animationProperty.setter(event as Vector4);
+  }
+  //Matrix4
+  bool isMatrix4(EditableProperty animationProperty){
+    return animationProperty.type == Matrix4;
+  }
+  setMatrix4Value(EditableProperty animationProperty, event){
+    animationProperty.setter(event as Matrix4);
   }
 
 }

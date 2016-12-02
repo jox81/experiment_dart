@@ -40,15 +40,22 @@
             <label *ngIf="isVector3(iEditElement.properties[key])">{{key}} :
                 <vector3
                     [vector]="iEditElement.properties[key].getter()"
-                    (valueChange) = "setVector3Value(iEditElement.properties[key], $event)">
+                    (vector3Change) = "setVector3Value(iEditElement.properties[key], $event)">
                 </vector3>
             </label>
 
             <label *ngIf="isVector4(iEditElement.properties[key])">{{key}} :
                 <vector4
                     [vector]="iEditElement.properties[key].getter()"
-                    (valueChange) = "setVector4Value(iEditElement.properties[key], $event)">
+                    (vector4Change) = "setVector4Value(iEditElement.properties[key], $event)">
                 </vector4>
+            </label>
+
+            <label *ngIf="isMatrix4(iEditElement.properties[key])">{{key}} :
+                <matrix4
+                    [matrix]="iEditElement.properties[key].getter()"
+                    (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
+                </matrix4>
             </label>
 
         </div>

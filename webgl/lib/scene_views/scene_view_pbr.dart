@@ -12,7 +12,6 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPBR extends Scene{
 
-  Map<String, EditableProperty> get properties =>{};
 
   SceneViewPBR();
 

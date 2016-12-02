@@ -13,8 +13,6 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewFrameBuffer extends Scene{
 
-  Map<String, EditableProperty> get properties =>{};
-
   SceneViewFrameBuffer();
 
   @override

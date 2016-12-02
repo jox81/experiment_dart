@@ -6,11 +6,11 @@
     position:relative;
     background-color: #336699;
     width:100%;
-    display: flex;
+    /*display: flex;*/
 }
 
-input{
-    width : 25%;
+vector4{
+    width : 100%;
     text-align: right;
 }
 /* vertical layout */

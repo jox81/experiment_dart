@@ -12,8 +12,6 @@ import 'package:webgl/src/interface/IScene.dart';
 class SceneViewExperiment extends Scene implements IEditElement{
 
   /// implements ISceneViewBase
-  Map<String, EditableProperty> get properties =>{};
-
   SceneViewExperiment();
 
   @override

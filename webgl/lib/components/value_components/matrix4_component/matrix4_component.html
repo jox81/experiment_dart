@@ -1,5 +1,22 @@
 <div id="container" >
-    <input type="number" step="0.1" [value]="vec.x" (change)="updateX($event)">
-    <input type="number" step="0.1" [value]="vec.y" (change)="updateY($event)">
-    <input type="number" step="0.1" [value]="vec.z" (change)="updateZ($event)">
+   <div class="row">
+      <div class="col-sm-12 first">
+         <vector4 [vector] = "matrix.getRow(0)" (vector4Change)="updateRow(0,$event)"></vector4>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12 first">
+         <vector4 [vector] = "matrix.getRow(1)" (vector4Change)="updateRow(1,$event)"></vector4>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12 first">
+         <vector4 [vector] = "matrix.getRow(2)" (vector4Change)="updateRow(2,$event)"></vector4>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-sm-12 first">
+         <vector4 [vector] = "matrix.getRow(3)" (vector4Change)="updateRow(3,$event)"></vector4>
+      </div>
+   </div>
 </div>

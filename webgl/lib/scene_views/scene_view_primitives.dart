@@ -86,10 +86,10 @@ class SceneViewPrimitives extends Scene{
 //    MaterialBase materialBase = new MaterialBase();
 
 
-    TriangleModel triangleModel = new TriangleModel()
-      ..name = 'triangle'
-      ..position = new Vector3(1.0, 0.0, 3.0);
-    models.add(triangleModel);
+//    TriangleModel triangleModel = new TriangleModel()
+//      ..name = 'triangle'
+//      ..position = new Vector3(1.0, 0.0, 3.0);
+//    models.add(triangleModel);
 
 
 //    QuadModel quad = new QuadModel()
@@ -102,10 +102,10 @@ class SceneViewPrimitives extends Scene{
 //      ..position = new Vector3(5.0, 5.0, 0.0);
 //    models.add(pyramid);
 
-//    CubeModel cube = new CubeModel()
-//      ..name = "cube"
-//      ..position = new Vector3(-5.0, 5.0, 0.0);
-//    models.add(cube);
+    CubeModel cube = new CubeModel()
+      ..name = "cube"
+      ..position = new Vector3(-5.0, 5.0, 0.0);
+    models.add(cube);
 
 //    SphereModel sphere = new SphereModel()
 //      ..name = "sphere"
