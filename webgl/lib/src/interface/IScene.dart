@@ -59,10 +59,10 @@ abstract class IEditElement{
       }
     });
 
-    instance_mirror_functions.forEach((String key, MethodMirror instance_mirror_field) {
-      Symbol fieldSymbol = instance_mirror_field.simpleName;
-      propertiesInfos[key] = new EditableProperty(Function,() => instance_mirror.getField(fieldSymbol).reflectee, null);
-    });
+//    instance_mirror_functions.forEach((String key, MethodMirror instance_mirror_field) {
+//      Symbol fieldSymbol = instance_mirror_field.simpleName;
+//      propertiesInfos[key] = new EditableProperty(Function,() => instance_mirror.getField(fieldSymbol).reflectee, null);
+//    });
 
     return propertiesInfos;
   }
