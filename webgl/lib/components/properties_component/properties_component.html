@@ -19,7 +19,7 @@
             </label>
 
             <label *ngIf="isNum(iEditElement.properties[key])">{{key}} :
-                <input type="number" step="0.5"
+                <input type="number" step="0.01"
                     [ngModel]="iEditElement.properties[key].getter().toStringAsFixed(2)"
                     (change) = "setNumValue(iEditElement.properties[key], $event)">
             </label>
@@ -30,9 +30,18 @@
                     (change) = "setIntValue(iEditElement.properties[key], $event)">
             </label>
 
-            <label *ngIf="isFunction(iEditElement.properties[key])">
+            <label *ngIf="isFunction(iEditElement.properties[key])">{{key}} :
                 <input type="button"
                     (click)="iEditElement.properties[key].getter()()" value="{{key}}">
+            </label>
+
+            <!-- Custom components-->
+
+            <label *ngIf="isVector3(iEditElement.properties[key])">{{key}} :
+                <vector3
+                    [vec]="iEditElement.properties[key].getter()"
+                    (change) = "setVector3Value(iEditElement.properties[key], $event)">
+                </vector3>
             </label>
 
         </div>
