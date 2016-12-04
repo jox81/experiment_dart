@@ -2,7 +2,7 @@ import 'dart:mirrors';
 
 import 'package:webgl/src/animation_property.dart';
 
-class  IntrospectionManager{
+class IntrospectionManager{
 
   static IntrospectionManager _instance;
 
@@ -15,7 +15,9 @@ class  IntrospectionManager{
     return _instance;
   }
 
-  Map<String, EditableProperty> getPropertiesInfos(dynamic element, Map<String, EditableProperty> propertiesInfos){
+  Map<String, EditableProperty> getPropertiesInfos(dynamic element){
+
+    Map<String, EditableProperty> propertiesInfos = {};
 
     InstanceMirror instance_mirror = reflect(element);
     var class_mirror = instance_mirror.type;
@@ -37,6 +39,11 @@ class  IntrospectionManager{
       }
     }
 
+    instance_mirror_functions.forEach((String key, MethodMirror instance_mirror_field) {
+      Symbol fieldSymbol = instance_mirror_field.simpleName;
+      propertiesInfos[key] = new EditableProperty(Function,() => instance_mirror.getField(fieldSymbol).reflectee, null);
+    });
+
     instance_mirror_getters.forEach((String key, MethodMirror instance_mirror_field){
       if(instance_mirror_setters.containsKey('$key=')){
         Symbol fieldSymbol = instance_mirror_field.simpleName;
@@ -44,10 +51,7 @@ class  IntrospectionManager{
       }
     });
 
-//    instance_mirror_functions.forEach((String key, MethodMirror instance_mirror_field) {
-//      Symbol fieldSymbol = instance_mirror_field.simpleName;
-//      propertiesInfos[key] = new EditableProperty(Function,() => instance_mirror.getField(fieldSymbol).reflectee, null);
-//    });
+
 
     return propertiesInfos;
   }
@@ -59,12 +63,16 @@ class PropertiesInfos{
 }
 
 abstract class IEditElement{
-  Map<String, EditableProperty> _properties = {};
+  Map<String, EditableProperty> _properties;
   Map<String, EditableProperty> get properties {
     if(_properties == null){
-      _properties = IntrospectionManager.instance.getPropertiesInfos(this, _properties);
+      _properties = getPropertiesInfos();
     }
     return _properties;
+  }
+
+  Map<String, EditableProperty> getPropertiesInfos(){
+    return IntrospectionManager.instance.getPropertiesInfos(this);
   }
 }
 

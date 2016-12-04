@@ -5,7 +5,7 @@ import 'package:webgl/components/properties_component/properties_component.dart'
 import 'package:webgl/components/toolbar_component/toolbar_component.dart';
 import 'package:webgl/scene_views/scene_view.dart';
 import 'package:webgl/src/application.dart';
-import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/scene.dart';
 
 

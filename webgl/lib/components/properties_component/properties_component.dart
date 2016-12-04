@@ -4,7 +4,7 @@ import 'package:webgl/components/value_components/matrix4_component/matrix4_comp
 import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/introspection.dart';
 
 @Component(
     selector: 'properties',
