@@ -1,4 +1,5 @@
-
+:host{
+}
 *{
     margin:0;
     color: #504f3b;
@@ -30,4 +31,9 @@ input[type=text]{
 }
 input[type=number]{
     width:40%;
+}
+
+#content{
+max-height: 95vh;
+overflow-y: scroll;
 }

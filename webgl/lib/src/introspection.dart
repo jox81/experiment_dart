@@ -39,11 +39,6 @@ class IntrospectionManager{
       }
     }
 
-    instance_mirror_functions.forEach((String key, MethodMirror instance_mirror_field) {
-      Symbol fieldSymbol = instance_mirror_field.simpleName;
-      propertiesInfos[key] = new EditableProperty(Function,() => instance_mirror.getField(fieldSymbol).reflectee, null);
-    });
-
     instance_mirror_getters.forEach((String key, MethodMirror instance_mirror_field){
       if(instance_mirror_setters.containsKey('$key=')){
         Symbol fieldSymbol = instance_mirror_field.simpleName;
@@ -51,14 +46,13 @@ class IntrospectionManager{
       }
     });
 
-
+    instance_mirror_functions.forEach((String key, MethodMirror instance_mirror_field) {
+      Symbol fieldSymbol = instance_mirror_field.simpleName;
+      propertiesInfos[key] = new EditableProperty(Function,() => instance_mirror.getField(fieldSymbol).reflectee, null);
+    });
 
     return propertiesInfos;
   }
-
-}
-
-class PropertiesInfos{
 
 }
 
@@ -72,12 +66,15 @@ abstract class IEditElement{
   }
 
   Map<String, EditableProperty> getPropertiesInfos(){
-    return IntrospectionManager.instance.getPropertiesInfos(this);
+    var elementToCheck = this;
+    if(this is CustomEditElement){
+      elementToCheck = (this as CustomEditElement).element;
+    }
+    return IntrospectionManager.instance.getPropertiesInfos(elementToCheck);
   }
 }
 
 class CustomEditElement extends IEditElement{
-
   final dynamic element;
   CustomEditElement(this.element);
 }

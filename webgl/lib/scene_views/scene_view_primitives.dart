@@ -3,6 +3,7 @@ import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/camera.dart';
@@ -27,6 +28,10 @@ class SceneViewPrimitives extends Scene{
     cameraIndex += 1;
     cameraIndex %= cameras.length;
     Context.mainCamera = cameras[cameraIndex];
+  }
+
+  void testEdit(){
+    currentSelection = new CustomEditElement(new Vector3(1.0,2.0,3.0));
   }
 
   SceneViewPrimitives(){
