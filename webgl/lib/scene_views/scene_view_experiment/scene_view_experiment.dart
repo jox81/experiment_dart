@@ -9,7 +9,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
-class SceneViewExperiment extends Scene implements IEditElement{
+class SceneViewExperiment extends Scene{
 
   /// implements ISceneViewBase
   SceneViewExperiment();
