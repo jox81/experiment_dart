@@ -68,6 +68,13 @@
                             (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
                         </matrix4>
                     </section>
+
+                    <section *ngIf="isList(iEditElement.properties[key])">
+                        <list
+                            [list]="iEditElement.properties[key].getter()"
+                            (elementSelected) = "setSelection($event)">
+                        </list>
+                    </section>
                 </fieldset>
                 <hr>
             </div>

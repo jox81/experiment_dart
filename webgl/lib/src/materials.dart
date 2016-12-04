@@ -33,7 +33,7 @@ class MaterialPoint extends Material {
 
   final List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
   final num pointSize;
-  final Vector4 color;
+  Vector4 color;
 
   MaterialPoint._internal(String vsSource, String fsSource, this.pointSize, this.color)
       : super(vsSource, fsSource);

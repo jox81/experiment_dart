@@ -3,13 +3,14 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 import 'dart:typed_data';
 
-abstract class Material {
+abstract class Material extends IEditElement {
   static bool debugging = false;
 
   /// GLSL Pragmas

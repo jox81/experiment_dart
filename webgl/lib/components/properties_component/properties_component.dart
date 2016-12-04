@@ -1,5 +1,6 @@
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/components/value_components/list_component/list_component.dart';
 import 'package:webgl/components/value_components/matrix4_component/matrix4_component.dart';
 import 'package:webgl/components/value_components/vector2_component/vector2_component.dart';
 import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
@@ -11,7 +12,7 @@ import 'package:webgl/src/introspection.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix4Component]
+    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix4Component, ListComponent]
 )
 class PropertiesComponent{
 
@@ -89,6 +90,17 @@ class PropertiesComponent{
   }
   setMatrix4Value(EditableProperty animationProperty, event){
     animationProperty.setter(event as Matrix4);
+  }
+  //List
+  bool isList(EditableProperty animationProperty){
+    return animationProperty.type.toString() == 'List';
+  }
+  setSelection(event){
+    if(event is IEditElement) {
+      iEditElement = event;
+    }else{
+      iEditElement = new CustomEditElement(event);
+    }
   }
 
 }

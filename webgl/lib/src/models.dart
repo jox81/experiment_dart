@@ -75,7 +75,7 @@ class PointModel extends Model {
 }
 
 class LineModel extends Model {
-  Vector3 point1, point2;
+  final Vector3 point1, point2;
 
   LineModel(this.point1, this.point2) {
     mesh = new Mesh.Line([point1, point2]);
@@ -160,7 +160,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   @override
   bool visible = false;
 
-  Camera _camera;
+  final Camera _camera;
   Matrix4 get _vpmatrix => _camera.vpMatrix;
 
   Vector4 _positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
@@ -168,8 +168,6 @@ class FrustrumGizmo extends Model implements IGizmo {
 
   num _positionPointSize = 6.0;
 
-  final Vector3 _cameraPosition = new Vector3.zero();
-  final Vector3 _targetPosition = new Vector3.zero();
 
   //near
   final Vector3 c0 = new Vector3.zero();
@@ -185,7 +183,8 @@ class FrustrumGizmo extends Model implements IGizmo {
   @override
   List<Model> gizmoModels = [];
 
-  FrustrumGizmo(this._camera) {
+  FrustrumGizmo(Camera camera):
+        _camera = camera{;
     _createFrustrumModel(_camera.vpMatrix);
   }
 
@@ -226,16 +225,16 @@ class FrustrumGizmo extends Model implements IGizmo {
     gizmoModels.add(new LineModel(c3, c7)
       ..material = frustrumDirectionLineMaterial);
 
-    gizmoModels.add(new LineModel(_cameraPosition, _targetPosition)
+    gizmoModels.add(new LineModel(_camera.position, _camera.targetPosition)
           ..material = frustrumDirectionLineMaterial);
 
     gizmoModels
         .add(new PointModel()
-        ..position = _cameraPosition
+        ..position = _camera.position
         ..material = frustrumPositionPointMaterial); //position
     gizmoModels
         .add(new PointModel()
-          ..position = _targetPosition
+          ..position = _camera.targetPosition
           ..material = frustrumPositionPointMaterial); //target
 
     updateGizmo();
@@ -246,9 +245,6 @@ class FrustrumGizmo extends Model implements IGizmo {
     //Update only final positions
     new Frustum.matrix(_vpmatrix)
       ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
-
-    _cameraPosition.setFrom(_camera.position);
-    _targetPosition.setFrom(_camera.targetPosition);
   }
 
   @override

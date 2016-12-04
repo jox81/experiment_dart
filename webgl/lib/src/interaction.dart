@@ -22,6 +22,7 @@ class Interaction {
   }
 
   bool dragging = false;
+  bool mouseDown = false;
 
   ///
   ///Keyboard
@@ -78,10 +79,13 @@ class Interaction {
 
     gl.canvas.onMouseDown.listen((MouseEvent e) {
       dragging = false;
+      mouseDown = true;
     });
 
     gl.canvas.onMouseMove.listen((MouseEvent e) {
-      dragging = true;
+      if(mouseDown) {
+        dragging = true;
+      }
     });
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
@@ -92,7 +96,8 @@ class Interaction {
         scene.currentSelection = modelHit;
         print(modelHit?.name);
       }
-        dragging = false;
+      dragging = false;
+      mouseDown = false;
     });
   }
 
