@@ -4,61 +4,72 @@
     <template [ngIf]="iEditElement != null">
         <div id="content">
             <div *ngFor="let key of iEditElement.properties.keys">
-                <br/>
-                {{key}} : {{iEditElement.properties[key].type}}<br/>
+                <fieldset>
+                    <legend *ngIf="isNull(iEditElement.properties[key])">{{key}} - (Null)
+                    </legend>
+                    <legend *ngIf="!isNull(iEditElement.properties[key])">{{key}} - ({{iEditElement.properties[key].type}})
+                    </legend>
 
-                <label *ngIf="isString(iEditElement.properties[key])">{{key}} :
-                    <input type="text"
-                        [ngModel]="iEditElement.properties[key].getter()"
-                        (change) = "setStringValue(iEditElement.properties[key], $event)">
-                </label>
+                    <section *ngIf="isString(iEditElement.properties[key])">
+                        <input type="text"
+                               [ngModel]="iEditElement.properties[key].getter()"
+                               (change) = "setStringValue(iEditElement.properties[key], $event)">
+                    </section>
 
-                <label *ngIf="isBool(iEditElement.properties[key])">{{key}} :
-                    <input type="checkbox"
-                        [ngModel]="iEditElement.properties[key].getter()"
-                        (change) = "setBoolValue(iEditElement.properties[key], $event)">
-                </label>
+                    <section *ngIf="isBool(iEditElement.properties[key])">
+                        <input type="checkbox"
+                               [ngModel]="iEditElement.properties[key].getter()"
+                               (change) = "setBoolValue(iEditElement.properties[key], $event)">
+                    </section>
 
-                <label *ngIf="isNum(iEditElement.properties[key])">{{key}} :
-                    <input type="number" step="0.01"
-                        [ngModel]="iEditElement.properties[key].getter().toStringAsFixed(2)"
-                        (change) = "setNumValue(iEditElement.properties[key], $event)">
-                </label>
+                    <section *ngIf="isNum(iEditElement.properties[key])">
+                        <input type="number" step="0.01"
+                            [ngModel]="iEditElement.properties[key].getter().toStringAsFixed(2)"
+                            (change) = "setNumValue(iEditElement.properties[key], $event)">
+                    </section>
 
-                <label *ngIf="isInt(iEditElement.properties[key])">{{key}} :
-                    <input type="number" step="1"
-                        [ngModel]="iEditElement.properties[key].getter()"
-                        (change) = "setIntValue(iEditElement.properties[key], $event)">
-                </label>
+                    <section *ngIf="isInt(iEditElement.properties[key])">
+                        <input type="number" step="1"
+                            [ngModel]="iEditElement.properties[key].getter()"
+                            (change) = "setIntValue(iEditElement.properties[key], $event)">
+                    </section>
 
-                <label *ngIf="isFunction(iEditElement.properties[key])">{{key}} :
-                    <input type="button"
-                        (click)="iEditElement.properties[key].getter()()" value="{{key}}">
-                </label>
+                    <section *ngIf="isFunction(iEditElement.properties[key])">
+                        <input type="button"
+                            (click)="iEditElement.properties[key].getter()()" value="{{key}}">
+                    </section>
 
-                <!-- Custom components-->
+                    <!-- Custom components-->
 
-                <label *ngIf="isVector3(iEditElement.properties[key])">{{key}} :
-                    <vector3
-                        [vector]="iEditElement.properties[key].getter()"
-                        (vector3Change) = "setVector3Value(iEditElement.properties[key], $event)">
-                    </vector3>
-                </label>
+                    <section *ngIf="isVector2(iEditElement.properties[key])">
+                        <vector2
+                            [vector]="iEditElement.properties[key].getter()"
+                            (vector3Change) = "setVector2Value(iEditElement.properties[key], $event)">
+                        </vector2>
+                    </section>
 
-                <label *ngIf="isVector4(iEditElement.properties[key])">{{key}} :
-                    <vector4
-                        [vector]="iEditElement.properties[key].getter()"
-                        (vector4Change) = "setVector4Value(iEditElement.properties[key], $event)">
-                    </vector4>
-                </label>
+                    <section *ngIf="isVector3(iEditElement.properties[key])">
+                        <vector3
+                            [vector]="iEditElement.properties[key].getter()"
+                            (vector3Change) = "setVector3Value(iEditElement.properties[key], $event)">
+                        </vector3>
+                    </section>
 
-                <label *ngIf="isMatrix4(iEditElement.properties[key])">{{key}} :
-                    <matrix4
-                        [matrix]="iEditElement.properties[key].getter()"
-                        (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
-                    </matrix4>
-                </label>
+                    <section *ngIf="isVector4(iEditElement.properties[key])">
+                        <vector4
+                            [vector]="iEditElement.properties[key].getter()"
+                            (vector4Change) = "setVector4Value(iEditElement.properties[key], $event)">
+                        </vector4>
+                    </section>
 
+                    <section *ngIf="isMatrix4(iEditElement.properties[key])">
+                        <matrix4
+                            [matrix]="iEditElement.properties[key].getter()"
+                            (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
+                        </matrix4>
+                    </section>
+                </fieldset>
+                <hr>
             </div>
         </div>
     </template>

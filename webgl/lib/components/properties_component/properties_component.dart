@@ -1,6 +1,7 @@
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/components/value_components/matrix4_component/matrix4_component.dart';
+import 'package:webgl/components/value_components/vector2_component/vector2_component.dart';
 import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/src/animation_property.dart';
@@ -10,12 +11,17 @@ import 'package:webgl/src/introspection.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector3Component, Vector4Component, Matrix4Component]
+    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix4Component]
 )
 class PropertiesComponent{
 
   @Input()
   IEditElement iEditElement;
+
+  //Null
+  bool isNull(EditableProperty animationProperty){
+    return animationProperty.type == Null;
+  }
 
   //String
   bool isString(EditableProperty animationProperty){
@@ -43,7 +49,7 @@ class PropertiesComponent{
 
   //num
   bool isNum(EditableProperty animationProperty){
-    return animationProperty.type == num;
+    return animationProperty.type == num || animationProperty.type == double;
   }
   setNumValue(EditableProperty animationProperty, event){
     animationProperty.setter(double.parse(event.target.value));
@@ -56,6 +62,13 @@ class PropertiesComponent{
 
   //Custom components
 
+  //Vector2
+  bool isVector2(EditableProperty animationProperty){
+    return animationProperty.type == Vector2;
+  }
+  setVector2Value(EditableProperty animationProperty, event){
+    animationProperty.setter(event as Vector2);
+  }
   //Vector3
   bool isVector3(EditableProperty animationProperty){
     return animationProperty.type == Vector3;
