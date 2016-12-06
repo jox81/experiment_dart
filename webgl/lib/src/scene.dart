@@ -26,7 +26,6 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
 
   Scene(){
     Context.mainCamera = new Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero();
   }
 

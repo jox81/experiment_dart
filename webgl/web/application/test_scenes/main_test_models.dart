@@ -4,6 +4,7 @@ import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/materials.dart';
@@ -69,7 +70,6 @@ class Webgl01 {
 
   void setupCamera()  {
     Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
-      ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(10.0,10.0,10.0)
       ..cameraController = new CameraController();
@@ -148,7 +148,6 @@ class Webgl01 {
 //    models.add(frustrumGizmo);
 
     Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
-      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
       ..position = new Vector3(5.0, 5.0, -5.0)
       ..showGizmo = true;

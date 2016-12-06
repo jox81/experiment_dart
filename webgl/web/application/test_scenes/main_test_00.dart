@@ -5,6 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
@@ -62,7 +63,6 @@ class Webgl01 {
 
   setupCamera() {
     Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
-      ..aspectRatio = gl.drawingBufferWidth / gl.drawingBufferHeight
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0,5.0,10.0)
       ..cameraController = new CameraController();

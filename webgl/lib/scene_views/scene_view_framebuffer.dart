@@ -3,6 +3,7 @@ import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
@@ -40,7 +41,6 @@ class SceneViewFrameBuffer extends Scene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(50.0, 50.0, 50.0)
       ..cameraController = new CameraController();

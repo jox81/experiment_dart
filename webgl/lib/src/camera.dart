@@ -1,15 +1,11 @@
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
-import 'dart:html';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/models.dart';
 
-//Remember
-//Matrix4  _mvMatrix = mainCamera.lookAtMatrix * mesh.transform;
-
 class Camera extends Model {
-  double _fOV;
 
   bool _active = false;
   bool get active => _active;
@@ -17,30 +13,44 @@ class Camera extends Model {
     _active = value;
   }
 
-  double get fOV => _fOV;
-  set fOV(num value) {
-    _fOV = value;
-    _updateGizmo();
+  double get aspectRatio => Context.viewAspectRatio;
+
+  double _fov;
+  double get fov => _fov;
+  set fov(num value) {
+    _fov = value;
+    _update();
   }
 
-  Vector3 _position = new Vector3(0.0, 1.0, 0.0);
-  Vector3 get position => _position;
+  double _zNear;
+  double get zNear => _zNear;
+  set zNear(double value) {
+    _zNear = value;
+    _update();
+  }
+
+  double _zFar;
+  double get zFar => _zFar;
+  set zFar(double value) {
+    _zFar = value;
+    _update();
+  }
+
   set position(Vector3 value) {
-    _position = value;
-    _updateGizmo();
+   super.position = value;
+    _update();
+  }
+  set transform(Matrix4 value) {
+   super.transform = value;
+    _update();
   }
 
   Vector3 _targetPosition;
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
-    _updateGizmo();
+    _update();
   }
-
-  final double zNear;
-  final double zFar;
-
-  double aspectRatio;
 
   Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
   Vector3 get frontDirection => targetPosition - position;
@@ -50,22 +60,17 @@ class Camera extends Model {
   Vector3 get yAxis => zAxis.cross(xAxis);
 
   CameraController _cameraController;
-
   set cameraController(CameraController value) {
     _cameraController = value;
     _cameraController.init(this);
   }
 
-  Camera(this._fOV, this.zNear, this.zFar) {
+  Camera(this._fov, this._zNear, this._zFar) {
 
   }
 
-  void translate(Vector3 position) {
+  void translate(Vector3 value) {
     this.position = position;
-  }
-
-  String toString() {
-    return '$position -> $targetPosition';
   }
 
   //roll on y
@@ -98,42 +103,22 @@ class Camera extends Model {
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
   }
 
+  Matrix4 _perspectiveMatrix = new Matrix4.identity();
   Matrix4 get perspectiveMatrix {
-    return makePerspectiveMatrix(_fOV, aspectRatio, zNear, zFar);
+    return _perspectiveMatrix;
+  }
+  set perspectiveMatrix(Matrix4 value){
+    _perspectiveMatrix = value;
+    _update();
   }
 
+  Matrix4 _lookAtMatrix = new Matrix4.identity();
   Matrix4 get lookAtMatrix {
-    return makeViewMatrix(position, targetPosition, upDirection);
+    return _lookAtMatrix;
   }
 
   Matrix4 get vpMatrix {
     return perspectiveMatrix * lookAtMatrix;
-  }
-
-  void rotateOrbitCamera(num xAngleRot, num yAngleRot) {
-    num distance = frontDirection
-        .length; // Straight line distance between the camera and look at point
-
-    // Calculate the camera position using the distance and angles
-    num camX = targetPosition.x +
-        distance *
-            -Math.sin(xAngleRot * (Math.PI / 180)) *
-            Math.cos((yAngleRot) * (Math.PI / 180));
-    num camY =
-        targetPosition.y + distance * -Math.sin((yAngleRot) * (Math.PI / 180));
-    num camZ = targetPosition.z +
-        -distance *
-            Math.cos((xAngleRot) * (Math.PI / 180)) *
-            Math.cos((yAngleRot) * (Math.PI / 180));
-
-    position.setValues(camX, camY, camZ);
-  }
-
-  void pan(double deltaX, double deltaY) {
-    position += xAxis * deltaX;
-    position += yAxis * deltaY;
-    targetPosition += xAxis * deltaX;
-    targetPosition += yAxis * deltaY;
   }
 
   @override
@@ -155,101 +140,19 @@ class Camera extends Model {
     _gizmo.visible = value;
   }
 
+  _update() {
+    setPerspectiveMatrix(_perspectiveMatrix, _fov, aspectRatio, _zNear, _zFar);
+    setViewMatrix(_lookAtMatrix, position, _targetPosition, upDirection);
+    _updateGizmo();
+  }
   _updateGizmo() {
     if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
   }
-}
 
-// A simple camera controller which uses an HTML element as the event
-// source for constructing a view matrix.
-//
-// The view matrix is computed elsewhere.
-
-//Todo create multiple controller for each action
-//abstract class CameraController {
-//  void init(Camera camera);
-//}
-
-class CameraController {
-  num xRot = 0.0;
-  num yRot = 0.0;
-  num scaleFactor = 3.0;
-  bool dragging = false;
-  int currentX = 0;
-  int currentY = 0;
-
-  //WheelEvent values
-  num fov = radians(45.0);
-
-  CameraController();
-
-  void init(Camera camera) {
-    xRot = 90 - camera.pitch;
-    yRot = camera.phiAngle;
-
-    // Assign a mouse down handler to the HTML element.
-    gl.canvas.onMouseDown.listen((ev) {
-      if (camera.active) {
-        dragging = true;
-        currentX = ev.client.x;
-        currentY = ev.client.y;
-      }
-    });
-
-    // Assign a mouse up handler to the HTML element.
-    gl.canvas.onMouseUp.listen((MouseEvent ev) {
-      if (camera.active) {
-        dragging = false;
-      }
-    });
-
-    // Assign a mouse move handler to the HTML element.
-    gl.canvas.onMouseMove.listen((MouseEvent ev) {
-      if (camera.active) {
-        if (dragging) {
-          // Determine how far we have moved since the last mouse move event.
-          int tempCurX = ev.client.x;
-          int tempCurY = ev.client.y;
-          var deltaX = (currentX - tempCurX) / scaleFactor;
-          var deltaY = (currentY - tempCurY) / scaleFactor;
-          currentX = tempCurX;
-          currentY = tempCurY;
-
-          if (ev.button == 0) {//LMB
-            // Update the X and Y rotation angles based on the mouse motion.
-            yRot = (yRot + deltaX) % 360;
-            xRot = (xRot + deltaY);
-
-            // Clamp the X rotation to prevent the camera from going upside down.
-            if (xRot < -90) {
-              xRot = -90;
-            } else if (xRot > 90) {
-              xRot = 90;
-            }
-
-            //Todo : create first person eye Rotation with ctrl key
-            camera.rotateOrbitCamera(yRot, xRot); //why inverted ?
-
-          } else if (ev.button == 1) {//MMB
-            deltaX *= 0.5;
-            deltaY *= 0.5;
-            camera.pan(deltaX, deltaY);
-          }
-        }
-      }
-    });
-
-    gl.canvas.onMouseWheel.listen((WheelEvent event) {
-      //Todo add zAxis translation
-
-      //Todo with ctrl key..May switch behaviors
-
-      if (camera.active) {
-        var delta = Math.max(-1, Math.min(1, -event.deltaY));
-        fov += delta / 50; //calcul du zoom
-
-        camera.fOV = fov;
-      }
-    });
+  String toString() {
+    return 'camera position : $position -> target : $targetPosition';
   }
 }
+
+
+

@@ -4,6 +4,7 @@ import 'package:datgui/datgui.dart' as dat;
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
@@ -52,7 +53,6 @@ class SceneViewPerformanceTest extends Scene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
-      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, -50.0)
       ..cameraController = new CameraController();

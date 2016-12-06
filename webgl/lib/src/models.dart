@@ -169,6 +169,9 @@ class FrustrumGizmo extends Model implements IGizmo {
   num _positionPointSize = 6.0;
 
 
+  //positions
+  final Vector3 cameraPosition = new Vector3.zero();
+  final Vector3 cameraTargetPosition = new Vector3.zero();
   //near
   final Vector3 c0 = new Vector3.zero();
   final Vector3 c1 = new Vector3.zero();
@@ -225,16 +228,16 @@ class FrustrumGizmo extends Model implements IGizmo {
     gizmoModels.add(new LineModel(c3, c7)
       ..material = frustrumDirectionLineMaterial);
 
-    gizmoModels.add(new LineModel(_camera.position, _camera.targetPosition)
+    gizmoModels.add(new LineModel(cameraPosition, cameraTargetPosition)
           ..material = frustrumDirectionLineMaterial);
 
     gizmoModels
         .add(new PointModel()
-        ..position = _camera.position
+        ..position = cameraPosition
         ..material = frustrumPositionPointMaterial); //position
     gizmoModels
         .add(new PointModel()
-          ..position = _camera.targetPosition
+          ..position = cameraTargetPosition
           ..material = frustrumPositionPointMaterial); //target
 
     updateGizmo();
@@ -245,6 +248,8 @@ class FrustrumGizmo extends Model implements IGizmo {
     //Update only final positions
     new Frustum.matrix(_vpmatrix)
       ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
+    cameraPosition.setFrom(_camera.position);
+    cameraTargetPosition.setFrom(_camera.targetPosition);
   }
 
   @override

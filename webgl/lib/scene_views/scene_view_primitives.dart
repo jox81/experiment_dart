@@ -2,6 +2,7 @@ import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/materials.dart';
@@ -62,7 +63,6 @@ class SceneViewPrimitives extends Scene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     camera = new Camera(radians(45.0), 5.0, 1000.0)
-      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 30.0, 50.0)
       ..cameraController = new CameraController()
@@ -71,7 +71,6 @@ class SceneViewPrimitives extends Scene{
     Context.mainCamera = camera;
 
     camera2 = new Camera(radians(37.0), 5.0, 100.0)
-      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(10.0, 10.0, 10.0)
       ..cameraController = new CameraController()
