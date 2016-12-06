@@ -26,7 +26,7 @@ class IntrospectionManager{
     Map<String, MethodMirror> instance_mirror_setters = new Map();
     Map<String, MethodMirror> instance_mirror_functions = new Map();
 
-    for (var v in class_mirror.instanceMembers.values) {
+    for (DeclarationMirror v in class_mirror.instanceMembers.values) {
       String name = MirrorSystem.getName(v.simpleName);
 
       if (v is VariableMirror) {
@@ -38,6 +38,16 @@ class IntrospectionManager{
         instance_mirror_functions[name] = v;
       }
     }
+
+//    for (DeclarationMirror v in class_mirror.declarations.values) {
+//      String name = MirrorSystem.getName(v.simpleName);
+//      if (v is VariableMirror) {
+//        if(v.isFinal){
+//          print('');
+//        }
+//      }
+//
+//    }
 
     instance_mirror_getters.forEach((String key, MethodMirror instance_mirror_field){
       if(instance_mirror_setters.containsKey('$key=')){

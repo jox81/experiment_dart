@@ -11,7 +11,7 @@ typedef void SetShaderVariables(Mesh mesh);
 
 class MaterialCustom extends Material {
 
-  List<String> buffersNames;
+  final List<String> buffersNames;
 
   SetShaderVariables setShaderAttributsVariables;
   SetShaderVariables setShaderUniformsVariables;
@@ -32,7 +32,7 @@ class MaterialCustom extends Material {
 class MaterialPoint extends Material {
 
   final List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
-  final num pointSize;
+  num pointSize;
   Vector4 color;
 
   MaterialPoint._internal(String vsSource, String fsSource, this.pointSize, this.color)
@@ -93,7 +93,7 @@ class MaterialBaseColor extends Material {
   final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External Parameters
-  final Vector4 color;
+  Vector4 color;
 
   MaterialBaseColor._internal(String vsSource, String fsSource, this.color)
       : super(vsSource, fsSource);
@@ -267,7 +267,7 @@ class MaterialPBR extends Material {
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
-  final PointLight pointLight;
+  PointLight pointLight;
 
   MaterialPBR._internal(String vsSource, String fsSource, this.pointLight)
       : super(vsSource, fsSource);
