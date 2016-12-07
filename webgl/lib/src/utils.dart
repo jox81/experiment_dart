@@ -223,7 +223,7 @@ class Utils{
 
       if(distance != null) {
         resultPoints.add(new PointModel()
-          ..transform = (new Matrix4.identity()..setTranslation(ray.at(distance)))
+          ..position = ray.at(distance)
           ..material = material);
       }
     }

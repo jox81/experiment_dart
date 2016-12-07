@@ -100,7 +100,7 @@ class SceneViewBase extends Scene{
     models.add(axis);
 
     PointModel point = new PointModel()
-        ..position.setValues(8.0, 5.0, 10.0);
+        ..position = new Vector3(8.0, 5.0, 10.0);
     models.add(point);
 
     //Line

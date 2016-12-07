@@ -19,6 +19,9 @@ class PropertiesComponent{
   @Input()
   IEditElement iEditElement;
 
+  @Output()
+  EventEmitter innerSelectionChange = new EventEmitter<IEditElement>();
+
   //Null
   bool isNull(EditableProperty animationProperty){
     return animationProperty.type == Null;
@@ -96,11 +99,13 @@ class PropertiesComponent{
     return animationProperty.type.toString() == 'List';
   }
   setSelection(event){
+    IEditElement selection;
     if(event is IEditElement) {
-      iEditElement = event;
+      selection = event;
     }else{
-      iEditElement = new CustomEditElement(event);
+      selection = new CustomEditElement(event);
     }
+    innerSelectionChange.emit(selection);
   }
 
 }

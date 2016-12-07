@@ -64,15 +64,15 @@ class SceneViewPrimitives extends Scene{
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     camera = new Camera(radians(45.0), 5.0, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 30.0, 50.0)
+      ..position = new Vector3(5.0, 7.5, 10.0)
       ..cameraController = new CameraController()
       ..showGizmo = true;
     models.add(camera);
     Context.mainCamera = camera;
 
-    camera2 = new Camera(radians(37.0), 5.0, 100.0)
+    camera2 = new Camera(radians(37.0), 0.5, 10.0)
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-      ..position = new Vector3(10.0, 10.0, 10.0)
+      ..position = new Vector3(2.0, 2.0, 2.0)
       ..cameraController = new CameraController()
       ..showGizmo = true;
     models.add(camera2);
@@ -89,12 +89,24 @@ class SceneViewPrimitives extends Scene{
 //    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
 //    MaterialBase materialBase = new MaterialBase();
 
+    AxisModel axis = new AxisModel();
+    models.add(axis);
 
-//    TriangleModel triangleModel = new TriangleModel()
-//      ..name = 'triangle'
-//      ..position = new Vector3(1.0, 0.0, 3.0);
-//    models.add(triangleModel);
+    models.add(
+        new PointModel()
+          ..name = 'point1'
+          ..position = new Vector3(1.0, 0.0, 1.0)
+    );
 
+    models.add(
+        new PointModel()
+          ..name = 'point2'
+          ..position.setFrom(new Vector3(1.0, 0.0, 1.0))
+    );
+
+//    models.add(new TriangleModel()
+//      ..name = 'triangle1'
+//      ..position = new Vector3(1.0, 0.0, 3.0));
 
 //    QuadModel quad = new QuadModel()
 //      ..name = "quad"
@@ -106,10 +118,10 @@ class SceneViewPrimitives extends Scene{
 //      ..position = new Vector3(5.0, 5.0, 0.0);
 //    models.add(pyramid);
 
-    CubeModel cube = new CubeModel()
-      ..name = "cube"
-      ..position = new Vector3(-5.0, 5.0, 0.0);
-    models.add(cube);
+//    CubeModel cube = new CubeModel()
+//      ..name = "cube"
+//      ..position = new Vector3(-5.0, 5.0, 0.0);
+//    models.add(cube);
 
 //    SphereModel sphere = new SphereModel()
 //      ..name = "sphere"

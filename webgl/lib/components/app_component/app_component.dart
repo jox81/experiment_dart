@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:angular2/core.dart';
 import 'package:webgl/components/canvas_component/canvas_component.dart';
 import 'package:webgl/components/layout_component/layout_component.dart';
@@ -29,6 +30,7 @@ class AppComponent implements AfterViewInit{
         _currentElement = currentScene;
       }
     }
+
     return _currentElement;
   }
 
@@ -38,7 +40,7 @@ class AppComponent implements AfterViewInit{
   List<Scene> scenes;
   int sceneId = -1;
 
-  switchScene () async {
+  Future switchScene () async {
     sceneId++;
     sceneId %= scenes.length;
 
@@ -47,14 +49,15 @@ class AppComponent implements AfterViewInit{
     application.render(currentScene);
   }
 
+  void selectElement(IEditElement element){
+    currentScene.currentSelection = element;
+  }
+
   @override
   ngAfterViewInit() async {
     application = await Application.create(canvasComponent.canvas);
     scenes = ServiceScene.getSceneViews();
     switchScene ();
-
-    //Todo : ajouter la selection...
-//    currentElement =
   }
 
 }

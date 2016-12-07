@@ -18,7 +18,9 @@ abstract class Model extends IEditElement {
   bool visible = true;
 
   //Transform : position, rotation, scale
-  Matrix4 transform = new Matrix4.identity();
+  final Matrix4 _transform = new Matrix4.identity();
+  Matrix4 get transform => _transform;
+  set transform(Matrix4 value) => _transform.setFrom(value);
 
   Vector3 get position => transform.getTranslation();
   set position(Vector3 value) => transform.setTranslation(value);
@@ -169,7 +171,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   num _positionPointSize = 6.0;
 
 
-  //positions
+  //camera
   final Vector3 cameraPosition = new Vector3.zero();
   final Vector3 cameraTargetPosition = new Vector3.zero();
   //near
@@ -183,11 +185,13 @@ class FrustrumGizmo extends Model implements IGizmo {
   final Vector3 c6 = new Vector3.zero();
   final Vector3 c7 = new Vector3.zero();
 
+  final PointModel cameraPositionPoint = new PointModel();
+  final PointModel cameraTargetPositionPoint = new PointModel();
+
   @override
   List<Model> gizmoModels = [];
 
-  FrustrumGizmo(Camera camera):
-        _camera = camera{;
+  FrustrumGizmo(Camera camera): _camera = camera{
     _createFrustrumModel(_camera.vpMatrix);
   }
 
@@ -232,12 +236,10 @@ class FrustrumGizmo extends Model implements IGizmo {
           ..material = frustrumDirectionLineMaterial);
 
     gizmoModels
-        .add(new PointModel()
-        ..position = cameraPosition
-        ..material = frustrumPositionPointMaterial); //position
+        .add(cameraPositionPoint
+          ..material = frustrumPositionPointMaterial); //position
     gizmoModels
-        .add(new PointModel()
-          ..position = cameraTargetPosition
+        .add(cameraTargetPositionPoint
           ..material = frustrumPositionPointMaterial); //target
 
     updateGizmo();
@@ -248,8 +250,14 @@ class FrustrumGizmo extends Model implements IGizmo {
     //Update only final positions
     new Frustum.matrix(_vpmatrix)
       ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
+
     cameraPosition.setFrom(_camera.position);
     cameraTargetPosition.setFrom(_camera.targetPosition);
+
+    cameraPositionPoint
+      ..position = _camera.position;
+    cameraTargetPositionPoint
+      ..position = _camera.targetPosition;
   }
 
   @override

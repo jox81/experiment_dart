@@ -4,7 +4,10 @@
     </div>
     <div class="row">
         <div class="col-sm-3 first">
-            <properties [iEditElement] = "currentElement"></properties>
+            <properties
+                [iEditElement] = "currentElement"
+                (innerSelectionChange) = "selectElement($event)">
+            </properties>
         </div>
         <div class="col-sm-9 second">
             <canvas_app id="canvasApp"></canvas_app>
