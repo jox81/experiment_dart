@@ -109,7 +109,7 @@ class Camera extends Model {
   }
   set perspectiveMatrix(Matrix4 value){
     _perspectiveMatrix = value;
-    _update();
+    _updateGizmo();
   }
 
   Matrix4 _lookAtMatrix = new Matrix4.identity();

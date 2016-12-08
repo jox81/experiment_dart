@@ -39,7 +39,6 @@ class SceneViewFrameBuffer extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(50.0, 50.0, 50.0)
@@ -51,20 +50,20 @@ class SceneViewFrameBuffer extends Scene{
     light = directionalLight;
 
     //
+    Texture newTexture = TextureUtils.createRenderedTexture();
+
+    //
     MaterialBaseTextureNormal materialBaseTextureNormal =
     new MaterialBaseTextureNormal()
       ..ambientColor = ambientLight.color
-      ..directionalLight = directionalLight;
+      ..directionalLight = directionalLight
+      ..texture = newTexture;
     materials.add(materialBaseTextureNormal);
 
-    Texture newTexture = TextureUtils.createRenderedTexture();
-
-    //Create Cube
-    CubeModel cube = new CubeModel();
-    cube.transform.translate(0.0, 0.0, 0.0);
-    materialBaseTextureNormal.texture = newTexture;
-    cube.material = materialBaseTextureNormal;
-//  cube.material = materialBase;
+    //Model
+    CubeModel cube = new CubeModel()
+      ..position = new Vector3(0.0, 0.0, 0.0)
+      ..material = materialBaseTextureNormal;
     models.add(cube);
 
     // Animation
@@ -73,14 +72,7 @@ class SceneViewFrameBuffer extends Scene{
     updateFunction = (num time) {
       double animationStep = time - _lastTime;
       //Do Animation here
-
-      //..
-      //
       _lastTime = time;
     };
-
-
   }
-
-
 }
