@@ -162,6 +162,8 @@ class _LineMesh extends Mesh {
 
 class _TriangleMesh extends Mesh {
   _TriangleMesh() {
+    mode = GL.TRIANGLES;
+
     vertices = [
       0.0, 0.0, 0.0,
       2.0, 0.0, 0.0,
@@ -174,15 +176,28 @@ class _TriangleMesh extends Mesh {
 class _SquareMesh extends Mesh {
   _SquareMesh() {
     mode = GL.TRIANGLES;
+
     vertices = [
-      1.0, 1.0, 0.0,
-      1.0, -1.0, 0.0,
       -1.0, 1.0, 0.0,
-      -1.0, -1.0, 0.0
+      -1.0, -1.0, 0.0,
+      1.0, -1.0, 0.0,
+      1.0, 1.0, 0.0
     ];
     indices = [
       0,1,2,
-      2,1,3
+      0,2,3
+    ];
+    vertexNormals = [
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
+      0.0, 0.0, 1.0,
+    ];
+    textureCoords = [
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+      0.0, 1.0,
     ];
   }
 }
@@ -218,41 +233,19 @@ class _PyramidMesh extends Mesh {
 
 class _CubeMesh extends Mesh {
   _CubeMesh() {
+    mode = GL.TRIANGLES;
+
     vertices = [
-      // Front face
+      // Front vertices
+      -1.0, 1.0, 1.0,
       -1.0, -1.0, 1.0,
       1.0, -1.0, 1.0,
       1.0, 1.0, 1.0,
-      -1.0, 1.0, 1.0,
 
-      // Back face
-      -1.0, -1.0, -1.0,
-      -1.0, 1.0, -1.0,
+      // Back vertices
       1.0, 1.0, -1.0,
       1.0, -1.0, -1.0,
-
-      // Top face
-      -1.0, 1.0, -1.0,
-      -1.0, 1.0, 1.0,
-      1.0, 1.0, 1.0,
-      1.0, 1.0, -1.0,
-
-      // Bottom face
       -1.0, -1.0, -1.0,
-      1.0, -1.0, -1.0,
-      1.0, -1.0, 1.0,
-      -1.0, -1.0, 1.0,
-
-      // Right face
-      1.0, -1.0, -1.0,
-      1.0, 1.0, -1.0,
-      1.0, 1.0, 1.0,
-      1.0, -1.0, 1.0,
-
-      // Left face
-      -1.0, -1.0, -1.0,
-      -1.0, -1.0, 1.0,
-      -1.0, 1.0, 1.0,
       -1.0, 1.0, -1.0,
     ];
 
@@ -274,10 +267,10 @@ class _CubeMesh extends Mesh {
     indices = [
       0, 1, 2, 0, 2, 3, // Front face
       4, 5, 6, 4, 6, 7, // Back face
-      8, 9, 10, 8, 10, 11, // Top face
-      12, 13, 14, 12, 14, 15, // Bottom face
-      16, 17, 18, 16, 18, 19, // Right face
-      20, 21, 22, 20, 22, 23 // Left face
+      7, 0, 3, 7, 3, 4, // Top face
+      1, 6, 5, 1, 5, 2, // Bottom face
+      3, 2, 5, 3, 5, 4, // Right face
+      7, 6, 1, 7, 1, 0, // Left face
     ];
 
     textureCoords = [
@@ -356,7 +349,7 @@ class _CubeMesh extends Mesh {
       -1.0, 0.0, 0.0,
     ];
 
-    mode = GL.TRIANGLES;
+
   }
 }
 
@@ -371,7 +364,10 @@ class _SphereMesh extends Mesh {
   List<Vector3> sphereVerticesVector = [];
   List<Vector2> uvs = [];
 
+
   _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
+
+    mode = GL.TRIANGLES;
 
     segmentV = max(1,segmentV--);
 
@@ -429,7 +425,7 @@ class _SphereMesh extends Mesh {
     }
 //    _textureCoords = uvs;
 
-    mode = GL.TRIANGLES;
+
   }
 }
 

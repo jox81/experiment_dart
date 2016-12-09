@@ -14,8 +14,8 @@ class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //    new SceneViewPrimitives(),
 //    new SceneViewBase(),
+   new SceneViewFrameBuffer(),
 //    new SceneViewPBR(),
-    new SceneViewFrameBuffer(),
 //    new SceneViewExperiment(),
 //    new SceneViewParticleSimple(),
 //    new SceneViewParticle(),

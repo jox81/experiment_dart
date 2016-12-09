@@ -1,4 +1,5 @@
 import 'dart:web_gl';
+import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 
@@ -24,6 +25,55 @@ class Context{
       return width / height;
     }
     return 1;
+  }
+
+  static RenderSetting _renderSetting;
+  static RenderSetting get renderSettings {
+    if(_renderSetting == null){
+      _renderSetting = new RenderSetting();
+    }
+    return _renderSetting;
+  }
+
+}
+
+class RenderSetting{
+  RenderSetting();
+
+  void showBackFace(bool visible){
+    if(!visible) {
+      gl.enable(GL.CULL_FACE);
+      gl.cullFace(GL.BACK);
+    }
+  }
+
+  void enableDepth(bool enable) {
+    if(enable) {
+      gl.clear(GL.DEPTH_BUFFER_BIT);
+      gl.enable(DEPTH_TEST);
+    }
+  }
+
+  void enableExtensions() {
+    print('###');
+    print('Possible extensions : ');
+    for(String extension in gl.getSupportedExtensions()){
+      print(extension);
+    }
+
+    print('###');
+    print('Enabling extensions : ');
+    List<String> extensionNames = [
+      'OES_texture_float',
+      'OES_depth_texture',
+      'WEBKIT_WEBGL_depth_texture',
+    ];
+
+    var extension;
+    for(String extensionName in extensionNames){
+      extension = gl.getExtension(extensionName);
+      print('$extensionName : ${(extension != null)?'enabled':'not available'}');
+    }
   }
 }
 

@@ -170,7 +170,6 @@ class FrustrumGizmo extends Model implements IGizmo {
 
   num _positionPointSize = 6.0;
 
-
   //camera
   final Vector3 cameraPosition = new Vector3.zero();
   final Vector3 cameraTargetPosition = new Vector3.zero();

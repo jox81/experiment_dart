@@ -38,7 +38,7 @@ Future<Model> experiment() async {
 
   num shaderTime = 0.0;
 
-  Texture texture = await TextureUtils.createTextureFromFile("../images/crate.gif");
+  Texture texture = await TextureUtils.getTextureFromFile("../images/crate.gif");
 
   //Material
   List<String> buffersNames = ['aVertexPosition', 'aVertexIndice'];

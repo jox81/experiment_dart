@@ -61,15 +61,13 @@ class Application {
       return null;
     }
 
-    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
-    gl.enable(DEPTH_TEST);
-
-    /*
-    //Hide backfaces
-    gl.enable(GL.CULL_FACE);
+    gl.clear(GL.COLOR_BUFFER_BIT);
     gl.frontFace(GL.CCW);
-    gl.cullFace(GL.BACK);
-    */
+
+    Context.renderSettings.enableDepth(true);
+    Context.renderSettings.showBackFace(true);
+    Context.renderSettings.enableExtensions();
+
   }
 
   void _initEvents() {

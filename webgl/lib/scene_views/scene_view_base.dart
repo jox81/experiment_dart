@@ -156,14 +156,14 @@ class SceneViewBase extends Scene{
     CubeModel cube = new CubeModel();
     cube.transform.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
-    await TextureUtils.createTextureFromFile("../images/crate.gif");
+    await TextureUtils.getTextureFromFile("../images/crate.gif");
     cube.material = materialBaseTextureNormal;
     models.add(cube);
 
     //SusanModel
     var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
     MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
-      ..texture = await TextureUtils.createTextureFromFile(
+      ..texture = await TextureUtils.getTextureFromFile(
           '../objects/susan/susan_texture.png');
     JsonObject jsonModel = new JsonObject(susanJson)
       ..transform.translate(10.0, 0.0, -5.0)

@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:web_gl';
+import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/scene_views/scene_view_primitives.dart';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -39,9 +41,9 @@ class SceneViewFrameBuffer extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
+    Camera camera = new Camera(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(50.0, 50.0, 50.0)
+      ..position = new Vector3(5.0, 5.0, 5.0)
       ..cameraController = new CameraController();
     Context.mainCamera = camera;
 
@@ -50,20 +52,33 @@ class SceneViewFrameBuffer extends Scene{
     light = directionalLight;
 
     //
-    Texture newTexture = TextureUtils.createRenderedTexture();
+    Texture textureEmpty = TextureUtils.createRenderedTexture();
+    Texture textureCrate =
+    await TextureUtils.getTextureFromFile("../images/crate.gif");
 
-    //
     MaterialBaseTextureNormal materialBaseTextureNormal =
     new MaterialBaseTextureNormal()
       ..ambientColor = ambientLight.color
       ..directionalLight = directionalLight
-      ..texture = newTexture;
+      ..texture = textureEmpty;
     materials.add(materialBaseTextureNormal);
 
+    MaterialBaseTextureNormal materialBaseTextureNormal2 =
+    new MaterialBaseTextureNormal()
+      ..ambientColor = ambientLight.color
+      ..directionalLight = directionalLight
+      ..texture = textureCrate;
+    materials.add(materialBaseTextureNormal2);
+
     //Model
-    CubeModel cube = new CubeModel()
+    QuadModel quad = new QuadModel()
       ..position = new Vector3(0.0, 0.0, 0.0)
-      ..material = materialBaseTextureNormal;
+      ..material = materialBaseTextureNormal2;
+    models.add(quad);
+
+    CubeModel cube = new CubeModel()
+      ..position = new Vector3(2.0, 0.0, 0.0)
+      ..material = materialBaseTextureNormal2;
     models.add(cube);
 
     // Animation
