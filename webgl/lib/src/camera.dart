@@ -13,7 +13,11 @@ class Camera extends Model {
     _active = value;
   }
 
-  double get aspectRatio => Context.viewAspectRatio;
+  double _aspectRatio;
+  set aspectRatio(double value){
+    _aspectRatio = value;
+  }
+  double get aspectRatio => _aspectRatio != null ? _aspectRatio : Context.viewAspectRatio;
 
   double _fov;
   double get fov => _fov;
