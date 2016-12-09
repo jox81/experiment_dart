@@ -73,7 +73,7 @@ class SceneViewFrameBuffer extends Scene{
     //Model
     QuadModel quad = new QuadModel()
       ..position = new Vector3(0.0, 0.0, 0.0)
-      ..material = materialBaseTextureNormal2;
+      ..material = materialBaseTextureNormal;
     models.add(quad);
 
     CubeModel cube = new CubeModel()

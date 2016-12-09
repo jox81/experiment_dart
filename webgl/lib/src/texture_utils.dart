@@ -6,7 +6,7 @@ import 'package:webgl/src/globals/context.dart';
 
 class TextureUtils {
 
-  static Future<Texture> createTextureFromFile(String fileUrl) {
+  static Future<Texture> getTextureFromFile(String fileUrl) {
     Completer completer = new Completer();
 
     ImageElement image;
