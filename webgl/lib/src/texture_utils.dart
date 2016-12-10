@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:web_gl';
 import 'dart:html';
 import 'package:gl_enums/gl_enums.dart' as GL;
@@ -128,6 +129,9 @@ class TextureUtils {
   ///
   static Texture createRenderedTexture({int size: 512}) {
 
+    //backup camera
+    Camera baseCam = Context.mainCamera;
+
     Texture colorTexture = createColorTexture(size);
     Renderbuffer depthRenderbuffer = createRenderBuffer(size);
     Texture depthTexture = createDepthTexture(size);
@@ -136,15 +140,11 @@ class TextureUtils {
 
     gl.bindFramebuffer(GL.FRAMEBUFFER, framebuffer);
 
-    //backup camera
-    Camera baseCam = Context.mainCamera;
-
     // draw something in the buffer
     // ...
 
     {
       Camera cameraTexture = new Camera(radians(45.0), 0.1, 100.0)
-        ..aspectRatio = 1.0
         ..targetPosition = new Vector3(6.0,3.0,0.0)
         ..position = new Vector3(10.0, 10.0, 10.0);
 
@@ -167,11 +167,31 @@ class TextureUtils {
     //...
     //End draw
 
+    readPixels(rectangle:new Rectangle(0,0,1,1));
+
+    // Unbind the framebuffer
     gl.bindFramebuffer(GL.FRAMEBUFFER, null);
 
     //reset camera
     Context.mainCamera = baseCam;
 
     return colorTexture;
+  }
+
+  static void readPixels({Rectangle rectangle}) {
+    if(rectangle == null) rectangle = new Rectangle(0,0,Context.width,Context.height);
+
+    var pixels = new Uint8List(rectangle.width * rectangle.height * 4);
+
+    gl.readPixels(
+        rectangle.left,
+        rectangle.top,
+        rectangle.width,
+        rectangle.height,
+        GL.RGBA,
+        GL.UNSIGNED_BYTE,
+        pixels);
+
+    print(pixels);
   }
 }

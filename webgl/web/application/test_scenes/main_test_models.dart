@@ -10,6 +10,7 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
+import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 
 Texture textureCrate;
@@ -237,9 +238,10 @@ class Webgl01 {
       model.render();
     }
 
-    window.requestAnimationFrame((num time) {
-      this.render(time: time);
-    });
+    TextureUtils.readPixels();
+//    window.requestAnimationFrame((num time) {
+//      this.render(time: time);
+//    });
   }
 
 }

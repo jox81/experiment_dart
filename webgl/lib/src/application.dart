@@ -36,10 +36,10 @@ class Application {
 
   void _initGL(CanvasElement canvas) {
     List<String> names = [
-      "webgl",
+//      "webgl",
       "experimental-webgl",
-      "webkit-3d",
-      "moz-webgl"
+//      "webkit-3d",
+//      "moz-webgl"
     ];
     var options = {
       'preserveDrawingBuffer': true,
