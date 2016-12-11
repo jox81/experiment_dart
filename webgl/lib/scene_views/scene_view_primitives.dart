@@ -92,17 +92,17 @@ class SceneViewPrimitives extends Scene{
     AxisModel axis = new AxisModel();
     models.add(axis);
 
-    models.add(
-        new PointModel()
-          ..name = 'point1'
-          ..position = new Vector3(1.0, 0.0, 1.0)
-    );
-
-    models.add(
-        new PointModel()
-          ..name = 'point2'
-          ..position.setFrom(new Vector3(1.0, 0.0, 1.0))
-    );
+//    models.add(
+//        new PointModel()
+//          ..name = 'point1'
+//          ..position = new Vector3(1.0, 0.0, 1.0)
+//    );
+//
+//    models.add(
+//        new PointModel()
+//          ..name = 'point2'
+//          ..position.setFrom(new Vector3(1.0, 0.0, 1.0))
+//    );
 
 //    models.add(new TriangleModel()
 //      ..name = 'triangle1'

@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/globals/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
@@ -90,9 +91,7 @@ class Interaction {
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
       if(!dragging) {
-        Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
-
-        Model modelHit = Utils.findModelHit(scene.models, ray);
+        Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, e.offset.x, e.offset.y, scene.models);
         scene.currentSelection = modelHit;
         print(modelHit?.name);
       }

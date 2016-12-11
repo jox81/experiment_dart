@@ -87,16 +87,16 @@ class SceneViewPerformanceTest extends Scene{
     //Meshes
 
     Random random = new Random();
-    int count = 1;
-    int randomWidth = 20;
+    int count = 50;
+    int randomWidth = 2 ;
 
     for (int i = 0; i < count; i++) {
       //Create Cube
-      CubeModel cube = new CubeModel();
-      cube.transform.translate(random.nextInt(randomWidth) - randomWidth / 2,
+      CubeModel cube = new CubeModel()
+        ..position = new Vector3(random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2,
-          random.nextInt(randomWidth) - randomWidth / 2);
-      cube.material = materialPBR;
+          random.nextInt(randomWidth) - randomWidth / 2)
+        ..material = materialPBR;
       models.add(cube);
     }
     // Animation

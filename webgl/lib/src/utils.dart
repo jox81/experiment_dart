@@ -231,6 +231,12 @@ class Utils{
     return resultPoints;
   }
 
+  static Model findModelFromMouseCoords(Camera camera, num x, num y, List<Model> models) {
+    Ray ray = Utils.findRay(camera, x, y);
+    Model modelHit = Utils.findModelHit(models, ray);
+    return modelHit;
+  }
+
   /// Find the first hit model in the list using the ray
   static Model findModelHit(List<Model> models, Ray ray) {
     Model modelHit;

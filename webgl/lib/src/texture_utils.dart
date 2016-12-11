@@ -12,7 +12,7 @@ import 'package:webgl/src/scene.dart';
 
 class TextureUtils {
 
-  static Future<Texture> getTextureFromFile(String fileUrl) {
+  static Future<Texture> getTextureFromFile(String fileUrl, {bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
     Completer completer = new Completer();
 
     ImageElement image;
@@ -20,7 +20,7 @@ class TextureUtils {
     image = new ImageElement()
       ..src = fileUrl
       ..onLoad.listen((e) {
-        completer.complete(createTextureFromElement(image));
+        completer.complete(createColorTextureFromElement(image, repeatU:repeatU, mirrorU: mirrorU, repeatV: repeatV, mirrorV: mirrorV));
       });
 
     return completer.future;
@@ -31,14 +31,17 @@ class TextureUtils {
   //  gl.texImage2D(GL.TEXTURE_2D, 0, GL.RGBA, GL.RGBA, GL.FLOAT, textureImage);
   //  gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST);
   //  gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST);
-  static Texture createTextureFromElement(ImageElement image) {
+  static Texture createColorTextureFromElement(ImageElement image,{bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
     Texture texture = gl.createTexture();
     gl.bindTexture(GL.TEXTURE_2D, texture);
 
     gl.pixelStorei(GL.UNPACK_FLIP_Y_WEBGL, 1);
 
-    gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
-    gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
+    int WRAP_S = repeatU ? (mirrorU ? GL.MIRRORED_REPEAT:GL.REPEAT):GL.CLAMP_TO_EDGE;
+    int WRAP_T = repeatV ? (mirrorV ? GL.MIRRORED_REPEAT:GL.REPEAT):GL.CLAMP_TO_EDGE;
+
+    gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, WRAP_S);
+    gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, WRAP_T);
 
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
     gl.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);

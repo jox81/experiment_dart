@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:gl_enums/gl_enums.dart' as GL;
 import 'dart:math';
@@ -70,21 +71,35 @@ class Mesh {
   List<Triangle> get faces {
 
     /*
-    référence pour la construction
+    //Référence de construction
+    0 - 3
+    | \ |
+    1 - 2
+
     vertices = [
-      0.0, 0.0, 0.0,
-      2.0, 0.0, 0.0,
-      0.0, 2.0, 0.0
+      -1.0, 1.0, 0.0,
+      -1.0, -1.0, 0.0,
+      1.0, -1.0, 0.0,
+      1.0, 1.0, 0.0
     ];
-    indices = [0,1,2];
-     */
+    indices = [
+      0, 1, 2, 0, 2, 3,
+    ];
+    */
 
     if(_faces == null){
+      List<Float32List> fullVertices = [];
       _faces = [];
-      for(int indice = 0; indice < _indices.length; indice += 9){
-        Vector3 p1 = new Vector3(vertices[indice + 0 + 0], vertices[indice + 0 + 1], vertices[indice + 0 + 2]);
-        Vector3 p2 = new Vector3(vertices[indice + 3 + 0], vertices[indice + 3 + 1], vertices[indice + 3 + 2]);
-        Vector3 p3 = new Vector3(vertices[indice + 6 + 0], vertices[indice + 6 + 1], vertices[indice + 6 + 2]);
+      int stepVertices = 3;
+      for(int vertex = 0; vertex < vertices.length; vertex += stepVertices) {
+        fullVertices.add([vertices[vertex + 0], vertices[vertex + 1], vertices[vertex + 2]]);
+      }
+
+      int stepIndices = 3;
+      for(int i = 0; i < indices.length; i += stepIndices) {
+        Vector3 p1 = new Vector3.fromFloat32List(fullVertices[indices[i]]);
+        Vector3 p2 = new Vector3.fromFloat32List(fullVertices[indices[i + 1]]);
+        Vector3 p3 = new Vector3.fromFloat32List(fullVertices[indices[i + 2]]);
         _faces.add(new Triangle.points(p1, p2, p3));
       }
     }
@@ -176,7 +191,11 @@ class _TriangleMesh extends Mesh {
 class _SquareMesh extends Mesh {
   _SquareMesh() {
     mode = GL.TRIANGLES;
-
+    /*
+    0 - 3
+    | \ |
+    1 - 2
+    */
     vertices = [
       -1.0, 1.0, 0.0,
       -1.0, -1.0, 0.0,
@@ -184,8 +203,7 @@ class _SquareMesh extends Mesh {
       1.0, 1.0, 0.0
     ];
     indices = [
-      0,1,2,
-      0,2,3
+      0, 1, 2, 0, 2, 3,
     ];
     vertexNormals = [
       0.0, 0.0, 1.0,
@@ -236,17 +254,88 @@ class _CubeMesh extends Mesh {
     mode = GL.TRIANGLES;
 
     vertices = [
-      // Front vertices
-      -1.0, 1.0, 1.0,
+      // Front face
       -1.0, -1.0, 1.0,
       1.0, -1.0, 1.0,
       1.0, 1.0, 1.0,
+      -1.0, 1.0, 1.0,
 
-      // Back vertices
-      1.0, 1.0, -1.0,
-      1.0, -1.0, -1.0,
+      // Back face
       -1.0, -1.0, -1.0,
       -1.0, 1.0, -1.0,
+      1.0, 1.0, -1.0,
+      1.0, -1.0, -1.0,
+
+      // Top face
+      -1.0, 1.0, -1.0,
+      -1.0, 1.0, 1.0,
+      1.0, 1.0, 1.0,
+      1.0, 1.0, -1.0,
+
+      // Bottom face
+      -1.0, -1.0, -1.0,
+      1.0, -1.0, -1.0,
+      1.0, -1.0, 1.0,
+      -1.0, -1.0, 1.0,
+
+      // Right face
+      1.0, -1.0, -1.0,
+      1.0, 1.0, -1.0,
+      1.0, 1.0, 1.0,
+      1.0, -1.0, 1.0,
+
+      // Left face
+      -1.0, -1.0, -1.0,
+      -1.0, -1.0, 1.0,
+      -1.0, 1.0, 1.0,
+      -1.0, 1.0, -1.0,
+    ];
+
+    indices = [
+      0, 1, 2, 0, 2, 3, // Front face
+      4, 5, 6, 4, 6, 7, // Back face
+      8, 9, 10, 8, 10, 11, // Top face
+      12, 13, 14, 12, 14, 15, // Bottom face
+      16, 17, 18, 16, 18, 19, // Right face
+      20, 21, 22, 20, 22, 23 // Left face
+    ];
+
+    textureCoords = [
+      // Front
+      0.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+
+      // Back
+      0.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+
+      // Top
+      0.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+
+      // Bottom
+      0.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+
+      // Right
+      0.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
+
+      // Left
+      0.0, 1.0,
+      0.0, 0.0,
+      1.0, 0.0,
+      1.0, 1.0,
     ];
 
     List<List<double>> _colorsFace = [
@@ -263,53 +352,6 @@ class _CubeMesh extends Mesh {
       // index % 4 returns 0-3 that's color component for each color
       return _colorsFace[index ~/ 16][index % 4];
     }, growable: false);
-
-    indices = [
-      0, 1, 2, 0, 2, 3, // Front face
-      4, 5, 6, 4, 6, 7, // Back face
-      7, 0, 3, 7, 3, 4, // Top face
-      1, 6, 5, 1, 5, 2, // Bottom face
-      3, 2, 5, 3, 5, 4, // Right face
-      7, 6, 1, 7, 1, 0, // Left face
-    ];
-
-    textureCoords = [
-      // Front face
-      0.0, 0.0,
-      1.0, 0.0,
-      1.0, 1.0,
-      0.0, 1.0,
-
-      // Back face
-      1.0, 0.0,
-      1.0, 1.0,
-      0.0, 1.0,
-      0.0, 0.0,
-
-      // Top face
-      0.0, 1.0,
-      0.0, 0.0,
-      1.0, 0.0,
-      1.0, 1.0,
-
-      // Bottom face
-      1.0, 1.0,
-      0.0, 1.0,
-      0.0, 0.0,
-      1.0, 0.0,
-
-      // Right face
-      1.0, 0.0,
-      1.0, 1.0,
-      0.0, 1.0,
-      0.0, 0.0,
-
-      // Left face
-      0.0, 0.0,
-      1.0, 0.0,
-      1.0, 1.0,
-      0.0, 1.0,
-    ];
 
     vertexNormals = [
       // Front face
@@ -455,6 +497,7 @@ class _AxisMesh extends Mesh {
 class _AxisPointMesh extends Mesh {
   _AxisPointMesh() {
     mode = GL.POINTS;
+
     vertices = [
       0.0, 0.0, 0.0,
       1.0, 0.0, 0.0,
