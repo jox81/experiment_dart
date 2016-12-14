@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:web_gl';
 import 'dart:html';
-import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/globals/context.dart';
+
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -36,10 +36,10 @@ class Application {
 
   void _initGL(CanvasElement canvas) {
     List<String> names = [
-//      "webgl",
+      "webgl",
       "experimental-webgl",
-//      "webkit-3d",
-//      "moz-webgl"
+      "webkit-3d",
+      "moz-webgl"
     ];
     var options = {
       'preserveDrawingBuffer': true,
@@ -61,8 +61,8 @@ class Application {
       return null;
     }
 
-    gl.clear(GL.COLOR_BUFFER_BIT);
-    gl.frontFace(GL.CCW);
+    gl.clear(RenderingContext.COLOR_BUFFER_BIT);
+    gl.frontFace(RenderingContext.CCW);
 
     Context.renderSettings.enableDepth(true);
     Context.renderSettings.showBackFace(true);
@@ -111,7 +111,7 @@ class Application {
 
   void clear(Vector4 color){
     gl.clearColor(color.r, color.g, color.b, color.a);
-    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
   }
 
 }

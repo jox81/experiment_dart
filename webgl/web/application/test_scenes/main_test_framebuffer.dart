@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
@@ -66,7 +66,7 @@ class Webgl01 {
     setupMeshes();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(GL.DEPTH_TEST);
+    gl.enable(RenderingContext.DEPTH_TEST);
   }
 
   void setupCamera()  {
@@ -83,23 +83,23 @@ class Webgl01 {
 
     // Create a framebuffer and attach the texture.
     Framebuffer fb = gl.createFramebuffer();
-    gl.bindFramebuffer(GL.FRAMEBUFFER, fb);
-    gl.framebufferTexture2D(GL.FRAMEBUFFER, GL.COLOR_ATTACHMENT0, GL.TEXTURE_2D, textureCrate, 0);
+    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, fb);
+    gl.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, textureCrate, 0);
 
     // Now draw with the texture to the canvas
     // NOTE: We clear the canvas to red so we'll know
     // we're drawing the texture and not seeing the clear
     // from above.
-    gl.bindFramebuffer(GL.FRAMEBUFFER, null);
+    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
     gl.clearColor(1, 0, 0, 1); // red
-    gl.clear(GL.COLOR_BUFFER_BIT);
-    gl.drawArrays(GL.TRIANGLES, 0, 6);
+    gl.clear(RenderingContext.COLOR_BUFFER_BIT);
+    gl.drawArrays(RenderingContext.TRIANGLES, 0, 6);
 
   }
 
   void render({num time : 0.0}) {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
 
     for(Model model in models){
       model.render();

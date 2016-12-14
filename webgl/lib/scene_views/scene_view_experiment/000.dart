@@ -1,4 +1,5 @@
-import 'package:gl_enums/gl_enums.dart' as GL;
+
+import 'dart:web_gl';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'dart:math';
@@ -49,7 +50,7 @@ Model experiment() {
     };
 
   Mesh mesh = new Mesh()
-  ..mode = GL.POINTS
+  ..mode = RenderingContext.POINTS
   ..vertices = [
     0.0,0.0,0.0,
   ]

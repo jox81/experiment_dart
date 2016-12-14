@@ -1,9 +1,9 @@
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'dart:web_gl';
 import 'package:webgl/src/shaders.dart';
 
@@ -166,8 +166,8 @@ class MaterialBaseTexture extends Material {
         'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
     setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
-    gl.activeTexture(GL.TEXTURE0);
-    gl.bindTexture(GL.TEXTURE_2D, texture);
+    gl.activeTexture(RenderingContext.TEXTURE0);
+    gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
   }
@@ -210,8 +210,8 @@ class MaterialBaseTextureNormal extends Material {
         'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
     setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
-    gl.activeTexture(GL.TEXTURE0);
-    gl.bindTexture(GL.TEXTURE_2D, texture);
+    gl.activeTexture(RenderingContext.TEXTURE0);
+    gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
 

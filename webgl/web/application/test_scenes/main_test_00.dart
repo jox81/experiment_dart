@@ -3,10 +3,10 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
 
@@ -41,7 +41,7 @@ class Webgl01 {
 
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(GL.DEPTH_TEST);
+    gl.enable(RenderingContext.DEPTH_TEST);
   }
 
   void initGL(CanvasElement canvas) {
@@ -115,9 +115,9 @@ class Webgl01 {
 
     Shader shader;
     if (shaderScript.type == "x-shader/x-fragment") {
-      shader = gl.createShader(GL.FRAGMENT_SHADER);
+      shader = gl.createShader(RenderingContext.FRAGMENT_SHADER);
     } else if (shaderScript.type == "x-shader/x-vertex") {
-      shader = gl.createShader(GL.VERTEX_SHADER);
+      shader = gl.createShader(RenderingContext.VERTEX_SHADER);
     } else {
       return null;
     }
@@ -125,7 +125,7 @@ class Webgl01 {
     gl.shaderSource(shader, shaderSource);
     gl.compileShader(shader);
 
-    if (!gl.getShaderParameter(shader, GL.COMPILE_STATUS)) {
+    if (!gl.getShaderParameter(shader, RenderingContext.COMPILE_STATUS)) {
       window.alert(gl._getShaderInfoLog(shader));
       return null;
     }
@@ -138,16 +138,16 @@ class Webgl01 {
     List<int> indices = models[0].mesh.indices;
 
     vertexBuffer = gl.createBuffer();
-    gl.bindBuffer(GL.ARRAY_BUFFER, vertexBuffer);
+    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(
-        GL.ARRAY_BUFFER, new Float32List.fromList(vertices), GL.STATIC_DRAW);
-    gl.bindBuffer(GL.ARRAY_BUFFER, null);
+        RenderingContext.ARRAY_BUFFER, new Float32List.fromList(vertices), RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, null);
 
     indicesBuffer = gl.createBuffer();
-    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, indicesBuffer);
-    gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
-        GL.STATIC_DRAW);
-    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, null);
+    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
+        RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, null);
   }
 
   /// Rendering part
@@ -159,20 +159,20 @@ class Webgl01 {
 
   void render({num time : 0.0}) {
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT);
+    gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
 
     Context.mvMatrix = Context.mainCamera.lookAtMatrix * models[0].transform;
 
-    gl.bindBuffer(GL.ARRAY_BUFFER, vertexBuffer);
-    gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexBuffer);
+    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
     gl.vertexAttribPointer(
-        vertexPositionAttribute, models[0].mesh.vertexDimensions, GL.FLOAT, false, 0, 0);
+        vertexPositionAttribute, models[0].mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
 
     _setMatrixUniforms();
 
     gl.drawElements(
-        GL.TRIANGLES, models[0].mesh.indices.length, GL.UNSIGNED_SHORT, 0);
+        RenderingContext.TRIANGLES, models[0].mesh.indices.length, RenderingContext.UNSIGNED_SHORT, 0);
 
     window.requestAnimationFrame((num time) {
       this.render(time: time);

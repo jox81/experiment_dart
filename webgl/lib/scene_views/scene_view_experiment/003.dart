@@ -1,5 +1,5 @@
-import 'package:gl_enums/gl_enums.dart' as GL;
-import 'package:webgl/src/globals/context.dart';
+
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
@@ -51,13 +51,13 @@ Future<Model> experiment() async {
     };
   materialCustom.setShaderUniformsVariables = (Mesh mesh) {
       materialCustom.setShaderUniformWithName("time", shaderTime);
-      gl.activeTexture(GL.TEXTURE0);
-      gl.bindTexture(GL.TEXTURE_2D, texture);
+      gl.activeTexture(RenderingContext.TEXTURE0);
+      gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
       materialCustom.setShaderUniformWithName("sTexture", 0);
     };
 
   Mesh mesh = new Mesh()
-  ..mode = GL.POINTS
+  ..mode = RenderingContext.POINTS
   ..vertices = [
     0.0, 0.0, 0.0,
     -0.5, 0.5, 0.0,

@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 
 class CameraController {
   num xRot = 0.0;

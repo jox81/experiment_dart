@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';

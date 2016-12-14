@@ -13,7 +13,6 @@ dependencies:
   stream_transformers: ^0.3.0
   stagexl: "^0.13.0"
   vector_math: any
-  gl_enums: "^0.0.1"
   logging: "^0.11.2"
   js: ^0.6.0
   analyzer: "^0.27.1+2"

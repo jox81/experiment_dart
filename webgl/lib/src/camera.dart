@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/models.dart';
 

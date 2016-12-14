@@ -1,12 +1,13 @@
 import 'dart:html';
+import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils.dart';
 import 'dart:typed_data';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 
 class Interaction {
 
@@ -103,7 +104,7 @@ class Interaction {
   void debugInfo(num posX, num posY, num posZ) {
     var colorPicked = new Uint8List(4);
     //Todo : readPixels doesn't work in dartium...
-    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, GL.RGBA, GL.UNSIGNED_BYTE, colorPicked);
+    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, colorPicked);
     elementDebugInfoText.text = '[$posX, $posY, $posZ] : $colorPicked';
   }
 }

@@ -1,4 +1,5 @@
-import 'package:gl_enums/gl_enums.dart' as GL;
+
+import 'dart:web_gl';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
@@ -47,7 +48,7 @@ Model experiment() {
     };
 
   Mesh mesh = new Mesh()
-  ..mode = GL.TRIANGLE_STRIP
+  ..mode = RenderingContext.TRIANGLE_STRIP
   ..vertices = [
     0.0, 0.0, 0.0,
     -0.5, 0.5, 0.0,

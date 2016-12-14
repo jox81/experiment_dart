@@ -4,7 +4,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/texture_utils.dart';
@@ -175,7 +175,7 @@ class SceneViewBase extends Scene{
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
       ..transform.translate(0.0, 0.0, -10.0)
       ..material = materialPBR;
-    //sphere.mode = GL.LINES;
+    //sphere.mode = RenderingContext.LINES;
     models.add(sphere);
 
     //Animation

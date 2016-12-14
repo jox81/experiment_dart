@@ -1,11 +1,12 @@
 import 'dart:typed_data';
+import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'dart:math';
 
 class Mesh {
 
-  int mode = GL.TRIANGLE_STRIP;
+  int mode = RenderingContext.TRIANGLE_STRIP;
 
   //Vertices infos
   int _vertexDimensions = 3;
@@ -148,7 +149,7 @@ class Mesh {
 class _PointMesh extends Mesh {
   _PointMesh() {
 
-    mode = GL.POINTS;
+    mode = RenderingContext.POINTS;
     vertices = [
       0.0, 0.0, 0.0,
     ];
@@ -159,7 +160,7 @@ class _LineMesh extends Mesh {
   _LineMesh(List<Vector3> points) {
     assert(points.length >= 2);
 
-    mode = GL.LINES;
+    mode = RenderingContext.LINES;
 
     vertices = [];
 
@@ -177,7 +178,7 @@ class _LineMesh extends Mesh {
 
 class _TriangleMesh extends Mesh {
   _TriangleMesh() {
-    mode = GL.TRIANGLES;
+    mode = RenderingContext.TRIANGLES;
 
     vertices = [
       0.0, 0.0, 0.0,
@@ -190,7 +191,7 @@ class _TriangleMesh extends Mesh {
 
 class _SquareMesh extends Mesh {
   _SquareMesh() {
-    mode = GL.TRIANGLES;
+    mode = RenderingContext.TRIANGLES;
     /*
     0 - 3
     | \ |
@@ -251,7 +252,7 @@ class _PyramidMesh extends Mesh {
 
 class _CubeMesh extends Mesh {
   _CubeMesh() {
-    mode = GL.TRIANGLES;
+    mode = RenderingContext.TRIANGLES;
 
     vertices = [
       // Front face
@@ -409,7 +410,7 @@ class _SphereMesh extends Mesh {
 
   _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
 
-    mode = GL.TRIANGLES;
+    mode = RenderingContext.TRIANGLES;
 
     segmentV = max(1,segmentV--);
 
@@ -473,7 +474,7 @@ class _SphereMesh extends Mesh {
 
 class _AxisMesh extends Mesh {
   _AxisMesh() {
-    mode = GL.LINES;
+    mode = RenderingContext.LINES;
     vertices = [
       0.0,0.0,0.0,
       1.0,0.0,0.0,
@@ -496,7 +497,7 @@ class _AxisMesh extends Mesh {
 //Points
 class _AxisPointMesh extends Mesh {
   _AxisPointMesh() {
-    mode = GL.POINTS;
+    mode = RenderingContext.POINTS;
 
     vertices = [
       0.0, 0.0, 0.0,

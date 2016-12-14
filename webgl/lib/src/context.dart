@@ -1,5 +1,4 @@
 import 'dart:web_gl';
-import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 
@@ -42,24 +41,25 @@ class RenderSetting{
 
   void showBackFace(bool visible){
     if(!visible) {
-      gl.enable(GL.CULL_FACE);
-      gl.cullFace(GL.BACK);
+      gl.enable(RenderingContext.CULL_FACE);
+      gl.cullFace(RenderingContext.BACK);
     }
+    
   }
 
   void enableDepth(bool enable) {
     if(enable) {
-      gl.clear(GL.DEPTH_BUFFER_BIT);
+      gl.clear(RenderingContext.DEPTH_BUFFER_BIT);
       gl.enable(DEPTH_TEST);
     }
   }
 
   void enableExtensions() {
-    print('###');
-    print('Possible extensions : ');
-    for(String extension in gl.getSupportedExtensions()){
-      print(extension);
-    }
+//    print('###');
+//    print('Possible extensions : ');
+//    for(String extension in gl.getSupportedExtensions()){
+//      print(extension);
+//    }
 
     /*
       :: in chromium ::
@@ -88,13 +88,13 @@ class RenderSetting{
       WEBKIT_WEBGL_lose_context
     */
 
-    print('###');
-    print('Enabling extensions : ');
+//    print('###');
+//    print('Enabling extensions : ');
     List<String> extensionNames = [
       'OES_texture_float',
       'OES_depth_texture',
-      'WEBGL_depth_texture',
-      'WEBKIT_WEBGL_depth_texture',
+//      'WEBGL_depth_texture',
+//      'WEBKIT_WEBGL_depth_texture',
     ];
 
     var extension;

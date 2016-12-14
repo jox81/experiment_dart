@@ -129,12 +129,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.0"
-  gl_enums:
-    description:
-      name: gl_enums
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.1"
   glob:
     description:
       name: glob

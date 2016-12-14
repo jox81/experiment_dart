@@ -1,6 +1,6 @@
 import 'dart:math' as Math;
+import 'dart:web_gl';
 import 'package:webgl/src/animation_property.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/materials.dart';
@@ -135,7 +135,7 @@ class SceneViewParticle extends Scene{
 
     CustomObject customObject = new CustomObject()
     ..mesh = new Mesh()
-    ..mesh.mode = GL.POINTS
+    ..mesh.mode = RenderingContext.POINTS
     ..mesh.vertexDimensions = 2
     ..mesh.vertices = pstart
     ..material = materialCustom;

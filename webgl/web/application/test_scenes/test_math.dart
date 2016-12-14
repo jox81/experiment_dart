@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';

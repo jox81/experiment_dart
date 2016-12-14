@@ -2,10 +2,10 @@ import 'dart:collection';
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/globals/context.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/meshes.dart';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 import 'dart:typed_data';
@@ -50,12 +50,12 @@ abstract class Material extends IEditElement {
 
   void initShaderProgram(String vsSource, String fsSource) {
     // vertex shader compilation
-    Shader vs = gl.createShader(GL.VERTEX_SHADER);
+    Shader vs = gl.createShader(RenderingContext.VERTEX_SHADER);
     gl.shaderSource(vs, vsSource);
     gl.compileShader(vs);
 
     // fragment shader compilation
-    Shader fs = gl.createShader(GL.FRAGMENT_SHADER);
+    Shader fs = gl.createShader(RenderingContext.FRAGMENT_SHADER);
     gl.shaderSource(fs, fsSource);
     gl.compileShader(fs);
 
@@ -69,17 +69,17 @@ abstract class Material extends IEditElement {
      * Check if shaders were compiled properly. This is probably the most painful part
      * since there's no way to "debug" shader compilation
      */
-    if (!gl.getShaderParameter(vs, GL.COMPILE_STATUS)) {
+    if (!gl.getShaderParameter(vs, RenderingContext.COMPILE_STATUS)) {
       print(gl.getShaderInfoLog(vs));
       return;
     }
 
-    if (!gl.getShaderParameter(fs, GL.COMPILE_STATUS)) {
+    if (!gl.getShaderParameter(fs, RenderingContext.COMPILE_STATUS)) {
       print(gl.getShaderInfoLog(fs));
       return;
     }
 
-    if (!gl.getProgramParameter(_program, GL.LINK_STATUS)) {
+    if (!gl.getProgramParameter(_program, RenderingContext.LINK_STATUS)) {
       print(gl.getProgramInfoLog(_program));
       window.alert("Could not initialise shaders");
       return;
@@ -121,7 +121,7 @@ abstract class Material extends IEditElement {
     setShaderSettings(model.mesh);
 
     if (model.mesh.indices.length > 0) {
-      gl.drawElements(model.mesh.mode, model.mesh.indices.length, GL.UNSIGNED_SHORT, 0);
+      gl.drawElements(model.mesh.mode, model.mesh.indices.length, RenderingContext.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
@@ -147,16 +147,16 @@ abstract class Material extends IEditElement {
   void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elemetArrayBuffer, data}) {
 
     if (arrayBuffer!= null && dimension != null) {
-      gl.bindBuffer(GL.ARRAY_BUFFER, buffers[attributName]);
+      gl.bindBuffer(RenderingContext.ARRAY_BUFFER, buffers[attributName]);
       gl.enableVertexAttribArray(attributes[attributName]);
       gl.bufferData(
-          GL.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), GL.STATIC_DRAW);
+          RenderingContext.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), RenderingContext.STATIC_DRAW);
       gl.vertexAttribPointer(
-          attributes[attributName], dimension, GL.FLOAT, false, 0, 0);
+          attributes[attributName], dimension, RenderingContext.FLOAT, false, 0, 0);
     } else if(elemetArrayBuffer != null){
-        gl.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-        gl.bufferData(GL.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
-            GL.STATIC_DRAW);
+        gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
+        gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
+            RenderingContext.STATIC_DRAW);
     }else{
       ActiveInfoCustom activeInfo = programInfo.attributes.firstWhere((a)=> a.activeInfo.name == attributName, orElse:() => null);
 

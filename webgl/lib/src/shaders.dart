@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:web_gl';
-import 'package:gl_enums/gl_enums.dart' as GL;
+
 import 'package:webgl/src/utils.dart';
 
 class ActiveInfoCustom{
@@ -53,7 +53,7 @@ class UtilsShader {
 
     // Loop through active attributes
     var activeAttributes = gl.getProgramParameter(
-        program, GL.ACTIVE_ATTRIBUTES);
+        program, RenderingContext.ACTIVE_ATTRIBUTES);
     for (var i = 0; i < activeAttributes; i++) {
       ActiveInfoCustom attribute = new ActiveInfoCustom(gl.getActiveAttrib(program, i));
       attribute.typeName = enumTypes[attribute.activeInfo.type];
@@ -62,7 +62,7 @@ class UtilsShader {
     }
 
     // Loop through active uniforms
-    var activeUniforms = gl.getProgramParameter(program, GL.ACTIVE_UNIFORMS);
+    var activeUniforms = gl.getProgramParameter(program, RenderingContext.ACTIVE_UNIFORMS);
     for (var i = 0; i < activeUniforms; i++) {
       ActiveInfoCustom uniform = new ActiveInfoCustom(gl.getActiveUniform(program, i));
       uniform.typeName = enumTypes[uniform.activeInfo.type];
