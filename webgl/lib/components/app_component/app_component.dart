@@ -9,7 +9,6 @@ import 'package:webgl/src/application.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/scene.dart';
 
-
 @Component(
     selector: 'my-app',
     templateUrl: 'app_component.html',
