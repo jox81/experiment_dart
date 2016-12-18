@@ -4,6 +4,7 @@ import 'package:webgl/components/canvas_component/canvas_component.dart';
 import 'package:webgl/components/layout_component/layout_component.dart';
 import 'package:webgl/components/properties_component/properties_component.dart';
 import 'package:webgl/components/toolbar_component/toolbar_component.dart';
+import 'package:webgl/components/ui/menu/menu_component.dart';
 import 'package:webgl/scene_views/scene_view.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/introspection.dart';
@@ -13,7 +14,7 @@ import 'package:webgl/src/scene.dart';
     selector: 'my-app',
     templateUrl: 'app_component.html',
     styleUrls: const ['app_component.css'],
-    directives: const [ToolbarComponent, CanvasComponent, LayoutComponent, PropertiesComponent]
+    directives: const [ToolbarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
 )
 class AppComponent implements AfterViewInit{
 
