@@ -52,6 +52,10 @@ class AppComponent implements AfterViewInit{
     currentScene.currentSelection = element;
   }
 
+  void onAxisXChange(bool checked){
+    print('onAxisXChange $checked');
+  }
+
   @override
   ngAfterViewInit() async {
     application = await Application.create(canvasComponent.canvas);

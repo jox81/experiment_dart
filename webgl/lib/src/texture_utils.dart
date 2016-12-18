@@ -173,7 +173,7 @@ class TextureUtils {
     //...
     //End draw
 
-    readPixels(rectangle:new Rectangle(0,0,20,20));
+//    readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
 
     // Unbind the framebuffer
     gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);

@@ -5,5 +5,6 @@ import 'package:angular2/core.dart';
     templateUrl: 'toggle_button_component.html',
     styleUrls: const ['toggle_button_component.css'])
 class ToggleButtonComponent{
-
+  @Input()
+  bool checked = false;
 }

@@ -11,8 +11,15 @@ class ToolbarComponent{
   @Output()
   EventEmitter onSwitchScene = new EventEmitter<bool>();
 
+  @Output()
+  EventEmitter axisXChange = new EventEmitter<bool>();
+
   onSelectNextScene(){
     onSwitchScene.emit(null);
+  }
+
+  onAxisXChange(event){
+    axisXChange.emit(event.target.checked);
   }
 
 }

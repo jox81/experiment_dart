@@ -12,14 +12,14 @@
 
                     <section *ngIf="isString(iEditElement.properties[key])">
                         <input type="text"
-                               [ngModel]="iEditElement.properties[key].getter()"
+                               [checked]="iEditElement.properties[key].getter()"
                                (change) = "setStringValue(iEditElement.properties[key], $event)">
                     </section>
 
                     <section *ngIf="isBool(iEditElement.properties[key])">
-                        <input type="checkbox"
-                               [ngModel]="iEditElement.properties[key].getter()"
-                               (change) = "setBoolValue(iEditElement.properties[key], $event)">
+                        <toggleButton
+                            [checked]="iEditElement.properties[key].getter()"
+                            (change)= "setBoolValue(iEditElement.properties[key], $event)"></toggleButton>
                     </section>
 
                     <section *ngIf="isNum(iEditElement.properties[key])">

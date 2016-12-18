@@ -1,5 +1,6 @@
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/components/ui/toggle_button/toggle_button_component.dart';
 import 'package:webgl/components/value_components/list_component/list_component.dart';
 import 'package:webgl/components/value_components/matrix4_component/matrix4_component.dart';
 import 'package:webgl/components/value_components/vector2_component/vector2_component.dart';
@@ -12,7 +13,7 @@ import 'package:webgl/src/introspection.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix4Component, ListComponent]
+    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix4Component, ListComponent, ToggleButtonComponent]
 )
 class PropertiesComponent{
 
