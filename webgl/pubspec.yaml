@@ -8,7 +8,7 @@ environment:
   sdk: '>=1.19.0 <2.0.0'
 
 dependencies:
-  angular2: ^2.0.0
+  angular2: ^2.2.0
   http: ^0.11.0
   stream_transformers: ^0.3.0
   stagexl: "^0.13.0"
