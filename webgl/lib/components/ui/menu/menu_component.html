@@ -1,11 +1,11 @@
 <!-- menu -->
 <ul>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#news">News</a></li>
-    <li class="dropdown">
+    <li><a href="#">File</a></li>
+    <li><a href="#">Settings</a></li>
+    <li class="dropdown" clickOutside (clickOutside)="close('headerId1')">
         <a href="javascript:void(0)"
            class="dropbtn"
-           (click)="headerClick('headerId1')">Dropdown</a>
+           (click)="headerClick('headerId1')">Tools</a>
         <div class="dropdown-content" id="myDropdown" [class.show]="headerId1Visible">
             <a href="#">Link 1</a>
             <a href="#">Link 2</a>
