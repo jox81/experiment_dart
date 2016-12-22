@@ -1,11 +1,12 @@
 import 'package:angular2/core.dart';
 import 'package:webgl/components/ui/toggle_button/toggle_button_component.dart';
+import 'package:webgl/components/ui/toolbar_button/toolbar_button_component.dart';
 
 @Component(
     selector: 'toolbar',
     templateUrl: 'toolbar_component.html',
     styleUrls: const ['toolbar_component.css'],
-    directives: const [ToggleButtonComponent])
+    directives: const [ToolbarButtonComponent])
 class ToolbarComponent{
 
   @Output()

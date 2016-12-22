@@ -1,11 +1,15 @@
 <div id="container">
     <div class="toolbar">
-        <!--Todo : add dropdown with scenes-->
         <button (click)="onSelectNextScene()">swicth scene</button>
         <div infos>
             <span id="fps"></span>
             <span id="debugInfosText"></span>
         </div>
-        <toggleButton [checked] = false (change)=onAxisXChange($event)></toggleButton>
+        <div id="axisLock">
+            <toolbarButton [checked] = false (change)=onAxisXChange($event)></toolbarButton>
+            <toolbarButton [checked] = false (change)=onAxisXChange($event)></toolbarButton>
+            <toolbarButton [checked] = false (change)=onAxisXChange($event)></toolbarButton>
+        </div>
+
     </div>
 </div>
