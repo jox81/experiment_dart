@@ -2,14 +2,19 @@
 <ul>
     <li><a href="#">File</a></li>
     <li><a href="#">Settings</a></li>
-    <li class="dropdown" clickOutside (clickOutside)="close('headerId1')">
+    <li class="dropdown" clickOutside (clickOutside)="closeAllMenus()">
         <a href="javascript:void(0)"
            class="dropbtn"
-           (click)="headerClick('headerId1')">Tools</a>
-        <div class="dropdown-content" id="myDropdown" [class.show]="headerId1Visible">
-            <a href="#">Link 1</a>
-            <a href="#">Link 2</a>
-            <a href="#">Link 3</a>
+           (click)="headerClick('headerId1')">Models</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId1')">
+            <a href="#" (click)="createModelByType('ModelType.point')">point</a>
+            <a href="#" (click)="createModelByType('ModelType.line')">line</a>
+            <a href="#" (click)="createModelByType('ModelType.triangle')">triangle</a>
+            <a href="#" (click)="createModelByType('ModelType.quad')">quad</a>
+            <a href="#" (click)="createModelByType('ModelType.pyramid')">pyramid</a>
+            <a href="#" (click)="createModelByType('ModelType.cube')">cube</a>
+            <a href="#" (click)="createModelByType('ModelType.sphere')">sphere</a>
+            <a href="#" (click)="createModelByType('ModelType.axis')">axis</a>
         </div>
     </li>
 </ul>

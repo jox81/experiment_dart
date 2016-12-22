@@ -9,6 +9,17 @@ import 'package:webgl/src/materials.dart';
 
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
+enum ModelType{
+  point,
+  line,
+  triangle,
+  quad,
+  pyramid,
+  cube,
+  sphere,
+  axis,
+}
+
 abstract class Model extends IEditElement {
 
   String name; //Todo : S'assurer que les noms soient uniques ?!
@@ -50,6 +61,38 @@ abstract class Model extends IEditElement {
     return _faces;
   }
 
+  static Model createByType(ModelType modelType) {
+    Model newModel;
+    switch(modelType){
+      case ModelType.point:
+        newModel = new PointModel();
+        break;
+      case ModelType.line:
+        newModel = new LineModel(new Vector3(-1.0,0.0,0.0), new Vector3(1.0,0.0,0.0));
+        break;
+      case ModelType.triangle:
+        newModel = new TriangleModel();
+        break;
+      case ModelType.quad:
+        newModel = new QuadModel();
+        break;
+      case ModelType.pyramid:
+        newModel = new PyramidModel();
+        break;
+      case ModelType.cube:
+        newModel = new CubeModel();
+        break;
+      case ModelType.sphere:
+        newModel = new SphereModel();
+        break;
+      case ModelType.axis:
+        newModel = new AxisModel();
+        break;
+      default:
+        break;
+    }
+    return newModel;
+  }
 }
 
 class CustomObject extends Model {

@@ -7,6 +7,7 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
 import 'package:webgl/src/interaction.dart';
+import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 
 abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
@@ -17,6 +18,8 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
 
   Light light;
   AmbientLight ambientLight = new AmbientLight();
+
+  Material defaultMaterial = new MaterialBase();
 
   List<Material> materials = new List();
   List<Model> models = new List();
@@ -58,5 +61,16 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
     for (Model model in models) {
       model.render();
     }
+  }
+
+  void addModel(Model model){
+    model.material ??= defaultMaterial;
+    model.name ??= model.runtimeType.toString();
+
+    models.add(model);
+    currentSelection = model;
+  }
+  void createModelByType(ModelType modelType){
+    addModel(Model.createByType(modelType));
   }
 }

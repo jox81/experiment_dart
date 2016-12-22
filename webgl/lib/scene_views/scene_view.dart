@@ -13,12 +13,12 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //    new SceneViewBase(),
-    new SceneViewFrameBuffer(),
+//    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),
 //    new SceneViewPBR(),
 //    new SceneViewPerformanceTest(),
-//    new SceneViewPrimitives(),
+    new SceneViewPrimitives(),
 //    new SceneViewShaderLearning01(),
 //    new SceneViewExperiment(),
  ];

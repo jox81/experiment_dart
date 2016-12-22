@@ -1,6 +1,6 @@
+import 'dart:math';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
-
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
@@ -145,6 +145,3 @@ class SceneViewPrimitives extends Scene{
     };
   }
 }
-
-
-
