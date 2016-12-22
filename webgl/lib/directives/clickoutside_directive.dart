@@ -12,10 +12,10 @@ class ClickOutsideDirective {
   EventEmitter clickOutside = new EventEmitter();
 
   ClickOutsideDirective(this._elementRef) {
-    window.onClick.listen((MouseEvent event)=>onClick(event.target));
+    window.onMouseDown.listen((MouseEvent event)=>onMouseDown(event.target));
   }
 
-  void onClick(EventTarget targetElement) {
+  void onMouseDown(EventTarget targetElement) {
     final bool clickedInside = this._elementRef.nativeElement.contains(targetElement);
     if (!clickedInside) {
       this.clickOutside.emit(null);
