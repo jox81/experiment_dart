@@ -1,7 +1,9 @@
+import '../lib/components/app_component.dart';
+import '../lib/services/in_memory_data_service.dart';
 import 'package:angular2/core.dart';
 import 'package:angular2/platform/browser.dart';
-import 'package:angular2_learning/components/app_component.dart';
-import 'package:angular2_learning/services/in_memory_data_service.dart';
+import 'package:angular2_learning/heroes_exemple/components/app_component.dart';
+import 'package:angular2_learning/heroes_exemple/services/in_memory_data_service.dart';
 import 'package:http/http.dart';
 
 //import 'package:http/browser_client.dart';
