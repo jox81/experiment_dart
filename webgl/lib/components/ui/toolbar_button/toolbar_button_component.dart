@@ -1,10 +1,10 @@
 import 'package:angular2/core.dart';
 
 @Component(
-    selector: 'toolbarButton',
+    selector: 'toolBarButton',
     templateUrl: 'toolbar_button_component.html',
     styleUrls: const ['toolbar_button_component.css'])
-class ToolbarButtonComponent{
+class ToolBarButtonComponent{
 
   @Input()
   bool checked = false;

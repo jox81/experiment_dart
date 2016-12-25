@@ -30,7 +30,6 @@ class MenuComponent{
   }
 
   void closeAllMenus(){
-    print('closing all menus');
     opendMenus.forEach((String k, bool v)=> opendMenus[k] = false);
   }
 

@@ -3,20 +3,21 @@ import 'package:angular2/core.dart';
 import 'package:webgl/components/canvas_component/canvas_component.dart';
 import 'package:webgl/components/layout_component/layout_component.dart';
 import 'package:webgl/components/properties_component/properties_component.dart';
-import 'package:webgl/components/toolbar_component/toolbar_component.dart';
 import 'package:webgl/components/ui/menu/menu_component.dart';
+import 'package:webgl/components/ui/toolbar_component/toolbar_component.dart';
 import 'package:webgl/scene_views/scene_view.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/ui_models/toolbar.dart';
 
 @Component(
     selector: 'my-app',
     templateUrl: 'app_component.html',
     styleUrls: const ['app_component.css'],
-    directives: const [ToolbarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
+    directives: const [ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
 )
-class AppComponent implements AfterViewInit{
+class AppComponent implements OnInit{
 
   Application application;
   Scene currentScene;
@@ -57,11 +58,18 @@ class AppComponent implements AfterViewInit{
     print('onAxisXChange $checked');
   }
 
+  ToolBar getToolBar(String toolBarName){
+    if(application != null) {
+      if (application.toolBars.containsKey(toolBarName)) {
+        return application.toolBars[toolBarName];
+      }
+    }
+    return null;
+  }
   @override
-  ngAfterViewInit() async {
+  ngOnInit() async {
     application = await Application.create(canvasComponent.canvas);
     scenes = ServiceScene.getSceneViews();
     switchScene ();
   }
-
 }
