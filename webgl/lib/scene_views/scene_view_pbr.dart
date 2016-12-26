@@ -11,25 +11,7 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPBR extends Scene{
 
-
   SceneViewPBR();
-
-  @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-      interaction.update();
-    };
-
-    updateUserInputFunction();
-
-  }
 
   @override
   Future setupScene() async {
@@ -63,14 +45,5 @@ class SceneViewPBR extends Scene{
     //sphere.mode = RenderingContext.LINES;
     models.add(sphere);
 
-    // Animation
-    num _lastTime = 0.0;
-    updateFunction = (num time) {
-      // rotate
-      double animationStep = time - _lastTime;
-      //... animation here
-
-      _lastTime = time;
-    };
   }
 }

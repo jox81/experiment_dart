@@ -15,35 +15,15 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewBase extends Scene{
 
-  bool useLighting = true;
-  Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
-  Vector3 ambientColor = new Vector3.all(0.0);
-  Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
-
-  //
-
   SceneViewBase();
 
   @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    //UserInput
-    updateUserInputFunction = (){
-      interaction.update();
-    };
-
-    updateUserInputFunction();
-
-  }
-
-  @override
   Future setupScene() async {
+
+    bool useLighting = true;
+    Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
+    Vector3 ambientColor = new Vector3.all(0.0);
+    Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
@@ -156,15 +136,15 @@ class SceneViewBase extends Scene{
     CubeModel cube = new CubeModel();
     cube.transform.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
-    await TextureUtils.getTextureFromFile("../images/crate.gif");
+    await TextureUtils.getTextureFromFile("./images/crate.gif");
     cube.material = materialBaseTextureNormal;
     models.add(cube);
 
     //SusanModel
-    var susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
+    var susanJson = await Utils.loadJSONResource('./objects/susan/susan.json');
     MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
       ..texture = await TextureUtils.getTextureFromFile(
-          '../objects/susan/susan_texture.png');
+          './objects/susan/susan_texture.png');
     JsonObject jsonModel = new JsonObject(susanJson)
       ..transform.translate(10.0, 0.0, -5.0)
       ..transform.rotateX(radians(-90.0))
@@ -200,19 +180,5 @@ class SceneViewBase extends Scene{
       _lastTime = time;
     };
 
-
   }
-
-  void addMesh(){
-
-    Random random = new Random();
-
-    // create cube
-    CubeModel centerCube = new CubeModel()
-      ..transform.translate(random.nextDouble() * 10, random.nextDouble() * 10, random.nextDouble() * 10)
-      ..transform.scale(0.1, 0.1, 0.1)
-      ..material = materials.firstWhere((m)=> m is MaterialBaseColor );
-    models.add(centerCube);
-  }
-
 }

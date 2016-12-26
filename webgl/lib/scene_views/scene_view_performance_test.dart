@@ -24,23 +24,6 @@ class SceneViewPerformanceTest extends Scene{
   SceneViewPerformanceTest();
 
   @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-      interaction.update();
-    };
-
-    updateUserInputFunction();
-
-  }
-
-  @override
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);

@@ -100,7 +100,7 @@ class Interaction {
 
     if(mouseDown) {
       dragging = true;
-      if(Application.currentScene.currentSelection is Model) {
+      if(Application.currentScene.currentSelection != null && Application.currentScene.currentSelection is Model) {
 
         Model currentModel = Application.currentScene.currentSelection as Model;
 

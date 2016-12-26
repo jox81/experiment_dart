@@ -18,9 +18,8 @@ class ServiceScene {
 //    new SceneViewParticleSimple(),
 //    new SceneViewPBR(),
 //    new SceneViewPerformanceTest(),
-    new SceneViewPrimitives(),
-//    new SceneViewShaderLearning01(),
+//    new SceneViewPrimitives(),
+    new SceneViewShaderLearning01(),
 //    new SceneViewExperiment(),
  ];
-
 }

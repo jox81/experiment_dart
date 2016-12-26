@@ -1,4 +1,3 @@
-import 'package:webgl/src/animation_property.dart';
 import 'package:vector_math/vector_math.dart';
 import '000.dart' as exp000;
 import '001.dart' as exp001;
@@ -7,29 +6,10 @@ import '003.dart' as exp003;
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewExperiment extends Scene{
 
-  /// implements ISceneViewBase
   SceneViewExperiment();
-
-  @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-      interaction.update();
-    };
-
-    updateUserInputFunction();
-
-  }
 
   @override
   Future setupScene() async {

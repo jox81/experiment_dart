@@ -12,8 +12,10 @@ import 'package:webgl/src/models.dart';
 
 abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
+  @override
   IEditElement currentSelection;
 
+  @override
   Vector4 backgroundColor;
 
   Light light;
@@ -32,6 +34,21 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
       ..targetPosition = new Vector3.zero();
   }
 
+  @override
+  setupUserInput() {
+    updateUserInputFunction = (){
+      interaction.update();
+    };
+
+    updateUserInputFunction();
+  }
+
+  @override
+  UpdateFunction updateFunction;
+
+  @override
+  UpdateUserInput updateUserInputFunction;
+
   bool _isSetuped = false;
 
   Future setup() async{
@@ -49,14 +66,19 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
     return future;
   }
 
+  @override
   void updateUserInput() {
     updateUserInputFunction();
   }
 
+  @override
   void update(num time) {
-    updateFunction(time);
+    if(updateFunction != null) {
+      updateFunction(time);
+    }
   }
 
+  @override
   void render(){
     for (Model model in models) {
       model.render();

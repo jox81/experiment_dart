@@ -14,22 +14,6 @@ class SceneViewParticleSimple extends Scene{
   SceneViewParticleSimple();
 
   @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-    };
-
-    updateUserInputFunction();
-
-  }
-
-  @override
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);

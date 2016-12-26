@@ -16,23 +16,6 @@ class SceneViewFrameBuffer extends Scene{
   SceneViewFrameBuffer();
 
   @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-      interaction.update();
-    };
-
-    updateUserInputFunction();
-
-  }
-
-  @override
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
@@ -51,7 +34,7 @@ class SceneViewFrameBuffer extends Scene{
     //
     Texture textureEmpty = TextureUtils.createRenderedTexture();
     Texture textureCrate =
-    await TextureUtils.getTextureFromFile("../images/crate.gif");
+    await TextureUtils.getTextureFromFile("./images/crate.gif");
 
     MaterialBaseTextureNormal materialBaseTextureNormal =
     new MaterialBaseTextureNormal()
@@ -80,13 +63,5 @@ class SceneViewFrameBuffer extends Scene{
       ..material = materialBaseTextureNormal2;
     models.add(cube);
 
-    // Animation
-    num _lastTime = 0.0;
-
-    updateFunction = (num time) {
-      double animationStep = time - _lastTime;
-      //Do Animation here
-      _lastTime = time;
-    };
   }
 }

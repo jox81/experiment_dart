@@ -18,29 +18,7 @@ class SceneViewParticle extends Scene{
   num varB = 20;
   num varCt = 0;
 
-//  Map<String, EditableProperty> get properties =>{
-//    'varA' : new EditableProperty<num>(num, ()=> varA, (num v)=> varA = v),
-//    'varB' : new EditableProperty<num>(num, ()=> varB, (num v)=> varB = v),
-//    'varCt' : new EditableProperty<num>(num, ()=> varCt, (num v)=> varCt = v),
-//  };
-
   SceneViewParticle();
-
-  @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-    };
-
-    updateUserInputFunction();
-
-  }
 
   @override
   Future setupScene() async {

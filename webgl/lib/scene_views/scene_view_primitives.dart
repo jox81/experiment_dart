@@ -10,13 +10,13 @@ import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPrimitives extends Scene{
 
-  //Todo : créer une liste déroulante de choix des meshes dans angular
-
   Camera camera;
   Camera camera2;
   Camera camera3;
 
   int cameraIndex = 0;
+
+  SceneViewPrimitives();
 
   void switchCamera(){
     cameraIndex += 1;
@@ -26,27 +26,6 @@ class SceneViewPrimitives extends Scene{
 
   void testEdit(){
     currentSelection = new CustomEditElement(new Vector3(1.0,2.0,3.0));
-  }
-
-  SceneViewPrimitives(){
-
-  }
-
-  @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
-
-  @override
-  setupUserInput() {
-
-    updateUserInputFunction = (){
-      interaction.update();
-    };
-
-    updateUserInputFunction();
-
   }
 
   @override
@@ -128,13 +107,5 @@ class SceneViewPrimitives extends Scene{
 //      ..transform.rotateX(radians(-90.0));
 //    models.add(jsonModel);
 
-    //Animation
-    num _lastTime = 0.0;
-    updateFunction = (num time) {
-      // rotate
-      double animationStep = time - _lastTime;
-      //... animation here
-      _lastTime = time;
-    };
   }
 }
