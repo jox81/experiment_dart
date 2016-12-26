@@ -12,9 +12,9 @@ class ToolBarComponent{
   @Input()
   ToolBar toolBar;
 
-  void onToolBarButtonClicked(UpdateToolBarItem updateToolBarItem, event){
+  void onToolBarButtonClicked(String key, UpdateToolBarItem updateToolBarItem, event){
     bool checked = event.target.checked;
-    print('onToolBarButtonClicked, $checked');
+    print('onToolBarButtonClicked > $key: $checked');
     updateToolBarItem(checked);
   }
 }

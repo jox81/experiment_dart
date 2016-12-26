@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
 
-enum AxisType { view, x, y, z , any}
+enum AxisType { view, x, y, z, any }
 enum ToolType { select, move, rotate, scale }
 
 class Application {
@@ -20,18 +20,28 @@ class Application {
 
   CanvasElement _canvas;
 
-  AxisType _currentAxis = AxisType.x;
-  AxisType get currentAxis => _currentAxis;
-  set currentAxis(AxisType value){
-    _currentAxis = value;
-    print('currentAxis : $_currentAxis');
+  ///
+  Map<AxisType, bool> _activeAxis = {
+    AxisType.x: false,
+    AxisType.y: false,
+    AxisType.z: false,
+  };
+  Map<AxisType, bool> get activeAxis => _activeAxis;
+  set activeAxis(Map<AxisType, bool> value) {
+    _activeAxis = value;
   }
 
-  ToolType _currentTool = ToolType.select;
-  ToolType get currentTool => _currentTool;
-  set currentTool(ToolType value){
-    _currentTool = value;
-    print('currentTool : $_currentTool');
+  setActiveAxis(AxisType axisType, bool isActive) {
+    _activeAxis[axisType] = isActive;
+    print(_activeAxis);
+  }
+
+  ///
+  ToolType _activeTool = ToolType.select;
+  ToolType get activeTool => _activeTool;
+  set activeTool(ToolType value) {
+    _activeTool = value;
+    print(_activeTool);
   }
 
   Map<String, ToolBar> toolBars;
@@ -52,26 +62,25 @@ class Application {
     _initEvents();
     _resizeCanvas();
     _initToolBars();
-
   }
 
   void _initToolBars() {
     toolBars = {};
 
-    ToolBar toolBarAxis = new ToolBar()
+    ToolBar toolBarAxis = new ToolBar(ToolBarItemsType.multi)
       ..toolBarItems = {
-        "x": (bool isActive) => currentAxis = isActive ? AxisType.x : AxisType.view,
-        "y": (bool isActive) => currentAxis = isActive ? AxisType.y : AxisType.view,
-        "z": (bool isActive) => currentAxis = isActive ? AxisType.z : AxisType.view,
+        "x": (bool isActive) => setActiveAxis(AxisType.x, isActive),
+        "y": (bool isActive) => setActiveAxis(AxisType.y, isActive),
+        "z": (bool isActive) => setActiveAxis(AxisType.z, isActive),
       };
     toolBars['axis'] = toolBarAxis;
 
-    ToolBar toolBarTransformTools = new ToolBar()
+    ToolBar toolBarTransformTools = new ToolBar(ToolBarItemsType.single)
       ..toolBarItems = {
-        "s": (bool isActive) => currentTool = isActive ? ToolType.select : ToolType.select,//Todo : change function
-        "M": (bool isActive) => currentTool = isActive ? ToolType.move : ToolType.select,
-        "R": (bool isActive) => currentTool = isActive ? ToolType.rotate : ToolType.select,
-        "S": (bool isActive) => currentTool = isActive ? ToolType.scale : ToolType.select,
+        "s": (bool isActive) => activeTool = ToolType.select,
+        "M": (bool isActive) => activeTool = ToolType.move,
+        "R": (bool isActive) => activeTool = ToolType.rotate,
+        "S": (bool isActive) => activeTool = ToolType.scale,
       };
     toolBars['transformTool'] = toolBarTransformTools;
   }

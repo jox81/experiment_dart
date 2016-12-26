@@ -1,13 +1,11 @@
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils.dart';
 import 'dart:typed_data';
-
 
 class Interaction {
 

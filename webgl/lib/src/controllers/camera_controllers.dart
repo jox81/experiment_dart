@@ -27,16 +27,14 @@ class CameraController {
     // Assign a mouse down handler to the HTML element.
     gl.canvas.onMouseDown.listen((ev) {
       if (camera.active) {
-        dragging = true;
-        currentX = ev.client.x;
-        currentY = ev.client.y;
+        beginOrbit(camera, ev.client.x, ev.client.y);
       }
     });
 
     // Assign a mouse up handler to the HTML element.
     gl.canvas.onMouseUp.listen((MouseEvent ev) {
       if (camera.active) {
-        dragging = false;
+        endOrbit(camera);
       }
     });
 
@@ -52,22 +50,12 @@ class CameraController {
           currentX = tempCurX;
           currentY = tempCurY;
 
-          if (ev.button == 0) {//LMB
-            // Update the X and Y rotation angles based on the mouse motion.
-            yRot = (yRot + deltaX) % 360;
-            xRot = (xRot + deltaY);
+          if (ev.button == 0) {
+            //LMB
+            doOrbit(deltaX, deltaY);
 
-            // Clamp the X rotation to prevent the camera from going upside down.
-            if (xRot < -90) {
-              xRot = -90;
-            } else if (xRot > 90) {
-              xRot = 90;
-            }
-
-            //Todo : create first person eye Rotation with ctrl key
-            rotateOrbit(yRot, xRot); //why inverted ?
-
-          } else if (ev.button == 1) {//MMB
+          } else if (ev.button == 1) {
+            //MMB
             deltaX *= 0.5;
             deltaY *= 0.5;
             pan(deltaX, deltaY);
@@ -77,17 +65,43 @@ class CameraController {
     });
 
     gl.canvas.onMouseWheel.listen((WheelEvent event) {
-      //Todo add zAxis translation
-
-      //Todo with ctrl key..May switch behaviors
-
-      if (camera.active) {
-        var delta = Math.max(-1, Math.min(1, -event.deltaY));
-        fov += delta / 50; //calcul du zoom
-
-        camera.fov = fov;
-      }
+      changeCameraFov(camera, -event.deltaY);
     });
+  }
+
+  /// Update the X and Y rotation angles based on the mouse motion.
+  void doOrbit(double deltaX, double deltaY) {
+    //LMB
+    // Update the X and Y rotation angles based on the mouse motion.
+    yRot = (yRot + deltaX) % 360;
+    xRot = (xRot + deltaY);
+
+    // Clamp the X rotation to prevent the camera from going upside down.
+    if (xRot < -90) {
+      xRot = -90;
+    } else if (xRot > 90) {
+      xRot = 90;
+    }
+
+    //Todo : create first person eye Rotation with ctrl key
+    rotateOrbit(yRot, xRot); //why inverted ?
+  }
+
+  void beginOrbit(Camera camera, int screenX, int screenY) {
+    dragging = true;
+    currentX = screenX;
+    currentY = screenY;
+  }
+
+  void endOrbit(Camera camera) {
+    dragging = false;
+  }
+
+  void changeCameraFov(Camera camera, num deltaY) {
+    var delta = Math.max(-1, Math.min(1, deltaY));
+    fov += delta / 50; //calcul du zoom
+
+    camera.fov = fov;
   }
 
   void rotateOrbit(num xAngleRot, num yAngleRot) {
@@ -99,8 +113,8 @@ class CameraController {
         distance *
             -Math.sin(xAngleRot * (Math.PI / 180)) *
             Math.cos((yAngleRot) * (Math.PI / 180));
-    num camY =
-        _camera.targetPosition.y + distance * -Math.sin((yAngleRot) * (Math.PI / 180));
+    num camY = _camera.targetPosition.y +
+        distance * -Math.sin((yAngleRot) * (Math.PI / 180));
     num camZ = _camera.targetPosition.z +
         -distance *
             Math.cos((xAngleRot) * (Math.PI / 180)) *

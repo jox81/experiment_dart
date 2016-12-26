@@ -1,5 +1,11 @@
 <!-- Rectangular switch -->
 <label class="switch">
-    <input type="checkbox" [ngModel] = checked>
+    <template [ngIf]="toolBarItemsType.toString() == 'ToolBarItemsType.multi'">
+        <input type="checkbox" [ngModel] = "checked">
+    </template>
+    <template [ngIf]="toolBarItemsType.toString() == 'ToolBarItemsType.single'">
+        <input type="radio" name="multi" value = 'text'>
+    </template>
+
     <div class="icon"><span>{{text}}</span></div>
 </label>
