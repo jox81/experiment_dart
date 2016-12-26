@@ -11,6 +11,8 @@ class CameraController {
   bool dragging = false;
   int currentX = 0;
   int currentY = 0;
+  num deltaX = 0.0;
+  num deltaY = 0.0;
 
   //WheelEvent values
   num fov = radians(45.0);
@@ -25,36 +27,34 @@ class CameraController {
     yRot = camera.phiAngle;
 
     // Assign a mouse down handler to the HTML element.
-    gl.canvas.onMouseDown.listen((ev) {
-      if (camera.active) {
-        beginOrbit(camera, ev.client.x, ev.client.y);
+    gl.canvas.onMouseDown.listen((event) {
+      if (camera.isActive) {
+        updateMouseInfos(event);
+        beginOrbit(camera, event.client.x, event.client.y);
       }
     });
 
     // Assign a mouse up handler to the HTML element.
-    gl.canvas.onMouseUp.listen((MouseEvent ev) {
-      if (camera.active) {
+    gl.canvas.onMouseUp.listen((MouseEvent event) {
+      if (camera.isActive) {
+        updateMouseInfos(event);
         endOrbit(camera);
       }
     });
 
     // Assign a mouse move handler to the HTML element.
-    gl.canvas.onMouseMove.listen((MouseEvent ev) {
-      if (camera.active) {
+    gl.canvas.onMouseMove.listen((MouseEvent event) {
+      if (camera.isActive) {
         if (dragging) {
           // Determine how far we have moved since the last mouse move event.
-          int tempCurX = ev.client.x;
-          int tempCurY = ev.client.y;
-          var deltaX = (currentX - tempCurX) / scaleFactor;
-          var deltaY = (currentY - tempCurY) / scaleFactor;
-          currentX = tempCurX;
-          currentY = tempCurY;
 
-          if (ev.button == 0) {
+          updateMouseInfos(event);
+
+          if (event.button == 0) {
             //LMB
             doOrbit(deltaX, deltaY);
 
-          } else if (ev.button == 1) {
+          } else if (event.button == 1) {
             //MMB
             deltaX *= 0.5;
             deltaY *= 0.5;
@@ -65,8 +65,19 @@ class CameraController {
     });
 
     gl.canvas.onMouseWheel.listen((WheelEvent event) {
-      changeCameraFov(camera, -event.deltaY);
+      if (camera.isActive) {
+        changeCameraFov(camera, -event.deltaY);
+      }
     });
+  }
+
+  void updateMouseInfos(MouseEvent event) {
+    int tempScreenX = event.client.x;
+    int tempScreenY = event.client.y;
+    deltaX = (currentX - tempScreenX) / scaleFactor;
+    deltaY = (currentY - tempScreenY) / scaleFactor;
+    currentX = tempScreenX;
+    currentY = tempScreenY;
   }
 
   /// Update the X and Y rotation angles based on the mouse motion.
@@ -89,8 +100,6 @@ class CameraController {
 
   void beginOrbit(Camera camera, int screenX, int screenY) {
     dragging = true;
-    currentX = screenX;
-    currentY = screenY;
   }
 
   void endOrbit(Camera camera) {

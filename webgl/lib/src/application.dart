@@ -39,15 +39,31 @@ class Application {
   ///
   ToolType _activeTool = ToolType.select;
   ToolType get activeTool => _activeTool;
-  set activeTool(ToolType value) {
+
+  setActiveTool(ToolType value) {
     _activeTool = value;
     print(_activeTool);
+    switch (_activeTool){
+      case ToolType.select:
+        Context.mainCamera.isActive = true;
+        break;
+      case ToolType.move:
+        Context.mainCamera.isActive = false;
+        break;
+      case ToolType.rotate:
+        Context.mainCamera.isActive = false;
+        break;
+      case ToolType.scale:
+        Context.mainCamera.isActive = false;
+        break;
+    }
   }
 
   Map<String, ToolBar> toolBars;
 
   //Singleton
   static Application _instance;
+  static Application get instance => _instance;
   static Future<Application> create(CanvasElement canvas) async {
     if (_instance == null) {
       _instance = new Application._internal(canvas);
@@ -77,10 +93,10 @@ class Application {
 
     ToolBar toolBarTransformTools = new ToolBar(ToolBarItemsType.single)
       ..toolBarItems = {
-        "s": (bool isActive) => activeTool = ToolType.select,
-        "M": (bool isActive) => activeTool = ToolType.move,
-        "R": (bool isActive) => activeTool = ToolType.rotate,
-        "S": (bool isActive) => activeTool = ToolType.scale,
+        "s": (bool isActive) => setActiveTool(ToolType.select),
+        "M": (bool isActive) => setActiveTool(ToolType.move),
+        "R": (bool isActive) => setActiveTool(ToolType.rotate),
+        "S": (bool isActive) => setActiveTool(ToolType.scale),
       };
     toolBars['transformTool'] = toolBarTransformTools;
   }

@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:web_gl';
-
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/scene_views/scene_view_primitives.dart';
-import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';

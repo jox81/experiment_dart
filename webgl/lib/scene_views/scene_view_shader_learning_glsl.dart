@@ -1,4 +1,3 @@
-import 'package:webgl/src/animation_property.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';

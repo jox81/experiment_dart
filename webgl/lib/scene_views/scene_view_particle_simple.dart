@@ -1,8 +1,5 @@
-import 'dart:math' as Math;
 import 'dart:web_gl';
-import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/application.dart';
-
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
@@ -11,7 +8,6 @@ import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/interaction.dart';
 
 class SceneViewParticleSimple extends Scene{
 

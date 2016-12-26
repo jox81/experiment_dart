@@ -9,9 +9,9 @@ class Context{
   static Camera _mainCamera;
   static Camera get mainCamera => _mainCamera;
   static set mainCamera(Camera value) {
-    _mainCamera?.active = false;
+    _mainCamera?.isActive = false;
     _mainCamera = value;
-    _mainCamera.active = true;
+    _mainCamera.isActive = true;
   }
 
   static Matrix4 mvMatrix = new Matrix4.identity();

@@ -1,18 +1,13 @@
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
-import 'package:datgui/datgui.dart' as dat;
-import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:math';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPerformanceTest extends Scene{

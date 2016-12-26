@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
@@ -23,6 +24,12 @@ class Interaction {
 
   bool dragging = false;
   bool mouseDown = false;
+
+  int currentX = 0;
+  int currentY = 0;
+  num deltaX = 0.0;
+  num deltaY = 0.0;
+  num scaleFactor = 3.0;
 
   ///
   ///Keyboard
@@ -77,28 +84,85 @@ class Interaction {
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
 
-    gl.canvas.onMouseDown.listen((MouseEvent e) {
-      dragging = false;
-      mouseDown = true;
-    });
-
-    gl.canvas.onMouseMove.listen((MouseEvent e) {
-      if(mouseDown) {
-        dragging = true;
-      }
-    });
-
-    gl.canvas.onMouseUp.listen((MouseEvent e) {
-      if(!dragging) {
-        Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, e.offset.x, e.offset.y, scene.models);
-        scene.currentSelection = modelHit;
-        print(modelHit?.name);
-      }
-      dragging = false;
-      mouseDown = false;
-    });
+    gl.canvas.onMouseDown.listen(onMouseDown);
+    gl.canvas.onMouseMove.listen(onMouseMove);
+    gl.canvas.onMouseUp.listen(onMouseUp);
   }
 
+  void onMouseDown(MouseEvent event) {
+    updateMouseInfos(event);
+    dragging = false;
+    mouseDown = true;
+  }
+
+  void onMouseMove(MouseEvent event) {
+    updateMouseInfos(event);
+
+    if(mouseDown) {
+      dragging = true;
+      if(Application.currentScene.currentSelection is Model) {
+
+        Model currentModel = Application.currentScene.currentSelection as Model;
+
+        num delta = deltaX; // get mouse delta
+        num deltaMoveX = (Application.instance.activeAxis[AxisType.x]
+            ? 1
+            : 0) * delta;
+        num deltaMoveY = (Application.instance.activeAxis[AxisType.y]
+            ? 1
+            : 0) * delta;
+        num deltaMoveZ = (Application.instance.activeAxis[AxisType.z]
+            ? 1
+            : 0) * delta;
+
+        print('$deltaMoveX, $deltaMoveY, $deltaMoveZ');
+
+        if (Application.instance.activeTool == ToolType.move) {
+          num moveFactor = 1.0;
+
+          currentModel.translate(
+              new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
+        }
+
+        if (Application.instance.activeTool == ToolType.rotate) {
+          num rotateFactor = 1.0;
+
+          currentModel.transform.rotateX(deltaMoveX * rotateFactor);
+          currentModel.transform.rotateY(deltaMoveY * rotateFactor);
+          currentModel.transform.rotateY(deltaMoveZ * rotateFactor);
+        }
+
+        if (Application.instance.activeTool == ToolType.scale) {
+          num scaleFactor = 0.03;
+
+          currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
+        }
+      }
+    }
+  }
+
+  void onMouseUp(MouseEvent event) {
+    if(!dragging) {
+      Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
+      scene.currentSelection = modelHit;
+      print(modelHit?.name);
+    }
+    dragging = false;
+    mouseDown = false;
+  }
+
+  void updateMouseInfos(MouseEvent event) {
+    int tempScreenX = event.client.x;
+    int tempScreenY = event.client.y;
+    deltaX = (currentX - tempScreenX) / scaleFactor;
+    deltaY = (currentY - tempScreenY) / scaleFactor;
+    currentX = tempScreenX;
+    currentY = tempScreenY;
+  }
+
+  String getMouseInfos(){
+    return 'currentX : $currentX | currentY : $currentY | deltaX : $deltaX | deltaY : $deltaY | ';
+  }
   void debugInfo(num posX, num posY, num posZ) {
     var colorPicked = new Uint8List(4);
     //Todo : readPixels doesn't work in dartium...

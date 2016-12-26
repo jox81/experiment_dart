@@ -1,8 +1,8 @@
 import 'dart:math' as Math;
 import 'dart:web_gl';
-import 'package:webgl/src/animation_property.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'dart:typed_data';
@@ -146,4 +146,5 @@ class SceneViewParticle extends Scene{
 
     return customObject;
   }
+
 }

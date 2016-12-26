@@ -36,6 +36,9 @@ abstract class Model extends IEditElement {
   Vector3 get position => transform.getTranslation();
   set position(Vector3 value) => transform.setTranslation(value);
 
+  Matrix3 get rotation => transform.getRotation();
+  set rotation(Matrix3 value) => transform.setRotation(value);
+
   Material material;
 
   //Animation
@@ -92,6 +95,10 @@ abstract class Model extends IEditElement {
         break;
     }
     return newModel;
+  }
+
+  void translate(Vector3 vector3) {
+    this.position += vector3;
   }
 }
 

@@ -7,10 +7,10 @@ import 'package:webgl/src/models.dart';
 
 class Camera extends Model {
 
-  bool _active = false;
-  bool get active => _active;
-  set active(bool value) {
-    _active = value;
+  bool _isActive = false;
+  bool get isActive => _isActive;
+  set isActive(bool value) {
+    _isActive = value;
   }
 
   double _aspectRatio;
@@ -74,7 +74,7 @@ class Camera extends Model {
   }
 
   void translate(Vector3 value) {
-    this.position = position;
+    this.position += value;
   }
 
   //roll on y
@@ -127,7 +127,7 @@ class Camera extends Model {
 
   @override
   void render() {
-    if (_gizmo.visible && !_active) {
+    if (_gizmo.visible && !_isActive) {
       _gizmo.render();
     }
   }

@@ -2,16 +2,12 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
-
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/material.dart';
-import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/texture_utils.dart';
-import 'package:webgl/src/utils.dart';
 
 Texture textureCrate;
 

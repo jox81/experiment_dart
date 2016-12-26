@@ -1,5 +1,3 @@
-import 'dart:mirrors';
-import 'package:webgl/src/animation_property.dart';
 import 'package:vector_math/vector_math.dart';
 import 'dart:async';
 import 'package:webgl/src/introspection.dart';
@@ -11,7 +9,9 @@ abstract class IUpdatable{
 
 }
 abstract class IUpdatableScene implements IUpdatable{
-  Vector4 get backgroundColor;
+  Vector4 backgroundColor;
+
+  IEditElement currentSelection;
 
   updateUserInput();
   update(time);

@@ -1,6 +1,4 @@
 import 'package:angular2/core.dart';
-import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/introspection.dart';
 
 @Component(
     selector: 'list',

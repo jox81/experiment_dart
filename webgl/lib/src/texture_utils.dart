@@ -7,7 +7,6 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/scene.dart';
 
 class TextureUtils {
 
