@@ -12,14 +12,14 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 //Todo : créer un vrai service angular
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
-//    new SceneViewBase(),
+    new SceneViewBase(),
 //    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),
 //    new SceneViewPBR(),
 //    new SceneViewPerformanceTest(),
 //    new SceneViewPrimitives(),
-    new SceneViewShaderLearning01(),
+//    new SceneViewShaderLearning01(),
 //    new SceneViewExperiment(),
  ];
 }

@@ -75,8 +75,7 @@ class Application {
 
   Application._internal(this._canvas) {
     _initGL(_canvas);
-    _initEvents();
-    _resizeCanvas();
+    resizeCanvas();
     _initToolBars();
   }
 
@@ -136,11 +135,7 @@ class Application {
     Context.renderSettings.enableExtensions();
   }
 
-  void _initEvents() {
-    window.onResize.listen((e) => _resizeCanvas());
-  }
-
-  void _resizeCanvas() {
+  void resizeCanvas() {
     // Lookup the size the browser is displaying the canvas.
     var displayWidth = _canvas.parent.offsetWidth;
     var displayHeight = window.innerHeight;
@@ -157,7 +152,7 @@ class Application {
 
   void render(IUpdatableScene scene) {
     _currentScene = scene;
-    _resizeCanvas();
+    resizeCanvas();
     _render();
   }
 

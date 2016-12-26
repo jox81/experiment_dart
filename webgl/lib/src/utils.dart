@@ -212,7 +212,6 @@ class Utils{
     return new Ray.originDirection(outRayNear, direction);
   }
 
-
   /// Draw a point on the model intersected with the ray
   static List<PointModel> findModelHitPoint(Model model, Ray ray) {
     List<PointModel> resultPoints = [];

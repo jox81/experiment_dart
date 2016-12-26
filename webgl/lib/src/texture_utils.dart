@@ -207,6 +207,4 @@ class TextureUtils {
 
     print(pixels);
   }
-
-
 }

@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
+
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
@@ -10,17 +11,14 @@ import 'dart:typed_data';
 
 class Interaction {
 
-  final Scene scene;
+  Scene get scene => Application.currentScene as Scene;
 
   //Debug div
   Element elementDebugInfoText;
   Element elementFPSText;
+
   //Interaction with keyboard
   List<bool> _currentlyPressedKeys;
-
-  Interaction(this.scene) {
-    _initEvents();
-  }
 
   bool dragging = false;
   bool mouseDown = false;
@@ -29,11 +27,42 @@ class Interaction {
   int currentY = 0;
   num deltaX = 0.0;
   num deltaY = 0.0;
+
   num scaleFactor = 3.0;
 
+  Interaction() {
+    _initEvents();
+  }
+
+  void _initEvents() {
+    //Without specifying size this array throws exception on []
+    _currentlyPressedKeys = new List<bool>(128);
+    for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
+
+    elementDebugInfoText = querySelector("#debugInfosText");
+    elementFPSText = querySelector("#fps");
+
+    window.onResize.listen(_onWindowResize);
+    window.onKeyUp.listen(_onKeyUp);
+    window.onKeyDown.listen(_onKeyDown);
+
+    gl.canvas.onMouseDown.listen(_onMouseDown);
+    gl.canvas.onMouseMove.listen(_onMouseMove);
+    gl.canvas.onMouseUp.listen(_onMouseUp);
+  }
+
   ///
-  ///Keyboard
+  /// Window
   ///
+
+  _onWindowResize (event) {
+    Application.instance.resizeCanvas();
+  }
+
+  ///
+  /// Keyboard
+  ///
+
   void _onKeyDown(KeyboardEvent event) {
     if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
       if ((elementDebugInfoText != null)) {
@@ -73,36 +102,24 @@ class Interaction {
     }
   }
 
-  void _initEvents() {
-    //Without specifying size this array throws exception on []
-    _currentlyPressedKeys = new List<bool>(128);
-    for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
+  ///
+  /// Mouse
+  ///
 
-    window.onKeyUp.listen(_onKeyUp);
-    window.onKeyDown.listen(_onKeyDown);
-
-    elementDebugInfoText = querySelector("#debugInfosText");
-    elementFPSText = querySelector("#fps");
-
-    gl.canvas.onMouseDown.listen(onMouseDown);
-    gl.canvas.onMouseMove.listen(onMouseMove);
-    gl.canvas.onMouseUp.listen(onMouseUp);
-  }
-
-  void onMouseDown(MouseEvent event) {
+  void _onMouseDown(MouseEvent event) {
     updateMouseInfos(event);
     dragging = false;
     mouseDown = true;
   }
 
-  void onMouseMove(MouseEvent event) {
+  void _onMouseMove(MouseEvent event) {
     updateMouseInfos(event);
 
     if(mouseDown) {
       dragging = true;
-      if(Application.currentScene.currentSelection != null && Application.currentScene.currentSelection is Model) {
+      if(scene.currentSelection != null && scene.currentSelection is Model) {
 
-        Model currentModel = Application.currentScene.currentSelection as Model;
+        Model currentModel = scene.currentSelection as Model;
 
         num delta = deltaX; // get mouse delta
         num deltaMoveX = (Application.instance.activeAxis[AxisType.x]
@@ -141,7 +158,7 @@ class Interaction {
     }
   }
 
-  void onMouseUp(MouseEvent event) {
+  void _onMouseUp(MouseEvent event) {
     if(!dragging) {
       Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
       scene.currentSelection = modelHit;
@@ -163,6 +180,11 @@ class Interaction {
   String getMouseInfos(){
     return 'currentX : $currentX | currentY : $currentY | deltaX : $deltaX | deltaY : $deltaY | ';
   }
+
+  ///
+  /// Debug
+  ///
+
   void debugInfo(num posX, num posY, num posZ) {
     var colorPicked = new Uint8List(4);
     //Todo : readPixels doesn't work in dartium...

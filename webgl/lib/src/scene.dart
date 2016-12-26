@@ -92,6 +92,7 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
     models.add(model);
     currentSelection = model;
   }
+
   void createModelByType(ModelType modelType){
     addModel(Model.createByType(modelType));
   }
