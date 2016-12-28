@@ -55,7 +55,7 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
 
     Future future = new Future.value();
 
-    interaction = new Interaction(this);
+    interaction = new Interaction();
 
     if(!_isSetuped){
       _isSetuped = true;
