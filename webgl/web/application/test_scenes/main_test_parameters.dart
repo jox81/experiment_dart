@@ -13,14 +13,12 @@ import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
 
 Texture textureCrate;
-Map susanJson;
 
 Future main() async {
 
   WebglTestParameters webgl01 = new WebglTestParameters(querySelector('#glCanvas'));
 
   await ShaderSource.loadShaders();
-  susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
   webgl01.setup();
   webgl01.render();
 }
@@ -68,9 +66,7 @@ class WebglTestParameters {
     gl.enable(RenderingContext.DEPTH_TEST);
 
 
-    var p = gl.getParameter(RenderingContext.CULL_FACE_MODE);
-    var s = WebGLDebugUtils.glEnumToString(p);
-    print(s);
+
   }
 
   void setupCamera()  {
@@ -99,7 +95,79 @@ class WebglTestParameters {
 
   void getInfos(){
 
-    InstanceMirror instance_mirror = reflect(gl);
-    var class_mirror = instance_mirror.type;
+    var p = gl.getParameter(RenderingContext.CULL_FACE_MODE);
+
+    Map<String, MethodMirror> instance_mirror_getters = new Map();
+
+
+    ClassMirror classMirror = reflectClass(RenderingContext);
+
+    print('#########################################################');
+    String name = MirrorSystem.getName(classMirror.simpleName);
+    print(name);
+    print('#########################################################');
+    print('');
+
+    print('### ClassMirror declarations #######################################################');
+    for(DeclarationMirror decl in classMirror.declarations.values){
+      PrintDeclarationInfos(classMirror, decl);
+    }
+
+    print('### ClassMirror instanceMembers #######################################################');
+    for(DeclarationMirror decl in classMirror.instanceMembers.values){
+      PrintDeclarationInfos(classMirror, decl);
+    }
+  }
+
+  void PrintDeclarationInfos(ClassMirror classMirror, DeclarationMirror decl){
+    print('###');
+    String name = MirrorSystem.getName(decl.simpleName);
+    print('simpleName : ${decl.simpleName} : $name');
+//      print('qualifiedName : ${decl.qualifiedName}');
+//      print('owner : ${decl.owner}');
+//      print('isPrivate : ${decl.isPrivate}');
+//      print('isTopLevel : ${decl.isTopLevel}');
+//      print('location : ${decl.location}');
+//      print('metadata : ${decl.metadata}');
+
+    if (decl is MethodMirror) {
+      print(' --- MethodMirror');
+//        print('returnType : ${decl.returnType}');
+//        print('source : ${decl.source}');
+//        print('parameters : ${decl.parameters}');
+//        print('isStatic : ${decl.isStatic}');
+//        print('isAbstract : ${decl.isAbstract}');
+//        print('isSynthetic : ${decl.isSynthetic}');
+//        print('isRegularMethod : ${decl.isRegularMethod}');
+//        print('isOperator : ${decl.isOperator}');
+//        print('isGetter : ${decl.isGetter}');
+//        print('isSetter : ${decl.isSetter}');
+//        print('isConstructor : ${decl.isConstructor}');
+//        print('constructorName : ${decl.constructorName}');
+//        print('isConstConstructor : ${decl.isConstConstructor}');
+//        print('isGenerativeConstructor : ${decl.isGenerativeConstructor}');
+//        print('isRedirectingConstructor : ${decl.isRedirectingConstructor}');
+//        print('isFactoryConstructor : ${decl.isFactoryConstructor}');
+    }
+
+    if (decl is VariableMirror) {
+      print(' --- VariableMirror');
+//        print('type : ${decl.type}');
+//        print('isStatic : ${decl.isStatic}');
+//        print('isFinal : ${decl.isFinal}');
+//        print('isConst : ${decl.isConst}');
+        print(classMirror.getField(decl.simpleName).reflectee);
+    }
+
+    if (decl is TypeMirror) {
+      print(' --- TypeMirror');
+//        print('hasReflectedType : ${decl.hasReflectedType}');
+//        print('reflectedType : ${decl.reflectedType}');
+//        print('typeVariables : ${decl.typeVariables}');
+//        print('typeArguments : ${decl.typeArguments}');
+//        print('isOriginalDeclaration : ${decl.isOriginalDeclaration}');
+//        print('originalDeclaration : ${decl.originalDeclaration}');
+//        print('originalDeclaration : ${decl.originalDeclaration}');
+    }
   }
 }
