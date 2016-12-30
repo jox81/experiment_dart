@@ -89,18 +89,18 @@ class WebglTestParameters {
 
 //    testGetParameter();
 
-    logContextParameters();
+    logContextAttributes();
   }
 
-  Map getContextParameters(){
+  Map getContextAttributes(){
     _ReturnedDictionary contextParameters = gl.getContextAttributes();
     return contextParameters.toMap;
   }
 
-  void logContextParameters(){
-    Map contextParameters = getContextParameters();
-    for(String key in contextParameters.keys){
-      print('$key : ${contextParameters[key]}');
+  void logContextAttributes(){
+    Map contextAttributes = getContextAttributes();
+    for(String key in contextAttributes.keys){
+      print('$key : ${contextAttributes[key]}');
     }
   }
 
