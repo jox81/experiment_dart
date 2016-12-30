@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:html';
 import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
@@ -89,19 +89,14 @@ class WebglTestParameters {
 
 //    testGetParameter();
 
-    logContextAttributes();
-  }
+//    Context.contextAttributs.logValues();
 
-  Map getContextAttributes(){
-    _ReturnedDictionary contextParameters = gl.getContextAttributes();
-    return contextParameters.toMap;
-  }
+//    List<String> supportedExtensions = gl.getSupportedExtensions();
+//    for(String extension in supportedExtensions){
+//      print(extension);
+//    }
 
-  void logContextAttributes(){
-    Map contextAttributes = getContextAttributes();
-    for(String key in contextAttributes.keys){
-      print('$key : ${contextAttributes[key]}');
-    }
+
   }
 
   void testGetParameter() {
@@ -132,10 +127,6 @@ class WebglTestParameters {
     var result = gl.getParameter(glEnum);
     int error = gl.getError();
     if (error != RenderingContext.INVALID_ENUM) {
-//      print('--');
-//      print(result);
-//      print(result.runtimeType);
-
       String glEnumStringValue;
 
       if (result is int) {
@@ -147,20 +138,13 @@ class WebglTestParameters {
               .glName;
         }
       }
+
       WebglParameter param = new WebglParameter()
         ..glName = webglConstants.firstWhere((c) => c.glEnum == glEnum).glName
         ..glValue = glEnumStringValue != null ? glEnumStringValue : result
         ..glType = result.runtimeType.toString()
         ..glEnum = glEnum;
       return param;
-
-//      String glName = webglConstants.firstWhere((c)=> c.glEnum == result).glName;
-//      int value = classMirror.getField(decl.simpleName).reflectee;
-//      glConstants[value] = name;
-//      glParameters[value] = '$ret : ${ret.runtimeType.toString()}';
-
-//      WebglParameter param = new WebglParameter();
-//      param.glType = result.runtimeType;
     }
 
     return null;
@@ -308,46 +292,5 @@ class WebglTestParameters {
   }
 }
 
-class WebglParameter {
-  int glEnum;
-  String glName;
-  String glType;
-  dynamic glValue;
-
-  WebglParameter();
-
-  @override
-  String toString() {
-    String typeString = (glType == 'int' && glValue is String)? 'glEnum' : glType;
-    return '$glName${glEnum != null ? ' (${glEnum})' : ''} = ${glValue} : $typeString ';
-  }
-}
-
-class WebglConstant {
-  int glEnum;
-  String glName;
-
-  WebglConstant();
-}
 
 
-// Creates a Dart class to allow members of the Map to be fetched (as if getters exist).
-// TODO(terry): Need to use package:js but that's a problem in dart:html. Talk to
-//              Jacob about how to do this properly using dart:js.
-class _ReturnedDictionary {
-  Map _values;
-
-  noSuchMethod(Invocation invocation) {
-    var key = MirrorSystem.getName(invocation.memberName);
-    if (invocation.isGetter) {
-      return _values[key];
-    } else if (invocation.isSetter && key.endsWith('=')) {
-      key = key.substring(0, key.length-1);
-      _values[key] = invocation.positionalArguments[0];
-    }
-  }
-
-  Map get toMap => _values;
-
-  _ReturnedDictionary(Map value): _values = value != null ? value : {};
-}

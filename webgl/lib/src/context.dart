@@ -2,12 +2,14 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 
 RenderingContext gl;
 
 class Context{
 
+  static ContextAttributs get contextAttributs => ContextAttributs.instance();
   static Camera _mainCamera;
   static Camera get mainCamera => _mainCamera;
   static set mainCamera(Camera value) {
@@ -134,5 +136,27 @@ class RenderSetting{
       print('$extensionName : ${(extension != null)?'enabled':'not available'}');
     }
   }
+}
+
+class WebglParameter {
+  int glEnum;
+  String glName;
+  String glType;
+  dynamic glValue;
+
+  WebglParameter();
+
+  @override
+  String toString() {
+    String typeString = (glType == 'int' && glValue is String)? 'glEnum' : glType;
+    return '$glName${glEnum != null ? ' (${glEnum})' : ''} = ${glValue} : $typeString ';
+  }
+}
+
+class WebglConstant {
+  int glEnum;
+  String glName;
+
+  WebglConstant();
 }
 
