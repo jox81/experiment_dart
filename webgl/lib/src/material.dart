@@ -63,6 +63,7 @@ abstract class Material extends IEditElement {
     Program _program = gl.createProgram();
     gl.attachShader(_program, vs);
     gl.attachShader(_program, fs);
+
     gl.linkProgram(_program);
 
     /**

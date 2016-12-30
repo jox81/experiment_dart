@@ -3,6 +3,7 @@ import 'dart:web_gl';
 import 'dart:html';
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
@@ -13,7 +14,6 @@ enum AxisType { view, x, y, z, any }
 enum ToolType { select, move, rotate, scale }
 
 class Application {
-  static const bool debugging = false;
 
   static IUpdatableScene _currentScene;
   static IUpdatableScene get currentScene => _currentScene;
@@ -101,31 +101,8 @@ class Application {
   }
 
   void _initGL(CanvasElement canvas) {
-    List<String> names = [
-      "webgl",
-      "experimental-webgl",
-      "webkit-3d",
-      "moz-webgl"
-    ];
-    var options = {
-      'preserveDrawingBuffer': true,
-    };
-    for (int i = 0; i < names.length; ++i) {
-      try {
-        gl = canvas.getContext(names[i], options); //Normal context
-        if (debugging) {
-          gl = WebGLDebugUtils.makeDebugContext(gl, throwOnGLError,
-              logAndValidate); //Kronos debug context using .js
-        }
-      } catch (e) {}
-      if (gl != null) {
-        break;
-      }
-    }
-    if (gl == null) {
-      window.alert("Could not initialise WebGL");
-      return null;
-    }
+
+    Context.init(canvas);
 
     gl.clear(RenderingContext.COLOR_BUFFER_BIT);
     gl.frontFace(RenderingContext.CCW);

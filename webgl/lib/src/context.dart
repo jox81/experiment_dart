@@ -1,6 +1,8 @@
+import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/debug_rendering_context.dart';
 
 RenderingContext gl;
 
@@ -34,6 +36,35 @@ class Context{
     return _renderSetting;
   }
 
+  static const bool debugging = false;
+
+  static void init(CanvasElement canvas){
+    List<String> names = [
+      "webgl",
+      "experimental-webgl",
+      "webkit-3d",
+      "moz-webgl"
+    ];
+    var options = {
+      'preserveDrawingBuffer': true,
+    };
+
+    for (int i = 0; i < names.length; ++i) {
+      try {
+        gl = canvas.getContext(names[i], options); //Normal context
+        if (debugging) {
+          gl = new DebugRenderingContext(gl);
+        }
+      } catch (e) {}
+      if (gl != null) {
+        break;
+      }
+    }
+    if (gl == null) {
+      window.alert("Could not initialise WebGL");
+      return null;
+    }
+  }
 }
 
 class RenderSetting{
