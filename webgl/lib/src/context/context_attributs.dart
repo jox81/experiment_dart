@@ -4,6 +4,13 @@ import 'package:webgl/src/context.dart';
 class ContextAttributs{
 
   static ContextAttributs _instance;
+  ContextAttributs._init();
+  static ContextAttributs instance(){
+    if(_instance == null){
+      _instance = new ContextAttributs._init();
+    }
+    return _instance;
+  }
 
   bool get alpha => values['alpha'];
   bool get antialias => values['alpha'];
@@ -18,19 +25,14 @@ class ContextAttributs{
     return contextParameters.toMap;
   }
 
-  ContextAttributs._init();
-
-  static ContextAttributs instance(){
-    if(_instance == null){
-      _instance = new ContextAttributs._init();
-    }
-    return _instance;
-  }
-
   void logValues(){
-    for(String key in values.keys){
-      print('$key : ${values[key]}');
-    }
+    print('##################################################################');
+    print('### Webgl Context Attributs');
+    print('##################################################################');
+    values.forEach((key,v){
+      print('$key : $v');
+    });
+    print('##################################################################');
   }
 }
 

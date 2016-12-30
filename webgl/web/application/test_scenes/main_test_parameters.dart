@@ -5,6 +5,8 @@ import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context/context_attributs.dart';
+import 'package:webgl/src/context/webgl_constants.dart';
+import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
@@ -19,7 +21,6 @@ Future main() async {
   webgl01.render();
 }
 
-List<WebglConstant> webglConstants = new List();
 List<WebglParameter> webglParameters = new List();
 
 class WebglTestParameters {
@@ -76,20 +77,23 @@ class WebglTestParameters {
   }
 
   void getInfos() {
-    InstanceMirror instanceMirror = reflect(gl);
-    getInstanceMirroInfos(instanceMirror);
+    Context.webglConstants.logValues();
+    Context.contextAttributs.logValues();
 
-    ClassMirror classMirror = reflectClass(RenderingContext);
-    getClassMirroInfos(classMirror);
+//    InstanceMirror instanceMirror = reflect(gl);
+//    getInstanceMirroInfos(instanceMirror);
+//
+//    ClassMirror classMirror = reflectClass(RenderingContext);
+//    getClassMirroInfos(classMirror);
+
 
 //    getParameters();
 
-//    logConstants();
 //    logParameters();
 
 //    testGetParameter();
 
-//    Context.contextAttributs.logValues();
+//
 
 //    List<String> supportedExtensions = gl.getSupportedExtensions();
 //    for(String extension in supportedExtensions){
@@ -115,7 +119,7 @@ class WebglTestParameters {
   }
 
   void getParameters() {
-    for (WebglConstant c in webglConstants) {
+    for (WebglConstant c in Context.webglConstants.values) {
       WebglParameter webglParameter = getParameter(c.glEnum);
       if (webglParameter != null) {
         webglParameters.add(webglParameter);
@@ -130,17 +134,17 @@ class WebglTestParameters {
       String glEnumStringValue;
 
       if (result is int) {
-        WebglConstant constant = webglConstants
+        WebglConstant constant = Context.webglConstants.values
             .firstWhere((c) => c.glEnum == (result as int), orElse: () => null);
         if (constant != null) {
-          glEnumStringValue = webglConstants
+          glEnumStringValue = Context.webglConstants.values
               .firstWhere((c) => c.glEnum == constant.glEnum)
               .glName;
         }
       }
 
       WebglParameter param = new WebglParameter()
-        ..glName = webglConstants.firstWhere((c) => c.glEnum == glEnum).glName
+        ..glName = Context.webglConstants.values.firstWhere((c) => c.glEnum == glEnum).glName
         ..glValue = glEnumStringValue != null ? glEnumStringValue : result
         ..glType = result.runtimeType.toString()
         ..glEnum = glEnum;
@@ -150,19 +154,7 @@ class WebglTestParameters {
     return null;
   }
 
-  void logConstants({bool nameFirst: true}) {
-    print('##################################################################');
-    print('Constants :');
-    print('');
-    webglConstants.forEach((c) {
-      if (nameFirst) {
-        print('${c.glName} = ${c.glEnum}');
-      } else {
-        print('${c.glName} = ${c.glEnum}');
-      }
-    });
-    print('##################################################################');
-  }
+
 
   void logParameters() {
     print('##################################################################');
@@ -195,9 +187,9 @@ class WebglTestParameters {
     }
 
 //    print('### ClassMirror instanceMembers  #################################');
-    for (DeclarationMirror decl in classMirror.instanceMembers.values) {
-      PrintDeclarationInfos(classMirror, decl);
-    }
+//    for (DeclarationMirror decl in classMirror.instanceMembers.values) {
+//      PrintDeclarationInfos(classMirror, decl);
+//    }
 
 //    print('##################################################################');
 //    print('');
@@ -248,7 +240,7 @@ class WebglTestParameters {
           ..glEnum = glEnum
           ..glName = name;
 
-        webglConstants.add(constant);
+//        webglConstants.add(constant);
 //        print('### VariableMirror : $name = ${classMirror.getField(decl.simpleName).reflectee}');
 ////        print('type : ${MirrorSystem.getName(decl.type.simpleName)}'); // always int in RenderingContext
 ////        print('isStatic : ${decl.isStatic}'); // always true in RenderingContext
