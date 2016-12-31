@@ -1,6 +1,7 @@
 import 'dart:mirrors';
 
 import 'package:webgl/src/animation_property.dart';
+import 'package:webgl/src/utils.dart';
 
 class IntrospectionManager {
   static IntrospectionManager _instance;
@@ -69,50 +70,77 @@ class IntrospectionManager {
     return propertiesInfos;
   }
 
-  void logTypeInfos(Type type) {
+  void logTypeInfos(
+    Type type, {
+      bool showBaseInfo: false,
+      bool showLibrary: false,
+      bool showType: false,
+      bool showTypeVariable: false,
+      bool showTypeDef: false,
+      bool showFunctionType: false,
+      bool showVariable: false,
+      bool showParameter: false,
+      bool showMethod: false,
+    }) {
     ClassMirror classMirror = reflectClass(type);
-    print('##################################################################');
-    print('### ClassMirror                  #################################');
-    print('##################################################################');
-    String simpleName = MirrorSystem.getName(classMirror.simpleName);
-    print('### $simpleName');
-    print('');
-    print('### ClassMirror declarations     #################################');
-    for (DeclarationMirror decl in classMirror.declarations.values) {
-      fillDeclarationInfos(classMirror, decl);
-    }
-    print('');
-    print('### ClassMirror instanceMembers  #################################');
-    for (DeclarationMirror decl in classMirror.instanceMembers.values) {
-      fillDeclarationInfos(classMirror, decl);
-    }
 
-    print('##################################################################');
-    print('');
+    Utils.log('',(){
+      if (showBaseInfo) {
+        String simpleName = MirrorSystem.getName(classMirror.simpleName);
+        print('### $simpleName');
+        print('');
+        print('### ClassMirror declarations     #################################');
+      }
+      for (DeclarationMirror decl in classMirror.declarations.values) {
+        _fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+      }
+      if (showBaseInfo) {
+        print('');
+        print('### ClassMirror instanceMembers  #################################');
+      }
+      for (DeclarationMirror decl in classMirror.instanceMembers.values) {
+        _fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+      }
+    });
   }
 
-  void fillDeclarationInfos(ClassMirror classMirror, DeclarationMirror decl) {
+  void _fillDeclarationInfos(
+    ClassMirror classMirror,
+    DeclarationMirror decl, {
+    bool showBaseInfo: false,
+    bool showLibrary: false,
+    bool showType: false,
+    bool showTypeVariable: false,
+    bool showTypeDef: false,
+    bool showFunctionType: false,
+    bool showVariable: false,
+    bool showParameter: false,
+    bool showMethod: false,
+  }) {
+
     String simpleName = MirrorSystem.getName(decl.simpleName);
     String className = MirrorSystem.getName(classMirror.simpleName);
     String ownerName = MirrorSystem.getName(decl.owner.simpleName);
 
-    print('');
-    print('### $simpleName : declarations infos ###');
-    print(
-        'simpleName : $simpleName / className : $className / ownerName : $ownerName');
-    print(
-        'qualifiedName : ${MirrorSystem.getName(decl.qualifiedName)}'); //ex : dart.dom.web_gl.RenderingContext.vertexAttrib2fv
-    print('owner : $ownerName');
-    print('isPrivate : ${decl.isPrivate}');
-    print('isTopLevel : ${decl.isTopLevel}');
-    print('location : ${decl.location}'); //ex : dart:web_gl:1445
-    print('metadata : ${decl.metadata}');
+    if(showBaseInfo) {
+      print('');
+      print('### $simpleName : declarations infos ###');
+      print(
+          'simpleName : $simpleName / className : $className / ownerName : $ownerName');
+      print(
+          'qualifiedName : ${MirrorSystem.getName(decl.qualifiedName)}'); //ex : dart.dom.web_gl.RenderingContext.vertexAttrib2fv
+      print('owner : $ownerName');
+      print('isPrivate : ${decl.isPrivate}');
+      print('isTopLevel : ${decl.isTopLevel}');
+      print('location : ${decl.location}'); //ex : dart:web_gl:1445
+      print('metadata : ${decl.metadata}');
+    }
 
-    if (decl is LibraryMirror) {
+    if (decl is LibraryMirror && showLibrary) {
       print('### $simpleName : LibraryMirror');
     }
 
-    if (decl is TypeMirror) {
+    if (decl is TypeMirror && showType) {
       print('### $simpleName : TypeMirror');
       print('hasReflectedType : ${decl.hasReflectedType}');
       print('reflectedType : ${decl.reflectedType}');
@@ -123,16 +151,16 @@ class IntrospectionManager {
       print('originalDeclaration : ${decl.originalDeclaration}');
     }
 
-    if (decl is TypeVariableMirror) {
+    if (decl is TypeVariableMirror && showTypeVariable) {
       print('### $simpleName : TypeVariableMirror');
     }
-    if (decl is TypedefMirror) {
+    if (decl is TypedefMirror && showTypeDef) {
       print('### $simpleName : TypedefMirror');
     }
-    if (decl is FunctionTypeMirror) {
+    if (decl is FunctionTypeMirror && showFunctionType) {
       print('### $simpleName : FunctionTypeMirror');
     }
-    if (decl is VariableMirror) {
+    if (decl is VariableMirror && showVariable) {
       print(
           '### VariableMirror : $simpleName = ${classMirror.getField(decl.simpleName).reflectee}');
       print('type : ${MirrorSystem.getName(decl.type.simpleName)}');
@@ -140,38 +168,35 @@ class IntrospectionManager {
       print('isFinal : ${decl.isFinal}');
       print('isConst : ${decl.isConst}');
     }
-    if (decl is ParameterMirror) {
+    if (decl is ParameterMirror && showParameter) {
       print('### $simpleName : ParameterMirror');
     }
-    if (decl is ParameterMirror) {
-      print('### $simpleName : ParameterMirror');
-    }
-    if (decl is MethodMirror) {
+    if (decl is MethodMirror && showMethod) {
       print('${MirrorSystem.getName(decl.returnType.simpleName)} $simpleName(');
       decl.parameters.forEach((p) {
         print(
             '   ${MirrorSystem.getName(p.type.simpleName)} ${MirrorSystem.getName(p.simpleName)},');
-        print('isOptional : ${p.isOptional}');
-        print('isNamed : ${p.isNamed}');
-        print('hasDefaultValue : ${p.hasDefaultValue}');
-        print('defaultValue : ${p.defaultValue}');
+//        print('isOptional : ${p.isOptional}');
+//        print('isNamed : ${p.isNamed}');
+//        print('hasDefaultValue : ${p.hasDefaultValue}');
+//        print('defaultValue : ${p.defaultValue}');
       });
       print(')');
 //        print('source : ${decl.source}'); // retourne le code
-      print('parameters : ${decl.parameters}'); //Explore more in depth types
-      print('isStatic : ${decl.isStatic}');
-      print('isAbstract : ${decl.isAbstract}');
-      print('isSynthetic : ${decl.isSynthetic}');
-      print('isRegularMethod : ${decl.isRegularMethod}');
-      print('isOperator : ${decl.isOperator}');
-      print('isGetter : ${decl.isGetter}');
-      print('isSetter : ${decl.isSetter}');
-      print('isConstructor : ${decl.isConstructor}');
-      print('constructorName : ${decl.constructorName}');
-      print('isConstConstructor : ${decl.isConstConstructor}');
-      print('isGenerativeConstructor : ${decl.isGenerativeConstructor}');
-      print('isRedirectingConstructor : ${decl.isRedirectingConstructor}');
-      print('isFactoryConstructor : ${decl.isFactoryConstructor}');
+//      print('parameters : ${decl.parameters}'); //Explore more in depth types
+//      print('isStatic : ${decl.isStatic}');
+//      print('isAbstract : ${decl.isAbstract}');
+//      print('isSynthetic : ${decl.isSynthetic}');
+//      print('isRegularMethod : ${decl.isRegularMethod}');
+//      print('isOperator : ${decl.isOperator}');
+//      print('isGetter : ${decl.isGetter}');
+//      print('isSetter : ${decl.isSetter}');
+//      print('isConstructor : ${decl.isConstructor}');
+//      print('constructorName : ${decl.constructorName}');
+//      print('isConstConstructor : ${decl.isConstConstructor}');
+//      print('isGenerativeConstructor : ${decl.isGenerativeConstructor}');
+//      print('isRedirectingConstructor : ${decl.isRedirectingConstructor}');
+//      print('isFactoryConstructor : ${decl.isFactoryConstructor}');
     }
   }
 }
