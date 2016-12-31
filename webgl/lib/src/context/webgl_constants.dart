@@ -1,6 +1,8 @@
 import 'dart:mirrors';
 import 'dart:web_gl';
 
+import 'package:webgl/src/utils.dart';
+
 class WebglConstants{
 
   static WebglConstants _instance;
@@ -15,22 +17,20 @@ class WebglConstants{
   List<WebglConstant> _values;
   List<WebglConstant> get values {
     if(_values == null){
-      _fillWebglConstants();
+      initWebglConstants();
     }
     return _values;
   }
 
   void logValues() {
-    print('##################################################################');
-    print('### Webgl Constants');
-    print('##################################################################');
-    values.forEach((c) {
+    Utils.log('Webgl Constants',(){
+      values.forEach((c) {
         print('${c.glName} = ${c.glEnum}');
+      });
     });
-    print('##################################################################');
   }
 
-  void _fillWebglConstants() {
+  void initWebglConstants() {
     _values = new List();
 
     ClassMirror classMirror = reflectClass(RenderingContext);

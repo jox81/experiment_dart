@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
@@ -7,11 +6,11 @@ import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
+import 'package:webgl/src/utils.dart';
 
 RenderingContext gl;
 
 class Context{
-
 
   static Camera _mainCamera;
   static Camera get mainCamera => _mainCamera;
@@ -43,7 +42,39 @@ class Context{
 
   static const bool debugging = false;
 
-  static void init(CanvasElement canvas){
+  static void init(CanvasElement canvas, {bool enableExtensions:false, bool logInfos : false}){
+    _initGl(canvas);
+    _initWebglConstants();
+    _initWebglParameters();
+
+    if(enableExtensions){
+      renderSettings.enableExtensions(log: logInfos);
+    }
+
+    if(logInfos) {
+      _logInfos();
+    }
+  }
+
+  static void _logInfos() {
+    Context.contextAttributs.logValues();
+    _renderSetting.logSupportedExtensions();
+    Context.webglConstants.logValues();
+    Context.webglParameters.logPossibleParameters();
+    Context.webglParameters.logValues();
+
+    Context.webglParameters.testGetParameter();
+  }
+
+  static void _initWebglConstants() {
+    webglConstants.initWebglConstants();
+  }
+
+  static void _initWebglParameters() {
+    webglParameters.initWebglParameters();
+  }
+
+  static void _initGl(CanvasElement canvas) {
     List<String> names = [
       "webgl",
       "experimental-webgl",
@@ -94,56 +125,37 @@ class RenderSetting{
     }
   }
 
-  void enableExtensions() {
-//    print('###');
-//    print('Possible extensions : ');
-//    for(String extension in gl.getSupportedExtensions()){
-//      print(extension);
-//    }
+  void logSupportedExtensions(){
+    Utils.log('Supported extensions',(){
+      List<String> supportedExtensions = gl.getSupportedExtensions();
+      for(String extension in supportedExtensions){
+        print(extension);
+      }
+    });
+  }
 
-    /*
-      :: in chromium ::
-      ANGLE_instanced_arrays
-      EXT_blend_minmax
-      EXT_frag_depth
-      EXT_shader_texture_lod
-      EXT_sRGB
-      EXT_texture_filter_anisotropic
-      WEBKIT_EXT_texture_filter_anisotropic
-      OES_element_index_uint
-      OES_standard_derivatives
-      OES_texture_float
-      OES_texture_float_linear
-      OES_texture_half_float
-      OES_texture_half_float_linear
-      OES_vertex_array_object
-      WEBGL_compressed_texture_s3tc
-      WEBKIT_WEBGL_compressed_texture_s3tc
-      WEBGL_debug_renderer_info
-      WEBGL_debug_shaders
-      WEBGL_depth_texture
-      WEBKIT_WEBGL_depth_texture
-      WEBGL_draw_buffers
-      WEBGL_lose_context
-      WEBKIT_WEBGL_lose_context
-    */
-
-//    print('###');
-//    print('Enabling extensions : ');
+  void enableExtensions({bool log : false}) {
     List<String> extensionNames = [
       'OES_texture_float',
       'OES_depth_texture',
-//      'WEBGL_depth_texture',
-//      'WEBKIT_WEBGL_depth_texture',
+      'WEBGL_depth_texture',
+      'WEBKIT_WEBGL_depth_texture',
     ];
 
-    var extension;
+    Map extensions = new Map();
     for(String extensionName in extensionNames){
-      extension = gl.getExtension(extensionName);
-      print('$extensionName : ${(extension != null)?'enabled':'not available'}');
+      var extension = gl.getExtension(extensionName);
+      extensions[extensionName] = extension;
+    }
+
+    if(log) {
+      Utils.log('Enabling extensions', () {
+        extensions.forEach((key, value) {
+          print('$key : ${(value != null) ? 'enabled' : 'not available'}');
+        });
+      });
     }
   }
-
 }
 
 

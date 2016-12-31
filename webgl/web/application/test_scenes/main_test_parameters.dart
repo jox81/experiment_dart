@@ -9,6 +9,7 @@ import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 
@@ -41,7 +42,7 @@ class WebglTestParameters {
   }
 
   void initGL(CanvasElement canvas) {
-    Context.init(canvas);
+    Context.init(canvas,enableExtensions:true,logInfos:false);
   }
 
   void setup() {
@@ -77,211 +78,9 @@ class WebglTestParameters {
   }
 
   void getInfos() {
-    Context.webglConstants.logValues();
-    Context.contextAttributs.logValues();
-
-//    InstanceMirror instanceMirror = reflect(gl);
-//    getInstanceMirroInfos(instanceMirror);
-//
-//    ClassMirror classMirror = reflectClass(RenderingContext);
-//    getClassMirroInfos(classMirror);
-
-
-//    getParameters();
-
-//    logParameters();
-
-//    testGetParameter();
-
-//
-
-//    List<String> supportedExtensions = gl.getSupportedExtensions();
-//    for(String extension in supportedExtensions){
-//      print(extension);
-//    }
-
-
+    Context.webglParameters.logValues();
   }
 
-  void testGetParameter() {
-    print('##################################################################');
-    print('TEXTURE0 : 0x84C0 = ${0x84C0}'); // == 33984
-    print('ACTIVE_TEXTURE : 0x84E0 = ${0x84E0}'); // == 34016
-    print(getParameter(RenderingContext.ACTIVE_TEXTURE));
-    //OK > ACTIVE_TEXTURE (34016) = TEXTURE0 : glEnum
-    print('##################################################################');
-
-    Object result = gl.getParameter(RenderingContext.BLEND_SRC_RGB);
-    print(result);
-    //NO > comment différencier une valeur int d'une valeur glEnum ?
-    print(getParameter(RenderingContext.BLEND_SRC_RGB));
-    print(0x0001);
-  }
-
-  void getParameters() {
-    for (WebglConstant c in Context.webglConstants.values) {
-      WebglParameter webglParameter = getParameter(c.glEnum);
-      if (webglParameter != null) {
-        webglParameters.add(webglParameter);
-      }
-    }
-  }
-
-  WebglParameter getParameter(int glEnum) {
-    var result = gl.getParameter(glEnum);
-    int error = gl.getError();
-    if (error != RenderingContext.INVALID_ENUM) {
-      String glEnumStringValue;
-
-      if (result is int) {
-        WebglConstant constant = Context.webglConstants.values
-            .firstWhere((c) => c.glEnum == (result as int), orElse: () => null);
-        if (constant != null) {
-          glEnumStringValue = Context.webglConstants.values
-              .firstWhere((c) => c.glEnum == constant.glEnum)
-              .glName;
-        }
-      }
-
-      WebglParameter param = new WebglParameter()
-        ..glName = Context.webglConstants.values.firstWhere((c) => c.glEnum == glEnum).glName
-        ..glValue = glEnumStringValue != null ? glEnumStringValue : result
-        ..glType = result.runtimeType.toString()
-        ..glEnum = glEnum;
-      return param;
-    }
-
-    return null;
-  }
-
-
-
-  void logParameters() {
-    print('##################################################################');
-    print('Parameters :');
-    print('');
-    webglParameters.forEach((p) {
-      print('${p.toString()}');
-    });
-    print('##################################################################');
-  }
-
-  void getInstanceMirroInfos(InstanceMirror instanceMirror) {
-//    print('');
-//    print('##################################################################');
-//    print('### InstanceMirror               #################################');
-//    print('##################################################################');
-//    print('');
-  }
-
-  void getClassMirroInfos(ClassMirror classMirror) {
-//    print('##################################################################');
-//    print('### ClassMirror                  #################################');
-//    print('##################################################################');
-//    String name = MirrorSystem.getName(classMirror.simpleName);
-//    print('### $name');
-//
-//    print('### ClassMirror declarations     #################################');
-    for (DeclarationMirror decl in classMirror.declarations.values) {
-      PrintDeclarationInfos(classMirror, decl);
-    }
-
-//    print('### ClassMirror instanceMembers  #################################');
-//    for (DeclarationMirror decl in classMirror.instanceMembers.values) {
-//      PrintDeclarationInfos(classMirror, decl);
-//    }
-
-//    print('##################################################################');
-//    print('');
-  }
-
-  void PrintDeclarationInfos(ClassMirror classMirror, DeclarationMirror decl) {
-    String name = MirrorSystem.getName(decl.simpleName);
-    String className = MirrorSystem.getName(classMirror.simpleName);
-    String ownerName = MirrorSystem.getName(decl.owner.simpleName);
-
-//    print('$name / $className / $ownerName');
-    if (className == ownerName) {
-//      print('qualifiedName : ${MirrorSystem.getName(decl.qualifiedName)}'); //ex : dart.dom.web_gl.RenderingContext.vertexAttrib2fv
-//      print('owner : $ownerName');
-//      print('isPrivate : ${decl.isPrivate}'); // always false in RenderingContext
-//      print('isTopLevel : ${decl.isTopLevel}'); // always false in RenderingContext
-//      print('location : ${decl.location}'); //ex : dart:web_gl:1445
-//      print('metadata : ${decl.metadata}');
-
-      if (decl is LibraryMirror) {
-        print('### $name : LibraryMirror');
-      }
-
-      if (decl is TypeMirror) {
-        print('### $name : TypeMirror');
-//        print('hasReflectedType : ${decl.hasReflectedType}');
-//        print('reflectedType : ${decl.reflectedType}');
-//        print('typeVariables : ${decl.typeVariables}');
-//        print('typeArguments : ${decl.typeArguments}');
-//        print('isOriginalDeclaration : ${decl.isOriginalDeclaration}');
-//        print('originalDeclaration : ${decl.originalDeclaration}');
-//        print('originalDeclaration : ${decl.originalDeclaration}');
-      }
-
-      if (decl is TypeVariableMirror) {
-        print('### $name : TypeVariableMirror');
-      }
-      if (decl is TypedefMirror) {
-        print('### $name : TypedefMirror');
-      }
-      if (decl is FunctionTypeMirror) {
-        print('### $name : FunctionTypeMirror');
-      }
-      if (decl is VariableMirror) {
-        int glEnum = classMirror.getField(decl.simpleName).reflectee;
-
-        WebglConstant constant = new WebglConstant()
-          ..glEnum = glEnum
-          ..glName = name;
-
-//        webglConstants.add(constant);
-//        print('### VariableMirror : $name = ${classMirror.getField(decl.simpleName).reflectee}');
-////        print('type : ${MirrorSystem.getName(decl.type.simpleName)}'); // always int in RenderingContext
-////        print('isStatic : ${decl.isStatic}'); // always true in RenderingContext
-////        print('isFinal : ${decl.isFinal}'); // always true in RenderingContext
-////        print('isConst : ${decl.isConst}'); // always true in RenderingContext
-      }
-      if (decl is ParameterMirror) {
-        print('### $name : ParameterMirror');
-      }
-      if (decl is ParameterMirror) {
-        print('### $name : ParameterMirror');
-      }
-      if (decl is MethodMirror) {
-//        print('${MirrorSystem.getName(decl.returnType.simpleName)} $name(');
-//        decl.parameters.forEach((p) {
-//          print('   ${MirrorSystem.getName(p.type.simpleName)} ${MirrorSystem.getName(p.simpleName)},');
-////          print('isOptional : ${p.isOptional}');
-////          print('isNamed : ${p.isNamed}');// always false
-////          print('hasDefaultValue : ${p.hasDefaultValue}');// always false
-////          print('defaultValue : ${p.defaultValue}');// always null
-//        });
-//        print(')');
-
-//        print('source : ${decl.source}'); // retourne le code
-//        print('parameters : ${decl.parameters}'); //Explore more in depth
-//        print('isStatic : ${decl.isStatic}');
-//        print('isAbstract : ${decl.isAbstract}'); // always false in RenderingContext
-//        print('isSynthetic : ${decl.isSynthetic}'); // always false in RenderingContext
-//        print('isRegularMethod : ${decl.isRegularMethod}');
-//        print('isOperator : ${decl.isOperator}'); // always false in RenderingContext
-//        print('isGetter : ${decl.isGetter}');
-//        print('isSetter : ${decl.isSetter}'); // always false in RenderingContext
-//        print('isConstructor : ${decl.isConstructor}');
-//        print('constructorName : ${decl.constructorName}');
-//        print('isConstConstructor : ${decl.isConstConstructor}'); // always false in RenderingContext
-//        print('isGenerativeConstructor : ${decl.isGenerativeConstructor}');
-//        print('isRedirectingConstructor : ${decl.isRedirectingConstructor}'); // always false in RenderingContext
-//        print('isFactoryConstructor : ${decl.isFactoryConstructor}'); // always false in RenderingContext
-      }
-    }
-  }
 }
 
 
