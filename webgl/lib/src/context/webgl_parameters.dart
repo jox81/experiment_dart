@@ -50,10 +50,10 @@ class WebglParameters{
     int result = gl.getParameter(constant.glEnum);
     String glEnumStringValue;
 
-    if (result is int) {
+    if (result is int && result > 1) {
       List<WebglConstant> constants = Context.webglConstants.values
           .where((c) => c.glEnum == result).toList();
-      if (constants.length == 1 && constants[0].glEnum > 1) { // >1 pour ne pas avoir de confusion dans les enums possibles
+      if (constants.length == 1) { // >1 pour ne pas avoir de confusion dans les enums possibles
         glEnumStringValue = Context.webglConstants.values
             .firstWhere((c) => c.glEnum == constants[0].glEnum)
             .glName;

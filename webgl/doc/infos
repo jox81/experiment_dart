@@ -1,3 +1,37 @@
 297 constants
 88 parametres
 145 methodes
+
+///////////> Get
+getError
+getParameter | context
+getContextAttributes | context
+
+getSupportedExtensions | extension multi
+getExtension | extension single
+
+getFramebufferAttachmentParameter | framebuffer
+
+getRenderbufferParameter | renderbuffer
+
+getBufferParameter | buffer
+
+getTexParameter | texture
+
+//>
+getActiveAttrib | program
+getActiveUniform | program
+getAttachedShaders | program
+getAttribLocation | program
+gl.getProgramInfoLog(program) | program
+getProgramParameter | program
+getUniform | program
+getUniformLocation | program
+
+//>
+getShaderInfoLog | shader
+getShaderParameter | shader
+getShaderPrecisionFormat | shader
+getShaderSource | shader
+getVertexAttrib | shader
+getVertexAttribOffset | shader

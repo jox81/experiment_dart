@@ -79,6 +79,7 @@ class WebglTestParameters {
 
   void getInfos() {
     Context.webglConstants.logConstants();
+    Context.webglParameters.logValues();
   }
 }
 

@@ -3,6 +3,8 @@ import 'dart:html';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/gl_objects/program.dart';
+import 'package:webgl/src/gl_objects/shader.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/meshes.dart';
 
@@ -21,7 +23,7 @@ abstract class Material extends IEditElement {
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
 
   String name;
-  Program program;
+  WebGLProgram program;
 
   ProgramInfo programInfo;
 
@@ -37,9 +39,9 @@ abstract class Material extends IEditElement {
   Material(vsSource, fsSource) {
     vsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
     fsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
-    initShaderProgram(vsSource, fsSource);
+    program = initShaderProgram(vsSource, fsSource);
 
-    programInfo = UtilsShader.getProgramInfo(gl, program);
+    programInfo = program.getProgramInfo();
     attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
     uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
 
@@ -48,45 +50,22 @@ abstract class Material extends IEditElement {
     getShaderSettings();
   }
 
-  void initShaderProgram(String vsSource, String fsSource) {
-    // vertex shader compilation
-    Shader vs = gl.createShader(RenderingContext.VERTEX_SHADER);
-    gl.shaderSource(vs, vsSource);
-    gl.compileShader(vs);
+  WebGLProgram initShaderProgram(String vsSource, String fsSource) {
+    WebGLShader vs = new WebGLShader(ShaderType.VERTEX_SHADER);
+      vs
+      ..setSource(vsSource)
+      ..compile();
 
-    // fragment shader compilation
-    Shader fs = gl.createShader(RenderingContext.FRAGMENT_SHADER);
-    gl.shaderSource(fs, fsSource);
-    gl.compileShader(fs);
+    WebGLShader fs = new WebGLShader(ShaderType.FRAGMENT_SHADER)
+      ..setSource(fsSource)
+      ..compile();
 
-    // attach shaders to a WebGL program
-    Program _program = gl.createProgram();
-    gl.attachShader(_program, vs);
-    gl.attachShader(_program, fs);
+    WebGLProgram _program = new WebGLProgram()
+    ..attachShader(vs)
+    ..attachShader(fs)
+    ..link();
 
-    gl.linkProgram(_program);
-
-    /**
-     * Check if shaders were compiled properly. This is probably the most painful part
-     * since there's no way to "debug" shader compilation
-     */
-    if (!gl.getShaderParameter(vs, RenderingContext.COMPILE_STATUS)) {
-      print(gl.getShaderInfoLog(vs));
-      return;
-    }
-
-    if (!gl.getShaderParameter(fs, RenderingContext.COMPILE_STATUS)) {
-      print(gl.getShaderInfoLog(fs));
-      return;
-    }
-
-    if (!gl.getProgramParameter(_program, RenderingContext.LINK_STATUS)) {
-      print(gl.getProgramInfoLog(_program));
-      window.alert("Could not initialise shaders");
-      return;
-    }
-
-    program = _program;
+    return _program;
   }
 
   void initBuffers() {
@@ -102,13 +81,13 @@ abstract class Material extends IEditElement {
 
   void _getShaderAttributSettings() {
     for (String name in attributsNames) {
-      attributes[name] = gl.getAttribLocation(program, name);
+      attributes[name] = program.getAttribLocation(name);
     }
   }
 
   void _getShaderUniformSettings() {
     for (String name in uniformsNames) {
-      uniforms[name] = gl.getUniformLocation(program, name);
+      uniforms[name] = program.getUniformLocation(name);
     }
   }
 
@@ -118,7 +97,8 @@ abstract class Material extends IEditElement {
 
     Context.mvMatrix.multiply(model.transform);
 
-    gl.useProgram(program);
+//    gl.useProgram(program);
+    program.use();
     setShaderSettings(model.mesh);
 
     if (model.mesh.indices.length > 0) {

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:web_gl';
 
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 
 class ActiveInfoCustom{
@@ -48,7 +49,7 @@ class UtilsShader {
     0x1406: 'FLOAT'
   };
 
-  static ProgramInfo getProgramInfo(RenderingContext gl, Program program) {
+  static ProgramInfo getProgramInfo(Program program) {
     ProgramInfo result = new ProgramInfo();
 
     // Loop through active attributes
