@@ -78,13 +78,7 @@ class WebglTestParameters {
   }
 
   void getInfos() {
-    ClassMirror classMirror = reflectClass(RenderingContext);
-    for (DeclarationMirror decl in classMirror.instanceMembers.values) {
-      if (decl is MethodMirror) {
-        String simpleName = MirrorSystem.getName(decl.simpleName);
-        print('$simpleName');
-      }
-    }
+    Context.webglConstants.logConstants();
   }
 }
 

@@ -1,6 +1,4 @@
-import 'dart:mirrors';
 import 'dart:web_gl';
-
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/utils.dart';
@@ -16,32 +14,6 @@ class WebglParameters{
     return _instance;
   }
 
-  List<WebglConstant> _possibleParameters;
-  List<WebglConstant> get possibleParameters {
-    if(_possibleParameters == null){
-      initWebglParameters();
-    }
-    return _possibleParameters;
-  }
-
-  void initWebglParameters() {
-    _possibleParameters = new List();
-    for (WebglConstant webglConstant in Context.webglConstants.values) {
-      WebglParameter webglParameter = getParameter(webglConstant.glEnum);
-      if (webglParameter != null) {
-        _possibleParameters.add(webglConstant);
-      }
-    }
-  }
-
-  void logPossibleParameters() {
-    Utils.log('Webgl Possible Parameters',(){
-      possibleParameters.forEach((c) {
-        print('${c.glName} = ${c.glEnum}');
-      });
-    });
-  }
-
   List<WebglParameter> _values;
   List<WebglParameter> get values {
     if(_values == null){
@@ -52,7 +24,7 @@ class WebglParameters{
 
   void _fillWebglParameters() {
     _values = new List();
-    for (WebglConstant webglConstant in possibleParameters) {
+    for (WebglConstant webglConstant in Context.webglConstants.parameters) {
       WebglParameter webglParameter = getParameter(webglConstant.glEnum);
       if (webglParameter != null) {
         _values.add(webglParameter);
@@ -69,30 +41,33 @@ class WebglParameters{
   }
 
   WebglParameter getParameter(int glEnum) {
-    var result = gl.getParameter(glEnum);
-    int error = gl.getError();
-    if (error != RenderingContext.INVALID_ENUM) {
-      String glEnumStringValue;
 
-      if (result is int) {
-        WebglConstant constant = Context.webglConstants.values
-            .firstWhere((c) => c.glEnum == (result as int), orElse: () => null);
-        if (constant != null && constant.glEnum > 1) { // >1 pour ne pas avoir de confusion dans les enums possibles
-          glEnumStringValue = Context.webglConstants.values
-              .firstWhere((c) => c.glEnum == constant.glEnum)
-              .glName;
-        }
+    WebglConstant constant = Context.webglConstants.values
+        .firstWhere((c) => c.glEnum == glEnum);
+
+    if(!constant.isParameter) return null;
+
+    int result = gl.getParameter(constant.glEnum);
+    String glEnumStringValue;
+
+    if (result is int) {
+      List<WebglConstant> constants = Context.webglConstants.values
+          .where((c) => c.glEnum == result).toList();
+      if (constants.length == 1 && constants[0].glEnum > 1) { // >1 pour ne pas avoir de confusion dans les enums possibles
+        glEnumStringValue = Context.webglConstants.values
+            .firstWhere((c) => c.glEnum == constants[0].glEnum)
+            .glName;
+      }else if(constants.length > 1){
+        throw new Exception('getParameter constants > 1 for parameter ${constant.glName}');
       }
-
-      WebglParameter param = new WebglParameter()
-        ..glName = Context.webglConstants.values.firstWhere((c) => c.glEnum == glEnum).glName
-        ..glValue = glEnumStringValue != null ? glEnumStringValue : result
-        ..glType = result.runtimeType.toString()
-        ..glEnum = glEnum;
-      return param;
     }
 
-    return null;
+    WebglParameter param = new WebglParameter()
+      ..glName = constant.glName
+      ..glValue = glEnumStringValue != null ? glEnumStringValue : result
+      ..glType = result.runtimeType.toString()
+      ..glEnum = constant.glEnum;
+    return param;
   }
 
   void testGetParameter() {

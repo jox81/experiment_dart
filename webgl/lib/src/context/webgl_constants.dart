@@ -1,12 +1,14 @@
 import 'dart:mirrors';
 import 'dart:web_gl';
-
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 
 class WebglConstants{
 
   static WebglConstants _instance;
   WebglConstants._init();
+
+
   static WebglConstants instance(){
     if(_instance == null){
       _instance = new WebglConstants._init();
@@ -22,11 +24,9 @@ class WebglConstants{
     return _values;
   }
 
-  void logValues() {
+  void logConstants() {
     Utils.log('Webgl Constants',(){
-      values.forEach((c) {
-        print('${c.glName} = ${c.glEnum}');
-      });
+      values.forEach((c)=> print(c));
     });
   }
 
@@ -49,10 +49,28 @@ class WebglConstants{
             ..glEnum = glEnum
             ..glName = name;
 
+          constant.isParameter = isParameter(glEnum);
+
           _values.add(constant);
         }
       }
     }
+  }
+
+  bool isParameter(int glEnum) {
+    gl.getParameter(glEnum);
+    bool isParameter = gl.getError() != RenderingContext.INVALID_ENUM;
+    return isParameter;
+  }
+
+  List<WebglConstant> get parameters {
+    return values.where((c)=> c.isParameter == true);
+  }
+
+  void logParameters() {
+    Utils.log('Webgl Parameters',(){
+      parameters.forEach((c)=> print(c));
+    });
   }
 }
 
@@ -60,5 +78,12 @@ class WebglConstant {
   int glEnum;
   String glName;
 
+  bool isParameter;
+
   WebglConstant();
+
+  @override
+  String toString() {
+    return '${glName} = ${glEnum} ${isParameter?'| isParameter' : ''}';
+  }
 }

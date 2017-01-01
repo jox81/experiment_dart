@@ -45,7 +45,6 @@ class Context{
   static void init(CanvasElement canvas, {bool enableExtensions:false, bool logInfos : false}){
     _initGl(canvas);
     _initWebglConstants();
-    _initWebglParameters();
 
     if(enableExtensions){
       renderSettings.enableExtensions(log: logInfos);
@@ -59,8 +58,8 @@ class Context{
   static void _logInfos() {
     Context.contextAttributs.logValues();
     _renderSetting.logSupportedExtensions();
-    Context.webglConstants.logValues();
-    Context.webglParameters.logPossibleParameters();
+    Context.webglConstants.logConstants();
+    Context.webglConstants.logParameters();
     Context.webglParameters.logValues();
 
     Context.webglParameters.testGetParameter();
@@ -68,10 +67,6 @@ class Context{
 
   static void _initWebglConstants() {
     webglConstants.initWebglConstants();
-  }
-
-  static void _initWebglParameters() {
-    webglParameters.initWebglParameters();
   }
 
   static void _initGl(CanvasElement canvas) {
@@ -115,7 +110,6 @@ class RenderSetting{
       gl.enable(RenderingContext.CULL_FACE);
       gl.cullFace(RenderingContext.BACK);
     }
-    
   }
 
   void enableDepth(bool enable) {

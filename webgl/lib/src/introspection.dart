@@ -199,6 +199,26 @@ class IntrospectionManager {
 //      print('isFactoryConstructor : ${decl.isFactoryConstructor}');
     }
   }
+
+  void getMehtodsName(Type type, {bool log : true}){
+    List<String> methodNames = new List();
+
+    ClassMirror classMirror = reflectClass(type);
+    for (DeclarationMirror decl in classMirror.instanceMembers.values) {
+      if (decl is MethodMirror) {
+        String simpleName = MirrorSystem.getName(decl.simpleName);
+        methodNames.add(simpleName);
+      }
+    }
+
+    if(log) {
+      Utils.log('Webgl Constants', () {
+        methodNames.forEach((n) {
+          print('$n');
+        });
+      });
+    }
+  }
 }
 
 abstract class IEditElement {
