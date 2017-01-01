@@ -2,6 +2,8 @@
 88 parametres
 145 methodes
 
+https://www.khronos.org/registry/webgl/specs/latest/1.0/
+
 ///////////> Get
 getError
 getParameter | context
