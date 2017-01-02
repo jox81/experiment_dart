@@ -22,43 +22,43 @@ class WebGLProgram{
   WebGl.Program webGLProgram;
 
   WebGLProgram(){
-    webGLProgram = gl.createProgram();
+    webGLProgram = gl.ctx.createProgram();
   }
 
   WebGl.ActiveInfo getActiveAttrib(int activeAttributIndex){
-    return gl.getActiveAttrib(webGLProgram, activeAttributIndex);
+    return gl.ctx.getActiveAttrib(webGLProgram, activeAttributIndex);
   }
 
   WebGl.ActiveInfo getActiveUniform(int activeUniformIndex){
-    return gl.getActiveUniform(webGLProgram, activeUniformIndex);
+    return gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex);
   }
 
   int getAttribLocation(String variableName){
-    return gl.getAttribLocation(webGLProgram, variableName);
+    return gl.ctx.getAttribLocation(webGLProgram, variableName);
   }
 
   String get infoLog{
-    return gl.getProgramInfoLog(webGLProgram);
+    return gl.ctx.getProgramInfoLog(webGLProgram);
   }
 
   WebGl.UniformLocation getUniformLocation(String variableName){
-    return gl.getUniformLocation(webGLProgram,variableName);
+    return gl.ctx.getUniformLocation(webGLProgram,variableName);
   }
 
   String getUniform(WebGl.UniformLocation location){
-    return gl.getUniform(webGLProgram, location);
+    return gl.ctx.getUniform(webGLProgram, location);
   }
 
   List<WebGl.Shader> get attachedShaders{
-    return gl.getAttachedShaders(webGLProgram);
+    return gl.ctx.getAttachedShaders(webGLProgram);
   }
 
   void attachShader(WebGLShader shader){
-    gl.attachShader(webGLProgram, shader.webGLShader);
+    gl.ctx.attachShader(webGLProgram, shader.webGLShader);
   }
 
   void link(){
-    gl.linkProgram(webGLProgram);
+    gl.ctx.linkProgram(webGLProgram);
 
     if (!linkStatus) {
       print(infoLog);
@@ -67,29 +67,29 @@ class WebGLProgram{
   }
 
   void use(){
-    gl.useProgram(webGLProgram);
+    gl.ctx.useProgram(webGLProgram);
   }
 
   dynamic getParameter(ProgramParameterGlEnum parameter){
-    return gl.getProgramParameter(webGLProgram, parameter.index);
+    return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
   }
   bool get deleteStatus{
-    return gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
+    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
   }
   bool get linkStatus{
-    return gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
+    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
   }
   bool get validateStatus{
-    return gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
+    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
   }
   int get attachedShadersCount{
-    return gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
+    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
   }
   int get activeAttributsCount{
-    return gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
+    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
   }
   int get activeUnifromsCount{
-    return gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
+    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
   }
 
   //Custom

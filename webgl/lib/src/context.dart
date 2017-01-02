@@ -5,10 +5,10 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
-import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
-RenderingContext gl;
+WebGLRenderingContext gl;
 
 class Context{
 
@@ -43,7 +43,7 @@ class Context{
   static const bool debugging = false;
 
   static void init(CanvasElement canvas, {bool enableExtensions:false, bool logInfos : false}){
-    _initGl(canvas);
+    gl = new WebGLRenderingContext.create(canvas);
     _initWebglConstants();
 
     if(enableExtensions){
@@ -69,34 +69,6 @@ class Context{
     webglConstants.initWebglConstants();
   }
 
-  static void _initGl(CanvasElement canvas) {
-    List<String> names = [
-      "webgl",
-      "experimental-webgl",
-      "webkit-3d",
-      "moz-webgl"
-    ];
-    var options = {
-      'preserveDrawingBuffer': true,
-    };
-
-    for (int i = 0; i < names.length; ++i) {
-      try {
-        gl = canvas.getContext(names[i], options); //Normal context
-        if (debugging) {
-          gl = new DebugRenderingContext(gl);
-        }
-      } catch (e) {}
-      if (gl != null) {
-        break;
-      }
-    }
-    if (gl == null) {
-      window.alert("Could not initialise WebGL");
-      return null;
-    }
-  }
-
   static ContextAttributs get contextAttributs => ContextAttributs.instance();
   static WebglConstants get webglConstants => WebglConstants.instance();
   static WebglParameters get webglParameters => WebglParameters.instance();
@@ -107,22 +79,21 @@ class RenderSetting{
 
   void showBackFace(bool visible){
     if(!visible) {
-      gl.enable(RenderingContext.CULL_FACE);
-      gl.cullFace(RenderingContext.BACK);
+      gl.cullFace = true;
+      gl.cullFaceMode = CullFaceMode.BACK;
     }
   }
 
   void enableDepth(bool enable) {
     if(enable) {
-      gl.clear(RenderingContext.DEPTH_BUFFER_BIT);
-      gl.enable(DEPTH_TEST);
+      gl.clear([ClearBufferMask.DEPTH_BUFFER_BIT]);
+      gl.depthTest = true;
     }
   }
 
   void logSupportedExtensions(){
     Utils.log('Supported extensions',(){
-      List<String> supportedExtensions = gl.getSupportedExtensions();
-      for(String extension in supportedExtensions){
+      for(String extension in gl.supportedExtensions){
         print(extension);
       }
     });

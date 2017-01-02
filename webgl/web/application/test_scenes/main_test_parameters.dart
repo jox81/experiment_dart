@@ -12,6 +12,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 Future main() async {
   WebglTestParameters webgl01 =
@@ -49,8 +50,8 @@ class WebglTestParameters {
     setupCamera();
     setupMeshes();
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(RenderingContext.DEPTH_TEST);
+    gl.clearColor = new Vector4(0.0, 0.0, 0.0, 1.0);
+    gl.depthTest = true;
   }
 
   void setupCamera() {
@@ -68,9 +69,9 @@ class WebglTestParameters {
   }
 
   void render({num time: 0.0}) {
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear(
-        RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+        [ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     for (Model model in models) {
       model.render();

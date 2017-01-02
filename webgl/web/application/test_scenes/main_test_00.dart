@@ -7,6 +7,10 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
+import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 void main() {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
@@ -15,12 +19,12 @@ void main() {
 
 class Webgl01 {
 
-  Buffer vertexBuffer;
-  Buffer indicesBuffer;
+  WebGLBuffer vertexBuffer;
+  WebGLBuffer indicesBuffer;
 
   List<Model> models = new List();
 
-  Program shaderProgram;
+  WebGLProgram shaderProgram;
 
   int vertexPositionAttribute;
 
@@ -38,25 +42,12 @@ class Webgl01 {
     initBuffers();
 
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(RenderingContext.DEPTH_TEST);
+    gl.clearColor = new Vector4(0.0, 0.0, 0.0, 1.0);
+    gl.depthTest = true;
   }
 
   void initGL(CanvasElement canvas) {
-
-    var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
-    for (var i = 0; i < names.length; ++i) {
-      try {
-        gl = canvas.getContext(names[i]);
-      } catch (e) {}
-      if (gl != null) {
-        break;
-      }
-    }
-    if (gl == null) {
-      window.alert("Could not initialise WebGL");
-      return null;
-    }
+    Context.init(canvas,enableExtensions:true,logInfos:false);
   }
 
   setupCamera() {
@@ -81,29 +72,29 @@ class Webgl01 {
   }
 
   void initShaders() {
-    Shader fragmentShader = _getShader(gl, "shader-fs");
-    Shader vertexShader = _getShader(gl, "shader-vs");
+    WebGLShader fragmentShader = _getShader(gl, "shader-fs");
+    WebGLShader vertexShader = _getShader(gl, "shader-vs");
 
-    shaderProgram = gl.createProgram();
-    gl.attachShader(shaderProgram, vertexShader);
-    gl.attachShader(shaderProgram, fragmentShader);
-    gl.linkProgram(shaderProgram);
+    shaderProgram = new WebGLProgram();
+    shaderProgram.attachShader(vertexShader);
+    shaderProgram.attachShader(fragmentShader);
+    shaderProgram.link();
 
-    if (!gl.getProgramParameter(shaderProgram, RenderingContext.LINK_STATUS)) {
+    if (!shaderProgram.linkStatus) {
       window.alert("Could not initialise shaders");
     }
 
-    gl.useProgram(shaderProgram);
+    shaderProgram.use();
 
     vertexPositionAttribute =
-        gl.getAttribLocation(shaderProgram, "aVertexPosition");
-    gl.enableVertexAttribArray(vertexPositionAttribute);
+        gl.ctx.getAttribLocation(shaderProgram.webGLProgram, "aVertexPosition");
+    gl.ctx.enableVertexAttribArray(vertexPositionAttribute);
 
-    pMatrixUniform = gl.getUniformLocation(shaderProgram, "uPMatrix");
-    mvMatrixUniform = gl.getUniformLocation(shaderProgram, "uMVMatrix");
+    pMatrixUniform = gl.ctx.getUniformLocation(shaderProgram.webGLProgram, "uPMatrix");
+    mvMatrixUniform = gl.ctx.getUniformLocation(shaderProgram.webGLProgram, "uMVMatrix");
   }
 
-  _getShader(gl, id) {
+  _getShader(WebGLRenderingContext gl, id) {
     ScriptElement shaderScript = document.getElementById(id);
     if (shaderScript == null) {
       return null;
@@ -111,20 +102,20 @@ class Webgl01 {
 
     String shaderSource = shaderScript.text;
 
-    Shader shader;
+    WebGLShader shader;
     if (shaderScript.type == "x-shader/x-fragment") {
-      shader = gl.createShader(RenderingContext.FRAGMENT_SHADER);
+      shader = new WebGLShader(ShaderType.FRAGMENT_SHADER);
     } else if (shaderScript.type == "x-shader/x-vertex") {
-      shader = gl.createShader(RenderingContext.VERTEX_SHADER);
+      shader = new WebGLShader(ShaderType.VERTEX_SHADER);
     } else {
       return null;
     }
 
-    gl.shaderSource(shader, shaderSource);
-    gl.compileShader(shader);
+    shader.source = shaderSource;
+    shader.compile();
 
-    if (!gl.getShaderParameter(shader, RenderingContext.COMPILE_STATUS)) {
-      window.alert(gl._getShaderInfoLog(shader));
+    if (!shader.compileStatus) {
+      window.alert(gl.ctx.getShaderInfoLog(shader.webGLShader));
       return null;
     }
 
@@ -135,41 +126,41 @@ class Webgl01 {
     List<num> vertices = models[0].mesh.vertices;
     List<int> indices = models[0].mesh.indices;
 
-    vertexBuffer = gl.createBuffer();
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexBuffer);
+    vertexBuffer = new WebGLBuffer();
+    gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(
-        RenderingContext.ARRAY_BUFFER, new Float32List.fromList(vertices), RenderingContext.STATIC_DRAW);
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, null);
+        BufferType.ARRAY_BUFFER, new Float32List.fromList(vertices), UsageType.STATIC_DRAW);
+    gl.bindBuffer(BufferType.ARRAY_BUFFER, null);
 
-    indicesBuffer = gl.createBuffer();
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, indicesBuffer);
-    gl.bufferData(RenderingContext.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
-        RenderingContext.STATIC_DRAW);
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, null);
+    indicesBuffer = new WebGLBuffer();
+    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
+        UsageType.STATIC_DRAW);
+    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, null);
   }
 
   /// Rendering part
   ///
   void _setMatrixUniforms() {
-    gl.uniformMatrix4fv(pMatrixUniform, false, Context.mainCamera.perspectiveMatrix.storage);
-    gl.uniformMatrix4fv(mvMatrixUniform, false, Context.mvMatrix.storage);
+    gl.ctx.uniformMatrix4fv(pMatrixUniform, false, Context.mainCamera.perspectiveMatrix.storage);
+    gl.ctx.uniformMatrix4fv(mvMatrixUniform, false, Context.mvMatrix.storage);
   }
 
   void render({num time : 0.0}) {
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.clear([ClearBufferMask.COLOR_BUFFER_BIT,ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     Context.mvMatrix = Context.mainCamera.lookAtMatrix * models[0].transform;
 
-    gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexBuffer);
-    gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
+    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
-    gl.vertexAttribPointer(
+    gl.ctx.vertexAttribPointer(
         vertexPositionAttribute, models[0].mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
 
     _setMatrixUniforms();
 
-    gl.drawElements(
+    gl.ctx.drawElements(
         RenderingContext.TRIANGLES, models[0].mesh.indices.length, RenderingContext.UNSIGNED_SHORT, 0);
 
     window.requestAnimationFrame((num time) {

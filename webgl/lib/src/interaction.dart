@@ -188,7 +188,7 @@ class Interaction {
   void debugInfo(num posX, num posY, num posZ) {
     var colorPicked = new Uint8List(4);
     //Todo : readPixels doesn't work in dartium...
-    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, colorPicked);
+//    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, colorPicked);
     elementDebugInfoText.text = '[$posX, $posY, $posZ] : $colorPicked';
   }
 }

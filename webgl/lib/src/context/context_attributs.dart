@@ -21,7 +21,7 @@ class ContextAttributs{
   bool get stencil => values['alpha'];
 
   Map get values {
-    _ReturnedDictionary contextParameters = gl.getContextAttributes();
+    _ReturnedDictionary contextParameters = gl.ctx.getContextAttributes();
     return contextParameters.toMap;
   }
 

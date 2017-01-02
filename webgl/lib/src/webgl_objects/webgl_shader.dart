@@ -81,23 +81,23 @@ class WebGLShader{
   WebGl.Shader webGLShader;
 
   WebGLShader(ShaderType shaderType){
-    webGLShader = gl.createShader(shaderType.index);
+    webGLShader = gl.ctx.createShader(shaderType.index);
   }
 
   String get infoLog{
-    return gl.getShaderInfoLog(webGLShader);
+    return gl.ctx.getShaderInfoLog(webGLShader);
   }
 
   String get source{
-    return gl.getShaderSource(webGLShader);
+    return gl.ctx.getShaderSource(webGLShader);
   }
 
-  void setSource(String shaderSource){
-    gl.shaderSource(webGLShader, shaderSource);
+  set source(String shaderSource){
+    gl.ctx.shaderSource(webGLShader, shaderSource);
   }
 
   void compile(){
-    gl.compileShader(webGLShader);
+    gl.ctx.compileShader(webGLShader);
 
     if (!compileStatus) {
       print(infoLog);
@@ -106,26 +106,26 @@ class WebGLShader{
   }
 
   dynamic getShaderParameter(ShaderParameterGlEnum parameter){
-    dynamic result =  gl.getShaderParameter(webGLShader,parameter.index);
+    dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
     return result;
   }
 
   bool get compileStatus{
-    return gl.getShaderParameter(webGLShader,ShaderParameterGlEnum.COMPILE_STATUS.index);
+    return gl.ctx.getShaderParameter(webGLShader,ShaderParameterGlEnum.COMPILE_STATUS.index);
   }
 
   //Why no webGLShader ref ? >>>
 
   WebGl.ShaderPrecisionFormat getShaderPrecisionFormat(ShaderType shaderType, PrecisionType precisionType){
-    return gl.getShaderPrecisionFormat(shaderType.index, precisionType.index);
+    return gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index);
   }
 
   dynamic getVertexAttrib(int vertexAttributePosition, VertexAttribGlEnum vertexAttribGlEnum){
-    return gl.getVertexAttrib(vertexAttributePosition,vertexAttribGlEnum.index);
+    return gl.ctx.getVertexAttrib(vertexAttributePosition,vertexAttribGlEnum.index);
   }
 
   int getVertexAttribOffset(int vertexAttributePosition){
-    return gl.getVertexAttribOffset(vertexAttributePosition, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
+    return gl.ctx.getVertexAttribOffset(vertexAttributePosition, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
   }
 
 }

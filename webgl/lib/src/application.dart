@@ -9,6 +9,7 @@ import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/webgl_debug_js.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 enum AxisType { view, x, y, z, any }
 enum ToolType { select, move, rotate, scale }
@@ -104,8 +105,8 @@ class Application {
 
     Context.init(canvas);
 
-    gl.clear(RenderingContext.COLOR_BUFFER_BIT);
-    gl.frontFace(RenderingContext.CCW);
+    gl.clear([ClearBufferMask.COLOR_BUFFER_BIT]);
+    gl.frontFace = FaceMode.CCW;
 
     Context.renderSettings.enableDepth(true);
     Context.renderSettings.showBackFace(true);
@@ -123,7 +124,7 @@ class Application {
       gl.canvas.width = displayWidth;
       gl.canvas.height = displayHeight;
 
-      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     }
   }
 
@@ -134,7 +135,7 @@ class Application {
   }
 
   void _render({num time: 0.0}) {
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     clear(_currentScene.backgroundColor);
 
     _currentScene.updateUserInput();
@@ -147,8 +148,7 @@ class Application {
   }
 
   void clear(Vector4 color) {
-    gl.clearColor(color.r, color.g, color.b, color.a);
-    gl.clear(
-        RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+    gl.clearColor = color;
+    gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
   }
 }

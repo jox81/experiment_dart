@@ -16,7 +16,7 @@ class WebGLBuffer{
   WebGl.Buffer webGLBuffer;
 
   WebGLBuffer(){
-    webGLBuffer = gl.createBuffer();
+    webGLBuffer = gl.ctx.createBuffer();
   }
 
 }

@@ -10,6 +10,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewFrameBuffer extends Scene{
 
@@ -32,8 +33,8 @@ class SceneViewFrameBuffer extends Scene{
     light = directionalLight;
 
     //
-    Texture textureEmpty = TextureUtils.createRenderedTexture();
-    Texture textureCrate =
+    WebGLTexture textureEmpty = TextureUtils.createRenderedTexture();
+    WebGLTexture textureCrate =
     await TextureUtils.getTextureFromFile("./images/crate.gif");
 
     MaterialBaseTextureNormal materialBaseTextureNormal =

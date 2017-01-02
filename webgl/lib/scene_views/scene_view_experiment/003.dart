@@ -6,6 +6,8 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
 import 'dart:web_gl';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future<Model> experiment() async {
 
@@ -38,7 +40,7 @@ Future<Model> experiment() async {
 
   num shaderTime = 0.0;
 
-  Texture texture = await TextureUtils.getTextureFromFile("./images/crate.gif");
+  WebGLTexture texture = await TextureUtils.getTextureFromFile("./images/crate.gif");
 
   //Material
   List<String> buffersNames = ['aVertexPosition', 'aVertexIndice'];
@@ -51,8 +53,8 @@ Future<Model> experiment() async {
     };
   materialCustom.setShaderUniformsVariables = (Mesh mesh) {
       materialCustom.setShaderUniformWithName("time", shaderTime);
-      gl.activeTexture(RenderingContext.TEXTURE0);
-      gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
+      gl.ctx.activeTexture(RenderingContext.TEXTURE0);
+      gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
       materialCustom.setShaderUniformWithName("sTexture", 0);
     };
 

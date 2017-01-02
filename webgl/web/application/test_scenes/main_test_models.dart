@@ -9,6 +9,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 Texture textureCrate;
 Map susanJson;
@@ -42,28 +43,15 @@ class Webgl01 {
   }
 
   void initGL(CanvasElement canvas) {
-
-    var names = ["webgl", "experimental-webgl", "webkit-3d", "moz-webgl"];
-    for (var i = 0; i < names.length; ++i) {
-      try {
-        gl = canvas.getContext(names[i]);
-      } catch (e) {}
-      if (gl != null) {
-        break;
-      }
-    }
-    if (gl == null) {
-      window.alert("Could not initialise WebGL");
-      return null;
-    }
+    Context.init(canvas,enableExtensions:true,logInfos:false);
   }
 
   void setup(){
     setupCamera();
     setupMeshes();
 
-    gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.enable(RenderingContext.DEPTH_TEST);
+    gl.clearColor = new Vector4(0.0, 0.0, 0.0, 1.0);
+    gl.depthTest = true;
   }
 
   void setupCamera()  {
@@ -228,8 +216,8 @@ class Webgl01 {
   }
 
   void render({num time : 0.0}) {
-    gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     for(Model model in models){
       model.render();

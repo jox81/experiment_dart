@@ -6,6 +6,8 @@ import 'package:webgl/src/light.dart';
 
 import 'dart:web_gl';
 import 'package:webgl/src/shaders.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 typedef void SetShaderVariables(Mesh mesh);
 
@@ -151,7 +153,7 @@ class MaterialBaseTexture extends Material {
   final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
   //External parameters
-  Texture texture;
+  WebGLTexture texture;
 
   MaterialBaseTexture._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);
@@ -166,8 +168,8 @@ class MaterialBaseTexture extends Material {
         'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
     setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
-    gl.activeTexture(RenderingContext.TEXTURE0);
-    gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
+    gl.ctx.activeTexture(RenderingContext.TEXTURE0);
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
   }
@@ -192,7 +194,7 @@ class MaterialBaseTextureNormal extends Material {
   ];
 
   //External Parameters
-  Texture texture;
+  WebGLTexture texture;
   Vector3 ambientColor;
   DirectionalLight directionalLight;
   bool useLighting = true;
@@ -210,8 +212,8 @@ class MaterialBaseTextureNormal extends Material {
         'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
     setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
-    gl.activeTexture(RenderingContext.TEXTURE0);
-    gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
+    gl.ctx.activeTexture(RenderingContext.TEXTURE0);
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
 

@@ -7,10 +7,12 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 class TextureUtils {
 
-  static Future<Texture> getTextureFromFile(String fileUrl, {bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
+  static Future<WebGLTexture> getTextureFromFile(String fileUrl, {bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
     Completer completer = new Completer();
 
     ImageElement image;
@@ -29,84 +31,84 @@ class TextureUtils {
   //  gl.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.FLOAT, textureImage);
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-  static Texture createColorTextureFromElement(ImageElement image,{bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
-    Texture texture = gl.createTexture();
-    gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
+  static WebGLTexture createColorTextureFromElement(ImageElement image,{bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
+    WebGLTexture texture = new WebGLTexture();
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
 
-    gl.pixelStorei(RenderingContext.UNPACK_FLIP_Y_WEBGL, 1);
+    gl.ctx.pixelStorei(RenderingContext.UNPACK_FLIP_Y_WEBGL, 1);
 
     int WRAP_S = repeatU ? (mirrorU ? RenderingContext.MIRRORED_REPEAT:RenderingContext.REPEAT):RenderingContext.CLAMP_TO_EDGE;
     int WRAP_T = repeatV ? (mirrorV ? RenderingContext.MIRRORED_REPEAT:RenderingContext.REPEAT):RenderingContext.CLAMP_TO_EDGE;
 
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, WRAP_S);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, WRAP_T);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, WRAP_S);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, WRAP_T);
 
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.LINEAR);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.LINEAR);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.LINEAR);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.LINEAR);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, image);
+    gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, image);
 
-    gl.bindTexture(RenderingContext.TEXTURE_2D, null);
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, null);
 
     return texture;
   }
 
-  static Texture createColorTexture(int size) {
-    Texture texture = gl.createTexture();
-    gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
+  static WebGLTexture createColorTexture(int size) {
+    WebGLTexture texture = new WebGLTexture();
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
 
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, size, size, 0, RenderingContext.RGBA,
+    gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, size, size, 0, RenderingContext.RGBA,
         RenderingContext.UNSIGNED_BYTE, null);
 
-    gl.bindTexture(RenderingContext.TEXTURE_2D, null);
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, null);
 
     return texture;
   }
 
-  static Texture createDepthTexture(int size) {
-    var depthTexture = gl.createTexture();
-    gl.bindTexture(RenderingContext.TEXTURE_2D, depthTexture);
+  static WebGLTexture createDepthTexture(int size) {
+    WebGLTexture depthTexture = new WebGLTexture();
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, depthTexture);
+    
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
+    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
 
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
-    gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
+    gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.DEPTH_COMPONENT, size, size, 0, RenderingContext.DEPTH_COMPONENT, RenderingContext.UNSIGNED_BYTE, null);
 
-    gl.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.DEPTH_COMPONENT, size, size, 0, RenderingContext.DEPTH_COMPONENT, RenderingContext.UNSIGNED_BYTE, null);
-
-    gl.bindTexture(RenderingContext.TEXTURE_2D, null);
+    gl.bindTexture(TextureTargetType.TEXTURE_2D, null);
 
     return depthTexture;
   }
 
   static Renderbuffer createRenderBuffer(int size) {
-    Renderbuffer renderBuffer = gl.createRenderbuffer();
+    Renderbuffer renderBuffer = gl.ctx.createRenderbuffer();
 
-    gl.bindRenderbuffer(RenderingContext.RENDERBUFFER, renderBuffer);
-    gl.renderbufferStorage(RenderingContext.RENDERBUFFER, RenderingContext.DEPTH_COMPONENT16, size, size);
-    gl.bindRenderbuffer(RenderingContext.RENDERBUFFER, null);
+    gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, renderBuffer);
+    gl.ctx.renderbufferStorage(RenderingContext.RENDERBUFFER, RenderingContext.DEPTH_COMPONENT16, size, size);
+    gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, null);
 
     return renderBuffer;
   }
 
-  static Framebuffer createFrameBuffer(Texture colorTexture, Renderbuffer depthRenderbuffer) {
-    Framebuffer framebuffer = gl.createFramebuffer();
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
+  static Framebuffer createFrameBuffer(WebGLTexture colorTexture, Renderbuffer depthRenderbuffer) {
+    Framebuffer framebuffer = gl.ctx.createFramebuffer();
+    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
 
-    gl.framebufferTexture2D(
-        RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture, 0);
-    gl.framebufferRenderbuffer(
+    gl.ctx.framebufferTexture2D(
+        RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture.webGLTexture, 0);
+    gl.ctx.framebufferRenderbuffer(
         RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.RENDERBUFFER, depthRenderbuffer);
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
 
-    if (gl.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) != RenderingContext.FRAMEBUFFER_COMPLETE) {
+    if (gl.ctx.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) != RenderingContext.FRAMEBUFFER_COMPLETE) {
       print("createRenderBuffer : this combination of attachments does not work");
       return null;
     }
@@ -114,16 +116,16 @@ class TextureUtils {
     return framebuffer;
   }
 
-  static Framebuffer createFrameBufferWithDepthTexture(Texture colorTexture, Texture depthTexture) {
-    Framebuffer framebuffer = gl.createFramebuffer();
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
+  static Framebuffer createFrameBufferWithDepthTexture(WebGLTexture colorTexture, WebGLTexture depthTexture) {
+    Framebuffer framebuffer = gl.ctx.createFramebuffer();
+    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
 
-    gl.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture, 0);
-    gl.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.TEXTURE_2D, depthTexture, 0);
+    gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture.webGLTexture, 0);
+    gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.TEXTURE_2D, depthTexture.webGLTexture, 0);
 
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
 
-    if (gl.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) != RenderingContext.FRAMEBUFFER_COMPLETE) {
+    if (gl.ctx.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) != RenderingContext.FRAMEBUFFER_COMPLETE) {
       print("createRenderBuffer : this combination of attachments does not work");
       return null;
     }
@@ -132,18 +134,18 @@ class TextureUtils {
   }
 
   ///
-  static Texture createRenderedTexture({int size: 512}) {
+  static WebGLTexture createRenderedTexture({int size: 512}) {
 
     //backup camera
     Camera baseCam = Context.mainCamera;
 
-    Texture colorTexture = createColorTexture(size);
+    WebGLTexture colorTexture = createColorTexture(size);
     Renderbuffer depthRenderbuffer = createRenderBuffer(size);
-//    Texture depthTexture = createDepthTexture(size);
+//    WebGLTexture depthTexture = createDepthTexture(size);
     Framebuffer framebuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
 //    Framebuffer framebuffer = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
+    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
 
     // draw something in the buffer
     // ...
@@ -156,9 +158,9 @@ class TextureUtils {
       Context.mainCamera = cameraTexture;
 
       //Each frameBuffer component will be filled up
-      gl.clearColor(.5, .5, .5, 1); // green;
-      gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-      gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+      gl.ctx.clearColor(.5, .5, .5, 1); // green;
+      gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
       CubeModel cube = new CubeModel();
       cube.render();
@@ -175,7 +177,7 @@ class TextureUtils {
 //    readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
 
     // Unbind the framebuffer
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
 
     //reset camera
     Context.mainCamera = baseCam;
@@ -193,10 +195,10 @@ class TextureUtils {
     ///However there are some methods for "packing" floats into RGBA/UNSIGNED_BYTE described here:
     ///http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/webgl.html
 
-    print('IMPLEMENTATION_COLOR_READ_FORMAT : ${gl.getParameter(RenderingContext.IMPLEMENTATION_COLOR_READ_FORMAT)}');
-    print('IMPLEMENTATION_COLOR_READ_TYPE : ${gl.getParameter(RenderingContext.IMPLEMENTATION_COLOR_READ_TYPE)}');
+    print('IMPLEMENTATION_COLOR_READ_FORMAT : ${gl.ctx.getParameter(RenderingContext.IMPLEMENTATION_COLOR_READ_FORMAT)}');
+    print('IMPLEMENTATION_COLOR_READ_TYPE : ${gl.ctx.getParameter(RenderingContext.IMPLEMENTATION_COLOR_READ_TYPE)}');
 
-    gl.readPixels(
+    gl.ctx.readPixels(
         rectangle.left,
         rectangle.top,
         rectangle.width,
