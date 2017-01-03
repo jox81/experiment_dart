@@ -1,9 +1,9 @@
-import 'dart:web_gl' as WebGl;
+import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 class WebGLActiveInfo{
   ShaderVariableType shaderVariableType;
-  WebGl.ActiveInfo activeInfo;
+  WebGL.ActiveInfo activeInfo;
   WebGLActiveInfo(this.activeInfo) {}
 }

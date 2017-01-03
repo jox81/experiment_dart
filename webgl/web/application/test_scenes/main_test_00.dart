@@ -115,7 +115,7 @@ class Webgl01 {
     shader.compile();
 
     if (!shader.compileStatus) {
-      window.alert(gl.ctx.getShaderInfoLog(shader.webGLShader));
+      window.alert(shader.infoLog);
       return null;
     }
 

@@ -7,6 +7,8 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
@@ -88,27 +90,27 @@ class TextureUtils {
     return depthTexture;
   }
 
-  static Renderbuffer createRenderBuffer(int size) {
-    Renderbuffer renderBuffer = gl.ctx.createRenderbuffer();
+  static WebGLRenderBuffer createRenderBuffer(int size) {
+    WebGLRenderBuffer renderBuffer = new WebGLRenderBuffer();
 
-    gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, renderBuffer);
+    gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, renderBuffer.webGLRenderBuffer);
     gl.ctx.renderbufferStorage(RenderingContext.RENDERBUFFER, RenderingContext.DEPTH_COMPONENT16, size, size);
     gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, null);
 
     return renderBuffer;
   }
 
-  static Framebuffer createFrameBuffer(WebGLTexture colorTexture, Renderbuffer depthRenderbuffer) {
-    Framebuffer framebuffer = gl.ctx.createFramebuffer();
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
+  static WebGLFrameBuffer createFrameBuffer(WebGLTexture colorTexture, WebGLRenderBuffer depthRenderbuffer) {
+    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+    framebuffer.bind();
 
     gl.ctx.framebufferTexture2D(
         RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture.webGLTexture, 0);
     gl.ctx.framebufferRenderbuffer(
-        RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.RENDERBUFFER, depthRenderbuffer);
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+        RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.RENDERBUFFER, depthRenderbuffer.webGLRenderBuffer);
+    framebuffer.unBind();
 
-    if (gl.ctx.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) != RenderingContext.FRAMEBUFFER_COMPLETE) {
+    if (framebuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
       print("createRenderBuffer : this combination of attachments does not work");
       return null;
     }
@@ -116,16 +118,16 @@ class TextureUtils {
     return framebuffer;
   }
 
-  static Framebuffer createFrameBufferWithDepthTexture(WebGLTexture colorTexture, WebGLTexture depthTexture) {
-    Framebuffer framebuffer = gl.ctx.createFramebuffer();
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
+  static WebGLFrameBuffer createFrameBufferWithDepthTexture(WebGLTexture colorTexture, WebGLTexture depthTexture) {
+    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+    framebuffer.bind();
 
     gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture.webGLTexture, 0);
     gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.TEXTURE_2D, depthTexture.webGLTexture, 0);
 
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+    framebuffer.unBind();
 
-    if (gl.ctx.checkFramebufferStatus(RenderingContext.FRAMEBUFFER) != RenderingContext.FRAMEBUFFER_COMPLETE) {
+    if (framebuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
       print("createRenderBuffer : this combination of attachments does not work");
       return null;
     }
@@ -140,12 +142,12 @@ class TextureUtils {
     Camera baseCam = Context.mainCamera;
 
     WebGLTexture colorTexture = createColorTexture(size);
-    Renderbuffer depthRenderbuffer = createRenderBuffer(size);
+    WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
 //    WebGLTexture depthTexture = createDepthTexture(size);
-    Framebuffer framebuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
+    WebGLFrameBuffer framebuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
 //    Framebuffer framebuffer = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, framebuffer);
+    framebuffer.bind();
 
     // draw something in the buffer
     // ...
@@ -158,7 +160,7 @@ class TextureUtils {
       Context.mainCamera = cameraTexture;
 
       //Each frameBuffer component will be filled up
-      gl.ctx.clearColor(.5, .5, .5, 1); // green;
+      gl.clearColor = new Vector4(.5, .5, .5, 1.0); // green;
       gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
       gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
@@ -177,7 +179,7 @@ class TextureUtils {
 //    readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
 
     // Unbind the framebuffer
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+    framebuffer.unBind();
 
     //reset camera
     Context.mainCamera = baseCam;

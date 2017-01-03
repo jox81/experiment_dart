@@ -1,12 +1,13 @@
 import 'dart:html';
 import 'dart:typed_data' as WebGlTypedData;
 import 'dart:typed_data';
-import 'dart:web_gl' as WebGl;
+import 'dart:web_gl' as WebGL;
 
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class UsageType {
@@ -14,67 +15,69 @@ class UsageType {
   const UsageType(this.index);
 
   static const UsageType STATIC_DRAW =
-      const UsageType(WebGl.RenderingContext.STATIC_DRAW);
+      const UsageType(WebGL.RenderingContext.STATIC_DRAW);
   static const UsageType DYNAMIC_DRAW =
-      const UsageType(WebGl.RenderingContext.DYNAMIC_DRAW);
+      const UsageType(WebGL.RenderingContext.DYNAMIC_DRAW);
   static const UsageType STREAM_DRAW =
-      const UsageType(WebGl.RenderingContext.STREAM_DRAW);
+      const UsageType(WebGL.RenderingContext.STREAM_DRAW);
 }
 
 class TextureTargetType{
   final index;
   const TextureTargetType(this.index);
 
-  static const TextureTargetType TEXTURE_2D = const TextureTargetType(WebGl.RenderingContext.TEXTURE_2D);
-  static const TextureTargetType TEXTURE_CUBE_MAP = const TextureTargetType(WebGl.RenderingContext.TEXTURE_CUBE_MAP);
+  static const TextureTargetType TEXTURE_2D = const TextureTargetType(WebGL.RenderingContext.TEXTURE_2D);
+  static const TextureTargetType TEXTURE_CUBE_MAP = const TextureTargetType(WebGL.RenderingContext.TEXTURE_CUBE_MAP);
 }
 
 class EnableCapType{
   final index;
   const EnableCapType(this.index);
 
-  static const EnableCapType BLEND = const EnableCapType(WebGl.RenderingContext.BLEND);
-  static const EnableCapType CULL_FACE = const EnableCapType(WebGl.RenderingContext.CULL_FACE);
-  static const EnableCapType DEPTH_TEST = const EnableCapType(WebGl.RenderingContext.DEPTH_TEST);
-  static const EnableCapType DITHER = const EnableCapType(WebGl.RenderingContext.DITHER);
-  static const EnableCapType POLYGON_OFFSET_FILL = const EnableCapType(WebGl.RenderingContext.POLYGON_OFFSET_FILL);
-  static const EnableCapType SAMPLE_ALPHA_TO_COVERAGE = const EnableCapType(WebGl.RenderingContext.SAMPLE_ALPHA_TO_COVERAGE);
-  static const EnableCapType SAMPLE_COVERAGE = const EnableCapType(WebGl.RenderingContext.SAMPLE_COVERAGE);
-  static const EnableCapType SCISSOR_TEST = const EnableCapType(WebGl.RenderingContext.SCISSOR_TEST);
-  static const EnableCapType STENCIL_TEST = const EnableCapType(WebGl.RenderingContext.STENCIL_TEST);
+  static const EnableCapType BLEND = const EnableCapType(WebGL.RenderingContext.BLEND);
+  static const EnableCapType CULL_FACE = const EnableCapType(WebGL.RenderingContext.CULL_FACE);
+  static const EnableCapType DEPTH_TEST = const EnableCapType(WebGL.RenderingContext.DEPTH_TEST);
+  static const EnableCapType DITHER = const EnableCapType(WebGL.RenderingContext.DITHER);
+  static const EnableCapType POLYGON_OFFSET_FILL = const EnableCapType(WebGL.RenderingContext.POLYGON_OFFSET_FILL);
+  static const EnableCapType SAMPLE_ALPHA_TO_COVERAGE = const EnableCapType(WebGL.RenderingContext.SAMPLE_ALPHA_TO_COVERAGE);
+  static const EnableCapType SAMPLE_COVERAGE = const EnableCapType(WebGL.RenderingContext.SAMPLE_COVERAGE);
+  static const EnableCapType SCISSOR_TEST = const EnableCapType(WebGL.RenderingContext.SCISSOR_TEST);
+  static const EnableCapType STENCIL_TEST = const EnableCapType(WebGL.RenderingContext.STENCIL_TEST);
 }
 
 class CullFaceMode{
   final index;
   const CullFaceMode(this.index);
 
-  static const CullFaceMode FRONT = const CullFaceMode(WebGl.RenderingContext.FRONT);
-  static const CullFaceMode BACK = const CullFaceMode(WebGl.RenderingContext.BACK);
-  static const CullFaceMode FRONT_AND_BACK = const CullFaceMode(WebGl.RenderingContext.FRONT_AND_BACK);
+  static const CullFaceMode FRONT = const CullFaceMode(WebGL.RenderingContext.FRONT);
+  static const CullFaceMode BACK = const CullFaceMode(WebGL.RenderingContext.BACK);
+  static const CullFaceMode FRONT_AND_BACK = const CullFaceMode(WebGL.RenderingContext.FRONT_AND_BACK);
 }
 
 class ClearBufferMask{
   final index;
   const ClearBufferMask(this.index);
 
-  static const ClearBufferMask DEPTH_BUFFER_BIT = const ClearBufferMask(WebGl.RenderingContext.DEPTH_BUFFER_BIT);
-  static const ClearBufferMask STENCIL_BUFFER_BIT = const ClearBufferMask(WebGl.RenderingContext.STENCIL_BUFFER_BIT);
-  static const ClearBufferMask COLOR_BUFFER_BIT = const ClearBufferMask(WebGl.RenderingContext.COLOR_BUFFER_BIT);
+  static const ClearBufferMask DEPTH_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.DEPTH_BUFFER_BIT);
+  static const ClearBufferMask STENCIL_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.STENCIL_BUFFER_BIT);
+  static const ClearBufferMask COLOR_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.COLOR_BUFFER_BIT);
 }
 
 class FaceMode{
   final index;
   const FaceMode(this.index);
 
-  static const FaceMode CW = const FaceMode(WebGl.RenderingContext.CW);
-  static const FaceMode CCW = const FaceMode(WebGl.RenderingContext.CCW);
+  static const FaceMode CW = const FaceMode(WebGL.RenderingContext.CW);
+  static const FaceMode CCW = const FaceMode(WebGL.RenderingContext.CCW);
 }
 
 class WebGLRenderingContext {
 
-  WebGl.RenderingContext ctx;
+  WebGL.RenderingContext ctx;
 
   CanvasElement get canvas => ctx.canvas;
+
+  Map get contextAttributes => (ctx.getContextAttributes() as WebGLDictionary).toMap;
 
   set frontFace(FaceMode mode){
     ctx.frontFace(mode.index);
@@ -108,7 +111,7 @@ class WebGLRenderingContext {
   WebGLRenderingContext._init(this.ctx);
 
   factory WebGLRenderingContext.create(CanvasElement canvas,{bool debug : false}){
-    WebGl.RenderingContext ctx;
+    WebGL.RenderingContext ctx;
 
     List<String> names = [
       "webgl",
@@ -187,12 +190,12 @@ class WebGLRenderingContext {
   }
 
 
-  Int32List get viewport => ctx.getParameter(WebGl.RenderingContext.MAX_VIEWPORT_DIMS);
+  Int32List get viewport => ctx.getParameter(WebGL.RenderingContext.MAX_VIEWPORT_DIMS);
   void setViewport(int x, int y, num width, num height) {
     assert(width >= 0 && height >= 0);
     ctx.viewport(x, y, width, height);
   }
 
-  Int32List get viewportDimensions => ctx.getParameter(WebGl.RenderingContext.MAX_VIEWPORT_DIMS);
+  Int32List get viewportDimensions => ctx.getParameter(WebGL.RenderingContext.MAX_VIEWPORT_DIMS);
 
 }

@@ -9,6 +9,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 WebGLTexture textureCrate;
@@ -67,15 +68,15 @@ class Webgl01 {
     models.add(quad);
 
     // Create a framebuffer and attach the texture.
-    Framebuffer fb = gl.ctx.createFramebuffer();
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, fb);
+    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+    framebuffer.bind();
     gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, textureCrate.webGLTexture, 0);
 
     // Now draw with the texture to the canvas
     // NOTE: We clear the canvas to red so we'll know
     // we're drawing the texture and not seeing the clear
     // from above.
-    gl.ctx.bindFramebuffer(RenderingContext.FRAMEBUFFER, null);
+    framebuffer.unBind();
     gl.clearColor = new Vector4(1.0, 0.0, 0.0, 1.0); // red
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT]);
     gl.ctx.drawArrays(RenderingContext.TRIANGLES, 0, 6);

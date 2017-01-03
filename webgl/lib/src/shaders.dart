@@ -19,7 +19,7 @@ class ProgramInfo{
 }
 
 class UtilsShader {
-  // Taken from the WebGl spec:
+  // Taken from the WebGL spec:
   // http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14
   static var enumTypes = {
     0x8B50: ShaderVariableType.FLOAT_VEC2,
