@@ -35,7 +35,7 @@ class TextureUtils {
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
   static WebGLTexture createColorTextureFromElement(ImageElement image,{bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
     WebGLTexture texture = new WebGLTexture();
-    gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
 
     gl.ctx.pixelStorei(RenderingContext.UNPACK_FLIP_Y_WEBGL, 1);
 
@@ -51,14 +51,14 @@ class TextureUtils {
 
     gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, image);
 
-    gl.bindTexture(TextureTargetType.TEXTURE_2D, null);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 
     return texture;
   }
 
   static WebGLTexture createColorTexture(int size) {
     WebGLTexture texture = new WebGLTexture();
-    gl.bindTexture(TextureTargetType.TEXTURE_2D, texture);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
 
     gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
     gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
@@ -69,14 +69,14 @@ class TextureUtils {
     gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, size, size, 0, RenderingContext.RGBA,
         RenderingContext.UNSIGNED_BYTE, null);
 
-    gl.bindTexture(TextureTargetType.TEXTURE_2D, null);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 
     return texture;
   }
 
   static WebGLTexture createDepthTexture(int size) {
     WebGLTexture depthTexture = new WebGLTexture();
-    gl.bindTexture(TextureTargetType.TEXTURE_2D, depthTexture);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, depthTexture);
     
     gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
     gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
@@ -85,7 +85,7 @@ class TextureUtils {
 
     gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.DEPTH_COMPONENT, size, size, 0, RenderingContext.DEPTH_COMPONENT, RenderingContext.UNSIGNED_BYTE, null);
 
-    gl.bindTexture(TextureTargetType.TEXTURE_2D, null);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 
     return depthTexture;
   }
