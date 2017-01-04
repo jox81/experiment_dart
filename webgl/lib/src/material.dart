@@ -65,7 +65,8 @@ abstract class Material extends IEditElement {
     WebGLProgram _program = new WebGLProgram()
     ..attachShader(vs)
     ..attachShader(fs)
-    ..link();
+    ..link()
+    ..validate();
 
     return _program;
   }

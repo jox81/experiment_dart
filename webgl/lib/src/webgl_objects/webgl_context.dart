@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
 
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/context.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
@@ -20,14 +19,6 @@ class UsageType {
       const UsageType(WebGL.RenderingContext.DYNAMIC_DRAW);
   static const UsageType STREAM_DRAW =
       const UsageType(WebGL.RenderingContext.STREAM_DRAW);
-}
-
-class TextureTargetType{
-  final index;
-  const TextureTargetType(this.index);
-
-  static const TextureTargetType TEXTURE_2D = const TextureTargetType(WebGL.RenderingContext.TEXTURE_2D);
-  static const TextureTargetType TEXTURE_CUBE_MAP = const TextureTargetType(WebGL.RenderingContext.TEXTURE_CUBE_MAP);
 }
 
 class EnableCapType{
@@ -165,7 +156,7 @@ class WebGLRenderingContext {
   }
 
   //Textures
-  void bindTexture(TextureTargetType target, WebGLTexture texture) {
+  void bindTexture(TextureTarget target, WebGLTexture texture) {
     ctx.bindTexture(target.index, texture?.webGLTexture);
   }
 

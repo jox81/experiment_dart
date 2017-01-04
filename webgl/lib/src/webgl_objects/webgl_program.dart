@@ -21,8 +21,14 @@ class WebGLProgram{
 
   WebGL.Program webGLProgram;
 
+  bool get isBuffer => gl.ctx.isProgram(webGLProgram);
+
   WebGLProgram(){
     webGLProgram = gl.ctx.createProgram();
+  }
+
+  void delete(){
+    gl.ctx.deleteProgram(webGLProgram);
   }
 
   WebGL.ActiveInfo getActiveAttrib(int activeAttributIndex){
@@ -68,6 +74,15 @@ class WebGLProgram{
 
   void use(){
     gl.ctx.useProgram(webGLProgram);
+  }
+
+  void validate(){
+    gl.ctx.validateProgram(webGLProgram);
+
+    if (!linkStatus) {
+      print(infoLog);
+      window.alert("Could not compile program");
+    }
   }
 
   dynamic getParameter(ProgramParameterGlEnum parameter){

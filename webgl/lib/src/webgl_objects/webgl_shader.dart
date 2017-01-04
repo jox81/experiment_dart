@@ -80,8 +80,14 @@ class WebGLShader{
 
   WebGL.Shader webGLShader;
 
+  bool get isBuffer => gl.ctx.isShader(webGLShader);
+
   WebGLShader(ShaderType shaderType){
     webGLShader = gl.ctx.createShader(shaderType.index);
+  }
+
+  void delete(){
+    gl.ctx.deleteShader(webGLShader);
   }
 
   String get infoLog{
@@ -105,7 +111,7 @@ class WebGLShader{
     }
   }
 
-  dynamic getShaderParameter(ShaderParameterGlEnum parameter){
+  dynamic getParameter(ShaderParameterGlEnum parameter){
     dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
     return result;
   }
