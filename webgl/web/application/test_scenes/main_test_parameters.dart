@@ -1,18 +1,14 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/context/context_attributs.dart';
-import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 Future main() async {
   WebglTestParameters webgl01 =

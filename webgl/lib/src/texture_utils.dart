@@ -35,35 +35,33 @@ class TextureUtils {
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
   static WebGLTexture createColorTextureFromElement(ImageElement image,{bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
     WebGLTexture texture = new WebGLTexture();
-    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
+    texture.bind(TextureTarget.TEXTURE_2D);
 
-    gl.ctx.pixelStorei(RenderingContext.UNPACK_FLIP_Y_WEBGL, 1);
+    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 1);
 
-    int WRAP_S = repeatU ? (mirrorU ? RenderingContext.MIRRORED_REPEAT:RenderingContext.REPEAT):RenderingContext.CLAMP_TO_EDGE;
-    int WRAP_T = repeatV ? (mirrorV ? RenderingContext.MIRRORED_REPEAT:RenderingContext.REPEAT):RenderingContext.CLAMP_TO_EDGE;
+    TextureWrapType WRAP_S = repeatU ? (mirrorU ? TextureWrapType.MIRRORED_REPEAT:TextureWrapType.REPEAT):TextureWrapType.CLAMP_TO_EDGE;
+    TextureWrapType WRAP_T = repeatV ? (mirrorV ? TextureWrapType.MIRRORED_REPEAT:TextureWrapType.REPEAT):TextureWrapType.CLAMP_TO_EDGE;
 
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, WRAP_S);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, WRAP_T);
-
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.LINEAR);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.LINEAR);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_WRAP_S, WRAP_S);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_WRAP_T, WRAP_T);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_MIN_FILTER, TextureMinType.LINEAR);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_MAG_FILTER, TextureMagType.LINEAR);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
     gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, image);
 
-    gl.bindTexture(TextureTarget.TEXTURE_2D, null);
-
+    texture.unBind(TextureTarget.TEXTURE_2D);
     return texture;
   }
 
   static WebGLTexture createColorTexture(int size) {
     WebGLTexture texture = new WebGLTexture();
-    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
+    texture.bind(TextureTarget.TEXTURE_2D);
 
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_MIN_FILTER, TextureMinType.NEAREST);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_MAG_FILTER, TextureMagType.NEAREST);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+    texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
     gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, size, size, 0, RenderingContext.RGBA,
@@ -76,16 +74,17 @@ class TextureUtils {
 
   static WebGLTexture createDepthTexture(int size) {
     WebGLTexture depthTexture = new WebGLTexture();
-    gl.bindTexture(TextureTarget.TEXTURE_2D, depthTexture);
-    
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_S, RenderingContext.CLAMP_TO_EDGE);
-    gl.ctx.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_WRAP_T, RenderingContext.CLAMP_TO_EDGE);
+    TextureTarget target = TextureTarget.TEXTURE_2D;
+    depthTexture.bind(target);
+
+    depthTexture.setParameterInt(target, TextureParameterGlEnum.TEXTURE_MAG_FILTER, TextureMagType.NEAREST);
+    depthTexture.setParameterInt(target, TextureParameterGlEnum.TEXTURE_MIN_FILTER, TextureMinType.NEAREST);
+    depthTexture.setParameterInt(target, TextureParameterGlEnum.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+    depthTexture.setParameterInt(target, TextureParameterGlEnum.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
     gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.DEPTH_COMPONENT, size, size, 0, RenderingContext.DEPTH_COMPONENT, RenderingContext.UNSIGNED_BYTE, null);
 
-    gl.bindTexture(TextureTarget.TEXTURE_2D, null);
+    depthTexture.unBind(target);
 
     return depthTexture;
   }
@@ -93,9 +92,9 @@ class TextureUtils {
   static WebGLRenderBuffer createRenderBuffer(int size) {
     WebGLRenderBuffer renderBuffer = new WebGLRenderBuffer();
 
-    gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, renderBuffer.webGLRenderBuffer);
+    renderBuffer.bind(RenderBufferTarget.RENDERBUFFER);
     gl.ctx.renderbufferStorage(RenderingContext.RENDERBUFFER, RenderingContext.DEPTH_COMPONENT16, size, size);
-    gl.ctx.bindRenderbuffer(RenderingContext.RENDERBUFFER, null);
+    gl.bindRenderBuffer(RenderBufferTarget.RENDERBUFFER, null);
 
     return renderBuffer;
   }

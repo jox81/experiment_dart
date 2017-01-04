@@ -1,9 +1,10 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
-
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
+import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
-import 'package:webgl/src/shaders.dart';
+import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 class ProgramParameterGlEnum{
   final index;
@@ -15,6 +16,13 @@ class ProgramParameterGlEnum{
   static const ProgramParameterGlEnum ATTACHED_SHADERS = const ProgramParameterGlEnum(WebGL.RenderingContext.ATTACHED_SHADERS);
   static const ProgramParameterGlEnum ACTIVE_ATTRIBUTES = const ProgramParameterGlEnum(WebGL.RenderingContext.ACTIVE_ATTRIBUTES);
   static const ProgramParameterGlEnum ACTIVE_UNIFORMS = const ProgramParameterGlEnum(WebGL.RenderingContext.ACTIVE_UNIFORMS);
+}
+
+class ProgramInfo{
+  List<WebGLActiveInfo> attributes = new List();
+  List<WebGLActiveInfo> uniforms = new List();
+  int attributeCount = 0;
+  int uniformCount = 0;
 }
 
 class WebGLProgram{
@@ -39,16 +47,16 @@ class WebGLProgram{
     return gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex);
   }
 
-  int getAttribLocation(String variableName){
-    return gl.ctx.getAttribLocation(webGLProgram, variableName);
+  WebGLAttributLocation getAttribLocation(String variableName){
+    return new WebGLAttributLocation(gl.ctx.getAttribLocation(webGLProgram, variableName));
   }
 
   String get infoLog{
     return gl.ctx.getProgramInfoLog(webGLProgram);
   }
 
-  WebGL.UniformLocation getUniformLocation(String variableName){
-    return gl.ctx.getUniformLocation(webGLProgram,variableName);
+  WebGLUniformLocation getUniformLocation(String variableName){
+    return new WebGLUniformLocation(gl.ctx.getUniformLocation(webGLProgram,variableName));
   }
 
   String getUniform(WebGL.UniformLocation location){
@@ -109,6 +117,26 @@ class WebGLProgram{
 
   //Custom
   ProgramInfo getProgramInfo(){
-    return UtilsShader.getProgramInfo(this);
+    ProgramInfo result = new ProgramInfo();
+
+    // Loop through active attributes
+    for (var i = 0; i < activeAttributsCount; i++) {
+      WebGLActiveInfo attribute = new WebGLActiveInfo(getActiveAttrib(i));
+      attribute.shaderVariableType = ShaderVariableType.enumTypes[attribute.activeInfo.type];
+      result.attributes.add(attribute);
+      result.attributeCount += attribute.activeInfo.size;
+    }
+
+    // Loop through active uniforms
+    var activeUniforms = getParameter(ProgramParameterGlEnum.ACTIVE_UNIFORMS);
+    for (var i = 0; i < activeUniforms; i++) {
+      WebGLActiveInfo uniform = new WebGLActiveInfo(getActiveUniform(i));
+      uniform.shaderVariableType = ShaderVariableType.enumTypes[uniform.activeInfo.type];
+      result.uniforms.add(uniform);
+      result.uniformCount += uniform.activeInfo.size;
+    }
+
+    return result;
   }
+
 }

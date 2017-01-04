@@ -28,13 +28,15 @@ class TextureTarget {
 }
 
 abstract class TextureSetParameterType {
-  final index;
+  final int index;
+  const TextureSetParameterType(this.index);
 }
-abstract class TextureFilterType extends TextureSetParameterType {}
+abstract class TextureFilterType extends TextureSetParameterType {
+  const TextureFilterType(int index):super(index);
+}
 
 class TextureMagType extends TextureFilterType {
-  final index;
-  const TextureMagType(this.index);
+  const TextureMagType(int index):super(index);
 
   static const TextureMagType LINEAR =
       const TextureMagType(WebGL.RenderingContext.LINEAR);
@@ -43,8 +45,7 @@ class TextureMagType extends TextureFilterType {
 }
 
 class TextureMinType extends TextureFilterType {
-  final index;
-  const TextureMinType(this.index);
+  const TextureMinType(int index):super(index);
 
   static const TextureMinType LINEAR =
       const TextureMinType(WebGL.RenderingContext.LINEAR);
@@ -61,8 +62,7 @@ class TextureMinType extends TextureFilterType {
 }
 
 class TextureWrapType extends TextureSetParameterType{
-  final index;
-  const TextureWrapType(this.index);
+  const TextureWrapType(int index):super(index);
 
   static const TextureWrapType REPEAT =
       const TextureWrapType(WebGL.RenderingContext.REPEAT);
@@ -101,5 +101,13 @@ class WebGLTexture {
   void setParameterInt(
       TextureTarget target, TextureParameterGlEnum parameter, TextureSetParameterType value) {
     gl.ctx.texParameteri(target.index, parameter.index, value.index);
+  }
+
+  void bind(TextureTarget target) {
+    gl.ctx.bindTexture(target.index, webGLTexture);
+  }
+
+  void unBind(TextureTarget target) {
+    gl.ctx.bindTexture(target.index, null);
   }
 }

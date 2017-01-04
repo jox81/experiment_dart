@@ -3,7 +3,11 @@ import 'dart:web_gl';
 import 'dart:typed_data';
 import 'dart:js' as js;
 
+import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
+import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 final String vertexShaderSource = """
 attribute vec3 a_Position;
@@ -68,16 +72,16 @@ WebGLFrameBuffer createRenderbuffer(RenderingContext gl, int width, int height) 
   return framebuffer;
 }
 
-void render(RenderingContext gl, WebGLFrameBuffer framebuffer, UniformLocation u_Color, int a_Position, Buffer vertexPositionBuffer, int vertexPositionBufferItemSize, Buffer vertexIndexBuffer, int indicesLength) {
+void render(RenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniformLocation u_Color, WebGLAttributLocation a_Position, Buffer vertexPositionBuffer, int vertexPositionBufferItemSize, Buffer vertexIndexBuffer, int indicesLength) {
   framebuffer.bind();
   gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
   
   Float32List red = new Float32List.fromList([1.0, 0.0, 0.0, 1.0]);
-  
-  gl.uniform4fv(u_Color, red);
+
+  u_Color.uniform4fv(red);
   
   gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexPositionBuffer);
-  gl.vertexAttribPointer(a_Position, vertexPositionBufferItemSize, RenderingContext.FLOAT, false, 0, 0);
+  a_Position.vertexAttribPointer(vertexPositionBufferItemSize, ShaderVariableType.FLOAT, false, 0, 0);
   
   gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
   gl.drawElements(RenderingContext.TRIANGLES, indices.length, RenderingContext.UNSIGNED_SHORT, 0);    
@@ -120,23 +124,23 @@ void main() {
   gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
   gl.bufferDataTyped(RenderingContext.ELEMENT_ARRAY_BUFFER, indices, RenderingContext.STATIC_DRAW);
     
-  Shader vertShader = gl.createShader(RenderingContext.VERTEX_SHADER);
-  gl.shaderSource(vertShader, vertexShaderSource);
-  gl.compileShader(vertShader);
+  WebGLShader vertShader = new WebGLShader(ShaderType.VERTEX_SHADER)
+      ..source = vertexShaderSource
+      ..compile();
+
+  WebGLShader fragShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
+    ..source = fragmentShaderSource
+    ..compile;
   
-  Shader fragShader = gl.createShader(RenderingContext.FRAGMENT_SHADER);
-  gl.shaderSource(fragShader, fragmentShaderSource);
-  gl.compileShader(fragShader); 
-  
-  Program p = gl.createProgram();
-  gl.attachShader(p, vertShader);
-  gl.attachShader(p, fragShader);
-  gl.linkProgram(p);
-  int a_Position = gl.getAttribLocation(p, "a_Position");
-  UniformLocation u_Color = gl.getUniformLocation(p, "u_Color");
-  
-  gl.useProgram(p);
-  gl.enableVertexAttribArray(a_Position);  
+  WebGLProgram program = new WebGLProgram();
+  program.attachShader(vertShader);
+  program.attachShader(fragShader);
+  program.link();
+  WebGLAttributLocation a_Position = program.getAttribLocation("a_Position");
+  WebGLUniformLocation u_Color = program.getUniformLocation("u_Color");
+
+  program.use();
+  a_Position.enableVertexAttribArray();
   
   gl.clearColor(0.5, 0.5, 0.5, 1.0);       // clear color
   gl.enable(RenderingContext.DEPTH_TEST);  // enable depth testing

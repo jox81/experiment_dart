@@ -11,6 +11,7 @@ import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 void main() {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
@@ -28,8 +29,8 @@ class Webgl01 {
 
   int vertexPositionAttribute;
 
-  UniformLocation pMatrixUniform;
-  UniformLocation mvMatrixUniform;
+  WebGLUniformLocation pMatrixUniform;
+  WebGLUniformLocation mvMatrixUniform;
 
   Webgl01(CanvasElement canvas){
 
@@ -90,8 +91,8 @@ class Webgl01 {
         gl.ctx.getAttribLocation(shaderProgram.webGLProgram, "aVertexPosition");
     gl.ctx.enableVertexAttribArray(vertexPositionAttribute);
 
-    pMatrixUniform = gl.ctx.getUniformLocation(shaderProgram.webGLProgram, "uPMatrix");
-    mvMatrixUniform = gl.ctx.getUniformLocation(shaderProgram.webGLProgram, "uMVMatrix");
+    pMatrixUniform = shaderProgram.getUniformLocation("uPMatrix");
+    mvMatrixUniform = shaderProgram.getUniformLocation("uMVMatrix");
   }
 
   _getShader(WebGLRenderingContext gl, id) {
@@ -142,8 +143,8 @@ class Webgl01 {
   /// Rendering part
   ///
   void _setMatrixUniforms() {
-    gl.ctx.uniformMatrix4fv(pMatrixUniform, false, Context.mainCamera.perspectiveMatrix.storage);
-    gl.ctx.uniformMatrix4fv(mvMatrixUniform, false, Context.mvMatrix.storage);
+    pMatrixUniform.uniformMatrix4fv(false, Context.mainCamera.perspectiveMatrix.storage);
+    mvMatrixUniform.uniformMatrix4fv(false, Context.mvMatrix.storage);
   }
 
   void render({num time : 0.0}) {

@@ -44,4 +44,8 @@ class WebGLRenderBuffer{
   }
 
   //Todo : get single parameter
+
+  void bind(RenderBufferTarget target) {
+    gl.ctx.bindRenderbuffer(target.index, webGLRenderBuffer);
+  }
 }

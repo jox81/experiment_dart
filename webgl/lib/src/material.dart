@@ -3,16 +3,16 @@ import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
+import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/meshes.dart';
-
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/shaders.dart';
 import 'dart:typed_data';
+import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 abstract class Material extends IEditElement {
   static bool debugging = false;
@@ -30,10 +30,10 @@ abstract class Material extends IEditElement {
   ProgramInfo programInfo;
 
   List<String> attributsNames = new List();
-  Map<String, int> attributes = new Map();
+  Map<String, WebGLAttributLocation> attributes = new Map();
 
   List<String> uniformsNames = new List();
-  Map<String, UniformLocation> uniforms = new Map();
+  Map<String, WebGLUniformLocation> uniformLocations = new Map();
 
   List<String> buffersNames = new List();
   Map<String, WebGLBuffer> buffers = new Map();
@@ -90,7 +90,7 @@ abstract class Material extends IEditElement {
 
   void _getShaderUniformSettings() {
     for (String name in uniformsNames) {
-      uniforms[name] = program.getUniformLocation(name);
+      uniformLocations[name] = program.getUniformLocation(name);
     }
   }
 
@@ -131,11 +131,10 @@ abstract class Material extends IEditElement {
 
     if (arrayBuffer!= null && dimension != null) {
       gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
-      gl.ctx.enableVertexAttribArray(attributes[attributName]);
+      attributes[attributName].enableVertexAttribArray();
       gl.bufferData(
           BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), UsageType.STATIC_DRAW);
-      gl.ctx.vertexAttribPointer(
-          attributes[attributName], dimension, RenderingContext.FLOAT, false, 0, 0);
+      attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
     } else if(elemetArrayBuffer != null){
       gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
       gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
@@ -149,10 +148,10 @@ abstract class Material extends IEditElement {
             break;
           case ShaderVariableType.FLOAT_VEC4:
             Vector4 vector4Value = data;
-            gl.ctx.vertexAttrib4f(attributes[attributName], vector4Value.x, vector4Value.y, vector4Value.z, vector4Value.w);
+            attributes[attributName].vertexAttrib4f(vector4Value.x, vector4Value.y, vector4Value.z, vector4Value.w);
             break;
           case ShaderVariableType.FLOAT:
-              gl.ctx.vertexAttrib1f(attributes[attributName], data);
+            attributes[attributName].vertexAttrib1f(data);
             break;
           default:
             print(
@@ -170,36 +169,35 @@ abstract class Material extends IEditElement {
       switch (activeInfo.shaderVariableType) {
         case ShaderVariableType.FLOAT_VEC2:
           if (data1 == null && data2 == null) {
-            gl.ctx.uniform2fv(uniforms[uniformName], data);
+            uniformLocations[uniformName].uniform2fv(data);
           }
           break;
         case ShaderVariableType.FLOAT_VEC3:
           if (data1 == null && data2 == null) {
-            gl.ctx.uniform3fv(uniforms[uniformName], data);
+            uniformLocations[uniformName].uniform3fv(data);
           } else {
-            gl.ctx.uniform3f(uniforms[uniformName], data, data1, data2);
+            uniformLocations[uniformName].uniform3f( data, data1, data2);
           }
           break;
         case ShaderVariableType.FLOAT_VEC4:
           if (data1 == null && data2 == null && data3 == null) {
-            gl.ctx.uniform4fv(uniforms[uniformName], data);
+            uniformLocations[uniformName].uniform4fv(data);
           } else {
-            gl.ctx.uniform4f(uniforms[uniformName], data, data1, data2, data3);
+            uniformLocations[uniformName].uniform4f(data, data1, data2, data3);
           }
           break;
         case ShaderVariableType.BOOL:
         case ShaderVariableType.SAMPLER_2D:
-
-          gl.ctx.uniform1i(uniforms[uniformName], data);
+          uniformLocations[uniformName].uniform1i(data);
           break;
         case ShaderVariableType.FLOAT:
-          gl.ctx.uniform1f(uniforms[uniformName], data);
+          uniformLocations[uniformName].uniform1f(data);
           break;
         case ShaderVariableType.FLOAT_MAT3:
-          gl.ctx.uniformMatrix3fv(uniforms[uniformName], false, data);
+          uniformLocations[uniformName].uniformMatrix3fv(false, data);
           break;
         case ShaderVariableType.FLOAT_MAT4:
-          gl.ctx.uniformMatrix4fv(uniforms[uniformName], false, data);
+          uniformLocations[uniformName].uniformMatrix4fv(false, data);
           break;
         default:
           print(
@@ -211,7 +209,7 @@ abstract class Material extends IEditElement {
 
   disableVertexAttributs() {
     for (String name in attributsNames) {
-      gl.ctx.disableVertexAttribArray(attributes[name]);
+      attributes[name].disableVertexAttribArray();
     }
   }
 

@@ -6,10 +6,10 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/shaders.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 Texture textureCrate;
 Map susanJson;
