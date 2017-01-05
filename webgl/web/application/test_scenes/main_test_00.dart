@@ -7,6 +7,7 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -27,7 +28,7 @@ class Webgl01 {
 
   WebGLProgram shaderProgram;
 
-  int vertexPositionAttribute;
+  WebGLAttributLocation vertexPositionAttribute;
 
   WebGLUniformLocation pMatrixUniform;
   WebGLUniformLocation mvMatrixUniform;
@@ -88,8 +89,8 @@ class Webgl01 {
     shaderProgram.use();
 
     vertexPositionAttribute =
-        gl.ctx.getAttribLocation(shaderProgram.webGLProgram, "aVertexPosition");
-    gl.ctx.enableVertexAttribArray(vertexPositionAttribute);
+        shaderProgram.getAttribLocation("aVertexPosition");
+    vertexPositionAttribute.enableVertexAttribArray();
 
     pMatrixUniform = shaderProgram.getUniformLocation("uPMatrix");
     mvMatrixUniform = shaderProgram.getUniformLocation("uMVMatrix");
@@ -156,8 +157,7 @@ class Webgl01 {
     gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
-    gl.ctx.vertexAttribPointer(
-        vertexPositionAttribute, models[0].mesh.vertexDimensions, RenderingContext.FLOAT, false, 0, 0);
+    vertexPositionAttribute.vertexAttribPointer(models[0].mesh.vertexDimensions, ShaderVariableType.FLOAT, false, 0, 0);
 
     _setMatrixUniforms();
 

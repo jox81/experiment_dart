@@ -196,8 +196,8 @@ class TextureUtils {
     ///However there are some methods for "packing" floats into RGBA/UNSIGNED_BYTE described here:
     ///http://concord-consortium.github.io/lab/experiments/webgl-gpgpu/webgl.html
 
-    print('IMPLEMENTATION_COLOR_READ_FORMAT : ${gl.ctx.getParameter(RenderingContext.IMPLEMENTATION_COLOR_READ_FORMAT)}');
-    print('IMPLEMENTATION_COLOR_READ_TYPE : ${gl.ctx.getParameter(RenderingContext.IMPLEMENTATION_COLOR_READ_TYPE)}');
+    print('IMPLEMENTATION_COLOR_READ_FORMAT : ${gl.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_FORMAT)}');
+    print('IMPLEMENTATION_COLOR_READ_TYPE : ${gl.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_TYPE)}');
 
     gl.ctx.readPixels(
         rectangle.left,
