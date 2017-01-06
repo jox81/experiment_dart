@@ -286,11 +286,15 @@ class WebGLRenderingContext {
     _enable(EnableCapabilityType.DEPTH_TEST, enable);
   }
 
+  bool get depthMask => getParameter(ContextParameter.DEPTH_WRITEMASK);
+  set depthMask(bool enable){
+      ctx.depthMask(enable);
+  }
+
   DepthComparisonFunction get depthFunc => new DepthComparisonFunction(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
   set depthFunc(DepthComparisonFunction depthComparisionFunction){
     ctx.depthFunc(depthComparisionFunction.index);
   }
-
 
   num get drawingBufferWidth => ctx.drawingBufferWidth;
   num get drawingBufferHeight => ctx.drawingBufferHeight;
