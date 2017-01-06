@@ -268,6 +268,13 @@ class WebGLRenderingContext {
 
   Map get contextAttributes => (ctx.getContextAttributes() as WebGLDictionary).toMap;
 
+  bool get isContextLost => ctx.isContextLost();
+
+  int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index);
+  set clearStencil(int index){
+    ctx.clearStencil(index) ;
+  }
+
   set frontFace(FaceMode mode){
     ctx.frontFace(mode.index);
   }
@@ -294,6 +301,12 @@ class WebGLRenderingContext {
   DepthComparisonFunction get depthFunc => new DepthComparisonFunction(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
   set depthFunc(DepthComparisonFunction depthComparisionFunction){
     ctx.depthFunc(depthComparisionFunction.index);
+  }
+
+  num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index);
+  set clearDepth(num depthValue){
+    assert(0.0 <= depthValue && depthValue <= 1.0);
+    ctx.clearDepth(depthValue);
   }
 
   num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index);
