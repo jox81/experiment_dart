@@ -286,7 +286,7 @@ class WebGLRenderingContext {
     _enable(EnableCapabilityType.DEPTH_TEST, enable);
   }
 
-  bool get depthMask => getParameter(ContextParameter.DEPTH_WRITEMASK);
+  bool get depthMask => ctx.getParameter(ContextParameter.DEPTH_WRITEMASK.index);
   set depthMask(bool enable){
       ctx.depthMask(enable);
   }
@@ -295,6 +295,13 @@ class WebGLRenderingContext {
   set depthFunc(DepthComparisonFunction depthComparisionFunction){
     ctx.depthFunc(depthComparisionFunction.index);
   }
+
+  num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index);
+  set lineWidth(num width){
+    ctx.lineWidth(width);
+  }
+
+  Float32List get lineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
 
   num get drawingBufferWidth => ctx.drawingBufferWidth;
   num get drawingBufferHeight => ctx.drawingBufferHeight;
@@ -410,6 +417,22 @@ class WebGLRenderingContext {
   }
 
   Int32List get viewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
+
+  Rectangle get scissor {
+    Int32List values = getParameter(ContextParameter.SCISSOR_BOX);
+    return new Rectangle(values[0], values[1], values[2], values[3]);
+  }
+  set scissor(Rectangle rect) {
+    //int x, int y, num width, num height
+    assert(rect.width >= 0 && rect.height >= 0);
+    ctx.scissor(rect.left, rect.top, rect.width, rect.height);
+  }
+
+  bool get scissorTest => getParameter(ContextParameter.SCISSOR_TEST);
+  set scissorTest(bool enabled){
+    _enable(EnableCapabilityType.SCISSOR_TEST, enabled);
+  }
+
 
   void pixelStorei(PixelStorgeType storage, int value) {
     ctx.pixelStorei(storage.index, value);

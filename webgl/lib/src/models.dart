@@ -17,6 +17,7 @@ enum ModelType{
   pyramid,
   cube,
   sphere,
+  torus,
   axis,
 }
 
@@ -87,6 +88,9 @@ abstract class Model extends IEditElement {
         break;
       case ModelType.sphere:
         newModel = new SphereModel();
+        break;
+      case ModelType.torus:
+        newModel = new TorusModel ();
         break;
       case ModelType.axis:
         newModel = new AxisModel();
@@ -316,5 +320,52 @@ class FrustrumGizmo extends Model implements IGizmo {
       model.render();
     }
   }
+}
 
+//Todo : convert from javascript
+class TorusModel extends Model {
+  /*
+  // Creates a 3D torus in the XY plane, returns the data in a new object composed of
+//   several Float32Array objects named 'vertices' and 'colors', according to
+//   the following parameters:
+// r:  big radius
+// sr: section radius
+// n:  number of faces
+// sn: number of faces on section
+// k:  factor between 0 and 1 defining the space between strips of the torus
+function makeTorus(r, sr, n, sn, k)
+{
+  // Temporary arrays for the vertices, normals and colors
+  var tv = new Array();
+  var tc = new Array();
+
+  // Iterates along the big circle and then around a section
+  for(var i=0;i<n;i++)               // Iterates over all strip rounds
+    for(var j=0;j<sn+1*(i==n-1);j++) // Iterates along the torus section
+      for(var v=0;v<2;v++)           // Creates zigzag pattern (v equals 0 or 1)
+      {
+        // Pre-calculation of angles
+        var a =  2*Math.PI*(i+j/sn+k*v)/n;
+        var sa = 2*Math.PI*j/sn;
+        var x, y, z;
+
+        // Coordinates on the surface of the torus
+        tv.push(x = (r+sr*Math.cos(sa))*Math.cos(a)); // X
+        tv.push(y = (r+sr*Math.cos(sa))*Math.sin(a)); // Y
+        tv.push(z = sr*Math.sin(sa));                 // Z
+
+        // Colors
+        tc.push(0.5+0.5*x);  // R
+        tc.push(0.5+0.5*y);  // G
+        tc.push(0.5+0.5*z);  // B
+        tc.push(1.0);  // Alpha
+      }
+
+  // Converts and returns array
+  var res = new Object();
+  res.vertices = new Float32Array(tv);
+  res.colors = new Float32Array(tc);
+  return res;
+}
+   */
 }
