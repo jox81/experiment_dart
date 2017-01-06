@@ -3,6 +3,7 @@ import 'dart:web_gl';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 Model experiment() {
 
@@ -48,7 +49,7 @@ Model experiment() {
     };
 
   Mesh mesh = new Mesh()
-  ..mode = RenderingContext.TRIANGLE_STRIP
+  ..mode = DrawMode.TRIANGLE_STRIP
   ..vertices = [
     0.0, 0.0, 0.0,
     -0.5, 0.5, 0.0,

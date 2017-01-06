@@ -59,7 +59,8 @@ class WebGLProgram{
     return new WebGLUniformLocation(gl.ctx.getUniformLocation(webGLProgram,variableName));
   }
 
-  String getUniform(WebGL.UniformLocation location){
+  //Todo return multitype...
+  dynamic getUniform(WebGL.UniformLocation location){
     return gl.ctx.getUniform(webGLProgram, location);
   }
 
@@ -69,6 +70,10 @@ class WebGLProgram{
 
   void attachShader(WebGLShader shader){
     gl.ctx.attachShader(webGLProgram, shader.webGLShader);
+  }
+
+  void detachShader(WebGLShader shader){
+    gl.ctx.detachShader(webGLProgram, shader.webGLShader);
   }
 
   void link(){
@@ -91,6 +96,10 @@ class WebGLProgram{
       print(infoLog);
       window.alert("Could not compile program");
     }
+  }
+
+  void bindAttribLocation(WebGLAttributLocation attributLocation, String variableName){
+    gl.ctx.bindAttribLocation(webGLProgram, attributLocation.location, variableName);
   }
 
   dynamic getParameter(ProgramParameterGlEnum parameter){

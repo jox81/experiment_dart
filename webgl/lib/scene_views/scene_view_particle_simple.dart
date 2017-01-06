@@ -8,6 +8,7 @@ import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/interface/IScene.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 class SceneViewParticleSimple extends Scene{
 
@@ -92,7 +93,7 @@ class SceneViewParticleSimple extends Scene{
 
     CustomObject customObject = new CustomObject()
     ..mesh = new Mesh()
-    ..mesh.mode = RenderingContext.POINTS
+    ..mesh.mode = DrawMode.POINTS
     ..mesh.vertexDimensions = 2
     ..mesh.vertices = pstart
     ..material = materialCustom;

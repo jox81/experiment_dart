@@ -6,7 +6,9 @@ import 'dart:js' as js;
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
+import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 final String vertexShaderSource = """
@@ -43,8 +45,8 @@ void log(String msg) {
 
 WebGLFrameBuffer createRenderbuffer(RenderingContext gl, int width, int height) {
   // 1. Init Picking Texture
-  Texture texture = gl.createTexture();
-  gl.bindTexture(RenderingContext.TEXTURE_2D, texture);
+  WebGLTexture texture = new WebGLTexture();
+  texture.bind(TextureTarget.TEXTURE_2D);
   try {
     gl.texImage2DTyped(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, width, height, 0, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, null);
   }
@@ -54,19 +56,19 @@ WebGLFrameBuffer createRenderbuffer(RenderingContext gl, int width, int height) 
   }
   
   // 2. Init Render Buffer
-  Renderbuffer renderbuffer = gl.createRenderbuffer();
-  gl.bindRenderbuffer(RenderingContext.RENDERBUFFER, renderbuffer);
-  gl.renderbufferStorage(RenderingContext.RENDERBUFFER, RenderingContext.DEPTH_COMPONENT16, width, height); 
+  WebGLRenderBuffer renderbuffer = new WebGLRenderBuffer();
+  renderbuffer.bind();
+  renderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, InternalFormatType.DEPTH_COMPONENT16, width, height);
   
   // 3. Init Frame Buffer
   WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
   framebuffer.bind();
-  gl.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, texture, 0);
-  gl.framebufferRenderbuffer(RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.RENDERBUFFER, renderbuffer);
+  texture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
+  renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
 
   // 4. Clean up
-  gl.bindTexture(RenderingContext.TEXTURE_2D, null);
-  gl.bindRenderbuffer(RenderingContext.RENDERBUFFER, null);
+  texture.unBind(TextureTarget.TEXTURE_2D);
+  renderbuffer.unBind();
   framebuffer.unBind();
   
   return framebuffer;

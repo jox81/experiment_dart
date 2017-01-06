@@ -161,8 +161,8 @@ class Webgl01 {
 
     _setMatrixUniforms();
 
-    gl.ctx.drawElements(
-        RenderingContext.TRIANGLES, models[0].mesh.indices.length, RenderingContext.UNSIGNED_SHORT, 0);
+    gl.drawElements(
+        DrawMode.TRIANGLES, models[0].mesh.indices.length, ElementType.UNSIGNED_SHORT, 0);
 
     window.requestAnimationFrame((num time) {
       this.render(time: time);

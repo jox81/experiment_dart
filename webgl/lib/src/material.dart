@@ -104,9 +104,9 @@ abstract class Material extends IEditElement {
     setShaderSettings(model.mesh);
 
     if (model.mesh.indices.length > 0) {
-      gl.ctx.drawElements(model.mesh.mode, model.mesh.indices.length, RenderingContext.UNSIGNED_SHORT, 0);
+      gl.drawElements(model.mesh.mode, model.mesh.indices.length, ElementType.UNSIGNED_SHORT, 0);
     } else {
-      gl.ctx.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
+      gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
     disableVertexAttributs();
 

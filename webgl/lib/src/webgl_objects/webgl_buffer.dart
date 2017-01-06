@@ -41,6 +41,14 @@ class WebGLBuffer{
     gl.ctx.deleteBuffer(webGLBuffer);
   }
 
+  void bind(BufferType bufferType) {
+    gl.ctx.bindBuffer(bufferType.index, webGLBuffer);
+  }
+
+  void unbind(BufferType bufferType) {
+    gl.ctx.bindBuffer(bufferType.index, null);
+  }
+
   dynamic getParameter(BufferTarget target, BufferParameterGlEnum parameter){
     dynamic result =  gl.ctx.getBufferParameter(target.index.index,parameter.index);
     return result;

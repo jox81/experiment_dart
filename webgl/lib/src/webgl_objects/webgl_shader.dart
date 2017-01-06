@@ -156,6 +156,7 @@ class WebGLShader{
     return gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index);
   }
 
+  //Todo return multiType...
   dynamic getVertexAttrib(int vertexAttributePosition, VertexAttribGlEnum vertexAttribGlEnum){
     return gl.ctx.getVertexAttrib(vertexAttributePosition,vertexAttribGlEnum.index);
   }

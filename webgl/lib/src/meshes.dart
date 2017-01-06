@@ -3,10 +3,11 @@ import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 
 import 'dart:math';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 class Mesh {
 
-  int mode = RenderingContext.TRIANGLE_STRIP;
+  DrawMode mode = DrawMode.TRIANGLE_STRIP;
 
   //Vertices infos
   int _vertexDimensions = 3;
@@ -149,7 +150,7 @@ class Mesh {
 class _PointMesh extends Mesh {
   _PointMesh() {
 
-    mode = RenderingContext.POINTS;
+    mode = DrawMode.POINTS;
     vertices = [
       0.0, 0.0, 0.0,
     ];
@@ -160,7 +161,7 @@ class _LineMesh extends Mesh {
   _LineMesh(List<Vector3> points) {
     assert(points.length >= 2);
 
-    mode = RenderingContext.LINES;
+    mode = DrawMode.LINES;
 
     vertices = [];
 
@@ -178,7 +179,7 @@ class _LineMesh extends Mesh {
 
 class _TriangleMesh extends Mesh {
   _TriangleMesh() {
-    mode = RenderingContext.TRIANGLES;
+    mode = DrawMode.TRIANGLES;
 
     vertices = [
       0.0, 0.0, 0.0,
@@ -191,7 +192,7 @@ class _TriangleMesh extends Mesh {
 
 class _SquareMesh extends Mesh {
   _SquareMesh() {
-    mode = RenderingContext.TRIANGLES;
+    mode = DrawMode.TRIANGLES;
     /*
     0 - 3
     | \ |
@@ -252,7 +253,7 @@ class _PyramidMesh extends Mesh {
 
 class _CubeMesh extends Mesh {
   _CubeMesh() {
-    mode = RenderingContext.TRIANGLES;
+    mode = DrawMode.TRIANGLES;
 
     vertices = [
       // Front face
@@ -410,7 +411,7 @@ class _SphereMesh extends Mesh {
 
   _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
 
-    mode = RenderingContext.TRIANGLES;
+    mode = DrawMode.TRIANGLES;
 
     segmentV = max(1,segmentV--);
 
@@ -474,7 +475,7 @@ class _SphereMesh extends Mesh {
 
 class _AxisMesh extends Mesh {
   _AxisMesh() {
-    mode = RenderingContext.LINES;
+    mode = DrawMode.LINES;
     vertices = [
       0.0,0.0,0.0,
       1.0,0.0,0.0,
@@ -497,7 +498,7 @@ class _AxisMesh extends Mesh {
 //Points
 class _AxisPointMesh extends Mesh {
   _AxisPointMesh() {
-    mode = RenderingContext.POINTS;
+    mode = DrawMode.POINTS;
 
     vertices = [
       0.0, 0.0, 0.0,

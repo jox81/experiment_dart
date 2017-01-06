@@ -70,7 +70,7 @@ class Webgl01 {
     // Create a framebuffer and attach the texture.
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
     framebuffer.bind();
-    gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, textureCrate.webGLTexture, 0);
+    textureCrate.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
 
     // Now draw with the texture to the canvas
     // NOTE: We clear the canvas to red so we'll know
@@ -79,7 +79,7 @@ class Webgl01 {
     framebuffer.unBind();
     gl.clearColor = new Vector4(1.0, 0.0, 0.0, 1.0); // red
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT]);
-    gl.ctx.drawArrays(RenderingContext.TRIANGLES, 0, 6);
+    gl.drawArrays(DrawMode.TRIANGLES, 0, 6);
 
   }
 

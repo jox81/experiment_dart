@@ -1,6 +1,4 @@
 import 'dart:typed_data';
-import 'dart:web_gl' as WebGL;
-
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 

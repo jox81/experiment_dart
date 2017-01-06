@@ -1,6 +1,7 @@
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 
 class TextureParameterGlEnum {
   final index;
@@ -109,5 +110,9 @@ class WebGLTexture {
 
   void unBind(TextureTarget target) {
     gl.ctx.bindTexture(target.index, null);
+  }
+
+  void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, AttachmentTextureTarget attachementTarget, int mipMapLevel){
+    gl.ctx.framebufferTexture2D(target.index, attachment.index, attachementTarget.index, webGLTexture, mipMapLevel);
   }
 }

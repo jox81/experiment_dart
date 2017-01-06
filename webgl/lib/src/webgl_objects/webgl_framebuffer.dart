@@ -20,6 +20,28 @@ class FrameBufferTarget{
   static const FrameBufferTarget FRAMEBUFFER = const FrameBufferTarget(WebGL.RenderingContext.FRAMEBUFFER);
 }
 
+class FrameBufferAttachment{
+  final index;
+  const FrameBufferAttachment(this.index);
+
+  static const FrameBufferAttachment COLOR_ATTACHMENT0 = const FrameBufferAttachment(WebGL.RenderingContext.COLOR_ATTACHMENT0);
+  static const FrameBufferAttachment DEPTH_ATTACHMENT = const FrameBufferAttachment(WebGL.RenderingContext.DEPTH_ATTACHMENT);
+  static const FrameBufferAttachment STENCIL_ATTACHMENT = const FrameBufferAttachment(WebGL.RenderingContext.STENCIL_ATTACHMENT);
+}
+
+class AttachmentTextureTarget{
+  final index;
+  const AttachmentTextureTarget(this.index);
+
+  static const AttachmentTextureTarget TEXTURE_2D = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_2D);
+  static const AttachmentTextureTarget TEXTURE_CUBE_MAP_POSITIVE_X = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_CUBE_MAP_POSITIVE_X);
+  static const AttachmentTextureTarget TEXTURE_CUBE_MAP_NEGATIVE_X = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_CUBE_MAP_NEGATIVE_X);
+  static const AttachmentTextureTarget TEXTURE_CUBE_MAP_POSITIVE_Y = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_CUBE_MAP_POSITIVE_Y);
+  static const AttachmentTextureTarget TEXTURE_CUBE_MAP_NEGATIVE_Y = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_CUBE_MAP_NEGATIVE_Y);
+  static const AttachmentTextureTarget TEXTURE_CUBE_MAP_POSITIVE_Z = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_CUBE_MAP_POSITIVE_Z);
+  static const AttachmentTextureTarget TEXTURE_CUBE_MAP_NEGATIVE_Z = const AttachmentTextureTarget(WebGL.RenderingContext.TEXTURE_CUBE_MAP_NEGATIVE_Z);
+}
+
 class WebGLFrameBuffer{
 
   WebGL.Framebuffer webGLFrameBuffer;

@@ -5,6 +5,7 @@ import 'package:webgl/src/meshes.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 Model experiment() {
 
@@ -50,7 +51,7 @@ Model experiment() {
     };
 
   Mesh mesh = new Mesh()
-  ..mode = RenderingContext.POINTS
+  ..mode = DrawMode.POINTS
   ..vertices = [
     0.0,0.0,0.0,
   ]

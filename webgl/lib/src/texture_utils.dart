@@ -92,9 +92,9 @@ class TextureUtils {
   static WebGLRenderBuffer createRenderBuffer(int size) {
     WebGLRenderBuffer renderBuffer = new WebGLRenderBuffer();
 
-    renderBuffer.bind(RenderBufferTarget.RENDERBUFFER);
-    gl.ctx.renderbufferStorage(RenderingContext.RENDERBUFFER, RenderingContext.DEPTH_COMPONENT16, size, size);
-    gl.bindRenderBuffer(RenderBufferTarget.RENDERBUFFER, null);
+    renderBuffer.bind();
+    renderBuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, InternalFormatType.DEPTH_COMPONENT16, size, size);
+    renderBuffer.unBind();
 
     return renderBuffer;
   }
@@ -103,10 +103,10 @@ class TextureUtils {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
     framebuffer.bind();
 
-    gl.ctx.framebufferTexture2D(
-        RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture.webGLTexture, 0);
-    gl.ctx.framebufferRenderbuffer(
-        RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.RENDERBUFFER, depthRenderbuffer.webGLRenderBuffer);
+    colorTexture.framebufferTexture2D(
+        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
+    depthRenderbuffer.framebufferRenderbuffer(
+        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER);
     framebuffer.unBind();
 
     if (framebuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
@@ -121,8 +121,8 @@ class TextureUtils {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
     framebuffer.bind();
 
-    gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.COLOR_ATTACHMENT0, RenderingContext.TEXTURE_2D, colorTexture.webGLTexture, 0);
-    gl.ctx.framebufferTexture2D(RenderingContext.FRAMEBUFFER, RenderingContext.DEPTH_ATTACHMENT, RenderingContext.TEXTURE_2D, depthTexture.webGLTexture, 0);
+    colorTexture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
+    depthTexture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, AttachmentTextureTarget.TEXTURE_2D, 0);
 
     framebuffer.unBind();
 

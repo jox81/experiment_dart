@@ -59,7 +59,7 @@ Future<Model> experiment() async {
     };
 
   Mesh mesh = new Mesh()
-  ..mode = RenderingContext.POINTS
+  ..mode = DrawMode.POINTS
   ..vertices = [
     0.0, 0.0, 0.0,
     -0.5, 0.5, 0.0,

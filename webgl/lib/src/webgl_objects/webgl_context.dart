@@ -112,6 +112,28 @@ class PixelStorgeType{
   static const PixelStorgeType UNPACK_COLORSPACE_CONVERSION_WEBGL = const PixelStorgeType(WebGL.RenderingContext.UNPACK_COLORSPACE_CONVERSION_WEBGL);
 }
 
+class DrawMode{
+  final index;
+  const DrawMode(this.index);
+
+  static const DrawMode POINTS = const DrawMode(WebGL.RenderingContext.POINTS);
+  static const DrawMode LINE_STRIP = const DrawMode(WebGL.RenderingContext.LINE_STRIP);
+  static const DrawMode LINE_LOOP = const DrawMode(WebGL.RenderingContext.LINE_LOOP);
+  static const DrawMode LINES = const DrawMode(WebGL.RenderingContext.LINES);
+  static const DrawMode TRIANGLE_STRIP = const DrawMode(WebGL.RenderingContext.TRIANGLE_STRIP);
+  static const DrawMode TRIANGLE_FAN = const DrawMode(WebGL.RenderingContext.TRIANGLE_FAN);
+  static const DrawMode TRIANGLES = const DrawMode(WebGL.RenderingContext.TRIANGLES);
+}
+
+class ElementType{
+  final index;
+  const ElementType(this.index);
+
+  static const ElementType UNSIGNED_BYTE = const ElementType(WebGL.RenderingContext.UNSIGNED_BYTE);
+  static const ElementType UNSIGNED_SHORT = const ElementType(WebGL.RenderingContext.UNSIGNED_SHORT);
+  //extension
+}
+
 class ContextParameter{
   final index;
   const ContextParameter(this.index);
@@ -347,5 +369,15 @@ class WebGLRenderingContext {
 
   void pixelStorei(PixelStorgeType storage, int value) {
     ctx.pixelStorei(storage.index, value);
+  }
+
+
+  void drawArrays(DrawMode mode, int firstVertexIndex, int vertexCount) {
+    assert(firstVertexIndex > 0 && vertexCount > 0);
+    ctx.drawArrays(mode.index, firstVertexIndex, vertexCount);
+  }
+
+  void drawElements(DrawMode mode, int count, ElementType type, int offset) {
+    ctx.drawElements(mode.index, count, type.index, offset);
   }
 }
