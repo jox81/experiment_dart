@@ -6,7 +6,6 @@ import 'package:webgl/src/camera.dart';
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPrimitives extends Scene{
 

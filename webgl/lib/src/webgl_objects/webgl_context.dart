@@ -7,6 +7,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
+import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
@@ -60,19 +61,19 @@ class UsageType {
       const UsageType(WebGL.RenderingContext.STREAM_DRAW);
 }
 
-class EnableCapType{
+class EnableCapabilityType{
   final index;
-  const EnableCapType(this.index);
+  const EnableCapabilityType(this.index);
 
-  static const EnableCapType BLEND = const EnableCapType(WebGL.RenderingContext.BLEND);
-  static const EnableCapType CULL_FACE = const EnableCapType(WebGL.RenderingContext.CULL_FACE);
-  static const EnableCapType DEPTH_TEST = const EnableCapType(WebGL.RenderingContext.DEPTH_TEST);
-  static const EnableCapType DITHER = const EnableCapType(WebGL.RenderingContext.DITHER);
-  static const EnableCapType POLYGON_OFFSET_FILL = const EnableCapType(WebGL.RenderingContext.POLYGON_OFFSET_FILL);
-  static const EnableCapType SAMPLE_ALPHA_TO_COVERAGE = const EnableCapType(WebGL.RenderingContext.SAMPLE_ALPHA_TO_COVERAGE);
-  static const EnableCapType SAMPLE_COVERAGE = const EnableCapType(WebGL.RenderingContext.SAMPLE_COVERAGE);
-  static const EnableCapType SCISSOR_TEST = const EnableCapType(WebGL.RenderingContext.SCISSOR_TEST);
-  static const EnableCapType STENCIL_TEST = const EnableCapType(WebGL.RenderingContext.STENCIL_TEST);
+  static const EnableCapabilityType BLEND = const EnableCapabilityType(WebGL.RenderingContext.BLEND);
+  static const EnableCapabilityType CULL_FACE = const EnableCapabilityType(WebGL.RenderingContext.CULL_FACE);
+  static const EnableCapabilityType DEPTH_TEST = const EnableCapabilityType(WebGL.RenderingContext.DEPTH_TEST);
+  static const EnableCapabilityType DITHER = const EnableCapabilityType(WebGL.RenderingContext.DITHER);
+  static const EnableCapabilityType POLYGON_OFFSET_FILL = const EnableCapabilityType(WebGL.RenderingContext.POLYGON_OFFSET_FILL);
+  static const EnableCapabilityType SAMPLE_ALPHA_TO_COVERAGE = const EnableCapabilityType(WebGL.RenderingContext.SAMPLE_ALPHA_TO_COVERAGE);
+  static const EnableCapabilityType SAMPLE_COVERAGE = const EnableCapabilityType(WebGL.RenderingContext.SAMPLE_COVERAGE);
+  static const EnableCapabilityType SCISSOR_TEST = const EnableCapabilityType(WebGL.RenderingContext.SCISSOR_TEST);
+  static const EnableCapabilityType STENCIL_TEST = const EnableCapabilityType(WebGL.RenderingContext.STENCIL_TEST);
 }
 
 class CullFaceMode{
@@ -132,6 +133,40 @@ class ElementType{
   static const ElementType UNSIGNED_BYTE = const ElementType(WebGL.RenderingContext.UNSIGNED_BYTE);
   static const ElementType UNSIGNED_SHORT = const ElementType(WebGL.RenderingContext.UNSIGNED_SHORT);
   //extension
+}
+
+class ReadPixelDataFormat{
+  final index;
+  const ReadPixelDataFormat(this.index);
+
+  static const ReadPixelDataFormat ALPHA = const ReadPixelDataFormat(WebGL.RenderingContext.ALPHA);
+  static const ReadPixelDataFormat RGB = const ReadPixelDataFormat(WebGL.RenderingContext.RGB);
+  static const ReadPixelDataFormat RGBA = const ReadPixelDataFormat(WebGL.RenderingContext.RGBA);
+}
+
+class ReadPixelDataType{
+  final index;
+  const ReadPixelDataType(this.index);
+
+  static const ReadPixelDataType UNSIGNED_BYTE = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_BYTE);
+  static const ReadPixelDataType UNSIGNED_SHORT_5_6_5 = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_6_5);
+  static const ReadPixelDataType UNSIGNED_SHORT_4_4_4_4 = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_4_4_4_4);
+  static const ReadPixelDataType UNSIGNED_SHORT_5_5_5_1 = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_5_5_1);
+  static const ReadPixelDataType FLOAT = const ReadPixelDataType(WebGL.RenderingContext.FLOAT);
+}
+
+class DepthComparisonFunction{
+  final index;
+  const DepthComparisonFunction(this.index);
+
+  static const DepthComparisonFunction NEVER = const DepthComparisonFunction(WebGL.RenderingContext.NEVER);
+  static const DepthComparisonFunction LESS = const DepthComparisonFunction(WebGL.RenderingContext.LESS);
+  static const DepthComparisonFunction EQUAL = const DepthComparisonFunction(WebGL.RenderingContext.EQUAL);
+  static const DepthComparisonFunction LEQUAL = const DepthComparisonFunction(WebGL.RenderingContext.LEQUAL);
+  static const DepthComparisonFunction GREATER = const DepthComparisonFunction(WebGL.RenderingContext.GREATER);
+  static const DepthComparisonFunction NOTEQUAL = const DepthComparisonFunction(WebGL.RenderingContext.NOTEQUAL);
+  static const DepthComparisonFunction GEQUAL = const DepthComparisonFunction(WebGL.RenderingContext.GEQUAL);
+  static const DepthComparisonFunction ALWAYS = const DepthComparisonFunction(WebGL.RenderingContext.ALWAYS);
 }
 
 class ContextParameter{
@@ -237,34 +272,33 @@ class WebGLRenderingContext {
     ctx.frontFace(mode.index);
   }
 
-  bool get cullFace => ctx.isEnabled(EnableCapType.CULL_FACE.index);
+  bool get cullFace => ctx.isEnabled(EnableCapabilityType.CULL_FACE.index);
   set cullFace(bool enable){
-    _enable(EnableCapType.CULL_FACE, enable);
+    _enable(EnableCapabilityType.CULL_FACE, enable);
   }
 
   set cullFaceMode(CullFaceMode mode){
     ctx.cullFace(mode.index);
   }
 
-  bool get depthTest => ctx.isEnabled(EnableCapType.DEPTH_TEST.index);
+  bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
   set depthTest(bool enable){
-    _enable(EnableCapType.DEPTH_TEST, enable);
+    _enable(EnableCapabilityType.DEPTH_TEST, enable);
   }
 
-  void _enable(EnableCapType enableCapType, bool enabled){
-    if(enabled){
-      ctx.enable(enableCapType.index);
-    } else {
-      ctx.disable(enableCapType.index);
-    }
+  DepthComparisonFunction get depthFunc => new DepthComparisonFunction(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
+  set depthFunc(DepthComparisonFunction depthComparisionFunction){
+    ctx.depthFunc(depthComparisionFunction.index);
   }
+
 
   num get drawingBufferWidth => ctx.drawingBufferWidth;
   num get drawingBufferHeight => ctx.drawingBufferHeight;
 
   WebGLRenderingContext._init(this.ctx);
 
-  factory WebGLRenderingContext.create(CanvasElement canvas,{bool debug : false}){
+  //Todo add default parameters
+  factory WebGLRenderingContext.create(CanvasElement canvas,{bool debug : false, bool preserveDrawingBuffer:true}){
     WebGL.RenderingContext ctx;
 
     List<String> names = [
@@ -274,7 +308,7 @@ class WebGLRenderingContext {
       "moz-webgl"
     ];
     var options = {
-      'preserveDrawingBuffer': true,
+      'preserveDrawingBuffer': preserveDrawingBuffer,
     };
 
     for (int i = 0; i < names.length; ++i) {
@@ -336,9 +370,11 @@ class WebGLRenderingContext {
 
   void clear(List<ClearBufferMask> masks) {
     //Todo : change with bitmask : RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT
+    int bitmask = 0;
     for(ClearBufferMask mask in masks) {
-      ctx.clear(mask.index);
+      bitmask |= mask.index;
     }
+    ctx.clear(bitmask);
   }
 
   //Extensions
@@ -359,10 +395,14 @@ class WebGLRenderingContext {
 
   //Todo : get single parameter
 
-  Int32List get viewport => ctx.getParameter(ContextParameter.VIEWPORT.index);
-  void setViewport(int x, int y, num width, num height) {
-    assert(width >= 0 && height >= 0);
-    ctx.viewport(x, y, width, height);
+  Rectangle get viewport {
+    Int32List values = ctx.getParameter(ContextParameter.VIEWPORT.index);
+    return new Rectangle(values[0], values[1], values[2], values[3]);
+  }
+  set viewport(Rectangle rect) {
+    //int x, int y, num width, num height
+    assert(rect.width >= 0 && rect.height >= 0);
+    ctx.viewport(rect.left, rect.top, rect.width, rect.height);
   }
 
   Int32List get viewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
@@ -373,11 +413,57 @@ class WebGLRenderingContext {
 
 
   void drawArrays(DrawMode mode, int firstVertexIndex, int vertexCount) {
-    assert(firstVertexIndex > 0 && vertexCount > 0);
+    assert(firstVertexIndex >= 0 && vertexCount >= 0);
     ctx.drawArrays(mode.index, firstVertexIndex, vertexCount);
   }
 
   void drawElements(DrawMode mode, int count, ElementType type, int offset) {
     ctx.drawElements(mode.index, count, type.index, offset);
+  }
+
+  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixelsSource) {
+    assert(width >= 0);
+    assert(height >= 0);
+    assert(internalFormat.index == internalFormat2.index);//in webgl1
+    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixelsSource);
+  }
+
+  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, pixelsSource) {
+    assert(internalFormat.index == internalFormat2.index);//in webgl1
+    assert(pixelsSource is ImageData || pixelsSource is ImageElement || pixelsSource is CanvasElement || pixelsSource is VideoElement || pixelsSource is ImageBitmap); //? add is null
+    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixelsSource);
+  }
+
+  void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
+    assert(width >= 0);
+    assert(height >= 0);
+    ctx.readPixels(left, top, width, height, format.index, type.index, pixels);
+  }
+
+  void enable(EnableCapabilityType cap) {
+    ctx.enable(cap.index);
+  }
+  void disable(EnableCapabilityType cap) {
+    ctx.disable(cap.index);
+  }
+
+  void _enable(EnableCapabilityType enableCapType, bool enabled){
+    if(enabled){
+      enable(enableCapType);
+    } else {
+      disable(enableCapType);
+    }
+  }
+
+  void isEnabled(EnableCapabilityType cap) {
+    ctx.isEnabled(cap.index);
+  }
+
+  void depthRange(num zNear, num zFar) {
+    ctx.depthRange(zNear, zFar);
+  }
+
+  void bindFrameBuffer(FrameBufferTarget target, WebGLFrameBuffer webGLframeBuffer) {
+    ctx.bindFramebuffer(target.index, webGLframeBuffer.webGLFrameBuffer);
   }
 }

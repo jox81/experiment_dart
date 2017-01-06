@@ -120,7 +120,7 @@ class Application {
       gl.canvas.width = displayWidth;
       gl.canvas.height = displayHeight;
 
-      gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     }
   }
 
@@ -131,7 +131,7 @@ class Application {
   }
 
   void _render({num time: 0.0}) {
-    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     clear(_currentScene.backgroundColor);
 
     _currentScene.updateUserInput();

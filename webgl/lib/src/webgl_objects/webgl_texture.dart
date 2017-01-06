@@ -45,6 +45,25 @@ class TextureMagType extends TextureFilterType {
       const TextureMagType(WebGL.RenderingContext.NEAREST);
 }
 
+class TextureInternalFormatType{
+  final index;
+  const TextureInternalFormatType(this.index);
+
+  static const TextureInternalFormatType ALPHA = const TextureInternalFormatType(WebGL.RenderingContext.ALPHA);
+  static const TextureInternalFormatType RGB = const TextureInternalFormatType(WebGL.RenderingContext.RGB);
+  static const TextureInternalFormatType RGBA = const TextureInternalFormatType(WebGL.RenderingContext.RGBA);
+  static const TextureInternalFormatType LUMINANCE = const TextureInternalFormatType(WebGL.RenderingContext.LUMINANCE);
+  static const TextureInternalFormatType LUMINANCE_ALPHA = const TextureInternalFormatType(WebGL.RenderingContext.LUMINANCE_ALPHA);
+}
+
+//Todo move in extension
+class WEBGL_depth_texture_InternalFormatType extends TextureInternalFormatType{
+  const WEBGL_depth_texture_InternalFormatType(int index):super(index);
+
+  static const WEBGL_depth_texture_InternalFormatType DEPTH_COMPONENT = const WEBGL_depth_texture_InternalFormatType(WebGL.RenderingContext.DEPTH_COMPONENT);
+  static const WEBGL_depth_texture_InternalFormatType DEPTH_STENCIL = const WEBGL_depth_texture_InternalFormatType(WebGL.RenderingContext.DEPTH_STENCIL);
+}
+
 class TextureMinType extends TextureFilterType {
   const TextureMinType(int index):super(index);
 
@@ -71,6 +90,16 @@ class TextureWrapType extends TextureSetParameterType{
       const TextureWrapType(WebGL.RenderingContext.CLAMP_TO_EDGE);
   static const TextureWrapType MIRRORED_REPEAT =
       const TextureWrapType(WebGL.RenderingContext.MIRRORED_REPEAT);
+}
+
+class TexelDataType{
+  final index;
+  const TexelDataType(this.index);
+
+  static const TexelDataType UNSIGNED_BYTE = const TexelDataType(WebGL.RenderingContext.UNSIGNED_BYTE);
+  static const TexelDataType UNSIGNED_SHORT_5_6_5 = const TexelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_6_5);
+  static const TexelDataType UNSIGNED_SHORT_4_4_4_4 = const TexelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_4_4_4_4);
+  static const TexelDataType UNSIGNED_SHORT_5_5_5_1 = const TexelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_5_5_1);
 }
 
 class WebGLTexture {
@@ -112,7 +141,7 @@ class WebGLTexture {
     gl.ctx.bindTexture(target.index, null);
   }
 
-  void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, AttachmentTextureTarget attachementTarget, int mipMapLevel){
+  void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, TextureAttachmentTarget attachementTarget, int mipMapLevel){
     gl.ctx.framebufferTexture2D(target.index, attachment.index, attachementTarget.index, webGLTexture, mipMapLevel);
   }
 }

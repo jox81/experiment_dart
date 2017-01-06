@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 Future main() async {
   WebglTestParameters webgl01 =
@@ -22,17 +24,17 @@ Future main() async {
 List<WebglParameter> webglParameters = new List();
 
 class WebglTestParameters {
-  Buffer vertexBuffer;
-  Buffer indicesBuffer;
+  WebGLBuffer vertexBuffer;
+  WebGLBuffer indicesBuffer;
 
   List<Model> models = new List();
 
-  Program shaderProgram;
+  WebGLProgram shaderProgram;
 
   int vertexPositionAttribute;
 
-  UniformLocation pMatrixUniform;
-  UniformLocation mvMatrixUniform;
+  WebGLUniformLocation pMatrixUniform;
+  WebGLUniformLocation mvMatrixUniform;
 
   WebglTestParameters(CanvasElement canvas) {
     initGL(canvas);
@@ -65,7 +67,7 @@ class WebglTestParameters {
   }
 
   void render({num time: 0.0}) {
-    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear(
         [ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 

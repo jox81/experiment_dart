@@ -25,16 +25,16 @@ class RenderBufferTarget{
   static const RenderBufferTarget RENDERBUFFER = const RenderBufferTarget(WebGL.RenderingContext.RENDERBUFFER);
 }
 
-class InternalFormatType{
+class RenderBufferInternalFormatType{
   final index;
-  const InternalFormatType(this.index);
+  const RenderBufferInternalFormatType(this.index);
 
-  static const InternalFormatType RGBA4 = const InternalFormatType(WebGL.RenderingContext.RGBA4);
-  static const InternalFormatType RGB565 = const InternalFormatType(WebGL.RenderingContext.RGB565);
-  static const InternalFormatType RGB5_A1 = const InternalFormatType(WebGL.RenderingContext.RGB5_A1);
-  static const InternalFormatType DEPTH_COMPONENT16 = const InternalFormatType(WebGL.RenderingContext.DEPTH_COMPONENT16);
-  static const InternalFormatType STENCIL_INDEX8 = const InternalFormatType(WebGL.RenderingContext.STENCIL_INDEX8);
-  static const InternalFormatType DEPTH_STENCIL = const InternalFormatType(WebGL.RenderingContext.DEPTH_STENCIL);
+  static const RenderBufferInternalFormatType RGBA4 = const RenderBufferInternalFormatType(WebGL.RenderingContext.RGBA4);
+  static const RenderBufferInternalFormatType RGB565 = const RenderBufferInternalFormatType(WebGL.RenderingContext.RGB565);
+  static const RenderBufferInternalFormatType RGB5_A1 = const RenderBufferInternalFormatType(WebGL.RenderingContext.RGB5_A1);
+  static const RenderBufferInternalFormatType DEPTH_COMPONENT16 = const RenderBufferInternalFormatType(WebGL.RenderingContext.DEPTH_COMPONENT16);
+  static const RenderBufferInternalFormatType STENCIL_INDEX8 = const RenderBufferInternalFormatType(WebGL.RenderingContext.STENCIL_INDEX8);
+  static const RenderBufferInternalFormatType DEPTH_STENCIL = const RenderBufferInternalFormatType(WebGL.RenderingContext.DEPTH_STENCIL);
 }
 
 class WebGLRenderBuffer{
@@ -67,7 +67,7 @@ class WebGLRenderBuffer{
     gl.ctx.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER.index, null);
   }
 
-  void renderbufferStorage(RenderBufferTarget renderbuffer, InternalFormatType internalFormat, int width, int heigth) {
+  void renderbufferStorage(RenderBufferTarget renderbuffer, RenderBufferInternalFormatType internalFormat, int width, int heigth) {
     gl.ctx.renderbufferStorage(renderbuffer.index, internalFormat.index, width, heigth);
   }
 

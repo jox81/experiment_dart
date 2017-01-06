@@ -8,7 +8,6 @@ import 'package:webgl/src/light.dart';
 import 'dart:math';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPerformanceTest extends Scene{
 

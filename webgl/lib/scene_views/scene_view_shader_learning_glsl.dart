@@ -5,7 +5,6 @@ import 'package:webgl/src/meshes.dart';
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interface/IScene.dart';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
 class SceneViewShaderLearning01 extends Scene{

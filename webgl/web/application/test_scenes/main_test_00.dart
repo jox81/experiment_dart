@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/camera.dart';
@@ -149,7 +148,7 @@ class Webgl01 {
   }
 
   void render({num time : 0.0}) {
-    gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT,ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     Context.mvMatrix = Context.mainCamera.lookAtMatrix * models[0].transform;

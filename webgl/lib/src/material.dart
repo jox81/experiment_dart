@@ -1,5 +1,4 @@
 import 'dart:collection';
-import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_info.dart';

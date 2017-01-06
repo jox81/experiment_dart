@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'dart:web_gl';
 import 'dart:html';
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
@@ -48,7 +47,7 @@ class TextureUtils {
     texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_MAG_FILTER, TextureMagType.LINEAR);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, image);
+    gl.texImage2D(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, image);
 
     texture.unBind(TextureTarget.TEXTURE_2D);
     return texture;
@@ -64,8 +63,8 @@ class TextureUtils {
     texture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameterGlEnum.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, size, size, 0, RenderingContext.RGBA,
-        RenderingContext.UNSIGNED_BYTE, null);
+    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
+        TexelDataType.UNSIGNED_BYTE, null);
 
     gl.bindTexture(TextureTarget.TEXTURE_2D, null);
 
@@ -82,7 +81,7 @@ class TextureUtils {
     depthTexture.setParameterInt(target, TextureParameterGlEnum.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
     depthTexture.setParameterInt(target, TextureParameterGlEnum.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
-    gl.ctx.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.DEPTH_COMPONENT, size, size, 0, RenderingContext.DEPTH_COMPONENT, RenderingContext.UNSIGNED_BYTE, null);
+    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, size, size, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, TexelDataType.UNSIGNED_BYTE, null);
 
     depthTexture.unBind(target);
 
@@ -93,7 +92,7 @@ class TextureUtils {
     WebGLRenderBuffer renderBuffer = new WebGLRenderBuffer();
 
     renderBuffer.bind();
-    renderBuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, InternalFormatType.DEPTH_COMPONENT16, size, size);
+    renderBuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, RenderBufferInternalFormatType.DEPTH_COMPONENT16, size, size);
     renderBuffer.unBind();
 
     return renderBuffer;
@@ -104,7 +103,7 @@ class TextureUtils {
     framebuffer.bind();
 
     colorTexture.framebufferTexture2D(
-        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
+        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
     depthRenderbuffer.framebufferRenderbuffer(
         FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER);
     framebuffer.unBind();
@@ -121,8 +120,8 @@ class TextureUtils {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
     framebuffer.bind();
 
-    colorTexture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
-    depthTexture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, AttachmentTextureTarget.TEXTURE_2D, 0);
+    colorTexture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
+    depthTexture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, TextureAttachmentTarget.TEXTURE_2D, 0);
 
     framebuffer.unBind();
 
@@ -160,7 +159,7 @@ class TextureUtils {
 
       //Each frameBuffer component will be filled up
       gl.clearColor = new Vector4(.5, .5, .5, 1.0); // green;
-      gl.setViewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
       gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
       CubeModel cube = new CubeModel();
@@ -199,13 +198,13 @@ class TextureUtils {
     print('IMPLEMENTATION_COLOR_READ_FORMAT : ${gl.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_FORMAT)}');
     print('IMPLEMENTATION_COLOR_READ_TYPE : ${gl.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_TYPE)}');
 
-    gl.ctx.readPixels(
+    gl.readPixels(
         rectangle.left,
         rectangle.top,
         rectangle.width,
         rectangle.height,
-        RenderingContext.RGBA,
-        RenderingContext.UNSIGNED_BYTE,
+        ReadPixelDataFormat.RGBA,
+        ReadPixelDataType.UNSIGNED_BYTE,
         pixels);
 
     print(pixels);

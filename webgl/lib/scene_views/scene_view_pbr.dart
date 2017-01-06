@@ -7,7 +7,6 @@ import 'package:webgl/src/light.dart';
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interface/IScene.dart';
 
 class SceneViewPBR extends Scene{
 

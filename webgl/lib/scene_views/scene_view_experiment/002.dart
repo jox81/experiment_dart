@@ -1,5 +1,3 @@
-
-import 'dart:web_gl';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';

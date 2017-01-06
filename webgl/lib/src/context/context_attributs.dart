@@ -1,4 +1,3 @@
-import 'dart:mirrors';
 import 'package:webgl/src/context.dart';
 
 class ContextAttributs{

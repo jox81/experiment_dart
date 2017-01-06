@@ -1,7 +1,9 @@
 import 'dart:html';
-import 'dart:web_gl';
 import 'dart:typed_data';
 import 'dart:js' as js;
+
+import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 
 void log(String msg) {
   print(msg);
@@ -23,20 +25,20 @@ void main() {
   document.body.append(canvas);
   log("canvas '${canvas.id}' created: width=${canvas.width} height=${canvas.height}");
 
-  RenderingContext gl = canvas.getContext3d(preserveDrawingBuffer: true);
+  WebGLRenderingContext gl = new WebGLRenderingContext.create(canvas, preserveDrawingBuffer: true);
   if (gl == null) {
     log("WebGL: initialization failure");
     return;
   }
   log("WebGL: initialized");
 
-  gl.clearColor(0.5, 0.5, 0.5, 1.0);       // clear color
-  gl.enable(RenderingContext.DEPTH_TEST);  // enable depth testing
-  gl.depthFunc(RenderingContext.LESS);     // gl.LESS is default depth test
+  gl.clearColor = new Vector4(0.5, 0.5, 0.5, 1.0);       // clear color
+  gl.enable(EnableCapabilityType.DEPTH_TEST);  // enable depth testing
+  gl.depthFunc = DepthComparisonFunction.LESS;     // gl.LESS is default depth test
   gl.depthRange(0.0, 1.0);                 // default
-  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.viewport = new Rectangle(0, 0, canvas.width, canvas.height);
 
-  gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+  gl.clear([ClearBufferMask.COLOR_BUFFER_BIT , ClearBufferMask.DEPTH_BUFFER_BIT]);
 
   canvas.onClick.listen((MouseEvent e) {
     log("mouse offset: x=${e.offset.x} y=${e.offset.y}");
@@ -45,7 +47,6 @@ void main() {
     int y = canvas.height - e.offset.y;
 
     Uint8List color = new Uint8List(4);
-    gl.bindFramebuffer(RenderingContext.FRAMEBUFFER, null); // default framebuffer
 //    gl.readPixels(x, y, 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, color);
     readPixelsDartium(gl,x, y);
 
@@ -68,7 +69,7 @@ get jsReadPixels {
   return _jsReadPixels;
 }
 
-readPixelsDartium(RenderingContext gl, x, y) {
+readPixelsDartium(WebGLRenderingContext gl, x, y) {
   // If we're in dart2js, just call the method.
   if (1.0 is int) {
     Uint8List color = new Uint8List(4);
@@ -77,8 +78,8 @@ readPixelsDartium(RenderingContext gl, x, y) {
         y,
         1,
         1,
-        RenderingContext.RGBA,
-        RenderingContext.UNSIGNED_BYTE,
+        ReadPixelDataFormat.RGBA,
+        ReadPixelDataType.UNSIGNED_BYTE,
         color);
     return color;
   }

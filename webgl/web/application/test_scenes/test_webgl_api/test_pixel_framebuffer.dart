@@ -1,9 +1,11 @@
 import 'dart:html';
-import 'dart:web_gl';
 import 'dart:typed_data';
 import 'dart:js' as js;
 
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
@@ -43,12 +45,12 @@ void log(String msg) {
   document.body.append(m); 
 }
 
-WebGLFrameBuffer createRenderbuffer(RenderingContext gl, int width, int height) {
+WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int height) {
   // 1. Init Picking Texture
   WebGLTexture texture = new WebGLTexture();
   texture.bind(TextureTarget.TEXTURE_2D);
   try {
-    gl.texImage2DTyped(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, width, height, 0, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, null);
+    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, width, height, 0, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, null);
   }
   catch (e) {
     // https://code.google.com/p/dart/issues/detail?id=11498
@@ -58,12 +60,12 @@ WebGLFrameBuffer createRenderbuffer(RenderingContext gl, int width, int height) 
   // 2. Init Render Buffer
   WebGLRenderBuffer renderbuffer = new WebGLRenderBuffer();
   renderbuffer.bind();
-  renderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, InternalFormatType.DEPTH_COMPONENT16, width, height);
+  renderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, RenderBufferInternalFormatType.DEPTH_COMPONENT16, width, height);
   
   // 3. Init Frame Buffer
   WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
   framebuffer.bind();
-  texture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, AttachmentTextureTarget.TEXTURE_2D, 0);
+  texture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
   renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
 
   // 4. Clean up
@@ -74,22 +76,22 @@ WebGLFrameBuffer createRenderbuffer(RenderingContext gl, int width, int height) 
   return framebuffer;
 }
 
-void render(RenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniformLocation u_Color, WebGLAttributLocation a_Position, Buffer vertexPositionBuffer, int vertexPositionBufferItemSize, Buffer vertexIndexBuffer, int indicesLength) {
+void render(WebGLRenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniformLocation u_Color, WebGLAttributLocation a_Position, WebGLBuffer vertexPositionBuffer, int vertexPositionBufferItemSize, WebGLBuffer vertexIndexBuffer, int indicesLength) {
   framebuffer.bind();
-  gl.clear(RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT);
+  gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
   
   Float32List red = new Float32List.fromList([1.0, 0.0, 0.0, 1.0]);
 
   u_Color.uniform4fv(red);
-  
-  gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexPositionBuffer);
+
+  vertexPositionBuffer.bind(BufferType.ARRAY_BUFFER);
   a_Position.vertexAttribPointer(vertexPositionBufferItemSize, ShaderVariableType.FLOAT, false, 0, 0);
-  
-  gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
-  gl.drawElements(RenderingContext.TRIANGLES, indices.length, RenderingContext.UNSIGNED_SHORT, 0);    
+
+  vertexIndexBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
+  gl.drawElements(DrawMode.TRIANGLES, indices.length, ElementType.UNSIGNED_SHORT, 0);
 }
 
-void readColor(String label, RenderingContext gl, int x, int y, WebGLFrameBuffer framebuffer) {
+void readColor(String label, WebGLRenderingContext gl, int x, int y, WebGLFrameBuffer framebuffer) {
   Uint8List color = new Uint8List(4);
   framebuffer.bind();
 //  gl.readPixels(x, y, 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, color);
@@ -110,21 +112,21 @@ void main() {
   document.body.append(canvas);
   log("canvas '${canvas.id}' created: width=${canvas.width} height=${canvas.height}");
 
-  RenderingContext gl = canvas.getContext3d(preserveDrawingBuffer: true);
+  WebGLRenderingContext gl = new WebGLRenderingContext.create(canvas, preserveDrawingBuffer: true);
   if (gl == null) {
     log("WebGL: initialization failure");
     return;
   }
   log("WebGL: initialized");
   
-  Buffer vertexPositionBuffer = gl.createBuffer();
+  WebGLBuffer vertexPositionBuffer = new WebGLBuffer();
   final int vertexPositionBufferItemSize = 3; // coord x,y,z
-  gl.bindBuffer(RenderingContext.ARRAY_BUFFER, vertexPositionBuffer);
-  gl.bufferDataTyped(RenderingContext.ARRAY_BUFFER, vertCoord, RenderingContext.STATIC_DRAW);
-  
-  Buffer vertexIndexBuffer = gl.createBuffer();
-  gl.bindBuffer(RenderingContext.ELEMENT_ARRAY_BUFFER, vertexIndexBuffer);
-  gl.bufferDataTyped(RenderingContext.ELEMENT_ARRAY_BUFFER, indices, RenderingContext.STATIC_DRAW);
+  vertexPositionBuffer.bind(BufferType.ARRAY_BUFFER);
+  gl.bufferData(BufferType.ARRAY_BUFFER, vertCoord, UsageType.STATIC_DRAW);
+
+  WebGLBuffer vertexIndexBuffer = new WebGLBuffer();
+  vertexIndexBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
+  gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, indices, UsageType.STATIC_DRAW);
     
   WebGLShader vertShader = new WebGLShader(ShaderType.VERTEX_SHADER)
       ..source = vertexShaderSource
@@ -144,11 +146,11 @@ void main() {
   program.use();
   a_Position.enableVertexAttribArray();
   
-  gl.clearColor(0.5, 0.5, 0.5, 1.0);       // clear color
-  gl.enable(RenderingContext.DEPTH_TEST);  // enable depth testing
-  gl.depthFunc(RenderingContext.LESS);     // gl.LESS is default depth test
+  gl.clearColor = new Vector4(0.5, 0.5, 0.5, 1.0);       // clear color
+  gl.enable(EnableCapabilityType.DEPTH_TEST);  // enable depth testing
+  gl.depthFunc = DepthComparisonFunction.LESS;     // gl.LESS is default depth test
   gl.depthRange(0.0, 1.0);                 // default
-  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.viewport = new Rectangle(0, 0, canvas.width, canvas.height);
 
   WebGLFrameBuffer offscreen = createRenderbuffer(gl, canvas.width, canvas.height);
   
@@ -180,7 +182,7 @@ get jsReadPixels {
   return _jsReadPixels;
 }
 
-readPixelsDartium(RenderingContext gl, x, y) {
+readPixelsDartium(WebGLRenderingContext gl, x, y) {
   // If we're in dart2js, just call the method.
   if (1.0 is int) {
     Uint8List color = new Uint8List(4);
@@ -189,8 +191,8 @@ readPixelsDartium(RenderingContext gl, x, y) {
         y,
         1,
         1,
-        RenderingContext.RGBA,
-        RenderingContext.UNSIGNED_BYTE,
+        ReadPixelDataFormat.RGBA,
+        ReadPixelDataType.UNSIGNED_BYTE,
         color);
     return color;
   }

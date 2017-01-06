@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:web_gl';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -9,7 +8,6 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewFrameBuffer extends Scene{
