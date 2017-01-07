@@ -406,10 +406,8 @@ class WebGLRenderingContext {
   int get maxCubeMapTextureSize => ctx.getParameter(ContextParameter.MAX_CUBE_MAP_TEXTURE_SIZE.index);
   // > MAX_TEXTURE_SIZE
   int get maxTextureSize => ctx.getParameter(ContextParameter.MAX_TEXTURE_SIZE.index);
-
   // > MAX_VERTEX_TEXTURE_IMAGE_UNITS
   int get maxVertexTextureImageUnits => ctx.getParameter(ContextParameter.MAX_VERTEX_TEXTURE_IMAGE_UNITS.index);
-
   // > MAX_VERTEX_ATTRIBS
   int get maxVertexAttributs => ctx.getParameter(ContextParameter.MAX_VERTEX_ATTRIBS.index);
   // > MAX_VERTEX_UNIFORM_VECTORS
@@ -418,7 +416,6 @@ class WebGLRenderingContext {
   int get maxVaryingVectors => ctx.getParameter(ContextParameter.MAX_VARYING_VECTORS.index);
   // > MAX_FRAGMENT_UNIFORM_VECTORS
   int get maxFragmentUnifromVectors => ctx.getParameter(ContextParameter.MAX_FRAGMENT_UNIFORM_VECTORS.index);
-
   // > MAX_RENDERBUFFER_SIZE
   int get maxRenderBufferSize => ctx.getParameter(ContextParameter.MAX_RENDERBUFFER_SIZE.index);
 
@@ -436,19 +433,6 @@ class WebGLRenderingContext {
   // > SAMPLE_BUFFERS
   int get sampleBuffers => ctx.getParameter(ContextParameter.SAMPLE_BUFFERS.index);
 
-  // > STENCIL_FAIL
-  StencilOpMode get stencilFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_FAIL.index));
-  // > STENCIL_PASS_DEPTH_PASS
-  StencilOpMode get stencilPassDepthPass => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index));
-  // > STENCIL_PASS_DEPTH_FAIL
-  StencilOpMode get stencilPassDepthFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index));
-  // > STENCIL_BACK_FAIL
-  StencilOpMode get stencilBackFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index));
-  // > STENCIL_BACK_PASS_DEPTH_PASS
-  StencilOpMode get stencilBackPassDepthPass => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index));
-  // > STENCIL_BACK_PASS_DEPTH_FAIL
-  StencilOpMode get stencilBackPassDepthFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index));
-
   // > UNPACK_ALIGNMENT
   int get unpackAlignment => ctx.getParameter(ContextParameter.UNPACK_ALIGNMENT.index);
 
@@ -459,12 +443,14 @@ class WebGLRenderingContext {
   // > UNPACK_PREMULTIPLY_ALPHA_WEBGL
   bool get unpackPreMultiplyAlphaWebGL => ctx.getParameter(ContextParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.index);
 
-
+  // > IMPLEMENTATION_COLOR_READ_FORMAT // Todo : GLenum ?
+  int get implementationColorReadFormat => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_FORMAT.index);
+  // > IMPLEMENTATION_COLOR_READ_TYPE // Todo : GLenum ?
+  int get implementationColorReadType => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_TYPE.index);
 
 
 
   //>>>
-
 
 
 
@@ -551,12 +537,7 @@ class WebGLRenderingContext {
   void setSampleCoverage(num value, bool invert) => ctx.sampleCoverage(value, invert);
 
   //Stencils
-  bool get stencilTest => isEnabled(EnableCapabilityType.STENCIL_TEST);
-  set stencilTest (bool enabled) => _setEnabled(EnableCapabilityType.STENCIL_TEST, enabled);
 
-  void stencilFunc(ComparisonFunction comparisonFunction, int ref, int mask){
-    ctx.stencilFunc(comparisonFunction.index, ref, mask);
-  }
   void stencilFuncSeparate(FacingType faceType, ComparisonFunction comparisonFunction, int ref, int mask){
     ctx.stencilFuncSeparate(faceType.index, comparisonFunction.index, ref, mask);
   }
@@ -569,14 +550,50 @@ class WebGLRenderingContext {
   void stencilOpSeparate(FacingType faceType, StencilOpMode fail, StencilOpMode zFail, StencilOpMode zPass){
     ctx.stencilOpSeparate(faceType.index, fail.index, zFail.index, zPass.index);
   }
+
+  // > STENCIL_TEST //Todo : ? identique à get parameter ? STENCIL_TEST
+  bool get stencilTest => isEnabled(EnableCapabilityType.STENCIL_TEST);
+  set stencilTest (bool enabled) => _setEnabled(EnableCapabilityType.STENCIL_TEST, enabled);
+
+  // > STENCIL_FUNC
+  ComparisonFunction get stencilFunc => new ComparisonFunction(ctx.getParameter(ContextParameter.STENCIL_FUNC.index));
+  // > STENCIL_BACK_FUNC
+  ComparisonFunction get stencilBackFunc => new ComparisonFunction(ctx.getParameter(ContextParameter.STENCIL_BACK_FUNC.index));
+  void setStencilFunc(ComparisonFunction comparisonFunction, int ref, int mask){
+    ctx.stencilFunc(comparisonFunction.index, ref, mask);
+  }
+
+  // > STENCIL_VALUE_MASK
+  int get stencilValueMask => ctx.getParameter(ContextParameter.STENCIL_VALUE_MASK.index);
+  // > STENCIL_WRITEMASK
   int get stencilWriteMask => ctx.getParameter(ContextParameter.STENCIL_WRITEMASK.index);
+  // > STENCIL_BACK_WRITEMASK
   int get stencilBackWriteMask => ctx.getParameter(ContextParameter.STENCIL_BACK_WRITEMASK.index);
   set stencilMaks(int value) => ctx.stencilMask(value);
 
+  // > STENCIL_REF
+  int get stencilRef => ctx.getParameter(ContextParameter.STENCIL_REF.index);
+  // > STENCIL_BACK_REF
+  int get stencilBackRef => ctx.getParameter(ContextParameter.STENCIL_BACK_REF.index);
+  // > STENCIL_BACK_VALUE_MASK
+  int get stencilBackValueMask => ctx.getParameter(ContextParameter.STENCIL_BACK_VALUE_MASK.index);
+
+  // > STENCIL_CLEAR_VALUE
   int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index);
-  set clearStencil(int index){
-    ctx.clearStencil(index) ;
-  }
+  set clearStencil(int index) => ctx.clearStencil(index);
+
+  // > STENCIL_FAIL
+  StencilOpMode get stencilFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_FAIL.index));
+  // > STENCIL_PASS_DEPTH_PASS
+  StencilOpMode get stencilPassDepthPass => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index));
+  // > STENCIL_PASS_DEPTH_FAIL
+  StencilOpMode get stencilPassDepthFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index));
+  // > STENCIL_BACK_FAIL
+  StencilOpMode get stencilBackFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index));
+  // > STENCIL_BACK_PASS_DEPTH_PASS
+  StencilOpMode get stencilBackPassDepthPass => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index));
+  // > STENCIL_BACK_PASS_DEPTH_FAIL
+  StencilOpMode get stencilBackPassDepthFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index));
 
   //Blend
   //Todo : ? identique à get parameter ? BLEND
