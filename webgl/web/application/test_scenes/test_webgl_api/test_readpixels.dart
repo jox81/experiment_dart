@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'dart:js' as js;
 
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 void log(String msg) {
   print(msg);
@@ -34,7 +34,7 @@ void main() {
 
   gl.clearColor = new Vector4(0.5, 0.5, 0.5, 1.0);       // clear color
   gl.enable(EnableCapabilityType.DEPTH_TEST);  // enable depth testing
-  gl.depthFunc = DepthComparisonFunction.LESS;     // gl.LESS is default depth test
+  gl.depthFunc = ComparisonFunction.LESS;     // gl.LESS is default depth test
   gl.depthRange(0.0, 1.0);                 // default
   gl.viewport = new Rectangle(0, 0, canvas.width, canvas.height);
 

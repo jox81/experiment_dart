@@ -11,44 +11,6 @@ import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-class TextureUnit {
-  final index;
-  const TextureUnit(this.index);
-
-  static const TextureUnit TEXTURE0 = const TextureUnit(WebGL.RenderingContext.TEXTURE0);
-  static const TextureUnit TEXTURE1 = const TextureUnit(WebGL.RenderingContext.TEXTURE1);
-  static const TextureUnit TEXTURE2 = const TextureUnit(WebGL.RenderingContext.TEXTURE2);
-  static const TextureUnit TEXTURE3 = const TextureUnit(WebGL.RenderingContext.TEXTURE3);
-  static const TextureUnit TEXTURE4 = const TextureUnit(WebGL.RenderingContext.TEXTURE4);
-  static const TextureUnit TEXTURE5 = const TextureUnit(WebGL.RenderingContext.TEXTURE5);
-  static const TextureUnit TEXTURE6 = const TextureUnit(WebGL.RenderingContext.TEXTURE6);
-  static const TextureUnit TEXTURE7 = const TextureUnit(WebGL.RenderingContext.TEXTURE7);
-  static const TextureUnit TEXTURE8 = const TextureUnit(WebGL.RenderingContext.TEXTURE8);
-  static const TextureUnit TEXTURE9 = const TextureUnit(WebGL.RenderingContext.TEXTURE9);
-  static const TextureUnit TEXTURE10 = const TextureUnit(WebGL.RenderingContext.TEXTURE10);
-  static const TextureUnit TEXTURE11 = const TextureUnit(WebGL.RenderingContext.TEXTURE11);
-  static const TextureUnit TEXTURE12 = const TextureUnit(WebGL.RenderingContext.TEXTURE12);
-  static const TextureUnit TEXTURE13 = const TextureUnit(WebGL.RenderingContext.TEXTURE13);
-  static const TextureUnit TEXTURE14 = const TextureUnit(WebGL.RenderingContext.TEXTURE14);
-  static const TextureUnit TEXTURE15 = const TextureUnit(WebGL.RenderingContext.TEXTURE15);
-  static const TextureUnit TEXTURE16 = const TextureUnit(WebGL.RenderingContext.TEXTURE16);
-  static const TextureUnit TEXTURE17 = const TextureUnit(WebGL.RenderingContext.TEXTURE17);
-  static const TextureUnit TEXTURE18 = const TextureUnit(WebGL.RenderingContext.TEXTURE18);
-  static const TextureUnit TEXTURE19 = const TextureUnit(WebGL.RenderingContext.TEXTURE19);
-  static const TextureUnit TEXTURE20 = const TextureUnit(WebGL.RenderingContext.TEXTURE20);
-  static const TextureUnit TEXTURE21 = const TextureUnit(WebGL.RenderingContext.TEXTURE21);
-  static const TextureUnit TEXTURE22 = const TextureUnit(WebGL.RenderingContext.TEXTURE22);
-  static const TextureUnit TEXTURE23 = const TextureUnit(WebGL.RenderingContext.TEXTURE23);
-  static const TextureUnit TEXTURE24 = const TextureUnit(WebGL.RenderingContext.TEXTURE24);
-  static const TextureUnit TEXTURE25 = const TextureUnit(WebGL.RenderingContext.TEXTURE25);
-  static const TextureUnit TEXTURE26 = const TextureUnit(WebGL.RenderingContext.TEXTURE26);
-  static const TextureUnit TEXTURE27 = const TextureUnit(WebGL.RenderingContext.TEXTURE27);
-  static const TextureUnit TEXTURE28 = const TextureUnit(WebGL.RenderingContext.TEXTURE28);
-  static const TextureUnit TEXTURE29 = const TextureUnit(WebGL.RenderingContext.TEXTURE29);
-  static const TextureUnit TEXTURE30 = const TextureUnit(WebGL.RenderingContext.TEXTURE30);
-  static const TextureUnit TEXTURE31 = const TextureUnit(WebGL.RenderingContext.TEXTURE31);
-}
-
 class UsageType {
   final index;
   const UsageType(this.index);
@@ -68,7 +30,7 @@ class EnableCapabilityType{
   static const EnableCapabilityType BLEND = const EnableCapabilityType(WebGL.RenderingContext.BLEND);
   static const EnableCapabilityType CULL_FACE = const EnableCapabilityType(WebGL.RenderingContext.CULL_FACE);
   static const EnableCapabilityType DEPTH_TEST = const EnableCapabilityType(WebGL.RenderingContext.DEPTH_TEST);
-  static const EnableCapabilityType DITHER = const EnableCapabilityType(WebGL.RenderingContext.DITHER);
+  static const EnableCapabilityType DITHER = const EnableCapabilityType(WebGL.RenderingContext.DITHER); //Todo : add enabling ?
   static const EnableCapabilityType POLYGON_OFFSET_FILL = const EnableCapabilityType(WebGL.RenderingContext.POLYGON_OFFSET_FILL);
   static const EnableCapabilityType SAMPLE_ALPHA_TO_COVERAGE = const EnableCapabilityType(WebGL.RenderingContext.SAMPLE_ALPHA_TO_COVERAGE);
   static const EnableCapabilityType SAMPLE_COVERAGE = const EnableCapabilityType(WebGL.RenderingContext.SAMPLE_COVERAGE);
@@ -76,13 +38,13 @@ class EnableCapabilityType{
   static const EnableCapabilityType STENCIL_TEST = const EnableCapabilityType(WebGL.RenderingContext.STENCIL_TEST);
 }
 
-class CullFaceMode{
+class FacingType{
   final index;
-  const CullFaceMode(this.index);
+  const FacingType(this.index);
 
-  static const CullFaceMode FRONT = const CullFaceMode(WebGL.RenderingContext.FRONT);
-  static const CullFaceMode BACK = const CullFaceMode(WebGL.RenderingContext.BACK);
-  static const CullFaceMode FRONT_AND_BACK = const CullFaceMode(WebGL.RenderingContext.FRONT_AND_BACK);
+  static const FacingType FRONT = const FacingType(WebGL.RenderingContext.FRONT);
+  static const FacingType BACK = const FacingType(WebGL.RenderingContext.BACK);
+  static const FacingType FRONT_AND_BACK = const FacingType(WebGL.RenderingContext.FRONT_AND_BACK);
 }
 
 class ClearBufferMask{
@@ -155,18 +117,84 @@ class ReadPixelDataType{
   static const ReadPixelDataType FLOAT = const ReadPixelDataType(WebGL.RenderingContext.FLOAT);
 }
 
-class DepthComparisonFunction{
+class ComparisonFunction{
   final index;
-  const DepthComparisonFunction(this.index);
+  const ComparisonFunction(this.index);
 
-  static const DepthComparisonFunction NEVER = const DepthComparisonFunction(WebGL.RenderingContext.NEVER);
-  static const DepthComparisonFunction LESS = const DepthComparisonFunction(WebGL.RenderingContext.LESS);
-  static const DepthComparisonFunction EQUAL = const DepthComparisonFunction(WebGL.RenderingContext.EQUAL);
-  static const DepthComparisonFunction LEQUAL = const DepthComparisonFunction(WebGL.RenderingContext.LEQUAL);
-  static const DepthComparisonFunction GREATER = const DepthComparisonFunction(WebGL.RenderingContext.GREATER);
-  static const DepthComparisonFunction NOTEQUAL = const DepthComparisonFunction(WebGL.RenderingContext.NOTEQUAL);
-  static const DepthComparisonFunction GEQUAL = const DepthComparisonFunction(WebGL.RenderingContext.GEQUAL);
-  static const DepthComparisonFunction ALWAYS = const DepthComparisonFunction(WebGL.RenderingContext.ALWAYS);
+  static const ComparisonFunction NEVER = const ComparisonFunction(WebGL.RenderingContext.NEVER);
+  static const ComparisonFunction LESS = const ComparisonFunction(WebGL.RenderingContext.LESS);
+  static const ComparisonFunction EQUAL = const ComparisonFunction(WebGL.RenderingContext.EQUAL);
+  static const ComparisonFunction LEQUAL = const ComparisonFunction(WebGL.RenderingContext.LEQUAL);
+  static const ComparisonFunction GREATER = const ComparisonFunction(WebGL.RenderingContext.GREATER);
+  static const ComparisonFunction NOTEQUAL = const ComparisonFunction(WebGL.RenderingContext.NOTEQUAL);
+  static const ComparisonFunction GEQUAL = const ComparisonFunction(WebGL.RenderingContext.GEQUAL);
+  static const ComparisonFunction ALWAYS = const ComparisonFunction(WebGL.RenderingContext.ALWAYS);
+}
+
+class ErrorType{
+  final index;
+  const ErrorType(this.index);
+
+  static const ErrorType NO_ERROR = const ErrorType(WebGL.RenderingContext.NO_ERROR);
+  static const ErrorType INVALID_ENUM = const ErrorType(WebGL.RenderingContext.INVALID_ENUM);
+  static const ErrorType INVALID_VALUE = const ErrorType(WebGL.RenderingContext.INVALID_VALUE);
+  static const ErrorType INVALID_OPERATION = const ErrorType(WebGL.RenderingContext.INVALID_OPERATION);
+  static const ErrorType INVALID_FRAMEBUFFER_OPERATION = const ErrorType(WebGL.RenderingContext.INVALID_FRAMEBUFFER_OPERATION);
+  static const ErrorType OUT_OF_MEMORY = const ErrorType(WebGL.RenderingContext.OUT_OF_MEMORY);
+  static const ErrorType CONTEXT_LOST_WEBGL = const ErrorType(WebGL.RenderingContext.CONTEXT_LOST_WEBGL);
+}
+
+class HintMode{
+  final index;
+  const HintMode(this.index);
+
+  static const HintMode FASTEST = const HintMode(WebGL.RenderingContext.FASTEST);
+  static const HintMode NICEST = const HintMode(WebGL.RenderingContext.NICEST);
+  static const HintMode DONT_CARE = const HintMode(WebGL.RenderingContext.DONT_CARE);
+}
+
+class StencilOpMode{
+  final index;
+  const StencilOpMode(this.index);
+
+  static const StencilOpMode ZERO = const StencilOpMode(WebGL.RenderingContext.ZERO);
+  static const StencilOpMode KEEP = const StencilOpMode(WebGL.RenderingContext.KEEP);
+  static const StencilOpMode REPLACE = const StencilOpMode(WebGL.RenderingContext.REPLACE);
+  static const StencilOpMode INVERT = const StencilOpMode(WebGL.RenderingContext.INVERT);
+  static const StencilOpMode INCR = const StencilOpMode(WebGL.RenderingContext.INCR);
+  static const StencilOpMode INCR_WRAP = const StencilOpMode(WebGL.RenderingContext.INCR_WRAP);
+  static const StencilOpMode DECR = const StencilOpMode(WebGL.RenderingContext.DECR);
+  static const StencilOpMode DECR_WRAP = const StencilOpMode(WebGL.RenderingContext.DECR_WRAP);
+}
+
+class BlendFactorMode{
+  final index;
+  const BlendFactorMode(this.index);
+
+  static const BlendFactorMode ZERO = const BlendFactorMode(WebGL.RenderingContext.ZERO);
+  static const BlendFactorMode ONE = const BlendFactorMode(WebGL.RenderingContext.ONE);
+  static const BlendFactorMode SRC_COLOR = const BlendFactorMode(WebGL.RenderingContext.SRC_COLOR);
+  static const BlendFactorMode SRC_ALPHA = const BlendFactorMode(WebGL.RenderingContext.SRC_ALPHA);
+  static const BlendFactorMode SRC_ALPHA_SATURATE = const BlendFactorMode(WebGL.RenderingContext.SRC_ALPHA_SATURATE);
+  static const BlendFactorMode DST_COLOR = const BlendFactorMode(WebGL.RenderingContext.DST_COLOR);
+  static const BlendFactorMode DST_ALPHA = const BlendFactorMode(WebGL.RenderingContext.DST_ALPHA);
+  static const BlendFactorMode CONSTANT_COLOR = const BlendFactorMode(WebGL.RenderingContext.CONSTANT_COLOR);
+  static const BlendFactorMode CONSTANT_ALPHA = const BlendFactorMode(WebGL.RenderingContext.CONSTANT_ALPHA);
+  static const BlendFactorMode ONE_MINUS_SRC_COLOR = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_SRC_COLOR);
+  static const BlendFactorMode ONE_MINUS_SRC_ALPHA = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_SRC_ALPHA);
+  static const BlendFactorMode ONE_MINUS_DST_COLOR = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_DST_COLOR);
+  static const BlendFactorMode ONE_MINUS_DST_ALPHA = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_DST_ALPHA);
+  static const BlendFactorMode ONE_MINUS_CONSTANT_COLOR = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_CONSTANT_COLOR);
+  static const BlendFactorMode ONE_MINUS_CONSTANT_ALPHA = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_CONSTANT_ALPHA);
+}
+
+class BlendFunctionMode{
+  final index;
+  const BlendFunctionMode(this.index);
+
+  static const BlendFunctionMode FUNC_ADD = const BlendFunctionMode(WebGL.RenderingContext.FUNC_ADD);
+  static const BlendFunctionMode FUNC_SUBTRACT = const BlendFunctionMode(WebGL.RenderingContext.FUNC_SUBTRACT);
+  static const BlendFunctionMode FUNC_REVERSE_SUBTRACT = const BlendFunctionMode(WebGL.RenderingContext.FUNC_REVERSE_SUBTRACT);
 }
 
 class ContextParameter{
@@ -176,7 +204,8 @@ class ContextParameter{
   static const ContextParameter ACTIVE_TEXTURE = const ContextParameter(WebGL.RenderingContext.ACTIVE_TEXTURE);
   static const ContextParameter ALIASED_LINE_WIDTH_RANGE = const ContextParameter(WebGL.RenderingContext.ALIASED_LINE_WIDTH_RANGE);
   static const ContextParameter ALIASED_POINT_SIZE_RANGE = const ContextParameter(WebGL.RenderingContext.ALIASED_POINT_SIZE_RANGE);
-  static const ContextParameter ALPHA_BITS = const ContextParameter(WebGL.RenderingContext.ARRAY_BUFFER_BINDING);
+  static const ContextParameter ALPHA_BITS = const ContextParameter(WebGL.RenderingContext.ALPHA_BITS);
+  static const ContextParameter ARRAY_BUFFER_BINDING = const ContextParameter(WebGL.RenderingContext.ARRAY_BUFFER_BINDING);
   static const ContextParameter BLEND = const ContextParameter(WebGL.RenderingContext.BLEND);
   static const ContextParameter BLEND_COLOR = const ContextParameter(WebGL.RenderingContext.BLEND_COLOR);
   static const ContextParameter BLEND_DST_ALPHA = const ContextParameter(WebGL.RenderingContext.BLEND_DST_ALPHA);
@@ -265,57 +294,6 @@ class WebGLRenderingContext {
   WebGL.RenderingContext ctx;
 
   CanvasElement get canvas => ctx.canvas;
-
-  Map get contextAttributes => (ctx.getContextAttributes() as WebGLDictionary).toMap;
-
-  bool get isContextLost => ctx.isContextLost();
-
-  int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index);
-  set clearStencil(int index){
-    ctx.clearStencil(index) ;
-  }
-
-  set frontFace(FaceMode mode){
-    ctx.frontFace(mode.index);
-  }
-
-  bool get cullFace => ctx.isEnabled(EnableCapabilityType.CULL_FACE.index);
-  set cullFace(bool enable){
-    _enable(EnableCapabilityType.CULL_FACE, enable);
-  }
-
-  set cullFaceMode(CullFaceMode mode){
-    ctx.cullFace(mode.index);
-  }
-
-  bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
-  set depthTest(bool enable){
-    _enable(EnableCapabilityType.DEPTH_TEST, enable);
-  }
-
-  bool get depthMask => ctx.getParameter(ContextParameter.DEPTH_WRITEMASK.index);
-  set depthMask(bool enable){
-      ctx.depthMask(enable);
-  }
-
-  DepthComparisonFunction get depthFunc => new DepthComparisonFunction(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
-  set depthFunc(DepthComparisonFunction depthComparisionFunction){
-    ctx.depthFunc(depthComparisionFunction.index);
-  }
-
-  num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index);
-  set clearDepth(num depthValue){
-    assert(0.0 <= depthValue && depthValue <= 1.0);
-    ctx.clearDepth(depthValue);
-  }
-
-  num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index);
-  set lineWidth(num width){
-    ctx.lineWidth(width);
-  }
-
-  Float32List get lineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
-
   num get drawingBufferWidth => ctx.drawingBufferWidth;
   num get drawingBufferHeight => ctx.drawingBufferHeight;
 
@@ -355,6 +333,192 @@ class WebGLRenderingContext {
 
   }
 
+  Map get contextAttributes => (ctx.getContextAttributes() as WebGLDictionary).toMap;
+
+  bool get isContextLost => ctx.isContextLost();
+
+  set frontFace(FaceMode mode){
+    ctx.frontFace(mode.index);
+  }
+
+  //CullFace
+  bool get cullFace => isEnabled(EnableCapabilityType.CULL_FACE.index);
+  set cullFace(bool enable){
+    _setEnabled(EnableCapabilityType.CULL_FACE, enable);
+  }
+
+  set cullFaceMode(FacingType mode){
+    ctx.cullFace(mode.index);
+  }
+
+  //Depth
+  bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
+  set depthTest(bool enable){
+    _setEnabled(EnableCapabilityType.DEPTH_TEST, enable);
+  }
+
+  bool get depthMask => ctx.getParameter(ContextParameter.DEPTH_WRITEMASK.index);
+  set depthMask(bool enable){
+      ctx.depthMask(enable);
+  }
+
+  ComparisonFunction get depthFunc => new ComparisonFunction(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
+  set depthFunc(ComparisonFunction depthComparisionFunction){
+    ctx.depthFunc(depthComparisionFunction.index);
+  }
+
+  void depthRange(num zNear, num zFar) {
+    ctx.depthRange(zNear, zFar);
+  }
+
+  num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index);
+  set clearDepth(num depthValue){
+    assert(0.0 <= depthValue && depthValue <= 1.0);
+    ctx.clearDepth(depthValue);
+  }
+
+  //Scissor
+  Rectangle get scissor {
+    Int32List values = getParameter(ContextParameter.SCISSOR_BOX);
+    return new Rectangle(values[0], values[1], values[2], values[3]);
+  }
+  set scissor(Rectangle rect) {
+    //int x, int y, num width, num height
+    assert(rect.width >= 0 && rect.height >= 0);
+    ctx.scissor(rect.left, rect.top, rect.width, rect.height);
+  }
+
+  bool get scissorTest => isEnabled(EnableCapabilityType.SCISSOR_TEST);
+  set scissorTest(bool enabled) => _setEnabled(EnableCapabilityType.SCISSOR_TEST, enabled);
+
+  //lineWidth
+  num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index);
+  set lineWidth(num width){
+    ctx.lineWidth(width);
+  }
+  Float32List get lineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
+
+  //Polygon offset
+  bool get polygonOffset => ctx.isEnabled(EnableCapabilityType.POLYGON_OFFSET_FILL.index);
+  set polygonOffset(bool enabled) =>_setEnabled(EnableCapabilityType.POLYGON_OFFSET_FILL, enabled);
+
+  num get polygonOffsetFactor => ctx.getParameter(ContextParameter.POLYGON_OFFSET_FACTOR.index);
+  num get polygonOffsetUnits => ctx.getParameter(ContextParameter.POLYGON_OFFSET_UNITS.index);
+  void setPolygonOffest(num factor, num units){
+    ctx.polygonOffset(factor, units);
+  }
+
+  //MultiSampleCoverage
+  bool get sampleCovarage => isEnabled(EnableCapabilityType.SAMPLE_COVERAGE);
+  set sampleCoverage(bool enabled) => _setEnabled(EnableCapabilityType.SAMPLE_COVERAGE, enabled);
+
+  bool get sampleAlphaToCoverage => isEnabled(EnableCapabilityType.SAMPLE_ALPHA_TO_COVERAGE);
+  set sampleAlphaToCoverage(bool enabled) => _setEnabled(EnableCapabilityType.SAMPLE_ALPHA_TO_COVERAGE, enabled);
+
+  num get sampleCoverageValue => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_VALUE.index);
+  bool get sampleCoverageInvert => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_INVERT.index);
+  void setSampleCoverage(num value, bool invert) => ctx.sampleCoverage(value, invert);
+
+  //Stencils
+  bool get stencilTest => isEnabled(EnableCapabilityType.STENCIL_TEST);
+  set stencilTest (bool enabled) => _setEnabled(EnableCapabilityType.STENCIL_TEST, enabled);
+
+  void stencilFunc(ComparisonFunction comparisonFunction, int ref, int mask){
+    ctx.stencilFunc(comparisonFunction.index, ref, mask);
+  }
+  void stencilFuncSeparate(FacingType faceType, ComparisonFunction comparisonFunction, int ref, int mask){
+    ctx.stencilFuncSeparate(faceType.index, comparisonFunction.index, ref, mask);
+  }
+  void stencilMaskSeparate(FacingType faceType, int mask){
+    ctx.stencilMaskSeparate(faceType.index, mask);
+  }
+  void stencilOp(StencilOpMode fail, StencilOpMode zFail, StencilOpMode zPass){
+    ctx.stencilOp(fail.index, zFail.index, zPass.index);
+  }
+  void stencilOpSeparate(FacingType faceType, StencilOpMode fail, StencilOpMode zFail, StencilOpMode zPass){
+    ctx.stencilOpSeparate(faceType.index, fail.index, zFail.index, zPass.index);
+  }
+  int get stencilWriteMask => ctx.getParameter(ContextParameter.STENCIL_WRITEMASK.index);
+  int get stencilBackWriteMask => ctx.getParameter(ContextParameter.STENCIL_BACK_WRITEMASK.index);
+  int get stencilBits => ctx.getParameter(ContextParameter.STENCIL_BITS.index);
+  set stencilMaks(int value) => ctx.stencilMask(value);
+
+  int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index);
+  set clearStencil(int index){
+    ctx.clearStencil(index) ;
+  }
+
+  //Blend
+  bool get blend => isEnabled(EnableCapabilityType.BLEND);
+  set blend (bool enabled) => _setEnabled(EnableCapabilityType.BLEND.index, enabled);
+
+  void blendFunc(BlendFactorMode sourceFactor, BlendFactorMode destinationFactor){
+    ctx.blendFunc(sourceFactor.index, destinationFactor.index);
+  }
+  void blendFuncSeparate(BlendFactorMode srcRGB, BlendFactorMode dstRGB, BlendFactorMode srcAlpha, BlendFactorMode dstAlpha){
+    ctx.blendFuncSeparate(srcRGB.index, dstRGB.index, srcAlpha.index, dstAlpha.index);
+  }
+  void blendEquation(BlendFunctionMode mode){
+    ctx.blendEquation(mode.index);
+  }
+  void blendEquationSeparate(BlendFunctionMode modeRGB, BlendFunctionMode modeAlpha){
+    ctx.blendEquationSeparate(modeRGB.index, modeAlpha.index);
+  }
+  void blendColor(num red, num green, num blue, num alpha){
+    assert(0.0 <= red && red <= 1.0);
+    assert(0.0 <= green && green <= 1.0);
+    assert(0.0 <= blue && blue <= 1.0);
+    assert(0.0 <= alpha && alpha <= 1.0);
+    ctx.blendColor(red, green, blue, alpha);
+  }
+  Float32List getBlendColor(){
+    return ctx.getParameter(ContextParameter.BLEND_COLOR.index);
+  }
+
+  //Dither
+  bool get dither => isEnabled(EnableCapabilityType.DITHER);
+  set dither (bool enabled) => _setEnabled(EnableCapabilityType.DITHER.index, enabled);
+
+  //EnableCapabilityType enabling
+  void enable(EnableCapabilityType cap) {
+    ctx.enable(cap.index);
+  }
+  void disable(EnableCapabilityType cap) {
+    ctx.disable(cap.index);
+  }
+
+  void _setEnabled(EnableCapabilityType enableCapType, bool enabled){
+    if(enabled){
+      enable(enableCapType);
+    } else {
+      disable(enableCapType);
+    }
+  }
+
+  bool isEnabled(EnableCapabilityType cap) {
+    return ctx.isEnabled(cap.index);
+  }
+
+  //
+  set clearColor(Vector4 color){
+    ctx.clearColor(color.r, color.g, color.b, color.a);
+  }
+
+  List<bool> get colorMask => ctx.getParameter(ContextParameter.COLOR_WRITEMASK.index);
+  set colorMask(List<bool> mask){
+      assert(mask.length == 4);
+      ctx.colorMask(mask[0], mask[1], mask[2], mask[3]);
+  }
+
+  void clear(List<ClearBufferMask> masks) {
+    //Todo : change with bitmask : RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT
+    int bitmask = 0;
+    for(ClearBufferMask mask in masks) {
+      bitmask |= mask.index;
+    }
+    ctx.clear(bitmask);
+  }
+
   // Buffers
   void bindBuffer(BufferType bufferType, WebGLBuffer webglBuffer) {
     ctx.bindBuffer(bufferType.index, webglBuffer?.webGLBuffer);
@@ -376,6 +540,12 @@ class WebGLRenderingContext {
     ctx.bufferData(bufferType.index, byteBuffer, usageType.index);
   }
 
+  //data type ?
+  void bufferSubData(BufferType bufferType,int offset, {dynamic data}) {
+    assert(data != null);
+    ctx.bufferSubData(bufferType.index, offset, data);
+  }
+
   //Textures
   void bindTexture(TextureTarget target, WebGLTexture texture) {
     ctx.bindTexture(target.index, texture?.webGLTexture);
@@ -386,19 +556,9 @@ class WebGLRenderingContext {
     ctx.bindRenderbuffer(target.index, renderBuffer?.webGLRenderBuffer);
   }
 
-  //
-
-  set clearColor(Vector4 color){
-    ctx.clearColor(color.r, color.g, color.b, color.a);
-  }
-
-  void clear(List<ClearBufferMask> masks) {
-    //Todo : change with bitmask : RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT
-    int bitmask = 0;
-    for(ClearBufferMask mask in masks) {
-      bitmask |= mask.index;
-    }
-    ctx.clear(bitmask);
+  //FrameBuffer
+  void bindFrameBuffer(FrameBufferTarget target, WebGLFrameBuffer webGLframeBuffer) {
+    ctx.bindFramebuffer(target.index, webGLframeBuffer.webGLFrameBuffer);
   }
 
   //Extensions
@@ -431,20 +591,7 @@ class WebGLRenderingContext {
 
   Int32List get viewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
 
-  Rectangle get scissor {
-    Int32List values = getParameter(ContextParameter.SCISSOR_BOX);
-    return new Rectangle(values[0], values[1], values[2], values[3]);
-  }
-  set scissor(Rectangle rect) {
-    //int x, int y, num width, num height
-    assert(rect.width >= 0 && rect.height >= 0);
-    ctx.scissor(rect.left, rect.top, rect.width, rect.height);
-  }
 
-  bool get scissorTest => getParameter(ContextParameter.SCISSOR_TEST);
-  set scissorTest(bool enabled){
-    _enable(EnableCapabilityType.SCISSOR_TEST, enabled);
-  }
 
 
   void pixelStorei(PixelStorgeType storage, int value) {
@@ -461,17 +608,45 @@ class WebGLRenderingContext {
     ctx.drawElements(mode.index, count, type.index, offset);
   }
 
-  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixelsSource) {
+  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
     assert(height >= 0);
     assert(internalFormat.index == internalFormat2.index);//in webgl1
-    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixelsSource);
+    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixels);
   }
 
-  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, pixelsSource) {
+  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, pixels) {
     assert(internalFormat.index == internalFormat2.index);//in webgl1
-    assert(pixelsSource is ImageData || pixelsSource is ImageElement || pixelsSource is CanvasElement || pixelsSource is VideoElement || pixelsSource is ImageBitmap); //? add is null
-    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixelsSource);
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixels);
+  }
+
+  void texSubImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, int width, int height, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+    assert(width >= 0);
+    assert(height >= 0);
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, width, height, internalFormat.index, texelDataType.index, pixels);
+  }
+
+  void texSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, internalFormat.index, texelDataType.index, pixels);
+  }
+
+  void copyTexImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat,
+      int x, int y, int width, int height, pixels) {
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    assert(width >= 0);
+    assert(height >= 0);
+    ctx.copyTexImage2D(target.index, mipMapLevel, internalFormat.index, x, y, width, height, pixels);
+  }
+
+  ///copies pixels from the current WebGLFramebuffer into an existing 2D texture sub-image.
+  void copyTexSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset,
+      int x, int y, int width, int height) {
+    assert(width >= 0);
+    assert(height >= 0);
+    ctx.copyTexSubImage2D(target.index, mipMapLevel, xOffset, yOffset, x, y, width, height);
   }
 
   void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
@@ -480,30 +655,24 @@ class WebGLRenderingContext {
     ctx.readPixels(left, top, width, height, format.index, type.index, pixels);
   }
 
-  void enable(EnableCapabilityType cap) {
-    ctx.enable(cap.index);
-  }
-  void disable(EnableCapabilityType cap) {
-    ctx.disable(cap.index);
+
+  ErrorType getError(){
+    return new ErrorType(ctx.getError());
   }
 
-  void _enable(EnableCapabilityType enableCapType, bool enabled){
-    if(enabled){
-      enable(enableCapType);
-    } else {
-      disable(enableCapType);
-    }
+  void hint(HintMode mode){
+    ctx.hint(ContextParameter.GENERATE_MIPMAP_HINT.index, mode.index);
   }
 
-  void isEnabled(EnableCapabilityType cap) {
-    ctx.isEnabled(cap.index);
+  ///avoid this method.
+  ///blocks execution until all previously called commands are finished.
+  void finish(){
+    ctx.finish();
   }
 
-  void depthRange(num zNear, num zFar) {
-    ctx.depthRange(zNear, zFar);
-  }
-
-  void bindFrameBuffer(FrameBufferTarget target, WebGLFrameBuffer webGLframeBuffer) {
-    ctx.bindFramebuffer(target.index, webGLframeBuffer.webGLFrameBuffer);
+  ///empties different buffer commands, causing all commands to be
+  ///executed as quickly as possible.
+  void flush(){
+    ctx.flush();
   }
 }

@@ -4,36 +4,29 @@
 
 https://www.khronos.org/registry/webgl/specs/latest/1.0/
 
-///////////> Get
-getError
-getParameter | context
-getContextAttributes | context
+// Suggestions /////////////////////
 
-getSupportedExtensions | extension multi
-getExtension | extension single
+- splitter les méthodes getParameter en multiParameters
 
-getFramebufferAttachmentParameter | framebuffer
+- placer les enums dans un même fichier ?
+- placer des méthodes static dans les object de réference : ie: placer bindFrameBuffer dans FrameBuffer plutot que dans context ?
+- ou placer certaine methode, en context ou en object specific ? bind dans le renderingcontext ou dans l'object ?
+- faut-il utiliser :
+(1) bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
+ou
+(2) bool get depthTest => isEnabled(EnableCapabilityType.DEPTH_TEST);
 
-getRenderbufferParameter | renderbuffer
+(1): appel direct, plus rapide sans autre appel de fonction
+(2): possibilité d'agir entre les deux
 
-getBufferParameter | buffer
+- gerer les exetnsions
+- ajouter des enums , methods etc, ...
 
-getTexParameter | texture
+- webglevents : https://developer.mozilla.org/en-US/docs/Web/API/WebGLContextEvent
+- créer des type webgl comme https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
+    -> GLclampf [0.0 -> 1.0]
 
-//>
-getActiveAttrib | program
-getActiveUniform | program
-getAttachedShaders | program
-getAttribLocation | program
-gl.getProgramInfoLog(program) | program
-getProgramParameter | program
-getUniform | program
-getUniformLocation | program
 
-//>
-getShaderInfoLog | shader
-getShaderParameter | shader
-getShaderPrecisionFormat | shader
-getShaderSource | shader
-getVertexAttrib | shader
-getVertexAttribOffset | shader
+// Done /////////////////////
+v- finir de placer toutes les méthodes webgl dans les objects //google doc
+v- vérifier les constantes utilisées et indiquer leur provenance //google doc

@@ -34,7 +34,7 @@ class ShaderVariableType{
 
   get name => null;
 
-  //Todo remove this
+  //Todo : remove this
   // Taken from the WebGL spec:
   // http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.14
   static Map enumTypes = {
@@ -67,12 +67,12 @@ class PrecisionType{
   final index;
   const PrecisionType(this.index);
 
-  static const PrecisionType LOW_FLOAT = const PrecisionType(WebGL.RenderingContext.LOW_FLOAT);
-  static const PrecisionType MEDIUM_FLOAT = const PrecisionType(WebGL.RenderingContext.MEDIUM_FLOAT);
-  static const PrecisionType HIGH_FLOAT = const PrecisionType(WebGL.RenderingContext.HIGH_FLOAT);
   static const PrecisionType LOW_INT = const PrecisionType(WebGL.RenderingContext.LOW_INT);
+  static const PrecisionType LOW_FLOAT = const PrecisionType(WebGL.RenderingContext.LOW_FLOAT);
   static const PrecisionType MEDIUM_INT = const PrecisionType(WebGL.RenderingContext.MEDIUM_INT);
+  static const PrecisionType MEDIUM_FLOAT = const PrecisionType(WebGL.RenderingContext.MEDIUM_FLOAT);
   static const PrecisionType HIGH_INT = const PrecisionType(WebGL.RenderingContext.HIGH_INT);
+  static const PrecisionType HIGH_FLOAT = const PrecisionType(WebGL.RenderingContext.HIGH_FLOAT);
 }
 
 class ShaderType{
@@ -161,6 +161,7 @@ class WebGLShader{
     return gl.ctx.getVertexAttrib(vertexAttributePosition,vertexAttribGlEnum.index);
   }
 
+  //placer dans attribut_location ?
   int getVertexAttribOffset(int vertexAttributePosition){
     return gl.ctx.getVertexAttribOffset(vertexAttributePosition, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
   }

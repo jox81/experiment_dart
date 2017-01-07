@@ -32,17 +32,30 @@ abstract class TextureSetParameterType {
   final int index;
   const TextureSetParameterType(this.index);
 }
-abstract class TextureFilterType extends TextureSetParameterType {
+class TextureFilterType extends TextureSetParameterType {
   const TextureFilterType(int index):super(index);
+
+  static const TextureFilterType LINEAR =
+  const TextureFilterType(WebGL.RenderingContext.LINEAR);
+  static const TextureFilterType NEAREST =
+  const TextureFilterType(WebGL.RenderingContext.NEAREST);
 }
 
 class TextureMagType extends TextureFilterType {
   const TextureMagType(int index):super(index);
+}
 
-  static const TextureMagType LINEAR =
-      const TextureMagType(WebGL.RenderingContext.LINEAR);
-  static const TextureMagType NEAREST =
-      const TextureMagType(WebGL.RenderingContext.NEAREST);
+class TextureMinType extends TextureFilterType {
+  const TextureMinType(int index):super(index);
+
+  static const TextureMinType NEAREST_MIPMAP_NEAREST =
+  const TextureMinType(WebGL.RenderingContext.NEAREST_MIPMAP_NEAREST);
+  static const TextureMinType LINEAR_MIPMAP_NEAREST =
+  const TextureMinType(WebGL.RenderingContext.LINEAR_MIPMAP_NEAREST);
+  static const TextureMinType NEAREST_MIPMAP_LINEAR =
+  const TextureMinType(WebGL.RenderingContext.NEAREST_MIPMAP_LINEAR);
+  static const TextureMinType LINEAR_MIPMAP_LINEAR =
+  const TextureMinType(WebGL.RenderingContext.LINEAR_MIPMAP_LINEAR);
 }
 
 class TextureInternalFormatType{
@@ -62,23 +75,6 @@ class WEBGL_depth_texture_InternalFormatType extends TextureInternalFormatType{
 
   static const WEBGL_depth_texture_InternalFormatType DEPTH_COMPONENT = const WEBGL_depth_texture_InternalFormatType(WebGL.RenderingContext.DEPTH_COMPONENT);
   static const WEBGL_depth_texture_InternalFormatType DEPTH_STENCIL = const WEBGL_depth_texture_InternalFormatType(WebGL.RenderingContext.DEPTH_STENCIL);
-}
-
-class TextureMinType extends TextureFilterType {
-  const TextureMinType(int index):super(index);
-
-  static const TextureMinType LINEAR =
-      const TextureMinType(WebGL.RenderingContext.LINEAR);
-  static const TextureMinType NEAREST =
-      const TextureMinType(WebGL.RenderingContext.NEAREST);
-  static const TextureMinType NEAREST_MIPMAP_NEAREST =
-      const TextureMinType(WebGL.RenderingContext.NEAREST_MIPMAP_NEAREST);
-  static const TextureMinType LINEAR_MIPMAP_NEAREST =
-      const TextureMinType(WebGL.RenderingContext.LINEAR_MIPMAP_NEAREST);
-  static const TextureMinType NEAREST_MIPMAP_LINEAR =
-      const TextureMinType(WebGL.RenderingContext.NEAREST_MIPMAP_LINEAR);
-  static const TextureMinType LINEAR_MIPMAP_LINEAR =
-      const TextureMinType(WebGL.RenderingContext.LINEAR_MIPMAP_LINEAR);
 }
 
 class TextureWrapType extends TextureSetParameterType{
@@ -102,6 +98,44 @@ class TexelDataType{
   static const TexelDataType UNSIGNED_SHORT_5_5_5_1 = const TexelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_5_5_1);
 }
 
+class TextureUnit {
+  final index;
+  const TextureUnit(this.index);
+
+  static const TextureUnit TEXTURE0 = const TextureUnit(WebGL.RenderingContext.TEXTURE0);
+  static const TextureUnit TEXTURE1 = const TextureUnit(WebGL.RenderingContext.TEXTURE1);
+  static const TextureUnit TEXTURE2 = const TextureUnit(WebGL.RenderingContext.TEXTURE2);
+  static const TextureUnit TEXTURE3 = const TextureUnit(WebGL.RenderingContext.TEXTURE3);
+  static const TextureUnit TEXTURE4 = const TextureUnit(WebGL.RenderingContext.TEXTURE4);
+  static const TextureUnit TEXTURE5 = const TextureUnit(WebGL.RenderingContext.TEXTURE5);
+  static const TextureUnit TEXTURE6 = const TextureUnit(WebGL.RenderingContext.TEXTURE6);
+  static const TextureUnit TEXTURE7 = const TextureUnit(WebGL.RenderingContext.TEXTURE7);
+  static const TextureUnit TEXTURE8 = const TextureUnit(WebGL.RenderingContext.TEXTURE8);
+  static const TextureUnit TEXTURE9 = const TextureUnit(WebGL.RenderingContext.TEXTURE9);
+  static const TextureUnit TEXTURE10 = const TextureUnit(WebGL.RenderingContext.TEXTURE10);
+  static const TextureUnit TEXTURE11 = const TextureUnit(WebGL.RenderingContext.TEXTURE11);
+  static const TextureUnit TEXTURE12 = const TextureUnit(WebGL.RenderingContext.TEXTURE12);
+  static const TextureUnit TEXTURE13 = const TextureUnit(WebGL.RenderingContext.TEXTURE13);
+  static const TextureUnit TEXTURE14 = const TextureUnit(WebGL.RenderingContext.TEXTURE14);
+  static const TextureUnit TEXTURE15 = const TextureUnit(WebGL.RenderingContext.TEXTURE15);
+  static const TextureUnit TEXTURE16 = const TextureUnit(WebGL.RenderingContext.TEXTURE16);
+  static const TextureUnit TEXTURE17 = const TextureUnit(WebGL.RenderingContext.TEXTURE17);
+  static const TextureUnit TEXTURE18 = const TextureUnit(WebGL.RenderingContext.TEXTURE18);
+  static const TextureUnit TEXTURE19 = const TextureUnit(WebGL.RenderingContext.TEXTURE19);
+  static const TextureUnit TEXTURE20 = const TextureUnit(WebGL.RenderingContext.TEXTURE20);
+  static const TextureUnit TEXTURE21 = const TextureUnit(WebGL.RenderingContext.TEXTURE21);
+  static const TextureUnit TEXTURE22 = const TextureUnit(WebGL.RenderingContext.TEXTURE22);
+  static const TextureUnit TEXTURE23 = const TextureUnit(WebGL.RenderingContext.TEXTURE23);
+  static const TextureUnit TEXTURE24 = const TextureUnit(WebGL.RenderingContext.TEXTURE24);
+  static const TextureUnit TEXTURE25 = const TextureUnit(WebGL.RenderingContext.TEXTURE25);
+  static const TextureUnit TEXTURE26 = const TextureUnit(WebGL.RenderingContext.TEXTURE26);
+  static const TextureUnit TEXTURE27 = const TextureUnit(WebGL.RenderingContext.TEXTURE27);
+  static const TextureUnit TEXTURE28 = const TextureUnit(WebGL.RenderingContext.TEXTURE28);
+  static const TextureUnit TEXTURE29 = const TextureUnit(WebGL.RenderingContext.TEXTURE29);
+  static const TextureUnit TEXTURE30 = const TextureUnit(WebGL.RenderingContext.TEXTURE30);
+  static const TextureUnit TEXTURE31 = const TextureUnit(WebGL.RenderingContext.TEXTURE31);
+}
+
 class WebGLTexture {
   WebGL.Texture webGLTexture;
 
@@ -117,7 +151,7 @@ class WebGLTexture {
 
   dynamic getParameter(TextureTarget target, TextureParameterGlEnum parameter) {
     dynamic result =
-        gl.ctx.getRenderbufferParameter(target.index.index, parameter.index);
+        gl.ctx.getTexParameter(target.index.index, parameter.index);
     return result;
   }
 
@@ -143,5 +177,8 @@ class WebGLTexture {
 
   void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, TextureAttachmentTarget attachementTarget, int mipMapLevel){
     gl.ctx.framebufferTexture2D(target.index, attachment.index, attachementTarget.index, webGLTexture, mipMapLevel);
+  }
+  void generateMipmap(TextureTarget target){
+    gl.ctx.generateMipmap(target.index);
   }
 }

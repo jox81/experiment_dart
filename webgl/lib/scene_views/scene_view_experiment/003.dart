@@ -4,7 +4,7 @@ import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future<Model> experiment() async {

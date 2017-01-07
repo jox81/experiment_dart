@@ -9,7 +9,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 class TextureUtils {
 

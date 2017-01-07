@@ -3,7 +3,7 @@ import 'package:webgl/src/meshes.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 Model experiment() {
 

@@ -4,7 +4,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 enum AxisType { view, x, y, z, any }

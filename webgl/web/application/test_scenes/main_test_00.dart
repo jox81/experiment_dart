@@ -8,7 +8,7 @@ import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';

@@ -5,7 +5,7 @@ import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/webgl_objects/webgl_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 WebGLRenderingContext gl;
 
@@ -79,7 +79,7 @@ class RenderSetting{
   void showBackFace(bool visible){
     if(!visible) {
       gl.cullFace = true;
-      gl.cullFaceMode = CullFaceMode.BACK;
+      gl.cullFaceMode = FacingType.BACK;
     }
   }
 

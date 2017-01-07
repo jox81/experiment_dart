@@ -19,14 +19,6 @@ class BufferParameterGlEnum{
   static const BufferParameterGlEnum BUFFER_USAGE = const BufferParameterGlEnum(WebGL.RenderingContext.BUFFER_USAGE);
 }
 
-class BufferTarget{
-  final index;
-  const BufferTarget(this.index);
-
-  static const BufferTarget ARRAY_BUFFER = const BufferTarget(WebGL.RenderingContext.ARRAY_BUFFER);
-  static const BufferTarget ELEMENT_ARRAY_BUFFER = const BufferTarget(WebGL.RenderingContext.ELEMENT_ARRAY_BUFFER);
-}
-
 class WebGLBuffer{
 
   WebGL.Buffer webGLBuffer;
@@ -49,7 +41,7 @@ class WebGLBuffer{
     gl.ctx.bindBuffer(bufferType.index, null);
   }
 
-  dynamic getParameter(BufferTarget target, BufferParameterGlEnum parameter){
+  dynamic getParameter(BufferType target, BufferParameterGlEnum parameter){
     dynamic result =  gl.ctx.getBufferParameter(target.index.index,parameter.index);
     return result;
   }
