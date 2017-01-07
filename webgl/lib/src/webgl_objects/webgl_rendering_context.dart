@@ -56,12 +56,12 @@ class ClearBufferMask{
   static const ClearBufferMask COLOR_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.COLOR_BUFFER_BIT);
 }
 
-class FaceMode{
+class FrontFaceDirection{
   final index;
-  const FaceMode(this.index);
+  const FrontFaceDirection(this.index);
 
-  static const FaceMode CW = const FaceMode(WebGL.RenderingContext.CW);
-  static const FaceMode CCW = const FaceMode(WebGL.RenderingContext.CCW);
+  static const FrontFaceDirection CW = const FrontFaceDirection(WebGL.RenderingContext.CW);
+  static const FrontFaceDirection CCW = const FrontFaceDirection(WebGL.RenderingContext.CCW);
 }
 
 class PixelStorgeType{
@@ -131,17 +131,17 @@ class ComparisonFunction{
   static const ComparisonFunction ALWAYS = const ComparisonFunction(WebGL.RenderingContext.ALWAYS);
 }
 
-class ErrorType{
+class ErrorCode{
   final index;
-  const ErrorType(this.index);
+  const ErrorCode(this.index);
 
-  static const ErrorType NO_ERROR = const ErrorType(WebGL.RenderingContext.NO_ERROR);
-  static const ErrorType INVALID_ENUM = const ErrorType(WebGL.RenderingContext.INVALID_ENUM);
-  static const ErrorType INVALID_VALUE = const ErrorType(WebGL.RenderingContext.INVALID_VALUE);
-  static const ErrorType INVALID_OPERATION = const ErrorType(WebGL.RenderingContext.INVALID_OPERATION);
-  static const ErrorType INVALID_FRAMEBUFFER_OPERATION = const ErrorType(WebGL.RenderingContext.INVALID_FRAMEBUFFER_OPERATION);
-  static const ErrorType OUT_OF_MEMORY = const ErrorType(WebGL.RenderingContext.OUT_OF_MEMORY);
-  static const ErrorType CONTEXT_LOST_WEBGL = const ErrorType(WebGL.RenderingContext.CONTEXT_LOST_WEBGL);
+  static const ErrorCode NO_ERROR = const ErrorCode(WebGL.RenderingContext.NO_ERROR);
+  static const ErrorCode INVALID_ENUM = const ErrorCode(WebGL.RenderingContext.INVALID_ENUM);
+  static const ErrorCode INVALID_VALUE = const ErrorCode(WebGL.RenderingContext.INVALID_VALUE);
+  static const ErrorCode INVALID_OPERATION = const ErrorCode(WebGL.RenderingContext.INVALID_OPERATION);
+  static const ErrorCode INVALID_FRAMEBUFFER_OPERATION = const ErrorCode(WebGL.RenderingContext.INVALID_FRAMEBUFFER_OPERATION);
+  static const ErrorCode OUT_OF_MEMORY = const ErrorCode(WebGL.RenderingContext.OUT_OF_MEMORY);
+  static const ErrorCode CONTEXT_LOST_WEBGL = const ErrorCode(WebGL.RenderingContext.CONTEXT_LOST_WEBGL);
 }
 
 class HintMode{
@@ -337,7 +337,7 @@ class WebGLRenderingContext {
 
   bool get isContextLost => ctx.isContextLost();
 
-  set frontFace(FaceMode mode){
+  set frontFace(FrontFaceDirection mode){
     ctx.frontFace(mode.index);
   }
 
@@ -656,8 +656,8 @@ class WebGLRenderingContext {
   }
 
 
-  ErrorType getError(){
-    return new ErrorType(ctx.getError());
+  ErrorCode getError(){
+    return new ErrorCode(ctx.getError());
   }
 
   void hint(HintMode mode){

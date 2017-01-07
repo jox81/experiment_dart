@@ -102,7 +102,7 @@ class Application {
     Context.init(canvas);
 
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT]);
-    gl.frontFace = FaceMode.CCW;
+    gl.frontFace = FrontFaceDirection.CCW;
 
     Context.renderSettings.enableDepth(true);
     Context.renderSettings.showBackFace(true);

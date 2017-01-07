@@ -34,20 +34,24 @@ abstract class TextureSetParameterType {
 }
 class TextureFilterType extends TextureSetParameterType {
   const TextureFilterType(int index):super(index);
-
-  static const TextureFilterType LINEAR =
-  const TextureFilterType(WebGL.RenderingContext.LINEAR);
-  static const TextureFilterType NEAREST =
-  const TextureFilterType(WebGL.RenderingContext.NEAREST);
 }
 
 class TextureMagType extends TextureFilterType {
   const TextureMagType(int index):super(index);
+
+  static const TextureMagType LINEAR =
+  const TextureMagType(WebGL.RenderingContext.LINEAR);
+  static const TextureMagType NEAREST =
+  const TextureMagType(WebGL.RenderingContext.NEAREST);
 }
 
 class TextureMinType extends TextureFilterType {
   const TextureMinType(int index):super(index);
 
+  static const TextureMinType LINEAR =
+  const TextureMinType(WebGL.RenderingContext.LINEAR);
+  static const TextureMinType NEAREST =
+  const TextureMinType(WebGL.RenderingContext.NEAREST);
   static const TextureMinType NEAREST_MIPMAP_NEAREST =
   const TextureMinType(WebGL.RenderingContext.NEAREST_MIPMAP_NEAREST);
   static const TextureMinType LINEAR_MIPMAP_NEAREST =
