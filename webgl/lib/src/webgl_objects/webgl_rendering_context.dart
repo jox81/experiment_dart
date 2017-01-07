@@ -345,7 +345,7 @@ class WebGLRenderingContext {
     return result;
   }
 
-  //>>> Todo : get single parameter
+  // >>> single getParameter
 
   // > ACTIVE_TEXTURE
   TextureUnit get activeTexture => new TextureUnit(ctx.getParameter(ContextParameter.ACTIVE_TEXTURE.index));
@@ -477,10 +477,8 @@ class WebGLRenderingContext {
   set depthFunc(ComparisonFunction depthComparisionFunction) => ctx.depthFunc(depthComparisionFunction.index);
 
   // > DEPTH_RANGE [2]
-  Float32List get depthRange => ctx.getParameter(ContextParameter.DEPTH_RANGE.index);
-  void setDepthRange(num zNear, num zFar) {
-    ctx.depthRange(zNear, zFar);
-  }
+  Float32List getDepthRange() => ctx.getParameter(ContextParameter.DEPTH_RANGE.index);
+  void setDepthRange(num zNear, num zFar) => ctx.depthRange(zNear, zFar);
 
   // > DEPTH_CLEAR_VALUE
   num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index);

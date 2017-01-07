@@ -7,6 +7,7 @@ https://www.khronos.org/registry/webgl/specs/latest/1.0/
 // Suggestions /////////////////////
 
 - splitter les méthodes getParameter en multiParameters
+    + chaque objet webgl aussi
 - vérifier si c'est pas trop lourd de passer par tout ça ? pédagogique
 - reoragniser et refactoriser le code plus ergonomique
 - placer les enums dans un même fichier ?

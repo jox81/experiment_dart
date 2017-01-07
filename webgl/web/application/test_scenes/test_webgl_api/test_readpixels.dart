@@ -35,7 +35,7 @@ void main() {
   gl.clearColor = new Vector4(0.5, 0.5, 0.5, 1.0);       // clear color
   gl.enable(EnableCapabilityType.DEPTH_TEST);  // enable depth testing
   gl.depthFunc = ComparisonFunction.LESS;     // gl.LESS is default depth test
-  gl.depthRange(0.0, 1.0);                 // default
+  gl.setDepthRange(0.0, 1.0);                 // default
   gl.viewport = new Rectangle(0, 0, canvas.width, canvas.height);
 
   gl.clear([ClearBufferMask.COLOR_BUFFER_BIT , ClearBufferMask.DEPTH_BUFFER_BIT]);

@@ -3,19 +3,19 @@ import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 
-class RenderBufferParameterGlEnum{
+class RenderBufferParameters{
   final index;
-  const RenderBufferParameterGlEnum(this.index);
+  const RenderBufferParameters(this.index);
 
-  static const RenderBufferParameterGlEnum RENDERBUFFER_WIDTH = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_WIDTH);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_HEIGHT = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_HEIGHT);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_INTERNAL_FORMAT = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_INTERNAL_FORMAT);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_GREEN_SIZE = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_GREEN_SIZE);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_BLUE_SIZE = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_BLUE_SIZE);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_RED_SIZE = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_RED_SIZE);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_ALPHA_SIZE = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_ALPHA_SIZE);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_DEPTH_SIZE = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_DEPTH_SIZE);
-  static const RenderBufferParameterGlEnum RENDERBUFFER_STENCIL_SIZE = const RenderBufferParameterGlEnum(WebGL.RenderingContext.RENDERBUFFER_STENCIL_SIZE);
+  static const RenderBufferParameters RENDERBUFFER_WIDTH = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_WIDTH);
+  static const RenderBufferParameters RENDERBUFFER_HEIGHT = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_HEIGHT);
+  static const RenderBufferParameters RENDERBUFFER_INTERNAL_FORMAT = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_INTERNAL_FORMAT);
+  static const RenderBufferParameters RENDERBUFFER_GREEN_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_GREEN_SIZE);
+  static const RenderBufferParameters RENDERBUFFER_BLUE_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_BLUE_SIZE);
+  static const RenderBufferParameters RENDERBUFFER_RED_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_RED_SIZE);
+  static const RenderBufferParameters RENDERBUFFER_ALPHA_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_ALPHA_SIZE);
+  static const RenderBufferParameters RENDERBUFFER_DEPTH_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_DEPTH_SIZE);
+  static const RenderBufferParameters RENDERBUFFER_STENCIL_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_STENCIL_SIZE);
 }
 
 class RenderBufferTarget{
@@ -54,13 +54,34 @@ class WebGLRenderBuffer{
     webGLRenderBuffer = null;
   }
 
-  dynamic getParameter(RenderBufferParameterGlEnum parameter){
-    dynamic result =  gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,parameter.index);
-    return result;
+  // >>> Parameteres
+
+  dynamic getParameter(RenderBufferParameters parameter){
+    return gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,parameter.index);
   }
 
-  //Todo : get single parameter
+  // >>> single getParameter
 
+  // > RENDERBUFFER_WIDTH
+  int get renderBufferWidth => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_WIDTH.index);
+  // > RENDERBUFFER_HEIGHT
+  int get renderBufferHeight => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_HEIGHT.index);
+  // > RENDERBUFFER_RED_SIZE
+  int get renderBufferRedSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_RED_SIZE.index);
+  // > RENDERBUFFER_GREEN_SIZE
+  int get renderBufferGreenSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_GREEN_SIZE.index);
+  // > RENDERBUFFER_BLUE_SIZE
+  int get renderBufferBlueSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_BLUE_SIZE.index);
+  // > RENDERBUFFER_ALPHA_SIZE
+  int get renderBufferAlphaSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_ALPHA_SIZE.index);
+  // > RENDERBUFFER_DEPTH_SIZE
+  int get renderBufferDepthSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_DEPTH_SIZE.index);
+  // > RENDERBUFFER_STENCIL_SIZE
+  int get renderBufferStencilSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_STENCIL_SIZE.index);
+  // > RENDERBUFFER_INTERNAL_FORMAT
+  RenderBufferInternalFormatType get renderBufferInterrnalFormat => new RenderBufferInternalFormatType(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index));
+
+  //Bind
   void bind() {
     gl.ctx.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER.index, webGLRenderBuffer);
   }
