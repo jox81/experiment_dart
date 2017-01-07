@@ -12,18 +12,6 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-class UsageType {
-  final index;
-  const UsageType(this.index);
-
-  static const UsageType STATIC_DRAW =
-      const UsageType(WebGL.RenderingContext.STATIC_DRAW);
-  static const UsageType DYNAMIC_DRAW =
-      const UsageType(WebGL.RenderingContext.DYNAMIC_DRAW);
-  static const UsageType STREAM_DRAW =
-      const UsageType(WebGL.RenderingContext.STREAM_DRAW);
-}
-
 class EnableCapabilityType{
   final index;
   const EnableCapabilityType(this.index);
@@ -685,18 +673,18 @@ class WebGLRenderingContext {
   }
 
   void bufferData(BufferType bufferType,
-      WebGlTypedData.TypedData typedData, UsageType usageType) {
+      WebGlTypedData.TypedData typedData, BufferUsageType usageType) {
     ctx.bufferData(bufferType.index, typedData, usageType.index);
   }
 
   void bufferDataWithSize(BufferType bufferType, int size,
-      WebGLBuffer webglBuffer, UsageType usageType) {
+      WebGLBuffer webglBuffer, BufferUsageType usageType) {
     assert(size != null);
     ctx.bufferData(bufferType.index, size, usageType.index);
   }
 
   void bufferDataWithByteBuffer(BufferType bufferType,
-      WebGlTypedData.ByteBuffer byteBuffer, UsageType usageType) {
+      WebGlTypedData.ByteBuffer byteBuffer, BufferUsageType usageType) {
     ctx.bufferData(bufferType.index, byteBuffer, usageType.index);
   }
 
@@ -724,6 +712,7 @@ class WebGLRenderingContext {
   //Extensions
   List<String> get supportedExtensions => ctx.getSupportedExtensions();
 
+  //Todo : get specific extension
   dynamic getExtension(String extensionName){
     return ctx.getExtension(extensionName);
   }

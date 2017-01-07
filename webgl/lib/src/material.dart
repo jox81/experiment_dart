@@ -132,12 +132,12 @@ abstract class Material extends IEditElement {
       gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
       attributes[attributName].enableVertexAttribArray();
       gl.bufferData(
-          BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), UsageType.STATIC_DRAW);
+          BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
       attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
     } else if(elemetArrayBuffer != null){
       gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
       gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
-          UsageType.STATIC_DRAW);
+          BufferUsageType.STATIC_DRAW);
     }else{
       WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.activeInfo.name == attributName, orElse:() => null);
 

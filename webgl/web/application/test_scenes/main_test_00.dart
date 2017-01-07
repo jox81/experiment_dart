@@ -130,13 +130,13 @@ class Webgl01 {
     vertexBuffer = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(
-        BufferType.ARRAY_BUFFER, new Float32List.fromList(vertices), UsageType.STATIC_DRAW);
+        BufferType.ARRAY_BUFFER, new Float32List.fromList(vertices), BufferUsageType.STATIC_DRAW);
     gl.bindBuffer(BufferType.ARRAY_BUFFER, null);
 
     indicesBuffer = new WebGLBuffer();
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
     gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
-        UsageType.STATIC_DRAW);
+        BufferUsageType.STATIC_DRAW);
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, null);
   }
 

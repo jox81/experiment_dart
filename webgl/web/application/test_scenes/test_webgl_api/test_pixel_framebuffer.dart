@@ -122,11 +122,11 @@ void main() {
   WebGLBuffer vertexPositionBuffer = new WebGLBuffer();
   final int vertexPositionBufferItemSize = 3; // coord x,y,z
   vertexPositionBuffer.bind(BufferType.ARRAY_BUFFER);
-  gl.bufferData(BufferType.ARRAY_BUFFER, vertCoord, UsageType.STATIC_DRAW);
+  gl.bufferData(BufferType.ARRAY_BUFFER, vertCoord, BufferUsageType.STATIC_DRAW);
 
   WebGLBuffer vertexIndexBuffer = new WebGLBuffer();
   vertexIndexBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
-  gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, indices, UsageType.STATIC_DRAW);
+  gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, indices, BufferUsageType.STATIC_DRAW);
     
   WebGLShader vertShader = new WebGLShader(ShaderType.VERTEX_SHADER)
       ..source = vertexShaderSource

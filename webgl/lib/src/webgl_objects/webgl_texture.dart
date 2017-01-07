@@ -155,13 +155,30 @@ class WebGLTexture {
     webGLTexture = null;
   }
 
+
+  // >>> Parameteres
+
+
   dynamic getParameter(TextureTarget target, TextureParameterGlEnum parameter) {
     dynamic result =
         gl.ctx.getTexParameter(target.index.index, parameter.index);
     return result;
   }
 
-  //Todo add single parameter
+  // >>> single getParameter
+
+  // > TEXTURE_MAG_FILTER
+  TextureMagType get texture2DTextureMagFilter => new TextureMagType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameterGlEnum.TEXTURE_MAG_FILTER.index));
+  TextureMagType get textureCubeMapTextureMagFilter => new TextureMagType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameterGlEnum.TEXTURE_MAG_FILTER.index));
+  // > TEXTURE_MIN_FILTER
+  TextureMinType get texture2DTextureMinFilter => new TextureMinType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameterGlEnum.TEXTURE_MIN_FILTER.index));
+  TextureMinType get textureCubeMapTextureMinFilter => new TextureMinType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameterGlEnum.TEXTURE_MIN_FILTER.index));
+  // > TEXTURE_WRAP_S
+  TextureWrapType get texture2DTextureWrapS => new TextureWrapType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameterGlEnum.TEXTURE_WRAP_S.index));
+  TextureWrapType get textureCubeMapTextureWrapS => new TextureWrapType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameterGlEnum.TEXTURE_WRAP_S.index));
+  // > TEXTURE_WRAP_T
+  TextureWrapType get texture2DTextureWrapT => new TextureWrapType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameterGlEnum.TEXTURE_WRAP_T.index));
+  TextureWrapType get textureCubeMapTextureWrapT => new TextureWrapType(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameterGlEnum.TEXTURE_WRAP_T.index));
 
   void setParameterFloat(
       TextureTarget target, TextureParameterGlEnum parameter, num value) {

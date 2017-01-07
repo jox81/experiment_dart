@@ -11,12 +11,24 @@ class BufferType{
   static const BufferType ELEMENT_ARRAY_BUFFER = const BufferType(WebGL.RenderingContext.ELEMENT_ARRAY_BUFFER);
 }
 
-class BufferParameterGlEnum{
+class BufferUsageType {
   final index;
-  const BufferParameterGlEnum(this.index);
+  const BufferUsageType(this.index);
 
-  static const BufferParameterGlEnum BUFFER_SIZE = const BufferParameterGlEnum(WebGL.RenderingContext.BUFFER_SIZE);
-  static const BufferParameterGlEnum BUFFER_USAGE = const BufferParameterGlEnum(WebGL.RenderingContext.BUFFER_USAGE);
+  static const BufferUsageType STATIC_DRAW =
+  const BufferUsageType(WebGL.RenderingContext.STATIC_DRAW);
+  static const BufferUsageType DYNAMIC_DRAW =
+  const BufferUsageType(WebGL.RenderingContext.DYNAMIC_DRAW);
+  static const BufferUsageType STREAM_DRAW =
+  const BufferUsageType(WebGL.RenderingContext.STREAM_DRAW);
+}
+
+class BufferParameters{
+  final index;
+  const BufferParameters(this.index);
+
+  static const BufferParameters BUFFER_SIZE = const BufferParameters(WebGL.RenderingContext.BUFFER_SIZE);
+  static const BufferParameters BUFFER_USAGE = const BufferParameters(WebGL.RenderingContext.BUFFER_USAGE);
 }
 
 class WebGLBuffer{
@@ -44,12 +56,27 @@ class WebGLBuffer{
     gl.ctx.bindBuffer(bufferType.index, null);
   }
 
-  dynamic getParameter(BufferType target, BufferParameterGlEnum parameter){
+
+  // >>> Parameteres
+
+
+  dynamic getParameter(BufferType target, BufferParameters parameter){
     dynamic result =  gl.ctx.getBufferParameter(target.index.index,parameter.index);
     return result;
   }
 
-  //Todo add single parameter
+  // >>> single getParameter
 
+  // >> ARRAY_BUFFER
+  // > BUFFER_SIZE
+  int get arrayBufferSize => gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_SIZE.index);
+  // > BUFFER_USAGE
+  BufferUsageType get arrayBufferUsage => new BufferUsageType(gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
+
+  // >> ELEMENT_ARRAY_BUFFER
+  // > BUFFER_SIZE
+  int get elementArrayBufferSize => gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_SIZE.index);
+  // > BUFFER_USAGE
+  BufferUsageType get elementArrayBufferUsage => new BufferUsageType(gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
 
 }

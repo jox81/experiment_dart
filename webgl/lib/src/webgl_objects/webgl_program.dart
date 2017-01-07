@@ -53,10 +53,6 @@ class WebGLProgram{
     return new WebGLAttributLocation(gl.ctx.getAttribLocation(webGLProgram, variableName));
   }
 
-  String get infoLog{
-    return gl.ctx.getProgramInfoLog(webGLProgram);
-  }
-
   WebGLUniformLocation getUniformLocation(String variableName){
     return new WebGLUniformLocation(gl.ctx.getUniformLocation(webGLProgram,variableName));
   }
@@ -104,27 +100,31 @@ class WebGLProgram{
     gl.ctx.bindAttribLocation(webGLProgram, attributLocation.location, variableName);
   }
 
+
+  String get infoLog => gl.ctx.getProgramInfoLog(webGLProgram);
+
+
+  // >>> Parameteres
+
+
   dynamic getParameter(ProgramParameterGlEnum parameter){
     return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
   }
-  bool get deleteStatus{
-    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
-  }
-  bool get linkStatus{
-    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
-  }
-  bool get validateStatus{
-    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
-  }
-  int get attachedShadersCount{
-    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
-  }
-  int get activeAttributsCount{
-    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
-  }
-  int get activeUnifromsCount{
-    return gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
-  }
+
+  // >>> single getParameter
+
+  // > DELETE_STATUS
+  bool get deleteStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
+  // > LINK_STATUS
+  bool get linkStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
+  // > VALIDATE_STATUS
+  bool get validateStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
+  // > ATTACHED_SHADERS
+  int get attachedShadersCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
+  // > ACTIVE_ATTRIBUTES
+  int get activeAttributsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
+  // > ACTIVE_UNIFORMS
+  int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
 
   //Custom
   ProgramInfo getProgramInfo(){

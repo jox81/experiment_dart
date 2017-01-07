@@ -83,13 +83,13 @@ class ShaderType{
   static const ShaderType VERTEX_SHADER = const ShaderType(WebGL.RenderingContext.VERTEX_SHADER);
 }
 
-class ShaderParameterGlEnum{
+class ShaderParameters{
   final index;
-  const ShaderParameterGlEnum(this.index);
+  const ShaderParameters(this.index);
 
-  static const ShaderParameterGlEnum DELETE_STATUS = const ShaderParameterGlEnum(WebGL.RenderingContext.DELETE_STATUS);
-  static const ShaderParameterGlEnum COMPILE_STATUS = const ShaderParameterGlEnum(WebGL.RenderingContext.COMPILE_STATUS);
-  static const ShaderParameterGlEnum SHADER_TYPE = const ShaderParameterGlEnum(WebGL.RenderingContext.SHADER_TYPE);
+  static const ShaderParameters DELETE_STATUS = const ShaderParameters(WebGL.RenderingContext.DELETE_STATUS);
+  static const ShaderParameters COMPILE_STATUS = const ShaderParameters(WebGL.RenderingContext.COMPILE_STATUS);
+  static const ShaderParameters SHADER_TYPE = const ShaderParameters(WebGL.RenderingContext.SHADER_TYPE);
 }
 
 class VertexAttribGlEnum{
@@ -142,14 +142,23 @@ class WebGLShader{
     }
   }
 
-  dynamic getParameter(ShaderParameterGlEnum parameter){
+
+  // >>> Parameteres
+
+
+  dynamic getParameter(ShaderParameters parameter){
     dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
     return result;
   }
 
-  bool get compileStatus{
-    return gl.ctx.getShaderParameter(webGLShader,ShaderParameterGlEnum.COMPILE_STATUS.index);
-  }
+  // >>> single getParameter
+
+  // > DELETE_STATUS
+  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index);
+  // > COMPILE_STATUS
+  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
+  // > SHADER_TYPE
+  ShaderType get shaderType => new ShaderType(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
 
   //Why no webGLShader ref ? >>>
 

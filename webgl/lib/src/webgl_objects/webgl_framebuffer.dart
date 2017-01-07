@@ -29,14 +29,23 @@ class FrameBufferAttachment{
   static const FrameBufferAttachment STENCIL_ATTACHMENT = const FrameBufferAttachment(WebGL.RenderingContext.STENCIL_ATTACHMENT);
 }
 
-class FrameBufferAttachmentQuery{
+class FrameBufferAttachmentType{
   final index;
-  const FrameBufferAttachmentQuery(this.index);
+  const FrameBufferAttachmentType(this.index);
 
-  static const FrameBufferAttachmentQuery FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = const FrameBufferAttachmentQuery(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
-  static const FrameBufferAttachmentQuery FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = const FrameBufferAttachmentQuery(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
-  static const FrameBufferAttachmentQuery FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL = const FrameBufferAttachmentQuery(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL);
-  static const FrameBufferAttachmentQuery FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE = const FrameBufferAttachmentQuery(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE);
+  static const FrameBufferAttachmentType TEXTURE = const FrameBufferAttachmentType(WebGL.RenderingContext.TEXTURE);
+  static const FrameBufferAttachmentType RENDERBUFFER = const FrameBufferAttachmentType(WebGL.RenderingContext.RENDERBUFFER);
+  static const FrameBufferAttachmentType NONE = const FrameBufferAttachmentType(WebGL.RenderingContext.NONE);
+}
+
+class FrameBufferAttachmentParameters{
+  final index;
+  const FrameBufferAttachmentParameters(this.index);
+
+  static const FrameBufferAttachmentParameters FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = const FrameBufferAttachmentParameters(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE);
+  static const FrameBufferAttachmentParameters FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = const FrameBufferAttachmentParameters(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
+  static const FrameBufferAttachmentParameters FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL = const FrameBufferAttachmentParameters(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL);
+  static const FrameBufferAttachmentParameters FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE = const FrameBufferAttachmentParameters(WebGL.RenderingContext.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE);
 }
 
 class TextureAttachmentTarget{
@@ -79,9 +88,44 @@ class WebGLFrameBuffer{
     gl.ctx.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER.index, null);
   }
 
-  //Parameters
-  dynamic getAttachmentParameter(FrameBufferAttachment attachment, FrameBufferAttachmentQuery query){
-    gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index,attachment.index, query.index);
+
+  // >>> Parameteres
+
+
+  dynamic getAttachmentParameter(FrameBufferAttachment attachment, FrameBufferAttachmentParameters query){
+    return gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index,attachment.index, query.index);
   }
-  //todo : add multiparameters
+
+  // >>> single getParameter
+
+  // >> COLOR_ATTACHMENT0
+  // > FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+  FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForColor0 => new FrameBufferAttachmentType(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE.index));
+  // > FRAMEBUFFER_ATTACHMENT_OBJECT_NAME : Todo : return the webGlTexture or the webGLRenderBuffer attached
+  dynamic get frameBufferAttachmentObjectNameForColor0 => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.index);
+  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
+  int get frameBufferAttachmentTextureLevelForColor0 => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
+  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
+  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForColor0 => new TextureAttachmentTarget(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+  
+  // >> DEPTH_ATTACHMENT
+  // > FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+  FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForDepth => new FrameBufferAttachmentType(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE.index));
+  // > FRAMEBUFFER_ATTACHMENT_OBJECT_NAME : Todo : return the webGlTexture or the webGLRenderBuffer attached
+  dynamic get frameBufferAttachmentObjectNameForDepth => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.index);
+  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
+  int get frameBufferAttachmentTextureLevelForDepth => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
+  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
+  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForDepth => new TextureAttachmentTarget(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+
+  // >> STENCIL_ATTACHMENT
+  // > FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
+  FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForStencil => new FrameBufferAttachmentType(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE.index));
+  // > FRAMEBUFFER_ATTACHMENT_OBJECT_NAME : Todo : return the webGlTexture or the webGLRenderBuffer attached
+  dynamic get frameBufferAttachmentObjectNameForStencil => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.index);
+  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
+  int get frameBufferAttachmentTextureLevelForStencil => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
+  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
+  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForStencil => new TextureAttachmentTarget(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+
 }
