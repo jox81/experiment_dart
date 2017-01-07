@@ -148,6 +148,7 @@ class WebGLTexture {
   WebGLTexture() {
     webGLTexture = gl.ctx.createTexture();
   }
+  WebGLTexture.fromWebgl(this.webGLTexture);
 
   void delete() {
     gl.ctx.deleteTexture(webGLTexture);
