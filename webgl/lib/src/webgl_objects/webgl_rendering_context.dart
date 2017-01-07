@@ -8,6 +8,7 @@ import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
@@ -232,6 +233,7 @@ class ContextParameter{
   static const ContextParameter FRAMEBUFFER_BINDING = const ContextParameter(WebGL.RenderingContext.FRAMEBUFFER_BINDING);
   static const ContextParameter FRONT_FACE = const ContextParameter(WebGL.RenderingContext.FRONT_FACE);
   static const ContextParameter GENERATE_MIPMAP_HINT = const ContextParameter(WebGL.RenderingContext.GENERATE_MIPMAP_HINT);
+  static const ContextParameter GREEN_BITS = const ContextParameter(WebGL.RenderingContext.GREEN_BITS);
   static const ContextParameter IMPLEMENTATION_COLOR_READ_FORMAT = const ContextParameter(WebGL.RenderingContext.IMPLEMENTATION_COLOR_READ_FORMAT);
   static const ContextParameter IMPLEMENTATION_COLOR_READ_TYPE = const ContextParameter(WebGL.RenderingContext.IMPLEMENTATION_COLOR_READ_TYPE);
   static const ContextParameter LINE_WIDTH = const ContextParameter(WebGL.RenderingContext.LINE_WIDTH);
@@ -334,43 +336,152 @@ class WebGLRenderingContext {
   }
 
   Map get contextAttributes => (ctx.getContextAttributes() as WebGLDictionary).toMap;
-
+  //
   bool get isContextLost => ctx.isContextLost();
 
-  set frontFace(FrontFaceDirection mode){
-    ctx.frontFace(mode.index);
+  // >>> Parameteres
+  dynamic getParameter(ContextParameter parameter){
+    dynamic result =  ctx.getParameter(parameter.index);
+    return result;
   }
+
+  //>>> Todo : get single parameter
+
+  // > ACTIVE_TEXTURE
+  TextureUnit get activeTexture => new TextureUnit(ctx.getParameter(ContextParameter.ACTIVE_TEXTURE.index));
+  set activeTexture(TextureUnit textureUnit) => ctx.activeTexture(textureUnit.index);
+
+  // > ALIASED_LINE_WIDTH_RANGE [2]
+  Float32List get aliasedLineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
+
+  // > ALIASED_POINT_SIZE_RANGE [2]
+  Float32List get aliasedPointSizeRange => ctx.getParameter(ContextParameter.ALIASED_POINT_SIZE_RANGE.index);
+
+  // > RED_BITS
+  int get redBits => ctx.getParameter(ContextParameter.RED_BITS.index);
+  // > GREEN_BITS
+  int get greenBits => ctx.getParameter(ContextParameter.GREEN_BITS.index);
+  // > BLUE_BITS
+  int get blueBits => ctx.getParameter(ContextParameter.BLUE_BITS.index);
+  // > ALPHA_BITS
+  int get alphaBits => ctx.getParameter(ContextParameter.ALPHA_BITS.index);
+  // > DEPTH_BITS
+  int get depthBits => ctx.getParameter(ContextParameter.DEPTH_BITS.index);
+  // > STENCIL_BITS
+  int get stencilBits => ctx.getParameter(ContextParameter.STENCIL_BITS.index);
+  // > SUBPIXEL_BITS
+  int get subPixelBits => ctx.getParameter(ContextParameter.SUBPIXEL_BITS.index);
+
+  // > COLOR_CLEAR_VALUE [4]
+  Vector4 get colorClearValue => new Vector4.fromFloat32List(ctx.getParameter(ContextParameter.COLOR_CLEAR_VALUE.index));
+
+  // > COMPRESSED_TEXTURE_FORMATS [4]
+  Int32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
+
+  // > CURRENT_PROGRAM
+  WebGLProgram get currentProgram => new WebGLProgram.fromWebgl(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index));
+
+  // > ARRAY_BUFFER_BINDING
+  WebGLBuffer get arrayBufferBinding => new WebGLBuffer.fromWebgl(ctx.getParameter(ContextParameter.ARRAY_BUFFER_BINDING.index));
+
+  // > ELEMENT_ARRAY_BUFFER_BINDING
+  WebGLBuffer get elementArrayBufferBinding => new WebGLBuffer.fromWebgl(ctx.getParameter(ContextParameter.ELEMENT_ARRAY_BUFFER_BINDING.index));
+
+  // > FRAMEBUFFER_BINDING
+  WebGLFrameBuffer get frameBufferBinding => new WebGLFrameBuffer.fromWebgl(ctx.getParameter(ContextParameter.FRAMEBUFFER_BINDING.index));
+
+  // > RENDERBUFFER_BINDING
+  WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebgl(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
+
+  // > FRONT_FACE
+  FrontFaceDirection get frontFace => new FrontFaceDirection(ctx.getParameter(ContextParameter.FRONT_FACE.index));
+  set frontFace(FrontFaceDirection mode) => ctx.frontFace(mode.index);
+
+  // > MAX_TEXTURE_IMAGE_UNITS
+  int get maxTextureImageUnits => ctx.getParameter(ContextParameter.MAX_TEXTURE_IMAGE_UNITS.index);
+  // > MAX_COMBINED_TEXTURE_IMAGE_UNITS
+  int get maxCombinedTextureImageUnits => ctx.getParameter(ContextParameter.MAX_COMBINED_TEXTURE_IMAGE_UNITS.index);
+  // > MAX_CUBE_MAP_TEXTURE_SIZE
+  int get maxCubeMapTextureSize => ctx.getParameter(ContextParameter.MAX_CUBE_MAP_TEXTURE_SIZE.index);
+  // > MAX_TEXTURE_SIZE
+  int get maxTextureSize => ctx.getParameter(ContextParameter.MAX_TEXTURE_SIZE.index);
+
+  // > MAX_VERTEX_TEXTURE_IMAGE_UNITS
+  int get maxVertexTextureImageUnits => ctx.getParameter(ContextParameter.MAX_VERTEX_TEXTURE_IMAGE_UNITS.index);
+
+  // > MAX_VERTEX_ATTRIBS
+  int get maxVertexAttributs => ctx.getParameter(ContextParameter.MAX_VERTEX_ATTRIBS.index);
+  // > MAX_VERTEX_UNIFORM_VECTORS
+  int get maxVertexUnifromVectors => ctx.getParameter(ContextParameter.MAX_VERTEX_UNIFORM_VECTORS.index);
+  // > MAX_VARYING_VECTORS
+  int get maxVaryingVectors => ctx.getParameter(ContextParameter.MAX_VARYING_VECTORS.index);
+  // > MAX_FRAGMENT_UNIFORM_VECTORS
+  int get maxFragmentUnifromVectors => ctx.getParameter(ContextParameter.MAX_FRAGMENT_UNIFORM_VECTORS.index);
+
+  // > MAX_RENDERBUFFER_SIZE
+  int get maxRenderBufferSize => ctx.getParameter(ContextParameter.MAX_RENDERBUFFER_SIZE.index);
+
+  // > RENDERER
+  String get renderer => ctx.getParameter(ContextParameter.RENDERER.index);
+  // > VERSION
+  String get version => ctx.getParameter(ContextParameter.VERSION.index);
+  // > SHADING_LANGUAGE_VERSION
+  String get shadingLanguageVersion => ctx.getParameter(ContextParameter.SHADING_LANGUAGE_VERSION.index);
+  // > VENDOR
+  String get vendor => ctx.getParameter(ContextParameter.VENDOR.index);
+
+  // > SAMPLES
+  int get samples => ctx.getParameter(ContextParameter.SAMPLES.index);
+  // > SAMPLE_BUFFERS
+  int get sampleBuffers => ctx.getParameter(ContextParameter.SAMPLE_BUFFERS.index);
+
+  // > STENCIL_FAIL
+  StencilOpMode get stencilFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_FAIL.index));
+  // > STENCIL_PASS_DEPTH_PASS
+  StencilOpMode get stencilPassDepthPass => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index));
+  // > STENCIL_PASS_DEPTH_FAIL
+  StencilOpMode get stencilPassDepthFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index));
+  // > STENCIL_BACK_FAIL
+  StencilOpMode get stencilBackFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index));
+  // > STENCIL_BACK_PASS_DEPTH_PASS
+  StencilOpMode get stencilBackPassDepthPass => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index));
+  // > STENCIL_BACK_PASS_DEPTH_FAIL
+  StencilOpMode get stencilBackPassDepthFail => new StencilOpMode(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index));
+
+  //>>>
+
+
+
 
   //CullFace
+  // > CULL_FACE //Todo : ? identique à get parameter ? BLEND
   bool get cullFace => isEnabled(EnableCapabilityType.CULL_FACE.index);
-  set cullFace(bool enable){
-    _setEnabled(EnableCapabilityType.CULL_FACE, enable);
-  }
+  set cullFace(bool enable) => _setEnabled(EnableCapabilityType.CULL_FACE, enable);
 
-  set cullFaceMode(FacingType mode){
-    ctx.cullFace(mode.index);
-  }
+  // > CULL_FACE_MODE
+  FacingType get cullFaceMode => new FacingType(ctx.getParameter(ContextParameter.CULL_FACE_MODE.index));
+  set cullFaceMode(FacingType mode) => ctx.cullFace(mode.index);
 
   //Depth
+  // > DEPTH_TEST
   bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
-  set depthTest(bool enable){
-    _setEnabled(EnableCapabilityType.DEPTH_TEST, enable);
-  }
+  set depthTest(bool enable) => _setEnabled(EnableCapabilityType.DEPTH_TEST, enable);
 
+  // > DEPTH_WRITEMASK
   bool get depthMask => ctx.getParameter(ContextParameter.DEPTH_WRITEMASK.index);
-  set depthMask(bool enable){
-      ctx.depthMask(enable);
-  }
+  set depthMask(bool enable) => ctx.depthMask(enable);
 
+  // > DEPTH_FUNC
   ComparisonFunction get depthFunc => new ComparisonFunction(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
-  set depthFunc(ComparisonFunction depthComparisionFunction){
-    ctx.depthFunc(depthComparisionFunction.index);
-  }
+  set depthFunc(ComparisonFunction depthComparisionFunction) => ctx.depthFunc(depthComparisionFunction.index);
 
-  void depthRange(num zNear, num zFar) {
+  // > DEPTH_RANGE [2]
+  Float32List get depthRange => ctx.getParameter(ContextParameter.DEPTH_RANGE.index);
+  void setDepthRange(num zNear, num zFar) {
     ctx.depthRange(zNear, zFar);
   }
 
+  // > DEPTH_CLEAR_VALUE
   num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index);
   set clearDepth(num depthValue){
     assert(0.0 <= depthValue && depthValue <= 1.0);
@@ -378,8 +489,9 @@ class WebGLRenderingContext {
   }
 
   //Scissor
+  // > SCISSOR_BOX
   Rectangle get scissor {
-    Int32List values = getParameter(ContextParameter.SCISSOR_BOX);
+    Int32List values = ctx.getParameter(ContextParameter.SCISSOR_BOX.index);
     return new Rectangle(values[0], values[1], values[2], values[3]);
   }
   set scissor(Rectangle rect) {
@@ -388,22 +500,24 @@ class WebGLRenderingContext {
     ctx.scissor(rect.left, rect.top, rect.width, rect.height);
   }
 
+  // > SCISSOR_TEST
   bool get scissorTest => isEnabled(EnableCapabilityType.SCISSOR_TEST);
   set scissorTest(bool enabled) => _setEnabled(EnableCapabilityType.SCISSOR_TEST, enabled);
 
-  //lineWidth
+  // > LINE_WIDTH
   num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index);
-  set lineWidth(num width){
-    ctx.lineWidth(width);
-  }
-  Float32List get lineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
+  set lineWidth(num width) => ctx.lineWidth(width);
 
   //Polygon offset
+  // > POLYGON_OFFSET_FILL
   bool get polygonOffset => ctx.isEnabled(EnableCapabilityType.POLYGON_OFFSET_FILL.index);
   set polygonOffset(bool enabled) =>_setEnabled(EnableCapabilityType.POLYGON_OFFSET_FILL, enabled);
 
+  // > POLYGON_OFFSET_FACTOR
   num get polygonOffsetFactor => ctx.getParameter(ContextParameter.POLYGON_OFFSET_FACTOR.index);
+  // > POLYGON_OFFSET_UNITS
   num get polygonOffsetUnits => ctx.getParameter(ContextParameter.POLYGON_OFFSET_UNITS.index);
+
   void setPolygonOffest(num factor, num units){
     ctx.polygonOffset(factor, units);
   }
@@ -415,7 +529,9 @@ class WebGLRenderingContext {
   bool get sampleAlphaToCoverage => isEnabled(EnableCapabilityType.SAMPLE_ALPHA_TO_COVERAGE);
   set sampleAlphaToCoverage(bool enabled) => _setEnabled(EnableCapabilityType.SAMPLE_ALPHA_TO_COVERAGE, enabled);
 
+  // > SAMPLE_COVERAGE_VALUE
   num get sampleCoverageValue => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_VALUE.index);
+  // > SAMPLE_COVERAGE_INVERT
   bool get sampleCoverageInvert => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_INVERT.index);
   void setSampleCoverage(num value, bool invert) => ctx.sampleCoverage(value, invert);
 
@@ -440,7 +556,6 @@ class WebGLRenderingContext {
   }
   int get stencilWriteMask => ctx.getParameter(ContextParameter.STENCIL_WRITEMASK.index);
   int get stencilBackWriteMask => ctx.getParameter(ContextParameter.STENCIL_BACK_WRITEMASK.index);
-  int get stencilBits => ctx.getParameter(ContextParameter.STENCIL_BITS.index);
   set stencilMaks(int value) => ctx.stencilMask(value);
 
   int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index);
@@ -449,6 +564,7 @@ class WebGLRenderingContext {
   }
 
   //Blend
+  //Todo : ? identique à get parameter ? BLEND
   bool get blend => isEnabled(EnableCapabilityType.BLEND);
   set blend (bool enabled) => _setEnabled(EnableCapabilityType.BLEND.index, enabled);
 
@@ -458,24 +574,37 @@ class WebGLRenderingContext {
   void blendFuncSeparate(BlendFactorMode srcRGB, BlendFactorMode dstRGB, BlendFactorMode srcAlpha, BlendFactorMode dstAlpha){
     ctx.blendFuncSeparate(srcRGB.index, dstRGB.index, srcAlpha.index, dstAlpha.index);
   }
-  void blendEquation(BlendFunctionMode mode){
-    ctx.blendEquation(mode.index);
-  }
-  void blendEquationSeparate(BlendFunctionMode modeRGB, BlendFunctionMode modeAlpha){
-    ctx.blendEquationSeparate(modeRGB.index, modeAlpha.index);
-  }
-  void blendColor(num red, num green, num blue, num alpha){
+  void setBlendColor(num red, num green, num blue, num alpha){
     assert(0.0 <= red && red <= 1.0);
     assert(0.0 <= green && green <= 1.0);
     assert(0.0 <= blue && blue <= 1.0);
     assert(0.0 <= alpha && alpha <= 1.0);
     ctx.blendColor(red, green, blue, alpha);
   }
-  Float32List getBlendColor(){
-    return ctx.getParameter(ContextParameter.BLEND_COLOR.index);
+  // > BLEND_COLOR
+  Float32List get blendColor => ctx.getParameter(ContextParameter.BLEND_COLOR.index);
+  set blendColor(Float32List values){
+    assert(values.length == 4);
+    setBlendColor(values[0], values[1], values[2], values[3]);
+  }
+  // > BLEND_SRC_RGB, BLEND_DST_RGB, BLEND_SRC_ALPHA, BLEND_DST_ALPHA
+  BlendFactorMode get blendSrcRGB => new BlendFactorMode(ctx.getParameter(ContextParameter.BLEND_SRC_RGB.index));
+  BlendFactorMode get blendSrcAlpha => new BlendFactorMode(ctx.getParameter(ContextParameter.BLEND_SRC_ALPHA.index));
+  BlendFactorMode get blendDstRGB => new BlendFactorMode(ctx.getParameter(ContextParameter.BLEND_DST_RGB.index));
+  BlendFactorMode get blendDstAlpha => new BlendFactorMode(ctx.getParameter(ContextParameter.BLEND_DST_ALPHA.index));
+
+  // > BLEND_EQUATION, BLEND_EQUATION_RGB, BLEND_EQUATION_ALPHA
+  BlendFunctionMode get blendEquation => new BlendFunctionMode(ctx.getParameter(ContextParameter.BLEND_EQUATION.index));
+  BlendFunctionMode get blendEquationRGB => new BlendFunctionMode(ctx.getParameter(ContextParameter.BLEND_EQUATION_RGB.index));
+  BlendFunctionMode get blendEquationAlpha => new BlendFunctionMode(ctx.getParameter(ContextParameter.BLEND_EQUATION_ALPHA .index));
+  set blendEquation(BlendFunctionMode mode) => ctx.blendEquation(mode.index);
+
+  void blendEquationSeparate(BlendFunctionMode modeRGB, BlendFunctionMode modeAlpha){
+    ctx.blendEquationSeparate(modeRGB.index, modeAlpha.index);
   }
 
   //Dither
+  // > DITHER
   bool get dither => isEnabled(EnableCapabilityType.DITHER);
   set dither (bool enabled) => _setEnabled(EnableCapabilityType.DITHER.index, enabled);
 
@@ -504,6 +633,7 @@ class WebGLRenderingContext {
     ctx.clearColor(color.r, color.g, color.b, color.a);
   }
 
+  // > COLOR_WRITEMASK [4]
   List<bool> get colorMask => ctx.getParameter(ContextParameter.COLOR_WRITEMASK.index);
   set colorMask(List<bool> mask){
       assert(mask.length == 4);
@@ -568,17 +698,10 @@ class WebGLRenderingContext {
     return ctx.getExtension(extensionName);
   }
 
-  void activeTexture(TextureUnit textureUnit) {
-    ctx.activeTexture(textureUnit.index);
-  }
+  // > MAX_VIEWPORT_DIMS
+  Int32List get viewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
 
-  dynamic getParameter(ContextParameter parameter){
-    dynamic result =  ctx.getParameter(parameter.index);
-    return result;
-  }
-
-  //Todo : get single parameter
-
+  // > VIEWPORT
   Rectangle get viewport {
     Int32List values = ctx.getParameter(ContextParameter.VIEWPORT.index);
     return new Rectangle(values[0], values[1], values[2], values[3]);
@@ -589,16 +712,11 @@ class WebGLRenderingContext {
     ctx.viewport(rect.left, rect.top, rect.width, rect.height);
   }
 
-  Int32List get viewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
+  // > PACK_ALIGNMENT
+  int get packAlignment => ctx.getParameter(ContextParameter.PACK_ALIGNMENT.index);
+  void pixelStorei(PixelStorgeType storage, int value) => ctx.pixelStorei(storage.index, value);
 
-
-
-
-  void pixelStorei(PixelStorgeType storage, int value) {
-    ctx.pixelStorei(storage.index, value);
-  }
-
-
+  // DRAW
   void drawArrays(DrawMode mode, int firstVertexIndex, int vertexCount) {
     assert(firstVertexIndex >= 0 && vertexCount >= 0);
     ctx.drawArrays(mode.index, firstVertexIndex, vertexCount);
@@ -608,6 +726,7 @@ class WebGLRenderingContext {
     ctx.drawElements(mode.index, count, type.index, offset);
   }
 
+  //Texture
   void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
     assert(height >= 0);
@@ -648,6 +767,12 @@ class WebGLRenderingContext {
     assert(height >= 0);
     ctx.copyTexSubImage2D(target.index, mipMapLevel, xOffset, yOffset, x, y, width, height);
   }
+  // > GENERATE_MIPMAP_HINT // Todo : return GLenum
+  int get generateMipMapHint => ctx.getParameter(ContextParameter.GENERATE_MIPMAP_HINT.index);
+  void hint(HintMode mode){
+    ctx.hint(ContextParameter.GENERATE_MIPMAP_HINT.index, mode.index);
+  }
+
 
   void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
@@ -656,13 +781,12 @@ class WebGLRenderingContext {
   }
 
 
+  //Errors
   ErrorCode getError(){
     return new ErrorCode(ctx.getError());
   }
 
-  void hint(HintMode mode){
-    ctx.hint(ContextParameter.GENERATE_MIPMAP_HINT.index, mode.index);
-  }
+
 
   ///avoid this method.
   ///blocks execution until all previously called commands are finished.

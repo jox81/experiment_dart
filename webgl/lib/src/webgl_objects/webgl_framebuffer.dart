@@ -61,9 +61,11 @@ class WebGLFrameBuffer{
   WebGLFrameBuffer(){
     webGLFrameBuffer = gl.ctx.createFramebuffer();
   }
+  WebGLFrameBuffer.fromWebgl(this.webGLFrameBuffer);
 
   void delete(){
     gl.ctx.deleteFramebuffer(webGLFrameBuffer);
+    webGLFrameBuffer = null;
   }
 
   FrameBufferStatus checkStatus(){

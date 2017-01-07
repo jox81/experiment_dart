@@ -118,6 +118,7 @@ class WebGLShader{
 
   void delete(){
     gl.ctx.deleteShader(webGLShader);
+    webGLShader = null;
   }
 
   String get infoLog{

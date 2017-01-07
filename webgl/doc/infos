@@ -7,7 +7,8 @@ https://www.khronos.org/registry/webgl/specs/latest/1.0/
 // Suggestions /////////////////////
 
 - splitter les méthodes getParameter en multiParameters
-
+- vérifier si c'est pas trop lourd de passer par tout ça ? pédagogique
+- reoragniser et refactoriser le code plus ergonomique
 - placer les enums dans un même fichier ?
 - placer des méthodes static dans les object de réference : ie: placer bindFrameBuffer dans FrameBuffer plutot que dans context ?
 - ou placer certaine methode, en context ou en object specific ? bind dans le renderingcontext ou dans l'object ?

@@ -28,9 +28,12 @@ class WebGLBuffer{
   WebGLBuffer(){
     webGLBuffer = gl.ctx.createBuffer();
   }
+  WebGLBuffer.fromWebgl(this.webGLBuffer){
+  }
 
   void delete(){
     gl.ctx.deleteBuffer(webGLBuffer);
+    webGLBuffer = null;
   }
 
   void bind(BufferType bufferType) {

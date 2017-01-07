@@ -151,6 +151,7 @@ class WebGLTexture {
 
   void delete() {
     gl.ctx.deleteTexture(webGLTexture);
+    webGLTexture = null;
   }
 
   dynamic getParameter(TextureTarget target, TextureParameterGlEnum parameter) {

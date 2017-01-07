@@ -34,9 +34,11 @@ class WebGLProgram{
   WebGLProgram(){
     webGLProgram = gl.ctx.createProgram();
   }
+  WebGLProgram.fromWebgl(this.webGLProgram);
 
   void delete(){
     gl.ctx.deleteProgram(webGLProgram);
+    webGLProgram = null;
   }
 
   WebGL.ActiveInfo getActiveAttrib(int activeAttributIndex){

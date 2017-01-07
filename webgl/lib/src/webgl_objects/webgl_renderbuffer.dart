@@ -41,14 +41,17 @@ class WebGLRenderBuffer{
 
   WebGL.Renderbuffer webGLRenderBuffer;
 
-  bool get isBuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
+  WebGLRenderBuffer.fromWebgl(this.webGLRenderBuffer);
 
   WebGLRenderBuffer(){
     webGLRenderBuffer = gl.ctx.createRenderbuffer();
   }
 
+  bool get isBuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
+
   void delete(){
     gl.ctx.deleteRenderbuffer(webGLRenderBuffer);
+    webGLRenderBuffer = null;
   }
 
   dynamic getParameter(RenderBufferParameterGlEnum parameter){
