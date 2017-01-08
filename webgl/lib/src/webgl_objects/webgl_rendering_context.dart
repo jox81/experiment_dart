@@ -7,6 +7,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
@@ -336,7 +337,7 @@ class WebGLRenderingContext {
   // >>> single getParameter
 
   // > ACTIVE_TEXTURE
-  TextureUnit get activeTexture => new TextureUnit(ctx.getParameter(ContextParameter.ACTIVE_TEXTURE.index));
+  TextureUnit get activeTexture => TextureUnit.getByIndex(ctx.getParameter(ContextParameter.ACTIVE_TEXTURE.index));
   set activeTexture(TextureUnit textureUnit) => ctx.activeTexture(textureUnit.index);
 
   // > ALIASED_LINE_WIDTH_RANGE [2]

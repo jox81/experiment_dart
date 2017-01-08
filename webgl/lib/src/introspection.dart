@@ -92,19 +92,26 @@ class IntrospectionManager {
         print('### ClassMirror declarations     #################################');
       }
       for (DeclarationMirror decl in classMirror.declarations.values) {
-        _fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+        fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+      }
+      if (showBaseInfo) {
+        print('');
+        print('### ClassMirror staticMembers  #################################');
+      }
+      for (DeclarationMirror decl in classMirror.staticMembers.values) {
+        fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
       }
       if (showBaseInfo) {
         print('');
         print('### ClassMirror instanceMembers  #################################');
       }
       for (DeclarationMirror decl in classMirror.instanceMembers.values) {
-        _fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+        fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
       }
     });
   }
 
-  void _fillDeclarationInfos(
+  void fillDeclarationInfos(
     ClassMirror classMirror,
     DeclarationMirror decl, {
     bool showBaseInfo: false,

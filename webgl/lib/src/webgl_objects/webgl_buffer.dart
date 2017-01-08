@@ -2,34 +2,7 @@ import 'dart:html';
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
-
-class BufferType{
-  final index;
-  const BufferType(this.index);
-
-  static const BufferType ARRAY_BUFFER = const BufferType(WebGL.RenderingContext.ARRAY_BUFFER);
-  static const BufferType ELEMENT_ARRAY_BUFFER = const BufferType(WebGL.RenderingContext.ELEMENT_ARRAY_BUFFER);
-}
-
-class BufferUsageType {
-  final index;
-  const BufferUsageType(this.index);
-
-  static const BufferUsageType STATIC_DRAW =
-  const BufferUsageType(WebGL.RenderingContext.STATIC_DRAW);
-  static const BufferUsageType DYNAMIC_DRAW =
-  const BufferUsageType(WebGL.RenderingContext.DYNAMIC_DRAW);
-  static const BufferUsageType STREAM_DRAW =
-  const BufferUsageType(WebGL.RenderingContext.STREAM_DRAW);
-}
-
-class BufferParameters{
-  final index;
-  const BufferParameters(this.index);
-
-  static const BufferParameters BUFFER_SIZE = const BufferParameters(WebGL.RenderingContext.BUFFER_SIZE);
-  static const BufferParameters BUFFER_USAGE = const BufferParameters(WebGL.RenderingContext.BUFFER_USAGE);
-}
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 
 class WebGLBuffer{
 
@@ -61,7 +34,7 @@ class WebGLBuffer{
 
 
   dynamic getParameter(BufferType target, BufferParameters parameter){
-    dynamic result =  gl.ctx.getBufferParameter(target.index.index,parameter.index);
+    dynamic result =  gl.ctx.getBufferParameter(target.index,parameter.index);
     return result;
   }
 
@@ -71,12 +44,12 @@ class WebGLBuffer{
   // > BUFFER_SIZE
   int get arrayBufferSize => gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_SIZE.index);
   // > BUFFER_USAGE
-  BufferUsageType get arrayBufferUsage => new BufferUsageType(gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
+  BufferUsageType get arrayBufferUsage => BufferUsageType.getByIndex(gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
 
   // >> ELEMENT_ARRAY_BUFFER
   // > BUFFER_SIZE
   int get elementArrayBufferSize => gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_SIZE.index);
   // > BUFFER_USAGE
-  BufferUsageType get elementArrayBufferUsage => new BufferUsageType(gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
+  BufferUsageType get elementArrayBufferUsage => BufferUsageType.getByIndex(gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
 
 }

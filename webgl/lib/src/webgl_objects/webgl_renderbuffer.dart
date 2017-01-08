@@ -1,41 +1,8 @@
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
-
-class RenderBufferParameters{
-  final index;
-  const RenderBufferParameters(this.index);
-
-  static const RenderBufferParameters RENDERBUFFER_WIDTH = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_WIDTH);
-  static const RenderBufferParameters RENDERBUFFER_HEIGHT = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_HEIGHT);
-  static const RenderBufferParameters RENDERBUFFER_INTERNAL_FORMAT = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_INTERNAL_FORMAT);
-  static const RenderBufferParameters RENDERBUFFER_GREEN_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_GREEN_SIZE);
-  static const RenderBufferParameters RENDERBUFFER_BLUE_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_BLUE_SIZE);
-  static const RenderBufferParameters RENDERBUFFER_RED_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_RED_SIZE);
-  static const RenderBufferParameters RENDERBUFFER_ALPHA_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_ALPHA_SIZE);
-  static const RenderBufferParameters RENDERBUFFER_DEPTH_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_DEPTH_SIZE);
-  static const RenderBufferParameters RENDERBUFFER_STENCIL_SIZE = const RenderBufferParameters(WebGL.RenderingContext.RENDERBUFFER_STENCIL_SIZE);
-}
-
-class RenderBufferTarget{
-  final index;
-  const RenderBufferTarget(this.index);
-
-  static const RenderBufferTarget RENDERBUFFER = const RenderBufferTarget(WebGL.RenderingContext.RENDERBUFFER);
-}
-
-class RenderBufferInternalFormatType{
-  final index;
-  const RenderBufferInternalFormatType(this.index);
-
-  static const RenderBufferInternalFormatType RGBA4 = const RenderBufferInternalFormatType(WebGL.RenderingContext.RGBA4);
-  static const RenderBufferInternalFormatType RGB565 = const RenderBufferInternalFormatType(WebGL.RenderingContext.RGB565);
-  static const RenderBufferInternalFormatType RGB5_A1 = const RenderBufferInternalFormatType(WebGL.RenderingContext.RGB5_A1);
-  static const RenderBufferInternalFormatType DEPTH_COMPONENT16 = const RenderBufferInternalFormatType(WebGL.RenderingContext.DEPTH_COMPONENT16);
-  static const RenderBufferInternalFormatType STENCIL_INDEX8 = const RenderBufferInternalFormatType(WebGL.RenderingContext.STENCIL_INDEX8);
-  static const RenderBufferInternalFormatType DEPTH_STENCIL = const RenderBufferInternalFormatType(WebGL.RenderingContext.DEPTH_STENCIL);
-}
 
 class WebGLRenderBuffer{
 
@@ -79,7 +46,7 @@ class WebGLRenderBuffer{
   // > RENDERBUFFER_STENCIL_SIZE
   int get renderBufferStencilSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_STENCIL_SIZE.index);
   // > RENDERBUFFER_INTERNAL_FORMAT
-  RenderBufferInternalFormatType get renderBufferInterrnalFormat => new RenderBufferInternalFormatType(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index));
+  RenderBufferInternalFormatType get renderBufferInterrnalFormat => RenderBufferInternalFormatType.getByIndex(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index));
 
   //Bind
   void bind() {

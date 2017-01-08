@@ -3,27 +3,9 @@ import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
-
-class ProgramParameterGlEnum{
-  final index;
-  const ProgramParameterGlEnum(this.index);
-
-  static const ProgramParameterGlEnum DELETE_STATUS = const ProgramParameterGlEnum(WebGL.RenderingContext.DELETE_STATUS);
-  static const ProgramParameterGlEnum LINK_STATUS = const ProgramParameterGlEnum(WebGL.RenderingContext.LINK_STATUS);
-  static const ProgramParameterGlEnum VALIDATE_STATUS = const ProgramParameterGlEnum(WebGL.RenderingContext.VALIDATE_STATUS);
-  static const ProgramParameterGlEnum ATTACHED_SHADERS = const ProgramParameterGlEnum(WebGL.RenderingContext.ATTACHED_SHADERS);
-  static const ProgramParameterGlEnum ACTIVE_ATTRIBUTES = const ProgramParameterGlEnum(WebGL.RenderingContext.ACTIVE_ATTRIBUTES);
-  static const ProgramParameterGlEnum ACTIVE_UNIFORMS = const ProgramParameterGlEnum(WebGL.RenderingContext.ACTIVE_UNIFORMS);
-}
-
-class ProgramInfo{
-  List<WebGLActiveInfo> attributes = new List();
-  List<WebGLActiveInfo> uniforms = new List();
-  int attributeCount = 0;
-  int uniformCount = 0;
-}
 
 class WebGLProgram{
 

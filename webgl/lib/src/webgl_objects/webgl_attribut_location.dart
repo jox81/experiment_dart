@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 
 class WebGLAttributLocation{
   int location;
