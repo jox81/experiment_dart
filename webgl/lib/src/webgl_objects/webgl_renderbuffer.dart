@@ -4,34 +4,33 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
 
-class WebGLRenderBuffer{
+class WebGLRenderBuffer extends WebGLObject{
 
-  WebGL.Renderbuffer webGLRenderBuffer;
+  final WebGL.Renderbuffer webGLRenderBuffer;
 
-  WebGLRenderBuffer.fromWebgl(this.webGLRenderBuffer);
+  WebGLRenderBuffer():this.webGLRenderBuffer = gl.ctx.createRenderbuffer();
+  WebGLRenderBuffer.fromWebGL(this.webGLRenderBuffer);
 
-  WebGLRenderBuffer(){
-    webGLRenderBuffer = gl.ctx.createRenderbuffer();
-  }
+  @override
+  void delete() => gl.ctx.deleteRenderbuffer(webGLRenderBuffer);
 
-  bool get isRenderbuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
-
-  void delete(){
-    gl.ctx.deleteRenderbuffer(webGLRenderBuffer);
-    webGLRenderBuffer = null;
-  }
-
-
-  //Bind
   void bind() {
     gl.ctx.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER.index, webGLRenderBuffer);
   }
 
   void unBind() {
-    //Todo : il se peut que ce render buffer ne soit pas celui qui est bindé à ce moment. du coup, c'est un autre qui le sera. vérifier ça !
     gl.ctx.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER.index, null);
   }
+
+
+  ////
+
+  bool get isRenderbuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
+
+
+
 
   void renderbufferStorage(RenderBufferTarget renderbuffer, RenderBufferInternalFormatType internalFormat, int width, int heigth) {
     gl.ctx.renderbufferStorage(renderbuffer.index, internalFormat.index, width, heigth);

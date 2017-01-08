@@ -4,21 +4,29 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
 
-class WebGLTexture {
-  WebGL.Texture webGLTexture;
+class WebGLTexture extends WebGLObject{
+  final WebGL.Texture webGLTexture;
+
+  WebGLTexture() : this.webGLTexture = gl.ctx.createTexture();
+  WebGLTexture.fromWebGL(this.webGLTexture);
+
+  @override
+  void delete() => gl.ctx.deleteTexture(webGLTexture);
+
+  void bind(TextureTarget target) {
+    gl.ctx.bindTexture(target.index, webGLTexture);
+  }
+
+  void unBind(TextureTarget target) {
+    gl.ctx.bindTexture(target.index, null);
+  }
+
+  ////
+
 
   bool get isTexture => gl.ctx.isTexture(webGLTexture);
-
-  WebGLTexture() {
-    webGLTexture = gl.ctx.createTexture();
-  }
-  WebGLTexture.fromWebgl(this.webGLTexture);
-
-  void delete() {
-    gl.ctx.deleteTexture(webGLTexture);
-    webGLTexture = null;
-  }
 
 
   // >>> Parameteres
@@ -53,14 +61,6 @@ class WebGLTexture {
   void setParameterInt(
       TextureTarget target, TextureParameterGlEnum parameter, TextureSetParameterType value) {
     gl.ctx.texParameteri(target.index, parameter.index, value.index);
-  }
-
-  void bind(TextureTarget target) {
-    gl.ctx.bindTexture(target.index, webGLTexture);
-  }
-
-  void unBind(TextureTarget target) {
-    gl.ctx.bindTexture(target.index, null);
   }
 
   void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, TextureAttachmentTarget attachementTarget, int mipMapLevel){

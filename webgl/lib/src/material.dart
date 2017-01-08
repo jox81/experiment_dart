@@ -5,7 +5,6 @@ import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/introspection.dart';
@@ -44,8 +43,8 @@ abstract class Material extends IEditElement {
     program = initShaderProgram(vsSource, fsSource);
 
     programInfo = program.getProgramInfo();
-    attributsNames =  programInfo.attributes.map((a)=> a.activeInfo.name).toList();
-    uniformsNames = programInfo.uniforms.map((a)=> a.activeInfo.name).toList();
+    attributsNames =  programInfo.attributes.map((a)=> a.name).toList();
+    uniformsNames = programInfo.uniforms.map((a)=> a.name).toList();
 
     initBuffers();
 
@@ -140,10 +139,10 @@ abstract class Material extends IEditElement {
       gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
           BufferUsageType.STATIC_DRAW);
     }else{
-      WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.activeInfo.name == attributName, orElse:() => null);
+      WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.name == attributName, orElse:() => null);
 
       if(activeInfo != null) {
-        switch (activeInfo.shaderVariableType) {
+        switch (activeInfo.type) {
           case ShaderVariableType.FLOAT_VEC3:
             break;
           case ShaderVariableType.FLOAT_VEC4:
@@ -163,10 +162,10 @@ abstract class Material extends IEditElement {
   }
 
   void setShaderUniformWithName(String uniformName, data, [data1, data2, data3]) {
-    WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.activeInfo.name == uniformName, orElse:() => null);
+    WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.name == uniformName, orElse:() => null);
 
     if(activeInfo != null) {
-      switch (activeInfo.shaderVariableType) {
+      switch (activeInfo.type) {
         case ShaderVariableType.FLOAT_VEC2:
           if (data1 == null && data2 == null) {
             uniformLocations[uniformName].uniform2fv(data);

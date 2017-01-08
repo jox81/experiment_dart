@@ -4,23 +4,17 @@ import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
 
-class WebGLBuffer{
+class WebGLBuffer extends WebGLObject{
 
-  WebGL.Buffer webGLBuffer;
+  final WebGL.Buffer webGLBuffer;
 
-  bool get isBuffer => gl.ctx.isBuffer(webGLBuffer);
+  WebGLBuffer():this.webGLBuffer = gl.ctx.createBuffer();
+  WebGLBuffer.fromWebGL(this.webGLBuffer);
 
-  WebGLBuffer(){
-    webGLBuffer = gl.ctx.createBuffer();
-  }
-  WebGLBuffer.fromWebgl(this.webGLBuffer){
-  }
-
-  void delete(){
-    gl.ctx.deleteBuffer(webGLBuffer);
-    webGLBuffer = null;
-  }
+  @override
+  void delete() => gl.ctx.deleteBuffer(webGLBuffer);
 
   void bind(BufferType bufferType) {
     gl.ctx.bindBuffer(bufferType.index, webGLBuffer);
@@ -30,6 +24,11 @@ class WebGLBuffer{
     gl.ctx.bindBuffer(bufferType.index, null);
   }
 
+  ////
+
+
+
+  bool get isBuffer => gl.ctx.isBuffer(webGLBuffer);
 
   // >>> Parameteres
 

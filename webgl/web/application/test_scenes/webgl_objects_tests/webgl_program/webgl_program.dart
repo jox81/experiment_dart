@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';

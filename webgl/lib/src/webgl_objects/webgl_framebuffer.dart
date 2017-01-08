@@ -3,26 +3,17 @@ import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
 
-class WebGLFrameBuffer{
+class WebGLFrameBuffer extends WebGLObject{
 
-  WebGL.Framebuffer webGLFrameBuffer;
+  final WebGL.Framebuffer webGLFrameBuffer;
 
-  bool get isFramebuffer => gl.ctx.isFramebuffer(webGLFrameBuffer);
+  WebGLFrameBuffer():this.webGLFrameBuffer = gl.ctx.createFramebuffer();
+  WebGLFrameBuffer.fromWebGL(this.webGLFrameBuffer);
 
-  WebGLFrameBuffer(){
-    webGLFrameBuffer = gl.ctx.createFramebuffer();
-  }
-  WebGLFrameBuffer.fromWebgl(this.webGLFrameBuffer);
-
-  void delete(){
-    gl.ctx.deleteFramebuffer(webGLFrameBuffer);
-    webGLFrameBuffer = null;
-  }
-
-  FrameBufferStatus checkStatus(){
-    return FrameBufferStatus.getByIndex(gl.ctx.checkFramebufferStatus(FrameBufferTarget.FRAMEBUFFER.index));
-  }
+  @override
+  void delete() => gl.ctx.deleteFramebuffer(webGLFrameBuffer);
 
   void bind(){
     gl.ctx.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER.index, webGLFrameBuffer);
@@ -31,6 +22,14 @@ class WebGLFrameBuffer{
     gl.ctx.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER.index, null);
   }
 
+  ////
+
+
+  FrameBufferStatus checkStatus(){
+    return FrameBufferStatus.getByIndex(gl.ctx.checkFramebufferStatus(FrameBufferTarget.FRAMEBUFFER.index));
+  }
+
+  bool get isFramebuffer => gl.ctx.isFramebuffer(webGLFrameBuffer);
 
   // >>> Parameteres
 

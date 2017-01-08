@@ -125,20 +125,20 @@ class WebGLRenderingContext {
   Int32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
 
   // > CURRENT_PROGRAM
-  WebGLProgram get currentProgram => new WebGLProgram.fromWebgl(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index));
+  WebGLProgram get currentProgram => new WebGLProgram.fromWebGL(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index));
 
   // > ARRAY_BUFFER_BINDING
-  WebGLBuffer get arrayBufferBinding => new WebGLBuffer.fromWebgl(ctx.getParameter(ContextParameter.ARRAY_BUFFER_BINDING.index));
+  WebGLBuffer get arrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ARRAY_BUFFER_BINDING.index));
   // > ELEMENT_ARRAY_BUFFER_BINDING
-  WebGLBuffer get elementArrayBufferBinding => new WebGLBuffer.fromWebgl(ctx.getParameter(ContextParameter.ELEMENT_ARRAY_BUFFER_BINDING.index));
+  WebGLBuffer get elementArrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ELEMENT_ARRAY_BUFFER_BINDING.index));
   // > FRAMEBUFFER_BINDING
-  WebGLFrameBuffer get frameBufferBinding => new WebGLFrameBuffer.fromWebgl(ctx.getParameter(ContextParameter.FRAMEBUFFER_BINDING.index));
+  WebGLFrameBuffer get frameBufferBinding => new WebGLFrameBuffer.fromWebGL(ctx.getParameter(ContextParameter.FRAMEBUFFER_BINDING.index));
   // > RENDERBUFFER_BINDING
-  WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebgl(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
+  WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebGL(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
   // > TEXTURE_BINDING_2D
-  WebGLTexture get textureBinding2D => new WebGLTexture.fromWebgl(ctx.getParameter(ContextParameter.TEXTURE_BINDING_2D.index));
+  WebGLTexture get textureBinding2D => new WebGLTexture.fromWebGL(ctx.getParameter(ContextParameter.TEXTURE_BINDING_2D.index));
   // > TEXTURE_BINDING_CUBE_MAP
-  WebGLTexture get textureBindingCubeMap => new WebGLTexture.fromWebgl(ctx.getParameter(ContextParameter.TEXTURE_BINDING_CUBE_MAP.index));
+  WebGLTexture get textureBindingCubeMap => new WebGLTexture.fromWebGL(ctx.getParameter(ContextParameter.TEXTURE_BINDING_CUBE_MAP.index));
 
   // > MAX_TEXTURE_IMAGE_UNITS
   int get maxTextureImageUnits => ctx.getParameter(ContextParameter.MAX_TEXTURE_IMAGE_UNITS.index);

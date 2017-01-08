@@ -5,31 +5,46 @@ import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
-class WebGLProgram{
+class WebGLProgram extends WebGLObject{
 
-  WebGL.Program webGLProgram;
+  final WebGL.Program webGLProgram;
+
+  WebGLProgram() : this.webGLProgram = gl.ctx.createProgram();
+  WebGLProgram.fromWebGL(this.webGLProgram);
+
+  @override
+  void delete() => gl.ctx.deleteProgram(webGLProgram);
+
+  List<WebGL.Shader> get attachedShaders{
+    return gl.ctx.getAttachedShaders(webGLProgram);
+  }
+
+  void attachShader(WebGLShader shader){
+    gl.ctx.attachShader(webGLProgram, shader.webGLShader);
+  }
+
+  void detachShader(WebGLShader shader){
+    gl.ctx.detachShader(webGLProgram, shader.webGLShader);
+  }
+
+  void use(){
+    gl.ctx.useProgram(webGLProgram);
+  }
+  ////
+
 
   bool get isProgram => gl.ctx.isProgram(webGLProgram);
 
-  WebGLProgram(){
-    webGLProgram = gl.ctx.createProgram();
-  }
-  WebGLProgram.fromWebgl(this.webGLProgram);
-
-  void delete(){
-    gl.ctx.deleteProgram(webGLProgram);
-    webGLProgram = null;
+  WebGLActiveInfo getActiveAttrib(int activeAttributIndex){
+    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveAttrib(webGLProgram, activeAttributIndex));
   }
 
-  WebGL.ActiveInfo getActiveAttrib(int activeAttributIndex){
-    return gl.ctx.getActiveAttrib(webGLProgram, activeAttributIndex);
-  }
-
-  WebGL.ActiveInfo getActiveUniform(int activeUniformIndex){
-    return gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex);
+  WebGLActiveInfo getActiveUniform(int activeUniformIndex){
+    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex));
   }
 
   WebGLAttributLocation getAttribLocation(String variableName){
@@ -45,17 +60,6 @@ class WebGLProgram{
     return gl.ctx.getUniform(webGLProgram, location);
   }
 
-  List<WebGL.Shader> get attachedShaders{
-    return gl.ctx.getAttachedShaders(webGLProgram);
-  }
-
-  void attachShader(WebGLShader shader){
-    gl.ctx.attachShader(webGLProgram, shader.webGLShader);
-  }
-
-  void detachShader(WebGLShader shader){
-    gl.ctx.detachShader(webGLProgram, shader.webGLShader);
-  }
 
   void link(){
     gl.ctx.linkProgram(webGLProgram);
@@ -64,10 +68,6 @@ class WebGLProgram{
       print(infoLog);
       window.alert("Could not initialise shaders");
     }
-  }
-
-  void use(){
-    gl.ctx.useProgram(webGLProgram);
   }
 
   void validate(){
@@ -92,19 +92,16 @@ class WebGLProgram{
 
     // Loop through active attributes
     for (var i = 0; i < activeAttributsCount; i++) {
-      WebGLActiveInfo attribute = new WebGLActiveInfo(getActiveAttrib(i));
-      attribute.shaderVariableType = ShaderVariableType.enumTypes[attribute.activeInfo.type];
+      WebGLActiveInfo attribute = getActiveAttrib(i);
       result.attributes.add(attribute);
-      result.attributeCount += attribute.activeInfo.size;
+      result.attributeCount += attribute.size;//??
     }
 
     // Loop through active uniforms
-    var activeUniforms = getParameter(ProgramParameterGlEnum.ACTIVE_UNIFORMS);
-    for (var i = 0; i < activeUniforms; i++) {
-      WebGLActiveInfo uniform = new WebGLActiveInfo(getActiveUniform(i));
-      uniform.shaderVariableType = ShaderVariableType.enumTypes[uniform.activeInfo.type];
+    for (var i = 0; i < activeUnifromsCount; i++) {
+      WebGLActiveInfo uniform = getActiveUniform(i);
       result.uniforms.add(uniform);
-      result.uniformCount += uniform.activeInfo.size;
+      result.uniformCount += uniform.size;//??
     }
 
     return result;
@@ -112,12 +109,9 @@ class WebGLProgram{
 
 
   // >>> Parameteres
-
-
-  dynamic getParameter(ProgramParameterGlEnum parameter){
-    return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
-  }
-
+  //dynamic getParameter(ProgramParameterGlEnum parameter){
+  //  return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
+  //}
   // >>> single getParameter
 
   // > DELETE_STATUS
@@ -140,9 +134,17 @@ class WebGLProgram{
       print('validateStatus : ${validateStatus}');
       print('deleteStatus : ${deleteStatus}');
       print('attachedShadersCount : ${attachedShadersCount}');
+
       print('activeAttributsCount : ${activeAttributsCount}');
+      for (var i = 0; i < activeAttributsCount; i++) {
+        print('-$i- ${getActiveAttrib(i)}');
+      }
+
       print('activeUnifromsCount : ${activeUnifromsCount}');
-      print('activeUnifromsCount : ${activeUnifromsCount}');
+      for (var i = 0; i < activeUnifromsCount; i++) {
+        print('-$i- ${getActiveUniform(i)}');
+      }
+
     });
   }
 }

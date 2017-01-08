@@ -5,21 +5,31 @@ import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
+import 'package:webgl/src/webgl_objects/webgl_shader_precision_format.dart';
 
-class WebGLShader{
+class WebGLShader extends WebGLObject{
 
-  WebGL.Shader webGLShader;
+  final WebGL.Shader webGLShader;
+
+  WebGLShader(ShaderType shaderType):this.webGLShader = gl.ctx.createShader(shaderType.index);
+  WebGLShader.fromWebGL(this.webGLShader);
+
+  @override
+  void delete() => gl.ctx.deleteShader(webGLShader);
+
+  void attach(WebGLProgram webGLProgram){
+    gl.ctx.attachShader(webGLProgram.webGLProgram, webGLShader);
+  }
+
+  void detachShader(WebGLProgram webGLProgram){
+    gl.ctx.detachShader(webGLProgram.webGLProgram, webGLShader);
+  }
+
+  ////
 
   bool get isShader => gl.ctx.isShader(webGLShader);
-
-  WebGLShader(ShaderType shaderType){
-    webGLShader = gl.ctx.createShader(shaderType.index);
-  }
-
-  void delete(){
-    gl.ctx.deleteShader(webGLShader);
-    webGLShader = null;
-  }
 
   String get infoLog{
     return gl.ctx.getShaderInfoLog(webGLShader);
@@ -41,8 +51,8 @@ class WebGLShader{
 
   //Why no webGLShader ref ? >>>
 
-  WebGL.ShaderPrecisionFormat getShaderPrecisionFormat(ShaderType shaderType, PrecisionType precisionType){
-    return gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index);
+  WebGLShaderPrecisionFormat getShaderPrecisionFormat(ShaderType shaderType, PrecisionType precisionType){
+    return new WebGLShaderPrecisionFormat.fromWebGL(gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index));
   }
 
   //Todo return multiType...

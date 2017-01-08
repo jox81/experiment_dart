@@ -3,6 +3,7 @@ import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
 
+///The WebGLUniformLocation interface represents the location of a uniform variable in a shader program.
 class WebGLUniformLocation{
   WebGL.UniformLocation webGLUniformLocation;
   WebGLUniformLocation(this.webGLUniformLocation);
