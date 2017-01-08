@@ -19,7 +19,7 @@ abstract class WebGLEnum<T> {
   }
 
   static Map<Type, List<WebGLEnum>> _typesMap = new Map();
-  
+
   static WebGLEnum findTypeByIndex(Type GLEnum, int enumIndex) {
     if(_typesMap[GLEnum] == null) {
       List<WebGLEnum> _types = new List();
@@ -39,6 +39,8 @@ abstract class WebGLEnum<T> {
   }
 
 }
+
+//todo add if extension ?
 
 
 //WebGLRenderBuffers
@@ -226,7 +228,6 @@ class TextureParameterGlEnum extends WebGLEnum{
   const TextureParameterGlEnum(WebGL.RenderingContext.TEXTURE_WRAP_S, 'TEXTURE_WRAP_S');
   static const TextureParameterGlEnum TEXTURE_WRAP_T =
   const TextureParameterGlEnum(WebGL.RenderingContext.TEXTURE_WRAP_T, 'TEXTURE_WRAP_T');
-//todo add if extension ?
 }
 
 class TextureTarget extends WebGLEnum{
@@ -275,6 +276,18 @@ class TextureMinType extends TextureFilterType {
   const TextureMinType(WebGL.RenderingContext.LINEAR_MIPMAP_LINEAR, 'LINEAR_MIPMAP_LINEAR');
 }
 
+class TextureWrapType extends TextureSetParameterType{
+  const TextureWrapType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(TextureWrapType, index);
+
+  static const TextureWrapType REPEAT =
+  const TextureWrapType(WebGL.RenderingContext.REPEAT, 'REPEAT');
+  static const TextureWrapType CLAMP_TO_EDGE =
+  const TextureWrapType(WebGL.RenderingContext.CLAMP_TO_EDGE, 'CLAMP_TO_EDGE');
+  static const TextureWrapType MIRRORED_REPEAT =
+  const TextureWrapType(WebGL.RenderingContext.MIRRORED_REPEAT, 'MIRRORED_REPEAT');
+}
+
 class TextureInternalFormatType extends WebGLEnum{
 
   const TextureInternalFormatType(int index, String name):super(index, name);
@@ -294,18 +307,6 @@ class WEBGL_depth_texture_InternalFormatType extends TextureInternalFormatType{
 
   static const WEBGL_depth_texture_InternalFormatType DEPTH_COMPONENT = const WEBGL_depth_texture_InternalFormatType(WebGL.RenderingContext.DEPTH_COMPONENT,'DEPTH_COMPONENT');
   static const WEBGL_depth_texture_InternalFormatType DEPTH_STENCIL = const WEBGL_depth_texture_InternalFormatType(WebGL.RenderingContext.DEPTH_STENCIL,'DEPTH_STENCIL');
-}
-
-class TextureWrapType extends TextureSetParameterType{
-  const TextureWrapType(int index, String name):super(index, name);
-  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(TextureWrapType, index);
-
-  static const TextureWrapType REPEAT =
-  const TextureWrapType(WebGL.RenderingContext.REPEAT, 'REPEAT');
-  static const TextureWrapType CLAMP_TO_EDGE =
-  const TextureWrapType(WebGL.RenderingContext.CLAMP_TO_EDGE, 'CLAMP_TO_EDGE');
-  static const TextureWrapType MIRRORED_REPEAT =
-  const TextureWrapType(WebGL.RenderingContext.MIRRORED_REPEAT, 'MIRRORED_REPEAT');
 }
 
 class TexelDataType extends WebGLEnum{
