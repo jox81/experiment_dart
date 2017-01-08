@@ -4,35 +4,42 @@ import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 
-class ShaderVariableType{
-  final int index;
-  const ShaderVariableType(this.index);
+class ShaderVariableType extends WebGLEnum{
 
-  static const ShaderVariableType FLOAT_VEC2 = const ShaderVariableType(WebGL.RenderingContext.FLOAT_VEC2);
-  static const ShaderVariableType FLOAT_VEC3 = const ShaderVariableType(WebGL.RenderingContext.FLOAT_VEC3);
-  static const ShaderVariableType FLOAT_VEC4 = const ShaderVariableType(WebGL.RenderingContext.FLOAT_VEC4);
-  static const ShaderVariableType INT_VEC2 = const ShaderVariableType(WebGL.RenderingContext.INT_VEC2);
-  static const ShaderVariableType INT_VEC3 = const ShaderVariableType(WebGL.RenderingContext.INT_VEC3);
-  static const ShaderVariableType INT_VEC4 = const ShaderVariableType(WebGL.RenderingContext.INT_VEC4);
-  static const ShaderVariableType BOOL = const ShaderVariableType(WebGL.RenderingContext.BOOL);
-  static const ShaderVariableType BOOL_VEC2 = const ShaderVariableType(WebGL.RenderingContext.BOOL_VEC2);
-  static const ShaderVariableType BOOL_VEC3 = const ShaderVariableType(WebGL.RenderingContext.BOOL_VEC3);
-  static const ShaderVariableType BOOL_VEC4 = const ShaderVariableType(WebGL.RenderingContext.BOOL_VEC4);
-  static const ShaderVariableType FLOAT_MAT2 = const ShaderVariableType(WebGL.RenderingContext.FLOAT_MAT2);
-  static const ShaderVariableType FLOAT_MAT3 = const ShaderVariableType(WebGL.RenderingContext.FLOAT_MAT3);
-  static const ShaderVariableType FLOAT_MAT4 = const ShaderVariableType(WebGL.RenderingContext.FLOAT_MAT4);
-  static const ShaderVariableType SAMPLER_2D = const ShaderVariableType(WebGL.RenderingContext.SAMPLER_2D);
-  static const ShaderVariableType SAMPLER_CUBE = const ShaderVariableType(WebGL.RenderingContext.SAMPLER_CUBE);
-  static const ShaderVariableType BYTE = const ShaderVariableType(WebGL.RenderingContext.BYTE);
-  static const ShaderVariableType UNSIGNED_BYTE = const ShaderVariableType(WebGL.RenderingContext.UNSIGNED_BYTE);
-  static const ShaderVariableType SHORT = const ShaderVariableType(WebGL.RenderingContext.SHORT);
-  static const ShaderVariableType UNSIGNED_SHORT = const ShaderVariableType(WebGL.RenderingContext.UNSIGNED_SHORT);
-  static const ShaderVariableType INT = const ShaderVariableType(WebGL.RenderingContext.INT);
-  static const ShaderVariableType UNSIGNED_INT = const ShaderVariableType(WebGL.RenderingContext.UNSIGNED_INT);
-  static const ShaderVariableType FLOAT = const ShaderVariableType(WebGL.RenderingContext.FLOAT);
+  ShaderVariableType._init(int index, String name):super(index, name){
+    types[index] = this;
+  }
 
-  get name => null;
+  static Map<int, WebGLEnum> types = new Map();
+  static ShaderVariableType getByIndex(int index){
+    types.forEach((k, v)=> print('$k : $v'));
+    return types[index];
+  }
+
+  static ShaderVariableType FLOAT_VEC2 = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT_VEC2, 'FLOAT_VEC2');
+  static ShaderVariableType FLOAT_VEC3 = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT_VEC3, 'FLOAT_VEC3');
+  static ShaderVariableType FLOAT_VEC4 = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT_VEC4, 'FLOAT_VEC4');
+  static ShaderVariableType INT_VEC2 = new ShaderVariableType._init(WebGL.RenderingContext.INT_VEC2, 'INT_VEC2');
+  static ShaderVariableType INT_VEC3 = new ShaderVariableType._init(WebGL.RenderingContext.INT_VEC3, 'INT_VEC3');
+  static ShaderVariableType INT_VEC4 = new ShaderVariableType._init(WebGL.RenderingContext.INT_VEC4, 'INT_VEC4');
+  static ShaderVariableType BOOL = new ShaderVariableType._init(WebGL.RenderingContext.BOOL, 'BOOL');
+  static ShaderVariableType BOOL_VEC2 = new ShaderVariableType._init(WebGL.RenderingContext.BOOL_VEC2, 'BOOL_VEC2');
+  static ShaderVariableType BOOL_VEC3 = new ShaderVariableType._init(WebGL.RenderingContext.BOOL_VEC3, 'BOOL_VEC3');
+  static ShaderVariableType BOOL_VEC4 = new ShaderVariableType._init(WebGL.RenderingContext.BOOL_VEC4, 'BOOL_VEC4');
+  static ShaderVariableType FLOAT_MAT2 = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT_MAT2, 'FLOAT_MAT2');
+  static ShaderVariableType FLOAT_MAT3 = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT_MAT3, 'FLOAT_MAT3');
+  static ShaderVariableType FLOAT_MAT4 = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT_MAT4, 'FLOAT_MAT4');
+  static ShaderVariableType SAMPLER_2D = new ShaderVariableType._init(WebGL.RenderingContext.SAMPLER_2D, 'SAMPLER_2D');
+  static ShaderVariableType SAMPLER_CUBE = new ShaderVariableType._init(WebGL.RenderingContext.SAMPLER_CUBE, 'SAMPLER_CUBE');
+  static ShaderVariableType BYTE = new ShaderVariableType._init(WebGL.RenderingContext.BYTE, 'BYTE');
+  static ShaderVariableType UNSIGNED_BYTE = new ShaderVariableType._init(WebGL.RenderingContext.UNSIGNED_BYTE, 'UNSIGNED_BYTE');
+  static ShaderVariableType SHORT = new ShaderVariableType._init(WebGL.RenderingContext.SHORT, 'SHORT');
+  static ShaderVariableType UNSIGNED_SHORT = new ShaderVariableType._init(WebGL.RenderingContext.UNSIGNED_SHORT, 'UNSIGNED_SHORT');
+  static ShaderVariableType INT = new ShaderVariableType._init(WebGL.RenderingContext.INT, 'INT');
+  static ShaderVariableType UNSIGNED_INT = new ShaderVariableType._init(WebGL.RenderingContext.UNSIGNED_INT, 'UNSIGNED_INT');
+  static ShaderVariableType FLOAT = new ShaderVariableType._init(WebGL.RenderingContext.FLOAT, 'FLOAT');
 
   //Todo : remove this
   // Taken from the WebGL spec:
@@ -63,54 +70,74 @@ class ShaderVariableType{
   };
 }
 
-class PrecisionType{
-  final index;
-  const PrecisionType(this.index);
+class PrecisionType extends WebGLEnum{
 
-  static const PrecisionType LOW_INT = const PrecisionType(WebGL.RenderingContext.LOW_INT);
-  static const PrecisionType LOW_FLOAT = const PrecisionType(WebGL.RenderingContext.LOW_FLOAT);
-  static const PrecisionType MEDIUM_INT = const PrecisionType(WebGL.RenderingContext.MEDIUM_INT);
-  static const PrecisionType MEDIUM_FLOAT = const PrecisionType(WebGL.RenderingContext.MEDIUM_FLOAT);
-  static const PrecisionType HIGH_INT = const PrecisionType(WebGL.RenderingContext.HIGH_INT);
-  static const PrecisionType HIGH_FLOAT = const PrecisionType(WebGL.RenderingContext.HIGH_FLOAT);
+  PrecisionType._init(int index, String name):super(index, name){
+    types[index] = this;
+  }
+
+  static Map<int, WebGLEnum> types = new Map();
+  static PrecisionType getByIndex(int index) => types[index];
+
+  static PrecisionType LOW_INT = new PrecisionType._init(WebGL.RenderingContext.LOW_INT, 'LOW_INT');
+  static PrecisionType LOW_FLOAT = new PrecisionType._init(WebGL.RenderingContext.LOW_FLOAT, 'LOW_FLOAT');
+  static PrecisionType MEDIUM_INT = new PrecisionType._init(WebGL.RenderingContext.MEDIUM_INT, 'MEDIUM_INT');
+  static PrecisionType MEDIUM_FLOAT = new PrecisionType._init(WebGL.RenderingContext.MEDIUM_FLOAT, 'MEDIUM_FLOAT');
+  static PrecisionType HIGH_INT = new PrecisionType._init(WebGL.RenderingContext.HIGH_INT, 'HIGH_INT');
+  static PrecisionType HIGH_FLOAT = new PrecisionType._init(WebGL.RenderingContext.HIGH_FLOAT, 'HIGH_FLOAT');
 }
 
-class ShaderType{
-  final index;
-  const ShaderType(this.index);
+class ShaderType extends WebGLEnum{
 
-  static const ShaderType FRAGMENT_SHADER = const ShaderType(WebGL.RenderingContext.FRAGMENT_SHADER);
-  static const ShaderType VERTEX_SHADER = const ShaderType(WebGL.RenderingContext.VERTEX_SHADER);
+  ShaderType._init(int index, String name):super(index, name){
+    types[index] = this;
+  }
+
+  static Map<int, WebGLEnum> types = new Map();
+  static ShaderType getByIndex(int index) => types[index];
+
+  static ShaderType FRAGMENT_SHADER = new ShaderType._init(WebGL.RenderingContext.FRAGMENT_SHADER, 'FRAGMENT_SHADER');
+  static ShaderType VERTEX_SHADER = new ShaderType._init(WebGL.RenderingContext.VERTEX_SHADER, 'VERTEX_SHADER');
 }
 
-class ShaderParameters{
-  final index;
-  const ShaderParameters(this.index);
+class ShaderParameters extends WebGLEnum{
 
-  static const ShaderParameters DELETE_STATUS = const ShaderParameters(WebGL.RenderingContext.DELETE_STATUS);
-  static const ShaderParameters COMPILE_STATUS = const ShaderParameters(WebGL.RenderingContext.COMPILE_STATUS);
-  static const ShaderParameters SHADER_TYPE = const ShaderParameters(WebGL.RenderingContext.SHADER_TYPE);
+  ShaderParameters._init(int index, String name):super(index, name){
+    types[index] = this;
+  }
+
+  static Map<int, WebGLEnum> types = new Map();
+  static ShaderParameters getByIndex(int index) => types[index];
+
+  static ShaderParameters DELETE_STATUS = new ShaderParameters._init(WebGL.RenderingContext.DELETE_STATUS, 'DELETE_STATUS');
+  static ShaderParameters COMPILE_STATUS = new ShaderParameters._init(WebGL.RenderingContext.COMPILE_STATUS, 'COMPILE_STATUS');
+  static ShaderParameters SHADER_TYPE = new ShaderParameters._init(WebGL.RenderingContext.SHADER_TYPE, 'SHADER_TYPE');
 }
 
-class VertexAttribGlEnum{
-  final index;
-  const VertexAttribGlEnum(this.index);
+class VertexAttribGlEnum extends WebGLEnum{
 
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_BUFFER_BINDING = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING);
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_ENABLED = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_ENABLED);
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_SIZE = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_SIZE);
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_STRIDE = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_STRIDE);
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_TYPE = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_TYPE);
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_NORMALIZED = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_NORMALIZED);
-  static const VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_POINTER = const VertexAttribGlEnum(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_POINTER);
-  static const VertexAttribGlEnum CURRENT_VERTEX_ATTRIB = const VertexAttribGlEnum(WebGL.RenderingContext.CURRENT_VERTEX_ATTRIB);
+  VertexAttribGlEnum._init(int index, String name):super(index, name){
+    types[index] = this;
+  }
+
+  static Map<int, WebGLEnum> types = new Map();
+  static VertexAttribGlEnum getByIndex(int index) => types[index];
+
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_BUFFER_BINDING = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING,'VERTEX_ATTRIB_ARRAY_BUFFER_BINDING');
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_ENABLED = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_ENABLED, 'VERTEX_ATTRIB_ARRAY_ENABLED');
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_SIZE = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_SIZE, 'VERTEX_ATTRIB_ARRAY_SIZE');
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_STRIDE = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_STRIDE, 'VERTEX_ATTRIB_ARRAY_STRIDE');
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_TYPE = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_TYPE, 'VERTEX_ATTRIB_ARRAY_TYPE');
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_NORMALIZED = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_NORMALIZED, 'VERTEX_ATTRIB_ARRAY_NORMALIZED');
+  static VertexAttribGlEnum VERTEX_ATTRIB_ARRAY_POINTER = new VertexAttribGlEnum._init(WebGL.RenderingContext.VERTEX_ATTRIB_ARRAY_POINTER, 'VERTEX_ATTRIB_ARRAY_POINTER');
+  static VertexAttribGlEnum CURRENT_VERTEX_ATTRIB = new VertexAttribGlEnum._init(WebGL.RenderingContext.CURRENT_VERTEX_ATTRIB, 'CURRENT_VERTEX_ATTRIB');
 }
 
 class WebGLShader{
 
   WebGL.Shader webGLShader;
 
-  bool get isBuffer => gl.ctx.isShader(webGLShader);
+  bool get isShader => gl.ctx.isShader(webGLShader);
 
   WebGLShader(ShaderType shaderType){
     webGLShader = gl.ctx.createShader(shaderType.index);
@@ -125,13 +152,8 @@ class WebGLShader{
     return gl.ctx.getShaderInfoLog(webGLShader);
   }
 
-  String get source{
-    return gl.ctx.getShaderSource(webGLShader);
-  }
-
-  set source(String shaderSource){
-    gl.ctx.shaderSource(webGLShader, shaderSource);
-  }
+  String get source => gl.ctx.getShaderSource(webGLShader);
+  set source(String shaderSource) => gl.ctx.shaderSource(webGLShader, shaderSource);
 
   void compile(){
     gl.ctx.compileShader(webGLShader);
@@ -158,7 +180,7 @@ class WebGLShader{
   // > COMPILE_STATUS
   bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
   // > SHADER_TYPE
-  ShaderType get shaderType => new ShaderType(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
+  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
 
   //Why no webGLShader ref ? >>>
 
@@ -177,7 +199,6 @@ class WebGLShader{
   }
 
 }
-
 
 class ShaderSource{
   static Map<String , List<String>> shadersPath = {

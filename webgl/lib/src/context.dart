@@ -41,9 +41,12 @@ class Context{
 
   static const bool debugging = false;
 
-  static void init(CanvasElement canvas, {bool enableExtensions:false, bool logInfos : false}){
+  static void init(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
     gl = new WebGLRenderingContext.create(canvas);
-    _initWebglConstants();
+
+    if(initConstant) {
+      _initWebglConstants();
+    }
 
     if(enableExtensions){
       renderSettings.enableExtensions(log: logInfos);

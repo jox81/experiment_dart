@@ -5,6 +5,7 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
@@ -13,15 +14,13 @@ import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
 
 Future main() async {
-  WebglTestParameters webgl01 =
+  WebglTestParameters webglTestParameters =
       new WebglTestParameters(querySelector('#glCanvas'));
 
   await ShaderSource.loadShaders();
-  webgl01.setup();
-  webgl01.render();
+  webglTestParameters.setup();
+  webglTestParameters.render();
 }
-
-List<WebglParameter> webglParameters = new List();
 
 class WebglTestParameters {
   WebGLBuffer vertexBuffer;
@@ -77,8 +76,20 @@ class WebglTestParameters {
   }
 
   void getInfos() {
-    Context.webglConstants.logConstants();
-    Context.webglParameters.logValues();
+//    Context.webglConstants.logConstants();
+//    Context.webglParameters.logValues();
+
+    IntrospectionManager.instance.logTypeInfos(ShaderType,
+      showBaseInfo: true,
+      showLibrary: true,
+      showType: true,
+      showTypeVariable: true,
+      showTypeDef: true,
+      showFunctionType: true,
+      showVariable: true,
+      showParameter: true,
+      showMethod: true
+    );
   }
 }
 

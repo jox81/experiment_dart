@@ -176,27 +176,27 @@ class IntrospectionManager {
       decl.parameters.forEach((p) {
         print(
             '   ${MirrorSystem.getName(p.type.simpleName)} ${MirrorSystem.getName(p.simpleName)},');
-//        print('isOptional : ${p.isOptional}');
-//        print('isNamed : ${p.isNamed}');
-//        print('hasDefaultValue : ${p.hasDefaultValue}');
-//        print('defaultValue : ${p.defaultValue}');
+        print('isOptional : ${p.isOptional}');
+        print('isNamed : ${p.isNamed}');
+        print('hasDefaultValue : ${p.hasDefaultValue}');
+        print('defaultValue : ${p.defaultValue}');
       });
       print(')');
-//        print('source : ${decl.source}'); // retourne le code
-//      print('parameters : ${decl.parameters}'); //Explore more in depth types
-//      print('isStatic : ${decl.isStatic}');
-//      print('isAbstract : ${decl.isAbstract}');
-//      print('isSynthetic : ${decl.isSynthetic}');
-//      print('isRegularMethod : ${decl.isRegularMethod}');
-//      print('isOperator : ${decl.isOperator}');
-//      print('isGetter : ${decl.isGetter}');
-//      print('isSetter : ${decl.isSetter}');
-//      print('isConstructor : ${decl.isConstructor}');
-//      print('constructorName : ${decl.constructorName}');
-//      print('isConstConstructor : ${decl.isConstConstructor}');
-//      print('isGenerativeConstructor : ${decl.isGenerativeConstructor}');
-//      print('isRedirectingConstructor : ${decl.isRedirectingConstructor}');
-//      print('isFactoryConstructor : ${decl.isFactoryConstructor}');
+        print('source : ${decl.source}'); // retourne le code
+      print('parameters : ${decl.parameters}'); //Explore more in depth types
+      print('isStatic : ${decl.isStatic}');
+      print('isAbstract : ${decl.isAbstract}');
+      print('isSynthetic : ${decl.isSynthetic}');
+      print('isRegularMethod : ${decl.isRegularMethod}');
+      print('isOperator : ${decl.isOperator}');
+      print('isGetter : ${decl.isGetter}');
+      print('isSetter : ${decl.isSetter}');
+      print('isConstructor : ${decl.isConstructor}');
+      print('constructorName : ${decl.constructorName}');
+      print('isConstConstructor : ${decl.isConstConstructor}');
+      print('isGenerativeConstructor : ${decl.isGenerativeConstructor}');
+      print('isRedirectingConstructor : ${decl.isRedirectingConstructor}');
+      print('isFactoryConstructor : ${decl.isFactoryConstructor}');
     }
   }
 
