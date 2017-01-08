@@ -74,6 +74,22 @@ class WebGLFrameBuffer{
   void logFrameBufferInfos() {
     Utils.log("FrameBuffer Infos", () {
       print('isFramebuffer : ${isFramebuffer}');
+      print('checkStatus() : ${checkStatus()}');
+      print('###  Color0 Attachment  ############################################');
+      print('frameBufferAttachmentObjectTypeForColor0 : ${frameBufferAttachmentObjectTypeForColor0}');
+      print('frameBufferAttachmentObjectNameForColor0 : ${frameBufferAttachmentObjectNameForColor0}');
+      print('frameBufferAttachmentTextureLevelForColor0 : ${frameBufferAttachmentTextureLevelForColor0}');
+      print('frameBufferAttachmentTextureCubeMapFaceForColor0 : ${frameBufferAttachmentTextureCubeMapFaceForColor0}');
+      print('###  Depth  Attachment  ###########################################');
+      print('frameBufferAttachmentObjectTypeForDepth : ${frameBufferAttachmentObjectTypeForDepth}');
+      print('frameBufferAttachmentObjectNameForDepth : ${frameBufferAttachmentObjectNameForDepth}');
+      print('frameBufferAttachmentTextureLevelForDepth : ${frameBufferAttachmentTextureLevelForDepth}');
+      print('frameBufferAttachmentTextureCubeMapFaceForDepth : ${frameBufferAttachmentTextureCubeMapFaceForDepth}');
+      print('###  Stencil Attachment  ##########################################');
+      print('frameBufferAttachmentObjectTypeForStencil : ${frameBufferAttachmentObjectTypeForStencil}');
+      print('frameBufferAttachmentObjectNameForStencil : ${frameBufferAttachmentObjectNameForStencil}');
+      print('frameBufferAttachmentTextureLevelForStencil : ${frameBufferAttachmentTextureLevelForStencil}');
+      print('frameBufferAttachmentTextureCubeMapFaceForStencil : ${frameBufferAttachmentTextureCubeMapFaceForStencil}');
     });
   }
 
