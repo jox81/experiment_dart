@@ -38,22 +38,6 @@ class WebGLShader{
   }
 
 
-  // >>> Parameteres
-
-
-  dynamic getParameter(ShaderParameters parameter){
-    dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
-    return result;
-  }
-
-  // >>> single getParameter
-
-  // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index);
-  // > COMPILE_STATUS
-  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
-  // > SHADER_TYPE
-  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
 
   //Why no webGLShader ref ? >>>
 
@@ -71,6 +55,47 @@ class WebGLShader{
     return gl.ctx.getVertexAttribOffset(vertexAttributePosition, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
   }
 
+  // >>> Parameteres
+
+
+  dynamic getParameter(ShaderParameters parameter){
+    dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
+    return result;
+  }
+
+  // >>> single getParameter
+
+  // > DELETE_STATUS
+  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index);
+  // > COMPILE_STATUS
+  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
+  // > SHADER_TYPE
+  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
+
+  void logShaderInfos() {
+    Utils.log("Shader Infos", () {
+      print('shaderType : ${shaderType}');
+      print('isShader : ${isShader}');
+      print('compileStatus : ${compileStatus}');
+      print('deleteStatus : ${deleteStatus}');
+      print('infoLog : ${infoLog}');
+      print('source : \n\n${source}');
+      print(
+          'VERTEX_ATTRIB_ARRAY_BUFFER_BINDING : ${getVertexAttrib(0, VertexAttribGlEnum.CURRENT_VERTEX_ATTRIB)}');
+      print(
+          'VERTEX_ATTRIB_ARRAY_ENABLED : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_ENABLED)}');
+      print(
+          'VERTEX_ATTRIB_ARRAY_SIZE : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_SIZE)}');
+      print(
+          'VERTEX_ATTRIB_ARRAY_STRIDE : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_STRIDE)}');
+      print(
+          'VERTEX_ATTRIB_ARRAY_TYPE : ${ShaderVariableType.getByIndex(getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE))}');
+      print(
+          'VERTEX_ATTRIB_ARRAY_NORMALIZED : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_NORMALIZED)}');
+      print(
+          'CURRENT_VERTEX_ATTRIB : ${getVertexAttrib(0, VertexAttribGlEnum.CURRENT_VERTEX_ATTRIB)}');
+    });
+  }
 }
 
 class ShaderSource{

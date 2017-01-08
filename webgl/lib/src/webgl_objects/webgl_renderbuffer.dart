@@ -1,6 +1,7 @@
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 
@@ -14,7 +15,7 @@ class WebGLRenderBuffer{
     webGLRenderBuffer = gl.ctx.createRenderbuffer();
   }
 
-  bool get isBuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
+  bool get isRenderbuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
 
   void delete(){
     gl.ctx.deleteRenderbuffer(webGLRenderBuffer);
@@ -64,5 +65,11 @@ class WebGLRenderBuffer{
 
   void framebufferRenderbuffer(FrameBufferTarget target, FrameBufferAttachment attachment, RenderBufferTarget renderBufferTarget){
     gl.ctx.framebufferRenderbuffer(target.index, attachment.index, renderBufferTarget.index, webGLRenderBuffer);
+  }
+
+  void logRenderBufferInfos() {
+    Utils.log("RenderBuffer Infos", () {
+      print('isRenderbuffer : ${isRenderbuffer}');
+    });
   }
 }

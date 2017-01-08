@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
@@ -11,7 +12,7 @@ class WebGLProgram{
 
   WebGL.Program webGLProgram;
 
-  bool get isBuffer => gl.ctx.isProgram(webGLProgram);
+  bool get isProgram => gl.ctx.isProgram(webGLProgram);
 
   WebGLProgram(){
     webGLProgram = gl.ctx.createProgram();
@@ -85,29 +86,6 @@ class WebGLProgram{
 
   String get infoLog => gl.ctx.getProgramInfoLog(webGLProgram);
 
-
-  // >>> Parameteres
-
-
-  dynamic getParameter(ProgramParameterGlEnum parameter){
-    return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
-  }
-
-  // >>> single getParameter
-
-  // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
-  // > LINK_STATUS
-  bool get linkStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
-  // > VALIDATE_STATUS
-  bool get validateStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
-  // > ATTACHED_SHADERS
-  int get attachedShadersCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
-  // > ACTIVE_ATTRIBUTES
-  int get activeAttributsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
-  // > ACTIVE_UNIFORMS
-  int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
-
   //Custom
   ProgramInfo getProgramInfo(){
     ProgramInfo result = new ProgramInfo();
@@ -132,4 +110,39 @@ class WebGLProgram{
     return result;
   }
 
+
+  // >>> Parameteres
+
+
+  dynamic getParameter(ProgramParameterGlEnum parameter){
+    return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
+  }
+
+  // >>> single getParameter
+
+  // > DELETE_STATUS
+  bool get deleteStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
+  // > LINK_STATUS
+  bool get linkStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
+  // > VALIDATE_STATUS
+  bool get validateStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
+  // > ATTACHED_SHADERS
+  int get attachedShadersCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
+  // > ACTIVE_ATTRIBUTES
+  int get activeAttributsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
+  // > ACTIVE_UNIFORMS
+  int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
+
+  void logProgramInfos() {
+    Utils.log("Program Infos", () {
+      print('isProgram : ${isProgram}');
+      print('linkStatus : ${linkStatus}');
+      print('validateStatus : ${validateStatus}');
+      print('deleteStatus : ${deleteStatus}');
+      print('attachedShadersCount : ${attachedShadersCount}');
+      print('activeAttributsCount : ${activeAttributsCount}');
+      print('activeUnifromsCount : ${activeUnifromsCount}');
+      print('activeUnifromsCount : ${activeUnifromsCount}');
+    });
+  }
 }

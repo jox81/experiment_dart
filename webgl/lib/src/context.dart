@@ -5,6 +5,7 @@ import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 WebGLRenderingContext gl;
@@ -58,7 +59,7 @@ class Context{
   }
 
   static void _logInfos() {
-    Context.contextAttributs.logValues();
+    gl.contextAttributes.logValues();
     _renderSetting.logSupportedExtensions();
     Context.webglConstants.logConstants();
     Context.webglConstants.logParameters();
@@ -71,7 +72,6 @@ class Context{
     webglConstants.initWebglConstants();
   }
 
-  static ContextAttributs get contextAttributs => ContextAttributs.instance();
   static WebglConstants get webglConstants => WebglConstants.instance();
   static WebglParameters get webglParameters => WebglParameters.instance();
 }

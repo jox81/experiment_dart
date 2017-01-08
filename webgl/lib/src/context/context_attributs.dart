@@ -1,15 +1,10 @@
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
 
 class ContextAttributs{
 
-  static ContextAttributs _instance;
-  ContextAttributs._init();
-  static ContextAttributs instance(){
-    if(_instance == null){
-      _instance = new ContextAttributs._init();
-    }
-    return _instance;
-  }
+  final WebGLDictionary _values;
+
+  ContextAttributs(this._values);
 
   bool get alpha => values['alpha'];
   bool get antialias => values['alpha'];
@@ -20,7 +15,7 @@ class ContextAttributs{
   bool get stencil => values['alpha'];
 
   Map get values {
-    return gl.contextAttributes;
+    return _values.toMap;
   }
 
   void logValues(){

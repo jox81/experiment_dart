@@ -1,13 +1,14 @@
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 
 class WebGLFrameBuffer{
 
   WebGL.Framebuffer webGLFrameBuffer;
 
-  bool get isBuffer => gl.ctx.isFramebuffer(webGLFrameBuffer);
+  bool get isFramebuffer => gl.ctx.isFramebuffer(webGLFrameBuffer);
 
   WebGLFrameBuffer(){
     webGLFrameBuffer = gl.ctx.createFramebuffer();
@@ -69,5 +70,11 @@ class WebGLFrameBuffer{
   int get frameBufferAttachmentTextureLevelForStencil => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
   // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
   TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForStencil => TextureAttachmentTarget.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+
+  void logFrameBufferInfos() {
+    Utils.log("FrameBuffer Infos", () {
+      print('isFramebuffer : ${isFramebuffer}');
+    });
+  }
 
 }

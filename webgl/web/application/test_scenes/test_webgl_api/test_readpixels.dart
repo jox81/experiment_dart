@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'dart:js' as js;
 
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 void log(String msg) {

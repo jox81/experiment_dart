@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 
 class WebGLBuffer{
@@ -52,4 +53,18 @@ class WebGLBuffer{
   // > BUFFER_USAGE
   BufferUsageType get elementArrayBufferUsage => BufferUsageType.getByIndex(gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index));
 
+
+  void logBufferInfos() {
+    Utils.log("Buffer Infos", () {
+      print('isBuffer : ${isBuffer}');
+
+      print('###  ARRAY_BUFFER  ###############################################');
+      print('arrayBufferSize : ${arrayBufferSize}');
+      print('arrayBufferUsage : ${arrayBufferUsage}');
+
+      print('###  ELEMENT_ARRAY_BUFFER  #######################################');
+      print('elementArrayBufferSize : ${elementArrayBufferSize}');
+      print('elementArrayBufferUsage : ${elementArrayBufferUsage}');
+    });
+  }
 }

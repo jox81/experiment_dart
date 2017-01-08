@@ -43,6 +43,292 @@ abstract class WebGLEnum<T> {
 //todo add if extension ?
 
 
+//WebGLRenderingContext
+
+
+class EnableCapabilityType extends WebGLEnum{
+
+  const EnableCapabilityType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(EnableCapabilityType, index);
+
+  static const EnableCapabilityType BLEND = const EnableCapabilityType(WebGL.RenderingContext.BLEND, 'BLEND');
+  static const EnableCapabilityType CULL_FACE = const EnableCapabilityType(WebGL.RenderingContext.CULL_FACE, 'CULL_FACE');
+  static const EnableCapabilityType DEPTH_TEST = const EnableCapabilityType(WebGL.RenderingContext.DEPTH_TEST, 'DEPTH_TEST');
+  static const EnableCapabilityType DITHER = const EnableCapabilityType(WebGL.RenderingContext.DITHER, 'DITHER'); //Todo : add enabling ?
+  static const EnableCapabilityType POLYGON_OFFSET_FILL = const EnableCapabilityType(WebGL.RenderingContext.POLYGON_OFFSET_FILL, 'POLYGON_OFFSET_FILL');
+  static const EnableCapabilityType SAMPLE_ALPHA_TO_COVERAGE = const EnableCapabilityType(WebGL.RenderingContext.SAMPLE_ALPHA_TO_COVERAGE, 'SAMPLE_ALPHA_TO_COVERAGE');
+  static const EnableCapabilityType SAMPLE_COVERAGE = const EnableCapabilityType(WebGL.RenderingContext.SAMPLE_COVERAGE, 'SAMPLE_COVERAGE');
+  static const EnableCapabilityType SCISSOR_TEST = const EnableCapabilityType(WebGL.RenderingContext.SCISSOR_TEST, 'SCISSOR_TEST');
+  static const EnableCapabilityType STENCIL_TEST = const EnableCapabilityType(WebGL.RenderingContext.STENCIL_TEST, 'STENCIL_TEST');
+}
+
+class FacingType extends WebGLEnum{
+
+  const FacingType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(FacingType, index);
+
+  static const FacingType FRONT = const FacingType(WebGL.RenderingContext.FRONT, 'FRONT');
+  static const FacingType BACK = const FacingType(WebGL.RenderingContext.BACK, 'BACK');
+  static const FacingType FRONT_AND_BACK = const FacingType(WebGL.RenderingContext.FRONT_AND_BACK, 'FRONT_AND_BACK');
+}
+
+class ClearBufferMask extends WebGLEnum{
+
+  const ClearBufferMask(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ClearBufferMask, index);
+
+  static const ClearBufferMask DEPTH_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.DEPTH_BUFFER_BIT, 'DEPTH_BUFFER_BIT');
+  static const ClearBufferMask STENCIL_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.STENCIL_BUFFER_BIT, 'STENCIL_BUFFER_BIT');
+  static const ClearBufferMask COLOR_BUFFER_BIT = const ClearBufferMask(WebGL.RenderingContext.COLOR_BUFFER_BIT, 'COLOR_BUFFER_BIT');
+}
+
+class FrontFaceDirection extends WebGLEnum{
+
+  const FrontFaceDirection(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(FrontFaceDirection, index);
+
+  static const FrontFaceDirection CW = const FrontFaceDirection(WebGL.RenderingContext.CW, 'CW');
+  static const FrontFaceDirection CCW = const FrontFaceDirection(WebGL.RenderingContext.CCW, 'CCW');
+}
+
+class PixelStorgeType extends WebGLEnum{
+
+  const PixelStorgeType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(PixelStorgeType, index);
+
+  static const PixelStorgeType PACK_ALIGNMENT = const PixelStorgeType(WebGL.RenderingContext.PACK_ALIGNMENT, 'PACK_ALIGNMENT');
+  static const PixelStorgeType UNPACK_ALIGNMENT = const PixelStorgeType(WebGL.RenderingContext.UNPACK_ALIGNMENT, 'UNPACK_ALIGNMENT');
+  static const PixelStorgeType UNPACK_FLIP_Y_WEBGL = const PixelStorgeType(WebGL.RenderingContext.UNPACK_FLIP_Y_WEBGL, 'UNPACK_FLIP_Y_WEBGL');
+  static const PixelStorgeType UNPACK_PREMULTIPLY_ALPHA_WEBGL = const PixelStorgeType(WebGL.RenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 'UNPACK_PREMULTIPLY_ALPHA_WEBGL');
+  static const PixelStorgeType UNPACK_COLORSPACE_CONVERSION_WEBGL = const PixelStorgeType(WebGL.RenderingContext.UNPACK_COLORSPACE_CONVERSION_WEBGL, 'UNPACK_COLORSPACE_CONVERSION_WEBGL');
+}
+
+class DrawMode extends WebGLEnum{
+
+  const DrawMode(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(DrawMode, index);
+
+  static const DrawMode POINTS = const DrawMode(WebGL.RenderingContext.POINTS, 'POINTS');
+  static const DrawMode LINE_STRIP = const DrawMode(WebGL.RenderingContext.LINE_STRIP, 'LINE_STRIP');
+  static const DrawMode LINE_LOOP = const DrawMode(WebGL.RenderingContext.LINE_LOOP, 'LINE_LOOP');
+  static const DrawMode LINES = const DrawMode(WebGL.RenderingContext.LINES, 'LINES');
+  static const DrawMode TRIANGLE_STRIP = const DrawMode(WebGL.RenderingContext.TRIANGLE_STRIP, 'TRIANGLE_STRIP');
+  static const DrawMode TRIANGLE_FAN = const DrawMode(WebGL.RenderingContext.TRIANGLE_FAN, 'TRIANGLE_FAN');
+  static const DrawMode TRIANGLES = const DrawMode(WebGL.RenderingContext.TRIANGLES, 'TRIANGLES');
+}
+
+class ElementType extends WebGLEnum{
+
+  const ElementType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ElementType, index);
+
+  static const ElementType UNSIGNED_BYTE = const ElementType(WebGL.RenderingContext.UNSIGNED_BYTE, 'UNSIGNED_BYTE');
+  static const ElementType UNSIGNED_SHORT = const ElementType(WebGL.RenderingContext.UNSIGNED_SHORT, 'UNSIGNED_SHORT');
+}
+
+class ReadPixelDataFormat extends WebGLEnum{
+
+  const ReadPixelDataFormat(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ReadPixelDataFormat, index);
+
+  static const ReadPixelDataFormat ALPHA = const ReadPixelDataFormat(WebGL.RenderingContext.ALPHA, 'ALPHA');
+  static const ReadPixelDataFormat RGB = const ReadPixelDataFormat(WebGL.RenderingContext.RGB, 'RGB');
+  static const ReadPixelDataFormat RGBA = const ReadPixelDataFormat(WebGL.RenderingContext.RGBA, 'RGBA');
+}
+
+class ReadPixelDataType extends WebGLEnum{
+
+  const ReadPixelDataType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ReadPixelDataType, index);
+
+  static const ReadPixelDataType UNSIGNED_BYTE = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_BYTE, 'UNSIGNED_BYTE');
+  static const ReadPixelDataType UNSIGNED_SHORT_5_6_5 = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_6_5, 'UNSIGNED_SHORT_5_6_5');
+  static const ReadPixelDataType UNSIGNED_SHORT_4_4_4_4 = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_4_4_4_4, 'UNSIGNED_SHORT_4_4_4_4');
+  static const ReadPixelDataType UNSIGNED_SHORT_5_5_5_1 = const ReadPixelDataType(WebGL.RenderingContext.UNSIGNED_SHORT_5_5_5_1, 'UNSIGNED_SHORT_5_5_5_1');
+  static const ReadPixelDataType FLOAT = const ReadPixelDataType(WebGL.RenderingContext.FLOAT, 'FLOAT');
+}
+
+class ComparisonFunction extends WebGLEnum{
+
+  const ComparisonFunction(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ComparisonFunction, index);
+
+  static const ComparisonFunction NEVER = const ComparisonFunction(WebGL.RenderingContext.NEVER, 'NEVER');
+  static const ComparisonFunction LESS = const ComparisonFunction(WebGL.RenderingContext.LESS, 'LESS');
+  static const ComparisonFunction EQUAL = const ComparisonFunction(WebGL.RenderingContext.EQUAL, 'EQUAL');
+  static const ComparisonFunction LEQUAL = const ComparisonFunction(WebGL.RenderingContext.LEQUAL, 'LEQUAL');
+  static const ComparisonFunction GREATER = const ComparisonFunction(WebGL.RenderingContext.GREATER, 'GREATER');
+  static const ComparisonFunction NOTEQUAL = const ComparisonFunction(WebGL.RenderingContext.NOTEQUAL, 'NOTEQUAL');
+  static const ComparisonFunction GEQUAL = const ComparisonFunction(WebGL.RenderingContext.GEQUAL, 'GEQUAL');
+  static const ComparisonFunction ALWAYS = const ComparisonFunction(WebGL.RenderingContext.ALWAYS, 'ALWAYS');
+}
+
+class ErrorCode extends WebGLEnum{
+
+  const ErrorCode(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ErrorCode, index);
+
+  static const ErrorCode NO_ERROR = const ErrorCode(WebGL.RenderingContext.NO_ERROR, 'NO_ERROR');
+  static const ErrorCode INVALID_ENUM = const ErrorCode(WebGL.RenderingContext.INVALID_ENUM, 'INVALID_ENUM');
+  static const ErrorCode INVALID_VALUE = const ErrorCode(WebGL.RenderingContext.INVALID_VALUE, 'INVALID_VALUE');
+  static const ErrorCode INVALID_OPERATION = const ErrorCode(WebGL.RenderingContext.INVALID_OPERATION, 'INVALID_OPERATION');
+  static const ErrorCode INVALID_FRAMEBUFFER_OPERATION = const ErrorCode(WebGL.RenderingContext.INVALID_FRAMEBUFFER_OPERATION, 'INVALID_FRAMEBUFFER_OPERATION');
+  static const ErrorCode OUT_OF_MEMORY = const ErrorCode(WebGL.RenderingContext.OUT_OF_MEMORY, 'OUT_OF_MEMORY');
+  static const ErrorCode CONTEXT_LOST_WEBGL = const ErrorCode(WebGL.RenderingContext.CONTEXT_LOST_WEBGL, 'CONTEXT_LOST_WEBGL');
+}
+
+class HintMode extends WebGLEnum{
+
+  const HintMode(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(HintMode, index);
+
+  static const HintMode FASTEST = const HintMode(WebGL.RenderingContext.FASTEST, 'FASTEST');
+  static const HintMode NICEST = const HintMode(WebGL.RenderingContext.NICEST, 'NICEST');
+  static const HintMode DONT_CARE = const HintMode(WebGL.RenderingContext.DONT_CARE, 'DONT_CARE');
+}
+
+class StencilOpMode extends WebGLEnum{
+
+  const StencilOpMode(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(StencilOpMode, index);
+
+  static const StencilOpMode ZERO = const StencilOpMode(WebGL.RenderingContext.ZERO, 'ZERO');
+  static const StencilOpMode KEEP = const StencilOpMode(WebGL.RenderingContext.KEEP, 'KEEP');
+  static const StencilOpMode REPLACE = const StencilOpMode(WebGL.RenderingContext.REPLACE, 'REPLACE');
+  static const StencilOpMode INVERT = const StencilOpMode(WebGL.RenderingContext.INVERT, 'INVERT');
+  static const StencilOpMode INCR = const StencilOpMode(WebGL.RenderingContext.INCR, 'INCR');
+  static const StencilOpMode INCR_WRAP = const StencilOpMode(WebGL.RenderingContext.INCR_WRAP, 'INCR_WRAP');
+  static const StencilOpMode DECR = const StencilOpMode(WebGL.RenderingContext.DECR, 'DECR');
+  static const StencilOpMode DECR_WRAP = const StencilOpMode(WebGL.RenderingContext.DECR_WRAP, 'DECR_WRAP');
+}
+
+class BlendFactorMode extends WebGLEnum{
+
+  const BlendFactorMode(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(BlendFactorMode, index);
+
+  static const BlendFactorMode ZERO = const BlendFactorMode(WebGL.RenderingContext.ZERO, 'ZERO');
+  static const BlendFactorMode ONE = const BlendFactorMode(WebGL.RenderingContext.ONE, 'ONE');
+  static const BlendFactorMode SRC_COLOR = const BlendFactorMode(WebGL.RenderingContext.SRC_COLOR, 'SRC_COLOR');
+  static const BlendFactorMode SRC_ALPHA = const BlendFactorMode(WebGL.RenderingContext.SRC_ALPHA, 'SRC_ALPHA');
+  static const BlendFactorMode SRC_ALPHA_SATURATE = const BlendFactorMode(WebGL.RenderingContext.SRC_ALPHA_SATURATE, 'SRC_ALPHA_SATURATE');
+  static const BlendFactorMode DST_COLOR = const BlendFactorMode(WebGL.RenderingContext.DST_COLOR, 'DST_COLOR');
+  static const BlendFactorMode DST_ALPHA = const BlendFactorMode(WebGL.RenderingContext.DST_ALPHA, 'DST_ALPHA');
+  static const BlendFactorMode CONSTANT_COLOR = const BlendFactorMode(WebGL.RenderingContext.CONSTANT_COLOR, 'CONSTANT_COLOR');
+  static const BlendFactorMode CONSTANT_ALPHA = const BlendFactorMode(WebGL.RenderingContext.CONSTANT_ALPHA, 'CONSTANT_ALPHA');
+  static const BlendFactorMode ONE_MINUS_SRC_COLOR = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_SRC_COLOR, 'ONE_MINUS_SRC_COLOR');
+  static const BlendFactorMode ONE_MINUS_SRC_ALPHA = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_SRC_ALPHA, 'ONE_MINUS_SRC_ALPHA');
+  static const BlendFactorMode ONE_MINUS_DST_COLOR = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_DST_COLOR, 'ONE_MINUS_DST_COLOR');
+  static const BlendFactorMode ONE_MINUS_DST_ALPHA = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_DST_ALPHA, 'ONE_MINUS_DST_ALPHA');
+  static const BlendFactorMode ONE_MINUS_CONSTANT_COLOR = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_CONSTANT_COLOR, 'ONE_MINUS_CONSTANT_COLOR');
+  static const BlendFactorMode ONE_MINUS_CONSTANT_ALPHA = const BlendFactorMode(WebGL.RenderingContext.ONE_MINUS_CONSTANT_ALPHA, 'ONE_MINUS_CONSTANT_ALPHA');
+}
+
+class BlendFunctionMode extends WebGLEnum{
+
+  const BlendFunctionMode(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(BlendFunctionMode, index);
+
+  static const BlendFunctionMode FUNC_ADD = const BlendFunctionMode(WebGL.RenderingContext.FUNC_ADD, 'FUNC_ADD');
+  static const BlendFunctionMode FUNC_SUBTRACT = const BlendFunctionMode(WebGL.RenderingContext.FUNC_SUBTRACT, 'FUNC_SUBTRACT');
+  static const BlendFunctionMode FUNC_REVERSE_SUBTRACT = const BlendFunctionMode(WebGL.RenderingContext.FUNC_REVERSE_SUBTRACT, 'FUNC_REVERSE_SUBTRACT');
+}
+
+class ContextParameter extends WebGLEnum{
+
+  const ContextParameter(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum.findTypeByIndex(ContextParameter, index);
+
+  static const ContextParameter ACTIVE_TEXTURE = const ContextParameter(WebGL.RenderingContext.ACTIVE_TEXTURE, 'ACTIVE_TEXTURE');
+  static const ContextParameter ALIASED_LINE_WIDTH_RANGE = const ContextParameter(WebGL.RenderingContext.ALIASED_LINE_WIDTH_RANGE, 'ALIASED_LINE_WIDTH_RANGE');
+  static const ContextParameter ALIASED_POINT_SIZE_RANGE = const ContextParameter(WebGL.RenderingContext.ALIASED_POINT_SIZE_RANGE, 'ALIASED_POINT_SIZE_RANGE');
+  static const ContextParameter ALPHA_BITS = const ContextParameter(WebGL.RenderingContext.ALPHA_BITS, 'ALPHA_BITS');
+  static const ContextParameter ARRAY_BUFFER_BINDING = const ContextParameter(WebGL.RenderingContext.ARRAY_BUFFER_BINDING, 'ARRAY_BUFFER_BINDING');
+  static const ContextParameter BLEND = const ContextParameter(WebGL.RenderingContext.BLEND, 'BLEND');
+  static const ContextParameter BLEND_COLOR = const ContextParameter(WebGL.RenderingContext.BLEND_COLOR, 'BLEND_COLOR');
+  static const ContextParameter BLEND_DST_ALPHA = const ContextParameter(WebGL.RenderingContext.BLEND_DST_ALPHA, 'BLEND_DST_ALPHA');
+  static const ContextParameter BLEND_DST_RGB = const ContextParameter(WebGL.RenderingContext.BLEND_DST_RGB, 'BLEND_DST_RGB');
+  static const ContextParameter BLEND_EQUATION = const ContextParameter(WebGL.RenderingContext.BLEND_EQUATION, 'BLEND_EQUATION');
+  static const ContextParameter BLEND_EQUATION_ALPHA = const ContextParameter(WebGL.RenderingContext.BLEND_EQUATION_ALPHA, 'BLEND_EQUATION_ALPHA');
+  static const ContextParameter BLEND_EQUATION_RGB = const ContextParameter(WebGL.RenderingContext.BLEND_EQUATION_RGB, 'BLEND_EQUATION_RGB');
+  static const ContextParameter BLEND_SRC_ALPHA = const ContextParameter(WebGL.RenderingContext.BLEND_SRC_ALPHA, 'BLEND_SRC_ALPHA');
+  static const ContextParameter BLEND_SRC_RGB = const ContextParameter(WebGL.RenderingContext.BLEND_SRC_RGB, 'BLEND_SRC_RGB');
+  static const ContextParameter BLUE_BITS = const ContextParameter(WebGL.RenderingContext.BLUE_BITS, 'BLUE_BITS');
+  static const ContextParameter COLOR_CLEAR_VALUE = const ContextParameter(WebGL.RenderingContext.COLOR_CLEAR_VALUE, 'COLOR_CLEAR_VALUE');
+  static const ContextParameter COLOR_WRITEMASK = const ContextParameter(WebGL.RenderingContext.COLOR_WRITEMASK, 'COLOR_WRITEMASK');
+  static const ContextParameter COMPRESSED_TEXTURE_FORMATS = const ContextParameter(WebGL.RenderingContext.COMPRESSED_TEXTURE_FORMATS, 'COMPRESSED_TEXTURE_FORMATS');
+  static const ContextParameter CULL_FACE_MODE = const ContextParameter(WebGL.RenderingContext.CULL_FACE_MODE, 'CULL_FACE_MODE');
+  static const ContextParameter CURRENT_PROGRAM = const ContextParameter(WebGL.RenderingContext.CURRENT_PROGRAM, 'CURRENT_PROGRAM');
+  static const ContextParameter DEPTH_BITS = const ContextParameter(WebGL.RenderingContext.DEPTH_BITS, 'DEPTH_BITS');
+  static const ContextParameter DEPTH_CLEAR_VALUE = const ContextParameter(WebGL.RenderingContext.DEPTH_CLEAR_VALUE, 'DEPTH_CLEAR_VALUE');
+  static const ContextParameter DEPTH_FUNC = const ContextParameter(WebGL.RenderingContext.DEPTH_FUNC, 'DEPTH_FUNC');
+  static const ContextParameter DEPTH_RANGE = const ContextParameter(WebGL.RenderingContext.DEPTH_RANGE, 'DEPTH_RANGE');
+  static const ContextParameter DEPTH_TEST = const ContextParameter(WebGL.RenderingContext.DEPTH_TEST, 'DEPTH_TEST');
+  static const ContextParameter DEPTH_WRITEMASK = const ContextParameter(WebGL.RenderingContext.DEPTH_WRITEMASK, 'DEPTH_WRITEMASK');
+  static const ContextParameter DITHER = const ContextParameter(WebGL.RenderingContext.DITHER, 'DITHER');
+  static const ContextParameter ELEMENT_ARRAY_BUFFER_BINDING = const ContextParameter(WebGL.RenderingContext.ELEMENT_ARRAY_BUFFER_BINDING, 'ELEMENT_ARRAY_BUFFER_BINDING');
+  static const ContextParameter FRAMEBUFFER_BINDING = const ContextParameter(WebGL.RenderingContext.FRAMEBUFFER_BINDING, 'FRAMEBUFFER_BINDING');
+  static const ContextParameter FRONT_FACE = const ContextParameter(WebGL.RenderingContext.FRONT_FACE, 'FRONT_FACE');
+  static const ContextParameter GENERATE_MIPMAP_HINT = const ContextParameter(WebGL.RenderingContext.GENERATE_MIPMAP_HINT, 'GENERATE_MIPMAP_HINT');
+  static const ContextParameter GREEN_BITS = const ContextParameter(WebGL.RenderingContext.GREEN_BITS, 'GREEN_BITS');
+  static const ContextParameter IMPLEMENTATION_COLOR_READ_FORMAT = const ContextParameter(WebGL.RenderingContext.IMPLEMENTATION_COLOR_READ_FORMAT, 'IMPLEMENTATION_COLOR_READ_FORMAT');
+  static const ContextParameter IMPLEMENTATION_COLOR_READ_TYPE = const ContextParameter(WebGL.RenderingContext.IMPLEMENTATION_COLOR_READ_TYPE, 'IMPLEMENTATION_COLOR_READ_TYPE');
+  static const ContextParameter LINE_WIDTH = const ContextParameter(WebGL.RenderingContext.LINE_WIDTH, 'LINE_WIDTH');
+  static const ContextParameter MAX_COMBINED_TEXTURE_IMAGE_UNITS = const ContextParameter(WebGL.RenderingContext.MAX_COMBINED_TEXTURE_IMAGE_UNITS, 'MAX_COMBINED_TEXTURE_IMAGE_UNITS');
+  static const ContextParameter MAX_CUBE_MAP_TEXTURE_SIZE = const ContextParameter(WebGL.RenderingContext.MAX_CUBE_MAP_TEXTURE_SIZE, 'MAX_CUBE_MAP_TEXTURE_SIZE');
+  static const ContextParameter MAX_FRAGMENT_UNIFORM_VECTORS = const ContextParameter(WebGL.RenderingContext.MAX_FRAGMENT_UNIFORM_VECTORS, 'MAX_FRAGMENT_UNIFORM_VECTORS');
+  static const ContextParameter MAX_RENDERBUFFER_SIZE = const ContextParameter(WebGL.RenderingContext.MAX_RENDERBUFFER_SIZE, 'MAX_RENDERBUFFER_SIZE');
+  static const ContextParameter MAX_TEXTURE_IMAGE_UNITS = const ContextParameter(WebGL.RenderingContext.MAX_TEXTURE_IMAGE_UNITS, 'MAX_TEXTURE_IMAGE_UNITS');
+  static const ContextParameter MAX_TEXTURE_SIZE = const ContextParameter(WebGL.RenderingContext.MAX_TEXTURE_SIZE, 'MAX_TEXTURE_SIZE');
+  static const ContextParameter MAX_VARYING_VECTORS = const ContextParameter(WebGL.RenderingContext.MAX_VARYING_VECTORS, 'MAX_VARYING_VECTORS');
+  static const ContextParameter MAX_VERTEX_ATTRIBS = const ContextParameter(WebGL.RenderingContext.MAX_VERTEX_ATTRIBS, 'MAX_VERTEX_ATTRIBS');
+  static const ContextParameter MAX_VERTEX_TEXTURE_IMAGE_UNITS = const ContextParameter(WebGL.RenderingContext.MAX_VERTEX_TEXTURE_IMAGE_UNITS, 'MAX_VERTEX_TEXTURE_IMAGE_UNITS');
+  static const ContextParameter MAX_VERTEX_UNIFORM_VECTORS = const ContextParameter(WebGL.RenderingContext.MAX_VERTEX_UNIFORM_VECTORS, 'MAX_VERTEX_UNIFORM_VECTORS');
+  static const ContextParameter MAX_VIEWPORT_DIMS = const ContextParameter(WebGL.RenderingContext.MAX_VIEWPORT_DIMS, 'MAX_VIEWPORT_DIMS');
+  static const ContextParameter PACK_ALIGNMENT = const ContextParameter(WebGL.RenderingContext.PACK_ALIGNMENT, 'PACK_ALIGNMENT');
+  static const ContextParameter POLYGON_OFFSET_FACTOR = const ContextParameter(WebGL.RenderingContext.POLYGON_OFFSET_FACTOR, 'POLYGON_OFFSET_FACTOR');
+  static const ContextParameter POLYGON_OFFSET_FILL = const ContextParameter(WebGL.RenderingContext.POLYGON_OFFSET_FILL, 'POLYGON_OFFSET_FILL');
+  static const ContextParameter POLYGON_OFFSET_UNITS = const ContextParameter(WebGL.RenderingContext.POLYGON_OFFSET_UNITS, 'POLYGON_OFFSET_UNITS');
+  static const ContextParameter RED_BITS = const ContextParameter(WebGL.RenderingContext.RED_BITS, 'RED_BITS');
+  static const ContextParameter RENDERBUFFER_BINDING = const ContextParameter(WebGL.RenderingContext.RENDERBUFFER_BINDING, 'RENDERBUFFER_BINDING');
+  static const ContextParameter RENDERER = const ContextParameter(WebGL.RenderingContext.RENDERER, 'RENDERER');
+  static const ContextParameter SAMPLE_BUFFERS = const ContextParameter(WebGL.RenderingContext.SAMPLE_BUFFERS, 'SAMPLE_BUFFERS');
+  static const ContextParameter SAMPLE_COVERAGE_INVERT = const ContextParameter(WebGL.RenderingContext.SAMPLE_COVERAGE_INVERT, 'SAMPLE_COVERAGE_INVERT');
+  static const ContextParameter SAMPLE_COVERAGE_VALUE = const ContextParameter(WebGL.RenderingContext.SAMPLE_COVERAGE_VALUE, 'SAMPLE_COVERAGE_VALUE');
+  static const ContextParameter SAMPLES = const ContextParameter(WebGL.RenderingContext.SAMPLES, 'SAMPLES');
+  static const ContextParameter SCISSOR_BOX = const ContextParameter(WebGL.RenderingContext.SCISSOR_BOX, 'SCISSOR_BOX');
+  static const ContextParameter SCISSOR_TEST = const ContextParameter(WebGL.RenderingContext.SCISSOR_TEST, 'SCISSOR_TEST');
+  static const ContextParameter SHADING_LANGUAGE_VERSION = const ContextParameter(WebGL.RenderingContext.SHADING_LANGUAGE_VERSION, 'SHADING_LANGUAGE_VERSION');
+  static const ContextParameter STENCIL_BACK_FAIL = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_FAIL, 'STENCIL_BACK_FAIL');
+  static const ContextParameter STENCIL_BACK_FUNC = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_FUNC, 'STENCIL_BACK_FUNC');
+  static const ContextParameter STENCIL_BACK_PASS_DEPTH_FAIL = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_PASS_DEPTH_FAIL, 'STENCIL_BACK_PASS_DEPTH_FAIL');
+  static const ContextParameter STENCIL_BACK_PASS_DEPTH_PASS = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_PASS_DEPTH_PASS, 'STENCIL_BACK_PASS_DEPTH_PASS');
+  static const ContextParameter STENCIL_BACK_REF = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_REF, 'STENCIL_BACK_REF');
+  static const ContextParameter STENCIL_BACK_VALUE_MASK = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_VALUE_MASK, 'STENCIL_BACK_VALUE_MASK');
+  static const ContextParameter STENCIL_BACK_WRITEMASK = const ContextParameter(WebGL.RenderingContext.STENCIL_BACK_WRITEMASK, 'STENCIL_BACK_WRITEMASK');
+  static const ContextParameter STENCIL_BITS = const ContextParameter(WebGL.RenderingContext.STENCIL_BITS, 'STENCIL_BITS');
+  static const ContextParameter STENCIL_CLEAR_VALUE = const ContextParameter(WebGL.RenderingContext.STENCIL_CLEAR_VALUE, 'STENCIL_CLEAR_VALUE');
+  static const ContextParameter STENCIL_FAIL = const ContextParameter(WebGL.RenderingContext.STENCIL_FAIL, 'STENCIL_FAIL');
+  static const ContextParameter STENCIL_FUNC = const ContextParameter(WebGL.RenderingContext.STENCIL_FUNC, 'STENCIL_FUNC');
+  static const ContextParameter STENCIL_PASS_DEPTH_FAIL = const ContextParameter(WebGL.RenderingContext.STENCIL_PASS_DEPTH_FAIL, 'STENCIL_PASS_DEPTH_FAIL');
+  static const ContextParameter STENCIL_PASS_DEPTH_PASS = const ContextParameter(WebGL.RenderingContext.STENCIL_PASS_DEPTH_PASS, 'STENCIL_PASS_DEPTH_PASS');
+  static const ContextParameter STENCIL_REF = const ContextParameter(WebGL.RenderingContext.STENCIL_REF, 'STENCIL_REF');
+  static const ContextParameter STENCIL_TEST = const ContextParameter(WebGL.RenderingContext.STENCIL_TEST, 'STENCIL_TEST');
+  static const ContextParameter STENCIL_VALUE_MASK = const ContextParameter(WebGL.RenderingContext.STENCIL_VALUE_MASK, 'STENCIL_VALUE_MASK');
+  static const ContextParameter STENCIL_WRITEMASK = const ContextParameter(WebGL.RenderingContext.STENCIL_WRITEMASK, 'STENCIL_WRITEMASK');
+  static const ContextParameter SUBPIXEL_BITS = const ContextParameter(WebGL.RenderingContext.SUBPIXEL_BITS, 'SUBPIXEL_BITS');
+  static const ContextParameter TEXTURE_BINDING_2D = const ContextParameter(WebGL.RenderingContext.TEXTURE_BINDING_2D, 'TEXTURE_BINDING_2D');
+  static const ContextParameter TEXTURE_BINDING_CUBE_MAP = const ContextParameter(WebGL.RenderingContext.TEXTURE_BINDING_CUBE_MAP, 'TEXTURE_BINDING_CUBE_MAP');
+  static const ContextParameter UNPACK_ALIGNMENT = const ContextParameter(WebGL.RenderingContext.UNPACK_ALIGNMENT, 'UNPACK_ALIGNMENT');
+  static const ContextParameter UNPACK_COLORSPACE_CONVERSION_WEBGL = const ContextParameter(WebGL.RenderingContext.UNPACK_COLORSPACE_CONVERSION_WEBGL, 'UNPACK_COLORSPACE_CONVERSION_WEBGL');
+  static const ContextParameter UNPACK_FLIP_Y_WEBGL = const ContextParameter(WebGL.RenderingContext.UNPACK_FLIP_Y_WEBGL, 'UNPACK_FLIP_Y_WEBGL');
+  static const ContextParameter UNPACK_PREMULTIPLY_ALPHA_WEBGL = const ContextParameter(WebGL.RenderingContext.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 'UNPACK_PREMULTIPLY_ALPHA_WEBGL');
+  static const ContextParameter VENDOR = const ContextParameter(WebGL.RenderingContext.VENDOR, 'VENDOR');
+  static const ContextParameter VERSION = const ContextParameter(WebGL.RenderingContext.VERSION, 'VERSION');
+  static const ContextParameter VIEWPORT = const ContextParameter(WebGL.RenderingContext.VIEWPORT, 'VIEWPORT');
+}
+
+
 //WebGLRenderBuffers
 
 

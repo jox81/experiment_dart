@@ -1,13 +1,14 @@
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 
 class WebGLTexture {
   WebGL.Texture webGLTexture;
 
-  bool get isBuffer => gl.ctx.isTexture(webGLTexture);
+  bool get isTexture => gl.ctx.isTexture(webGLTexture);
 
   WebGLTexture() {
     webGLTexture = gl.ctx.createTexture();
@@ -67,5 +68,23 @@ class WebGLTexture {
   }
   void generateMipmap(TextureTarget target){
     gl.ctx.generateMipmap(target.index);
+  }
+
+  void logTextureInfos() {
+    Utils.log("RenderingContext Infos", () {
+
+      print('###  texture2D  ##################################################');
+      print('texture2DTextureMagFilter : ${texture2DTextureMagFilter}');
+      print('texture2DTextureMinFilter : ${texture2DTextureMinFilter}');
+      print('texture2DTextureWrapS : ${texture2DTextureWrapS}');
+      print('texture2DTextureWrapT : ${texture2DTextureWrapT}');
+
+      print('###  textureCubeMap  #############################################');
+      print('textureCubeMapTextureMagFilter : ${textureCubeMapTextureMagFilter}');
+      print('textureCubeMapTextureMinFilter : ${textureCubeMapTextureMinFilter}');
+      print('textureCubeMapTextureWrapS : ${textureCubeMapTextureWrapS}');
+      print('textureCubeMapTextureWrapS : ${textureCubeMapTextureWrapS}');
+      print('textureCubeMapTextureWrapT : ${textureCubeMapTextureWrapT}');
+    });
   }
 }

@@ -8,7 +8,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -19,10 +19,10 @@ Map susanJson;
 
 Future main() async {
 
-  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
-
   await ShaderSource.loadShaders();
   susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
+
+  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
   webgl01.setup();
   webgl01.render();
 }
