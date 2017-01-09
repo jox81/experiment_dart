@@ -1,8 +1,6 @@
 import 'dart:mirrors';
 import 'dart:web_gl' as WebGL;
 
-import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
-
 abstract class WebGLEnum<T> {
 
   final int _index;
@@ -117,13 +115,13 @@ class DrawMode extends WebGLEnum{
   static const DrawMode TRIANGLES = const DrawMode(WebGL.RenderingContext.TRIANGLES, 'TRIANGLES');
 }
 
-class ElementType extends WebGLEnum{
+class BufferElementType extends WebGLEnum{
 
-  const ElementType(int index, String name):super(index, name);
-  static WebGLEnum getByIndex(int index) => WebGLEnum._findTypeByIndex(ElementType, index);
+  const BufferElementType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum._findTypeByIndex(BufferElementType, index);
 
-  static const ElementType UNSIGNED_BYTE = const ElementType(WebGL.RenderingContext.UNSIGNED_BYTE, 'UNSIGNED_BYTE');
-  static const ElementType UNSIGNED_SHORT = const ElementType(WebGL.RenderingContext.UNSIGNED_SHORT, 'UNSIGNED_SHORT');
+  static const BufferElementType UNSIGNED_BYTE = const BufferElementType(WebGL.RenderingContext.UNSIGNED_BYTE, 'UNSIGNED_BYTE');
+  static const BufferElementType UNSIGNED_SHORT = const BufferElementType(WebGL.RenderingContext.UNSIGNED_SHORT, 'UNSIGNED_SHORT');
 }
 
 class ReadPixelDataFormat extends WebGLEnum{
@@ -490,11 +488,16 @@ class ProgramParameterGlEnum extends WebGLEnum{
   static const ProgramParameterGlEnum ACTIVE_UNIFORMS = const ProgramParameterGlEnum(WebGL.RenderingContext.ACTIVE_UNIFORMS, 'ACTIVE_UNIFORMS');
 }
 
-class ProgramInfo{
-  List<WebGLActiveInfo> attributes = new List();
-  List<WebGLActiveInfo> uniforms = new List();
-  int attributeCount = 0;
-  int uniformCount = 0;
+class VertexAttribArrayType extends WebGLEnum{
+
+  const VertexAttribArrayType(int index, String name):super(index, name);
+  static WebGLEnum getByIndex(int index) => WebGLEnum._findTypeByIndex(VertexAttribArrayType, index);
+
+  static const VertexAttribArrayType BYTE = const VertexAttribArrayType(WebGL.RenderingContext.BYTE, 'BYTE');
+  static const VertexAttribArrayType UNSIGNED_BYTE = const VertexAttribArrayType(WebGL.RenderingContext.UNSIGNED_BYTE, 'UNSIGNED_BYTE');
+  static const VertexAttribArrayType SHORT = const VertexAttribArrayType(WebGL.RenderingContext.SHORT, 'SHORT');
+  static const VertexAttribArrayType UNSIGNED_SHORT = const VertexAttribArrayType(WebGL.RenderingContext.UNSIGNED_SHORT, 'UNSIGNED_SHORT');
+  static const VertexAttribArrayType FLOAT = const VertexAttribArrayType(WebGL.RenderingContext.FLOAT, 'FLOAT');
 }
 
 

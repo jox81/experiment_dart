@@ -1,4 +1,4 @@
-import 'package:webgl/src/webgl_objects/webgl_dictionnary.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_dictionnary.dart';
 
 class ContextAttributs{
 

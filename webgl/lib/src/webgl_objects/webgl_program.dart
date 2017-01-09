@@ -1,13 +1,23 @@
 import 'dart:html';
+import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
-import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
-import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
+
+class ProgramInfo{
+  List<WebGLActiveInfo> attributes = new List();
+  List<WebGLActiveInfo> uniforms = new List();
+  int attributeCount = 0;
+  int uniformCount = 0;
+}
 
 class WebGLProgram extends WebGLObject{
 
@@ -34,32 +44,11 @@ class WebGLProgram extends WebGLObject{
   void use(){
     gl.ctx.useProgram(webGLProgram);
   }
+
   ////
 
-
   bool get isProgram => gl.ctx.isProgram(webGLProgram);
-
-  WebGLActiveInfo getActiveAttrib(int activeAttributIndex){
-    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveAttrib(webGLProgram, activeAttributIndex));
-  }
-
-  WebGLActiveInfo getActiveUniform(int activeUniformIndex){
-    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex));
-  }
-
-  WebGLAttributLocation getAttribLocation(String variableName){
-    return new WebGLAttributLocation(gl.ctx.getAttribLocation(webGLProgram, variableName));
-  }
-
-  WebGLUniformLocation getUniformLocation(String variableName){
-    return new WebGLUniformLocation(gl.ctx.getUniformLocation(webGLProgram,variableName));
-  }
-
-  //Todo return multitype...
-  dynamic getUniform(WebGL.UniformLocation location){
-    return gl.ctx.getUniform(webGLProgram, location);
-  }
-
+  String get infoLog => gl.ctx.getProgramInfoLog(webGLProgram);
 
   void link(){
     gl.ctx.linkProgram(webGLProgram);
@@ -79,12 +68,45 @@ class WebGLProgram extends WebGLObject{
     }
   }
 
+  //Attributs
+
+  ///Returns a new WebGLActiveInfo object describing the size, type and name of
+  ///the vertex attribute at the passed index of the passed program object.
+  WebGLActiveInfo getActiveAttribInfo(int activeAttributIndex){
+    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveAttrib(webGLProgram, activeAttributIndex));
+  }
+
+  ///Return a new WebGLUniformLocation that represents the location of a
+  ///specific vertex attribut variable within a program object.
+  WebGLAttributLocation getAttribLocation(String variableName){
+    return new WebGLAttributLocation(gl.ctx.getAttribLocation(webGLProgram, variableName));
+  }
+
+  ///associate a generic vertex attribute index with a named attribute variable
+  //??
   void bindAttribLocation(WebGLAttributLocation attributLocation, String variableName){
     gl.ctx.bindAttribLocation(webGLProgram, attributLocation.location, variableName);
   }
 
+  //Uniforms
 
-  String get infoLog => gl.ctx.getProgramInfoLog(webGLProgram);
+  ///Returns a new WebGLActiveInfo object describing the size, type and name of
+  ///the uniform at the passed index of the passed program object
+  WebGLActiveInfo getActiveUniform(int activeUniformIndex){
+    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex));
+  }
+
+  ///Return a new WebGLUniformLocation that represents the location of a
+  ///specific uniform variable within a program object.
+  WebGLUniformLocation getUniformLocation(String variableName){
+    return new WebGLUniformLocation(gl.ctx.getUniformLocation(webGLProgram,variableName));
+  }
+
+  ///Return the uniform value at the passed location in the passed program.
+  ///The type returned is dependent on the uniform type
+  dynamic getUniformValue(WebGLUniformLocation location){
+    return gl.ctx.getUniform(webGLProgram, location.webGLUniformLocation);
+  }
 
   //Custom
   ProgramInfo getProgramInfo(){
@@ -92,7 +114,7 @@ class WebGLProgram extends WebGLObject{
 
     // Loop through active attributes
     for (var i = 0; i < activeAttributsCount; i++) {
-      WebGLActiveInfo attribute = getActiveAttrib(i);
+      WebGLActiveInfo attribute = getActiveAttribInfo(i);
       result.attributes.add(attribute);
       result.attributeCount += attribute.size;//??
     }
@@ -135,14 +157,25 @@ class WebGLProgram extends WebGLObject{
       print('deleteStatus : ${deleteStatus}');
       print('attachedShadersCount : ${attachedShadersCount}');
 
+      print('##################################################################');
       print('activeAttributsCount : ${activeAttributsCount}');
       for (var i = 0; i < activeAttributsCount; i++) {
-        print('-$i- ${getActiveAttrib(i)}');
+        print('-$i-');
+        WebGLActiveInfo attribute = getActiveAttribInfo(i);
+        print('${attribute}');
+        WebGLAttributLocation attribLocation = getAttribLocation(attribute.name);
+        attribLocation.logVertexAttributInfos();
       }
 
+      print('##################################################################');
       print('activeUnifromsCount : ${activeUnifromsCount}');
       for (var i = 0; i < activeUnifromsCount; i++) {
-        print('-$i- ${getActiveUniform(i)}');
+        print('-$i-');
+        WebGLActiveInfo activeInfo = getActiveUniform(i);
+        print('${activeInfo}');
+        WebGLUniformLocation uniformLocation = getUniformLocation(activeInfo.name);
+//        print('getUniformLocation : ${uniformLocation}'); //Inutile car il n'y a aucune infos associées
+        print('getUniformValue : ${getUniformValue(uniformLocation)}');
       }
 
     });

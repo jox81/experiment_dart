@@ -1,7 +1,6 @@
 import 'dart:web_gl' as WebGL;
 
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 ///The WebGLActiveInfo represents the information returned from the getActiveAttrib and getActiveUniform calls in a WebGlProgram.
 class WebGLActiveInfo{
@@ -21,6 +20,6 @@ class WebGLActiveInfo{
 
   @override
   String toString(){
-    return 'name : $name, type : $type, size : $size ';
+    return 'name : $name, \ntype : $type, \nsize : $size ';
   }
 }

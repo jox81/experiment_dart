@@ -4,10 +4,10 @@ import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader_precision_format.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_shader_precision_format.dart';
 
 class WebGLShader extends WebGLObject{
 
@@ -47,22 +47,18 @@ class WebGLShader extends WebGLObject{
     }
   }
 
-
-
-  //Why no webGLShader ref ? >>>
+  //Why no webGLShader ref ? should be in program or in renderingcontext ?>>>
 
   WebGLShaderPrecisionFormat getShaderPrecisionFormat(ShaderType shaderType, PrecisionType precisionType){
     return new WebGLShaderPrecisionFormat.fromWebGL(gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index));
   }
 
-  //Todo return multiType...
-  dynamic getVertexAttrib(int vertexAttributePosition, VertexAttribGlEnum vertexAttribGlEnum){
-    return gl.ctx.getVertexAttrib(vertexAttributePosition,vertexAttribGlEnum.index);
-  }
+
 
   //placer dans attribut_location ?
-  int getVertexAttribOffset(int vertexAttributePosition){
-    return gl.ctx.getVertexAttribOffset(vertexAttributePosition, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
+  ///returns the address of a specified vertex attribute.
+  int getVertexAttribOffset(int vertexAttributeIndex){
+    return gl.ctx.getVertexAttribOffset(vertexAttributeIndex, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
   }
 
   // >>> Parameteres
@@ -90,20 +86,6 @@ class WebGLShader extends WebGLObject{
       print('deleteStatus : ${deleteStatus}');
       print('infoLog : ${infoLog}');
       print('source : \n\n${source}');
-      print(
-          'VERTEX_ATTRIB_ARRAY_BUFFER_BINDING : ${getVertexAttrib(0, VertexAttribGlEnum.CURRENT_VERTEX_ATTRIB)}');
-      print(
-          'VERTEX_ATTRIB_ARRAY_ENABLED : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_ENABLED)}');
-      print(
-          'VERTEX_ATTRIB_ARRAY_SIZE : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_SIZE)}');
-      print(
-          'VERTEX_ATTRIB_ARRAY_STRIDE : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_STRIDE)}');
-      print(
-          'VERTEX_ATTRIB_ARRAY_TYPE : ${ShaderVariableType.getByIndex(getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE))}');
-      print(
-          'VERTEX_ATTRIB_ARRAY_NORMALIZED : ${getVertexAttrib(0, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_NORMALIZED)}');
-      print(
-          'CURRENT_VERTEX_ATTRIB : ${getVertexAttrib(0, VertexAttribGlEnum.CURRENT_VERTEX_ATTRIB)}');
     });
   }
 }

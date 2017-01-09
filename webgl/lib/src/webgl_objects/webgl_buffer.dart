@@ -1,9 +1,8 @@
-import 'dart:html';
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 
 class WebGLBuffer extends WebGLObject{
@@ -26,9 +25,8 @@ class WebGLBuffer extends WebGLObject{
 
   ////
 
-
-
   bool get isBuffer => gl.ctx.isBuffer(webGLBuffer);
+
 
   // >>> Parameteres
 
@@ -57,11 +55,13 @@ class WebGLBuffer extends WebGLObject{
     Utils.log("Buffer Infos", () {
       print('isBuffer : ${isBuffer}');
 
-      print('###  ARRAY_BUFFER  ###############################################');
+      print('..................................................................');
+      print('###  ARRAY_BUFFER');
       print('arrayBufferSize : ${arrayBufferSize}');
       print('arrayBufferUsage : ${arrayBufferUsage}');
 
-      print('###  ELEMENT_ARRAY_BUFFER  #######################################');
+      print('..................................................................');
+      print('###  ELEMENT_ARRAY_BUFFER');
       print('elementArrayBufferSize : ${elementArrayBufferSize}');
       print('elementArrayBufferUsage : ${elementArrayBufferUsage}');
     });

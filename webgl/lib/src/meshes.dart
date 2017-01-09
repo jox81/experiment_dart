@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 
 import 'dart:math';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class Mesh {
 

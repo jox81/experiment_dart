@@ -6,13 +6,13 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
-import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 
 void main() {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
@@ -90,7 +90,7 @@ class Webgl01 {
 
     vertexPositionAttribute =
         shaderProgram.getAttribLocation("aVertexPosition");
-    vertexPositionAttribute.enableVertexAttribArray();
+    vertexPositionAttribute.enabled = true;
 
     pMatrixUniform = shaderProgram.getUniformLocation("uPMatrix");
     mvMatrixUniform = shaderProgram.getUniformLocation("uMVMatrix");
@@ -144,8 +144,8 @@ class Webgl01 {
   /// Rendering part
   ///
   void _setMatrixUniforms() {
-    pMatrixUniform.uniformMatrix4fv(false, Context.mainCamera.perspectiveMatrix.storage);
-    mvMatrixUniform.uniformMatrix4fv(false, Context.mvMatrix.storage);
+    pMatrixUniform.uniformMatrix4fv(Context.mainCamera.perspectiveMatrix, false);
+    mvMatrixUniform.uniformMatrix4fv(Context.mvMatrix, false);
   }
 
   void render({num time : 0.0}) {
@@ -162,7 +162,7 @@ class Webgl01 {
     _setMatrixUniforms();
 
     gl.drawElements(
-        DrawMode.TRIANGLES, models[0].mesh.indices.length, ElementType.UNSIGNED_SHORT, 0);
+        DrawMode.TRIANGLES, models[0].mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
 
     window.requestAnimationFrame((num time) {
       this.render(time: time);

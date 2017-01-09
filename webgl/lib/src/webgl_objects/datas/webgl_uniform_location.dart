@@ -1,9 +1,16 @@
 import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
 
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 
-///The WebGLUniformLocation interface represents the location of a uniform variable in a shader program.
+///The WebGLUniformLocation represents the location of a uniform
+///variable in a shader program.
+///
+///The WebGL.UniformLocation object does not define any methods or properties of
+///its own and its content is not directly accessible.
+///
+///Mistake : Before a value can be set, the program must be used()
 class WebGLUniformLocation{
   WebGL.UniformLocation webGLUniformLocation;
   WebGLUniformLocation(this.webGLUniformLocation);
@@ -74,15 +81,15 @@ class WebGLUniformLocation{
   }
   
   //matrix float
-  void uniformMatrix2fv(bool transpose, Float32List array) {
-    gl.ctx.uniformMatrix3fv(webGLUniformLocation, transpose, array);
+  void uniformMatrix2fv(Matrix2 matrix, bool transpose) {
+    gl.ctx.uniformMatrix3fv(webGLUniformLocation, transpose, matrix.storage);
   }
 
-  void uniformMatrix3fv(bool transpose, Float32List array) {
-    gl.ctx.uniformMatrix3fv(webGLUniformLocation, transpose, array);
+  void uniformMatrix3fv(Matrix3 matrix, bool transpose) {
+    gl.ctx.uniformMatrix3fv(webGLUniformLocation, transpose, matrix.storage);
   }
 
-  void uniformMatrix4fv(bool transpose, Float32List array) {
-    gl.ctx.uniformMatrix4fv(webGLUniformLocation, transpose, array);
+  void uniformMatrix4fv(Matrix4 matrix, bool transpose) {
+    gl.ctx.uniformMatrix4fv(webGLUniformLocation, transpose, matrix.storage);
   }
 }

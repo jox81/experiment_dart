@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:html';
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
@@ -37,7 +40,21 @@ class WebglTest {
       ..attachShader(vertexShader)
       ..attachShader(fragmentShader)
       ..link()
-      ..validate();
+      ..validate()
+      ..use();
+
+    //Pour setter une valeur à un attribut :
+    //
+    WebGLActiveInfo attribute = program.getActiveAttribInfo(0);
+    WebGLAttributLocation attribLocation = program.getAttribLocation(attribute.name);
+    attribLocation.enabled = true;
+    attribLocation.vertexAttrib3fv(new Vector3.all(0.5));
+
+    //Pour setter une valeur à un uniform :
+    //
+    WebGLActiveInfo activeInfo = program.getActiveUniform(1);
+    WebGLUniformLocation uniformLocation = program.getUniformLocation(activeInfo.name);
+    uniformLocation.uniformMatrix4fv(new Matrix4.identity(), false);
 
     program.logProgramInfos();
 

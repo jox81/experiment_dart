@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 Future main() async {
@@ -24,6 +24,8 @@ class WebglTest {
 
   void setup() {
     TriangleModel triangleModel = new TriangleModel();
+    print('triangleModel.mesh.vertices.length : ${triangleModel.mesh.vertices.length}');
+    print('triangleModel.mesh.indices.length : ${triangleModel.mesh.indices.length}');
 
     WebGLBuffer vertexBuffer = new WebGLBuffer();
     vertexBuffer.bind(BufferType.ARRAY_BUFFER);

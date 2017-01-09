@@ -1,17 +1,17 @@
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/webgl_objects/webgl_active_info.dart';
-import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
 import 'dart:typed_data';
-import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 
 abstract class Material extends IEditElement {
   static bool debugging = false;
@@ -103,7 +103,7 @@ abstract class Material extends IEditElement {
     setShaderSettings(model.mesh);
 
     if (model.mesh.indices.length > 0) {
-      gl.drawElements(model.mesh.mode, model.mesh.indices.length, ElementType.UNSIGNED_SHORT, 0);
+      gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
@@ -130,7 +130,7 @@ abstract class Material extends IEditElement {
 
     if (arrayBuffer!= null && dimension != null) {
       gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
-      attributes[attributName].enableVertexAttribArray();
+      attributes[attributName].enabled = true;
       gl.bufferData(
           BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
       attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
@@ -193,10 +193,10 @@ abstract class Material extends IEditElement {
           uniformLocations[uniformName].uniform1f(data);
           break;
         case ShaderVariableType.FLOAT_MAT3:
-          uniformLocations[uniformName].uniformMatrix3fv(false, data);
+          uniformLocations[uniformName].uniformMatrix3fv(data, false);
           break;
         case ShaderVariableType.FLOAT_MAT4:
-          uniformLocations[uniformName].uniformMatrix4fv(false, data);
+          uniformLocations[uniformName].uniformMatrix4fv(data, false);
           break;
         default:
           print(
@@ -208,7 +208,7 @@ abstract class Material extends IEditElement {
 
   disableVertexAttributs() {
     for (String name in attributsNames) {
-      attributes[name].disableVertexAttribArray();
+      attributes[name].enabled = false;
     }
   }
 

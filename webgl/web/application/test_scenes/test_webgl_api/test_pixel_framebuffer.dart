@@ -3,16 +3,16 @@ import 'dart:typed_data';
 import 'dart:js' as js;
 
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/webgl_objects/webgl_attribut_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'package:webgl/src/webgl_objects/webgl_uniform_location.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 
 final String vertexShaderSource = """
 attribute vec3 a_Position;
@@ -89,7 +89,7 @@ void render(WebGLRenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniform
   a_Position.vertexAttribPointer(vertexPositionBufferItemSize, ShaderVariableType.FLOAT, false, 0, 0);
 
   vertexIndexBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
-  gl.drawElements(DrawMode.TRIANGLES, indices.length, ElementType.UNSIGNED_SHORT, 0);
+  gl.drawElements(DrawMode.TRIANGLES, indices.length, BufferElementType.UNSIGNED_SHORT, 0);
 }
 
 void readColor(String label, WebGLRenderingContext gl, int x, int y, WebGLFrameBuffer framebuffer) {
@@ -145,7 +145,7 @@ void main() {
   WebGLUniformLocation u_Color = program.getUniformLocation("u_Color");
 
   program.use();
-  a_Position.enableVertexAttribArray();
+  a_Position.enabled = true;
   
   gl.clearColor = new Vector4(0.5, 0.5, 0.5, 1.0);       // clear color
   gl.enable(EnableCapabilityType.DEPTH_TEST);  // enable depth testing

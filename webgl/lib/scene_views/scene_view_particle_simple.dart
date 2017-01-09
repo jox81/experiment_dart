@@ -6,7 +6,7 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class SceneViewParticleSimple extends Scene{
 

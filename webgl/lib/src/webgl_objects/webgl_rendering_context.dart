@@ -8,7 +8,7 @@ import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
@@ -475,7 +475,7 @@ class WebGLRenderingContext {
     ctx.drawArrays(mode.index, firstVertexIndex, vertexCount);
   }
 
-  void drawElements(DrawMode mode, int count, ElementType type, int offset) {
+  void drawElements(DrawMode mode, int count, BufferElementType type, int offset) {
     ctx.drawElements(mode.index, count, type.index, offset);
   }
 
