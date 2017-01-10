@@ -181,7 +181,9 @@ class TextureUtils {
     framebuffer.unBind();
 
     //reset camera
-    Context.mainCamera = baseCam;
+    if(baseCam != null) {
+      Context.mainCamera = baseCam;
+    }
     return colorTexture;
   }
 

@@ -136,7 +136,14 @@ class WebGLRenderingContext {
   // > RENDERBUFFER_BINDING
   WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebGL(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
   // > TEXTURE_BINDING_2D
-  WebGLTexture get textureBinding2D => new WebGLTexture.fromWebGL(ctx.getParameter(ContextParameter.TEXTURE_BINDING_2D.index));
+  WebGLTexture get textureBinding2D {
+    WebGLTexture textureBound;
+    WebGL.Texture webGLTexture = ctx.getParameter(ContextParameter.TEXTURE_BINDING_2D.index);
+    if(webGLTexture != null){
+      textureBound  = new WebGLTexture.fromWebGL(webGLTexture);
+    }
+    return textureBound;
+  }
   // > TEXTURE_BINDING_CUBE_MAP
   WebGLTexture get textureBindingCubeMap => new WebGLTexture.fromWebGL(ctx.getParameter(ContextParameter.TEXTURE_BINDING_CUBE_MAP.index));
 

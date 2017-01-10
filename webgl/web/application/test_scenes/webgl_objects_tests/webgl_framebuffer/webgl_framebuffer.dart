@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -29,6 +30,7 @@ class WebglTest {
   void setup() {
 //    createFrameBuffer01();
     createFrameBuffer02();
+    createFrameBuffer03();
   }
 
   void createFrameBuffer01() {
@@ -74,6 +76,31 @@ class WebglTest {
 
     // 4. Clean up
     texture.unBind(TextureTarget.TEXTURE_2D);
+    renderbuffer.unBind();
+    framebuffer.unBind();
+  }
+  void createFrameBuffer03() {
+    int width = 64;
+    int height = 64;
+
+    // 1. Init Texture
+    WebGLTexture textureEmpty = TextureUtils.createRenderedTexture();
+
+    // 2. Init Render Buffer
+    WebGLRenderBuffer renderbuffer = new WebGLRenderBuffer();
+    renderbuffer.bind();
+    renderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, RenderBufferInternalFormatType.DEPTH_COMPONENT16, width, height);
+
+    // 3. Init Frame Buffer
+    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+    framebuffer.bind();
+    textureEmpty.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
+    renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
+
+    framebuffer.logFrameBufferInfos();
+
+    // 4. Clean up
+    textureEmpty.unBind(TextureTarget.TEXTURE_2D);
     renderbuffer.unBind();
     framebuffer.unBind();
   }

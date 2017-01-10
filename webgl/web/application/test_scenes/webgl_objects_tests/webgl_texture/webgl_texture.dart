@@ -23,12 +23,30 @@ class WebglTest {
 
   Future setup() async {
 
-    WebGLTexture texture = await TextureUtils.getTextureFromFile("/application/images/crate.gif");
+//    await test01();
+    await test02();
+  }
+
+  Future test01() async {
+      WebGLTexture texture = await TextureUtils.getTextureFromFile("/application/images/crate.gif");
     texture.bind(TextureTarget.TEXTURE_2D);
 
-//    gl.activeTexture = TextureUnit.TEXTURE0;
+    //    gl.activeTexture = TextureUnit.TEXTURE0;
 
     texture.logTextureInfos();
+  }
+
+  Future test02() async {
+    WebGLTexture texture = TextureUtils.createColorTexture(256);
+
+    assert(gl.textureBinding2D == null);
+
+    texture.bind(TextureTarget.TEXTURE_2D);
+    assert(gl.textureBinding2D != null);
+
+    texture.unBind(TextureTarget.TEXTURE_2D);
+    assert(gl.textureBinding2D == null);
+
   }
 
 }
