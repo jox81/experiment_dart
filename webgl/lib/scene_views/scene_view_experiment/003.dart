@@ -2,10 +2,8 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/texture_utils.dart';
 import 'dart:async';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future<Model> experiment() async {
@@ -52,7 +50,7 @@ Future<Model> experiment() async {
     };
   materialCustom.setShaderUniformsVariables = (Mesh mesh) {
       materialCustom.setShaderUniformWithName("time", shaderTime);
-      gl.activeTexture = TextureUnit.TEXTURE0;
+      gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
       gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
       materialCustom.setShaderUniformWithName("sTexture", 0);
     };

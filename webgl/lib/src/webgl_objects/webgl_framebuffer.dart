@@ -4,6 +4,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class WebGLFrameBuffer extends WebGLObject{
 
@@ -69,6 +70,11 @@ class WebGLFrameBuffer extends WebGLObject{
   int get frameBufferAttachmentTextureLevelForStencil => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
   // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
   TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForStencil => TextureAttachmentTarget.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+
+
+  void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, TextureAttachmentTarget attachementTarget, WebGLTexture webGLTexture, int mipMapLevel){
+    gl.ctx.framebufferTexture2D(target.index, attachment.index, attachementTarget.index, webGLTexture.webGLTexture, mipMapLevel);
+  }
 
   void logFrameBufferInfos() {
     Utils.log("FrameBuffer Infos", () {

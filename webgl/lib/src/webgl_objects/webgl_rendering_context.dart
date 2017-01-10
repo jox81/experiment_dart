@@ -7,6 +7,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -63,6 +64,8 @@ class WebGLRenderingContext {
   //
   bool get isContextLost => ctx.isContextLost();
 
+  ActiveTexture get activeTexture => ActiveTexture.instance;
+
   // >>> Parameteres
   dynamic getParameter(ContextParameter parameter){
     dynamic result =  ctx.getParameter(parameter.index);
@@ -85,9 +88,6 @@ class WebGLRenderingContext {
     ctx.viewport(rect.left, rect.top, rect.width, rect.height);
   }
 
-  // > ACTIVE_TEXTURE
-  TextureUnit get activeTexture => TextureUnit.getByIndex(ctx.getParameter(ContextParameter.ACTIVE_TEXTURE.index));
-  set activeTexture(TextureUnit textureUnit) => ctx.activeTexture(textureUnit.index);
 
   // > ALIASED_LINE_WIDTH_RANGE [2]
   Float32List get aliasedLineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
@@ -135,26 +135,7 @@ class WebGLRenderingContext {
   WebGLFrameBuffer get frameBufferBinding => new WebGLFrameBuffer.fromWebGL(ctx.getParameter(ContextParameter.FRAMEBUFFER_BINDING.index));
   // > RENDERBUFFER_BINDING
   WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebGL(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
-  // > TEXTURE_BINDING_2D
-  WebGLTexture get textureBinding2D {
-    WebGLTexture textureBound;
-    WebGL.Texture webGLTexture = ctx.getParameter(ContextParameter.TEXTURE_BINDING_2D.index);
-    if(webGLTexture != null){
-      textureBound  = new WebGLTexture.fromWebGL(webGLTexture);
-    }
-    return textureBound;
-  }
-  // > TEXTURE_BINDING_CUBE_MAP
-  WebGLTexture get textureBindingCubeMap => new WebGLTexture.fromWebGL(ctx.getParameter(ContextParameter.TEXTURE_BINDING_CUBE_MAP.index));
 
-  // > MAX_TEXTURE_IMAGE_UNITS
-  int get maxTextureImageUnits => ctx.getParameter(ContextParameter.MAX_TEXTURE_IMAGE_UNITS.index);
-  // > MAX_COMBINED_TEXTURE_IMAGE_UNITS
-  int get maxCombinedTextureImageUnits => ctx.getParameter(ContextParameter.MAX_COMBINED_TEXTURE_IMAGE_UNITS.index);
-  // > MAX_CUBE_MAP_TEXTURE_SIZE
-  int get maxCubeMapTextureSize => ctx.getParameter(ContextParameter.MAX_CUBE_MAP_TEXTURE_SIZE.index);
-  // > MAX_TEXTURE_SIZE
-  int get maxTextureSize => ctx.getParameter(ContextParameter.MAX_TEXTURE_SIZE.index);
   // > MAX_VERTEX_TEXTURE_IMAGE_UNITS
   int get maxVertexTextureImageUnits => ctx.getParameter(ContextParameter.MAX_VERTEX_TEXTURE_IMAGE_UNITS.index);
   // > MAX_VERTEX_ATTRIBS
@@ -527,11 +508,6 @@ class WebGLRenderingContext {
     assert(height >= 0);
     ctx.copyTexSubImage2D(target.index, mipMapLevel, xOffset, yOffset, x, y, width, height);
   }
-  // > GENERATE_MIPMAP_HINT
-  HintMode get generateMipMapHint => HintMode.getByIndex(ctx.getParameter(ContextParameter.GENERATE_MIPMAP_HINT.index));
-  void hint(HintMode mode){
-    ctx.hint(ContextParameter.GENERATE_MIPMAP_HINT.index, mode.index);
-  }
 
   void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
@@ -581,10 +557,6 @@ class WebGLRenderingContext {
       print('colorClear : ${colorClear}');
       print('colorMask : ${colorMask}');
       print('compressTextureFormats : ${compressTextureFormats}');
-      print('maxTextureImageUnits : ${maxTextureImageUnits}');
-      print('maxCombinedTextureImageUnits : ${maxCombinedTextureImageUnits}');
-      print('maxCubeMapTextureSize : ${maxCubeMapTextureSize}');
-      print('maxTextureSize : ${maxTextureSize}');
       print('maxVertexTextureImageUnits : ${maxVertexTextureImageUnits}');
       print('maxVertexAttributs : ${maxVertexAttributs}');
       print('maxVertexUnifromVectors : ${maxVertexUnifromVectors}');
@@ -599,7 +571,6 @@ class WebGLRenderingContext {
       print('unpackFlipYWebGL : ${unpackFlipYWebGL}');
       print('unpackPreMultiplyAlphaWebGL : ${unpackPreMultiplyAlphaWebGL}');
       print('lineWidth : ${lineWidth}');
-      print('generateMipMapHint : ${generateMipMapHint}');
 
       print('###  CullFace  ####################################################');
       print('cullFace : ${cullFace}');
@@ -661,7 +632,7 @@ class WebGLRenderingContext {
       print('dither : ${dither}');
 
       print('###  Texture  ####################################################');
-      print('generateMipMapHint : ${generateMipMapHint}');
+      print('-- Todo show globals');
 
       print('###  Extensions  #################################################');
       print('###  supportedExtensions  ########################################');
@@ -687,11 +658,7 @@ class WebGLRenderingContext {
       print('renderBufferBinding : ${renderBufferBinding}');
       renderBufferBinding.logRenderBufferInfos();
       print('...................................................................');
-      print('textureBinding2D : ${textureBinding2D}');
-      textureBinding2D.logTextureInfos();
-      print('...................................................................');
-      print('textureBindingCubeMap : ${textureBindingCubeMap}');
-      textureBindingCubeMap.logTextureInfos();
+
       print('###################################################################');
       print('###################################################################');
 

@@ -49,7 +49,7 @@ void log(String msg) {
 WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int height) {
   // 1. Init Picking Texture
   WebGLTexture texture = new WebGLTexture();
-  texture.bind(TextureTarget.TEXTURE_2D);
+  gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
   try {
     gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, width, height, 0, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, null);
   }
@@ -66,11 +66,11 @@ WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int hei
   // 3. Init Frame Buffer
   WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
   framebuffer.bind();
-  texture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
+  framebuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
   renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
 
   // 4. Clean up
-  texture.unBind(TextureTarget.TEXTURE_2D);
+  gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
   renderbuffer.unBind();
   framebuffer.unBind();
   

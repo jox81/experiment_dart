@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:typed_data';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/models.dart';
-import 'package:webgl/src/texture_utils.dart';
 import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
@@ -52,7 +48,7 @@ class WebglTest {
 
     // 1. Init Texture
     WebGLTexture texture = new WebGLTexture();
-    texture.bind(TextureTarget.TEXTURE_2D);
+    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
     try {
       gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, width, height, 0, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, null);
     }
@@ -69,13 +65,13 @@ class WebglTest {
     // 3. Init Frame Buffer
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
     framebuffer.bind();
-    texture.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
+    framebuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
     renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
 
     framebuffer.logFrameBufferInfos();
 
     // 4. Clean up
-    texture.unBind(TextureTarget.TEXTURE_2D);
+    gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
     renderbuffer.unBind();
     framebuffer.unBind();
   }
@@ -88,19 +84,21 @@ class WebglTest {
 
     // 2. Init Render Buffer
     WebGLRenderBuffer renderbuffer = new WebGLRenderBuffer();
+
     renderbuffer.bind();
     renderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, RenderBufferInternalFormatType.DEPTH_COMPONENT16, width, height);
 
     // 3. Init Frame Buffer
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+
     framebuffer.bind();
-    textureEmpty.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, 0);
+    framebuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, textureEmpty, 0);
     renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
 
     framebuffer.logFrameBufferInfos();
 
     // 4. Clean up
-    textureEmpty.unBind(TextureTarget.TEXTURE_2D);
+    gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
     renderbuffer.unBind();
     framebuffer.unBind();
   }
