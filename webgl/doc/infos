@@ -2,15 +2,23 @@
 88 parametres
 145 methodes
 
+
+bounds:
+getParameter : ARRAY_BUFFER_BINDING
+getParameter : ELEMENT_ARRAY_BUFFER_BINDING
+getParameter : FRAMEBUFFER_BINDING
+getParameter : RENDERBUFFER_BINDING
+getParameter : TEXTURE_BINDING_2D
+getParameter : TEXTURE_BINDING_CUBE_MAP
+getParameter : VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
+CURRENT_PROGRAM
+
 https://www.khronos.org/registry/webgl/specs/latest/1.0/
 
 // Suggestions /////////////////////
 
-- splitter les méthodes getParameter en multiParameters
-    + chaque objet webgl aussi
-- vérifier si c'est pas trop lourd de passer par tout ça ? pédagogique
-- reoragniser et refactoriser le code plus ergonomique
-- placer les enums dans un même fichier ?
+- reorganiser et refactoriser le code plus ergonomique
+
 - placer des méthodes static dans les object de réference : ie: placer bindFrameBuffer dans FrameBuffer plutot que dans context ?
 - ou placer certaine methode, en context ou en object specific ? bind dans le renderingcontext ou dans l'object ?
 - faut-il utiliser :
@@ -21,14 +29,17 @@ ou
 (1): appel direct, plus rapide sans autre appel de fonction
 (2): possibilité d'agir entre les deux
 
-- gerer les exetnsions
-- ajouter des enums , methods etc, ...
+- gerer les extensions
+    -> ajouter des enums , methods etc, ...
 
 - webglevents : https://developer.mozilla.org/en-US/docs/Web/API/WebGLContextEvent
 - créer des type webgl comme https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
     -> GLclampf [0.0 -> 1.0]
-
+- vérifier si c'est pas trop lourd de passer par tout ça ? pédagogique
 
 // Done /////////////////////
 v- finir de placer toutes les méthodes webgl dans les objects //google doc
 v- vérifier les constantes utilisées et indiquer leur provenance //google doc
+v- splitter les méthodes getParameter en multiParameters
+    + chaque objet webgl aussi
+v- placer les enums dans un même fichier ?

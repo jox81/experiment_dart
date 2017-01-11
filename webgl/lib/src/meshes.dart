@@ -93,7 +93,7 @@ class Mesh {
       _faces = [];
       int stepVertices = 3;
       for(int vertex = 0; vertex < vertices.length; vertex += stepVertices) {
-        fullVertices.add([vertices[vertex + 0], vertices[vertex + 1], vertices[vertex + 2]]);
+        fullVertices.add(new Float32List.fromList([vertices[vertex + 0], vertices[vertex + 1], vertices[vertex + 2]]));
       }
 
       int stepIndices = 3;
