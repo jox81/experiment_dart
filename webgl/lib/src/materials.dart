@@ -168,7 +168,7 @@ class MaterialBaseTexture extends Material {
     setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
   }
@@ -212,7 +212,7 @@ class MaterialBaseTextureNormal extends Material {
     setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
 

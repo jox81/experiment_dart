@@ -21,8 +21,8 @@ class WebglTest {
   }
 
   Future setup() async {
-//    await simpleBindTexture2D();
-//    await test02();
+//    await simpleBindTest();
+//    await bindUnbindTestNull();
 //    await test03();
 //    await wrongSwapTextureTarget();
 //    await textureToMultipleTextureUnits();
@@ -30,14 +30,16 @@ class WebglTest {
     await textureUnitSwitchTexture();
   }
 
-  Future simpleBindTexture2D() async {
+  Future simpleBindTest() async {
+    gl.activeTexture.logActiveTextureInfo();
+
     WebGLTexture texture = new WebGLTexture();
     gl.activeTexture
         ..bind(TextureTarget.TEXTURE_2D, texture)
         ..logActiveTextureInfo();
   }
 
-  Future test02() async {
+  Future bindUnbindTestNull() async {
     WebGLTexture texture = new WebGLTexture();
 
     assert(gl.activeTexture.boundTexture2D == null);
@@ -48,6 +50,7 @@ class WebglTest {
     gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
     assert(gl.activeTexture.boundTexture2D == null);
 
+    print('test ok');
   }
 
   Future test03() async {

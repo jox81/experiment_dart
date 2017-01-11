@@ -997,6 +997,7 @@ class TextureInternalFormatType extends WebGLEnum {
 }
 
 //Todo move in extension
+//From https://www.khronos.org/registry/webgl/extensions/WEBGL_depth_texture/
 class WEBGL_depth_texture_InternalFormatType extends TextureInternalFormatType {
   const WEBGL_depth_texture_InternalFormatType(int index, String name)
       : super(index, name);
@@ -1006,9 +1007,27 @@ class WEBGL_depth_texture_InternalFormatType extends TextureInternalFormatType {
   static const WEBGL_depth_texture_InternalFormatType DEPTH_COMPONENT =
       const WEBGL_depth_texture_InternalFormatType(
           WebGL.RenderingContext.DEPTH_COMPONENT, 'DEPTH_COMPONENT');
+
+  static const WEBGL_depth_texture_InternalFormatType UNSIGNED_INT_24_8_WEBGL =
+      const WEBGL_depth_texture_InternalFormatType(
+          WebGL.DepthTexture.UNSIGNED_INT_24_8_WEBGL, 'UNSIGNED_INT_24_8_WEBGL');
+
+
   static const WEBGL_depth_texture_InternalFormatType DEPTH_STENCIL =
       const WEBGL_depth_texture_InternalFormatType(
           WebGL.RenderingContext.DEPTH_STENCIL, 'DEPTH_STENCIL');
+}
+
+class OES_texture_float_InternalFormatType extends TextureInternalFormatType {
+  const OES_texture_float_InternalFormatType(int index, String name)
+      : super(index, name);
+  static WebGLEnum getByIndex(int index) =>
+      WebGLEnum._findTypeByIndex(OES_texture_float_InternalFormatType, index);
+
+  static const OES_texture_float_InternalFormatType HALF_FLOAT_OES =
+      const OES_texture_float_InternalFormatType(0x8D61, 'HALF_FLOAT_OES');
+  static const OES_texture_float_InternalFormatType FLOAT =
+      const OES_texture_float_InternalFormatType(0x1406, 'FLOAT');
 }
 
 class TexelDataType extends WebGLEnum {

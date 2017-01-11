@@ -51,7 +51,7 @@ WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int hei
   WebGLTexture texture = new WebGLTexture();
   gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
   try {
-    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, width, height, 0, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, null);
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, width, height, 0, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, null);
   }
   catch (e) {
     // https://code.google.com/p/dart/issues/detail?id=11498
@@ -65,20 +65,20 @@ WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int hei
   
   // 3. Init Frame Buffer
   WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
-  framebuffer.bind();
-  framebuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
-  renderbuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER );
+  gl.activeFrameBuffer.bind(framebuffer);
+  gl.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
+  gl.activeFrameBuffer.framebufferRenderbuffer(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER, renderbuffer);
 
   // 4. Clean up
   gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
   renderbuffer.unBind();
-  framebuffer.unBind();
+  gl.activeFrameBuffer.unBind();
   
   return framebuffer;
 }
 
 void render(WebGLRenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniformLocation u_Color, WebGLAttributLocation a_Position, WebGLBuffer vertexPositionBuffer, int vertexPositionBufferItemSize, WebGLBuffer vertexIndexBuffer, int indicesLength) {
-  framebuffer.bind();
+  gl.activeFrameBuffer.bind(framebuffer);
   gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
   
   Float32List red = new Float32List.fromList([1.0, 0.0, 0.0, 1.0]);
@@ -94,9 +94,9 @@ void render(WebGLRenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniform
 
 void readColor(String label, WebGLRenderingContext gl, int x, int y, WebGLFrameBuffer framebuffer) {
   Uint8List color = new Uint8List(4);
-  framebuffer.bind();
+  gl.activeFrameBuffer.bind(framebuffer);
 //  gl.readPixels(x, y, 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, color);
-  readPixelsDartium(gl,x, y);
+  readPixelsDartium(gl, x, y);
   log("$label: readPixels: x=$x y=$y color=$color");     
 }
 
@@ -168,7 +168,6 @@ void main() {
     readColor("offscreen", gl, x, y, offscreen); // read color from offscreen framebuffer
   }); 
 }
-
 
 var _jsReadPixels;
 get jsReadPixels {

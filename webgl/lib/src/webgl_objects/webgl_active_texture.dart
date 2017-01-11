@@ -1,8 +1,10 @@
+import 'dart:html';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/context.dart';
 import 'dart:web_gl' as WebGL;
+import 'dart:typed_data' as WebGlTypedData;
 
 class ActiveTexture{
 
@@ -116,6 +118,49 @@ class ActiveTexture{
   TextureWrapType get texture2DTextureWrapT => TextureWrapType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameter.TEXTURE_WRAP_T.index));
   TextureWrapType get textureCubeMapTextureWrapT => TextureWrapType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameter.TEXTURE_WRAP_T.index));
 
+
+  // >>> Filling Texture
+
+  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+    assert(width >= 0);
+    assert(height >= 0);
+    assert(internalFormat.index == internalFormat2.index);//in webgl1
+    gl.ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixels);
+  }
+
+  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, pixels) {
+    assert(internalFormat.index == internalFormat2.index);//in webgl1
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    gl.ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixels);
+  }
+
+  void texSubImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, int width, int height, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+    assert(width >= 0);
+    assert(height >= 0);
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    gl.ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, width, height, internalFormat.index, texelDataType.index, pixels);
+  }
+
+  void texSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    gl.ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, internalFormat.index, texelDataType.index, pixels);
+  }
+
+  void copyTexImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat,
+      int x, int y, int width, int height, pixels) {
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
+    assert(width >= 0);
+    assert(height >= 0);
+    gl.ctx.copyTexImage2D(target.index, mipMapLevel, internalFormat.index, x, y, width, height, pixels);
+  }
+
+  ///copies pixels from the current WebGLFramebuffer into an existing 2D texture sub-image.
+  void copyTexSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset,
+      int x, int y, int width, int height) {
+    assert(width >= 0);
+    assert(height >= 0);
+    gl.ctx.copyTexSubImage2D(target.index, mipMapLevel, xOffset, yOffset, x, y, width, height);
+  }
 
   // > Logging
 

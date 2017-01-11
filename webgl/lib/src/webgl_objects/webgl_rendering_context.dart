@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'dart:typed_data' as WebGlTypedData;
-import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
 
 import 'package:vector_math/vector_math.dart';
@@ -13,7 +12,6 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class WebGLRenderingContext {
 
@@ -65,6 +63,7 @@ class WebGLRenderingContext {
   bool get isContextLost => ctx.isContextLost();
 
   ActiveTexture get activeTexture => ActiveTexture.instance;
+  ActiveFrameBuffer get activeFrameBuffer => ActiveFrameBuffer.instance;
 
   // >>> Parameteres
   dynamic getParameter(ContextParameter parameter){
@@ -75,11 +74,11 @@ class WebGLRenderingContext {
   // >>> single getParameter
 
   // > MAX_VIEWPORT_DIMS
-  Int32List get maxViewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
+  WebGlTypedData.Int32List get maxViewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
 
   // > VIEWPORT
   Rectangle get viewport {
-    Int32List values = ctx.getParameter(ContextParameter.VIEWPORT.index);
+    WebGlTypedData.Int32List values = ctx.getParameter(ContextParameter.VIEWPORT.index);
     return new Rectangle(values[0], values[1], values[2], values[3]);
   }
   set viewport(Rectangle rect) {
@@ -90,10 +89,10 @@ class WebGLRenderingContext {
 
 
   // > ALIASED_LINE_WIDTH_RANGE [2]
-  Float32List get aliasedLineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
+  WebGlTypedData.Float32List get aliasedLineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
 
   // > ALIASED_POINT_SIZE_RANGE [2]
-  Float32List get aliasedPointSizeRange => ctx.getParameter(ContextParameter.ALIASED_POINT_SIZE_RANGE.index);
+  WebGlTypedData.Float32List get aliasedPointSizeRange => ctx.getParameter(ContextParameter.ALIASED_POINT_SIZE_RANGE.index);
 
   // > RED_BITS
   int get redBits => ctx.getParameter(ContextParameter.RED_BITS.index);
@@ -122,7 +121,7 @@ class WebGLRenderingContext {
   }
 
   // > COMPRESSED_TEXTURE_FORMATS [4]
-  Int32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
+  WebGlTypedData.Int32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
 
   // > CURRENT_PROGRAM
   WebGLProgram get currentProgram => new WebGLProgram.fromWebGL(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index));
@@ -131,8 +130,6 @@ class WebGLRenderingContext {
   WebGLBuffer get arrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ARRAY_BUFFER_BINDING.index));
   // > ELEMENT_ARRAY_BUFFER_BINDING
   WebGLBuffer get elementArrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ELEMENT_ARRAY_BUFFER_BINDING.index));
-  // > FRAMEBUFFER_BINDING
-  WebGLFrameBuffer get frameBufferBinding => new WebGLFrameBuffer.fromWebGL(ctx.getParameter(ContextParameter.FRAMEBUFFER_BINDING.index));
   // > RENDERBUFFER_BINDING
   WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebGL(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
 
@@ -217,7 +214,7 @@ class WebGLRenderingContext {
   set depthFunc(ComparisonFunction depthComparisionFunction) => ctx.depthFunc(depthComparisionFunction.index);
 
   // > DEPTH_RANGE [2]
-  Float32List getDepthRange() => ctx.getParameter(ContextParameter.DEPTH_RANGE.index);
+  WebGlTypedData.Float32List getDepthRange() => ctx.getParameter(ContextParameter.DEPTH_RANGE.index);
   void setDepthRange(num zNear, num zFar) => ctx.depthRange(zNear, zFar);
 
   // > DEPTH_CLEAR_VALUE
@@ -236,7 +233,7 @@ class WebGLRenderingContext {
 
   // > SCISSOR_BOX
   Rectangle get scissor {
-    Int32List values = ctx.getParameter(ContextParameter.SCISSOR_BOX.index);
+    WebGlTypedData.Int32List values = ctx.getParameter(ContextParameter.SCISSOR_BOX.index);
     return new Rectangle(values[0], values[1], values[2], values[3]);
   }
   set scissor(Rectangle rect) {
@@ -349,8 +346,8 @@ class WebGLRenderingContext {
     ctx.blendColor(red, green, blue, alpha);
   }
   // > BLEND_COLOR
-  Float32List get blendColor => ctx.getParameter(ContextParameter.BLEND_COLOR.index);
-  set blendColor(Float32List values){
+  WebGlTypedData.Float32List get blendColor => ctx.getParameter(ContextParameter.BLEND_COLOR.index);
+  set blendColor(WebGlTypedData.Float32List values){
     assert(values.length == 4);
     setBlendColor(values[0], values[1], values[2], values[3]);
   }
@@ -434,19 +431,9 @@ class WebGLRenderingContext {
     ctx.bufferSubData(bufferType.index, offset, data);
   }
 
-  //Textures
-  void bindTexture(TextureTarget target, WebGLTexture texture) {
-    ctx.bindTexture(target.index, texture?.webGLTexture);
-  }
-
   //RenderBuffer
   void bindRenderBuffer(RenderBufferTarget target, WebGLRenderBuffer renderBuffer) {
     ctx.bindRenderbuffer(target.index, renderBuffer?.webGLRenderBuffer);
-  }
-
-  //FrameBuffer
-  void bindFrameBuffer(FrameBufferTarget target, WebGLFrameBuffer webGLframeBuffer) {
-    ctx.bindFramebuffer(target.index, webGLframeBuffer.webGLFrameBuffer);
   }
 
   //Extensions
@@ -467,47 +454,7 @@ class WebGLRenderingContext {
     ctx.drawElements(mode.index, count, type.index, offset);
   }
 
-  //Texture
-  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
-    assert(width >= 0);
-    assert(height >= 0);
-    assert(internalFormat.index == internalFormat2.index);//in webgl1
-    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixels);
-  }
 
-  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, pixels) {
-    assert(internalFormat.index == internalFormat2.index);//in webgl1
-    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
-    ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixels);
-  }
-
-  void texSubImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, int width, int height, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
-    assert(width >= 0);
-    assert(height >= 0);
-    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
-    ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, width, height, internalFormat.index, texelDataType.index, pixels);
-  }
-
-  void texSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
-    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
-    ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, internalFormat.index, texelDataType.index, pixels);
-  }
-
-  void copyTexImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat,
-      int x, int y, int width, int height, pixels) {
-    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
-    assert(width >= 0);
-    assert(height >= 0);
-    ctx.copyTexImage2D(target.index, mipMapLevel, internalFormat.index, x, y, width, height, pixels);
-  }
-
-  ///copies pixels from the current WebGLFramebuffer into an existing 2D texture sub-image.
-  void copyTexSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset,
-      int x, int y, int width, int height) {
-    assert(width >= 0);
-    assert(height >= 0);
-    ctx.copyTexSubImage2D(target.index, mipMapLevel, xOffset, yOffset, x, y, width, height);
-  }
 
   void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
@@ -638,7 +585,6 @@ class WebGLRenderingContext {
       print('###  supportedExtensions  ########################################');
       supportedExtensions.forEach((ext) => print('$ext'));
 
-
       print('###  currentProgram  ##############################################');
       print('currentProgram :${currentProgram}');
       print('${currentProgram.logProgramInfos()}');
@@ -651,9 +597,6 @@ class WebGLRenderingContext {
       print('...................................................................');
       print('elementArrayBufferBinding : ${elementArrayBufferBinding}');
       elementArrayBufferBinding.logBufferInfos();
-      print('...................................................................');
-      print('frameBufferBinding : ${frameBufferBinding}');
-      frameBufferBinding.logFrameBufferInfos();
       print('...................................................................');
       print('renderBufferBinding : ${renderBufferBinding}');
       renderBufferBinding.logRenderBufferInfos();

@@ -26,11 +26,6 @@ class WebGLTexture extends WebGLObject{
 
   bool get isTexture => gl.ctx.isTexture(webGLTexture);
 
-  ////
-
-
-
-
   void logTextureInfos() {
     Utils.log("RenderingContext Infos", () {
 
@@ -75,7 +70,7 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_MAG_FILTER, TextureMagnificationFilterType.LINEAR);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.texImage2D(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, image);
+    gl.activeTexture.texImage2D(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, image);
 
     gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
     return texture;
@@ -91,10 +86,10 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
         TexelDataType.UNSIGNED_BYTE, null);
 
-    gl.bindTexture(TextureTarget.TEXTURE_2D, null);
+    gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
 
     return texture;
   }
@@ -109,10 +104,10 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_CUBE_MAP, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.MIRRORED_REPEAT);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_CUBE_MAP_POSITIVE_X, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_CUBE_MAP_POSITIVE_X, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
         TexelDataType.UNSIGNED_BYTE, null);
 
-    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, null);
+    gl.activeTexture.unBind(TextureTarget.TEXTURE_CUBE_MAP);
 
     return texture;
   }
@@ -120,15 +115,13 @@ class TextureUtils {
   static WebGLTexture createDepthTexture(int size) {
     WebGLTexture depthTexture = new WebGLTexture();
     TextureTarget target = TextureTarget.TEXTURE_2D;
-    gl.activeTexture.bind(target, depthTexture);
 
+    gl.activeTexture.bind(target, depthTexture);
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_MAG_FILTER, TextureMagnificationFilterType.NEAREST);
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_MIN_FILTER, TextureMinificationFilterType.NEAREST);
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-
-    gl.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, size, size, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, TexelDataType.UNSIGNED_BYTE, null);
-
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, size, size, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, TexelDataType.UNSIGNED_BYTE, null);
     gl.activeTexture.unBind(target);
 
     return depthTexture;
@@ -147,14 +140,14 @@ class TextureUtils {
   static WebGLFrameBuffer createFrameBuffer(WebGLTexture colorTexture, WebGLRenderBuffer depthRenderbuffer) {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
-    framebuffer.bind();
-    framebuffer.framebufferTexture2D(
+    gl.activeFrameBuffer.bind(framebuffer);
+    gl.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, colorTexture, 0);
-    depthRenderbuffer.framebufferRenderbuffer(
-        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER);
-    framebuffer.unBind();
+    gl.activeFrameBuffer.framebufferRenderbuffer(
+        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER, depthRenderbuffer);
+    gl.activeFrameBuffer.unBind();
 
-    if (framebuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
+    if (gl.activeFrameBuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
       print("createRenderBuffer : this combination of attachments does not work");
       return null;
     }
@@ -165,12 +158,12 @@ class TextureUtils {
   static WebGLFrameBuffer createFrameBufferWithDepthTexture(WebGLTexture colorTexture, WebGLTexture depthTexture) {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
-    framebuffer.bind();
-    framebuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, colorTexture, 0);
-    framebuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, TextureAttachmentTarget.TEXTURE_2D, depthTexture, 0);
-    framebuffer.unBind();
+    gl.activeFrameBuffer.bind(framebuffer);
+    gl.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, colorTexture, 0);
+    gl.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, TextureAttachmentTarget.TEXTURE_2D, depthTexture, 0);
+    gl.activeFrameBuffer.unBind();
 
-    if (framebuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
+    if (gl.activeFrameBuffer.checkStatus() != FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
       print("createRenderBuffer : this combination of attachments does not work");
       return null;
     }
@@ -190,7 +183,7 @@ class TextureUtils {
     WebGLFrameBuffer framebuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
 //    Framebuffer framebuffer = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 
-    framebuffer.bind();
+    gl.activeFrameBuffer.bind(framebuffer);
 
     // draw something in the buffer
     // ...
@@ -222,7 +215,7 @@ class TextureUtils {
 //    readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
 
     // Unbind the framebuffer
-    framebuffer.unBind();
+    gl.activeFrameBuffer.unBind();
 
     //reset camera
     if(baseCam != null) {

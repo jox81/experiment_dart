@@ -35,10 +35,6 @@ class WebGLRenderBuffer extends WebGLObject{
     gl.ctx.renderbufferStorage(renderbuffer.index, internalFormat.index, width, heigth);
   }
 
-  void framebufferRenderbuffer(FrameBufferTarget target, FrameBufferAttachment attachment, RenderBufferTarget renderBufferTarget){
-    gl.ctx.framebufferRenderbuffer(target.index, attachment.index, renderBufferTarget.index, webGLRenderBuffer);
-  }
-
   // >>> Parameteres
 
   dynamic getParameter(RenderBufferParameters parameter){

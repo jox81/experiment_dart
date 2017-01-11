@@ -44,16 +44,16 @@ Future<Model> experiment() async {
 
   MaterialCustom materialCustom = new MaterialCustom(vs, fs, buffersNames);
   materialCustom.setShaderAttributsVariables = (Mesh mesh) {
-      materialCustom.setShaderAttributWithName(
-          'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
-      materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  mesh.indices);
-    };
+    materialCustom.setShaderAttributWithName(
+        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
+    materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  mesh.indices);
+  };
   materialCustom.setShaderUniformsVariables = (Mesh mesh) {
-      materialCustom.setShaderUniformWithName("time", shaderTime);
-      gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-      gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
-      materialCustom.setShaderUniformWithName("sTexture", 0);
-    };
+    materialCustom.setShaderUniformWithName("time", shaderTime);
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
+    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    materialCustom.setShaderUniformWithName("sTexture", 0);
+  };
 
   Mesh mesh = new Mesh()
   ..mode = DrawMode.POINTS
