@@ -9,6 +9,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
@@ -70,7 +71,7 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_MAG_FILTER, TextureMagnificationFilterType.LINEAR);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.activeTexture.texImage2D(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, image);
+    gl.activeTexture.texImage2D(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormat.RGBA, TextureInternalFormat.RGBA, TexelDataType.UNSIGNED_BYTE, image);
 
     gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
     return texture;
@@ -86,7 +87,7 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormat.RGBA, size, size, 0, TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE, null);
 
     gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
@@ -104,7 +105,7 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_CUBE_MAP, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.MIRRORED_REPEAT);
 //    gl.generateMipmap(RenderingContext.TEXTURE_2D);
 
-    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_CUBE_MAP_POSITIVE_X, 0, TextureInternalFormatType.RGBA, size, size, 0, TextureInternalFormatType.RGBA,
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_CUBE_MAP_POSITIVE_X, 0, TextureInternalFormat.RGBA, size, size, 0, TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE, null);
 
     gl.activeTexture.unBind(TextureTarget.TEXTURE_CUBE_MAP);
@@ -113,6 +114,13 @@ class TextureUtils {
   }
 
   static WebGLTexture createDepthTexture(int size) {
+    //need extensions
+    var OES_texture_float = gl.getExtension('OES_texture_float');
+    assert(OES_texture_float != null);
+
+    var WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
+    assert(WEBGL_depth_texture != null);
+
     WebGLTexture depthTexture = new WebGLTexture();
     TextureTarget target = TextureTarget.TEXTURE_2D;
 
@@ -121,7 +129,7 @@ class TextureUtils {
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_MIN_FILTER, TextureMinificationFilterType.NEAREST);
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
     gl.activeTexture.setParameterInt(target, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, size, size, 0, WEBGL_depth_texture_InternalFormatType.DEPTH_COMPONENT, TexelDataType.UNSIGNED_BYTE, null);
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT, size, size, 0, WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT, WEBGL_depth_texture_TexelDataType.UNSIGNED_SHORT, null);
     gl.activeTexture.unBind(target);
 
     return depthTexture;
@@ -178,12 +186,14 @@ class TextureUtils {
     Camera baseCam = Context.mainCamera;
 
     WebGLTexture colorTexture = createColorTexture(size);
-    WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
-//    WebGLTexture depthTexture = createDepthTexture(size);
-    WebGLFrameBuffer framebuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
-//    Framebuffer framebuffer = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 
-    gl.activeFrameBuffer.bind(framebuffer);
+    WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
+    WebGLFrameBuffer framebufferWithDepthRenderBuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
+
+    WebGLTexture depthTexture = createDepthTexture(size);
+    WebGLFrameBuffer framebufferWithDepthTexture = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
+
+    gl.activeFrameBuffer.bind(framebufferWithDepthTexture);
 
     // draw something in the buffer
     // ...

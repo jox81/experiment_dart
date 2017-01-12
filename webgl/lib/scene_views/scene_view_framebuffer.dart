@@ -31,8 +31,6 @@ class SceneViewFrameBuffer extends Scene{
 
     //
     WebGLTexture textureEmpty = TextureUtils.createRenderedTexture();
-    WebGLTexture textureCrate =
-    await TextureUtils.getTextureFromFile("./images/crate.gif");
 
     MaterialBaseTextureNormal materialBaseTextureNormal =
     new MaterialBaseTextureNormal()
@@ -41,24 +39,17 @@ class SceneViewFrameBuffer extends Scene{
       ..texture = textureEmpty;
     materials.add(materialBaseTextureNormal);
 
-    MaterialBaseTextureNormal materialBaseTextureNormal2 =
-    new MaterialBaseTextureNormal()
-      ..ambientColor = ambientLight.color
-      ..directionalLight = directionalLight
-      ..texture = textureCrate;
-    materials.add(materialBaseTextureNormal2);
-
     //Model
     QuadModel quad = new QuadModel()
       ..name = 'Quad'
       ..position = new Vector3(0.0, 0.0, 0.0)
-      ..material = materialBaseTextureNormal2;
+      ..material = materialBaseTextureNormal;
     models.add(quad);
 
     CubeModel cube = new CubeModel()
       ..name = "cube"
       ..position = new Vector3(2.0, 0.0, 0.0)
-      ..material = materialBaseTextureNormal2;
+      ..material = materialBaseTextureNormal;
     models.add(cube);
 
   }

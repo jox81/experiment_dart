@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
@@ -27,8 +28,9 @@ class WebglTest {
 //    bindUnbindTestNull();
 //    createFrameBufferNoAttachment();
 //    createFrameBufferColorAttachment();
-//    createFrameBufferDepthAttachment();
-    createFrameBufferStencilAttachment();
+    createFrameBufferDepthTextureAttachment();
+//    createFrameBufferDepthBufferAttachment();
+//    createFrameBufferStencilAttachment();
 //    createFrameBuffer02();
 //    createFrameBuffer03();
   }
@@ -82,11 +84,11 @@ class WebglTest {
     gl.activeTexture.texImage2DWithWidthAndHeight(
         TextureAttachmentTarget.TEXTURE_2D,
         0,
-        TextureInternalFormatType.RGBA,
+        TextureInternalFormat.RGBA,
         64,
         64,
         0,
-        TextureInternalFormatType.RGBA,
+        TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE,
         null);
 
@@ -102,7 +104,40 @@ class WebglTest {
     gl.activeFrameBuffer.logActiveFrameBufferInfos();
   }
 
-  void createFrameBufferDepthAttachment() {
+  void createFrameBufferDepthTextureAttachment() {
+    //need extensions
+    var OES_texture_float = gl.getExtension('OES_texture_float');
+    assert(OES_texture_float != null);
+
+    var WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
+    assert(WEBGL_depth_texture != null);
+
+    //
+    WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
+    gl.activeFrameBuffer.bind(frameBuffer);
+
+    //The texture to bind must have a correct InternalFormatType
+    WebGLTexture texture = new WebGLTexture();
+    gl.activeTexture..bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texImage2DWithWidthAndHeight(
+        TextureAttachmentTarget.TEXTURE_2D,
+        0,
+        WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
+        64,
+        64,
+        0,
+        WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
+        WEBGL_depth_texture_TexelDataType.UNSIGNED_SHORT,
+        null);
+
+    gl.activeFrameBuffer.framebufferTexture2D(
+        FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
+
+    gl.activeTexture.logActiveTextureInfo();
+    gl.activeFrameBuffer.logActiveFrameBufferInfos();
+  }
+
+  void createFrameBufferDepthBufferAttachment() {
     gl.activeFrameBuffer.logActiveFrameBufferInfos();
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
@@ -146,11 +181,11 @@ class WebglTest {
       gl.activeTexture.texImage2DWithWidthAndHeight(
           TextureAttachmentTarget.TEXTURE_2D,
           0,
-          TextureInternalFormatType.RGBA,
+          TextureInternalFormat.RGBA,
           width,
           height,
           0,
-          TextureInternalFormatType.RGBA,
+          TextureInternalFormat.RGBA,
           TexelDataType.UNSIGNED_BYTE,
           null);
     } catch (e) {

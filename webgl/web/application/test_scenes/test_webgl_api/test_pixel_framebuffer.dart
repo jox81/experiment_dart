@@ -51,7 +51,7 @@ WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int hei
   WebGLTexture texture = new WebGLTexture();
   gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
   try {
-    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormatType.RGBA, width, height, 0, TextureInternalFormatType.RGBA, TexelDataType.UNSIGNED_BYTE, null);
+    gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormat.RGBA, width, height, 0, TextureInternalFormat.RGBA, TexelDataType.UNSIGNED_BYTE, null);
   }
   catch (e) {
     // https://code.google.com/p/dart/issues/detail?id=11498

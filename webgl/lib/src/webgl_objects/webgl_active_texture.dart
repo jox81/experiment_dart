@@ -121,32 +121,32 @@ class ActiveTexture{
 
   // >>> Filling Texture
 
-  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, int width, int height, int border, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+  void texImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormat internalFormat, int width, int height, int border, TextureInternalFormat internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
     assert(height >= 0);
     assert(internalFormat.index == internalFormat2.index);//in webgl1
     gl.ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixels);
   }
 
-  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat, TextureInternalFormatType internalFormat2, TexelDataType texelDataType, pixels) {
+  void texImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormat internalFormat, TextureInternalFormat internalFormat2, TexelDataType texelDataType, pixels) {
     assert(internalFormat.index == internalFormat2.index);//in webgl1
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
     gl.ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixels);
   }
 
-  void texSubImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, int width, int height, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+  void texSubImage2DWithWidthAndHeight(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, int width, int height, TextureInternalFormat internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
     assert(height >= 0);
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
     gl.ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, width, height, internalFormat.index, texelDataType.index, pixels);
   }
 
-  void texSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, TextureInternalFormatType internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+  void texSubImage2D(TextureAttachmentTarget target, int mipMapLevel, int xOffset, int yOffset, TextureInternalFormat internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
     gl.ctx.texSubImage2D(target.index, mipMapLevel, xOffset, yOffset, internalFormat.index, texelDataType.index, pixels);
   }
 
-  void copyTexImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormatType internalFormat,
+  void copyTexImage2D(TextureAttachmentTarget target, int mipMapLevel, TextureInternalFormat internalFormat,
       int x, int y, int width, int height, pixels) {
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
     assert(width >= 0);
