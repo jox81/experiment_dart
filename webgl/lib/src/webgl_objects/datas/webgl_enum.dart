@@ -35,8 +35,6 @@ abstract class WebGLEnum<T> {
   }
 }
 
-//Todo : add extensions
-
 //WebGLRenderingContext
 
 class EnableCapabilityType extends WebGLEnum {
@@ -994,18 +992,6 @@ class TextureInternalFormat extends WebGLEnum {
   static const TextureInternalFormat LUMINANCE_ALPHA =
       const TextureInternalFormat(
           WebGL.RenderingContext.LUMINANCE_ALPHA, 'LUMINANCE_ALPHA');
-}
-
-class OES_texture_float_InternalFormat extends TextureInternalFormat {
-  const OES_texture_float_InternalFormat(int index, String name)
-      : super(index, name);
-  static WebGLEnum getByIndex(int index) =>
-      WebGLEnum.findTypeByIndex(OES_texture_float_InternalFormat, index);
-
-  static const OES_texture_float_InternalFormat HALF_FLOAT_OES =
-      const OES_texture_float_InternalFormat(0x8D61, 'HALF_FLOAT_OES');
-  static const OES_texture_float_InternalFormat FLOAT =
-      const OES_texture_float_InternalFormat(0x1406, 'FLOAT');
 }
 
 class TexelDataType extends WebGLEnum {

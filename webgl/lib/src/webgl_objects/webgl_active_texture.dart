@@ -125,6 +125,7 @@ class ActiveTexture{
     assert(width >= 0);
     assert(height >= 0);
     assert(internalFormat.index == internalFormat2.index);//in webgl1
+
     gl.ctx.texImage2D(target.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixels);
   }
 
