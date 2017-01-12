@@ -180,58 +180,56 @@ class TextureUtils {
   }
 
   ///
-  static WebGLTexture createRenderedTexture({int size: 512}) {
+  static List<WebGLTexture> createRenderedTextures({int size: 1024}) {
 
-    //backup camera
-    Camera baseCam = Context.mainCamera;
-
+    //
     WebGLTexture colorTexture = createColorTexture(size);
-
     WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
-    WebGLFrameBuffer framebufferWithDepthRenderBuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
-
     WebGLTexture depthTexture = createDepthTexture(size);
-    WebGLFrameBuffer framebufferWithDepthTexture = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 
-    gl.activeFrameBuffer.bind(framebufferWithDepthTexture);
+    WebGLFrameBuffer framebufferWithDepthRenderBuffer = createFrameBuffer(colorTexture, depthRenderbuffer);
+    WebGLFrameBuffer framebufferWithDepthTexture = createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 
     // draw something in the buffer
     // ...
+    {
+      //backup camera
+      Camera baseCam = Context.mainCamera;
+      Rectangle previousViewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
-        {
+      gl.activeFrameBuffer.bind(framebufferWithDepthTexture);
+
       Camera cameraTexture = new Camera(radians(45.0), 0.1, 100.0)
-        ..targetPosition = new Vector3(6.0,3.0,0.0)
-        ..position = new Vector3(10.0, 10.0, 10.0);
+        ..targetPosition = new Vector3(0.0,0.0,-12.0)
+        ..position = new Vector3(5.0, 15.0, 15.0);
 
       Context.mainCamera = cameraTexture;
 
       //Each frameBuffer component will be filled up
-      gl.clearColor = new Vector4(.5, .5, .5, 1.0); // green;
-      gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.clearColor = new Vector4(.5, .5, .5, 0.0); // green;
+      gl.viewport = new Rectangle(0, 0, size, size);
       gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
-      CubeModel cube = new CubeModel();
-      cube.render();
+      for(int i = 0; i < 20; i++){
+        CubeModel cube = new CubeModel()
+          ..position = new Vector3(0.0,0.0,-4.0 * i.toDouble());
+        cube.render();
+      }
 
-      CubeModel cube2 = new CubeModel()
-        ..position = new Vector3(3.0,0.0,0.0)
-        ..material = new MaterialBaseColor(new Vector4.all(1.0));
-      cube2.render();
+      // Unbind the framebuffer
+      gl.activeFrameBuffer.unBind();
+
+      if(baseCam != null) {
+        gl.viewport = previousViewport;
+        Context.mainCamera = baseCam;
+      }
     }
-
     //...
     //End draw
 
-//    readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
+    //readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
 
-    // Unbind the framebuffer
-    gl.activeFrameBuffer.unBind();
-
-    //reset camera
-    if(baseCam != null) {
-      Context.mainCamera = baseCam;
-    }
-    return colorTexture;
+    return [colorTexture, depthTexture];
   }
 
   static void readPixels({Rectangle rectangle}) {

@@ -227,7 +227,7 @@ class WebglTest {
     int height = 64;
 
     // 1. Init Texture
-    WebGLTexture textureEmpty = TextureUtils.createRenderedTexture();
+    List<WebGLTexture> renderedTextures = TextureUtils.createRenderedTextures();
 
     // 2. Init Render Buffer
     WebGLRenderBuffer renderbuffer = new WebGLRenderBuffer();
@@ -244,7 +244,7 @@ class WebglTest {
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
-        textureEmpty,
+        renderedTextures[0],
         0);
     gl.activeFrameBuffer.framebufferRenderbuffer(
         FrameBufferTarget.FRAMEBUFFER,

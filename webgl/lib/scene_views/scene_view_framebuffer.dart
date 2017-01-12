@@ -30,27 +30,33 @@ class SceneViewFrameBuffer extends Scene{
     light = directionalLight;
 
     //
-    WebGLTexture textureEmpty = TextureUtils.createRenderedTexture();
-
-    MaterialBaseTextureNormal materialBaseTextureNormal =
-    new MaterialBaseTextureNormal()
-      ..ambientColor = ambientLight.color
-      ..directionalLight = directionalLight
-      ..texture = textureEmpty;
-    materials.add(materialBaseTextureNormal);
+    List<WebGLTexture> renderedTextures = TextureUtils.createRenderedTextures();
 
     //Model
-    QuadModel quad = new QuadModel()
-      ..name = 'Quad'
-      ..position = new Vector3(0.0, 0.0, 0.0)
-      ..material = materialBaseTextureNormal;
-    models.add(quad);
+    MaterialBaseTexture materialBaseTextureNormal =
+    new MaterialBaseTexture()
+      ..texture = renderedTextures[0];
+    materials.add(materialBaseTextureNormal);
 
-    CubeModel cube = new CubeModel()
-      ..name = "cube"
-      ..position = new Vector3(2.0, 0.0, 0.0)
-      ..material = materialBaseTextureNormal;
-    models.add(cube);
+    QuadModel quadColor = new QuadModel()
+      ..name = 'quadColor'
+      ..position = new Vector3(0.0, 1.0, 0.0)
+      ..material = materialBaseTextureNormal
+      ..transform.rotateZ(radians(90.0));
+    models.add(quadColor);
+
+    //
+    MaterialDepthTexture materialDepthTextureNormal =
+    new MaterialDepthTexture()
+      ..texture = renderedTextures[1];
+    materials.add(materialDepthTextureNormal);
+
+    QuadModel quadDepth = new QuadModel()
+      ..name = 'quadDepth'
+      ..position = new Vector3(0.0, -1.0, 0.0)
+      ..material = materialDepthTextureNormal
+      ..transform.rotateZ(radians(90.0));
+    models.add(quadDepth);
 
   }
 }

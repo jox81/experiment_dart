@@ -112,6 +112,10 @@ class ShaderSource{
       '/application/shaders/material_base_texture/material_base_texture.vs.glsl',
       '/application/shaders/material_base_texture/material_base_texture.fs.glsl'
     ],
+    'material_depth_texture' :[
+      '/application/shaders/material_depth_texture/material_depth_texture.vs.glsl',
+      '/application/shaders/material_depth_texture/material_depth_texture.fs.glsl'
+    ],
     'material_base_texture_normal' :[
       '/application/shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl',
       '/application/shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl'

@@ -301,6 +301,42 @@ class MaterialPBR extends Material {
   }
 }
 
+class MaterialDepthTexture extends Material {
+
+  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
+
+  //External parameters
+  WebGLTexture texture;
+
+  MaterialDepthTexture._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+
+  factory MaterialDepthTexture(){
+    ShaderSource shaderSource = ShaderSource.sources['material_depth_texture'];
+    return new MaterialDepthTexture._internal(shaderSource.vsCode, shaderSource.fsCode);
+  }
+
+  setShaderAttributs(Mesh mesh) {
+    setShaderAttributWithName(
+        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
+
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
+    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    setShaderAttributWithName(
+        'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
+  }
+
+  setShaderUniforms(Mesh mesh) {
+    setShaderUniformWithName(
+        "uMVMatrix", Context.mvMatrix);
+    setShaderUniformWithName(
+        "uPMatrix", Context.mainCamera.vpMatrix);
+    setShaderUniformWithName('uSampler', 0);
+  }
+
+}
+
 /*
 //Loading glsl files....
   //may be used to load code async
