@@ -149,7 +149,7 @@ class WebglTest {
   Future textureCubeMap() async{
     print('@ Test de loading d\'un cubemap');
 
-    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages();
+    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages('kitchen');
     WebGLTexture cubeMapTexture = TextureUtils.createCubeMapFromElements(cubeMapImages);
     gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTexture);
 

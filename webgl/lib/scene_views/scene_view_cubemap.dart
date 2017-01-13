@@ -27,13 +27,14 @@ class SceneViewCubeMap extends Scene{
       ..cameraController = new CameraController();
     Context.mainCamera = camera;
 
-    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages();
-    WebGLTexture cubeMapTexture = TextureUtils.createCubeMapFromElements(cubeMapImages);
+    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
+    WebGLTexture cubeMapTexture = TextureUtils.createCubeMapFromElements(cubeMapImages, flip:false);
 
     MaterialSkyBox materialSkyBox = new MaterialSkyBox();
     materialSkyBox.skyboxTexture = cubeMapTexture;
 
-    SkyBoxModel skyBoxModel = new SkyBoxModel();
+    SkyBoxModel skyBoxModel = new SkyBoxModel()
+    ..transform.scale(10.0);
     skyBoxModel.material = materialSkyBox;
     models.add(skyBoxModel);
   }

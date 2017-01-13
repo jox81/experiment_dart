@@ -98,7 +98,7 @@ abstract class Material extends IEditElement {
     _mvPushMatrix();
 
     Context.mvMatrix.multiply(model.transform);
-
+    if(model is SkyBoxModel)gl.depthTest = false;
     program.use();
     setShaderSettings(model.mesh);
 
@@ -108,7 +108,7 @@ abstract class Material extends IEditElement {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
     disableVertexAttributs();
-
+    if(model is SkyBoxModel)gl.depthTest = true;
     _mvPopMatrix();
   }
 
@@ -187,6 +187,7 @@ abstract class Material extends IEditElement {
           break;
         case ShaderVariableType.BOOL:
         case ShaderVariableType.SAMPLER_2D:
+        case ShaderVariableType.SAMPLER_CUBE:
           uniformLocations[uniformName].uniform1i(data);
           break;
         case ShaderVariableType.FLOAT:

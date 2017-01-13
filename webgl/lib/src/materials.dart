@@ -358,8 +358,10 @@ class MaterialSkyBox extends Material {
   }
 
   setShaderUniforms(Mesh mesh) {
+    Matrix3 m3 = Context.mvMatrix.getRotation();
+    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uMVMatrix", m4);
     setShaderUniformWithName(
         "uPMatrix", Context.mainCamera.vpMatrix);
 
