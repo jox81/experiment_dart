@@ -736,6 +736,16 @@ class TextureAttachmentTarget extends WebGLEnum {
       const TextureAttachmentTarget(
           WebGL.RenderingContext.TEXTURE_CUBE_MAP_NEGATIVE_Z,
           'TEXTURE_CUBE_MAP_NEGATIVE_Z');
+
+  /// need to iterate instead of : gl.TEXTURE_CUBE_MAP_POSITIVE_X + i
+  static List<TextureAttachmentTarget> TEXTURE_CUBE_MAPS = [
+      TEXTURE_CUBE_MAP_POSITIVE_X,
+      TEXTURE_CUBE_MAP_NEGATIVE_X,
+      TEXTURE_CUBE_MAP_POSITIVE_Y,
+      TEXTURE_CUBE_MAP_NEGATIVE_Y,
+      TEXTURE_CUBE_MAP_POSITIVE_Z,
+      TEXTURE_CUBE_MAP_NEGATIVE_Z
+    ];
 }
 
 //WebGLBuffers

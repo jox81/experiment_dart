@@ -1,3 +1,4 @@
+import 'package:webgl/scene_views/scene_view_cubemap.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/scene_views/scene_view_base.dart';
@@ -13,7 +14,8 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //    new SceneViewBase(),
-    new SceneViewFrameBuffer(),
+    new SceneViewCubeMap(),
+//    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),
 //    new SceneViewPBR(),

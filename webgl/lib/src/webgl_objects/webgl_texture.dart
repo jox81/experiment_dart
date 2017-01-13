@@ -37,6 +37,20 @@ class WebGLTexture extends WebGLObject{
 
 class TextureUtils {
 
+  static Future<ImageElement> getImageFromFile(String fileUrl) {
+    Completer completer = new Completer();
+
+    ImageElement image;
+
+    image = new ImageElement()
+      ..src = fileUrl
+      ..onLoad.listen((e) {
+        completer.complete(image);
+      });
+
+    return completer.future;
+  }
+
   static Future<WebGLTexture> getTextureFromFile(String fileUrl, {bool repeatU : false, bool mirrorU : false,bool repeatV : false, bool mirrorV : false}) {
     Completer completer = new Completer();
 

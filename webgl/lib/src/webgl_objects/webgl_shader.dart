@@ -123,6 +123,10 @@ class ShaderSource{
     'material_pbr' :[
       '/application/shaders/material_pbr/material_pbr.vs.glsl',
       '/application/shaders/material_pbr/material_pbr.fs.glsl'
+    ],
+    'material_skybox' :[
+      '/application/shaders/material_skybox/material_skybox.vs.glsl',
+      '/application/shaders/material_skybox/material_skybox.fs.glsl'
     ]
   };
   static Map<String, ShaderSource> sources = new Map();
