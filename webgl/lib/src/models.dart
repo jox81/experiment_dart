@@ -19,6 +19,7 @@ enum ModelType{
   sphere,
   torus,
   axis,
+  skybox
 }
 
 abstract class Model extends IEditElement {
@@ -94,6 +95,9 @@ abstract class Model extends IEditElement {
         break;
       case ModelType.axis:
         newModel = new AxisModel();
+        break;
+      case ModelType.skybox:
+        newModel = new SkyBoxModel();
         break;
       default:
         break;
@@ -368,4 +372,13 @@ function makeTorus(r, sr, n, sn, k)
   return res;
 }
    */
+}
+
+
+
+class SkyBoxModel extends Model{
+  SkyBoxModel() {
+    mesh = new Mesh.SkyBox();
+    material = new MaterialPoint();
+  }
 }

@@ -106,18 +106,13 @@ class ActiveTexture{
   }
   // >>> single getParameter
   // > TEXTURE_MAG_FILTER
-  TextureMagnificationFilterType get texture2DTextureMagFilter => TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameter.TEXTURE_MAG_FILTER.index));
-  TextureMagnificationFilterType get textureCubeMapTextureMagFilter => TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameter.TEXTURE_MAG_FILTER.index));
+  TextureMagnificationFilterType getTextureMagFilter(TextureTarget textureTarget) => TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
   // > TEXTURE_MIN_FILTER
-  TextureMinificationFilterType get texture2DTextureMinFilter => TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameter.TEXTURE_MIN_FILTER.index));
-  TextureMinificationFilterType get textureCubeMapTextureMinFilter => TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameter.TEXTURE_MIN_FILTER.index));
+  TextureMinificationFilterType getTextureMinFilter(TextureTarget textureTarget) => TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MIN_FILTER.index));
   // > TEXTURE_WRAP_S
-  TextureWrapType get texture2DTextureWrapS => TextureWrapType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameter.TEXTURE_WRAP_S.index));
-  TextureWrapType get textureCubeMapTextureWrapS => TextureWrapType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameter.TEXTURE_WRAP_S.index));
+  TextureWrapType getTextureWrapS(TextureTarget textureTarget) => TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
   // > TEXTURE_WRAP_T
-  TextureWrapType get texture2DTextureWrapT => TextureWrapType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_2D.index,TextureParameter.TEXTURE_WRAP_T.index));
-  TextureWrapType get textureCubeMapTextureWrapT => TextureWrapType.getByIndex(gl.ctx.getTexParameter(TextureTarget.TEXTURE_CUBE_MAP.index,TextureParameter.TEXTURE_WRAP_T.index));
-
+  TextureWrapType getTextureWrapT(TextureTarget textureTarget) => TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
 
   // >>> Filling Texture
 
@@ -190,24 +185,23 @@ class ActiveTexture{
       print('activeUnit : ${_instance.activeUnit}');
       WebGLTexture texture2D = boundTexture2D;
       if(texture2D != null) {
-        print('... texture2D binding ............................................');
+        print('### texture2D binding ............................................');
         print('boundTexture2D : ${texture2D}');
-        print('texture2DTextureMagFilter : ${texture2DTextureMagFilter}');
-        print('texture2DTextureMinFilter : ${texture2DTextureMinFilter}');
-        print('texture2DTextureWrapS : ${texture2DTextureWrapS}');
-        print('texture2DTextureWrapT : ${texture2DTextureWrapT}');
+        print('getTextureMagFilter : ${getTextureMagFilter(TextureTarget.TEXTURE_2D)}');
+        print('getTextureMinFilter : ${getTextureMinFilter(TextureTarget.TEXTURE_2D)}');
+        print('getTextureWrapS : ${getTextureWrapS(TextureTarget.TEXTURE_2D)}');
+        print('getTextureWrapT : ${getTextureWrapT(TextureTarget.TEXTURE_2D)}');
       }else{
         print('### no texture2D bound');
       }
       WebGLTexture textureCubeMap = boundTextureCubeMap;
       if(textureCubeMap != null) {
-        print('... textureCubeMap binding .......................................');
+        print('### textureCubeMap binding .......................................');
         print('boundTextureCubeMap : ${textureCubeMap}');
-        print('textureCubeMapTextureMagFilter : ${textureCubeMapTextureMagFilter}');
-        print('textureCubeMapTextureMinFilter : ${textureCubeMapTextureMinFilter}');
-        print('textureCubeMapTextureWrapS : ${textureCubeMapTextureWrapS}');
-        print('textureCubeMapTextureWrapS : ${textureCubeMapTextureWrapS}');
-        print('textureCubeMapTextureWrapT : ${textureCubeMapTextureWrapT}');
+        print('getTextureMagFilter : ${getTextureMagFilter(TextureTarget.TEXTURE_CUBE_MAP)}');
+        print('getTextureMinFilter : ${getTextureMinFilter(TextureTarget.TEXTURE_CUBE_MAP)}');
+        print('getTextureWrapS : ${getTextureWrapS(TextureTarget.TEXTURE_CUBE_MAP)}');
+        print('getTextureWrapT : ${getTextureWrapT(TextureTarget.TEXTURE_CUBE_MAP)}');
       }else{
         print('### no textureCubeMap bound');
       }

@@ -337,6 +337,39 @@ class MaterialDepthTexture extends Material {
 
 }
 
+class MaterialSkyBox extends Material {
+
+  final buffersNames = ['aVertexPosition'];
+
+  //External parameters
+  WebGLTexture skyboxTexture;
+
+  MaterialSkyBox._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+
+  factory MaterialSkyBox(){
+    ShaderSource shaderSource = ShaderSource.sources['material_skybox'];
+    return new MaterialSkyBox._internal(shaderSource.vsCode, shaderSource.fsCode);
+  }
+
+  setShaderAttributs(Mesh mesh) {
+    setShaderAttributWithName(
+        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+  }
+
+  setShaderUniforms(Mesh mesh) {
+    setShaderUniformWithName(
+        "uMVMatrix", Context.mvMatrix);
+    setShaderUniformWithName(
+        "uPMatrix", Context.mainCamera.vpMatrix);
+
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
+    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
+    setShaderUniformWithName('skybox', 0);
+  }
+
+}
+
 /*
 //Loading glsl files....
   //may be used to load code async

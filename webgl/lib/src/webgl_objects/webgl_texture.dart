@@ -34,7 +34,6 @@ class WebGLTexture extends WebGLObject{
   }
 }
 
-
 class TextureUtils {
 
   static Future<ImageElement> getImageFromFile(String fileUrl) {
@@ -286,5 +285,41 @@ class TextureUtils {
         pixels);
 
     print(pixels);
+  }
+
+
+  static Future<List<ImageElement>> loadCubeMapImages() async {
+    List<ImageElement> imageElements = new List(6);
+
+    imageElements[0] = await TextureUtils.getImageFromFile("/application/images/cubemap/kitchen/c00.bmp");
+    imageElements[1] = await TextureUtils.getImageFromFile("/application/images/cubemap/kitchen/c01.bmp");
+    imageElements[2] = await TextureUtils.getImageFromFile("/application/images/cubemap/kitchen/c02.bmp");
+    imageElements[3] = await TextureUtils.getImageFromFile("/application/images/cubemap/kitchen/c03.bmp");
+    imageElements[4] = await TextureUtils.getImageFromFile("/application/images/cubemap/kitchen/c04.bmp");
+    imageElements[5] = await TextureUtils.getImageFromFile("/application/images/cubemap/kitchen/c05.bmp");
+
+    return imageElements;
+  }
+
+  static WebGLTexture createCubeMapFromElements(List<ImageElement> cubeMapImages) {
+    assert(cubeMapImages.length == 6);
+
+    WebGLTexture texture = new WebGLTexture();
+
+    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 1);
+
+    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, texture);
+    gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_CUBE_MAP, TextureParameter.TEXTURE_MAG_FILTER, TextureMagnificationFilterType.LINEAR);
+    gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_CUBE_MAP, TextureParameter.TEXTURE_MIN_FILTER, TextureMinificationFilterType.LINEAR);
+    gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+    gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
+
+    for (int i = 0; i < cubeMapImages.length; i++) {
+      gl.activeTexture.texImage2D(
+          TextureAttachmentTarget.TEXTURE_CUBE_MAPS[i], 0, TextureInternalFormat.RGBA, TextureInternalFormat.RGBA, TexelDataType.UNSIGNED_BYTE, cubeMapImages[i]);
+    }
+
+    gl.activeTexture.unBind(TextureTarget.TEXTURE_CUBE_MAP);
+    return texture;
   }
 }

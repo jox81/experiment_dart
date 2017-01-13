@@ -27,35 +27,15 @@ class SceneViewCubeMap extends Scene{
       ..cameraController = new CameraController();
     Context.mainCamera = camera;
 
+    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages();
+    WebGLTexture cubeMapTexture = TextureUtils.createCubeMapFromElements(cubeMapImages);
+
+    MaterialSkyBox materialSkyBox = new MaterialSkyBox();
+    materialSkyBox.skyboxTexture = cubeMapTexture;
+
+    SkyBoxModel skyBoxModel = new SkyBoxModel();
+    skyBoxModel.material = materialSkyBox;
+    models.add(skyBoxModel);
   }
 
-  Future<WebGLTexture> loadCubeMap() async {
-    List<ImageElement> imageElements = new List(6);
-    imageElements[0] = await TextureUtils.getImageFromFile("./images/cubemap/kitchen/c00.bmp");
-    imageElements[1] = await TextureUtils.getImageFromFile("./images/cubemap/kitchen/c01.bmp");
-    imageElements[2] = await TextureUtils.getImageFromFile("./images/cubemap/kitchen/c02.bmp");
-    imageElements[3] = await TextureUtils.getImageFromFile("./images/cubemap/kitchen/c03.bmp");
-    imageElements[4] = await TextureUtils.getImageFromFile("./images/cubemap/kitchen/c04.bmp");
-    imageElements[5] = await TextureUtils.getImageFromFile("./images/cubemap/kitchen/c05.bmp");
-
-    return createCubeMapFromElements(imageElements);
-  }
-
-  WebGLTexture createCubeMapFromElements(List<ImageElement> cubeMapImages) {
-    assert(cubeMapImages.length == 6);
-
-    WebGLTexture texture = new WebGLTexture();
-
-    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, texture);
-
-    for (int i = 0; i < 6; i++) {
-      gl.activeTexture.texImage2D(
-          TextureAttachmentTarget.TEXTURE_CUBE_MAPS[i], 0, TextureInternalFormat.RGBA, TextureInternalFormat.RGBA, TexelDataType.UNSIGNED_BYTE, cubeMapImages[i]);
-    }
-    gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_CUBE_MAP, TextureParameter.TEXTURE_MAG_FILTER, TextureMagnificationFilterType.LINEAR);
-    gl.activeTexture.setParameterInt(TextureTarget.TEXTURE_CUBE_MAP, TextureParameter.TEXTURE_MIN_FILTER, TextureMinificationFilterType.LINEAR);
-
-    gl.activeTexture.unBind(TextureTarget.TEXTURE_CUBE_MAP);
-    return texture;
-  }
 }

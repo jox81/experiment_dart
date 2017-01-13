@@ -27,7 +27,8 @@ class WebglTest {
 //    await wrongSwapTextureTarget();
 //    await textureToMultipleTextureUnits();
 //    await textureUnitWithBothTarget();
-    await textureUnitSwitchTexture();
+//    await textureUnitSwitchTexture();
+    await textureCubeMap();
   }
 
   Future simpleBindTest() async {
@@ -143,6 +144,16 @@ class WebglTest {
     gl.activeTexture
       ..unBind(TextureTarget.TEXTURE_2D)
       ..logActiveTextureInfo();
+  }
+
+  Future textureCubeMap() async{
+    print('@ Test de loading d\'un cubemap');
+
+    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages();
+    WebGLTexture cubeMapTexture = TextureUtils.createCubeMapFromElements(cubeMapImages);
+    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTexture);
+
+    gl.activeTexture.logActiveTextureInfo();
   }
 
 }
