@@ -193,6 +193,8 @@ class TextureUtils {
     // draw something in the buffer
     // ...
     {
+      List<Model> models = new List();
+
       //backup camera
       Camera baseCam = Context.mainCamera;
       Rectangle previousViewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
@@ -210,10 +212,24 @@ class TextureUtils {
       gl.viewport = new Rectangle(0, 0, size, size);
       gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
+      //plane
+      QuadModel quadColor = new QuadModel()
+        ..name = 'ground'
+        ..material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0))
+        ..position = new Vector3(0.0, 0.0, -50.0)
+        ..transform.scale(10.0,1.0,100.0)
+        ..transform.rotateX(radians(90.0));
+      models.add(quadColor);
+
+      //cubes
       for(int i = 0; i < 20; i++){
         CubeModel cube = new CubeModel()
           ..position = new Vector3(0.0,0.0,-4.0 * i.toDouble());
-        cube.render();
+        models.add(cube);
+      }
+
+      for(Model model in models){
+        model.render();
       }
 
       // Unbind the framebuffer
