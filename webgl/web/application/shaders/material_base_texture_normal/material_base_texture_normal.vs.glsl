@@ -2,8 +2,8 @@ attribute vec3 aVertexPosition;
 attribute vec2 aTextureCoord;
 attribute vec3 aVertexNormal;
 
-uniform mat4 uMVMatrix;
-uniform mat4 uPMatrix;
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
 uniform mat3 uNMatrix;
 uniform vec3 uAmbientColor;
 uniform vec3 uLightingDirection;
@@ -14,7 +14,7 @@ varying vec2 vTextureCoord;
 varying vec3 vLightWeighting;
 
 void main(void) {
-  gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+  gl_Position = uProjectionMatrix * uModelViewMatrix * vec4(aVertexPosition, 1.0);
   vTextureCoord = aTextureCoord;
   if(!uUseLighting)
   {

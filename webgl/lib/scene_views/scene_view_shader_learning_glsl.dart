@@ -164,12 +164,12 @@ class SceneViewShaderLearning01 extends Scene{
     MaterialCustom materialCustom = new MaterialCustom(
         vShader, fShader, buffersNames);
     materialCustom
-      ..setShaderAttributsVariables = (Mesh mesh) {
+      ..setShaderAttributsVariables = (Model model) {
         materialCustom.setShaderAttributWithName(
-            'a_vertex', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
-        materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : mesh.indices);
+            'a_vertex', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+        materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : model.mesh.indices);
       }
-      ..setShaderUniformsVariables = (Mesh mesh) {
+      ..setShaderUniformsVariables = (Model model) {
         materialCustom.setShaderUniformWithName('iGlobalTime', shaderTime);
         materialCustom.setShaderUniformWithName('iResolution', iResolution.storage);
       };

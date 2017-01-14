@@ -37,13 +37,13 @@ Model experiment() {
   List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
 
   MaterialCustom materialCustom = new MaterialCustom(vs, fs, buffersNames);
-  materialCustom.setShaderAttributsVariables = (Mesh mesh) {
+  materialCustom.setShaderAttributsVariables = (Model model) {
       materialCustom.setShaderAttributWithName(
-          'aVertexPosition', arrayBuffer : mesh.vertices, dimension : mesh.vertexDimensions);
+          'aVertexPosition', arrayBuffer : model.mesh.vertices, dimension : model.mesh.vertexDimensions);
       materialCustom.setShaderAttributWithName(
-          'aVertexColor', arrayBuffer : mesh.colors, dimension : mesh.colorDimensions);
+          'aVertexColor', arrayBuffer : model.mesh.colors, dimension : model.mesh.colorDimensions);
     };
-  materialCustom.setShaderUniformsVariables = (Mesh mesh) {
+  materialCustom.setShaderUniformsVariables = (Model model) {
       materialCustom.setShaderUniformWithName("pointSize", pointSize);
     };
 

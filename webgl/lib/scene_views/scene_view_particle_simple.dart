@@ -72,11 +72,11 @@ class SceneViewParticleSimple extends Scene{
     MaterialCustom materialCustom = new MaterialCustom(
         vShader, fShader, buffersNames);
     materialCustom
-      ..setShaderAttributsVariables = (Mesh mesh) {
+      ..setShaderAttributsVariables = (Model model) {
         materialCustom.setShaderAttributWithName(
-            'a_vertex', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
+            'a_vertex', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
       }
-      ..setShaderUniformsVariables = (Mesh mesh) {
+      ..setShaderUniformsVariables = (Model model) {
         materialCustom.setShaderUniformWithName('u_time', shaderTime);
       };
     materials.add(materialCustom);

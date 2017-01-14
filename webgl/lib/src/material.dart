@@ -97,10 +97,10 @@ abstract class Material extends IEditElement {
 
     _mvPushMatrix();
 
-    Context.mvMatrix.multiply(model.transform);
+    Context.modelViewMatrix.multiply(model.transform);
     if(model is SkyBoxModel)gl.depthTest = false;
     program.use();
-    setShaderSettings(model.mesh);
+    setShaderSettings(model);
 
     if (model.mesh.indices.length > 0) {
       gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
@@ -109,6 +109,7 @@ abstract class Material extends IEditElement {
     }
     disableVertexAttributs();
     if(model is SkyBoxModel)gl.depthTest = true;
+
     _mvPopMatrix();
   }
 
@@ -116,14 +117,14 @@ abstract class Material extends IEditElement {
   Queue<Matrix4> _mvMatrixStack = new Queue();
 
   void _mvPushMatrix() {
-    _mvMatrixStack.addFirst(Context.mvMatrix.clone());
+    _mvMatrixStack.addFirst(Context.modelViewMatrix.clone());
   }
 
   void _mvPopMatrix() {
     if (0 == _mvMatrixStack.length) {
       throw new Exception("Invalid popMatrix!");
     }
-    Context.mvMatrix = _mvMatrixStack.removeFirst();
+    Context.modelViewMatrix = _mvMatrixStack.removeFirst();
   }
 
   void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elemetArrayBuffer, data}) {
@@ -213,13 +214,13 @@ abstract class Material extends IEditElement {
     }
   }
 
-  setShaderSettings(Mesh mesh) {
-    setShaderAttributs(mesh);
-    setShaderUniforms(mesh);
+  setShaderSettings(Model model) {
+    setShaderAttributs(model);
+    setShaderUniforms(model);
   }
 
-  setShaderAttributs(Mesh mesh);
-  setShaderUniforms(Mesh mesh);
+  setShaderAttributs(Model model);
+  setShaderUniforms(Model model);
 
 
 }

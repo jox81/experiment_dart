@@ -1,8 +1,8 @@
 attribute vec4 aVertexPosition;
 
-uniform mat4 uMVMatrix;
-uniform mat4 uPMatrix;
+uniform mat4 uModelViewMatrix;
+uniform mat4 uProjectionMatrix;
 
 void main(void) {
-    gl_Position = uPMatrix * uMVMatrix * aVertexPosition;
+    gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
 }

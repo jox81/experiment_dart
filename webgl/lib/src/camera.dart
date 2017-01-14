@@ -121,6 +121,7 @@ class Camera extends Model {
     return _lookAtMatrix;
   }
 
+  //Todo : nomenclature : viewProjecionMatrix ? pq utilisé comme projection dans les shader.. il y a un soucis à clarifier
   Matrix4 get vpMatrix {
     return perspectiveMatrix * lookAtMatrix;
   }

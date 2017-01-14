@@ -43,12 +43,12 @@ Future<Model> experiment() async {
   List<String> buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   MaterialCustom materialCustom = new MaterialCustom(vs, fs, buffersNames);
-  materialCustom.setShaderAttributsVariables = (Mesh mesh) {
+  materialCustom.setShaderAttributsVariables = (Model model) {
     materialCustom.setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
-    materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  mesh.indices);
+        'aVertexPosition', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  model.mesh.indices);
   };
-  materialCustom.setShaderUniformsVariables = (Mesh mesh) {
+  materialCustom.setShaderUniformsVariables = (Model model) {
     materialCustom.setShaderUniformWithName("time", shaderTime);
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);

@@ -1,14 +1,13 @@
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material.dart';
-import 'package:webgl/src/meshes.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
+import 'package:webgl/src/models.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-typedef void SetShaderVariables(Mesh mesh);
+typedef void SetShaderVariables(Model model);
 
 class MaterialCustom extends Material {
 
@@ -20,13 +19,13 @@ class MaterialCustom extends Material {
   MaterialCustom(String vsSource, String fsSource, this.buffersNames): super(vsSource, fsSource);
 
   @override
-  setShaderAttributs(Mesh mesh) {
-    setShaderAttributsVariables(mesh);
+  setShaderAttributs(Model model) {
+    setShaderAttributsVariables(model);
   }
 
   @override
-  setShaderUniforms(Mesh mesh) {
-    setShaderUniformsVariables(mesh);
+  setShaderUniforms(Model model) {
+    setShaderUniformsVariables(model);
   }
 }
 
@@ -44,21 +43,21 @@ class MaterialPoint extends Material {
     return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize, color);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
     setShaderAttributWithName(
         'aVertexColor',
-        arrayBuffer: color == null ? mesh.colors : null,
+        arrayBuffer: color == null ? model.mesh.colors : null,
         data: color,
-        dimension : mesh.colorDimensions);
+        dimension : model.mesh.colorDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
     setShaderUniformWithName("pointSize", pointSize);
   }
 }
@@ -75,17 +74,17 @@ class MaterialBase extends Material {
     return new MaterialBase._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : mesh.indices);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : model.mesh.indices);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
   }
 }
 
@@ -104,17 +103,17 @@ class MaterialBaseColor extends Material {
     return new MaterialBaseColor._internal(shaderSource.vsCode, shaderSource.fsCode, color);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  mesh.indices);
+        'aVertexPosition', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  model.mesh.indices);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
     setShaderUniformWithName("uColor", color.storage);
   }
 }
@@ -131,19 +130,19 @@ class MaterialBaseVertexColor extends Material {
    return new MaterialBaseVertexColor._internal(shaderSource.vsCode, shaderSource.fsCode);
  }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
     setShaderAttributWithName(
-        'aVertexColor', arrayBuffer: mesh.colors, dimension : mesh.colorDimensions);
+        'aVertexColor', arrayBuffer: model.mesh.colors, dimension : model.mesh.colorDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
   }
 }
 
@@ -162,22 +161,22 @@ class MaterialBaseTexture extends Material {
     return new MaterialBaseTexture._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
     setShaderAttributWithName(
-        'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
+        'aTextureCoord', arrayBuffer: model.mesh.textureCoords, dimension : model.mesh.textureCoordsDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
     setShaderUniformWithName('uSampler', 0);
   }
 
@@ -206,28 +205,28 @@ class MaterialBaseTextureNormal extends Material {
     return new MaterialBaseTextureNormal._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
     setShaderAttributWithName(
-        'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
+        'aTextureCoord', arrayBuffer: model.mesh.textureCoords, dimension : model.mesh.textureCoordsDimensions);
 
     setShaderAttributWithName(
-        'aVertexNormal', arrayBuffer: mesh.vertexNormals, dimension : mesh.vertexNormalsDimensions);
+        'aVertexNormal', arrayBuffer: model.mesh.vertexNormals, dimension : model.mesh.vertexNormalsDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
 
     Matrix4 mvInverse = new Matrix4.identity();
-    mvInverse.copyInverse(Context.mvMatrix);
+    mvInverse.copyInverse(Context.modelViewMatrix);
     Matrix3 normalMatrix = mvInverse.getRotation();
 
     normalMatrix.transpose();
@@ -262,6 +261,7 @@ class MaterialBaseTextureNormal extends Material {
 
 ///PBR's
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
+///module explained can be found here : https://github.com/vorg/pragmatic-pbr/tree/master/local_modules
 ///base
 class MaterialPBR extends Material {
 
@@ -278,23 +278,23 @@ class MaterialPBR extends Material {
     return new MaterialPBR._internal(shaderSource.vsCode, shaderSource.fsCode, pointLight);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
     setShaderAttributWithName(
-        'aNormal', arrayBuffer: mesh.vertexNormals, dimension : mesh.vertexNormalsDimensions);
+        'aNormal', arrayBuffer: model.mesh.vertexNormals, dimension : model.mesh.vertexNormalsDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
 
     setShaderUniformWithName(
         "uNormalMatrix",
-        new Matrix4.inverted(Context.mvMatrix)
+        new Matrix4.inverted(Context.modelViewMatrix)
             .transposed()
             .getRotation());
     setShaderUniformWithName("uLightPos", pointLight.position.storage);
@@ -316,22 +316,22 @@ class MaterialDepthTexture extends Material {
     return new MaterialDepthTexture._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: mesh.indices);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
     setShaderAttributWithName(
-        'aTextureCoord', arrayBuffer: mesh.textureCoords, dimension : mesh.textureCoordsDimensions);
+        'aTextureCoord', arrayBuffer: model.mesh.textureCoords, dimension : model.mesh.textureCoordsDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
+  setShaderUniforms(Model model) {
     setShaderUniformWithName(
-        "uMVMatrix", Context.mvMatrix);
+        "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
     setShaderUniformWithName('uSampler', 0);
   }
 
@@ -352,22 +352,48 @@ class MaterialSkyBox extends Material {
     return new MaterialSkyBox._internal(shaderSource.vsCode, shaderSource.fsCode);
   }
 
-  setShaderAttributs(Mesh mesh) {
+  setShaderAttributs(Model model) {
     setShaderAttributWithName(
-        'aVertexPosition', arrayBuffer: mesh.vertices, dimension : mesh.vertexDimensions);
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
   }
 
-  setShaderUniforms(Mesh mesh) {
-    Matrix3 m3 = Context.mvMatrix.getRotation();
-    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
+  setShaderUniforms(Model model) {
+    //new Matrix4.identity()
+
+//    setShaderUniformWithName(
+//      "uModelMatrix", new Matrix4.identity());
+//    setShaderUniformWithName(
+//        "uViewMatrix", Context.modelViewMatrix);
+//    setShaderUniformWithName(
+//        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+
     setShaderUniformWithName(
-        "uMVMatrix", m4);
+        "uModelMatrix", model.transform);
     setShaderUniformWithName(
-        "uPMatrix", Context.mainCamera.vpMatrix);
+        "uViewMatrix", Context.modelViewMatrix);
+    setShaderUniformWithName(
+        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+
+
+
+
+
+//
+//    setShaderUniformWithName(
+//        "uModelViewMatrix", model.transform);
+//
+//
+//    Matrix3 m3 = Context.modelViewMatrix.getRotation();
+//    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
+//
+//    setShaderUniformWithName(
+//        "uViewMatrix", m4);
+//    setShaderUniformWithName(
+//        "uProjectionMatrix", Context.mainCamera.vpMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
-    setShaderUniformWithName('skybox', 0);
+    setShaderUniformWithName('uSkybox', 0);
   }
 
 }

@@ -81,7 +81,7 @@ class SceneViewParticle extends Scene{
     MaterialCustom materialCustom = new MaterialCustom(
         vShader, fShader, buffersNames);
     materialCustom
-      ..setShaderAttributsVariables = (Mesh mesh) {
+      ..setShaderAttributsVariables = (Model model) {
         materialCustom.setShaderAttributWithName(
             'varA', data : varA);
         materialCustom.setShaderAttributWithName(
@@ -89,9 +89,9 @@ class SceneViewParticle extends Scene{
         materialCustom.setShaderAttributWithName(
             'varCt', data : varCt);
         materialCustom.setShaderAttributWithName(
-            'a_vertex', arrayBuffer:  mesh.vertices, dimension : mesh.vertexDimensions);
+            'a_vertex', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
       }
-      ..setShaderUniformsVariables = (Mesh mesh) {
+      ..setShaderUniformsVariables = (Model model) {
         materialCustom.setShaderUniformWithName('u_time', shaderTime);
       };
     materials.add(materialCustom);

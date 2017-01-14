@@ -19,7 +19,8 @@ class Context{
     _mainCamera.isActive = true;
   }
 
-  static Matrix4 mvMatrix = new Matrix4.identity();
+  //Todo : splitter model et view
+  static Matrix4 modelViewMatrix = new Matrix4.identity();
 
   static num get width => gl.drawingBufferWidth;
   static num get height => gl.drawingBufferHeight;
