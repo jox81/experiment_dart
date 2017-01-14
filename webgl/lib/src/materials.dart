@@ -81,6 +81,7 @@ class MaterialBase extends Material {
   }
 
   setShaderUniforms(Model model) {
+
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
@@ -230,7 +231,7 @@ class MaterialBaseTextureNormal extends Material {
     Matrix3 normalMatrix = mvInverse.getRotation();
 
     normalMatrix.transpose();
-    setShaderUniformWithName("uNMatrix", normalMatrix);
+    setShaderUniformWithName("uNormalMatrix", normalMatrix);
 
     //Light
 
@@ -339,7 +340,7 @@ class MaterialDepthTexture extends Material {
 
 class MaterialSkyBox extends Material {
 
-  final buffersNames = ['aVertexPosition'];
+  final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External parameters
   WebGLTexture skyboxTexture;
@@ -355,41 +356,73 @@ class MaterialSkyBox extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
   }
 
   setShaderUniforms(Model model) {
-    //new Matrix4.identity()
 
-//    setShaderUniformWithName(
-//      "uModelMatrix", new Matrix4.identity());
-//    setShaderUniformWithName(
-//        "uViewMatrix", Context.modelViewMatrix);
-//    setShaderUniformWithName(
-//        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+    //removing skybox transform
+    setShaderUniformWithName(
+        "uModelMatrix", new Matrix4.identity());
+
+    //removing camera translation
+    Matrix3 m3 = Context.mainCamera.lookAtMatrix.getRotation();
+    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
+    setShaderUniformWithName(
+        "uViewMatrix", m4);
+
+    setShaderUniformWithName(
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
+
+    Matrix4 mvInverse = new Matrix4.identity();
+    mvInverse.copyInverse(Context.modelViewMatrix);
+    Matrix3 normalMatrix = mvInverse.getRotation();
+
+    normalMatrix.transpose();
+    setShaderUniformWithName("uNormalMatrix", normalMatrix);
+
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
+    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
+    setShaderUniformWithName('uEnvMap', 0);
+  }
+
+}
+
+class MaterialReflection extends Material {
+
+  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
+
+  //External parameters
+  WebGLTexture skyboxTexture;
+
+  MaterialReflection._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+
+  factory MaterialReflection(){
+    ShaderSource shaderSource = ShaderSource.sources['material_reflection'];
+    return new MaterialReflection._internal(shaderSource.vsCode, shaderSource.fsCode);
+  }
+
+  setShaderAttributs(Model model) {
+    setShaderAttributWithName(
+        'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
+    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName(
+        'aNormal', arrayBuffer: model.mesh.vertexNormals, dimension : model.mesh.vertexNormalsDimensions);
+  }
+
+  setShaderUniforms(Model model) {
 
     setShaderUniformWithName(
         "uModelMatrix", model.transform);
     setShaderUniformWithName(
-        "uViewMatrix", Context.modelViewMatrix);
+        "uViewMatrix", Context.mainCamera.lookAtMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
-
-
-
-
-//
-//    setShaderUniformWithName(
-//        "uModelViewMatrix", model.transform);
-//
-//
-//    Matrix3 m3 = Context.modelViewMatrix.getRotation();
-//    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
-//
-//    setShaderUniformWithName(
-//        "uViewMatrix", m4);
-//    setShaderUniformWithName(
-//        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+    //??
+    setShaderUniformWithName(
+        "uInverseViewMatrix", new Matrix4.inverted(Context.mainCamera.lookAtMatrix) );
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);

@@ -127,6 +127,10 @@ class ShaderSource{
     'material_skybox' :[
       '/application/shaders/material_skybox/material_skybox.vs.glsl',
       '/application/shaders/material_skybox/material_skybox.fs.glsl'
+    ],
+    'material_reflection' :[
+      '/application/shaders/reflection/reflection.vs.glsl',
+      '/application/shaders/reflection/reflection.fs.glsl'
     ]
   };
   static Map<String, ShaderSource> sources = new Map();

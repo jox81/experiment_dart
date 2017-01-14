@@ -23,20 +23,35 @@ class SceneViewCubeMap extends Scene{
     //Cameras
     Camera camera = new Camera(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(5.0, 5.0, 5.0)
+      ..position = new Vector3(0.0, 0.0, -5.0)
       ..cameraController = new CameraController();
     Context.mainCamera = camera;
 
-    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages('test');
+    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
     WebGLTexture cubeMapTexture = TextureUtils.createCubeMapFromElements(cubeMapImages, flip:false);
 
     MaterialSkyBox materialSkyBox = new MaterialSkyBox();
     materialSkyBox.skyboxTexture = cubeMapTexture;
 
     SkyBoxModel skyBoxModel = new SkyBoxModel()
-    ..transform.scale(1.0);
-    skyBoxModel.material = materialSkyBox;
+      ..material = materialSkyBox
+      ..transform.scale(1);
     models.add(skyBoxModel);
+
+
+    //Sphere
+    MaterialReflection materialReflection = new MaterialReflection()
+    ..skyboxTexture = cubeMapTexture;
+    SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
+      ..transform.translate(0.0, 0.0, 0.0)
+      ..transform.scale(0.5)
+      ..material = materialReflection;
+    models.add(sphere);
+
+  }
+
+  Future createSkyBox(String cubeMapName) async {
+
   }
 
 }

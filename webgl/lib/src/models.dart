@@ -374,11 +374,9 @@ function makeTorus(r, sr, n, sn, k)
    */
 }
 
-
-
-class SkyBoxModel extends Model{
+class SkyBoxModel extends CubeModel{
   SkyBoxModel() {
-    mesh = new Mesh.SkyBox();
+    mesh = new Mesh.Cube();
     material = new MaterialPoint();
   }
 }

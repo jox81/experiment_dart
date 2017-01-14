@@ -55,7 +55,7 @@ class AppComponent implements OnInit{
   }
 
   void onAxisXChange(bool checked){
-    print('onAxisXChange $checked');
+//    print('onAxisXChange $checked');
   }
 
   ToolBar getToolBar(String toolBarName){

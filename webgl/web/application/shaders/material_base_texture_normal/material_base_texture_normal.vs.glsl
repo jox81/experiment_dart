@@ -4,7 +4,7 @@ attribute vec3 aVertexNormal;
 
 uniform mat4 uModelViewMatrix;
 uniform mat4 uProjectionMatrix;
-uniform mat3 uNMatrix;
+uniform mat3 uNormalMatrix;
 uniform vec3 uAmbientColor;
 uniform vec3 uLightingDirection;
 uniform vec3 uDirectionalColor;
@@ -21,7 +21,7 @@ void main(void) {
      vLightWeighting = vec3(1.0, 1.0, 1.0);
   } else
   {
-     vec3 transformedNormal = uNMatrix * aVertexNormal;
+     vec3 transformedNormal = uNormalMatrix * aVertexNormal;
      float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
      vLightWeighting = uAmbientColor + uDirectionalColor*directionalLightWeighting;
   }

@@ -97,8 +97,9 @@ abstract class Material extends IEditElement {
 
     _mvPushMatrix();
 
-    Context.modelViewMatrix.multiply(model.transform);
     if(model is SkyBoxModel)gl.depthTest = false;
+
+    Context.modelViewMatrix.multiply(model.transform);
     program.use();
     setShaderSettings(model);
 
@@ -108,6 +109,7 @@ abstract class Material extends IEditElement {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
     disableVertexAttributs();
+
     if(model is SkyBoxModel)gl.depthTest = true;
 
     _mvPopMatrix();

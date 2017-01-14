@@ -14,7 +14,7 @@ class ToolBarComponent{
 
   void onToolBarButtonClicked(String key, UpdateToolBarItem updateToolBarItem, event){
     bool checked = event.target.checked;
-    print('onToolBarButtonClicked > $key: $checked');
+//    print('onToolBarButtonClicked > $key: $checked');
     updateToolBarItem(checked);
   }
 }
