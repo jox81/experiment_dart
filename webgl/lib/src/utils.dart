@@ -138,7 +138,7 @@ class Utils{
     num pickX = screenX;
     num pickY = Context.height - screenY;
 
-    bool unProjected = unproject(camera.vpMatrix, 0, Context.width,
+    bool unProjected = unproject(camera.viewProjecionMatrix, 0, Context.width,
         0, Context.height, pickX, pickY, pickZ, pickWorld);
 
     return unProjected;
@@ -149,7 +149,7 @@ class Utils{
     num pickX = screenX;
     num pickY = screenY;
 
-    bool rayPicked = pickRay(camera.vpMatrix, 0, Context.width,
+    bool rayPicked = pickRay(camera.viewProjecionMatrix, 0, Context.width,
         0, Context.height, pickX, pickY, outRayNear, outRayFar);
 
     return rayPicked;

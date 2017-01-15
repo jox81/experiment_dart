@@ -57,7 +57,7 @@ class MaterialPoint extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
     setShaderUniformWithName("pointSize", pointSize);
   }
 }
@@ -85,7 +85,7 @@ class MaterialBase extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
   }
 }
 
@@ -114,7 +114,7 @@ class MaterialBaseColor extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
     setShaderUniformWithName("uColor", color.storage);
   }
 }
@@ -143,7 +143,7 @@ class MaterialBaseVertexColor extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
   }
 }
 
@@ -177,7 +177,7 @@ class MaterialBaseTexture extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
     setShaderUniformWithName('uSampler', 0);
   }
 
@@ -224,7 +224,7 @@ class MaterialBaseTextureNormal extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
 
     Matrix4 mvInverse = new Matrix4.identity();
     mvInverse.copyInverse(Context.modelViewMatrix);
@@ -291,7 +291,7 @@ class MaterialPBR extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
 
     setShaderUniformWithName(
         "uNormalMatrix",
@@ -332,7 +332,7 @@ class MaterialDepthTexture extends Material {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniformWithName(
-        "uProjectionMatrix", Context.mainCamera.vpMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
     setShaderUniformWithName('uSampler', 0);
   }
 

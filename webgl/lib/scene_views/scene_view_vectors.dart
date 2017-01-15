@@ -89,7 +89,7 @@ class SceneViewVectors extends Scene{
   void test03() {
 
     Matrix4 uModelViewMatrix = Context.modelViewMatrix;
-    Matrix4 uProjectionMatrix = Context.mainCamera.vpMatrix;
+    Matrix4 uProjectionMatrix = Context.mainCamera.viewProjecionMatrix;
 
     VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;
@@ -102,24 +102,35 @@ class SceneViewVectors extends Scene{
   void test04() {
 
     Vector3 cameraPosition = new Vector3(0.0,2.0,2.0);
-    Vector3 cameraTargetPosition = new Vector3(1.0,0.0,1.0);
+    Vector3 cameraTargetPosition = new Vector3(0.0,0.0,1.0);
 
     cameraTest
+      ..fov = radians(45.0)
       ..targetPosition = cameraTargetPosition
       ..position = cameraPosition;
 
-    AxisModel axis = new AxisModel();
+    AxisModel axis = new AxisModel()
+    ..position = new Vector3(1.0,0.0,0.0)
+    ..transform.rotateY(radians(0.0));
     models.add(axis);
 
     GridModel grid = new GridModel();
     models.add(grid);
 
-    Matrix4 matrix = new Matrix4.identity();
-    setViewMatrix(matrix, cameraPosition, cameraTargetPosition, new Vector3(0.0,1.0,0.0));
+    PointModel point = new PointModel();
+    models.add(point);
 
-//    axis.transform = matrix *  axis.transform;
-    axis.transform = cameraTest.perspectiveMatrix * cameraTest.lookAtMatrix *  axis.transform;
-    grid.transform = cameraTest.perspectiveMatrix * cameraTest.lookAtMatrix *  grid.transform;
+    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
 
+    Matrix4 modelMatrix = axis.transform;
+
+    Matrix4 viewMatrix = cameraTest.lookAtMatrix;
+    Matrix4 projectionMatrix = cameraTest.perspectiveMatrix;
+
+    Matrix4 finalMatrix = /*projectionMatrix **/ viewMatrix * new Matrix4.identity();
+
+    point.position = finalMatrix * modelMatrix * vertexPosition;
+    grid.transform = finalMatrix * grid.transform;
+    axis.transform = finalMatrix * axis.transform;
   }
 }

@@ -222,7 +222,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   bool visible = false;
 
   final Camera _camera;
-  Matrix4 get _vpmatrix => _camera.vpMatrix;
+  Matrix4 get _vpmatrix => _camera.viewProjecionMatrix;
 
   Vector4 _positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
   Vector4 _frustrumColor = new Vector4(0.0, 0.7, 1.0, 1.0);
@@ -250,7 +250,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   List<Model> gizmoModels = [];
 
   FrustrumGizmo(Camera camera): _camera = camera{
-    _createFrustrumModel(_camera.vpMatrix);
+    _createFrustrumModel(_camera.viewProjecionMatrix);
   }
 
   _createFrustrumModel(Matrix4 cameraMatrix) {

@@ -106,6 +106,7 @@ class Camera extends Model {
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
   }
 
+  //projectionMatrix
   Matrix4 _perspectiveMatrix = new Matrix4.identity();
   Matrix4 get perspectiveMatrix {
     return _perspectiveMatrix;
@@ -115,13 +116,14 @@ class Camera extends Model {
     _updateGizmo();
   }
 
+  //viewMatrix
   Matrix4 _lookAtMatrix = new Matrix4.identity();
   Matrix4 get lookAtMatrix {
     return _lookAtMatrix;
   }
 
-  //Todo : nomenclature : viewProjecionMatrix ? pq utilisé comme projection dans les shader.. il y a un soucis à clarifier
-  Matrix4 get vpMatrix {
+  //viewProjectionMatrix
+  Matrix4 get viewProjecionMatrix {
     return perspectiveMatrix * lookAtMatrix;
   }
 
