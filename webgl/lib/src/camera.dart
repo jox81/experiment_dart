@@ -70,7 +70,6 @@ class Camera extends Model {
   }
 
   Camera(this._fov, this._zNear, this._zFar) {
-
   }
 
   void translate(Vector3 value) {
