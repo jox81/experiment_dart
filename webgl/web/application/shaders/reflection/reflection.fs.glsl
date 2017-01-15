@@ -27,6 +27,11 @@ uniform samplerCube uEnvMap;
 varying vec3 ecPosition;
 varying vec3 ecNormal;
 
+//http://marcinignac.com/blog/pragmatic-pbr-hdr/
+//It's important to remember in which coordinate space we calculate our reflection. Normals are usually in
+//the view (eye) space and it's easy to calculate view ray (eyeDir) in view space as the camera position is [0,0,0] so
+//we just negate the vertex position. But the cubemap textures are addressed by a vector in the world space so we need
+//to move our computation there.
 void main() {
     //direction towards they eye (camera) in the view (eye) space
     vec3 ecEyeDir = normalize(-ecPosition);
