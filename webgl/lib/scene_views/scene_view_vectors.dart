@@ -23,21 +23,34 @@ class SceneViewVectors extends Scene{
     //Cameras
     Camera camera = new Camera(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(3.0, 5.0, 5.0)
+      ..position = new Vector3(3.0, 10.0, 10.0)
       ..cameraController = new CameraController();
     Context.mainCamera = camera;
 
     AxisModel axis = new AxisModel();
     models.add(axis);
 
-    MultiLineModel line = new MultiLineModel([
-      new Vector3.all(0.0),
-      new Vector3(10.0, 0.0, 0.0),
-      new Vector3(10.0, 0.0, 10.0),
-      new Vector3(10.0, 10.0, 10.0),
-    ]);
-    models.add(line);
+    GridModel grid = new GridModel();
+    models.add(grid);
+
+    VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,-3.0));
+    models.add(vectorModelA);
+
+    VectorModel vectorModelB = new VectorModel(new Vector3(-2.0,0.0,-2.0));
+    models.add(vectorModelB);
+
+    VectorModel vectorModelR = new VectorModel(vectorModelA.vec + vectorModelB.vec);
+    models.add(vectorModelR);
 
 
+    VectorModel vectorModelRMatrixView = new VectorModel(Context.mainCamera.perspectiveMatrix * new Vector3(1.0,1.0,1.0))
+      ..material = new MaterialBaseColor(new Vector4(0.6,0.2,0.2,1.0));
+    models.add(vectorModelRMatrixView);
+    print(vectorModelRMatrixView.vec);
+
+    VectorModel vectorModelvpMatrix = new VectorModel(Context.mainCamera.vpMatrix * Context.modelViewMatrix * new Vector3(1.0,1.0,1.0))
+      ..material = new MaterialBaseColor(new Vector4(0.6,0.2,0.2,1.0));
+    models.add(vectorModelvpMatrix);
+    print(vectorModelvpMatrix.vec);
   }
 }

@@ -117,6 +117,10 @@ class Mesh {
     return new _LineMesh(points);
   }
 
+  factory Mesh.Line2(List<Vector3> points) {
+    return new _LineMesh2(points);
+  }
+
   factory Mesh.Rectangle() {
     return new _SquareMesh();
   }
@@ -156,8 +160,10 @@ class _PointMesh extends Mesh {
 
   }
 }
-class _LineMesh extends Mesh {
-  _LineMesh(List<Vector3> points) {
+
+//Deprecated
+class _LineMesh2 extends Mesh {
+  _LineMesh2(List<Vector3> points) {
     assert(points.length >= 2);
 
     mode = DrawMode.LINES;
@@ -172,6 +178,21 @@ class _LineMesh extends Mesh {
       vertices.addAll(point2.storage);
 
       colors.addAll([1.0, 0.0, 0.0, 1.0]);
+    }
+  }
+}
+
+class _LineMesh extends Mesh {
+  _LineMesh(List<Vector3> points) {
+    assert(points.length >= 2);
+
+    mode = DrawMode.LINE_STRIP;
+
+    vertices = [];
+
+    for(int i = 0; i < points.length; i++){
+      vertices.addAll(points[i].storage);
+//      colors.addAll([1.0, 0.0, 0.0, 1.0]);
     }
   }
 }

@@ -67,7 +67,7 @@ class Interaction {
       if ((elementDebugInfoText != null)) {
         elementDebugInfoText.text =
             "Camera Position: ${Context.mainCamera.position}";
-        print(event.keyCode);
+//        print(event.keyCode);
       }
     } else {}
     _currentlyPressedKeys[event.keyCode] = true;
@@ -131,7 +131,7 @@ class Interaction {
             ? 1
             : 0) * delta;
 
-        print('$deltaMoveX, $deltaMoveY, $deltaMoveZ');
+//        print('$deltaMoveX, $deltaMoveY, $deltaMoveZ');
 
         if (Application.instance.activeTool == ToolType.move) {
           num moveFactor = 1.0;
@@ -161,7 +161,7 @@ class Interaction {
     if(!dragging) {
       Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
       scene.currentSelection = modelHit;
-      print(modelHit?.name);
+//      print(modelHit?.name);
     }
     dragging = false;
     mouseDown = false;

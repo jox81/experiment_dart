@@ -6,6 +6,7 @@ import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 
@@ -19,7 +20,7 @@ enum ModelType{
   sphere,
   torus,
   axis,
-  skybox
+  grid,
 }
 
 abstract class Model extends IEditElement {
@@ -96,8 +97,8 @@ abstract class Model extends IEditElement {
       case ModelType.axis:
         newModel = new AxisModel();
         break;
-      case ModelType.skybox:
-        newModel = new SkyBoxModel();
+      case ModelType.grid:
+        newModel = new GridModel();
         break;
       default:
         break;
@@ -326,6 +327,30 @@ class FrustrumGizmo extends Model implements IGizmo {
   }
 }
 
+class GridModel extends Model {
+  GridModel() {
+    int gridHalfWidthCount = 5;
+    List<Vector3> points = [];
+    for(int i = -gridHalfWidthCount; i <= gridHalfWidthCount; i++){
+      Vector3 p1 = new Vector3(i.toDouble(), 0.0, gridHalfWidthCount.toDouble());
+      Vector3 p2 = new Vector3(i.toDouble(), 0.0, -gridHalfWidthCount.toDouble());
+      points.add(p1);
+      points.add(p2);
+    }
+    for(int i = -gridHalfWidthCount; i <= gridHalfWidthCount; i++){
+      Vector3 p1 = new Vector3(-gridHalfWidthCount.toDouble(), 0.0, i.toDouble());
+      Vector3 p2 = new Vector3(gridHalfWidthCount.toDouble(), 0.0, i.toDouble());
+      points.add(p1);
+      points.add(p2);
+    }
+
+    mesh = new Mesh.Line(points)
+    ..mode = DrawMode.LINES;
+
+    material = new MaterialBaseColor(new Vector4(0.5,0.5,0.5,1.0));
+  }
+}
+
 //Todo : convert from javascript
 class TorusModel extends Model {
   /*
@@ -378,5 +403,22 @@ class SkyBoxModel extends CubeModel{
   SkyBoxModel() {
     mesh = new Mesh.Cube();
     material = new MaterialPoint();
+  }
+}
+
+
+class VectorModel extends Model {
+  final Vector3 vec;
+  VectorModel(this.vec) {
+    List<Vector3> points = new List();
+
+    points
+      ..add(new Vector3.all(0.0))
+      ..add(vec);
+
+    mesh = new Mesh.Line(points)
+      ..mode = DrawMode.LINES;
+
+    material = new MaterialBase();
   }
 }
