@@ -14,9 +14,9 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 //Todo : créer un vrai service angular
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
-    new SceneViewVectors(),
+//    new SceneViewVectors(),
+    new SceneViewCubeMap(),
 //    new SceneViewBase(),
-//    new SceneViewCubeMap(),
 //    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),

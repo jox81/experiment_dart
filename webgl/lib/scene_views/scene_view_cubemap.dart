@@ -38,20 +38,24 @@ class SceneViewCubeMap extends Scene{
       ..transform.scale(1);
     models.add(skyBoxModel);
 
+    MaterialReflection materialReflection = new MaterialReflection()
+      ..skyboxTexture = cubeMapTexture;
+
+    GridModel grid = new GridModel();
+    models.add(grid);
 
     //Sphere
-    MaterialReflection materialReflection = new MaterialReflection()
-    ..skyboxTexture = cubeMapTexture;
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
       ..transform.translate(0.0, 0.0, 0.0)
-      ..transform.scale(0.5)
+      ..transform.scale(0.1)
       ..material = materialReflection;
     models.add(sphere);
 
+    QuadModel plane = new QuadModel()
+      ..transform.translate(0.0, 0.0, 0.0)
+      ..transform.scale(1.0)
+      ..transform.rotateX(radians(-90.0))
+      ..material = materialReflection;
+    models.add(plane);
   }
-
-  Future createSkyBox(String cubeMapName) async {
-
-  }
-
 }

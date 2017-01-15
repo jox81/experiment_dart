@@ -424,6 +424,12 @@ class MaterialReflection extends Material {
     setShaderUniformWithName(
         "uInverseViewMatrix", new Matrix4.inverted(Context.mainCamera.lookAtMatrix) );
 
+    setShaderUniformWithName(
+        "uNormalMatrix",
+        new Matrix4.inverted(Context.modelViewMatrix)
+            .transposed()
+            .getRotation());
+
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
     setShaderUniformWithName('uSkybox', 0);

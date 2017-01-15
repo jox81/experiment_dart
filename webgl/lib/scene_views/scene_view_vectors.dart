@@ -117,7 +117,8 @@ class SceneViewVectors extends Scene{
     GridModel grid = new GridModel();
     models.add(grid);
 
-    PointModel point = new PointModel();
+    PointModel point = new PointModel()
+    ..position = new Vector3(1.0,0.0,1.0);
     models.add(point);
 
     Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
@@ -129,7 +130,7 @@ class SceneViewVectors extends Scene{
 
     Matrix4 finalMatrix = /*projectionMatrix **/ viewMatrix * new Matrix4.identity();
 
-    point.position = finalMatrix * modelMatrix * vertexPosition;
+    point.transform = finalMatrix * axis.transform * point.transform;
     grid.transform = finalMatrix * grid.transform;
     axis.transform = finalMatrix * axis.transform;
   }
