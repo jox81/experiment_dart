@@ -44,8 +44,7 @@ class SceneViewCubeMap extends Scene{
     GridModel grid = new GridModel();
     models.add(grid);
 
-    //Sphere
-    SphereModel sphere = new SphereModel(radius: 5.0, segmentV: 8, segmentH: 12)
+    SphereModel sphere = new SphereModel(radius: 5.0, segmentV: 32, segmentH: 32)
       ..transform.translate(0.0, 0.0, 0.0)
       ..transform.scale(0.1)
       ..material = materialReflection;

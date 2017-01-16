@@ -226,11 +226,9 @@ class MaterialBaseTextureNormal extends Material {
     setShaderUniformWithName(
         "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
 
-    Matrix4 mvInverse = new Matrix4.identity();
-    mvInverse.copyInverse(Context.modelViewMatrix);
-    Matrix3 normalMatrix = mvInverse.getRotation();
-
-    normalMatrix.transpose();
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (Context.modelViewMatrix).getNormalMatrix();
     setShaderUniformWithName("uNormalMatrix", normalMatrix);
 
     //Light
@@ -293,11 +291,11 @@ class MaterialPBR extends Material {
     setShaderUniformWithName(
         "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
 
-    setShaderUniformWithName(
-        "uNormalMatrix",
-        new Matrix4.inverted(Context.modelViewMatrix)
-            .transposed()
-            .getRotation());
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (Context.modelViewMatrix).getNormalMatrix();
+    setShaderUniformWithName("uNormalMatrix", normalMatrix);
+
     setShaderUniformWithName("uLightPos", pointLight.position.storage);
   }
 }
@@ -374,11 +372,9 @@ class MaterialSkyBox extends Material {
     setShaderUniformWithName(
         "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
-    Matrix4 mvInverse = new Matrix4.identity();
-    mvInverse.copyInverse(Context.modelViewMatrix);
-    Matrix3 normalMatrix = mvInverse.getRotation();
-
-    normalMatrix.transpose();
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = Context.modelViewMatrix.getNormalMatrix();
     setShaderUniformWithName("uNormalMatrix", normalMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
@@ -420,15 +416,15 @@ class MaterialReflection extends Material {
     setShaderUniformWithName(
         "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
-    //??
     setShaderUniformWithName(
         "uInverseViewMatrix", new Matrix4.inverted(Context.mainCamera.lookAtMatrix) );
 
-    setShaderUniformWithName(
-        "uNormalMatrix",
-        new Matrix4.inverted(Context.modelViewMatrix)
-            .transposed()
-            .getRotation());
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    /// why ? !!do not use : Matrix3 normalMatrix = Context.modelViewMatrix.getNormalMatrix();
+    /// but :
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * model.transform).getNormalMatrix();
+    setShaderUniformWithName("uNormalMatrix", normalMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
