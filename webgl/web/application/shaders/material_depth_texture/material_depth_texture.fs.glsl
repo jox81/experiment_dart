@@ -26,5 +26,5 @@ void main(void) {
 if you're drawing the depth texture from the FBO and things are either white or black,
 your depth texture is working, but your values are too high. OpenGL camera set up so that the Z values get big quickly,
 whereas when you're drawing those values directly as colors 0 is black and 1 is white,
-so you're getting what you're expecting, which an image rendered with a 0.0 - 1.0 range.
+so you're getting what you're expecting, which is an image rendered with a 0.0 - 1.0 range.
 */

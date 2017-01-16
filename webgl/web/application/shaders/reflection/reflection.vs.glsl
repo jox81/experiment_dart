@@ -13,6 +13,10 @@ varying vec3 ecNormal;
 
 void main() {
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * aVertexPosition;
+
+    //position du vertex en coordonée de vue
     ecPosition = vec3(uViewMatrix * uModelMatrix * aVertexPosition);
+
+    //norm en coordonée de vue
     ecNormal = uNormalMatrix * aNormal;
 }

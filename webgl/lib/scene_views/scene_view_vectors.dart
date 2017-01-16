@@ -33,27 +33,28 @@ class SceneViewVectors extends Scene{
       ..cameraController = new CameraController();
     Context.mainCamera = camera;
 
-    cameraTest = new Camera(radians(45.0), 0.2, 5.0)
-      ..targetPosition = new Vector3(1.0, 0.0, 0.0)
-      ..position = new Vector3(3.0, 3.0, 3.0)
-      ..showGizmo = true;
-    models.add(cameraTest);
-
     matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));
     matVectorB = new MaterialBaseColor(new Vector4(0.0,0.0,1.0,1.0));
     matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
 
-    AxisModel axis = new AxisModel();
-    models.add(axis);
-
-    GridModel grid = new GridModel()
-      ..position = new Vector3(0.0,-0.01,0.0);
+//    cameraTest = new Camera(radians(45.0), 0.2, 5.0)
+//      ..targetPosition = new Vector3(1.0, 0.0, 0.0)
+//      ..position = new Vector3(3.0, 3.0, 3.0)
+//      ..showGizmo = true;
+//    models.add(cameraTest);
+//
+//
+//    AxisModel axis = new AxisModel();
+//    models.add(axis);
+//
+    GridModel grid = new GridModel();
     models.add(grid);
 
 //    test01();
 //    test02();
 //    test03();
-    test04();
+//    test04();
+    testDisplayNormals();
   }
 
   /// basic add vector result
@@ -99,13 +100,15 @@ class SceneViewVectors extends Scene{
       ..material = matVectorResult;
     models.add(vectorModelR);
   }
-  void test04() {
+
+  //Projection view Matrix test
+  void testViewProjectionMatrix() {
 
     Vector3 cameraPosition = new Vector3(0.0,2.0,2.0);
     Vector3 cameraTargetPosition = new Vector3(0.0,0.0,1.0);
 
     cameraTest
-      ..fov = radians(45.0)
+      ..fov = radians(150.0)
       ..targetPosition = cameraTargetPosition
       ..position = cameraPosition;
 
@@ -128,10 +131,47 @@ class SceneViewVectors extends Scene{
     Matrix4 viewMatrix = cameraTest.lookAtMatrix;
     Matrix4 projectionMatrix = cameraTest.perspectiveMatrix;
 
-    Matrix4 finalMatrix = /*projectionMatrix **/ viewMatrix * new Matrix4.identity();
+    Matrix4 finalMatrix = projectionMatrix * viewMatrix * new Matrix4.identity();
 
     point.transform = finalMatrix * axis.transform * point.transform;
     grid.transform = finalMatrix * grid.transform;
     axis.transform = finalMatrix * axis.transform;
+  }
+
+  //Nomral tests
+  void testDisplayNormals() {
+
+//    QuadModel plane = new QuadModel();
+//    models.add(plane);
+
+//    CubeModel cube = new CubeModel();
+//    models.add(cube);
+
+    SphereModel sphere = new SphereModel(radius: 2.0, segmentV: 8, segmentH: 12);
+    models.add(sphere);
+
+    displayNormals(sphere);
+  }
+
+  //Todo : optimiser en ne rendant qu'un seul MultiLineModel
+  void displayNormals(Model model) {
+    for(int i = 0; i < model.mesh.vertexNormalsCount; i++){
+
+      //the normal
+      num nX = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 0];
+      num nY = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 1];
+      num nZ = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 2];
+      Vector3 normal = new Vector3(nX, nY, nZ);
+
+      //position of the normal
+      num pX = model.mesh.vertices[i * model.mesh.vertexDimensions + 0];
+      num pY = model.mesh.vertices[i * model.mesh.vertexDimensions + 1];
+      num pZ = model.mesh.vertices[i * model.mesh.vertexDimensions + 2];
+
+      VectorModel vectorModelA = new VectorModel(normal)
+        ..translate(new Vector3(pX, pY, pZ))
+        ..material = matVectorA;
+      models.add(vectorModelA);
+    }
   }
 }

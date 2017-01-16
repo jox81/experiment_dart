@@ -59,6 +59,7 @@ class Mesh {
   //vertexNormals infos
   int _vertexNormalsDimensions = 3;
   int get vertexNormalsDimensions => _vertexNormalsDimensions;
+
   List<double> _vertexNormals = new List();
   List<double> get vertexNormals => _vertexNormals;
   set vertexNormals(List<double> value) {

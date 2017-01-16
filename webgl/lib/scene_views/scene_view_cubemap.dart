@@ -35,7 +35,7 @@ class SceneViewCubeMap extends Scene{
 
     SkyBoxModel skyBoxModel = new SkyBoxModel()
       ..material = materialSkyBox
-      ..transform.scale(1);
+      ..transform.scale(1.0);
     models.add(skyBoxModel);
 
     MaterialReflection materialReflection = new MaterialReflection()
@@ -45,17 +45,23 @@ class SceneViewCubeMap extends Scene{
     models.add(grid);
 
     //Sphere
-    SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
+    SphereModel sphere = new SphereModel(radius: 5.0, segmentV: 8, segmentH: 12)
       ..transform.translate(0.0, 0.0, 0.0)
       ..transform.scale(0.1)
       ..material = materialReflection;
     models.add(sphere);
 
-    QuadModel plane = new QuadModel()
-      ..transform.translate(0.0, 0.0, 0.0)
-      ..transform.scale(1.0)
-      ..transform.rotateX(radians(-90.0))
-      ..material = materialReflection;
-    models.add(plane);
+//    QuadModel plane = new QuadModel()
+//      ..transform.translate(0.0, 0.0, 0.0)
+//      ..transform.scale(1.0)
+//      ..transform.rotateX(radians(-90.0))
+//      ..material = materialReflection;
+//    models.add(plane);
+
+//    CubeModel cube = new CubeModel()
+//      ..transform.translate(0.0, 0.0, 0.0)
+//      ..transform.scale(1.0)
+//      ..material = materialReflection;
+//    models.add(cube);
   }
 }

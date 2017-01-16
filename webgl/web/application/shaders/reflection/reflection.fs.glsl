@@ -11,6 +11,7 @@ precision mediump float;
  *                                  1.0 for right handed coorinate system oriented texture
  * @return {vec4} - cubemap texture coordinate
  */
+//(jpu) j'ai du ajouter un flip sur le y, le résutat est meiux mais pas encore correcte
 vec3 envMapCube(vec3 wcNormal, float flipEnvMap) {
     return vec3(flipEnvMap * wcNormal.x, wcNormal.y, wcNormal.z);
 }
@@ -28,20 +29,22 @@ varying vec3 ecPosition;
 varying vec3 ecNormal;
 
 //http://marcinignac.com/blog/pragmatic-pbr-hdr/
-//It's important to remember in which coordinate space we calculate our reflection. Normals are usually in
-//the view (eye) space and it's easy to calculate view ray (eyeDir) in view space as the camera position is [0,0,0] so
-//we just negate the vertex position. But the cubemap textures are addressed by a vector in the world space so we need
-//to move our computation there.
+//
+//It's important to remember in which coordinate space we calculate our reflection.
+//
+//Normals are usually in the view (eye) space and it's easy to calculate view ray (eyeDir) in view space as the
+//camera position is [0,0,0] so we just negate the vertex position.
+//
+//But the cubemap textures are addressed by a vector in the world space so we need to move our computation there.
 void main() {
-    //direction towards they eye (camera) in the view (eye) space
-    vec3 ecEyeDir = normalize(-ecPosition);
-    //direction towards the camera in the world space
-    vec3 wcEyeDir = vec3(uInverseViewMatrix * vec4(ecEyeDir, 0.0));
+    //direction from they eye (camera) in the view (eye) space is = ecPosition
+    //direction from the camera in the world space
+    vec3 wcEyeDir = vec3(uInverseViewMatrix * vec4(ecPosition, 0.0));
     //surface normal in the world space
     vec3 wcNormal = vec3(uInverseViewMatrix * vec4(ecNormal, 0.0));
 
-    //reflection vector in the world space. We negate wcEyeDir as the reflect function expect incident vector pointing towards the surface
-    vec3 reflectionWorld = reflect(-wcEyeDir, normalize(wcNormal));
+    //reflection vector in the world space.
+    vec3 wcReflection = reflect(normalize(wcEyeDir), normalize(wcNormal));
 
-    gl_FragColor = textureCube(uEnvMap, envMapCube(reflectionWorld));
+    gl_FragColor = textureCube(uEnvMap, envMapCube(wcReflection));
 }

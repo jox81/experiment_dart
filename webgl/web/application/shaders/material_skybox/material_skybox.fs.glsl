@@ -2,8 +2,6 @@ precision mediump float;
 
 ///> from web/application/shaders/functions/envMap-cube.glsl
 /// should be inserted dynamically
-//using :
-//#pragma tessd: require("/application/shaders/functions/envMap-cube.glsl")
 /**
  * Samples cubemap environment map
  * @param  {vec3} wcNormal - normal in the world coordinate space
