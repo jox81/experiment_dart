@@ -4,14 +4,15 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/camera.dart';
 import 'dart:async';
+import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 
 class SceneViewPrimitives extends Scene{
 
   Camera camera;
-  Camera camera2;
-  Camera camera3;
+//  Camera camera2;
+//  Camera camera3;
 
   int cameraIndex = 0;
 
@@ -41,12 +42,12 @@ class SceneViewPrimitives extends Scene{
     models.add(camera);
     Context.mainCamera = camera;
 
-    camera2 = new Camera(radians(37.0), 0.5, 10.0)
-      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-      ..position = new Vector3(2.0, 2.0, 2.0)
-      ..cameraController = new CameraController()
-      ..showGizmo = true;
-    models.add(camera2);
+//    camera2 = new Camera(radians(37.0), 0.5, 10.0)
+//      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
+//      ..position = new Vector3(2.0, 2.0, 2.0)
+//      ..cameraController = new CameraController()
+//      ..showGizmo = true;
+//    models.add(camera2);
 
 //    camera3 = new Camera(radians(37.0), 1.0, 100.0)
 //      ..aspectRatio = Context.viewAspectRatio
@@ -59,9 +60,9 @@ class SceneViewPrimitives extends Scene{
     //Material
 //    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
 //    MaterialBase materialBase = new MaterialBase();
-
-    AxisModel axis = new AxisModel();
-    models.add(axis);
+//
+//    AxisModel axis = new AxisModel();
+//    models.add(axis);
 
 //    models.add(
 //        new PointModel()
@@ -75,9 +76,12 @@ class SceneViewPrimitives extends Scene{
 //          ..position.setFrom(new Vector3(1.0, 0.0, 1.0))
 //    );
 
-//    models.add(new TriangleModel()
-//      ..name = 'triangle1'
-//      ..position = new Vector3(1.0, 0.0, 3.0));
+    MaterialBaseColor materialBaseColor = new MaterialBaseColor(new Vector4(1.0,1.0,0.0, 1.0));
+    materials.add(materialBaseColor);
+
+    models.add(new TriangleModel()
+      ..name = 'triangle1'
+      ..material = materialBaseColor);
 
 //    QuadModel quad = new QuadModel()
 //      ..name = "quad"
@@ -89,10 +93,10 @@ class SceneViewPrimitives extends Scene{
 //      ..position = new Vector3(5.0, 5.0, 0.0);
 //    models.add(pyramid);
 
-    CubeModel cube = new CubeModel()
-      ..name = "cube"
-      ..position = new Vector3(0.0, 0.0, 0.0);
-    models.add(cube);
+//    CubeModel cube = new CubeModel()
+//      ..name = "cube"
+//      ..position = new Vector3(0.0, 0.0, 0.0);
+//    models.add(cube);
 
 //    SphereModel sphere = new SphereModel()
 //      ..name = "sphere"

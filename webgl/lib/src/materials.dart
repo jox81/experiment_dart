@@ -307,6 +307,9 @@ class MaterialDepthTexture extends Material {
   //External parameters
   WebGLTexture texture;
 
+  num near = 1.0;
+  num far = 1000.0;
+
   MaterialDepthTexture._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);
 
@@ -329,9 +332,14 @@ class MaterialDepthTexture extends Material {
   setShaderUniforms(Model model) {
     setShaderUniformWithName(
         "uModelViewMatrix", Context.modelViewMatrix);
+
     setShaderUniformWithName(
         "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+
     setShaderUniformWithName('uSampler', 0);
+
+    setShaderUniformWithName('near', near);
+    setShaderUniformWithName('far', far);
   }
 
 }

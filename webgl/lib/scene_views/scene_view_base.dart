@@ -46,7 +46,8 @@ class SceneViewBase extends Scene{
     light = pointLight;
 
     //Materials
-    MaterialPoint materialPoint = new MaterialPoint(pointSize:4.0);
+    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0 ,color:new Vector4(1.0,1.0,0.0,1.0))
+      ..name = "pointMat";
     materials.add(materialPoint);
 
     MaterialBase materialBase = new MaterialBase();
@@ -77,7 +78,8 @@ class SceneViewBase extends Scene{
     models.add(axis);
 
     PointModel point = new PointModel()
-        ..position = new Vector3(8.0, 5.0, 10.0);
+        ..position = new Vector3(8.0, 5.0, 10.0)
+    ..material = materialPoint;
     models.add(point);
 
     //Line

@@ -4,8 +4,8 @@ uniform sampler2D uSampler;
 
 varying vec2 vTextureCoord;
 
-float near = 2.0;
-float far = 1000.0;
+uniform float near;
+uniform float far;
 
 //applique une adaptation linéaire sur zoverw
 //car les valeurs de depth ne sont pas linéaires
