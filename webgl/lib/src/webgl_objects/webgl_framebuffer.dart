@@ -1,13 +1,14 @@
 import 'dart:web_gl' as WebGL;
 
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-class ActiveFrameBuffer{
+class ActiveFrameBuffer extends IEditElement {
   static ActiveFrameBuffer _instance;
   ActiveFrameBuffer._init();
 

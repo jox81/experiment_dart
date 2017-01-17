@@ -1,6 +1,7 @@
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_dictionnary.dart';
 
-class ContextAttributs{
+class ContextAttributs extends IEditElement {
 
   final WebGLDictionary _values;
 

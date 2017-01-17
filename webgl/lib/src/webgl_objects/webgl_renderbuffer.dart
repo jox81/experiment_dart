@@ -29,8 +29,6 @@ class WebGLRenderBuffer extends WebGLObject{
   bool get isRenderbuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
 
 
-
-
   void renderbufferStorage(RenderBufferTarget renderbuffer, RenderBufferInternalFormatType internalFormat, int width, int heigth) {
     gl.ctx.renderbufferStorage(renderbuffer.index, internalFormat.index, width, heigth);
   }

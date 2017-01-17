@@ -18,14 +18,11 @@ class SceneViewPrimitives extends Scene{
 
   SceneViewPrimitives();
 
+  //Todo : move to global
   void switchCamera(){
     cameraIndex += 1;
     cameraIndex %= cameras.length;
     Context.mainCamera = cameras[cameraIndex];
-  }
-
-  void testEdit(){
-    currentSelection = new CustomEditElement(new Vector3(1.0,2.0,3.0));
   }
 
   @override

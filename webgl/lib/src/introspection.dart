@@ -49,61 +49,80 @@ class IntrospectionManager {
 //
 //    }
 
-    instance_mirror_getters
-        .forEach((String key, MethodMirror instance_mirror_field) {
-      if (instance_mirror_setters.containsKey('$key=')) {
-        Symbol fieldSymbol = instance_mirror_field.simpleName;
-        propertiesInfos[key] = new EditableProperty(
-            instance_mirror.getField(fieldSymbol).reflectee.runtimeType,
-            () => instance_mirror.getField(fieldSymbol).reflectee,
-            (v) => instance_mirror.setField(fieldSymbol, v).reflectee);
-      }
-    });
+    /// Rempli les getters et associe un getter si existant. Sinon ce sera en lecture seule
+    for (String key in instance_mirror_getters.keys) {
+      //on ne veut pas de properties sinon boucle infinie bug !
+      if (key != 'properties') {
+        MethodMirror instance_mirror_field = instance_mirror_getters[key];
 
-    instance_mirror_functions
-        .forEach((String key, MethodMirror instance_mirror_field) {
+        Symbol fieldSymbol = instance_mirror_field.simpleName;
+
+        Type type;
+        PropertyGetter getter;
+        PropertySetter setter;
+
+        type = instance_mirror.getField(fieldSymbol).reflectee.runtimeType;
+        getter = () => instance_mirror.getField(fieldSymbol).reflectee;
+
+        if (instance_mirror_setters.containsKey('$key=')) {
+          setter = (v) => instance_mirror.setField(fieldSymbol, v).reflectee;
+        } else {
+          setter = null;
+        }
+
+        propertiesInfos[key] = new EditableProperty(type, getter, setter);
+      }
+    }
+
+    //Rempli les fonctions
+    for (String key in instance_mirror_functions.keys) {
+      MethodMirror instance_mirror_field = instance_mirror_functions[key];
+
       Symbol fieldSymbol = instance_mirror_field.simpleName;
       propertiesInfos[key] = new EditableProperty(Function,
           () => instance_mirror.getField(fieldSymbol).reflectee, null);
-    });
+    }
 
     return propertiesInfos;
   }
 
   void logTypeInfos(
     Type type, {
-      bool showBaseInfo: false,
-      bool showLibrary: false,
-      bool showType: false,
-      bool showTypeVariable: false,
-      bool showTypeDef: false,
-      bool showFunctionType: false,
-      bool showVariable: false,
-      bool showParameter: false,
-      bool showMethod: false,
-    }) {
+    bool showBaseInfo: false,
+    bool showLibrary: false,
+    bool showType: false,
+    bool showTypeVariable: false,
+    bool showTypeDef: false,
+    bool showFunctionType: false,
+    bool showVariable: false,
+    bool showParameter: false,
+    bool showMethod: false,
+  }) {
     ClassMirror classMirror = reflectClass(type);
 
-    Utils.log('',(){
+    Utils.log('', () {
       if (showBaseInfo) {
         String simpleName = MirrorSystem.getName(classMirror.simpleName);
         print('### $simpleName');
         print('');
-        print('### ClassMirror declarations     #################################');
+        print(
+            '### ClassMirror declarations     #################################');
       }
       for (DeclarationMirror decl in classMirror.declarations.values) {
         fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
       }
       if (showBaseInfo) {
         print('');
-        print('### ClassMirror staticMembers  #################################');
+        print(
+            '### ClassMirror staticMembers  #################################');
       }
       for (DeclarationMirror decl in classMirror.staticMembers.values) {
         fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
       }
       if (showBaseInfo) {
         print('');
-        print('### ClassMirror instanceMembers  #################################');
+        print(
+            '### ClassMirror instanceMembers  #################################');
       }
       for (DeclarationMirror decl in classMirror.instanceMembers.values) {
         fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
@@ -124,12 +143,11 @@ class IntrospectionManager {
     bool showParameter: false,
     bool showMethod: false,
   }) {
-
     String simpleName = MirrorSystem.getName(decl.simpleName);
     String className = MirrorSystem.getName(classMirror.simpleName);
     String ownerName = MirrorSystem.getName(decl.owner.simpleName);
 
-    if(showBaseInfo) {
+    if (showBaseInfo) {
       print('');
       print('### $simpleName : declarations infos ###');
       print(
@@ -189,7 +207,7 @@ class IntrospectionManager {
         print('defaultValue : ${p.defaultValue}');
       });
       print(')');
-        print('source : ${decl.source}'); // retourne le code
+      print('source : ${decl.source}'); // retourne le code
       print('parameters : ${decl.parameters}'); //Explore more in depth types
       print('isStatic : ${decl.isStatic}');
       print('isAbstract : ${decl.isAbstract}');
@@ -207,7 +225,7 @@ class IntrospectionManager {
     }
   }
 
-  void getMehtodsName(Type type, {bool log : true}){
+  void getMehtodsName(Type type, {bool log: true}) {
     List<String> methodNames = new List();
 
     ClassMirror classMirror = reflectClass(type);
@@ -218,7 +236,7 @@ class IntrospectionManager {
       }
     }
 
-    if(log) {
+    if (log) {
       Utils.log('Webgl Constants', () {
         methodNames.forEach((n) {
           print('$n');

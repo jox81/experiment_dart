@@ -9,6 +9,7 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 
 abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
@@ -32,6 +33,10 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   Scene(){
     Context.mainCamera = new Camera(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero();
+  }
+
+  void editGL(){
+    currentSelection = WebglEdit.instance(this);
   }
 
   @override

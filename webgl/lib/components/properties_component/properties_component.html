@@ -11,27 +11,57 @@
                     </legend>
 
                     <section *ngIf="isString(iEditElement.properties[key])">
-                        <input type="text"
-                               [checked]="iEditElement.properties[key].getter()"
-                               (change) = "setStringValue(iEditElement.properties[key], $event)">
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <input type="text"
+                                   [checked]="iEditElement.properties[key].getter()"
+                            disabled>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <input type="text"
+                                   [checked]="iEditElement.properties[key].getter()"
+                                   (change) = "setStringValue(iEditElement.properties[key], $event)">
+                        </section>
                     </section>
 
                     <section *ngIf="isBool(iEditElement.properties[key])">
-                        <toggleButton
-                            [checked]="iEditElement.properties[key].getter()"
-                            (change)= "setBoolValue(iEditElement.properties[key], $event)"></toggleButton>
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <toggleButton
+                                    [checked]="iEditElement.properties[key].getter()"
+                                disabled>
+                            </toggleButton>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <toggleButton
+                                    [checked]="iEditElement.properties[key].getter()"
+                                    (change)= "setBoolValue(iEditElement.properties[key], $event)">
+                            </toggleButton>
+                        </section>
                     </section>
 
                     <section *ngIf="isNum(iEditElement.properties[key])">
-                        <input type="number" step="0.01"
-                            [ngModel]="iEditElement.properties[key].getter().toStringAsFixed(2)"
-                            (change) = "setNumValue(iEditElement.properties[key], $event)">
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <input type="number" step="0.01"
+                                   [ngModel]="iEditElement.properties[key].getter().toStringAsFixed(2)"
+                                   disabled>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <input type="number" step="0.01"
+                                   [ngModel]="iEditElement.properties[key].getter().toStringAsFixed(2)"
+                                   (change) = "setNumValue(iEditElement.properties[key], $event)">
+                        </section>
                     </section>
 
                     <section *ngIf="isInt(iEditElement.properties[key])">
-                        <input type="number" step="1"
-                            [ngModel]="iEditElement.properties[key].getter()"
-                            (change) = "setIntValue(iEditElement.properties[key], $event)">
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <input type="number" step="1"
+                                   [ngModel]="iEditElement.properties[key].getter()"
+                                   disabled>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <input type="number" step="1"
+                                   [ngModel]="iEditElement.properties[key].getter()"
+                                   (change) = "setIntValue(iEditElement.properties[key], $event)">
+                        </section>
                     </section>
 
                     <section *ngIf="isFunction(iEditElement.properties[key])">
@@ -39,34 +69,66 @@
                             (click)="iEditElement.properties[key].getter()()" value="{{key}}">
                     </section>
 
-                    <!-- Custom components-->
+                    <!-- Custom components -->
 
                     <section *ngIf="isVector2(iEditElement.properties[key])">
-                        <vector2
-                            [vector]="iEditElement.properties[key].getter()"
-                            (vector3Change) = "setVector2Value(iEditElement.properties[key], $event)">
-                        </vector2>
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <vector2
+                                    [vector]="iEditElement.properties[key].getter()"
+                                    (vector3Change) = "print('setter disabled')">
+                            </vector2>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <vector2
+                                    [vector]="iEditElement.properties[key].getter()"
+                                    (vector3Change) = "setVector2Value(iEditElement.properties[key], $event)">
+                            </vector2>
+                        </section>
                     </section>
 
                     <section *ngIf="isVector3(iEditElement.properties[key])">
-                        <vector3
-                            [vector]="iEditElement.properties[key].getter()"
-                            (vector3Change) = "setVector3Value(iEditElement.properties[key], $event)">
-                        </vector3>
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <vector3
+                                    [vector]="iEditElement.properties[key].getter()"
+                                    (vector3Change) = "print('setter disabled')">
+                            </vector3>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <vector3
+                                    [vector]="iEditElement.properties[key].getter()"
+                                    (vector3Change) = "setVector3Value(iEditElement.properties[key], $event)">
+                            </vector3>
+                        </section>
                     </section>
 
                     <section *ngIf="isVector4(iEditElement.properties[key])">
-                        <vector4
-                            [vector]="iEditElement.properties[key].getter()"
-                            (vector4Change) = "setVector4Value(iEditElement.properties[key], $event)">
-                        </vector4>
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <vector4
+                                    [vector]="iEditElement.properties[key].getter()"
+                                    (vector4Change) = "print('setter disabled')">
+                            </vector4>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <vector4
+                                    [vector]="iEditElement.properties[key].getter()"
+                                    (vector4Change) = "setVector4Value(iEditElement.properties[key], $event)">
+                            </vector4>
+                        </section>
                     </section>
 
                     <section *ngIf="isMatrix4(iEditElement.properties[key])">
-                        <matrix4
-                            [matrix]="iEditElement.properties[key].getter()"
-                            (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
-                        </matrix4>
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <matrix4
+                                    [matrix]="iEditElement.properties[key].getter()"
+                                    (matrix4Change) = "print('setter disabled')">
+                            </matrix4>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <matrix4
+                                    [matrix]="iEditElement.properties[key].getter()"
+                                    (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
+                            </matrix4>
+                        </section>
                     </section>
 
                     <section *ngIf="isList(iEditElement.properties[key])">
