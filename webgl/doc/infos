@@ -17,29 +17,43 @@ https://www.khronos.org/registry/webgl/specs/latest/1.0/
 
 // Suggestions /////////////////////
 
-- reorganiser et refactoriser le code plus ergonomique
 
-- placer des méthodes static dans les object de réference : ie: placer bindFrameBuffer dans FrameBuffer plutot que dans context ?
-- ou placer certaine methode, en context ou en object specific ? bind dans le renderingcontext ou dans l'object ?
-- faut-il utiliser :
-(1) bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
-ou
-(2) bool get depthTest => isEnabled(EnableCapabilityType.DEPTH_TEST);
-
-(1): appel direct, plus rapide sans autre appel de fonction
-(2): possibilité d'agir entre les deux
-
+- sauvegarde d'une scene
+    => skin
+        -> json : static
+        -> direct dart code
+- affichage édition / visualisation
+- affichage fps
+- chargement d'un scene
+- ui beauty
+- ajouter un matériaux à un object
+- bibliothèque des materiaux
+- page settings globales
+- shaders pbr +
 - gerer les extensions
     -> ajouter des enums , methods etc, ...
 
 - webglevents : https://developer.mozilla.org/en-US/docs/Web/API/WebGLContextEvent
+
 - créer des type webgl comme https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API/Types
     -> GLclampf [0.0 -> 1.0]
-- vérifier si c'est pas trop lourd de passer par tout ça ? pédagogique
 
 // Done /////////////////////
+
 v- finir de placer toutes les méthodes webgl dans les objects //google doc
 v- vérifier les constantes utilisées et indiquer leur provenance //google doc
 v- splitter les méthodes getParameter en multiParameters
     + chaque objet webgl aussi
 v- placer les enums dans un même fichier ?
+
+v- reorganiser et refactoriser le code plus ergonomique
+v- placer des méthodes static dans les object de réference : ie: placer bindFrameBuffer dans FrameBuffer plutot que dans context ?
+v- ou placer certaine methode, en context ou en object specific ? bind dans le renderingcontext ou dans l'object ?
+v- faut-il utiliser :
+    (1) bool get depthTest => ctx.isEnabled(EnableCapabilityType.DEPTH_TEST.index);
+    ou
+    (2) bool get depthTest => isEnabled(EnableCapabilityType.DEPTH_TEST);
+
+    (1): appel direct, plus rapide sans autre appel de fonction
+    (2): possibilité d'agir entre les deux
+    ==> préférer la (1) car plus directe
