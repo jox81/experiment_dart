@@ -122,7 +122,7 @@ class WebGLRenderingContext extends IEditElement {
   }
 
   // > COMPRESSED_TEXTURE_FORMATS [4]
-  WebGlTypedData.Int32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
+  WebGlTypedData.Uint32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
 
   // > CURRENT_PROGRAM
   WebGLProgram get currentProgram => new WebGLProgram.fromWebGL(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index));
