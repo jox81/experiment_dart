@@ -1,7 +1,0 @@
-<div id="container">
-    <template [ngIf]="toolBar != null">
-        <div *ngFor="let key of toolBar.toolBarItems.keys">
-            <toolBarButton [checked] = "false" [toolBarItemsType] = "toolBar.toolBarItemsType" [text] = "key" (change)="onToolBarButtonClicked(key, toolBar.toolBarItems[key],$event)"></toolBarButton>
-        </div>
-    </template>
-</div>

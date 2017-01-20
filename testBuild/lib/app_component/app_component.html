@@ -1,0 +1,11 @@
+<div class="container-fluid">
+    <div class="row">
+        <p>infos : {{infos}}</p>
+    </div>
+    <div class="row">
+        <properties
+            [iEditElement] = "currentElement"
+            (innerSelectionChange) = "selectElement($event)">
+        </properties>
+    </div>
+</div>
