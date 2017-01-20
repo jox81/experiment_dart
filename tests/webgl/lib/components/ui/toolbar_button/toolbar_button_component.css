@@ -1,0 +1,59 @@
+:host {
+    position:relative;
+    display: flex;
+    background-color: #666;
+    width: 30px;
+    height: 30px;
+}
+
+/* Hide default HTML checkbox */
+ .switch input {display:none;}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin:0;
+}
+
+.icon {
+  position: absolute;
+  cursor: pointer;
+  display: flex;
+  top: 2%;
+  left: 2%;
+  right: 2%;
+  bottom: 2%;
+  background-color: #888; /* background border unchecked, inactive */
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.icon:before {
+  position: absolute;
+  content: "";
+  top: 5%;
+  left: 5%;
+  right: 5%;
+  bottom: 5%;
+  background-color: #ccc; /* background unchecked, inactive */
+  -webkit-transition: .1s;
+  transition: .1s;
+}
+
+.icon span{
+    position:relative;
+    color : white;
+    margin: auto;
+}
+
+/* checked states */
+
+input:checked + .icon {
+  background-color: #ccc; /* background border checked, active */
+}
+
+input:checked + .icon:before {
+  background-color: #888; /* background checked, active */
+}

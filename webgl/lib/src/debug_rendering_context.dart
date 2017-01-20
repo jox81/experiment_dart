@@ -1,4 +1,5 @@
 import 'dart:async';
+@MirrorsUsed(targets:const[DebugRenderingContext, RenderingErrorEvent], override:'*')
 import 'dart:mirrors';
 import 'dart:web_gl';
 

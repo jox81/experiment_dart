@@ -1,3 +1,4 @@
+@MirrorsUsed(targets:const[WebglConstant, WebglConstants], override:'*')
 import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';

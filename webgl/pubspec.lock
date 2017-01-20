@@ -13,13 +13,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
-  anime_engine:
-    description:
-      ref: HEAD
-      resolved-ref: "9edc32bacf50cd2e2501d6dd477f551593898125"
-      url: "https://github.com/jox81/anime_engine.git"
-    source: git
-    version: "0.0.1"
   args:
     description:
       name: args
@@ -38,12 +31,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.15.2+9"
-  boolean_selector:
-    description:
-      name: boolean_selector
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   browser:
     description:
       name: browser
@@ -86,13 +73,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  core_engine:
-    description:
-      ref: HEAD
-      resolved-ref: "22ac0986ceb758009afaf2b1bf6cb1977c2444df"
-      url: "https://github.com/jox81/core_engine.git"
-    source: git
-    version: "0.0.1"
   crypto:
     description:
       name: crypto
@@ -117,24 +97,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  datgui:
-    description:
-      name: datgui
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0+1"
   fixnum:
     description:
       name: fixnum
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.5"
-  func:
-    description:
-      name: func
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   glob:
     description:
       name: glob
@@ -147,18 +115,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.13.0"
-  http:
-    description:
-      name: http
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.3+9"
-  http_multi_server:
-    description:
-      name: http_multi_server
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.3"
   http_parser:
     description:
       name: http_parser
@@ -189,12 +145,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.3+1"
-  matcher:
-    description:
-      name: matcher
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.12.0+2"
   meta:
     description:
       name: meta
@@ -219,24 +169,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  package_resolver:
-    description:
-      name: package_resolver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   path:
     description:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
-  petitparser:
-    description:
-      name: petitparser
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.3"
   plugin:
     description:
       name: plugin
@@ -255,42 +193,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.3"
-  pub_semver:
-    description:
-      name: pub_semver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.3.2"
   shelf:
     description:
       name: shelf
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.7+1"
-  shelf_packages_handler:
-    description:
-      name: shelf_packages_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   shelf_static:
     description:
       name: shelf_static
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.4"
-  shelf_web_socket:
-    description:
-      name: shelf_web_socket
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
-  source_map_stack_trace:
-    description:
-      name: source_map_stack_trace
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.1.3"
   source_maps:
     description:
       name: source_maps
@@ -309,36 +223,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.8"
-  stagexl:
-    description:
-      name: stagexl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.13.11+1"
   stream_channel:
     description:
       name: stream_channel
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.0"
-  stream_transformers:
-    description:
-      name: stream_transformers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.0+3"
   string_scanner:
     description:
       name: string_scanner
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
-  test:
-    description:
-      name: test
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.12.17+2"
   typed_data:
     description:
       name: typed_data
@@ -363,12 +259,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7+3"
-  web_socket_channel:
-    description:
-      name: web_socket_channel
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.4"
   when:
     description:
       name: when
@@ -381,12 +271,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.3"
-  xml:
-    description:
-      name: xml
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.4.3"
   yaml:
     description:
       name: yaml

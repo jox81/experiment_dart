@@ -1,0 +1,22 @@
+<div class="container-fluid">
+    <div class="row">
+        <menuBase [currentScene]="currentScene"></menuBase>
+    </div>
+    <div class="row">
+        <toolBar [toolBar] = "getToolBar('axis')"></toolBar>
+        <toolBar [toolBar] = "getToolBar('transformTool')"></toolBar>
+    </div>
+    <div class="row">
+        <div class="col-sm-3 first">
+            <properties
+                [iEditElement] = "currentElement"
+                (innerSelectionChange) = "selectElement($event)">
+            </properties>
+        </div>
+        <div class="col-sm-9 second">
+            <canvas_app id="canvasApp"></canvas_app>
+        </div>
+        <div class="col-sm-0 third">
+        </div>
+    </div>
+</div>

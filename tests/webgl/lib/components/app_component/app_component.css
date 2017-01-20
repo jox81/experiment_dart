@@ -1,0 +1,27 @@
+:host{
+}
+*{
+    color: #c2c19a;
+}
+.row{
+    display: flex;
+
+}
+
+.first{
+    background-color: #504f3b;
+    flex-flow: column;
+    padding:0;
+}
+
+.second{
+    background-color: #504f3b;
+    flex-flow: column;
+    padding:0;
+}
+
+.third{
+    background-color: #504f3b;
+    flex-flow: column;
+    padding:0;
+}
