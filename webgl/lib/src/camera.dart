@@ -4,6 +4,12 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/models.dart';
+@MirrorsUsed(
+    targets: const [
+      Camera,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class Camera extends Model {
 

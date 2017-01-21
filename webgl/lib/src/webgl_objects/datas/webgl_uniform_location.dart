@@ -1,8 +1,13 @@
 import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
-
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+@MirrorsUsed(
+    targets: const [
+      WebGLUniformLocation,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 ///The WebGLUniformLocation represents the location of a uniform
 ///variable in a shader program.

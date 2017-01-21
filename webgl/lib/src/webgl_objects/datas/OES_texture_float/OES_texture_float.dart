@@ -1,5 +1,10 @@
-import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+@MirrorsUsed(
+    targets: const [
+      OES_texture_float_InternalFormat,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class OES_texture_float_InternalFormat extends TextureInternalFormat {
   const OES_texture_float_InternalFormat(int index, String name)

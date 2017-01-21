@@ -8,6 +8,12 @@ import 'package:webgl/src/light.dart';
 import 'dart:math';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewPerformanceTest,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewPerformanceTest extends Scene{
 

@@ -1,5 +1,15 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/models.dart';
+@MirrorsUsed(
+    targets: const [
+      Light,
+      AmbientLight,
+      PointLight,
+      DirectionalLight,
+      DirectionalLight,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class Light extends Model{
   Vector3 color;

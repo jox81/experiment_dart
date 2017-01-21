@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'package:angular2/core.dart';
-
 @Directive(
   selector: '[clickOutside]'
 )

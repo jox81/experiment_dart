@@ -6,6 +6,23 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+@MirrorsUsed(
+    targets: const [
+      SetShaderVariables,
+      MaterialCustom,
+      MaterialPoint,
+      MaterialBase,
+      MaterialBaseColor,
+      MaterialBaseVertexColor,
+      MaterialBaseTexture,
+      MaterialBaseTextureNormal,
+      MaterialPBR,
+      MaterialDepthTexture,
+      MaterialSkyBox,
+      MaterialReflection,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 typedef void SetShaderVariables(Model model);
 

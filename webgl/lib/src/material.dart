@@ -8,10 +8,15 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/models.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
+@MirrorsUsed(
+    targets: const [
+      Material,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 abstract class Material extends IEditElement {
   static bool debugging = false;

@@ -36,6 +36,14 @@ class PropertiesComponent{
     animationProperty.setter(event.target.value);
   }
 
+  //bool
+  bool isBool(EditableProperty animationProperty){
+    return animationProperty.type == bool;
+  }
+  setBoolValue(EditableProperty animationProperty, event){
+    animationProperty.setter(event.target.checked);
+  }
+
   //int
   bool isInt(EditableProperty animationProperty){
     return animationProperty.type == int;

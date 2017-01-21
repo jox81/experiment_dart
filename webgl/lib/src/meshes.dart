@@ -1,8 +1,23 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-
 import 'dart:math';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+@MirrorsUsed(
+    targets: const [
+      Mesh,
+      _PointMesh,
+      _LineMesh2,
+      _LineMesh,
+      _TriangleMesh,
+      _SquareMesh,
+      _PyramidMesh,
+      _CubeMesh,
+      _SphereMesh,
+      _AxisMesh,
+      _AxisPointMesh,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class Mesh {
 

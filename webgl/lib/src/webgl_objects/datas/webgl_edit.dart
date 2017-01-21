@@ -1,6 +1,12 @@
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/scene.dart';
+@MirrorsUsed(
+    targets: const [
+      WebglEdit,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class WebglEdit extends IEditElement {
   final Scene scene;

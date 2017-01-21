@@ -1,3 +1,12 @@
+@MirrorsUsed(
+    targets: const [
+      PropertyGetter,
+      PropertySetter,
+      EditableProperty,
+    ],
+    override: '*')
+import 'dart:mirrors';
+
 typedef T PropertyGetter<T>();
 typedef T PropertySetter<T>(T value);
 

@@ -7,6 +7,12 @@ import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewParticleSimple,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewParticleSimple extends Scene{
 

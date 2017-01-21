@@ -1,4 +1,10 @@
 import 'dart:web_gl' as WebGL;
+@MirrorsUsed(
+    targets: const [
+      WebGLShaderPrecisionFormat,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 ///The WebGLShaderPrecisionFormat represents the information returned from the getShaderPrecisionFormat call.
 class WebGLShaderPrecisionFormat {

@@ -1,5 +1,13 @@
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+@MirrorsUsed(
+    targets: const [
+      WEBGL_depth_texture_InternalFormat,
+      WEBGL_depth_texture_TexelDataType,
+      WEBGL_depth_texture_TextureAttachmentTarget,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 //Extension : WEBGL_depth_texture
 //From https://www.khronos.org/registry/webgl/extensions/WEBGL_depth_texture/

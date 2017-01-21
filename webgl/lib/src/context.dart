@@ -6,6 +6,13 @@ import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
+@MirrorsUsed(
+    targets: const [
+      Context,
+      RenderSetting,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 WebGLRenderingContext gl;
 

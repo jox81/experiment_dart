@@ -1,16 +1,20 @@
 import 'dart:html';
-import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
-import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
-import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
+@MirrorsUsed(
+    targets: const [
+      ProgramInfo,
+      WebGLProgram,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class ProgramInfo{
   List<WebGLActiveInfo> attributes = new List();

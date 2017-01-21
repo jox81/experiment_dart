@@ -9,6 +9,12 @@ import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewBase,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewBase extends Scene{
 

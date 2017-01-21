@@ -7,6 +7,12 @@ import 'package:webgl/src/light.dart';
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewPBR,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewPBR extends Scene{
 

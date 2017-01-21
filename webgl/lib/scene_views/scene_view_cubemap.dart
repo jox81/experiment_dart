@@ -5,11 +5,15 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/light.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewCubeMap,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewCubeMap extends Scene{
 

@@ -5,6 +5,12 @@ import 'package:webgl/src/meshes.dart';
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewShaderLearning01,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
 class SceneViewShaderLearning01 extends Scene{

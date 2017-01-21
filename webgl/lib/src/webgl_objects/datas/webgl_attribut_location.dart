@@ -4,6 +4,12 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+@MirrorsUsed(
+    targets: const [
+      WebGLAttributLocation,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class WebGLAttributLocation{
   int _location;

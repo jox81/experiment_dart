@@ -7,6 +7,30 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+@MirrorsUsed(
+    targets: const [
+      ModelType,
+      Model,
+      CustomObject,
+      JsonObject,
+      PointModel,
+      LineModel,
+      MultiLineModel,
+      TriangleModel,
+      QuadModel,
+      PyramidModel,
+      CubeModel,
+      SphereModel,
+      AxisModel,
+      AxisPointsModel,
+      FrustrumGizmo,
+      GridModel,
+      TorusModel,
+      SkyBoxModel,
+      VectorModel,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 Vector4 _defaultModelColor = new Vector4(1.0,0.5,0.0,1.0);
 

@@ -6,6 +6,12 @@ import '003.dart' as exp003;
 import 'dart:async';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewExperiment,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewExperiment extends Scene{
 

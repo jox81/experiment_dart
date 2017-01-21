@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
-
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -14,6 +13,13 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
+@MirrorsUsed(
+    targets: const [
+      WebGLTexture,
+      TextureUtils,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class WebGLTexture extends WebGLObject {
   final WebGL.Texture webGLTexture;

@@ -8,6 +8,12 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+@MirrorsUsed(
+    targets: const [
+      SceneViewFrameBuffer,
+    ],
+    override: '*')
+import 'dart:mirrors';
 
 class SceneViewFrameBuffer extends Scene{
 
