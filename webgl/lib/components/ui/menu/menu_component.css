@@ -1,6 +1,6 @@
 :host {
     position:relative;
-    background-color: #504f3b;
+    background-color: #333;
     width:100%;
     display: flex;
 }
@@ -15,14 +15,16 @@ ul {
 
 li {
     float: left;
+    border-right:1px solid #666;
 }
 
 li a, .dropbtn {
     display: inline-block;
-    color: white;
+    color: #FEFEFE;
     text-align: center;
-    padding: 14px 16px;
+    padding: 6px 8px;
     text-decoration: none;
+
 }
 
 li a:hover, .dropdown:hover .dropbtn {
@@ -36,7 +38,7 @@ li.dropdown {
 .dropdown-content {
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #e5e5e5;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
 }
@@ -49,7 +51,7 @@ li.dropdown {
     text-align: left;
 }
 
-.dropdown-content a:hover {background-color: #f1f1f1}
+.dropdown-content a:hover {background-color: #f3f3f3}
 
 .show {
     display:block;

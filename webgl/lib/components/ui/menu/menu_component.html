@@ -1,7 +1,6 @@
 <!-- menu -->
 <ul>
-    <li><a href="#">File</a></li>
-    <li><a href="#">Settings</a></li>
+    <li><a>File</a></li>
     <li class="dropdown" clickOutside (clickOutside)="closeAllMenus()">
         <a href="javascript:void(0)"
            class="dropbtn"
@@ -13,9 +12,11 @@
             <a href="#" (click)="createModelByType('ModelType.quad')">quad</a>
             <a href="#" (click)="createModelByType('ModelType.pyramid')">pyramid</a>
             <a href="#" (click)="createModelByType('ModelType.cube')">cube</a>
-            <a href="#" (click)="createModelByType('ModelType.sphere')">sphere</a>
+            <!--problems with added triangles-->
+            <!--<a href="#" (click)="createModelByType('ModelType.sphere')">sphere</a>-->
             <a href="#" (click)="createModelByType('ModelType.axis')">axis</a>
             <a href="#" (click)="createModelByType('ModelType.grid')">grid</a>
         </div>
     </li>
+    <li><a>Settings</a></li>
 </ul>

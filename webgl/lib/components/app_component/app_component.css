@@ -7,21 +7,25 @@
     display: flex;
 
 }
-
+#toolbar{
+    background-color: #333;
+    border-top:1px solid #AAA;
+    border-bottom:1px solid #AAA;
+}
 .first{
-    background-color: #504f3b;
+    background-color: #333;
     flex-flow: column;
     padding:0;
 }
 
 .second{
-    background-color: #504f3b;
+    background-color: #333;
     flex-flow: column;
     padding:0;
 }
 
 .third{
-    background-color: #504f3b;
+    background-color: #333;
     flex-flow: column;
     padding:0;
 }

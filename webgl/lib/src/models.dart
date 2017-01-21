@@ -217,7 +217,7 @@ class CubeModel extends Model {
 }
 
 class SphereModel extends Model {
-  SphereModel({num radius: 1, int segmentV: 32, int segmentH: 32}) {
+  SphereModel({num radius: 1, int segmentV: 16, int segmentH: 16}) {
     mesh =
         new Mesh.Sphere(radius: radius, segmentV: segmentV, segmentH: segmentH);
     material = new MaterialBase();

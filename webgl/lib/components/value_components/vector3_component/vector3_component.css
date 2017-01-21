@@ -13,6 +13,14 @@ input{
     width : 33.33%;
     text-align: right;
 }
+input[type=number]{
+    background-color:#222;/*Properties input background-color*/
+    border:none;
+    border-right:1px solid #AAA;
+}
+input[type=number]:disabled {
+    background: #333;
+}
 /* vertical layout */
 .vertical{
     flex-flow: column;
