@@ -22,6 +22,24 @@ class WebGLShader extends WebGLObject{
   WebGLShader(ShaderType shaderType):this.webGLShader = gl.ctx.createShader(shaderType.index);
   WebGLShader.fromWebGL(this.webGLShader);
 
+  bool get isShader => gl.ctx.isShader(webGLShader);
+
+  // > SHADER_TYPE
+  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
+  // > COMPILE_STATUS
+  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
+
+
+  String get source => gl.ctx.getShaderSource(webGLShader);
+  set source(String shaderSource) => gl.ctx.shaderSource(webGLShader, shaderSource);
+
+  String get infoLog{
+    return gl.ctx.getShaderInfoLog(webGLShader);
+  }
+
+  // > DELETE_STATUS
+  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index);
+
   @override
   void delete() => gl.ctx.deleteShader(webGLShader);
 
@@ -33,17 +51,6 @@ class WebGLShader extends WebGLObject{
     gl.ctx.detachShader(webGLProgram.webGLProgram, webGLShader);
   }
 
-  ////
-
-  bool get isShader => gl.ctx.isShader(webGLShader);
-
-  String get infoLog{
-    return gl.ctx.getShaderInfoLog(webGLShader);
-  }
-
-  String get source => gl.ctx.getShaderSource(webGLShader);
-  set source(String shaderSource) => gl.ctx.shaderSource(webGLShader, shaderSource);
-
   void compile(){
     gl.ctx.compileShader(webGLShader);
 
@@ -53,13 +60,9 @@ class WebGLShader extends WebGLObject{
     }
   }
 
-  //Why no webGLShader ref ? should be in program or in renderingcontext ?>>>
-
   WebGLShaderPrecisionFormat getShaderPrecisionFormat(ShaderType shaderType, PrecisionType precisionType){
     return new WebGLShaderPrecisionFormat.fromWebGL(gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index));
   }
-
-
 
   //placer dans attribut_location ?
   ///returns the address of a specified vertex attribute.
@@ -67,22 +70,10 @@ class WebGLShader extends WebGLObject{
     return gl.ctx.getVertexAttribOffset(vertexAttributeIndex, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
   }
 
-  // >>> Parameteres
-
-
   dynamic getParameter(ShaderParameters parameter){
     dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
     return result;
   }
-
-  // >>> single getParameter
-
-  // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index);
-  // > COMPILE_STATUS
-  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
-  // > SHADER_TYPE
-  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
 
   void logShaderInfos() {
     Utils.log("Shader Infos", () {

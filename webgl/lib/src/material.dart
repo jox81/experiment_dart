@@ -28,6 +28,8 @@ abstract class Material extends IEditElement {
   "#pragma optimize(on)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
 
+  List<WebGLShader> shaders;
+
   String name;
   WebGLProgram program;
 
@@ -42,7 +44,7 @@ abstract class Material extends IEditElement {
   List<String> buffersNames = new List();
   Map<String, WebGLBuffer> buffers = new Map();
 
-  Material(vsSource, fsSource) {
+  Material(String vsSource, String fsSource) {
     vsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
     fsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
     program = initShaderProgram(vsSource, fsSource);
@@ -65,6 +67,9 @@ abstract class Material extends IEditElement {
     WebGLShader fs = new WebGLShader(ShaderType.FRAGMENT_SHADER)
       ..source = fsSource
       ..compile();
+
+
+    shaders = [vs, fs];
 
     WebGLProgram _program = new WebGLProgram()
     ..attachShader(vs)
