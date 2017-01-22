@@ -1,7 +1,7 @@
 <!-- menu -->
-<ul>
+<ul clickOutside (clickOutside)="closeAllMenus()">
     <li><a>File</a></li>
-    <li class="dropdown" clickOutside (clickOutside)="closeAllMenus()">
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId1')">
         <a href="javascript:void(0)"
            class="dropbtn"
            (click)="headerClick('headerId1')">Models</a>
@@ -18,5 +18,17 @@
             <a href="#" (click)="createModelByType('ModelType.grid')">grid</a>
         </div>
     </li>
-    <li><a>Settings</a></li>
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId2')">
+        <a href="javascript:void(0)"
+           class="dropbtn"
+           (click)="headerClick('headerId2')">Settings</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId2')">
+            <a href="#" (click)="editCustomSettings()">CustomSettings</a>
+            <a href="#" (click)="editRenderingContext()">RenderingContext</a>
+            <a href="#" (click)="editContextAttributs()">ContextAttributs</a>
+            <a href="#" (click)="editActiveFrameBuffer()">ActiveFrameBuffer</a>
+            <a href="#" (click)="editCurrentProgram()">CurrentProgram</a>
+            <a href="#" (click)="editActiveTexture()">ActiveTexture</a>
+        </div>
+    </li>
 </ul>

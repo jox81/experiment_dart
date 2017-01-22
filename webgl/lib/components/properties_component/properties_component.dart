@@ -1,19 +1,24 @@
+import 'dart:html';
+import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/components/ui/toggle_button/toggle_button_component.dart';
 import 'package:webgl/components/value_components/list_component/list_component.dart';
+import 'package:webgl/components/value_components/matrix3_component/matrix3_component.dart';
 import 'package:webgl/components/value_components/matrix4_component/matrix4_component.dart';
 import 'package:webgl/components/value_components/vector2_component/vector2_component.dart';
 import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
+import 'package:webgl/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/introspection.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 @Component(
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix4Component, ListComponent, ToggleButtonComponent]
+    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, ToggleButtonComponent, WebGLEnumComponent]
 )
 class PropertiesComponent{
 
@@ -88,6 +93,13 @@ class PropertiesComponent{
   setVector4Value(EditableProperty animationProperty, event){
     animationProperty.setter(event as Vector4);
   }
+  //Matrix3
+  bool isMatrix3(EditableProperty animationProperty){
+    return animationProperty.type == Matrix3;
+  }
+  setMatrix3Value(EditableProperty animationProperty, event){
+    animationProperty.setter(event as Matrix3);
+  }
   //Matrix4
   bool isMatrix4(EditableProperty animationProperty){
     return animationProperty.type == Matrix4;
@@ -109,4 +121,20 @@ class PropertiesComponent{
     innerSelectionChange.emit(selection);
   }
 
+  //isWebGLEnum
+  bool isWebGLEnum(EditableProperty animationProperty){
+    ClassMirror typeMirror = reflectClass(animationProperty.type);
+    ClassMirror WebGLEnumMirror = reflectClass(WebGLEnum);
+    bool result = typeMirror.isSubtypeOf(WebGLEnumMirror);
+    if(result){
+//      print('${animationProperty.getter()}');
+    }
+    return result;
+  }
+  setWebGLEnumSelection(EditableProperty animationProperty, event){
+    animationProperty.setter(event);
+  }
+  List<WebGLEnum> getWebglEnumItems(Type type) {
+    return WebGLEnum.getItems(type);
+  }
 }

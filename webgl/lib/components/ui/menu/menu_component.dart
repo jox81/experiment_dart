@@ -1,7 +1,9 @@
 import 'package:angular2/core.dart';
 import 'package:webgl/directives/clickoutside_directive.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 
 // Suivant l'exemple :
 // http://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_dropdown_navbar_click
@@ -16,21 +18,26 @@ class MenuComponent{
   @Input()
   Scene currentScene;
 
-  Map<String, bool> opendMenus = {
-    'headerId1' : false
+  Map<String, bool> openedMenus = {
+    'headerId1' : false,
+    'headerId2' : false
   };
 
   bool isMenuVisible(String headerId){
-    return opendMenus['headerId1'];
+    return openedMenus[headerId];
   }
 
   headerClick(String headerId){
-    opendMenus['headerId1'] = !opendMenus['headerId1'];
-    print('toggle menu $headerId : visible = ${opendMenus['headerId1']}');
+    openedMenus[headerId] = !openedMenus[headerId];
+    print('toggle menu $headerId : visible = ${openedMenus[headerId]}');
   }
 
   void closeAllMenus(){
-    opendMenus.forEach((String k, bool v)=> opendMenus[k] = false);
+    openedMenus.forEach((String k, bool v)=> openedMenus[k] = false);
+  }
+
+  void closeThisMenus(String headerId){
+    openedMenus[headerId] = false;
   }
 
   // use enums instead
@@ -45,6 +52,44 @@ class MenuComponent{
       print('$modelTypeString not created');
     }
 
+    closeAllMenus();
+    return false;
+  }
+
+  // >> GL Edit
+
+  bool editCustomSettings(){
+    currentScene?.currentSelection = WebglEdit.instance(currentScene);
+    closeAllMenus();
+    return false;
+  }
+
+  bool editRenderingContext(){
+    currentScene?.currentSelection = gl;
+    closeAllMenus();
+    return false;
+  }
+
+  bool editContextAttributs(){
+    currentScene?.currentSelection = gl.contextAttributes;
+    closeAllMenus();
+    return false;
+  }
+
+  bool editActiveFrameBuffer(){
+    currentScene?.currentSelection = gl.activeFrameBuffer;
+    closeAllMenus();
+    return false;
+  }
+
+  bool editCurrentProgram(){
+    currentScene?.currentSelection = gl.currentProgram;
+    closeAllMenus();
+    return false;
+  }
+
+  bool editActiveTexture(){
+    currentScene?.currentSelection = gl.activeTexture;
     closeAllMenus();
     return false;
   }

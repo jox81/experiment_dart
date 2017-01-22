@@ -183,7 +183,7 @@ class Utils{
     List<PointModel> resultPoints = [];
     Material material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
 
-    for(Triangle triangle in model.faces){
+    for(Triangle triangle in model.getFaces()){
       resultPoints.addAll(drawTriangleVertices(triangle, material));
     }
     return resultPoints;
@@ -217,7 +217,7 @@ class Utils{
     List<PointModel> resultPoints = [];
     Material material = new MaterialPoint(pointSize:8.0 ,color: new Vector4(1.0, 0.0, 0.0, 1.0));
 
-    for(Triangle triangle in model.faces) {
+    for(Triangle triangle in model.getFaces()) {
       num distance = ray.intersectsWithTriangle(triangle);
 
       if(distance != null) {
@@ -242,7 +242,7 @@ class Utils{
     num distanceHit;
 
     for(Model model in models){
-      for(Triangle triangle in model.faces) {
+      for(Triangle triangle in model.getFaces()) {
         num distance = ray.intersectsWithTriangle(triangle);
 
         if(distance != null) {

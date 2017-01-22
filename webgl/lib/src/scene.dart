@@ -41,10 +41,6 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
       ..targetPosition = new Vector3.zero();
   }
 
-  void editGL(){
-    currentSelection = WebglEdit.instance(this);
-  }
-
   @override
   setupUserInput() {
     updateUserInputFunction = (){

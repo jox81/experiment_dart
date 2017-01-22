@@ -62,10 +62,10 @@ abstract class WebGLEnum<T> {
     return '$_name : $_index';
   }
 
-  static Map<Type, List<WebGLEnum>> _typesMap = new Map();
+  static Map<Type, List<WebGLEnum>> typesMap = new Map();
 
   static WebGLEnum findTypeByIndex(Type GLEnum, int enumIndex) {
-    if (_typesMap[GLEnum] == null) {
+    if (typesMap[GLEnum] == null) {
       List<WebGLEnum> _types = new List();
       ClassMirror classMirror = reflectClass(GLEnum);
       List<MethodMirror> decls =
@@ -74,11 +74,24 @@ abstract class WebGLEnum<T> {
       decls.forEach((decl) =>
           _types.add(classMirror.getField(decl.simpleName).reflectee));
 
-      _typesMap[GLEnum] = _types;
+      typesMap[GLEnum] = _types;
     }
-    return _typesMap[GLEnum].firstWhere(
+    return typesMap[GLEnum].firstWhere(
         (WebGLEnum e) => e.runtimeType == GLEnum && e.index == enumIndex,
         orElse: () => null);
+  }
+
+  static List<WebGLEnum> getItems(Type GLEnum){
+    if (typesMap[GLEnum] == null) {
+      typesMap[GLEnum] = new List();
+      ClassMirror classMirror = reflectClass(GLEnum);
+      List<MethodMirror> decls =
+      classMirror.staticMembers.values.where((e) => e.isGetter).toList();
+
+      decls.forEach((decl) =>
+          typesMap[GLEnum].add(classMirror.getField(decl.simpleName).reflectee));
+    }
+    return typesMap[GLEnum].where((WebGLEnum e) => e.runtimeType == GLEnum).toList();
   }
 }
 
@@ -86,6 +99,7 @@ abstract class WebGLEnum<T> {
 
 class EnableCapabilityType extends WebGLEnum {
   const EnableCapabilityType(int index, String name) : super(index, name);
+
   static WebGLEnum getByIndex(int index) =>
       WebGLEnum.findTypeByIndex(EnableCapabilityType, index);
 

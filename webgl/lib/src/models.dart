@@ -83,10 +83,15 @@ abstract class Model extends IEditElement {
     material.render(this);
   }
 
-  List<Triangle> get faces {
-    List<Triangle> _faces = [];
-    for(Triangle triangle in mesh.faces){
-      _faces.add(new Triangle.points(transform * triangle.point0, transform * triangle.point1, transform * triangle.point2));
+  List<Triangle> _faces;
+  List<Triangle> getFaces() {
+    if(_faces == null) {
+      _faces = new List();
+      for (Triangle triangle in mesh.faces) {
+        _faces.add(new Triangle.points(
+            transform * triangle.point0, transform * triangle.point1,
+            transform * triangle.point2));
+      }
     }
     return _faces;
   }

@@ -1,0 +1,5 @@
+<div id="container" >
+    <select [(ngModel)]="element" (change)="selectionChange($event)">
+        <option *ngFor="let e of webglEnums" [ngValue]="e">{{e.runtimeType}}.{{e.name}}</option>
+    </select>
+</div>

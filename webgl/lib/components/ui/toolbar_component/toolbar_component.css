@@ -1,6 +1,7 @@
 :host {
     position:relative;
-    margin-left:2px;
+    margin-left:0px;
+    border-left: 3px solid #2F67C7;
 }
 
 #container{

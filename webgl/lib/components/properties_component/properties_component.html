@@ -5,11 +5,24 @@
         <div id="content">
             <div *ngFor="let key of iEditElement.properties.keys">
                 <fieldset>
-                    <legend *ngIf="isNull(iEditElement.properties[key])">{{key}} - (Null)
-                    </legend>
-                    <legend *ngIf="!isNull(iEditElement.properties[key])">{{key}} - ({{iEditElement.properties[key].type}})
+
+                    <legend *ngIf="!isString(iEditElement.properties[key])&&
+                    !isBool(iEditElement.properties[key]) &&
+                    !isNum(iEditElement.properties[key]) &&
+                    !isInt(iEditElement.properties[key]) &&
+                    !isFunction(iEditElement.properties[key]) &&
+                    !isVector2(iEditElement.properties[key]) &&
+                    !isVector3(iEditElement.properties[key]) &&
+                    !isVector4(iEditElement.properties[key]) &&
+                    !isMatrix4(iEditElement.properties[key]) &&
+                    !isList(iEditElement.properties[key]) &&
+                    !isWebGLEnum(iEditElement.properties[key])">
+                        {{key}} - ({{iEditElement.properties[key].type}})
                     </legend>
 
+                    <legend *ngIf="isString(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isString(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <input type="text"
@@ -23,12 +36,12 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isBool(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isBool(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
-                            <toggleButton
-                                    [checked]="iEditElement.properties[key].getter()"
-                                disabled>
-                            </toggleButton>
+                            {{iEditElement.properties[key].getter()}}&nbsp;&nbsp;
                         </section>
                         <section *ngIf="iEditElement.properties[key].setter != null">
                             <toggleButton
@@ -38,6 +51,9 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isNum(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isNum(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <input type="number" step="0.01"
@@ -51,6 +67,9 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isInt(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isInt(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <input type="number" step="1"
@@ -64,6 +83,8 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isFunction(iEditElement.properties[key])">
+                    </legend>
                     <section *ngIf="isFunction(iEditElement.properties[key])">
                         <input type="button"
                             (click)="iEditElement.properties[key].getter()()" value="{{key}}">
@@ -71,6 +92,9 @@
 
                     <!-- Custom components -->
 
+                    <legend *ngIf="isVector2(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isVector2(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <vector2
@@ -86,6 +110,9 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isVector3(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isVector3(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <vector3
@@ -101,6 +128,9 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isVector4(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isVector4(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <vector4
@@ -116,6 +146,27 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isMatrix3(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isMatrix3(iEditElement.properties[key])">
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            <matrix3
+                                    [matrix]="iEditElement.properties[key].getter()"
+                                    (matrix3Change) = "print('setter disabled')">
+                            </matrix3>
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <matrix3
+                                    [matrix]="iEditElement.properties[key].getter()"
+                                    (matrix4Change) = "setMatrix3Value(iEditElement.properties[key], $event)">
+                            </matrix3>
+                        </section>
+                    </section>
+
+                    <legend *ngIf="isMatrix4(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isMatrix4(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
                             <matrix4
@@ -131,11 +182,30 @@
                         </section>
                     </section>
 
+                    <legend *ngIf="isList(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
                     <section *ngIf="isList(iEditElement.properties[key])">
                         <list
                             [list]="iEditElement.properties[key].getter()"
                             (elementSelected) = "setSelection($event)">
                         </list>
+                    </section>
+
+                    <legend *ngIf="isWebGLEnum(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isWebGLEnum(iEditElement.properties[key])">
+                        <section *ngIf="iEditElement.properties[key].setter == null">
+                            {{iEditElement.properties[key].type}}.{{iEditElement.properties[key].getter().name}}
+                        </section>
+                        <section *ngIf="iEditElement.properties[key].setter != null">
+                            <webglEnum
+                                    [webglEnums]="getWebglEnumItems(iEditElement.properties[key].type)"
+                                    [element]="iEditElement.properties[key].getter()"
+                                    (elementSelected) = "setWebGLEnumSelection(iEditElement.properties[key],$event)">
+                            </webglEnum>
+                        </section>
                     </section>
                 </fieldset>
                 <hr>

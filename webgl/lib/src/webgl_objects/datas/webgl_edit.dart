@@ -7,6 +7,7 @@ import 'package:webgl/src/scene.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class WebglEdit extends IEditElement {
   final Scene scene;
@@ -21,31 +22,39 @@ class WebglEdit extends IEditElement {
     return _instance;
   }
 
-  void getRenderingContext(){
-    scene.currentSelection = gl;
-  }
+  // >> Test num
 
-  void getContextAttributs(){
-    scene.currentSelection = gl.contextAttributes;
-  }
+  //getter + setter
+  num _testNum01 = 1.0;
+  num get testNum01 => _testNum01;
+  set testNum01(num value) => _testNum01 = value;
 
-  void getActiveFrameBuffer(){
-    scene.currentSelection = gl.activeFrameBuffer;
-  }
-
-  void getCurrentProgram(){
-    scene.currentSelection = gl.currentProgram;
-  }
-
-  void getActiveTexture(){
-    scene.currentSelection = gl.activeTexture;
-  }
-
-  num _test01 = 1.0;
-  num get test01 => _test01;
-  set test01(num value) => _test01 = value;
-
+  //getter only
   num _test02 = 2.0;
   get test02 => _test02;
+
+  // >> Test bool
+
+  //getter + setter
+  bool _testBool01 = true;
+  bool get testBool01 => _testBool01;
+  set testBool01(bool value) => _testBool01 = value;
+
+  //getter only
+  bool _testBool02 = false;
+  get testBool02 => _testBool02;
+
+  // >> Test WebGLEnum
+
+  //getter + setter
+  EnableCapabilityType _enableCapabilityType = EnableCapabilityType.DEPTH_TEST;
+  EnableCapabilityType get testWebGLEnum01 => _enableCapabilityType;
+  set testWebGLEnum01(EnableCapabilityType value) {
+    _enableCapabilityType = value;
+    print('### $value');
+  }
+
+  //getter only
+  EnableCapabilityType get testWebGLEnum02 => EnableCapabilityType.CULL_FACE;
 
 }
