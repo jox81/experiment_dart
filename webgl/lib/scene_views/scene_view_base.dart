@@ -18,6 +18,9 @@ import 'dart:mirrors';
 
 class SceneViewBase extends Scene{
 
+//  @override
+//  bool isEditing = true;
+
   SceneViewBase();
 
   @override

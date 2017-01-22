@@ -19,6 +19,8 @@ import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 
 abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
+//  bool isEditing = true;
+
   @override
   IEditElement currentSelection;
 
