@@ -21,12 +21,6 @@ import 'dart:mirrors';
 
 class WebGLRenderingContext extends IEditElement {
 
-  WebGL.RenderingContext ctx;
-
-  CanvasElement get canvas => ctx.canvas;
-  num get drawingBufferWidth => ctx.drawingBufferWidth;
-  num get drawingBufferHeight => ctx.drawingBufferHeight;
-
   WebGLRenderingContext._init(this.ctx);
 
   //Todo add default parameters
@@ -63,6 +57,17 @@ class WebGLRenderingContext extends IEditElement {
 
   }
 
+  WebGL.RenderingContext ctx;
+
+  CanvasElement get canvas => ctx.canvas;
+
+
+  // >>> Parameteres
+  dynamic getParameter(ContextParameter parameter){
+    dynamic result =  ctx.getParameter(parameter.index);
+    return result;
+  }
+
   ContextAttributs get contextAttributes => new ContextAttributs(ctx.getContextAttributes());
 
   //
@@ -71,13 +76,19 @@ class WebGLRenderingContext extends IEditElement {
   ActiveTexture get activeTexture => ActiveTexture.instance;
   ActiveFrameBuffer get activeFrameBuffer => ActiveFrameBuffer.instance;
 
-  // >>> Parameteres
-  dynamic getParameter(ContextParameter parameter){
-    dynamic result =  ctx.getParameter(parameter.index);
-    return result;
-  }
-
   // >>> single getParameter
+
+  // > VENDOR
+  String get vendor => ctx.getParameter(ContextParameter.VENDOR.index);
+  // > RENDERER
+  String get renderer => ctx.getParameter(ContextParameter.RENDERER.index);
+  // > VERSION
+  String get version => ctx.getParameter(ContextParameter.VERSION.index);
+  // > SHADING_LANGUAGE_VERSION
+  String get shadingLanguageVersion => ctx.getParameter(ContextParameter.SHADING_LANGUAGE_VERSION.index);
+
+  num get drawingBufferWidth => ctx.drawingBufferWidth;
+  num get drawingBufferHeight => ctx.drawingBufferHeight;
 
   // > MAX_VIEWPORT_DIMS
   WebGlTypedData.Int32List get maxViewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
@@ -152,14 +163,7 @@ class WebGLRenderingContext extends IEditElement {
   // > MAX_RENDERBUFFER_SIZE
   int get maxRenderBufferSize => ctx.getParameter(ContextParameter.MAX_RENDERBUFFER_SIZE.index);
 
-  // > RENDERER
-  String get renderer => ctx.getParameter(ContextParameter.RENDERER.index);
-  // > VERSION
-  String get version => ctx.getParameter(ContextParameter.VERSION.index);
-  // > SHADING_LANGUAGE_VERSION
-  String get shadingLanguageVersion => ctx.getParameter(ContextParameter.SHADING_LANGUAGE_VERSION.index);
-  // > VENDOR
-  String get vendor => ctx.getParameter(ContextParameter.VENDOR.index);
+
 
   // > SAMPLES
   int get samples => ctx.getParameter(ContextParameter.SAMPLES.index);

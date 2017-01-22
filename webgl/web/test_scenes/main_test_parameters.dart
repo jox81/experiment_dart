@@ -77,20 +77,22 @@ class WebglTestParameters {
   }
 
   void getInfos() {
-    Context.webglConstants.logConstants();
-    Context.webglParameters.logValues();
+//    Context.webglConstants.logConstants();
+//    Context.webglParameters.logValues();
 
-//    IntrospectionManager.instance.logTypeInfos(ShaderType,
-//      showBaseInfo: true,
-//      showLibrary: true,
-//      showType: true,
-//      showTypeVariable: true,
-//      showTypeDef: true,
-//      showFunctionType: true,
-//      showVariable: true,
-//      showParameter: true,
-//      showMethod: true
-//    );
+    IntrospectionManager.instance.logTypeInfos(CubeModel,
+      showBaseInfo: true,
+      showLibrary: false,
+      showType: false,
+      showTypeVariable: false,
+      showTypeDef: false,
+      showFunctionType: true,
+      showVariable: true,
+      showParameter: false,
+      showMethod: true
+    );
+
+    models[0].getPropertiesInfos();
   }
 }
 

@@ -18,7 +18,8 @@
                     !isMatrix4(iEditElement.properties[key]) &&
                     !isList(iEditElement.properties[key]) &&
                     !isWebGLEnum(iEditElement.properties[key])">
-                        {{key}} - ({{iEditElement.properties[key].type}})
+                        <p>{{key}} - {{iEditElement.properties[key].type}}</p>
+                        <p style='text-align: right; margin: 18px 0px;'>{{iEditElement.properties[key].getter()}}</p>
                     </legend>
 
                     <legend *ngIf="isString(iEditElement.properties[key])">
@@ -26,13 +27,11 @@
                     </legend>
                     <section *ngIf="isString(iEditElement.properties[key])">
                         <section *ngIf="iEditElement.properties[key].setter == null">
-                            <input type="text"
-                                   [checked]="iEditElement.properties[key].getter()"
-                            disabled>
+                            {{iEditElement.properties[key].getter()}}&nbsp;&nbsp;
                         </section>
                         <section *ngIf="iEditElement.properties[key].setter != null">
                             <input type="text"
-                                   [checked]="iEditElement.properties[key].getter()"
+                                   [value]="iEditElement.properties[key].getter()"
                                    (change) = "setStringValue(iEditElement.properties[key], $event)">
                         </section>
                     </section>

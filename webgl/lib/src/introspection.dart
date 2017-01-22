@@ -30,11 +30,11 @@ class IntrospectionManager {
 
       if (v is VariableMirror) {} else if (v is MethodMirror &&
           v.isGetter &&
-          !v.isPrivate) {
+          !v.isPrivate && MirrorSystem.getName(v.owner.simpleName) != "Object") {
         instance_mirror_getters[name] = v;
       } else if (v is MethodMirror && v.isSetter && !v.isPrivate) {
         instance_mirror_setters[name] = v;
-      } else if (v is MethodMirror && v.isRegularMethod) {
+      } else if (v is MethodMirror && v.isRegularMethod && MirrorSystem.getName(v.owner.simpleName) != "Object") {
         instance_mirror_functions[name] = v;
       }
     }
@@ -109,7 +109,7 @@ class IntrospectionManager {
             '### ClassMirror declarations     #################################');
       }
       for (DeclarationMirror decl in classMirror.declarations.values) {
-        fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+        fillDeclarationInfos(classMirror, decl, showBaseInfo:showBaseInfo, showMethod: showMethod);
       }
       if (showBaseInfo) {
         print('');
@@ -117,7 +117,7 @@ class IntrospectionManager {
             '### ClassMirror staticMembers  #################################');
       }
       for (DeclarationMirror decl in classMirror.staticMembers.values) {
-        fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+        fillDeclarationInfos(classMirror, decl, showBaseInfo:showBaseInfo, showMethod: showMethod);
       }
       if (showBaseInfo) {
         print('');
@@ -125,7 +125,7 @@ class IntrospectionManager {
             '### ClassMirror instanceMembers  #################################');
       }
       for (DeclarationMirror decl in classMirror.instanceMembers.values) {
-        fillDeclarationInfos(classMirror, decl, showMethod: showMethod);
+        fillDeclarationInfos(classMirror, decl, showBaseInfo:showBaseInfo, showMethod: showMethod);
       }
     });
   }
@@ -154,7 +154,7 @@ class IntrospectionManager {
           'simpleName : $simpleName / className : $className / ownerName : $ownerName');
       print(
           'qualifiedName : ${MirrorSystem.getName(decl.qualifiedName)}'); //ex : dart.dom.web_gl.RenderingContext.vertexAttrib2fv
-      print('owner : $ownerName');
+      print('## owner : $ownerName');
       print('isPrivate : ${decl.isPrivate}');
       print('isTopLevel : ${decl.isTopLevel}');
       print('location : ${decl.location}'); //ex : dart:web_gl:1445

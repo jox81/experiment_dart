@@ -22,6 +22,17 @@ class WebglEdit extends IEditElement {
     return _instance;
   }
 
+  // >> Test String
+
+  //getter + setter
+  String _testString01 = 'testString01';
+  String get testString01 => _testString01;
+  set testString01(String value) => _testString01 = value;
+
+  //getter only
+  String _testString02 = "testString02";
+  get testString02 => _testString02;
+
   // >> Test num
 
   //getter + setter
@@ -30,8 +41,8 @@ class WebglEdit extends IEditElement {
   set testNum01(num value) => _testNum01 = value;
 
   //getter only
-  num _test02 = 2.0;
-  get test02 => _test02;
+  num _testNum02 = 2.0;
+  get testNum02 => _testNum02;
 
   // >> Test bool
 

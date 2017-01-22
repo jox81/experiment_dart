@@ -49,11 +49,16 @@ enum ModelType{
 
 abstract class Model extends IEditElement {
 
-  String name; //Todo : S'assurer que les noms soient uniques ?!
+
+
   Mesh mesh = new Mesh();
   IGizmo gizmo;
 
   bool visible = true;
+
+  String _name = '';//Todo : S'assurer que les noms soient uniques ?!
+  String get name => _name;
+  set name(String value) => _name = value;
 
   //Transform : position, rotation, scale
   final Matrix4 _transform = new Matrix4.identity();

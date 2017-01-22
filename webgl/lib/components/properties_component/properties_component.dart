@@ -35,7 +35,11 @@ class PropertiesComponent{
 
   //String
   bool isString(EditableProperty animationProperty){
-    return animationProperty.type == String;
+    bool result = compareType(animationProperty.type, String);
+    if(result){
+      print('');
+    }
+    return result;
   }
   setStringValue(EditableProperty animationProperty, event){
     animationProperty.setter(event.target.value);
@@ -123,18 +127,19 @@ class PropertiesComponent{
 
   //isWebGLEnum
   bool isWebGLEnum(EditableProperty animationProperty){
-    ClassMirror typeMirror = reflectClass(animationProperty.type);
-    ClassMirror WebGLEnumMirror = reflectClass(WebGLEnum);
-    bool result = typeMirror.isSubtypeOf(WebGLEnumMirror);
-    if(result){
-//      print('${animationProperty.getter()}');
-    }
-    return result;
+    return compareType(animationProperty.type, WebGLEnum);
   }
   setWebGLEnumSelection(EditableProperty animationProperty, event){
     animationProperty.setter(event);
   }
   List<WebGLEnum> getWebglEnumItems(Type type) {
     return WebGLEnum.getItems(type);
+  }
+
+  /// Return true if type is the same or if it's a subType
+  bool compareType(Type elementType, Type compareType){
+    ClassMirror elementTypeMirror = reflectClass(elementType);
+    ClassMirror compareTypeMirror = reflectClass(compareType);
+    return elementTypeMirror.isSubtypeOf(compareTypeMirror);
   }
 }

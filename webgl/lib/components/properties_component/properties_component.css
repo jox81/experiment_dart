@@ -1,5 +1,6 @@
 :host{
 }
+
 *{
     margin:0;
     color: #BBB;/*Properties text color*/
@@ -75,26 +76,39 @@ fieldset > input{
     background-color:#F0F;
 }
 
+/*input background color*/
 input[type=text], textarea, select{
-    width:100%;
-    border:none;
+    background-color:#222;
 }
+
 input[type=number]{
-    width:100%;
-    text-align: right;
-    background-color:#222;/*Properties input background-color*/
-    border:none;
+    background-color:#222;
 }
 input[type=number]:disabled {
-    background: #333;
+    background-color: #333;
 }
 
 input[type=button]{
-    width:100%;
-    border:none;
     background-color:#666;/*Properties button background-color*/
 }
 input[type=button]:hover{
     background-color:#888;/*Properties button background-color hover*/
     color:#EEE;
+}
+/**/
+
+input[type=text], textarea, select{
+    width:100%;
+    text-align: right;
+    border:none;
+}
+input[type=number]{
+    width:100%;
+    text-align: right;
+    border:none;
+}
+
+input[type=button]{
+    width:100%;
+    border:none;
 }
