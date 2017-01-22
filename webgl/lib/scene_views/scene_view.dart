@@ -17,8 +17,8 @@ class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //    new SceneViewWebGLEdit(),
 //    new SceneViewVectors(),
-//    new SceneViewCubeMap(),
-    new SceneViewBase(),
+    new SceneViewCubeMap(),
+//    new SceneViewBase(),
 //    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),
