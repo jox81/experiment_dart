@@ -17,7 +17,12 @@ https://www.khronos.org/registry/webgl/specs/latest/1.0/
 
 // Suggestions /////////////////////
 
-
+- clean scene before loading another
+    /* ?? voir ici : http://stackoverflow.com/questions/9251837/how-to-remove-all-listeners-in-an-element
+    var old_element = document.getElementById("btn");
+    var new_element = old_element.cloneNode(true);
+    old_element.parentNode.replaceChild(new_element, old_element);
+    */
 - sauvegarde d'une scene
     => skin
         -> json : static
