@@ -20,8 +20,26 @@
     <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId2')">
         <a href="javascript:void(0)"
            class="dropbtn"
-           (click)="headerClick('headerId2')">Settings</a>
+           (click)="headerClick('headerId2')">Materials</a>
         <div class="dropdown-content" [class.show]="isMenuVisible('headerId2')">
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialCustom')">MaterialCustom</a>-->
+            <a href="#" (click)="assignMaterial('MaterialType.MaterialPoint')">MaterialPoint</a>
+            <a href="#" (click)="assignMaterial('MaterialType.MaterialBase')">MaterialBase</a>
+            <a href="#" (click)="assignMaterial('MaterialType.MaterialBaseColor')">MaterialBaseColor</a>
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialBaseVertexColor')">MaterialBaseVertexColor</a>-->
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialBaseTexture')">MaterialBaseTexture</a>-->
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialBaseTextureNormal')">MaterialBaseTextureNormal</a>-->
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialPBR')">MaterialPBR</a>-->
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialDepthTexture')">MaterialDepthTexture</a>-->
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialSkyBox')">MaterialSkyBox</a>-->
+            <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialReflection')">MaterialReflection</a>-->
+        </div>
+    </li>
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId3')">
+        <a href="javascript:void(0)"
+           class="dropbtn"
+           (click)="headerClick('headerId3')">Settings</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId3')">
             <a href="#" (click)="editCustomSettings()">CustomSettings</a>
             <a href="#" (click)="editRenderingContext()">RenderingContext</a>
             <a href="#" (click)="editContextAttributs()">ContextAttributs</a>

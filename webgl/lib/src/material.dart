@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -27,6 +28,65 @@ abstract class Material extends IEditElement {
   static const String GLSL_PRAGMA_OPTIMIZE_ON =
   "#pragma optimize(on)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
+
+  static void assignMaterialTypeToModel(MaterialType materialType, Model model) {
+    Material newMaterial;
+    switch(materialType){
+//      case MaterialType.MaterialCustom:
+//        newMaterial = new MaterialCustom();
+//        break;
+      case MaterialType.MaterialPoint:
+        model
+          ..mesh.mode = DrawMode.POINTS
+          ..material = new MaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
+        break;
+      case MaterialType.MaterialBase:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBase();
+        break;
+      case MaterialType.MaterialBaseColor:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBaseColor(new Vector4.all(1.0));
+        break;
+      case MaterialType.MaterialBaseVertexColor:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBaseVertexColor();
+        break;
+      case MaterialType.MaterialBaseTexture:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBaseTexture();
+        break;
+      case MaterialType.MaterialBaseTextureNormal:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBaseTextureNormal();
+        break;
+//      case MaterialType.MaterialPBR:
+//        newMaterial = new MaterialPBR();
+//        break;
+      case MaterialType.MaterialDepthTexture:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialDepthTexture();
+        break;
+      case MaterialType.MaterialSkyBox:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialSkyBox();
+        break;
+      case MaterialType.MaterialReflection:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialReflection();
+        break;
+      default:
+        break;
+    }
+  }
 
   List<WebGLShader> shaders;
 
@@ -113,7 +173,7 @@ abstract class Material extends IEditElement {
     program.use();
     setShaderSettings(model);
 
-    if (model.mesh.indices.length > 0) {
+    if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
       gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);

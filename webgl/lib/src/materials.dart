@@ -24,6 +24,20 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     override: '*')
 import 'dart:mirrors';
 
+enum MaterialType{
+  MaterialCustom,
+  MaterialPoint,
+  MaterialBase,
+  MaterialBaseColor,
+  MaterialBaseVertexColor,
+  MaterialBaseTexture,
+  MaterialBaseTextureNormal,
+  MaterialPBR,
+  MaterialDepthTexture,
+  MaterialSkyBox,
+  MaterialReflection
+}
+
 typedef void SetShaderVariables(Model model);
 
 class MaterialCustom extends Material {
@@ -55,7 +69,7 @@ class MaterialPoint extends Material {
   MaterialPoint._internal(String vsSource, String fsSource, this.pointSize, this.color)
       : super(vsSource, fsSource);
 
-  factory MaterialPoint({num pointSize:1.0,Vector4 color:null}){
+  factory MaterialPoint({num pointSize:1.0,Vector4 color}){
     ShaderSource shaderSource = ShaderSource.sources['material_point'];
     return new MaterialPoint._internal(shaderSource.vsCode, shaderSource.fsCode, pointSize, color);
   }

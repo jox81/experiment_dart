@@ -49,8 +49,6 @@ enum ModelType{
 
 abstract class Model extends IEditElement {
 
-
-
   Mesh mesh = new Mesh();
   IGizmo gizmo;
 

@@ -12,6 +12,7 @@ import 'package:webgl/components/value_components/vector4_component/vector4_comp
 import 'package:webgl/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation_property.dart';
 import 'package:webgl/src/introspection.dart';
+import 'package:webgl/src/material.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 @Component(
@@ -37,7 +38,7 @@ class PropertiesComponent{
   bool isString(EditableProperty animationProperty){
     bool result = compareType(animationProperty.type, String);
     if(result){
-      print('');
+//      print('');
     }
     return result;
   }
@@ -110,6 +111,10 @@ class PropertiesComponent{
   }
   setMatrix4Value(EditableProperty animationProperty, event){
     animationProperty.setter(event as Matrix4);
+  }
+  //Material
+  bool isMaterial(EditableProperty animationProperty){
+    return compareType(animationProperty.type, Material);
   }
   //List
   bool isList(EditableProperty animationProperty){

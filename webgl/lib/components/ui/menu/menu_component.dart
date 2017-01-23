@@ -1,6 +1,7 @@
 import 'package:angular2/core.dart';
 import 'package:webgl/directives/clickoutside_directive.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
@@ -20,7 +21,8 @@ class MenuComponent{
 
   Map<String, bool> openedMenus = {
     'headerId1' : false,
-    'headerId2' : false
+    'headerId2' : false,
+    'headerId3' : false
   };
 
   bool isMenuVisible(String headerId){
@@ -40,6 +42,8 @@ class MenuComponent{
     openedMenus[headerId] = false;
   }
 
+  // >> Models
+
   // use enums instead
   // bool createModelByType(ModelType modelType){
   bool createModelByType(String modelTypeString){
@@ -50,6 +54,24 @@ class MenuComponent{
       currentScene.createModelByType(modelType);
     }else{
       print('$modelTypeString not created');
+    }
+
+    closeAllMenus();
+    return false;
+  }
+
+  // >> Materials
+
+  // use enums instead
+  // bool assignMaterial(MaterialType materialType){
+  bool assignMaterial(String materialTypeString){
+
+    MaterialType materialType = MaterialType.values.firstWhere((MaterialType e)=> e.toString() == materialTypeString, orElse: ()=> null);
+
+    if(currentScene != null && materialType != null){
+      currentScene.assignMaterial(materialType);
+    }else{
+      print('$materialTypeString not created');
     }
 
     closeAllMenus();

@@ -66,44 +66,38 @@ class SceneViewPrimitives extends Scene{
 //    AxisModel axis = new AxisModel();
 //    models.add(axis);
 
-//    models.add(
-//        new PointModel()
-//          ..name = 'point1'
-//          ..position = new Vector3(1.0, 0.0, 1.0)
-//    );
-//
-//    models.add(
-//        new PointModel()
-//          ..name = 'point2'
-//          ..position.setFrom(new Vector3(1.0, 0.0, 1.0))
-//    );
-
     MaterialBaseColor materialBaseColor = new MaterialBaseColor(new Vector4(1.0,1.0,0.0, 1.0));
     materials.add(materialBaseColor);
 
-    models.add(new TriangleModel()
-      ..name = 'triangle1'
-      ..material = materialBaseColor);
+    PointModel point = new PointModel()
+      ..name = 'point'
+      ..position = new Vector3(-5.0, 0.0, -5.0);
+    models.add(point);
 
-//    QuadModel quad = new QuadModel()
-//      ..name = "quad"
-//      ..position = new Vector3(2.0, 0.0, 0.0);
-//    models.add(quad);
+    TriangleModel triangle = new TriangleModel()
+      ..name = 'triangle'
+      ..position = new Vector3(0.0, 0.0, -5.0);
+    models.add(triangle);
 
-//    PyramidModel pyramid = new PyramidModel()
-//      ..name = "pyramid"
-//      ..position = new Vector3(5.0, 5.0, 0.0);
-//    models.add(pyramid);
+    QuadModel quad = new QuadModel()
+      ..name = "quad"
+      ..position = new Vector3(5.0, 0.0, -5.0);
+    models.add(quad);
 
-//    CubeModel cube = new CubeModel()
-//      ..name = "cube"
-//      ..position = new Vector3(0.0, 0.0, 0.0);
-//    models.add(cube);
+    PyramidModel pyramid = new PyramidModel()
+      ..name = "pyramid"
+      ..position = new Vector3(-5.0, 0.0, 0.0);
+    models.add(pyramid);
 
-//    SphereModel sphere = new SphereModel()
-//      ..name = "sphere"
-//      ..position = new Vector3(-5.0, -5.0, 0.0);
-//    models.add(sphere);
+    CubeModel cube = new CubeModel()
+      ..name = "cube"
+      ..position = new Vector3(0.0, 0.0, 0.0);
+    models.add(cube);
+
+    SphereModel sphere = new SphereModel()
+      ..name = "sphere"
+      ..position = new Vector3(5.0, 0.0, 0.0);
+    models.add(sphere);
 
 //    Map susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
 //

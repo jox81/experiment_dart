@@ -16,6 +16,7 @@
                     !isVector4(iEditElement.properties[key]) &&
                     !isMatrix3(iEditElement.properties[key]) &&
                     !isMatrix4(iEditElement.properties[key]) &&
+                    !isMaterial(iEditElement.properties[key]) &&
                     !isList(iEditElement.properties[key]) &&
                     !isWebGLEnum(iEditElement.properties[key])">
                         <p>{{key}} - Type : {{iEditElement.properties[key].type}}</p>
@@ -180,6 +181,14 @@
                                     (matrix4Change) = "setMatrix4Value(iEditElement.properties[key], $event)">
                             </matrix4>
                         </section>
+                    </section>
+
+                    <legend *ngIf="isMaterial(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isMaterial(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit {{iEditElement.properties[key].type}}?">
                     </section>
 
                     <legend *ngIf="isList(iEditElement.properties[key])">
