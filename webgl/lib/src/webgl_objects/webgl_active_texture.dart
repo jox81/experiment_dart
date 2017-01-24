@@ -68,7 +68,7 @@ class ActiveTexture extends IEditElement{
   }
 
   void bind(TextureTarget target, WebGLTexture texture) {
-    gl.ctx.bindTexture(target.index, texture.webGLTexture);
+    gl.ctx.bindTexture(target.index, texture?.webGLTexture);
   }
 
   void bindToUnit(TextureUnit textureUnit, TextureTarget target, WebGLTexture texture) {

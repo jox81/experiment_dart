@@ -40,7 +40,7 @@ Model experiment() {
   materialCustom.setShaderAttributsVariables = (Model model) {
       materialCustom.setShaderAttributWithName(
           'aVertexPosition', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-      materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  model.mesh.indices);
+      materialCustom.setShaderAttributWithName('aVertexIndice', elementArrayBuffer:  model.mesh.indices);
     };
   materialCustom.setShaderUniformsVariables = (Model model) {
       materialCustom.setShaderUniformWithName("time", shaderTime);

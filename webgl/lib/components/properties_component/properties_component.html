@@ -188,7 +188,7 @@
                     </legend>
                     <section *ngIf="isMaterial(iEditElement.properties[key])">
                         <input type="button"
-                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit {{iEditElement.properties[key].type}}?">
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Material">
                     </section>
 
                     <legend *ngIf="isList(iEditElement.properties[key])">

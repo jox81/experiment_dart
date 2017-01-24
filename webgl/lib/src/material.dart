@@ -30,7 +30,6 @@ abstract class Material extends IEditElement {
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
 
   static void assignMaterialTypeToModel(MaterialType materialType, Model model) {
-    Material newMaterial;
     switch(materialType){
 //      case MaterialType.MaterialCustom:
 //        newMaterial = new MaterialCustom();
@@ -173,6 +172,7 @@ abstract class Material extends IEditElement {
     program.use();
     setShaderSettings(model);
 
+    //Todo : trouver une meilleur condition pour savoir si on utilise l'un ou l'autre
     if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
       gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
     } else {
@@ -199,7 +199,8 @@ abstract class Material extends IEditElement {
     Context.modelViewMatrix = _mvMatrixStack.removeFirst();
   }
 
-  void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elemetArrayBuffer, data}) {
+  //Todo : Améliorer le process, le rendre plus clair !!
+  void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elementArrayBuffer, data}) {
 
     if (arrayBuffer!= null && dimension != null) {
       gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
@@ -207,15 +208,17 @@ abstract class Material extends IEditElement {
       gl.bufferData(
           BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
       attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
-    } else if(elemetArrayBuffer != null){
+    } else if(elementArrayBuffer != null){
       gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-      gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elemetArrayBuffer),
+      gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elementArrayBuffer),
           BufferUsageType.STATIC_DRAW);
     }else{
       WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.name == attributName, orElse:() => null);
 
       if(activeInfo != null) {
         switch (activeInfo.type) {
+          case ShaderVariableType.FLOAT_VEC2:
+            break;
           case ShaderVariableType.FLOAT_VEC3:
             break;
           case ShaderVariableType.FLOAT_VEC4:

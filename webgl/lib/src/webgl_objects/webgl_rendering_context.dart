@@ -408,14 +408,7 @@ class WebGLRenderingContext extends IEditElement {
     return ctx.isEnabled(cap.index);
   }
 
-  void clear(List<ClearBufferMask> masks) {
-    //Todo : change with bitmask : RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT
-    int bitmask = 0;
-    for(ClearBufferMask mask in masks) {
-      bitmask |= mask.index;
-    }
-    ctx.clear(bitmask);
-  }
+
 
   // Buffers
   void bindBuffer(BufferType bufferType, WebGLBuffer webglBuffer) {
@@ -457,27 +450,27 @@ class WebGLRenderingContext extends IEditElement {
     return ctx.getExtension(extensionName);
   }
 
-  // DRAW
+  // >> DRAW to the drawing buffer
+
+  ///
+  void clear(List<ClearBufferMask> masks) {
+    //Todo : change with bitmask : RenderingContext.COLOR_BUFFER_BIT | RenderingContext.DEPTH_BUFFER_BIT
+    int bitmask = 0;
+    for(ClearBufferMask mask in masks) {
+      bitmask |= mask.index;
+    }
+    ctx.clear(bitmask);
+  }
+
+  ///
   void drawArrays(DrawMode mode, int firstVertexIndex, int vertexCount) {
     assert(firstVertexIndex >= 0 && vertexCount >= 0);
     ctx.drawArrays(mode.index, firstVertexIndex, vertexCount);
   }
 
+  ///[offset] is in bytes
   void drawElements(DrawMode mode, int count, BufferElementType type, int offset) {
     ctx.drawElements(mode.index, count, type.index, offset);
-  }
-
-
-
-  void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
-    assert(width >= 0);
-    assert(height >= 0);
-    ctx.readPixels(left, top, width, height, format.index, type.index, pixels);
-  }
-
-  //Errors
-  ErrorCode getError(){
-    return ErrorCode.getByIndex(ctx.getError());
   }
 
   ///avoid this method.
@@ -491,6 +484,21 @@ class WebGLRenderingContext extends IEditElement {
   void flush(){
     ctx.flush();
   }
+
+
+  // >>
+  void readPixels(int left, int top, int width, int height, ReadPixelDataFormat format, ReadPixelDataType type, WebGlTypedData.TypedData pixels) {
+    assert(width >= 0);
+    assert(height >= 0);
+    ctx.readPixels(left, top, width, height, format.index, type.index, pixels);
+  }
+
+  //Errors
+  ErrorCode getError(){
+    return ErrorCode.getByIndex(ctx.getError());
+  }
+
+
 
   void logRenderingContextInfos() {
     Utils.log("RenderingContext Infos", () {

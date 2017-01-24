@@ -223,6 +223,12 @@ class _TriangleMesh extends Mesh {
       0.0, 2.0, 0.0
     ];
     indices = [0,1,2];
+
+    textureCoords = [
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+    ];
   }
 }
 
@@ -275,6 +281,32 @@ class _PyramidMesh extends Mesh {
       0, 4, 1, // back face
       1, 2, 3, // bottom face
       1, 3, 4, // bottom face
+    ];
+
+    textureCoords = [
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
     ];
 
     colors = [
@@ -442,8 +474,7 @@ class _SphereMesh extends Mesh {
   Vector3 _up = new Vector3(0.0, 1.0, 0.0);
 
   List<Vector3> sphereVerticesVector = [];
-  List<Vector2> uvs = [];
-
+  List<double> uvs = [];
 
   _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
 
@@ -481,7 +512,7 @@ class _SphereMesh extends Mesh {
         _tmpVec3.normalize();
         vertexNormals.addAll(_tmpVec3.storage);
 
-        uvs.add(new Vector2(normalizedY, 1 - normalizedZ));
+        uvs.addAll([normalizedY, 1 - normalizedZ]);
       }
 
       if (zRotationStep > 0) {
@@ -503,9 +534,7 @@ class _SphereMesh extends Mesh {
         }
       }
     }
-//    _textureCoords = uvs;
-
-
+    _textureCoords = uvs;
   }
 }
 

@@ -108,7 +108,7 @@ class MaterialBase extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer : model.mesh.indices);
   }
 
   setShaderUniforms(Model model) {
@@ -138,7 +138,7 @@ class MaterialBaseColor extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer:  model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer:  model.mesh.indices);
   }
 
   setShaderUniforms(Model model) {
@@ -165,7 +165,7 @@ class MaterialBaseVertexColor extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
     setShaderAttributWithName(
         'aVertexColor', arrayBuffer: model.mesh.colors, dimension : model.mesh.colorDimensions);
   }
@@ -196,12 +196,16 @@ class MaterialBaseTexture extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+
+    //textureCoords
+    List<double> coords = model.mesh.textureCoords.length > 0 ? model.mesh.textureCoords:null;
+    if(coords == null) print('### MaterialBaseTexture : No textureCoords in the mesh of Model type : ${model.runtimeType}');
     setShaderAttributWithName(
-        'aTextureCoord', arrayBuffer: model.mesh.textureCoords, dimension : model.mesh.textureCoordsDimensions);
+        'aTextureCoord', arrayBuffer: coords, dimension : model.mesh.textureCoordsDimensions);
   }
 
   setShaderUniforms(Model model) {
@@ -240,7 +244,7 @@ class MaterialBaseTextureNormal extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
@@ -311,7 +315,7 @@ class MaterialPBR extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
     setShaderAttributWithName(
         'aNormal', arrayBuffer: model.mesh.vertexNormals, dimension : model.mesh.vertexNormalsDimensions);
   }
@@ -352,7 +356,7 @@ class MaterialDepthTexture extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
@@ -393,7 +397,7 @@ class MaterialSkyBox extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
   }
 
   setShaderUniforms(Model model) {
@@ -441,7 +445,7 @@ class MaterialReflection extends Material {
   setShaderAttributs(Model model) {
     setShaderAttributWithName(
         'aVertexPosition', arrayBuffer: model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-    setShaderAttributWithName('aVertexIndice', elemetArrayBuffer: model.mesh.indices);
+    setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
     setShaderAttributWithName(
         'aNormal', arrayBuffer: model.mesh.vertexNormals, dimension : model.mesh.vertexNormalsDimensions);
   }

@@ -173,7 +173,7 @@ class SceneViewShaderLearning01 extends Scene{
       ..setShaderAttributsVariables = (Model model) {
         materialCustom.setShaderAttributWithName(
             'a_vertex', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-        materialCustom.setShaderAttributWithName('aVertexIndice', elemetArrayBuffer : model.mesh.indices);
+        materialCustom.setShaderAttributWithName('aVertexIndice', elementArrayBuffer : model.mesh.indices);
       }
       ..setShaderUniformsVariables = (Model model) {
         materialCustom.setShaderUniformWithName('iGlobalTime', shaderTime);
