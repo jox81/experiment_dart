@@ -80,7 +80,7 @@ class WebglTest {
 
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture();
-    gl.activeTexture..bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
     gl.activeTexture.texImage2DWithWidthAndHeight(
         TextureAttachmentTarget.TEXTURE_2D,
         0,
@@ -118,7 +118,7 @@ class WebglTest {
 
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture();
-    gl.activeTexture..bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
     gl.activeTexture.texImage2DWithWidthAndHeight(
         TextureAttachmentTarget.TEXTURE_2D,
         0,
@@ -176,7 +176,7 @@ class WebglTest {
 
     // 1. Init Texture
     WebGLTexture texture = new WebGLTexture();
-    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
     try {
       gl.activeTexture.texImage2DWithWidthAndHeight(
           TextureAttachmentTarget.TEXTURE_2D,
@@ -217,7 +217,7 @@ class WebglTest {
     gl.activeFrameBuffer.logActiveFrameBufferInfos();
 
     // 4. Clean up
-    gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
+    gl.activeTexture.texture2d.unBind();
     renderbuffer.unBind();
     gl.activeFrameBuffer.unBind();
   }
@@ -255,7 +255,7 @@ class WebglTest {
     gl.activeFrameBuffer.logActiveFrameBufferInfos();
 
     // 4. Clean up
-    gl.activeTexture.unBind(TextureTarget.TEXTURE_2D);
+    gl.activeTexture.texture2d.unBind();
     renderbuffer.unBind();
     gl.activeFrameBuffer.unBind();
   }

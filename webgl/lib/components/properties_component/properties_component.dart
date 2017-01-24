@@ -11,9 +11,14 @@ import 'package:webgl/components/value_components/vector3_component/vector3_comp
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation_property.dart';
+import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/introspection.dart';
+import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material.dart';
+import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 @Component(
     selector: 'properties',
@@ -112,10 +117,6 @@ class PropertiesComponent{
   setMatrix4Value(EditableProperty animationProperty, event){
     animationProperty.setter(event as Matrix4);
   }
-  //Material
-  bool isMaterial(EditableProperty animationProperty){
-    return compareType(animationProperty.type, Material);
-  }
   //List
   bool isList(EditableProperty animationProperty){
     return animationProperty.type.toString() == 'List';
@@ -139,6 +140,36 @@ class PropertiesComponent{
   }
   List<WebGLEnum> getWebglEnumItems(Type type) {
     return WebGLEnum.getItems(type);
+  }
+
+  //Material
+  bool isMaterial(EditableProperty animationProperty){
+    return compareType(animationProperty.type, Material);
+  }
+
+  //Texture
+  bool isTexture(EditableProperty animationProperty){
+    return compareType(animationProperty.type, Texture);
+  }
+
+  //WebGLTexture
+  bool isWebGLTexture(EditableProperty animationProperty){
+    return compareType(animationProperty.type, WebGLTexture);
+  }
+
+  //Mesh
+  bool isMesh(EditableProperty animationProperty){
+    return compareType(animationProperty.type, Mesh);
+  }
+
+  //Camera
+  bool isCamera(EditableProperty animationProperty){
+    return compareType(animationProperty.type, Camera);
+  }
+
+  //Light
+  bool isLight(EditableProperty animationProperty){
+    return compareType(animationProperty.type, Light);
   }
 
   /// Return true if type is the same or if it's a subType

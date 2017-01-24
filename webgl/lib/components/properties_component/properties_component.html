@@ -18,7 +18,13 @@
                     !isMatrix4(iEditElement.properties[key]) &&
                     !isMaterial(iEditElement.properties[key]) &&
                     !isList(iEditElement.properties[key]) &&
-                    !isWebGLEnum(iEditElement.properties[key])">
+                    !isWebGLEnum(iEditElement.properties[key]) &&
+                    !isMaterial(iEditElement.properties[key]) &&
+                    !isTexture(iEditElement.properties[key]) &&
+                    !isWebGLTexture(iEditElement.properties[key]) &&
+                    !isMesh(iEditElement.properties[key]) &&
+                    !isCamera(iEditElement.properties[key]) &&
+                    !isLight(iEditElement.properties[key])">
                         <p>{{key}} - Type : {{iEditElement.properties[key].type}}</p>
                         <p style='text-align: right; margin: 18px 0px;'>{{iEditElement.properties[key].getter()}}</p>
                     </legend>
@@ -183,13 +189,7 @@
                         </section>
                     </section>
 
-                    <legend *ngIf="isMaterial(iEditElement.properties[key])">
-                        {{key}}
-                    </legend>
-                    <section *ngIf="isMaterial(iEditElement.properties[key])">
-                        <input type="button"
-                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Material">
-                    </section>
+
 
                     <legend *ngIf="isList(iEditElement.properties[key])">
                         {{key}}
@@ -216,6 +216,55 @@
                             </webglEnum>
                         </section>
                     </section>
+
+                    <legend *ngIf="isMaterial(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isMaterial(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Material">
+                    </section>
+
+                    <legend *ngIf="isTexture(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isTexture(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Texture">
+                    </section>
+
+                    <legend *ngIf="isWebGLTexture(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isWebGLTexture(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit WebGLTexture">
+                    </section>
+
+                    <legend *ngIf="isMesh(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isMesh(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Mesh">
+                    </section>
+
+                    <legend *ngIf="isCamera(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isCamera(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Camera">
+                    </section>
+
+                    <legend *ngIf="isLight(iEditElement.properties[key])">
+                        {{key}}
+                    </legend>
+                    <section *ngIf="isLight(iEditElement.properties[key])">
+                        <input type="button"
+                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Light">
+                    </section>
+
                 </fieldset>
                 <hr>
             </div>

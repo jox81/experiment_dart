@@ -51,7 +51,7 @@ Future<Model> experiment() async {
   materialCustom.setShaderUniformsVariables = (Model model) {
     materialCustom.setShaderUniformWithName("time", shaderTime);
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
     materialCustom.setShaderUniformWithName("sTexture", 0);
   };
 

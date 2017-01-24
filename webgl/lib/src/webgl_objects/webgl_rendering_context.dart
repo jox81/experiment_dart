@@ -206,7 +206,6 @@ class WebGLRenderingContext extends IEditElement {
   FacingType get cullFaceMode => FacingType.getByIndex(ctx.getParameter(ContextParameter.CULL_FACE_MODE.index));
   set cullFaceMode(FacingType mode) {
     ctx.cullFace(mode.index);
-    print("###$mode");
   }
 
   // > FRONT_FACE

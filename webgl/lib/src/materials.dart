@@ -199,7 +199,7 @@ class MaterialBaseTexture extends Material {
     setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
 
     //textureCoords
     List<double> coords = model.mesh.textureCoords.length > 0 ? model.mesh.textureCoords:null;
@@ -247,7 +247,7 @@ class MaterialBaseTextureNormal extends Material {
     setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: model.mesh.textureCoords, dimension : model.mesh.textureCoordsDimensions);
 
@@ -359,7 +359,7 @@ class MaterialDepthTexture extends Material {
     setShaderAttributWithName('aVertexIndice', elementArrayBuffer: model.mesh.indices);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.bind(TextureTarget.TEXTURE_2D, texture);
+    gl.activeTexture.texture2d.bind(texture);
     setShaderAttributWithName(
         'aTextureCoord', arrayBuffer: model.mesh.textureCoords, dimension : model.mesh.textureCoordsDimensions);
   }
@@ -421,7 +421,7 @@ class MaterialSkyBox extends Material {
     setShaderUniformWithName("uNormalMatrix", normalMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
+    gl.activeTexture.textureCubeMap.bind(skyboxTexture);
     setShaderUniformWithName('uEnvMap', 0);
   }
 
@@ -470,7 +470,7 @@ class MaterialReflection extends Material {
     setShaderUniformWithName("uNormalMatrix", normalMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.bind(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture);
+    gl.activeTexture.textureCubeMap.bind(skyboxTexture);
     setShaderUniformWithName('uSkybox', 0);
   }
 

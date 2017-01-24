@@ -12,6 +12,7 @@ import 'package:webgl/src/scene.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewPrimitives extends Scene{
 
@@ -66,9 +67,6 @@ class SceneViewPrimitives extends Scene{
 //    AxisModel axis = new AxisModel();
 //    models.add(axis);
 
-    MaterialBaseColor materialBaseColor = new MaterialBaseColor(new Vector4(1.0,1.0,0.0, 1.0));
-    materials.add(materialBaseColor);
-
     PointModel point = new PointModel()
       ..name = 'point'
       ..position = new Vector3(-5.0, 0.0, -5.0);
@@ -99,12 +97,24 @@ class SceneViewPrimitives extends Scene{
       ..position = new Vector3(5.0, 0.0, 0.0);
     models.add(sphere);
 
-//    Map susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
-//
-//    JsonObject jsonModel = new JsonObject(susanJson)
-//      ..name = "jsonModel"
-//      ..transform.rotateX(radians(-90.0));
-//    models.add(jsonModel);
 
+    //Texturing
+
+
+    Map<String, String> textures = {
+      'crate' : "./images/crate.gif"
+    };
+
+    WebGLTexture texture = await TextureUtils.getTextureFromFile(textures['crate']);
+
+    MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture()
+        ..texture = texture;
+    materials.add(materialBaseTexture);
+
+    CubeModel cube2 = new CubeModel()
+      ..name = "cube2"
+      ..position = new Vector3(0.0, 0.0, -2.0)
+      ..material = materialBaseTexture;
+    models.add(cube2);
   }
 }
