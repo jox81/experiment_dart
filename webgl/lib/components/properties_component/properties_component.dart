@@ -1,9 +1,11 @@
+import 'dart:collection';
 import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/components/ui/toggle_button/toggle_button_component.dart';
 import 'package:webgl/components/value_components/list_component/list_component.dart';
+import 'package:webgl/components/value_components/map_component/map_component.dart';
 import 'package:webgl/components/value_components/matrix3_component/matrix3_component.dart';
 import 'package:webgl/components/value_components/matrix4_component/matrix4_component.dart';
 import 'package:webgl/components/value_components/vector2_component/vector2_component.dart';
@@ -18,13 +20,14 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 @Component(
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, ToggleButtonComponent, WebGLEnumComponent]
+    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, ToggleButtonComponent, WebGLEnumComponent]
 )
 class PropertiesComponent{
 
@@ -130,6 +133,10 @@ class PropertiesComponent{
     }
     innerSelectionChange.emit(selection);
   }
+  //Map
+  bool isMap(EditableProperty animationProperty){
+    return animationProperty.type.toString() == '_InternalLinkedHashMap';
+  }
 
   //isWebGLEnum
   bool isWebGLEnum(EditableProperty animationProperty){
@@ -155,6 +162,11 @@ class PropertiesComponent{
   //WebGLTexture
   bool isWebGLTexture(EditableProperty animationProperty){
     return compareType(animationProperty.type, WebGLTexture);
+  }
+
+  //WebGLBuffer
+  bool isWebGLBuffer(EditableProperty animationProperty){
+    return compareType(animationProperty.type, WebGLBuffer);
   }
 
   //Mesh

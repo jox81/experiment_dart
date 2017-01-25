@@ -48,17 +48,15 @@ enum ModelType{
 }
 
 abstract class Model extends IEditElement {
-
-  Mesh mesh = new Mesh();
-  IGizmo gizmo;
-
-  bool visible = true;
-
   String _name = '';//Todo : S'assurer que les noms soient uniques ?!
   String get name => _name;
   set name(String value) => _name = value;
 
-  //Transform : position, rotation, scale
+  bool _visible = true;
+  bool get visible => _visible;
+  set visible(bool value) =>
+      _visible = value; //Transform : position, rotation, scale
+
   final Matrix4 _transform = new Matrix4.identity();
   Matrix4 get transform => _transform;
   set transform(Matrix4 value) => _transform.setFrom(value);
@@ -69,10 +67,21 @@ abstract class Model extends IEditElement {
   Matrix3 get rotation => transform.getRotation();
   set rotation(Matrix3 value) => transform.setRotation(value);
 
-  Material material;
+  Mesh _mesh = new Mesh();
+  Mesh get mesh => _mesh;
+  set mesh(Mesh value) => _mesh = value;
 
-  //Animation
-  UpdateFunction updateFunction;
+  Material _material;
+  Material get material => _material;
+  set material(Material value) => _material = value; //Animation
+
+  IGizmo _gizmo;
+  IGizmo get gizmo => _gizmo;
+  set gizmo(IGizmo value) => _gizmo = value;
+
+  UpdateFunction _updateFunction;
+  UpdateFunction get updateFunction => _updateFunction;
+  set updateFunction(UpdateFunction value) => _updateFunction = value;
 
   void render() {
 
@@ -90,7 +99,7 @@ abstract class Model extends IEditElement {
   List<Triangle> getFaces() {
     if(_faces == null) {
       _faces = new List();
-      for (Triangle triangle in mesh.faces) {
+      for (Triangle triangle in mesh.getFaces()) {
         _faces.add(new Triangle.points(
             transform * triangle.point0, transform * triangle.point1,
             transform * triangle.point2));

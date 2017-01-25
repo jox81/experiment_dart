@@ -85,7 +85,7 @@ class Mesh {
       _vertexNormals.length ~/ _vertexNormalsDimensions;
 
   List<Triangle> _faces;
-  List<Triangle> get faces {
+  List<Triangle> getFaces() {
 
     /*
     //Référence de construction

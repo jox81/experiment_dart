@@ -87,12 +87,15 @@ abstract class Material extends IEditElement {
     }
   }
 
+  String name;
+
+  WebGLProgram program;
+  ProgramInfo programInfo;
   List<WebGLShader> shaders;
 
-  String name;
-  WebGLProgram program;
 
-  ProgramInfo programInfo;
+  List<String> buffersNames = new List();
+  Map<String, WebGLBuffer> buffers = new Map();
 
   List<String> attributsNames = new List();
   Map<String, WebGLAttributLocation> attributes = new Map();
@@ -100,8 +103,6 @@ abstract class Material extends IEditElement {
   List<String> uniformsNames = new List();
   Map<String, WebGLUniformLocation> uniformLocations = new Map();
 
-  List<String> buffersNames = new List();
-  Map<String, WebGLBuffer> buffers = new Map();
 
   Material(String vsSource, String fsSource) {
     vsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
@@ -185,7 +186,7 @@ abstract class Material extends IEditElement {
     _mvPopMatrix();
   }
 
-  //Animation
+  // >> Animation and Hierarchy
   Queue<Matrix4> _mvMatrixStack = new Queue();
 
   void _mvPushMatrix() {
@@ -199,45 +200,56 @@ abstract class Material extends IEditElement {
     Context.modelViewMatrix = _mvMatrixStack.removeFirst();
   }
 
-  //Todo : Améliorer le process, le rendre plus clair !!
-  void setShaderAttributWithName(String attributName, {arrayBuffer, dimension, elementArrayBuffer, data}) {
+  // >> Attributs
 
-    if (arrayBuffer!= null && dimension != null) {
-      gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
-      attributes[attributName].enabled = true;
-      gl.bufferData(
-          BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
-      attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
-    } else if(elementArrayBuffer != null){
-      gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-      gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elementArrayBuffer),
-          BufferUsageType.STATIC_DRAW);
-    }else{
-      WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.name == attributName, orElse:() => null);
+  void setShaderAttributArrayBuffer(String attributName, List arrayBuffer, int dimension){
+    gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
+    attributes[attributName].enabled = true;
+    gl.bufferData(
+        BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
+    attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
+  }
 
-      if(activeInfo != null) {
-        switch (activeInfo.type) {
-          case ShaderVariableType.FLOAT_VEC2:
-            break;
-          case ShaderVariableType.FLOAT_VEC3:
-            break;
-          case ShaderVariableType.FLOAT_VEC4:
-            Vector4 vector4Value = data;
-            attributes[attributName].vertexAttrib4f(vector4Value.x, vector4Value.y, vector4Value.z, vector4Value.w);
-            break;
-          case ShaderVariableType.FLOAT:
-            attributes[attributName].vertexAttrib1f(data);
-            break;
-          default:
-            print(
-                'setShaderAttributWithName not set in material.dart for : ${activeInfo}');
-            break;
-        }
+  void setShaderAttributElementArrayBuffer(String attributName, List<int> elementArrayBuffer){
+    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
+    gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elementArrayBuffer),
+        BufferUsageType.STATIC_DRAW);
+  }
+
+  void setShaderAttributData(String attributName, data) {
+
+    WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.name == attributName, orElse:() => null);
+
+    if(activeInfo != null) {
+      switch (activeInfo.type) {
+        case ShaderVariableType.FLOAT:
+          num vector1Value = data;
+          attributes[attributName].vertexAttrib1f(vector1Value);
+          break;
+        case ShaderVariableType.FLOAT_VEC2:
+          Vector2 vector2Value = data;
+          attributes[attributName].vertexAttrib2f(vector2Value.x, vector2Value.y);
+          break;
+        case ShaderVariableType.FLOAT_VEC3:
+          Vector3 vector3Value = data;
+          attributes[attributName].vertexAttrib3f(vector3Value.x, vector3Value.y, vector3Value.z);
+          break;
+        case ShaderVariableType.FLOAT_VEC4:
+          Vector4 vector4Value = data;
+          attributes[attributName].vertexAttrib4f(vector4Value.x, vector4Value.y, vector4Value.z, vector4Value.w);
+          break;
+
+        default:
+          print(
+              'setShaderAttributWithName not set in material.dart for : ${activeInfo}');
+          break;
       }
     }
   }
 
-  void setShaderUniformWithName(String uniformName, data, [data1, data2, data3]) {
+  // >> Uniforms
+
+  void setShaderUniform(String uniformName, data, [data1, data2, data3]) {
     WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.name == uniformName, orElse:() => null);
 
     if(activeInfo != null) {

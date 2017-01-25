@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -11,7 +12,7 @@ import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
     override: '*')
 import 'dart:mirrors';
 
-class WebGLAttributLocation{
+class WebGLAttributLocation extends IEditElement{
   int _location;
   int get location => _location;
 

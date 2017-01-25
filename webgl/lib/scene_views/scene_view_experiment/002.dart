@@ -38,12 +38,12 @@ Model experiment() {
 
   MaterialCustom materialCustom = new MaterialCustom(vs, fs, buffersNames);
   materialCustom.setShaderAttributsVariables = (Model model) {
-      materialCustom.setShaderAttributWithName(
-          'aVertexPosition', arrayBuffer:  model.mesh.vertices, dimension : model.mesh.vertexDimensions);
-      materialCustom.setShaderAttributWithName('aVertexIndice', elementArrayBuffer:  model.mesh.indices);
+      materialCustom.setShaderAttributArrayBuffer(
+          'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);
+      materialCustom.setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
     };
   materialCustom.setShaderUniformsVariables = (Model model) {
-      materialCustom.setShaderUniformWithName("time", shaderTime);
+      materialCustom.setShaderUniform("time", shaderTime);
     };
 
   Mesh mesh = new Mesh()

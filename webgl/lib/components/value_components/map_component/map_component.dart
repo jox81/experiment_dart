@@ -1,14 +1,14 @@
 import 'package:angular2/core.dart';
 
 @Component(
-    selector: 'list',
-    templateUrl: 'list_component.html',
-    styleUrls: const ['list_component.css']
+    selector: 'map',
+    templateUrl: 'map_component.html',
+    styleUrls: const ['map_component.css']
 )
-class ListComponent {
+class MapComponent {
 
   @Input()
-  List list;
+  Map map;
 
   @Input()
   bool disabled = false;
@@ -19,7 +19,7 @@ class ListComponent {
   EventEmitter elementSelected = new EventEmitter();
 
   void selectionChange(event){
-    var selection = list[event.target.selectedIndex];
+    var selection = map[(event.target.value.toString().split(': ')[1])];
     elementSelected.emit(selection);
   }
 
