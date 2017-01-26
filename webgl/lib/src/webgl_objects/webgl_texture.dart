@@ -21,12 +21,15 @@ import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'dart:mirrors';
 
 ///
-class WebGLTexture extends WebGLObject {
+class WebGLTexture extends EditTexture {
   final WebGL.Texture webGLTexture;
+  final TextureTarget textureTarget;
+
   bool get isTexture => gl.ctx.isTexture(webGLTexture);
 
-  WebGLTexture() : this.webGLTexture = gl.ctx.createTexture();
-  WebGLTexture.fromWebGL(this.webGLTexture);
+  WebGLTexture.texture2d() : this.textureTarget = TextureTarget.TEXTURE_2D, this.webGLTexture = gl.ctx.createTexture();
+  WebGLTexture.textureCubeMap() : this.textureTarget = TextureTarget.TEXTURE_2D, this.webGLTexture = gl.ctx.createTexture();
+  WebGLTexture.fromWebGL(WebGL.Texture webGLTexture, TextureTarget textureTarget): this.webGLTexture = webGLTexture, this.textureTarget = textureTarget;
 
   @override
   void delete() => gl.ctx.deleteTexture(webGLTexture);
@@ -40,6 +43,23 @@ class WebGLTexture extends WebGLObject {
         ..texture2d.logInfo()
         ..texture2d.unBind();
     });
+  }
+
+  void edit() {
+    TextureUnit lastTextureUnit = ActiveTexture.instance.activeUnit;
+
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+
+    switch(textureTarget){
+      case TextureTarget.TEXTURE_2D:
+        ActiveTexture.instance.texture2d.bind(this);
+        break;
+      case TextureTarget.TEXTURE_CUBE_MAP:
+        ActiveTexture.instance.textureCubeMap.bind(this);
+        break;
+    }
+
+    ActiveTexture.instance.activeUnit = lastTextureUnit;
   }
 }
 
@@ -90,7 +110,7 @@ class TextureUtils {
       bool mirrorU: false,
       bool repeatV: false,
       bool mirrorV: false}) {
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
 
     gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 1);
@@ -127,7 +147,7 @@ class TextureUtils {
   }
 
   static WebGLTexture createColorTexture(int size) {
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
 
     gl.activeTexture.texture2d.setParameterInt(
@@ -159,7 +179,7 @@ class TextureUtils {
   }
 
   static WebGLTexture createColorCubeMapTexture(int size) {
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.textureCubeMap();
     gl.activeTexture.textureCubeMap.bind(texture);
 
     gl.activeTexture.textureCubeMap.setParameterInt(
@@ -198,8 +218,7 @@ class TextureUtils {
     var WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
     assert(WEBGL_depth_texture != null);
 
-    WebGLTexture depthTexture = new WebGLTexture();
-    TextureTarget target = TextureTarget.TEXTURE_2D;
+    WebGLTexture depthTexture = new WebGLTexture.texture2d();
 
     gl.activeTexture.texture2d.bind(depthTexture);
     gl.activeTexture.texture2d.setParameterInt(
@@ -441,7 +460,7 @@ class TextureUtils {
       {bool flip: true}) {
     assert(cubeMapImages.length == 6);
 
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.textureCubeMap();
 
     gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip ? 1 : 0);
 

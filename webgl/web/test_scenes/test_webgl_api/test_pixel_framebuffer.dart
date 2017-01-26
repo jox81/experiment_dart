@@ -48,7 +48,7 @@ void log(String msg) {
 
 WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int height) {
   // 1. Init Picking Texture
-  WebGLTexture texture = new WebGLTexture();
+  WebGLTexture texture = new WebGLTexture.texture2d();
   gl.activeTexture.texture2d.bind(texture);
   try {
     gl.activeTexture.texImage2DWithWidthAndHeight(TextureAttachmentTarget.TEXTURE_2D, 0, TextureInternalFormat.RGBA, width, height, 0, TextureInternalFormat.RGBA, TexelDataType.UNSIGNED_BYTE, null);

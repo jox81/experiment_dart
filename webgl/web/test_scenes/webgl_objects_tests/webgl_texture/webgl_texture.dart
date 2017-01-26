@@ -33,14 +33,14 @@ class WebglTest {
   Future simpleBindTest() async {
     gl.activeTexture.logActiveTextureInfo();
 
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture
       ..texture2d.bind(texture)
       ..logActiveTextureInfo();
   }
 
   Future bindUnbindTestNull() async {
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
 
     assert(gl.activeTexture.texture2d.boundTexture == null);
 
@@ -54,8 +54,8 @@ class WebglTest {
   }
 
   Future test03() async {
-    WebGLTexture texture1 = new WebGLTexture();
-    WebGLTexture texture2 = new WebGLTexture();
+    WebGLTexture texture1 = new WebGLTexture.texture2d();
+    WebGLTexture texture2 = new WebGLTexture.textureCubeMap();
 
     gl.activeTexture..logActiveTextureInfo();
 
@@ -80,7 +80,7 @@ class WebglTest {
     print(
         '@ une fois une texture bindé à une TextureTarget, il n\'est plus possible de la binder à une autre TextureTarget');
 
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
 
     gl.activeTexture
       ..activeUnit = TextureUnit.TEXTURE0
@@ -97,7 +97,7 @@ class WebglTest {
     print(
         '@ une texture peut être bindé à différente TextureUnit en gardant le même TextureTarget');
 
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
 
     gl.activeTexture
       ..activeUnit = TextureUnit.TEXTURE0
@@ -114,8 +114,8 @@ class WebglTest {
     print(
         '@ une TextureUnit peut avoir ses deux TextureTarget bindés par des textures différentes');
 
-    WebGLTexture texture1 = new WebGLTexture();
-    WebGLTexture texture2 = new WebGLTexture();
+    WebGLTexture texture1 = new WebGLTexture.texture2d();
+    WebGLTexture texture2 = new WebGLTexture.textureCubeMap();
 
     gl.activeTexture
       ..activeUnit = TextureUnit.TEXTURE0
@@ -127,7 +127,7 @@ class WebglTest {
   Future textureUnitSwitchTexture() async {
     print('@ une TextureTraget est simplement remplacée par un nouveau bind');
 
-    WebGLTexture texture1 = new WebGLTexture();
+    WebGLTexture texture1 = new WebGLTexture.texture2d();
     WebGLTexture texture2 = TextureUtils.createColorTexture(64);
 
     gl.activeTexture..activeUnit = TextureUnit.TEXTURE0;
@@ -161,8 +161,8 @@ class WebglTest {
     int size = 64;
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE7;
 
-    WebGLTexture texture1 = new WebGLTexture();
-    WebGLTexture texture2 = new WebGLTexture();
+    WebGLTexture texture1 = new WebGLTexture.texture2d();
+    WebGLTexture texture2 = new WebGLTexture.texture2d();
 
     void setupTexture1(WebGLTexture texture, int size) {
       gl.activeTexture.texture2d.bind(texture);

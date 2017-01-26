@@ -163,12 +163,10 @@ class SceneViewShaderLearning01 extends Scene{
 
     ''';
 
-    List<String> buffersNames = ['a_vertex', 'aVertexIndice'];
-
     Vector2 iResolution = new Vector2(gl.canvas.width.toDouble(), gl.canvas.height.toDouble());
 
     MaterialCustom materialCustom = new MaterialCustom(
-        vShader, fShader, buffersNames);
+        vShader, fShader);
     materialCustom
       ..setShaderAttributsVariables = (Model model) {
         materialCustom.setShaderAttributArrayBuffer(

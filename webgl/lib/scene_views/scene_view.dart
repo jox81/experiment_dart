@@ -19,10 +19,10 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //   new SceneViewStart(),
-//   new SceneViewBase(),
+   new SceneViewBase(),
 //    new SceneViewWebGLEdit(),
 //    new SceneViewVectors(),
-    new SceneViewCubeMap(),
+//    new SceneViewCubeMap(),
 //    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),

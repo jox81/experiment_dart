@@ -40,9 +40,7 @@ Future<Model> experiment() async {
   WebGLTexture texture = await TextureUtils.getTextureFromFile("./images/crate.gif");
 
   //Material
-  List<String> buffersNames = ['aVertexPosition', 'aVertexIndice'];
-
-  MaterialCustom materialCustom = new MaterialCustom(vs, fs, buffersNames);
+  MaterialCustom materialCustom = new MaterialCustom(vs, fs);
   materialCustom.setShaderAttributsVariables = (Model model) {
     materialCustom.setShaderAttributArrayBuffer(
         'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);

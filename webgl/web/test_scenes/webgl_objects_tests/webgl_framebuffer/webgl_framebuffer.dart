@@ -79,7 +79,7 @@ class WebglTest {
     gl.activeFrameBuffer.logActiveFrameBufferInfos();
 
     //The texture to bind must have a correct InternalFormatType
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
     gl.activeTexture.texImage2DWithWidthAndHeight(
         TextureAttachmentTarget.TEXTURE_2D,
@@ -117,7 +117,7 @@ class WebglTest {
     gl.activeFrameBuffer.bind(frameBuffer);
 
     //The texture to bind must have a correct InternalFormatType
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
     gl.activeTexture.texImage2DWithWidthAndHeight(
         TextureAttachmentTarget.TEXTURE_2D,
@@ -175,7 +175,7 @@ class WebglTest {
     int height = 64;
 
     // 1. Init Texture
-    WebGLTexture texture = new WebGLTexture();
+    WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
     try {
       gl.activeTexture.texImage2DWithWidthAndHeight(

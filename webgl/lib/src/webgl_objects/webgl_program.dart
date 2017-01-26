@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
@@ -16,11 +17,12 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
     override: '*')
 import 'dart:mirrors';
 
-class ProgramInfo{
-  List<WebGLActiveInfo> attributes = new List();
-  List<WebGLActiveInfo> uniforms = new List();
+class ProgramInfo extends IEditElement {
   int attributeCount = 0;
+  List<WebGLActiveInfo> attributes = new List();
+
   int uniformCount = 0;
+  List<WebGLActiveInfo> uniforms = new List();
 }
 
 class WebGLProgram extends WebGLObject{
@@ -33,8 +35,8 @@ class WebGLProgram extends WebGLObject{
   @override
   void delete() => gl.ctx.deleteProgram(webGLProgram);
 
-  List<WebGL.Shader> get attachedShaders{
-    return gl.ctx.getAttachedShaders(webGLProgram);
+  List<WebGLShader> get attachedShaders{
+    return gl.ctx.getAttachedShaders(webGLProgram).map((s)=> new WebGLShader.fromWebGL(s)).toList();
   }
 
   void attachShader(WebGLShader shader){

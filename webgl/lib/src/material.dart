@@ -93,27 +93,22 @@ abstract class Material extends IEditElement {
   ProgramInfo programInfo;
   List<WebGLShader> shaders;
 
-
-  List<String> buffersNames = new List();
   Map<String, WebGLBuffer> buffers = new Map();
 
-  List<String> attributsNames = new List();
+  List<String> _attributsNames = new List();
   Map<String, WebGLAttributLocation> attributes = new Map();
 
-  List<String> uniformsNames = new List();
+  List<String> _uniformsNames = new List();
   Map<String, WebGLUniformLocation> uniformLocations = new Map();
-
 
   Material(String vsSource, String fsSource) {
     vsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON +  GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + vsSource;
     fsSource = ((debugging)? Material.GLSL_PRAGMA_DEBUG_ON  + GLSL_PRAGMA_OPTIMIZE_OFF : "" ) + fsSource;
+
     program = initShaderProgram(vsSource, fsSource);
-
     programInfo = program.getProgramInfo();
-    attributsNames =  programInfo.attributes.map((a)=> a.name).toList();
-    uniformsNames = programInfo.uniforms.map((a)=> a.name).toList();
-
-    initBuffers();
+    _attributsNames =  programInfo.attributes.map((a)=> a.name).toList();
+    _uniformsNames = programInfo.uniforms.map((a)=> a.name).toList();
 
     getShaderSettings();
   }
@@ -128,9 +123,7 @@ abstract class Material extends IEditElement {
       ..source = fsSource
       ..compile();
 
-
     shaders = [vs, fs];
-
     WebGLProgram _program = new WebGLProgram()
     ..attachShader(vs)
     ..attachShader(fs)
@@ -140,69 +133,27 @@ abstract class Material extends IEditElement {
     return _program;
   }
 
-  void initBuffers() {
-    for (String name in buffersNames) {
-      buffers[name] = new WebGLBuffer();
-    }
-  }
-
   void getShaderSettings() {
     _getShaderAttributSettings();
     _getShaderUniformSettings();
   }
 
   void _getShaderAttributSettings() {
-    for (String name in attributsNames) {
+    for (String name in _attributsNames) {
       attributes[name] = program.getAttribLocation(name);
     }
   }
 
   void _getShaderUniformSettings() {
-    for (String name in uniformsNames) {
+    for (String name in _uniformsNames) {
       uniformLocations[name] = program.getUniformLocation(name);
     }
-  }
-
-  render(Model model) {
-
-    _mvPushMatrix();
-
-    if(model is SkyBoxModel)gl.depthTest = false;
-
-    Context.modelViewMatrix.multiply(model.transform);
-    program.use();
-    setShaderSettings(model);
-
-    //Todo : trouver une meilleur condition pour savoir si on utilise l'un ou l'autre
-    if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
-      gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
-    } else {
-      gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
-    }
-    disableVertexAttributs();
-
-    if(model is SkyBoxModel)gl.depthTest = true;
-
-    _mvPopMatrix();
-  }
-
-  // >> Animation and Hierarchy
-  Queue<Matrix4> _mvMatrixStack = new Queue();
-
-  void _mvPushMatrix() {
-    _mvMatrixStack.addFirst(Context.modelViewMatrix.clone());
-  }
-
-  void _mvPopMatrix() {
-    if (0 == _mvMatrixStack.length) {
-      throw new Exception("Invalid popMatrix!");
-    }
-    Context.modelViewMatrix = _mvMatrixStack.removeFirst();
   }
 
   // >> Attributs
 
   void setShaderAttributArrayBuffer(String attributName, List arrayBuffer, int dimension){
+    if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
     attributes[attributName].enabled = true;
     gl.bufferData(
@@ -211,6 +162,7 @@ abstract class Material extends IEditElement {
   }
 
   void setShaderAttributElementArrayBuffer(String attributName, List<int> elementArrayBuffer){
+    if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
     gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elementArrayBuffer),
         BufferUsageType.STATIC_DRAW);
@@ -255,8 +207,10 @@ abstract class Material extends IEditElement {
     if(activeInfo != null) {
       switch (activeInfo.type) {
         case ShaderVariableType.FLOAT_VEC2:
-          if (data1 == null && data2 == null) {
+          if (data1 == null) {
             uniformLocations[uniformName].uniform2fv(data);
+          }else{
+            uniformLocations[uniformName].uniform2f(data, data1);
           }
           break;
         case ShaderVariableType.FLOAT_VEC3:
@@ -295,20 +249,59 @@ abstract class Material extends IEditElement {
     }
   }
 
-  disableVertexAttributs() {
-    for (String name in attributsNames) {
-      attributes[name].enabled = false;
-    }
+  // > Animation and Hierarchy
+  Queue<Matrix4> _mvMatrixStack = new Queue();
+
+  void _mvPushMatrix() {
+    _mvMatrixStack.addFirst(Context.modelViewMatrix.clone());
   }
 
-  setShaderSettings(Model model) {
+  void _mvPopMatrix() {
+    if (0 == _mvMatrixStack.length) {
+      throw new Exception("Invalid popMatrix!");
+    }
+    Context.modelViewMatrix = _mvMatrixStack.removeFirst();
+  }
+
+  // >> Rendering
+
+  render(Model model) {
+    _mvPushMatrix();
+    Context.modelViewMatrix.multiply(model.transform);
+
+    beforeRender(model);
+    if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
+      gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
+    } else {
+      gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
+    }
+    afterRender(model);
+
+    _mvPopMatrix();
+  }
+
+  beforeRender(Model model) {
+    program.use();
     setShaderAttributs(model);
     setShaderUniforms(model);
+    setupBeforeRender();
   }
 
   setShaderAttributs(Model model);
   setShaderUniforms(Model model);
+  setupBeforeRender(){}
+  setupAfterRender(){}
 
+  afterRender(Model model){
+    setupAfterRender();
+    disableVertexAttributs();
+  }
+
+  disableVertexAttributs() {
+    for (String name in _attributsNames) {
+      attributes[name].enabled = false;
+    }
+  }
 
 }
 

@@ -39,12 +39,11 @@ enum MaterialType {
 typedef void SetShaderVariables(Model model);
 
 class MaterialCustom extends Material {
-  final List<String> buffersNames;
 
   SetShaderVariables setShaderAttributsVariables;
   SetShaderVariables setShaderUniformsVariables;
 
-  MaterialCustom(String vsSource, String fsSource, this.buffersNames)
+  MaterialCustom(String vsSource, String fsSource)
       : super(vsSource, fsSource);
 
   @override
@@ -59,7 +58,6 @@ class MaterialCustom extends Material {
 }
 
 class MaterialPoint extends Material {
-  final List<String> buffersNames = ['aVertexPosition', 'aVertexColor'];
   num pointSize;
   Vector4 color;
 
@@ -94,7 +92,6 @@ class MaterialPoint extends Material {
 }
 
 class MaterialBase extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   MaterialBase._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);
@@ -118,7 +115,6 @@ class MaterialBase extends Material {
 }
 
 class MaterialBaseColor extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External Parameters
   Vector4 color;
@@ -147,7 +143,6 @@ class MaterialBaseColor extends Material {
 }
 
 class MaterialBaseVertexColor extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aVertexColor'];
 
   MaterialBaseVertexColor._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);
@@ -175,7 +170,6 @@ class MaterialBaseVertexColor extends Material {
 }
 
 class MaterialBaseTexture extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
   //External parameters
   WebGLTexture texture;
@@ -216,12 +210,6 @@ class MaterialBaseTexture extends Material {
 }
 
 class MaterialBaseTextureNormal extends Material {
-  final buffersNames = [
-    'aVertexPosition',
-    'aVertexIndice',
-    'aTextureCoord',
-    'aVertexNormal'
-  ];
 
   //External Parameters
   WebGLTexture texture;
@@ -295,7 +283,6 @@ class MaterialBaseTextureNormal extends Material {
 ///module explained can be found here : https://github.com/vorg/pragmatic-pbr/tree/master/local_modules
 ///base
 class MaterialPBR extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External Parameters
   PointLight pointLight;
@@ -332,7 +319,6 @@ class MaterialPBR extends Material {
 }
 
 class MaterialDepthTexture extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aTextureCoord'];
 
   //External parameters
   WebGLTexture texture;
@@ -374,7 +360,6 @@ class MaterialDepthTexture extends Material {
 }
 
 class MaterialSkyBox extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice'];
 
   //External parameters
   WebGLTexture skyboxTexture;
@@ -414,10 +399,17 @@ class MaterialSkyBox extends Material {
     gl.activeTexture.textureCubeMap.bind(skyboxTexture);
     setShaderUniform('uEnvMap', 0);
   }
+
+  setupBeforeRender(){
+    gl.depthTest = false;
+  }
+  setupAfterRender(){
+    gl.depthTest = true;
+  }
+
 }
 
 class MaterialReflection extends Material {
-  final buffersNames = ['aVertexPosition', 'aVertexIndice', 'aNormal'];
 
   //External parameters
   WebGLTexture skyboxTexture;

@@ -2,6 +2,7 @@ import 'dart:html';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/context.dart';
 import 'dart:web_gl' as WebGL;
@@ -9,6 +10,10 @@ import 'dart:typed_data' as WebGlTypedData;
 @MirrorsUsed(
     targets: const [
       ActiveTexture,
+      EditTexture,
+      Texture,
+      Texture2D,
+      TextureCubeMap
     ],
     override: '*')
 import 'dart:mirrors';
@@ -25,7 +30,7 @@ class ActiveTexture extends IEditElement{
     return _instance;
   }
 
-  // > MAX_TEXTURE_IMAGE_UNITS
+   // > MAX_TEXTURE_IMAGE_UNITS
   int get maxTextureImageUnits => gl.ctx.getParameter(ContextParameter.MAX_TEXTURE_IMAGE_UNITS.index);
   // > MAX_COMBINED_TEXTURE_IMAGE_UNITS
   int get maxCombinedTextureImageUnits => gl.ctx.getParameter(ContextParameter.MAX_COMBINED_TEXTURE_IMAGE_UNITS.index);
@@ -139,6 +144,62 @@ class ActiveTexture extends IEditElement{
   }
 }
 
+abstract class EditTexture extends WebGLObject{
+
+  TextureTarget textureTarget;
+
+  TextureUnit editTextureUnit = TextureUnit.TEXTURE8;
+
+  // >>> single getParameter
+
+  bool get unpackFlipYWebGL => gl.ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index);
+  set unpackFlipYWebGL(bool flip) => gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip?1:0);
+
+  // > TEXTURE_MAG_FILTER
+  TextureMagnificationFilterType get textureMagFilter{
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
+  }
+  set textureMagFilter(TextureMagnificationFilterType  textureMagnificationFilterType){
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MAG_FILTER.index, textureMagnificationFilterType.index);
+  }
+
+  // > TEXTURE_MIN_FILTER
+  TextureMinificationFilterType get textureMinFilter {
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    return TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(
+        textureTarget.index,
+        TextureParameter.TEXTURE_MIN_FILTER.index));
+  }
+  set textureMinFilter(TextureMinificationFilterType  textureMinificationFilterType){
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MIN_FILTER.index, textureMinificationFilterType.index);
+  }
+
+  // > TEXTURE_WRAP_S
+  TextureWrapType get textureWrapS
+  {
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
+  }
+  set textureWrapS(TextureWrapType  textureWrapType){
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_S.index, textureWrapType.index);
+  }
+
+  // > TEXTURE_WRAP_T
+  TextureWrapType get textureWrapT {
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
+  }
+  set textureWrapT(TextureWrapType  textureWrapType){
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_T.index, textureWrapType.index);
+  }
+
+}
+
 abstract class Texture{
   TextureTarget textureTarget;
   ContextParameter textureBinding;
@@ -162,7 +223,7 @@ abstract class Texture{
 
     WebGL.Texture webGLTexture = gl.ctx.getParameter(textureBinding.index);
     if(webGLTexture != null && gl.ctx.isTexture(webGLTexture)){
-      return new WebGLTexture.fromWebGL(webGLTexture);
+      return new WebGLTexture.fromWebGL(webGLTexture, TextureTarget.getByIndex(textureBinding.index));
     }
     return null;
   }
@@ -179,23 +240,6 @@ abstract class Texture{
   }
   void unBind() {
     gl.ctx.bindTexture(textureTarget.index, null);
-  }
-
-  void bindToUnit(TextureUnit textureUnit, WebGLTexture texture) {
-    TextureUnit lastTextureUnit = ActiveTexture.instance.activeUnit;
-
-    ActiveTexture.instance.activeUnit = textureUnit;
-    bind(texture);
-
-    ActiveTexture.instance.activeUnit = lastTextureUnit;
-  }
-  void unBindUnit(TextureUnit textureUnit) {
-    TextureUnit lastTextureUnit = ActiveTexture.instance.activeUnit;
-
-    ActiveTexture.instance.activeUnit = textureUnit;
-    unBind();
-
-    ActiveTexture.instance.activeUnit = lastTextureUnit;
   }
 
   // >> Set values

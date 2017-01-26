@@ -36,9 +36,7 @@ Model experiment() {
   num pointSize = 5.0;
 
   //Material
-  List<String> buffersNames = ['aVertexPosition'];
-
-  MaterialCustom materialCustom = new MaterialCustom(vs, fs, buffersNames);
+  MaterialCustom materialCustom = new MaterialCustom(vs, fs);
   materialCustom.setShaderAttributsVariables = (Model model) {
       materialCustom.setShaderAttributArrayBuffer(
           'aVertexPosition', model.mesh.vertices,  model.mesh.vertexDimensions);

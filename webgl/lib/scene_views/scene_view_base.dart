@@ -69,9 +69,6 @@ class SceneViewBase extends Scene{
     MaterialBaseVertexColor materialBaseVertexColor = new MaterialBaseVertexColor();
     materials.add(materialBaseVertexColor);
 
-    MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture();
-    materials.add(materialBaseTexture);
-
     MaterialBaseTextureNormal materialBaseTextureNormal =
     new MaterialBaseTextureNormal()
       ..ambientColor = ambientLight.color

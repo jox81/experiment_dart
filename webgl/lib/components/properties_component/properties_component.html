@@ -195,18 +195,10 @@
                         {{key}}
                     </legend>
                     <section *ngIf="isList(iEditElement.properties[key])">
-                        <section *ngIf="iEditElement.properties[key].setter == null">
-                            <list
-                                    [list]="iEditElement.properties[key].getter()"
-                                    [disabled] = 'true'>
-                            </list>
-                        </section>
-                        <section *ngIf="iEditElement.properties[key].setter != null">
-                            <list
-                                    [list]="iEditElement.properties[key].getter()"
-                                    (elementSelected) = "setSelection($event)">
-                            </list>
-                        </section>
+                        <list
+                                [list]="iEditElement.properties[key].getter()"
+                                (elementSelected) = "setSelection($event)">
+                        </list>
                     </section>
 
                     <legend *ngIf="isMap(iEditElement.properties[key])">
@@ -264,7 +256,7 @@
                     </legend>
                     <section *ngIf="isWebGLTexture(iEditElement.properties[key])">
                         <input type="button"
-                               (click)="setSelection(iEditElement.properties[key].getter())" value="Edit WebGLTexture">
+                               (click)="setSelectionWebGLTexture(iEditElement.properties[key].getter())" value="Edit WebGLTexture">
                     </section>
 
                     <legend *ngIf="isWebGLBuffer(iEditElement.properties[key])">

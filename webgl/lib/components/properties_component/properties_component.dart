@@ -164,6 +164,11 @@ class PropertiesComponent{
     return compareType(animationProperty.type, WebGLTexture);
   }
 
+  setSelectionWebGLTexture(event){
+    (event as WebGLTexture).edit();
+    setSelection(event);
+  }
+
   //WebGLBuffer
   bool isWebGLBuffer(EditableProperty animationProperty){
     return compareType(animationProperty.type, WebGLBuffer);

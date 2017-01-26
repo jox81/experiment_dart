@@ -164,25 +164,29 @@ class WebGLRenderingContext extends IEditElement {
   int get maxRenderBufferSize => ctx.getParameter(ContextParameter.MAX_RENDERBUFFER_SIZE.index);
 
 
-
   // > SAMPLES
   int get samples => ctx.getParameter(ContextParameter.SAMPLES.index);
   // > SAMPLE_BUFFERS
   int get sampleBuffers => ctx.getParameter(ContextParameter.SAMPLE_BUFFERS.index);
 
+
+  // >> pixelStorei
+
   // > PACK_ALIGNMENT
   int get packAlignment => ctx.getParameter(ContextParameter.PACK_ALIGNMENT.index);
-  void pixelStorei(PixelStorgeType storage, int value) => ctx.pixelStorei(storage.index, value);
-
   // > UNPACK_ALIGNMENT
   int get unpackAlignment => ctx.getParameter(ContextParameter.UNPACK_ALIGNMENT.index);
-
-  // > UNPACK_COLORSPACE_CONVERSION_WEBGL
-  PixelStorgeType get unpackColorSpaceConversionWebGL => PixelStorgeType.getByIndex(ctx.getParameter(ContextParameter.UNPACK_COLORSPACE_CONVERSION_WEBGL.index));
   // > UNPACK_FLIP_Y_WEBGL
   bool get unpackFlipYWebGL => ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index);
   // > UNPACK_PREMULTIPLY_ALPHA_WEBGL
   bool get unpackPreMultiplyAlphaWebGL => ctx.getParameter(ContextParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.index);
+  // > UNPACK_COLORSPACE_CONVERSION_WEBGL
+  PixelStorgeType get unpackColorSpaceConversionWebGL => PixelStorgeType.getByIndex(ctx.getParameter(ContextParameter.UNPACK_COLORSPACE_CONVERSION_WEBGL.index));
+
+  void pixelStorei(PixelStorgeType storage, int value) => ctx.pixelStorei(storage.index, value);
+
+
+  // >>
 
   // > IMPLEMENTATION_COLOR_READ_FORMAT // Todo : GLenum ?
   int get implementationColorReadFormat => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_FORMAT.index);

@@ -82,10 +82,8 @@ class SceneViewParticle extends Scene{
     }
   ''';
 
-    List<String> buffersNames = ['a_vertex'];
-
     MaterialCustom materialCustom = new MaterialCustom(
-        vShader, fShader, buffersNames);
+        vShader, fShader);
     materialCustom
       ..setShaderAttributsVariables = (Model model) {
         materialCustom.setShaderAttributData(
