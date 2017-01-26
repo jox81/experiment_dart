@@ -45,29 +45,25 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 20.0, 20.0)
       ..cameraController = new CameraController();
-
-    GridModel grid = new GridModel();
-    models.add(grid);
-
-    AxisModel axis = new AxisModel();
-    models.add(axis);
   }
 
   bool _isSetuped = false;
 
   Future setup() async{
 
-    Future future = new Future.value();
-
     interaction = new Interaction();
 
     if(!_isSetuped){
       _isSetuped = true;
       setupUserInput();
-      future = setupScene();
-    }
+      await setupScene();
 
-    return future;
+      GridModel grid = new GridModel();
+      models.add(grid);
+
+      AxisModel axis = new AxisModel();
+      models.add(axis);
+    }
   }
 
   void addModel(Model model){
