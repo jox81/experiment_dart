@@ -21,4 +21,9 @@ class Matrix4Component {
     matrix4Change.emit(matrix);
   }
 
+  void setIdentity(){
+    matrix.setIdentity();
+    matrix4Change.emit(matrix);
+  }
+
 }

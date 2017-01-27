@@ -1,6 +1,7 @@
 import 'package:webgl/scene_views/scene_view_cubemap.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
 import 'package:webgl/scene_views/scene_view_start.dart';
+import 'package:webgl/scene_views/scene_view_texturing.dart';
 import 'package:webgl/scene_views/scene_view_vectors.dart';
 import 'package:webgl/scene_views/scene_view_webgl_edit.dart';
 import 'package:webgl/src/scene.dart';
@@ -19,7 +20,8 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //   new SceneViewStart(),
-   new SceneViewBase(),
+//   new SceneViewBase(),
+   new SceneViewTexturing(),
 //    new SceneViewWebGLEdit(),
 //    new SceneViewVectors(),
 //    new SceneViewCubeMap(),

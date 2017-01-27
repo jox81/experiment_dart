@@ -206,6 +206,7 @@ class MaterialBaseTexture extends Material {
     setShaderUniform(
         "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
     setShaderUniform('uSampler', 0);
+    setShaderUniform('uTextureMatrix', texture.textureMatrix);
   }
 }
 

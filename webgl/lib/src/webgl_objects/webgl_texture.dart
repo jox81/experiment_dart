@@ -25,6 +25,8 @@ class WebGLTexture extends EditTexture {
   final WebGL.Texture webGLTexture;
   final TextureTarget textureTarget;
 
+  Matrix4 textureMatrix = new Matrix4.identity();
+
   bool get isTexture => gl.ctx.isTexture(webGLTexture);
 
   WebGLTexture.texture2d() : this.textureTarget = TextureTarget.TEXTURE_2D, this.webGLTexture = gl.ctx.createTexture();

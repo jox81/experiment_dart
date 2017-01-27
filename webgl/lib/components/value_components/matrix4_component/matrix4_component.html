@@ -19,4 +19,10 @@
          <vector4 [vector] = "matrix.getRow(3)" (vector4Change)="updateRow(3,$event)"></vector4>
       </div>
    </div>
+   <div class="row">
+      <div class="col-sm-12 first">
+         <input type="button"
+                (click)="setIdentity()" value="i">
+      </div>
+   </div>
 </div>
