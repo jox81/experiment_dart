@@ -83,12 +83,12 @@ class SceneViewPerformanceTest extends Scene{
       models.add(cube);
     }
     // Animation
-    num _lastTime = 0.0;
+//    num _lastTime = 0.0;
     updateFunction = (num time) {
-      double animationStep = time - _lastTime;
+//      double animationStep = time - _lastTime;
       // Do animation
 //    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
-      _lastTime = time;
+//      _lastTime = time;
 
 //    materialBaseTextureNormal..useLighting = useLighting;
 //

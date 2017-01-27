@@ -8,7 +8,6 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future main() async {
   await ShaderSource.loadShaders();

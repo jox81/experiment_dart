@@ -30,20 +30,25 @@ class WebGLTexture extends EditTexture {
   bool get isTexture => gl.ctx.isTexture(webGLTexture);
 
   WebGLTexture.texture2d() : this.textureTarget = TextureTarget.TEXTURE_2D, this.webGLTexture = gl.ctx.createTexture();
-  WebGLTexture.textureCubeMap() : this.textureTarget = TextureTarget.TEXTURE_2D, this.webGLTexture = gl.ctx.createTexture();
+  WebGLTexture.textureCubeMap() : this.textureTarget = TextureTarget.TEXTURE_CUBE_MAP, this.webGLTexture = gl.ctx.createTexture();
   WebGLTexture.fromWebGL(WebGL.Texture webGLTexture, TextureTarget textureTarget): this.webGLTexture = webGLTexture, this.textureTarget = textureTarget;
 
   @override
   void delete() => gl.ctx.deleteTexture(webGLTexture);
 
   void logTextureInfos() {
-    Utils.log("RenderingContext Infos", () {
+    Utils.log("WebGLTexture Infos", () {
 
-      ActiveTexture.instance
-        ..activeUnit = TextureUnit.TEXTURE7
-        ..texture2d.bind(this)
-        ..texture2d.logInfo()
-        ..texture2d.unBind();
+      print('editTextureUnit : ${editTextureUnit}');
+      print('webGLTexture : ${webGLTexture}');
+      print('textureTarget : ${textureTarget}');
+      print('isTexture : ${isTexture}');
+
+//      ActiveTexture.instance.activeUnit = editTextureUnit;
+//
+//      ActiveTexture.instance
+//        ..texture2d.bind(this);
+
     });
   }
 
@@ -63,6 +68,68 @@ class WebGLTexture extends EditTexture {
 
     ActiveTexture.instance.activeUnit = lastTextureUnit;
   }
+}
+
+abstract class EditTexture extends WebGLObject{
+
+  TextureTarget textureTarget;
+
+  TextureUnit editTextureUnit = TextureUnit.TEXTURE8;
+
+  // >>> single getParameter
+
+  // >> Bind
+
+  void bind({TextureUnit textureUnit}) {
+    if(textureUnit != null){
+      gl.activeTexture.activeUnit = textureUnit;
+    }
+    gl.activeTexture.bind(this, textureTarget);
+  }
+
+  // > TEXTURE_MAG_FILTER
+  TextureMagnificationFilterType get textureMagFilter{
+    bind(textureUnit: editTextureUnit);
+    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
+  }
+  set textureMagFilter(TextureMagnificationFilterType  textureMagnificationFilterType){
+    bind(textureUnit: editTextureUnit);
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MAG_FILTER.index, textureMagnificationFilterType.index);
+  }
+
+  // > TEXTURE_MIN_FILTER
+  TextureMinificationFilterType get textureMinFilter {
+    bind(textureUnit: editTextureUnit);
+    return TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(
+        textureTarget.index,
+        TextureParameter.TEXTURE_MIN_FILTER.index));
+  }
+  set textureMinFilter(TextureMinificationFilterType  textureMinificationFilterType){
+    bind(textureUnit: editTextureUnit);
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MIN_FILTER.index, textureMinificationFilterType.index);
+  }
+
+  // > TEXTURE_WRAP_S
+  TextureWrapType get textureWrapS
+  {
+    bind(textureUnit: editTextureUnit);
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
+  }
+  set textureWrapS(TextureWrapType  textureWrapType){
+    bind(textureUnit: editTextureUnit);
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_S.index, textureWrapType.index);
+  }
+
+  // > TEXTURE_WRAP_T
+  TextureWrapType get textureWrapT {
+    bind(textureUnit: editTextureUnit);
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
+  }
+  set textureWrapT(TextureWrapType  textureWrapType){
+    bind(textureUnit: editTextureUnit);
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_T.index, textureWrapType.index);
+  }
+
 }
 
 class TextureUtils {
@@ -320,11 +387,11 @@ class TextureUtils {
   static List<WebGLTexture> createRenderedTextures({int size: 1024}) {
     //
     WebGLTexture colorTexture = createColorTexture(size);
-    WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
+//    WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
     WebGLTexture depthTexture = createDepthTexture(size);
 
-    WebGLFrameBuffer framebufferWithDepthRenderBuffer =
-        createFrameBuffer(colorTexture, depthRenderbuffer);
+//    WebGLFrameBuffer framebufferWithDepthRenderBuffer =
+//        createFrameBuffer(colorTexture, depthRenderbuffer);
     WebGLFrameBuffer framebufferWithDepthTexture =
         createFrameBufferWithDepthTexture(colorTexture, depthTexture);
 

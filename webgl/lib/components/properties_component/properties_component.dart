@@ -1,5 +1,3 @@
-import 'dart:collection';
-import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';

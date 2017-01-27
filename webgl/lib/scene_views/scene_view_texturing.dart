@@ -24,8 +24,8 @@ class SceneViewTexturing extends Scene{
   @override
   Future setupScene() async {
 
-    bool useLighting = true;
-    Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
+//    bool useLighting = true;
+//    Vector3 directionalPosition = new Vector3(-0.25,-0.125,-0.25);
     Vector3 ambientColor = new Vector3.all(0.0);
     Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
@@ -53,17 +53,17 @@ class SceneViewTexturing extends Scene{
     models.add(pointLight);
 
     //Materials
-    MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture()
-    ..texture =
-    await TextureUtils.getTextureFromFile("./images/crate.gif")
-      ..texture.textureMatrix = new Matrix4.columns(
-          new Vector4(6.0,5.0,0.0,-2.0),
-          new Vector4(-.0,5.0,0.0,-2.0),
+    WebGLTexture texture = await TextureUtils.getTextureFromFile("./images/crate.gif")
+        ..textureWrapS = TextureWrapType.REPEAT
+        ..textureWrapT = TextureWrapType.REPEAT
+        ..textureMatrix = new Matrix4.columns(
+          new Vector4(2.0,1.0,0.0,-2.0),
+          new Vector4(0.0,2.0,0.0,-2.0),
           new Vector4(0.0,0.0,1.0,0.0),
           new Vector4(0.0,0.0,0.0,1.0),
-      ).transposed()
-      ..texture.textureWrapS = TextureWrapType.REPEAT
-      ..texture.textureWrapT = TextureWrapType.REPEAT;
+          ).transposed();
+    MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture()
+    ..texture = texture;
     materials.add(materialBaseTexture);
 
     //Meshes

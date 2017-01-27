@@ -27,10 +27,10 @@ class SceneViewExperiment extends Scene{
     models.add(model);
 
     //Animation
-    num _lastTime = 0.0;
+//    num _lastTime = 0.0;
     updateFunction = (num time) {
       model.updateFunction(time);
-      _lastTime = time;
+//      _lastTime = time;
     };
   }
 }

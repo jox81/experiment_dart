@@ -13,6 +13,10 @@ getParameter : TEXTURE_BINDING_CUBE_MAP
 getParameter : VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
 CURRENT_PROGRAM
 
+
+// activeTexture
+// webGLTexture
+
 https://www.khronos.org/registry/webgl/specs/latest/1.0/
 
 // Suggestions /////////////////////

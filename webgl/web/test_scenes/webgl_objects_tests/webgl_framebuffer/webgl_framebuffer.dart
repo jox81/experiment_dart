@@ -8,7 +8,6 @@ import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'dart:web_gl' as WebGL;
 
 Future main() async {
   await ShaderSource.loadShaders();

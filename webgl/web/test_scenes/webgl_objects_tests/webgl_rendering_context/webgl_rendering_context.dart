@@ -33,7 +33,9 @@ class WebglTest {
       ..source = ShaderSource.sources['material_point'].fsCode
       ..compile();
 
-    WebGLProgram program = new WebGLProgram()
+    WebGLProgram program = new WebGLProgram();
+
+    program
       ..attachShader(vertexShader)
       ..attachShader(fragmentShader)
       ..link()

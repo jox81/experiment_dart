@@ -45,12 +45,21 @@ class ActiveTexture extends IEditElement{
     gl.ctx.activeTexture(textureUnit.index);
   }
 
+  // >> Binding
+
+  void bind(WebGLTexture texture, TextureTarget textureTarget) {
+    gl.ctx.bindTexture(textureTarget.index, texture.webGLTexture);
+  }
+
   Texture2D get texture2d => Texture2D.instance;
   TextureCubeMap get textureCubeMap => TextureCubeMap.instance;
 
   // > GENERATE_MIPMAP_HINT
   HintMode get mipMapHint => HintMode.getByIndex(gl.ctx.getParameter(ContextParameter.GENERATE_MIPMAP_HINT.index));
   set mipMapHint(HintMode mode) => gl.ctx.hint(ContextParameter.GENERATE_MIPMAP_HINT.index, mode.index);
+
+  bool get unpackFlipYWebGL => gl.ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index);
+  set unpackFlipYWebGL(bool flip) => gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip?1:0);
 
   // >>> Filling Texture
 
@@ -144,82 +153,17 @@ class ActiveTexture extends IEditElement{
   }
 }
 
-abstract class EditTexture extends WebGLObject{
 
-  TextureTarget textureTarget;
-
-  TextureUnit editTextureUnit = TextureUnit.TEXTURE8;
-
-  // >>> single getParameter
-
-  bool get unpackFlipYWebGL => gl.ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index);
-  set unpackFlipYWebGL(bool flip) => gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip?1:0);
-
-  // > TEXTURE_MAG_FILTER
-  TextureMagnificationFilterType get textureMagFilter{
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
-  }
-  set textureMagFilter(TextureMagnificationFilterType  textureMagnificationFilterType){
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MAG_FILTER.index, textureMagnificationFilterType.index);
-  }
-
-  // > TEXTURE_MIN_FILTER
-  TextureMinificationFilterType get textureMinFilter {
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    return TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(
-        textureTarget.index,
-        TextureParameter.TEXTURE_MIN_FILTER.index));
-  }
-  set textureMinFilter(TextureMinificationFilterType  textureMinificationFilterType){
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MIN_FILTER.index, textureMinificationFilterType.index);
-  }
-
-  // > TEXTURE_WRAP_S
-  TextureWrapType get textureWrapS
-  {
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
-  }
-  set textureWrapS(TextureWrapType  textureWrapType){
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_S.index, textureWrapType.index);
-  }
-
-  // > TEXTURE_WRAP_T
-  TextureWrapType get textureWrapT {
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
-  }
-  set textureWrapT(TextureWrapType  textureWrapType){
-    ActiveTexture.instance.activeUnit = editTextureUnit;
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_T.index, textureWrapType.index);
-  }
-
-}
 
 abstract class Texture{
   TextureTarget textureTarget;
   ContextParameter textureBinding;
 
-  // >>> single getParameter
-
-  // > TEXTURE_MAG_FILTER
-  TextureMagnificationFilterType get textureMagFilter => TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
-  // > TEXTURE_MIN_FILTER
-  TextureMinificationFilterType get textureMinFilter => TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MIN_FILTER.index));
-  // > TEXTURE_WRAP_S
-  TextureWrapType get textureWrapS => TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
-  // > TEXTURE_WRAP_T
-  TextureWrapType get textureWrapT => TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
-
   // > Bindings
 
   // > TEXTURE_BINDING
   WebGLTexture get boundTexture {
-    assert(textureBinding.index == TextureTarget.TEXTURE_2D || textureBinding.index == TextureTarget.TEXTURE_2D);
+    assert(textureTarget == TextureTarget.TEXTURE_2D || textureTarget == TextureTarget.TEXTURE_CUBE_MAP);
 
     WebGL.Texture webGLTexture = gl.ctx.getParameter(textureBinding.index);
     if(webGLTexture != null && gl.ctx.isTexture(webGLTexture)){
@@ -240,6 +184,43 @@ abstract class Texture{
   }
   void unBind() {
     gl.ctx.bindTexture(textureTarget.index, null);
+  }
+
+  // >>> single getParameter
+
+  // > TEXTURE_MAG_FILTER
+  TextureMagnificationFilterType get textureMagFilter{
+    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
+  }
+  set textureMagFilter(TextureMagnificationFilterType  textureMagnificationFilterType){
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MAG_FILTER.index, textureMagnificationFilterType.index);
+  }
+
+  // > TEXTURE_MIN_FILTER
+  TextureMinificationFilterType get textureMinFilter {
+    return TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(
+        textureTarget.index,
+        TextureParameter.TEXTURE_MIN_FILTER.index));
+  }
+  set textureMinFilter(TextureMinificationFilterType  textureMinificationFilterType){
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MIN_FILTER.index, textureMinificationFilterType.index);
+  }
+
+  // > TEXTURE_WRAP_S
+  TextureWrapType get textureWrapS
+  {
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
+  }
+  set textureWrapS(TextureWrapType  textureWrapType){
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_S.index, textureWrapType.index);
+  }
+
+  // > TEXTURE_WRAP_T
+  TextureWrapType get textureWrapT {
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
+  }
+  set textureWrapT(TextureWrapType  textureWrapType){
+    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_T.index, textureWrapType.index);
   }
 
   // >> Set values

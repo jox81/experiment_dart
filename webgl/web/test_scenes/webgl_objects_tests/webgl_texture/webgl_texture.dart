@@ -19,130 +19,11 @@ class WebglTest {
   }
 
   Future setup() async {
-//    await simpleBindTest();
-//    await bindUnbindTestNull();
-//    await test03();
-//    await wrongSwapTextureTarget();
-//    await textureToMultipleTextureUnits();
-//    await textureUnitWithBothTarget();
-//    await textureUnitSwitchTexture();
+//    print('//////////////////////////////////////////////////////////////////');
 //    await textureCubeMap();
-    await testModifTexture();
-  }
-
-  Future simpleBindTest() async {
-    gl.activeTexture.logActiveTextureInfo();
-
-    WebGLTexture texture = new WebGLTexture.texture2d();
-    gl.activeTexture
-      ..texture2d.bind(texture)
-      ..logActiveTextureInfo();
-  }
-
-  Future bindUnbindTestNull() async {
-    WebGLTexture texture = new WebGLTexture.texture2d();
-
-    assert(gl.activeTexture.texture2d.boundTexture == null);
-
-    gl.activeTexture.texture2d.bind(texture);
-    assert(gl.activeTexture.texture2d.boundTexture != null);
-
-    gl.activeTexture.texture2d.unBind();
-    assert(gl.activeTexture.texture2d.boundTexture == null);
-
-    print('test ok');
-  }
-
-  Future test03() async {
-    WebGLTexture texture1 = new WebGLTexture.texture2d();
-    WebGLTexture texture2 = new WebGLTexture.textureCubeMap();
-
-    gl.activeTexture..logActiveTextureInfo();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE0 //Default
-      ..texture2d.bind(texture1)
-      ..logActiveTextureInfo();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE0
-      ..texture2d.bind(texture1)
-      ..textureCubeMap.bind(texture2)
-      ..logActiveTextureInfo();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE0 //Default
-      ..texture2d.unBind()
-      ..logActiveTextureInfo();
-  }
-
-  Future wrongSwapTextureTarget() async {
-    print(
-        '@ une fois une texture bindé à une TextureTarget, il n\'est plus possible de la binder à une autre TextureTarget');
-
-    WebGLTexture texture = new WebGLTexture.texture2d();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE0
-      ..texture2d.bind(texture)
-      ..texture2d.unBind();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE1
-      ..textureCubeMap.bind(texture);
-    ;
-  }
-
-  Future textureToMultipleTextureUnits() async {
-    print(
-        '@ une texture peut être bindé à différente TextureUnit en gardant le même TextureTarget');
-
-    WebGLTexture texture = new WebGLTexture.texture2d();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE0
-      ..texture2d.bind(texture)
-      ..logActiveTextureInfo();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE1
-      ..texture2d.bind(texture)
-      ..logActiveTextureInfo();
-  }
-
-  Future textureUnitWithBothTarget() async {
-    print(
-        '@ une TextureUnit peut avoir ses deux TextureTarget bindés par des textures différentes');
-
-    WebGLTexture texture1 = new WebGLTexture.texture2d();
-    WebGLTexture texture2 = new WebGLTexture.textureCubeMap();
-
-    gl.activeTexture
-      ..activeUnit = TextureUnit.TEXTURE0
-      ..texture2d.bind(texture1)
-      ..textureCubeMap.bind(texture2)
-      ..logActiveTextureInfo();
-  }
-
-  Future textureUnitSwitchTexture() async {
-    print('@ une TextureTraget est simplement remplacée par un nouveau bind');
-
-    WebGLTexture texture1 = new WebGLTexture.texture2d();
-    WebGLTexture texture2 = TextureUtils.createColorTexture(64);
-
-    gl.activeTexture..activeUnit = TextureUnit.TEXTURE0;
-
-    gl.activeTexture
-      ..texture2d.bind(texture1)
-      ..logActiveTextureInfo();
-
-    gl.activeTexture
-      ..texture2d.bind(texture2)
-      ..logActiveTextureInfo();
-
-    gl.activeTexture
-      ..texture2d.unBind()
-      ..logActiveTextureInfo();
+//    await testModifTexture();
+//    await testModifTextureInOtherUnit();
+//    await testModifTextureInOtherUnitViaTexture();
   }
 
   Future textureCubeMap() async {
@@ -229,5 +110,101 @@ class WebglTest {
     gl.activeTexture.texture2d.bind(texture1);
     gl.activeTexture.logActiveTextureInfo();
     gl.activeTexture.texture2d.unBind();
+  }
+
+  Future testModifTextureInOtherUnit() async {
+
+    WebGLTexture texture = new WebGLTexture.texture2d();
+
+    //on initialize la texture et on set ses paramertes
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE3;
+    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_MIN_FILTER,
+    TextureMinificationFilterType.NEAREST);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_MAG_FILTER,
+    TextureMagnificationFilterType.NEAREST);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
+    int size = 64;
+    gl.activeTexture.texImage2DWithWidthAndHeight(
+        TextureAttachmentTarget.TEXTURE_2D,
+        0,
+        TextureInternalFormat.RGBA,
+        size,
+        size,
+        0,
+        TextureInternalFormat.RGBA,
+        TexelDataType.UNSIGNED_BYTE,
+        null);
+    gl.activeTexture.logActiveTextureInfo();
+    gl.activeTexture.texture2d.unBind();
+
+    //on change de textureUnit pour la texture et on change quelques parametres
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE5;
+    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_MIN_FILTER,
+        TextureMinificationFilterType.LINEAR);
+    gl.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_MAG_FILTER,
+        TextureMagnificationFilterType.LINEAR);
+    gl.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_WRAP_S, TextureWrapType.REPEAT);
+    gl.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
+    gl.activeTexture.logActiveTextureInfo();
+    gl.activeTexture.texture2d.unBind();
+
+    //on rechange de textureUnit et on vérifier les parametres
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE3;
+    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture.logActiveTextureInfo();
+  }
+
+  Future testModifTextureInOtherUnitViaTexture() async {
+
+    WebGLTexture texture = new WebGLTexture.texture2d();
+
+    //on initialize la texture et on set ses paramertes
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE3;
+    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_MIN_FILTER,
+    TextureMinificationFilterType.NEAREST);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_MAG_FILTER,
+    TextureMagnificationFilterType.NEAREST);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+    gl.activeTexture.texture2d.setParameterInt(
+    TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
+    int size = 64;
+    gl.activeTexture.texImage2DWithWidthAndHeight(
+        TextureAttachmentTarget.TEXTURE_2D,
+        0,
+        TextureInternalFormat.RGBA,
+        size,
+        size,
+        0,
+        TextureInternalFormat.RGBA,
+        TexelDataType.UNSIGNED_BYTE,
+        null);
+    gl.activeTexture.logActiveTextureInfo();
+    gl.activeTexture.texture2d.unBind();
+
+    //on change de methode pour la texture et on change quelques parametres
+//    gl.activeTexture.activeUnit = texture.editTextureUnit;
+//    texture.bind();
+    texture.textureWrapS = TextureWrapType.REPEAT;
+    texture.textureWrapT = TextureWrapType.REPEAT;
+
+    //on rechange de textureUnit et on vérifier les parametres
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE3;
+    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture.logActiveTextureInfo();
   }
 }

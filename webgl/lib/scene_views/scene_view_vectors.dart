@@ -128,12 +128,12 @@ class SceneViewVectors extends Scene{
     ..position = new Vector3(1.0,0.0,1.0);
     models.add(pointTest);
 
-    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
-
-    Matrix4 modelMatrix = axis.transform;
-
-    Matrix4 viewMatrix = cameraTest.lookAtMatrix;
-    Matrix4 projectionMatrix = cameraTest.perspectiveMatrix;
+//    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
+//
+//    Matrix4 modelMatrix = axis.transform;
+//
+//    Matrix4 viewMatrix = cameraTest.lookAtMatrix;
+//    Matrix4 projectionMatrix = cameraTest.perspectiveMatrix;
 
 //    Matrix4 finalMatrix = projectionMatrix * viewMatrix * new Matrix4.identity();
 //    pointTest.transform = finalMatrix * axisTest.transform * pointTest.transform;

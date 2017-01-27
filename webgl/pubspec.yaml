@@ -10,6 +10,7 @@ environment:
 dependencies:
   angular2: ^2.2.0
   vector_math: any
+  test:
 
 dev_dependencies:
   browser: '>=0.10.0 <0.11.0'

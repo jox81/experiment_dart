@@ -27,12 +27,12 @@ class SceneViewShaderLearning01 extends Scene{
     models.add(customObject);
 
     //Animation
-    num _lastTime = 0.0;
+//    num _lastTime = 0.0;
     updateFunction = (num time) {
-      double animationStep = time - _lastTime;
+//      double animationStep = time - _lastTime;
       //... custom animation here
       customObject.updateFunction(time);
-      _lastTime = time;
+//      _lastTime = time;
     };
   }
 
