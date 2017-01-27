@@ -158,13 +158,15 @@ class Interaction {
   }
 
   void _onMouseUp(MouseEvent event) {
+    dragging = false;
+    mouseDown = false;
+
     if(!dragging) {
       Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
       scene.currentSelection = modelHit;
 //      print(modelHit?.name);
     }
-    dragging = false;
-    mouseDown = false;
+
   }
 
   void updateMouseInfos(MouseEvent event) {

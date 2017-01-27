@@ -21,7 +21,7 @@ class ServiceScene {
  static  List<Scene> getSceneViews() => [
 //   new SceneViewStart(),
 //   new SceneViewBase(),
-   new SceneViewTexturing(),
+//   new SceneViewTexturing(),
 //    new SceneViewWebGLEdit(),
 //    new SceneViewVectors(),
 //    new SceneViewCubeMap(),
@@ -30,7 +30,7 @@ class ServiceScene {
 //    new SceneViewParticleSimple(),
 //    new SceneViewPBR(),
 //    new SceneViewPerformanceTest(),
-//    new SceneViewPrimitives(),
+    new SceneViewPrimitives(),
 //    new SceneViewShaderLearning01(),
 //    new SceneViewExperiment(),
  ];

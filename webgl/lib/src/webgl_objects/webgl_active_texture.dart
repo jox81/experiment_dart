@@ -153,17 +153,16 @@ class ActiveTexture extends IEditElement{
   }
 }
 
-
-
 abstract class Texture{
   TextureTarget textureTarget;
-  ContextParameter textureBinding;
 
   // > Bindings
 
   // > TEXTURE_BINDING
   WebGLTexture get boundTexture {
     assert(textureTarget == TextureTarget.TEXTURE_2D || textureTarget == TextureTarget.TEXTURE_CUBE_MAP);
+
+    ContextParameter textureBinding = textureTarget == TextureTarget.TEXTURE_2D ? ContextParameter.TEXTURE_BINDING_2D : ContextParameter.TEXTURE_BINDING_CUBE_MAP;
 
     WebGL.Texture webGLTexture = gl.ctx.getParameter(textureBinding.index);
     if(webGLTexture != null && gl.ctx.isTexture(webGLTexture)){
@@ -261,7 +260,6 @@ abstract class Texture{
 
 class Texture2D extends Texture{
   TextureTarget textureTarget = TextureTarget.TEXTURE_2D;
-  ContextParameter textureBinding = ContextParameter.TEXTURE_BINDING_2D;
 
   static Texture2D _instance;
   Texture2D._init();
@@ -276,7 +274,6 @@ class Texture2D extends Texture{
 
 class TextureCubeMap extends Texture{
   TextureTarget textureTarget = TextureTarget.TEXTURE_CUBE_MAP;
-  ContextParameter textureBinding = ContextParameter.TEXTURE_BINDING_CUBE_MAP;
 
   static TextureCubeMap _instance;
   TextureCubeMap._init();

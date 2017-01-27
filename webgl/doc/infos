@@ -14,9 +14,6 @@ getParameter : VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
 CURRENT_PROGRAM
 
 
-// activeTexture
-// webGLTexture
-
 https://www.khronos.org/registry/webgl/specs/latest/1.0/
 
 // Suggestions /////////////////////
@@ -31,13 +28,12 @@ https://www.khronos.org/registry/webgl/specs/latest/1.0/
     => skin
         -> json : static
         -> direct dart code
-- affichage édition / visualisation
+- affichage différent : édition app / visualisation no app
 - affichage fps
-- chargement d'un scene
-- ui beauty
-- ajouter un matériaux à un object
+- chargement d'un scene json/dart
+
+
 - bibliothèque des materiaux
-- page settings globales
 - shaders pbr +
 - gerer les extensions
     -> ajouter des enums , methods etc, ...
@@ -66,3 +62,7 @@ v- faut-il utiliser :
     (1): appel direct, plus rapide sans autre appel de fonction
     (2): possibilité d'agir entre les deux
     ==> préférer la (1) car plus directe
+v- ui beauty
+v- ajouter un matériaux à un object
+v- page settings globales
+v- unit test setup base
