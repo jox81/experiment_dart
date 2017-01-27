@@ -154,6 +154,8 @@ class Interaction {
           currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
         }
       }
+    }else{
+      dragging = false;
     }
   }
 
