@@ -2,6 +2,7 @@ import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/components/ui/toggle_button/toggle_button_component.dart';
+import 'package:webgl/components/value_components/function_component/dynamic_load_component.dart';
 import 'package:webgl/components/value_components/function_component/function_component.dart';
 import 'package:webgl/components/value_components/list_component/list_component.dart';
 import 'package:webgl/components/value_components/map_component/map_component.dart';
@@ -26,7 +27,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, ToggleButtonComponent, WebGLEnumComponent, FunctionComponent]
+    directives: const [DynamicLoadComponent, Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, ToggleButtonComponent, WebGLEnumComponent, FunctionComponent]
 )
 class PropertiesComponent{
 
