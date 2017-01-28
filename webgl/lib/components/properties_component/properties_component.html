@@ -91,13 +91,6 @@
                         </section>
                     </section>
 
-                    <legend *ngIf="isFunction(iEditElement.properties[key])">
-                    </legend>
-                    <section *ngIf="isFunction(iEditElement.properties[key])">
-                        <input type="button"
-                            (click)="iEditElement.properties[key].getter()()" value="{{key}}">
-                    </section>
-
                     <!-- Custom components -->
 
                     <legend *ngIf="isVector2(iEditElement.properties[key])">
@@ -292,6 +285,15 @@
                         <input type="button"
                                (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Light">
                     </section>
+
+
+
+                    <legend *ngIf="isFunction(iEditElement.properties[key])">
+                    </legend>
+                    <section *ngIf="isFunction(iEditElement.properties[key])">
+                        <function [functionModel] = 'iEditElement.properties[key].getter()'></function>
+                    </section>
+
 
                 </fieldset>
                 <hr>

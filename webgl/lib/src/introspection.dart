@@ -76,11 +76,15 @@ class IntrospectionManager {
 
     //Rempli les fonctions
     for (String key in instance_mirror_functions.keys) {
-      MethodMirror instance_mirror_field = instance_mirror_functions[key];
+      MethodMirror methodMirrorField = instance_mirror_functions[key];
 
-      Symbol fieldSymbol = instance_mirror_field.simpleName;
-      propertiesInfos[key] = new EditableProperty(Function,
-          () => instance_mirror.getField(fieldSymbol).reflectee, null);
+      Symbol fieldSymbol = methodMirrorField.simpleName;
+
+      Function function = instance_mirror.getField(fieldSymbol).reflectee;
+      FunctionModel functionModel = new FunctionModel(function, key);
+
+      propertiesInfos[key] = new EditableProperty(FunctionModel,
+          () => functionModel, null);
     }
 
     return propertiesInfos;
@@ -244,6 +248,13 @@ class IntrospectionManager {
       });
     }
   }
+}
+
+class FunctionModel{
+  final Function function;
+  final String name;
+
+  FunctionModel(this.function, this.name);
 }
 
 abstract class IEditElement {
