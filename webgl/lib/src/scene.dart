@@ -16,7 +16,6 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 
 abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 

@@ -1,4 +1,3 @@
-import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
