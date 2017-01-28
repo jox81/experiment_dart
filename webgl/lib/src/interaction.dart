@@ -105,19 +105,16 @@ class Interaction {
   /// Mouse
   ///
 
+  Model tempSelection;
   void _onMouseDown(MouseEvent event) {
     updateMouseInfos(event);
     dragging = false;
     mouseDown = true;
 
-//    if(Application.instance.activeTool == ToolType.move ||
-//        Application.instance.activeTool == ToolType.rotate ||
-//        Application.instance.activeTool == ToolType.scale) {
-      Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
-      if(modelHit != null) {
-        scene.currentSelection = modelHit;
-      }
-//    }
+
+    Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
+    tempSelection = modelHit;
+
   }
 
   void _onMouseMove(MouseEvent event) {
@@ -125,6 +122,12 @@ class Interaction {
 
     if(mouseDown) {
       dragging = true;
+
+      if(Application.instance.activeTool == ToolType.move ||
+        Application.instance.activeTool == ToolType.rotate ||
+        Application.instance.activeTool == ToolType.scale) {
+        scene.currentSelection = tempSelection;
+      }
 
       if(scene.currentSelection != null && scene.currentSelection is Model) {
 
@@ -170,10 +173,14 @@ class Interaction {
   }
 
   void _onMouseUp(MouseEvent event) {
+
+
+    if(tempSelection != null && !dragging) {
+      scene.currentSelection = tempSelection;
+    }
+
     dragging = false;
     mouseDown = false;
-
-
 
   }
 
