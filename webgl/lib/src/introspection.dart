@@ -76,21 +76,12 @@ class IntrospectionManager {
 
     //Rempli les fonctions
     for (String key in instance_mirror_functions.keys) {
-      MethodMirror methodMirrorField = instance_mirror_functions[key];
+      MethodMirror methodMirror = instance_mirror_functions[key];
 
-      Symbol fieldSymbol = methodMirrorField.simpleName;
+      Symbol fieldSymbol = methodMirror.simpleName;
 
       Function function = instance_mirror.getField(fieldSymbol).reflectee;
-      List<ParameterMirror> parameters = methodMirrorField.parameters;
-
-      Type returnType;
-      try{
-        returnType = methodMirrorField.returnType.reflectedType;
-      }catch(e){
-
-      }
-
-      FunctionModel functionModel = new FunctionModel(function, key, returnType);
+      FunctionModel functionModel = new FunctionModel(function, instance_mirror, methodMirror);
 
       propertiesInfos[key] = new EditableProperty(FunctionModel,
           () => functionModel, null);
@@ -261,10 +252,55 @@ class IntrospectionManager {
 
 class FunctionModel{
   final Function function;
-  final String name;
-  final Type returnType;
+  final InstanceMirror instancesMirror;
+  final MethodMirror methodMirror;
+  FunctionModel(this.function,this.instancesMirror, this.methodMirror);
 
-  FunctionModel(this.function, this.name, this.returnType);
+  String getName(){
+    return MirrorSystem.getName(methodMirror.simpleName);
+  }
+
+  List<String> getParameters(){
+    List<String> parameters = methodMirror.parameters.map((ParameterMirror p)=>'${MirrorSystem.getName(p.type.simpleName)} ${MirrorSystem.getName(p.simpleName)}').toList();
+    return parameters;
+  }
+
+  List<String> getPositionalArgumentsString() {
+    List<String> parameters = methodMirror.parameters.where((ParameterMirror p)=> !p.isNamed).map((ParameterMirror p)=>'${MirrorSystem.getName(p.type.simpleName)} ${MirrorSystem.getName(p.simpleName)}').toList();
+    return parameters;
+  }
+
+
+  List<ParameterMirror> getPositionalArguments() {
+    List<ParameterMirror> parameters = methodMirror.parameters.where((ParameterMirror p)=> !p.isNamed).toList();
+    return parameters;
+  }
+
+
+  List<String> getNamedArgumentsString() {
+    List<String> parameters = methodMirror.parameters.where((ParameterMirror p)=> p.isNamed).map((ParameterMirror p)=>'{${MirrorSystem.getName(p.type.simpleName)} ${MirrorSystem.getName(p.simpleName)} : ${p.defaultValue.reflectee}}').toList();
+    return parameters;
+  }
+
+  List<ParameterMirror> getNamedArguments() {
+    List<ParameterMirror> parameters = methodMirror.parameters.where((ParameterMirror p)=> p.isNamed).toList();
+    return parameters;
+  }
+
+  String getReturnType(){
+    Type returnType;
+    try{
+      returnType = methodMirror.returnType.reflectedType;
+    }catch(e){
+
+    }
+    return returnType != null ? returnType.toString() : 'void';
+  }
+
+  dynamic invoke(Symbol memberName, List positionalArguments, Map<Symbol, dynamic> namedArguments) {
+    InstanceMirror f = instancesMirror.invoke(memberName, positionalArguments, namedArguments);
+    return f.reflectee;
+  }
 }
 
 abstract class IEditElement {

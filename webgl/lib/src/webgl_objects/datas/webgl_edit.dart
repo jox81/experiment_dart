@@ -1,3 +1,4 @@
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
@@ -67,4 +68,17 @@ class WebglEdit extends IEditElement {
   //getter only
   EnableCapabilityType get testWebGLEnum02 => EnableCapabilityType.CULL_FACE;
 
+  // >> Functions
+
+  void getFunc01Test(num count, {num optionalCount:3}){
+    print('count:${count}, optionalCount:${optionalCount}');
+  }
+
+  num getFunc02Test(num count, {num optionalCount:3}){
+    return count + optionalCount;
+  }
+
+  String getFunc03Test(String name){
+    return 'name : $name';
+  }
 }

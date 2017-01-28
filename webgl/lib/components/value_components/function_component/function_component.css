@@ -9,9 +9,8 @@
     /*display: flex;*/
 }
 
-vector4{
-    width : 100%;
-    text-align: right;
+p{
+    text-align:left;
 }
 /* vertical layout */
 .vertical{
@@ -43,13 +42,18 @@ vector4{
     background-color: #f44336;
 }
 
-/* buttons */
+/* inputs */
+input[type=text]{
+    background-color:#222;
+    width:100%;
+    border:none;
+}
 input[type=button]{
-    background-color:#666;/*Properties button background-color*/
+    background-color:#666;
     width:100%;
     border:none;
 }
 input[type=button]:hover{
-    background-color:#888;/*Properties button background-color hover*/
+    background-color:#888;
     color:#EEE;
 }
