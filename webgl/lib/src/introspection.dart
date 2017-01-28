@@ -81,7 +81,16 @@ class IntrospectionManager {
       Symbol fieldSymbol = methodMirrorField.simpleName;
 
       Function function = instance_mirror.getField(fieldSymbol).reflectee;
-      FunctionModel functionModel = new FunctionModel(function, key);
+      List<ParameterMirror> parameters = methodMirrorField.parameters;
+
+      Type returnType;
+      try{
+        returnType = methodMirrorField.returnType.reflectedType;
+      }catch(e){
+
+      }
+
+      FunctionModel functionModel = new FunctionModel(function, key, returnType);
 
       propertiesInfos[key] = new EditableProperty(FunctionModel,
           () => functionModel, null);
@@ -253,8 +262,9 @@ class IntrospectionManager {
 class FunctionModel{
   final Function function;
   final String name;
+  final Type returnType;
 
-  FunctionModel(this.function, this.name);
+  FunctionModel(this.function, this.name, this.returnType);
 }
 
 abstract class IEditElement {

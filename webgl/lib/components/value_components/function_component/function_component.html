@@ -1,4 +1,14 @@
 <div id="container" >
-    <input type="button"
-           (click)="functionModel.function()" value="{{functionModel.name}}">
+    <div class="row">
+        <div class="col-sm-12 first">
+            <input type="button"
+                   (click)="functionModel.function()" value="{{functionModel.name}}">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12 first">
+            <span>=> {{getReturnType()}}</span>
+        </div>
+    </div>
+
 </div>

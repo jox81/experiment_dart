@@ -14,4 +14,9 @@ class FunctionComponent {
   @Input()
   bool disabled = false;
 
+  String getReturnType(){
+    Type returnType = functionModel.returnType;
+
+    return returnType != null ? returnType.toString() : 'void';
+  }
 }
