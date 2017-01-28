@@ -129,6 +129,7 @@ class Application {
       gl.canvas.height = displayHeight;
 
       gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      Context.mainCamera?.update();
     }
   }
 

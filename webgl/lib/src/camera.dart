@@ -29,37 +29,37 @@ class Camera extends Model {
   double get fov => _fov;
   set fov(num value) {
     _fov = value;
-    _update();
+    update();
   }
 
   double _zNear;
   double get zNear => _zNear;
   set zNear(double value) {
     _zNear = value;
-    _update();
+    update();
   }
 
   double _zFar;
   double get zFar => _zFar;
   set zFar(double value) {
     _zFar = value;
-    _update();
+    update();
   }
 
   set position(Vector3 value) {
    super.position = value;
-    _update();
+    update();
   }
   set transform(Matrix4 value) {
    super.transform = value;
-    _update();
+    update();
   }
 
   Vector3 _targetPosition;
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
-    _update();
+    update();
   }
 
   Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
@@ -152,7 +152,7 @@ class Camera extends Model {
     _gizmo.visible = value;
   }
 
-  _update() {
+  update() {
     setPerspectiveMatrix(_perspectiveMatrix, _fov, aspectRatio, _zNear, _zFar);
     setViewMatrix(_lookAtMatrix, position, _targetPosition, upDirection);
     _updateGizmo();

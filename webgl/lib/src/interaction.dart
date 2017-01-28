@@ -34,7 +34,6 @@ class Interaction {
   }
 
   void _initEvents() {
-    //Without specifying size this array throws exception on []
     _currentlyPressedKeys = new List<bool>(128);
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
@@ -67,7 +66,6 @@ class Interaction {
       if ((elementDebugInfoText != null)) {
         elementDebugInfoText.text =
             "Camera Position: ${Context.mainCamera.position}";
-//        print(event.keyCode);
       }
     } else {}
     _currentlyPressedKeys[event.keyCode] = true;
@@ -111,10 +109,8 @@ class Interaction {
     dragging = false;
     mouseDown = true;
 
-
     Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
     tempSelection = modelHit;
-
   }
 
   void _onMouseMove(MouseEvent event) {
@@ -143,8 +139,6 @@ class Interaction {
         num deltaMoveZ = (Application.instance.activeAxis[AxisType.z]
             ? 1
             : 0) * delta;
-
-//        print('$deltaMoveX, $deltaMoveY, $deltaMoveZ');
 
         if (Application.instance.activeTool == ToolType.move) {
           num moveFactor = 1.0;
