@@ -1,17 +1,17 @@
 <div id="container" >
    <div class="row">
       <div class="col-sm-12 first">
-         <vector3 [vector] = "matrix.getRow(0)" (vector4Change)="updateRow(0,$event)"></vector3>
+         <vector3 [value] = "value?.getRow(0)" (valueChange)="updateRow(0,$event)"></vector3>
       </div>
    </div>
    <div class="row">
       <div class="col-sm-12 first">
-         <vector3 [vector] = "matrix.getRow(1)" (vector4Change)="updateRow(1,$event)"></vector3>
+         <vector3 [value] = "value?.getRow(1)" (valueChange)="updateRow(1,$event)"></vector3>
       </div>
    </div>
    <div class="row">
       <div class="col-sm-12 first">
-         <vector3 [vector] = "matrix.getRow(2)" (vector4Change)="updateRow(2,$event)"></vector3>
+         <vector3 [value] = "value?.getRow(2)" (valueChange)="updateRow(2,$event)"></vector3>
       </div>
    </div>
 </div>

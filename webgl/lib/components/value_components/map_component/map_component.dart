@@ -16,7 +16,7 @@ class MapComponent {
   dynamic element;
 
   @Output()
-  EventEmitter elementSelected = new EventEmitter();
+  EventEmitter elementSelected = new EventEmitter<Map>();
 
   void selectionChange(event){
     var selection = map[(event.target.value.toString().split(': ')[1])];

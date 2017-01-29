@@ -1,7 +1,7 @@
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/components/ui/toggle_button/toggle_button_component.dart';
+import 'package:webgl/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl/components/value_components/function_component/dynamic_load_component.dart';
 import 'package:webgl/components/value_components/function_component/function_component.dart';
 import 'package:webgl/components/value_components/list_component/list_component.dart';
@@ -27,7 +27,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [DynamicLoaderComponent, Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, ToggleButtonComponent, WebGLEnumComponent, FunctionComponent]
+    directives: const [DynamicLoaderComponent, Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, BoolComponent, WebGLEnumComponent, FunctionComponent]
 )
 class PropertiesComponent{
 
@@ -67,7 +67,7 @@ class PropertiesComponent{
     return animationProperty.type == int;
   }
   setIntValue(EditableProperty animationProperty, event){
-    animationProperty.setter(int.parse(event.target.value));
+    animationProperty.setter(int.parse(event.target.value, onError:(s)=>0));
   }
 
   //num
@@ -75,7 +75,7 @@ class PropertiesComponent{
     return animationProperty.type == num || animationProperty.type == double;
   }
   setNumValue(EditableProperty animationProperty, event){
-    animationProperty.setter(double.parse(event.target.value));
+    animationProperty.setter(double.parse(event.target.value, (s)=>0.0));
   }
 
   //Function

@@ -70,17 +70,20 @@ class WebglEdit extends IEditElement {
 
   // >> Functions
 
-//  void getFunc01Test(num count, {num optionalCount:3}){
-//    print('count:${count}, optionalCount:${optionalCount}');
-//  }
-//
-//  num getFunc02Test(num count, {num optionalCount:3}){
-//    return count + optionalCount;
-//  }
-//
-  Vector2 getFunc04Test(Vector3 vec3, Vector2 vec2){
+  void getFunc01Test(num count, {num optionalCount:3}){
+    print('count:${count}, optionalCount:${optionalCount}');
+  }
+
+  num getFunc02Test(num count, {num optionalCount:3}){
+    return count + optionalCount;
+  }
+
+  Vector2 getFunc04Test(Vector3 vec3, Vector2 vec2, {bool useVec2 : false, Vector2 vec2Opt, Vector3 vec3Opt, num test : 10.5}){
     print('vec3:$vec3');
     print('vec2:$vec2');
-    return vec3.xy + vec2;
+    print('vec3Opt:$vec3Opt');
+    print('vec2Opt:$vec2Opt');
+    print('test:$test');
+    return vec3.xy + (useVec2?vec2:new Vector2.zero());
   }
 }

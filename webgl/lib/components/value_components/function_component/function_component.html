@@ -2,24 +2,11 @@
 
     <div class="row">
         <div class="col-sm-12 first">
-            <componentLoader #loader></componentLoader>
-        </div>
-    </div>
+            <!-- PositionalArguments -->
+            <componentLoader #loaderPositionalArguments></componentLoader>
 
-    <div class="row" *ngFor="let p of getPositionalArguments()">
-        <div class="col-sm-12 first">
-            <p><span>{{p}}</span></p>
-            <input type="text"
-                   (change) = "setPositionalValue(p, $event)">
-        </div>
-    </div>
-
-    <div class="row" *ngFor="let p of getNamedArguments()">
-        <div class="col-sm-12 first">
-            <p><span>{{p}}</span></p>
-            <input type="text"
-                   [value]="p.defaultValue.reflectee"
-                   (change) = "setNamedValue(p, $event)">
+            <!-- NamedArguments -->
+            <componentLoader #loaderNamedArguments></componentLoader>
         </div>
     </div>
 
@@ -31,8 +18,7 @@
 
     <div class="row">
         <div class="col-sm-12 first">
-            <input type="button"
-                   (click)="invokeMethod()" value="{{getName()}}">
+            <input type="button" (click)="invokeMethod()" value="{{getName()}}">
         </div>
     </div>
 

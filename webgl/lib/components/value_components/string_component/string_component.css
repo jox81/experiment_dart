@@ -10,7 +10,7 @@
 }
 
 input{
-    width : 33.33%;
+    width : 100%;
     text-align: right;
 }
 input[type=number]{

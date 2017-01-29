@@ -11,19 +11,19 @@ import 'package:webgl/components/value_components/vector4_component/vector4_comp
 class Matrix4Component {
 
   @Input()
-  Matrix4 matrix;
+  Matrix4 value;
 
   @Output()
-  EventEmitter matrix4Change = new EventEmitter<Matrix4>();
+  EventEmitter valueChange = new EventEmitter<Matrix4>();
 
   void updateRow(int rowIndex,event){
-    matrix.setRow(rowIndex, event);
-    matrix4Change.emit(matrix);
+    value.setRow(rowIndex, event);
+    valueChange.emit(value);
   }
 
   void setIdentity(){
-    matrix.setIdentity();
-    matrix4Change.emit(matrix);
+    value.setIdentity();
+    valueChange.emit(value);
   }
 
 }

@@ -17,6 +17,7 @@ input[type=number]{
     background-color:#222;/*Properties input background-color*/
     border:none;
     border-right:1px solid #AAA;
+    border-bottom:1px solid #333;
 }
 input[type=number]:disabled {
     background: #333;

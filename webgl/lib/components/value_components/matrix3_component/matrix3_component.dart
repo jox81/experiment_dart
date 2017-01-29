@@ -11,14 +11,14 @@ import 'package:webgl/components/value_components/vector3_component/vector3_comp
 class Matrix3Component {
 
   @Input()
-  Matrix3 matrix;
+  Matrix3 value;
 
   @Output()
-  EventEmitter matrix3Change = new EventEmitter<Matrix4>();
+  EventEmitter valueChange = new EventEmitter<Matrix3>();
 
   void updateRow(int rowIndex,event){
-    matrix.setRow(rowIndex, event);
-    matrix3Change.emit(matrix);
+    value.setRow(rowIndex, event);
+    valueChange.emit(value);
   }
 
 }

@@ -9,14 +9,23 @@ import 'package:vector_math/vector_math.dart';
 class Vector2Component {
 
   @Input()
-  Vector2 vector;
+  Vector2 value;
 
   @Output()
-  EventEmitter vector2Change = new EventEmitter<Vector3>();
+  EventEmitter valueChange = new EventEmitter<Vector2>();
 
   updateRow(int rowIndex, event){
-    vector[rowIndex] = double.parse(event.target.value);
-    vector2Change.emit(vector);
+    value[rowIndex] = double.parse(event.target.value, (s)=>0.0);
+    valueChange.emit(value);
   }
 
+  static void initDynamicComponent(Vector2Component component, defaultValue, Function callBack) {
+    component
+      ..value = defaultValue is Vector2 ? defaultValue : new Vector2.zero()
+      ..valueChange.listen((d){
+        if(callBack != null){
+          callBack(d);
+        }
+      });
+  }
 }

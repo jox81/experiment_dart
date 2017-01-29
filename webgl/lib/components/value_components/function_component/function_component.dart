@@ -11,18 +11,17 @@ import 'package:webgl/src/introspection.dart';
 )
 class FunctionComponent implements AfterViewInit{
 
-  @ViewChild('loader')
-  DynamicLoaderComponent loader;
+  @ViewChild('loaderPositionalArguments')
+  DynamicLoaderComponent loaderPositionalArguments;
+
+  @ViewChild('loaderNamedArguments')
+  DynamicLoaderComponent loaderNamedArguments;
 
   @Input()
   FunctionModel functionModel;
 
   @Input()
   bool disabled = false;
-
-  Type getComponentType(String typeString){
-    return ComponentTypes.getComponentType(typeString);
-  }
 
   String getName(){
     return functionModel.getName();
@@ -62,15 +61,7 @@ class FunctionComponent implements AfterViewInit{
   }
 
   void setNamedValue(ParameterMirror parameter, event){
-
-    var typedInstance = Activator.createInstance(parameter.type.reflectedType);
-//
-//    reflectType()
-//    ClassMirror cm = lm.classes['TestClass'];
-//    Future tcFuture = cm.newInstance('', []);
-
-    var typedValue = event.target.value;// as parameter.type.reflectedType;
-    named[parameter.simpleName] = typedValue;
+    named[parameter.simpleName] = event;
   }
 
   void invokeMethod(){
@@ -79,38 +70,19 @@ class FunctionComponent implements AfterViewInit{
   }
 
   @override
-  ngAfterViewInit() {
+  ngAfterViewInit() async {
     for(ParameterMirror param in getPositionalArguments()) {
-      print(param.type.reflectedType);
-      loader.createDynamicComponentBaseType(param.type.reflectedType, (v){
-        setPositionalValue(param, v);
-      });
+      await loaderPositionalArguments.createDynamicComponentBaseType(param.type.reflectedType,
+        param.hasDefaultValue?param.defaultValue.reflectee:null,
+        (v)=> setPositionalValue(param, v),
+        name:'${param.type.reflectedType} ${MirrorSystem.getName(param.simpleName)}');
+    }
+
+    for(ParameterMirror param in getNamedArguments()) {
+      await loaderNamedArguments.createDynamicComponentBaseType(param.type.reflectedType,
+        param.hasDefaultValue?param.defaultValue.reflectee:null,
+        (v)=> setNamedValue(param, v),
+        name:'{ ${param.type.reflectedType} ${MirrorSystem.getName(param.simpleName)} : ${param.hasDefaultValue ? '${param.defaultValue.reflectee}' : 'null'} }');
     }
   }
 }
-
-class Activator {
-  static createInstance(Type type, [Symbol constructor, List
-  arguments, Map<Symbol, dynamic> namedArguments]) {
-    if (type == null) {
-      throw new ArgumentError("type: $type");
-    }
-
-    if (constructor == null) {
-      constructor = const Symbol("");
-    }
-
-    if (arguments == null) {
-      arguments = const [];
-    }
-
-    var typeMirror = reflectType(type);
-    if (typeMirror is ClassMirror) {
-      return typeMirror.newInstance(constructor, arguments,
-          namedArguments).reflectee;
-    } else {
-      throw new ArgumentError("Cannot create the instance of the type '$type'.");
-    }
-  }
-}
-

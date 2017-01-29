@@ -9,14 +9,14 @@ import 'package:vector_math/vector_math.dart';
 class Vector4Component {
 
   @Input()
-  Vector4 vector;
+  Vector4 value;
 
   @Output()
-  EventEmitter vector4Change = new EventEmitter<Vector4>();
+  EventEmitter valueChange = new EventEmitter<Vector4>();
 
   updateRow(int rowIndex, event){
-    vector[rowIndex] = double.parse(event.target.value);
-    vector4Change.emit(vector);
+    value[rowIndex] = double.parse(event.target.value, (s)=>0.0);
+    valueChange.emit(value);
   }
 
 }

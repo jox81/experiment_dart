@@ -31,7 +31,7 @@ class MenuComponent{
 
   headerClick(String headerId){
     openedMenus[headerId] = !openedMenus[headerId];
-    print('toggle menu $headerId : visible = ${openedMenus[headerId]}');
+//    print('toggle menu $headerId : visible = ${openedMenus[headerId]}');
   }
 
   void closeAllMenus(){

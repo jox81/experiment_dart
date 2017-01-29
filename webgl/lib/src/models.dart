@@ -367,6 +367,13 @@ class FrustrumGizmo extends Model implements IGizmo {
 class GridModel extends Model {
   GridModel() {
     int gridHalfWidthCount = 5;
+    constructGrid(gridHalfWidthCount);
+
+    material = new MaterialBaseColor(new Vector4(0.5,0.5,0.5,1.0));
+  }
+
+  void constructGrid(int gridHalfWidthCount) {
+
     List<Vector3> points = [];
     for(int i = -gridHalfWidthCount; i <= gridHalfWidthCount; i++){
       Vector3 p1 = new Vector3(i.toDouble(), 0.0, gridHalfWidthCount.toDouble());
@@ -382,9 +389,7 @@ class GridModel extends Model {
     }
 
     mesh = new Mesh.Line(points)
-    ..mode = DrawMode.LINES;
-
-    material = new MaterialBaseColor(new Vector4(0.5,0.5,0.5,1.0));
+      ..mode = DrawMode.LINES;
   }
 }
 

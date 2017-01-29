@@ -9,19 +9,11 @@
     display: flex;
 }
 
-input{
-    width : 33.33%;
-    text-align: right;
+p{
+    margin-top:5px;
+    margin-bottom:4px;
 }
-input[type=number]{
-    background-color:#222;/*Properties input background-color*/
-    border:none;
-    border-right:1px solid #AAA;
-    border-bottom:1px solid #333;
-}
-input[type=number]:disabled {
-    background: #333;
-}
+
 /* vertical layout */
 .vertical{
     flex-flow: column;

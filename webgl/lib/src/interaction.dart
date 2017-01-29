@@ -169,7 +169,7 @@ class Interaction {
   void _onMouseUp(MouseEvent event) {
 
 
-    if(tempSelection != null && !dragging) {
+    if(!dragging) {
       scene.currentSelection = tempSelection;
     }
 
