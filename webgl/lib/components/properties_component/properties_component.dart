@@ -27,7 +27,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     selector: 'properties',
     templateUrl: 'properties_component.html',
     styleUrls: const ['properties_component.css'],
-    directives: const [DynamicLoadComponent, Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, ToggleButtonComponent, WebGLEnumComponent, FunctionComponent]
+    directives: const [DynamicLoaderComponent, Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, ToggleButtonComponent, WebGLEnumComponent, FunctionComponent]
 )
 class PropertiesComponent{
 

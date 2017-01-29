@@ -1,19 +1,28 @@
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
+import 'package:webgl/components/value_components/function_component/dynamic_load_component.dart';
 import 'package:webgl/src/introspection.dart';
 
 @Component(
     selector: 'function',
     templateUrl: 'function_component.html',
-    styleUrls: const ['function_component.css']
+    styleUrls: const ['function_component.css'],
+    directives: const [DynamicLoaderComponent]
 )
-class FunctionComponent {
+class FunctionComponent implements AfterViewInit{
+
+  @ViewChild('loader')
+  DynamicLoaderComponent loader;
 
   @Input()
   FunctionModel functionModel;
 
   @Input()
   bool disabled = false;
+
+  Type getComponentType(String typeString){
+    return ComponentTypes.getComponentType(typeString);
+  }
 
   String getName(){
     return functionModel.getName();
@@ -39,8 +48,7 @@ class FunctionComponent {
   }
 
   void setPositionalValue(ParameterMirror parameter, event){
-    var typedValue = event.target.value;
-    positionals[parameter.simpleName] = typedValue;
+    positionals[parameter.simpleName] = event;
   }
 
   Map<Symbol, dynamic> named;
@@ -68,6 +76,16 @@ class FunctionComponent {
   void invokeMethod(){
     Symbol memberName = functionModel.methodMirror.simpleName;
     result = functionModel.invoke(memberName, positionals.values, named);
+  }
+
+  @override
+  ngAfterViewInit() {
+    for(ParameterMirror param in getPositionalArguments()) {
+      print(param.type.reflectedType);
+      loader.createDynamicComponentBaseType(param.type.reflectedType, (v){
+        setPositionalValue(param, v);
+      });
+    }
   }
 }
 

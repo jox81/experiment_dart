@@ -1,5 +1,11 @@
 <div id="container" >
 
+    <div class="row">
+        <div class="col-sm-12 first">
+            <componentLoader #loader></componentLoader>
+        </div>
+    </div>
+
     <div class="row" *ngFor="let p of getPositionalArguments()">
         <div class="col-sm-12 first">
             <p><span>{{p}}</span></p>

@@ -70,15 +70,17 @@ class WebglEdit extends IEditElement {
 
   // >> Functions
 
-  void getFunc01Test(num count, {num optionalCount:3}){
-    print('count:${count}, optionalCount:${optionalCount}');
-  }
-
-  num getFunc02Test(num count, {num optionalCount:3}){
-    return count + optionalCount;
-  }
-
-  String getFunc03Test(String name){
-    return 'name : $name';
+//  void getFunc01Test(num count, {num optionalCount:3}){
+//    print('count:${count}, optionalCount:${optionalCount}');
+//  }
+//
+//  num getFunc02Test(num count, {num optionalCount:3}){
+//    return count + optionalCount;
+//  }
+//
+  Vector2 getFunc04Test(Vector3 vec3, Vector2 vec2){
+    print('vec3:$vec3');
+    print('vec2:$vec2');
+    return vec3.xy + vec2;
   }
 }
