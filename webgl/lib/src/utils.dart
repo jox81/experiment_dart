@@ -1,3 +1,4 @@
+import 'dart:core';
 import 'dart:html';
 import 'dart:math';
 import 'dart:convert';
@@ -10,21 +11,6 @@ import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 
 class Utils{
-
-  static double fpsAverage;
-
-  ///Display the animation's FPS in a div.
-  static void showFps(Element element, num fps) {
-    if(element == null) return;
-
-    if (fpsAverage == null) {
-      fpsAverage = fps.toDouble();
-    }
-
-    fpsAverage = fps * 0.05 + fpsAverage * 0.95;
-
-    element.text = "${fpsAverage.round()} fps";
-  }
 
   ///Load a text resource from a file over the network
   static Future loadTextResource (url) {

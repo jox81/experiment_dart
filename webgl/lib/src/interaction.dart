@@ -7,6 +7,7 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils.dart';
 import 'dart:typed_data';
+import 'package:webgl/src/utils_fps.dart';
 
 class Interaction {
 
@@ -78,6 +79,7 @@ class Interaction {
 
   void update() {
     _handleKeys();
+    UtilsFps.showFps(elementFPSText);
   }
 
   void _handleKeys() {
@@ -105,8 +107,8 @@ class Interaction {
 
   ///Bug correctif, Mouse down trigger mouse move...
   ///
-  num mouseMoveX = 0;
-  num mouseMoveY = 0;
+//  num mouseMoveX = 0;
+//  num mouseMoveY = 0;
 
   Model tempSelection;
   void _onMouseDown(MouseEvent event) {
@@ -114,10 +116,10 @@ class Interaction {
     dragging = false;
     mouseDown = true;
 
-    mouseMoveX = event.client.x;
-    mouseMoveY = event.client.y;
+//    mouseMoveX = event.client.x;
+//    mouseMoveY = event.client.y;
 
-    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
+//    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
 
     Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
     tempSelection = modelHit;
@@ -125,11 +127,11 @@ class Interaction {
 
   void _onMouseMove(MouseEvent event) {
     updateMouseInfos(event);
+//    print('_onMouseMove ${dragging} : ${event.client.x} / ${event.client.y}');
 
-    if(mouseDown && (event.client.x != mouseMoveX || event.client.y != mouseMoveY)) {
+    if(mouseDown /*&& (event.client.x != mouseMoveX || event.client.y != mouseMoveY)*/) {
 
       dragging = true;
-      print('_onMouseMove ${dragging} : ${event.client.x} / ${event.client.y}');
 
       if(Application.instance.activeTool == ToolType.move ||
         Application.instance.activeTool == ToolType.rotate ||
@@ -187,17 +189,15 @@ class Interaction {
 
     dragging = false;
     mouseDown = false;
-
-
   }
 
   void updateMouseInfos(MouseEvent event) {
-//    int tempScreenX = event.client.x;
-//    int tempScreenY = event.client.y;
-//    deltaX = (currentX - tempScreenX) / scaleFactor;
-//    deltaY = (currentY - tempScreenY) / scaleFactor;
-//    currentX = tempScreenX;
-//    currentY = tempScreenY;
+    int tempScreenX = event.client.x;
+    int tempScreenY = event.client.y;
+    deltaX = (currentX - tempScreenX) / scaleFactor;
+    deltaY = (currentY - tempScreenY) / scaleFactor;
+    currentX = tempScreenX;
+    currentY = tempScreenY;
   }
 
   String getMouseInfos(){
@@ -212,6 +212,6 @@ class Interaction {
     var colorPicked = new Uint8List(4);
     //Todo : readPixels doesn't work in dartium...
 //    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, colorPicked);
-    elementDebugInfoText.text = '[$posX, $posY, $posZ] : $colorPicked';
+    elementDebugInfoText?.text = '[$posX, $posY, $posZ] : $colorPicked';
   }
 }

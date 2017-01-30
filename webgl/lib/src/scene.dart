@@ -84,11 +84,6 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   }
 
   @override
-  void updateUserInput() {
-    updateUserInputFunction();
-  }
-
-  @override
   void update(num time) {
     if(updateFunction != null) {
       updateFunction(time);
@@ -103,11 +98,17 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   }
 
   @override
-  setupUserInput() {
-    updateUserInputFunction = (){
-      interaction.update();
-    };
+  void updateUserInput() {
+    updateUserInputFunction();
+  }
 
+  @override
+  setupUserInput() {
+    if(updateUserInputFunction == null) {
+      updateUserInputFunction = () {
+        interaction.update();
+      };
+    }
     updateUserInputFunction();
   }
 
