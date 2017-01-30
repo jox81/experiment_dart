@@ -16,7 +16,7 @@ class ListComponent {
   dynamic element;
 
   @Output()
-  EventEmitter elementSelected = new EventEmitter<List>();
+  EventEmitter elementSelected = new EventEmitter();
 
   void selectionChange(event){
     var selection = list[event.target.selectedIndex];

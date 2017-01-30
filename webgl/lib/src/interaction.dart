@@ -103,11 +103,21 @@ class Interaction {
   /// Mouse
   ///
 
+  ///Bug correctif, Mouse down trigger mouse move...
+  ///
+  num mouseMoveX = 0;
+  num mouseMoveY = 0;
+
   Model tempSelection;
   void _onMouseDown(MouseEvent event) {
     updateMouseInfos(event);
     dragging = false;
     mouseDown = true;
+
+    mouseMoveX = event.client.x;
+    mouseMoveY = event.client.y;
+
+    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
 
     Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
     tempSelection = modelHit;
@@ -116,8 +126,10 @@ class Interaction {
   void _onMouseMove(MouseEvent event) {
     updateMouseInfos(event);
 
-    if(mouseDown) {
+    if(mouseDown && (event.client.x != mouseMoveX || event.client.y != mouseMoveY)) {
+
       dragging = true;
+      print('_onMouseMove ${dragging} : ${event.client.x} / ${event.client.y}');
 
       if(Application.instance.activeTool == ToolType.move ||
         Application.instance.activeTool == ToolType.rotate ||
@@ -168,7 +180,7 @@ class Interaction {
 
   void _onMouseUp(MouseEvent event) {
 
-
+    print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
     if(!dragging) {
       scene.currentSelection = tempSelection;
     }
@@ -176,15 +188,16 @@ class Interaction {
     dragging = false;
     mouseDown = false;
 
+
   }
 
   void updateMouseInfos(MouseEvent event) {
-    int tempScreenX = event.client.x;
-    int tempScreenY = event.client.y;
-    deltaX = (currentX - tempScreenX) / scaleFactor;
-    deltaY = (currentY - tempScreenY) / scaleFactor;
-    currentX = tempScreenX;
-    currentY = tempScreenY;
+//    int tempScreenX = event.client.x;
+//    int tempScreenY = event.client.y;
+//    deltaX = (currentX - tempScreenX) / scaleFactor;
+//    deltaY = (currentY - tempScreenY) / scaleFactor;
+//    currentX = tempScreenX;
+//    currentY = tempScreenY;
   }
 
   String getMouseInfos(){

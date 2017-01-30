@@ -84,6 +84,6 @@ class WebglEdit extends IEditElement {
     print('vec3Opt:$vec3Opt');
     print('vec2Opt:$vec2Opt');
     print('test:$test');
-    return vec3.xy + (useVec2?vec2:new Vector2.zero());
+    return vec3.xy +vec2;// (useVec2?vec2:new Vector2.zero());
   }
 }

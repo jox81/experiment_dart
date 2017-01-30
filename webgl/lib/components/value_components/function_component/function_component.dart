@@ -66,7 +66,7 @@ class FunctionComponent implements AfterViewInit{
 
   void invokeMethod(){
     Symbol memberName = functionModel.methodMirror.simpleName;
-    result = functionModel.invoke(memberName, positionals.values, named);
+    result = '${functionModel.invoke(memberName, positionals.values.toList(), named)}';
   }
 
   @override
