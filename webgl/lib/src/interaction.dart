@@ -39,7 +39,8 @@ class Interaction {
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
     elementDebugInfoText = querySelector("#debugInfosText");
-    elementFPSText = querySelector("#fps");
+    elementFPSText = querySelector("#fps")
+    ..style.display = 'block';
 
     window.onResize.listen(_onWindowResize);
     window.onKeyUp.listen(_onKeyUp);

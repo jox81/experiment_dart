@@ -16,4 +16,5 @@ html, body {
     color: white;
     background-color: black;
     padding: 10px;
+    display: none;/* will be shown by the app if used */
 }
