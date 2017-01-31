@@ -1,4 +1,5 @@
 import 'package:webgl/scene_views/scene_view_cubemap.dart';
+import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
 import 'package:webgl/scene_views/scene_view_start.dart';
 import 'package:webgl/scene_views/scene_view_texturing.dart';
@@ -19,12 +20,13 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 // - charger  /décharger une scene proprement
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
+   new SceneViewJsonLoader(),
 //   new SceneViewStart(),
 //   new SceneViewBase(),
 //   new SceneViewTexturing(),
 //    new SceneViewWebGLEdit(),
 //    new SceneViewVectors(),
-    new SceneViewCubeMap(),
+//    new SceneViewCubeMap(),
 //    new SceneViewFrameBuffer(),
 //    new SceneViewParticle(),
 //    new SceneViewParticleSimple(),

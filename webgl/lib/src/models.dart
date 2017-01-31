@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
@@ -48,7 +49,9 @@ enum ModelType{
 }
 
 abstract class Model extends IEditElement {
-  String _name = '';//Todo : S'assurer que les noms soient uniques ?!
+  String _name = '';
+
+  //Todo : S'assurer que les noms soient uniques ?!
   String get name => _name;
   set name(String value) => _name = value;
 
@@ -83,6 +86,19 @@ abstract class Model extends IEditElement {
   UpdateFunction get updateFunction => _updateFunction;
   set updateFunction(UpdateFunction value) => _updateFunction = value;
 
+  void translate(Vector3 vector3) {
+    this.position += vector3;
+  }
+
+  List<Triangle> _faces;
+  List<Triangle> getFaces() {
+    _faces = new List();
+    for (Triangle triangle in mesh.getFaces()) {
+      _faces.add(new Triangle.copy(triangle)..transform(transform));
+    }
+    return _faces;
+  }
+
   void render() {
 
     if (material == null) {
@@ -95,47 +111,38 @@ abstract class Model extends IEditElement {
     material.render(this);
   }
 
-  List<Triangle> _faces;
-  List<Triangle> getFaces() {
-    _faces = new List();
-      for (Triangle triangle in mesh.getFaces()) {
-        _faces.add(new Triangle.copy(triangle)..transform(transform));
-      }
-    return _faces;
-  }
-
-  static Model createByType(ModelType modelType) {
+  static Model createByType(ModelType modelType,{bool doInitMaterial : true}) {
     Model newModel;
     switch(modelType){
       case ModelType.point:
-        newModel = new PointModel();
+        newModel = new PointModel(doInitMaterial:doInitMaterial);
         break;
       case ModelType.line:
         newModel = new LineModel(new Vector3(-1.0,0.0,0.0), new Vector3(1.0,0.0,0.0));
         break;
       case ModelType.triangle:
-        newModel = new TriangleModel();
+        newModel = new TriangleModel(doInitMaterial:doInitMaterial);
         break;
       case ModelType.quad:
-        newModel = new QuadModel();
+        newModel = new QuadModel(doInitMaterial:doInitMaterial);
         break;
       case ModelType.pyramid:
-        newModel = new PyramidModel();
+        newModel = new PyramidModel(doInitMaterial:doInitMaterial);
         break;
       case ModelType.cube:
-        newModel = new CubeModel();
+        newModel = new CubeModel(doInitMaterial:doInitMaterial);
         break;
       case ModelType.sphere:
-        newModel = new SphereModel();
+        newModel = new SphereModel(doInitMaterial:doInitMaterial);
         break;
-      case ModelType.torus:
-        newModel = new TorusModel ();
-        break;
+//      case ModelType.torus:
+//        newModel = new TorusModel(doInitMaterial:doInitMaterial);
+//        break;
       case ModelType.axis:
-        newModel = new AxisModel();
+        newModel = new AxisModel(doInitMaterial:doInitMaterial);
         break;
       case ModelType.grid:
-        newModel = new GridModel();
+        newModel = new GridModel(doInitMaterial:doInitMaterial);
         break;
       default:
         break;
@@ -143,9 +150,14 @@ abstract class Model extends IEditElement {
     return newModel;
   }
 
-  void translate(Vector3 vector3) {
-    this.position += vector3;
+  static Model createFromJson(Map result){
+    ModelType modelType = ModelType.values.firstWhere((m)=> m.toString() == 'ModelType.${result["type"]}', orElse: ()=>null);
+    Model model = Model.createByType(modelType,doInitMaterial: false)
+    ..name = result["name"]
+    ..position = new Vector3.fromFloat32List(result["position"]);
+    return model;
   }
+
 }
 
 class CustomObject extends Model {
@@ -153,7 +165,7 @@ class CustomObject extends Model {
 }
 
 class JsonObject extends Model {
-  JsonObject(Map jsonFile){
+  JsonObject(Map jsonFile,{bool doInitMaterial : true}){
     mesh
       ..vertices = jsonFile['meshes'][0]['vertices']
       ..indices = jsonFile['meshes'][0]['faces']
@@ -166,18 +178,18 @@ class JsonObject extends Model {
 }
 
 class PointModel extends Model {
-  PointModel() {
+  PointModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Point();
-    material = new MaterialPoint(pointSize:5.0 ,color:_defaultModelColor);
+    material = doInitMaterial ? new MaterialPoint(pointSize:5.0 ,color:_defaultModelColor): null;
   }
 }
 
 class LineModel extends Model {
   final Vector3 point1, point2;
 
-  LineModel(this.point1, this.point2) {
+  LineModel(this.point1, this.point2,{bool doInitMaterial : true}) {
     mesh = new Mesh.Line([point1, point2]);
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 
   @override
@@ -195,61 +207,61 @@ class LineModel extends Model {
 }
 
 class MultiLineModel extends Model {
-  MultiLineModel(List<Vector3> points) {
+  MultiLineModel(List<Vector3> points,{bool doInitMaterial : true}) {
     mesh = new Mesh.Line(points);
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
 
 class TriangleModel extends Model {
-  TriangleModel() {
+  TriangleModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Triangle();
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
 
 class QuadModel extends Model {
-  QuadModel() {
+  QuadModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Rectangle();
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
 
 class PyramidModel extends Model {
-  PyramidModel() {
+  PyramidModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Pyramid();
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
 
 class CubeModel extends Model {
-  CubeModel() {
+  CubeModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Cube();
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
 
 class SphereModel extends Model {
-  SphereModel({num radius: 1.0, int segmentV: 16, int segmentH: 16}) {
+  SphereModel({num radius: 1.0, int segmentV: 16, int segmentH: 16, bool doInitMaterial : true}) {
     mesh =
         new Mesh.Sphere(radius: radius, segmentV: segmentV, segmentH: segmentH);
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
 
 //Todo : create a CompoundObjectModel
 
 class AxisModel extends Model {
-  AxisModel() {
+  AxisModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Axis();
-    material = new MaterialPoint();
+    material = doInitMaterial ? new MaterialPoint(): null;
   }
 }
 
 class AxisPointsModel extends Model {
-  AxisPointsModel() {
+  AxisPointsModel({bool doInitMaterial : true}) {
     mesh = new Mesh.AxisPoints();
-    material = new MaterialPoint(pointSize:5.0);
+    material = doInitMaterial ? new MaterialPoint(pointSize:5.0): null;;
   }
 }
 
@@ -365,11 +377,11 @@ class FrustrumGizmo extends Model implements IGizmo {
 }
 
 class GridModel extends Model {
-  GridModel() {
+  GridModel({bool doInitMaterial : true}) {
     int gridHalfWidthCount = 5;
     constructGrid(gridHalfWidthCount);
 
-    material = new MaterialBaseColor(new Vector4(0.5,0.5,0.5,1.0));
+    material = doInitMaterial ? new MaterialBaseColor(new Vector4(0.5,0.5,0.5,1.0)): null;
   }
 
   void constructGrid(int gridHalfWidthCount) {
@@ -442,16 +454,16 @@ function makeTorus(r, sr, n, sn, k)
 }
 
 class SkyBoxModel extends CubeModel{
-  SkyBoxModel() {
+  SkyBoxModel({bool doInitMaterial : true}) {
     mesh = new Mesh.Cube();
-    material = new MaterialPoint();
+    material = doInitMaterial ? new MaterialPoint(): null;
   }
 }
 
 
 class VectorModel extends Model {
   final Vector3 vec;
-  VectorModel(this.vec) {
+  VectorModel(this.vec,{bool doInitMaterial : true}) {
     List<Vector3> points = new List();
 
     points
@@ -461,6 +473,6 @@ class VectorModel extends Model {
     mesh = new Mesh.Line(points)
       ..mode = DrawMode.LINES;
 
-    material = new MaterialBase();
+    material = doInitMaterial ? new MaterialBase(): null;
   }
 }
