@@ -118,6 +118,19 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   @override
   UpdateUserInput updateUserInputFunction;
 
+  // Json
 
+  static Scene createFromJson(Map json) {
+    Scene scene =  new _CustomScene();
+    scene.backgroundColor = new Vector4.fromFloat32List(json["backgroundColor"]);
+    return scene;
+  }
+}
 
+class _CustomScene extends Scene{
+
+  @override
+  Future setupScene() {
+    // TODO: implement setupScene
+  }
 }

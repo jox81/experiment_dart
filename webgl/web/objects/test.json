@@ -1,48 +1,48 @@
 {
   "scene": {
-    "backgrounColor": [
+    "backgroundColor": [
+      0.5,
+      1.0,
       0.2,
-      0.2,
-      0.2,
-      1
+      1.0
+    ],
+    "cameras": [
+      {
+        "fov": 25.0,
+        "zNear": 0.1,
+        "zFar": 100,
+        "targetPosition": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "position": [
+          10.0,
+          10.0,
+          10.0
+        ],
+        "showGizmo": true
+      }
+    ],
+    "models": [
+      {
+        "type": "quad",
+        "name": "quad",
+        "position": [
+          5.0,
+          0.0,
+          -5.0
+        ]
+      },
+      {
+        "type": "cube",
+        "name": "cube",
+        "position": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
     ]
-  },
-  "cameras": [
-    {
-      "fov": 25,
-      "zNear": 0.1,
-      "zFar": 100,
-      "targetPosition": [
-        0.0,
-        0.0,
-        0.0
-      ],
-      "position": [
-        10.0,
-        10.0,
-        10.0
-      ],
-      "showGizmo": true
-    }
-  ],
-  "models": [
-    {
-      "type": "quad",
-      "name": "quad",
-      "position": [
-        5.0,
-        0.0,
-        -5.0
-      ]
-    },
-    {
-      "type": "cube",
-      "name": "cube",
-      "position": [
-        0.0,
-        0.0,
-        0.0
-      ]
-    }
-  ]
+  }
 }

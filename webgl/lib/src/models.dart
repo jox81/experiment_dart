@@ -150,11 +150,11 @@ abstract class Model extends IEditElement {
     return newModel;
   }
 
-  static Model createFromJson(Map result){
-    ModelType modelType = ModelType.values.firstWhere((m)=> m.toString() == 'ModelType.${result["type"]}', orElse: ()=>null);
+  static Model createFromJson(Map json){
+    ModelType modelType = ModelType.values.firstWhere((m)=> m.toString() == 'ModelType.${json["type"]}', orElse: ()=>null);
     Model model = Model.createByType(modelType,doInitMaterial: false)
-    ..name = result["name"]
-    ..position = new Vector3.fromFloat32List(result["position"]);
+    ..name = json["name"]
+    ..position = new Vector3.fromFloat32List(json["position"]);
     return model;
   }
 

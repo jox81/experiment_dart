@@ -1,24 +1,27 @@
 @TestOn("dartium")
 
 import 'dart:convert';
+import 'dart:html';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/scene.dart';
 
 void main() {
   final String testJsonString = r'''
   {
     "scene": {
-      "backgrounColor": [
+      "backgroundColor": [
+        0.5,
+        1.0,
         0.2,
-        0.2,
-        0.2,
-        1
+        1.0
       ]
     },
     "cameras": [
       {
-        "fov": 25,
+        "fov": 25.0,
         "zNear": 0.1,
         "zFar": 100,
         "targetPosition": [
@@ -59,8 +62,14 @@ void main() {
 
   Map testJson;
 
+  Application application;
+
   setUp(() async {
     testJson = JSON.decode(testJsonString);
+
+    CanvasElement canvas = querySelector('#glCanvas');
+    application = await Application.create(canvas);
+
   });
 
   tearDown(() async {
@@ -71,6 +80,21 @@ void main() {
     test("test 01", () {
       String type = testJson['models'][0]["type"];
       expect(type, equals("quad"));
+    });
+  });
+
+  group("test scene", () {
+    test("test 01", () {
+      Scene scene = Scene.createFromJson(testJson['scene']);
+      expect(scene,isNotNull);
+    });
+
+    test("test 02", () {
+      Scene scene = Scene.createFromJson(testJson['scene']);
+      expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
+          1.0,
+          0.2,
+          1.0])));
     });
   });
 
