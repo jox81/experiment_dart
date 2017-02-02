@@ -1,3 +1,4 @@
+import 'dart:async';
 @TestOn("dartium")
 
 import 'dart:convert';
@@ -5,80 +6,31 @@ import 'dart:html';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/utils.dart';
 
-void main() {
-  final String testJsonString = r'''
-  {
-    "scene": {
-      "backgroundColor": [
-        0.5,
-        1.0,
-        0.2,
-        1.0
-      ]
-    },
-    "cameras": [
-      {
-        "fov": 25.0,
-        "zNear": 0.1,
-        "zFar": 100,
-        "targetPosition": [
-          0.0,
-          0.0,
-          0.0
-        ],
-        "position": [
-          10.0,
-          10.0,
-          10.0
-        ],
-        "showGizmo": true
-      }
-    ],
-    "models": [
-      {
-        "type": "quad",
-        "name": "quad",
-        "position": [
-          5.0,
-          0.0,
-          -5.0
-        ]
-      },
-      {
-        "type": "cube",
-        "name": "cube",
-        "position": [
-          0.0,
-          0.0,
-          0.0
-        ]
-      }
-    ]
-  }
-  ''';
+Future main() async {
 
-  Map testJson;
+  var testJson = await Utils.loadJSONResource('../objects/json_scene.json');
 
   Application application;
+  CanvasElement canvas;
 
   setUp(() async {
-    testJson = JSON.decode(testJsonString);
-
     CanvasElement canvas = querySelector('#glCanvas');
     application = await Application.create(canvas);
-
   });
 
   tearDown(() async {
-    testJson = null;
+    canvas = null;
+    application = null;
   });
 
   group("json read", () {
     test("test 01", () {
-      String type = testJson['models'][0]["type"];
+      String type = testJson['scene']['models'][0]["type"];
       expect(type, equals("quad"));
     });
   });
@@ -98,19 +50,50 @@ void main() {
     });
   });
 
+  group("test camera", () {
+    test("test camera creation", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera != null,isTrue);
+    });
+    test("test camera fov", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera.fov == 25.0,isTrue);
+    });
+    test("test camera zNear", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera.zNear == 0.1,isTrue);
+    });
+    test("test camera zFar", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera.zFar == 100.0,isTrue);
+    });
+    test("test camera position", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
+    });
+//    test("test camera targetPosition", () {
+//      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+//      expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
+//    });
+//    test("test camera showGizmo", () {
+//      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+//      expect(camera.showGizmo,isTrue);
+//    });
+  });
+
   group("test modelTest01", () {
     test("test model", () {
-      Model model = Model.createFromJson(testJson['models'][0]);
+      Model model = Model.createFromJson(testJson['scene']['models'][0]);
 
       expect(model is QuadModel,isTrue);
     });
     test("test model name", () {
-      Model model = Model.createFromJson(testJson['models'][0]);
+      Model model = Model.createFromJson(testJson['scene']['models'][0]);
 
       expect(model.name == 'quad',isTrue);
     });
     test("test model position", () {
-      Model model = Model.createFromJson(testJson['models'][0]);
+      Model model = Model.createFromJson(testJson['scene']['models'][0]);
 
       expect(model.position == new Vector3(5.0, 0.0, -5.0),isTrue);
     });
@@ -118,17 +101,17 @@ void main() {
 
   group("test modelTest02", () {
     test("test model", () {
-      Model model = Model.createFromJson(testJson['models'][1]);
+      Model model = Model.createFromJson(testJson['scene']['models'][1]);
 
       expect(model is CubeModel,isTrue);
     });
     test("test model name", () {
-      Model model = Model.createFromJson(testJson['models'][1]);
+      Model model = Model.createFromJson(testJson['scene']['models'][1]);
 
       expect(model.name == 'cube',isTrue);
     });
     test("test model position", () {
-      Model model = Model.createFromJson(testJson['models'][1]);
+      Model model = Model.createFromJson(testJson['scene']['models'][1]);
 
       expect(model.position == new Vector3(0.0, 0.0, 0.0),isTrue);
     });

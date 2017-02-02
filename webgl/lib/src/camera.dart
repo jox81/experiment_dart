@@ -164,6 +164,15 @@ class Camera extends Model {
   String toString() {
     return 'camera position : $position -> target : $targetPosition';
   }
+
+  static Camera createFromJson(Map json) {
+    Camera camera =  new Camera(json['fov'] as num, json['zNear'] as num, json['zFar'] as num);
+    Vector3 position =  new Vector3.fromFloat32List(json['position']);
+    camera.position = new Vector3.copy(position);
+//    camera.targetPosition = new Vector3(json['targetPosition'][0] as num, json['targetPosition'][1] as num, json['targetPosition'][2] as num);
+//    camera.showGizmo = json['showGizmo'] as bool;
+    return camera;
+  }
 }
 
 
