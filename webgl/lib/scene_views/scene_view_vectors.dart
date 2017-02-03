@@ -47,7 +47,7 @@ class SceneViewVectors extends Scene{
       ..targetPosition = new Vector3(1.0, 0.0, 0.0)
       ..position = new Vector3(3.0, 3.0, 3.0)
       ..showGizmo = true;
-    models.add(cameraTest);
+    cameras.add(cameraTest);
 
     axis = new AxisModel();
     models.add(axis);

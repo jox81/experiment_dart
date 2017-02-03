@@ -30,9 +30,8 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
 
   List<Material> materials = new List();
   List<Model> models = new List();
-
-  List<Camera> get cameras => models.where((m)=> m is Camera).toList();
-  List<Light> get lights => models.where((m)=> m is Light).toList();
+  List<Camera> cameras = new List();
+  List<Light> lights = new List();
 
   Material defaultMaterial = new MaterialBase();
 
@@ -65,16 +64,20 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
     }
   }
 
-  void addModel(Model model){
-    model.material ??= defaultMaterial;
-    model.name ??= model.runtimeType.toString();
+  void add(Object3d object3d){
+    if(object3d is Model) {
+      object3d.material ??= defaultMaterial;
+      object3d.name ??= object3d.runtimeType.toString();
 
-    models.add(model);
-    currentSelection = model;
+      models.add(object3d);
+      currentSelection = object3d;
+    }else if(object3d is Camera){
+
+    }
   }
 
   void createModelByType(ModelType modelType){
-    addModel(Model.createByType(modelType));
+    add(Model.createByType(modelType));
   }
 
   void assignMaterial(MaterialType materialType) {
@@ -121,16 +124,31 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   // Json
 
   static Scene createFromJson(Map json) {
-    Scene scene =  new _CustomScene();
-    scene.backgroundColor = new Vector4.fromFloat32List(json["backgroundColor"]);
+    Scene scene =  new _SceneJson(json);
     return scene;
   }
 }
 
-class _CustomScene extends Scene{
+class _SceneJson extends Scene{
+
+  _SceneJson(Map json){
+    backgroundColor = new Vector4.fromFloat32List(json["backgroundColor"]);
+
+    for(var item in json["cameras"] as List){
+      Camera camera = Camera.createFromJson(item);
+      cameras.add(camera);
+    }
+
+    for(var item in json["models"] as List){
+      Model model = Model.createFromJson(item);
+      models.add(model);
+    }
+  }
 
   @override
   Future setupScene() {
     // TODO: implement setupScene
+    return new Future.value();
   }
+
 }

@@ -36,21 +36,6 @@ Future main() async {
     });
   });
 
-  group("test scene", () {
-    test("test 01", () {
-      Scene scene = Scene.createFromJson(testJson['scene']);
-      expect(scene,isNotNull);
-    });
-
-    test("test 02", () {
-      Scene scene = Scene.createFromJson(testJson['scene']);
-      expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
-          1.0,
-          0.2,
-          1.0])));
-    });
-  });
-
   group("test camera", () {
     test("test camera creation", () {
       Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
@@ -92,7 +77,7 @@ Future main() async {
     });
   });
 
-  group("test modelTest01", () {
+  group("test model 01", () {
     test("test model", () {
       Model model = Model.createFromJson(testJson['scene']['models'][0]);
 
@@ -110,7 +95,7 @@ Future main() async {
     });
   });
 
-  group("test modelTest02", () {
+  group("test model 02", () {
     test("test model", () {
       Model model = Model.createFromJson(testJson['scene']['models'][1]);
 
@@ -118,13 +103,36 @@ Future main() async {
     });
     test("test model name", () {
       Model model = Model.createFromJson(testJson['scene']['models'][1]);
-
       expect(model.name == 'cube',isTrue);
     });
     test("test model position", () {
       Model model = Model.createFromJson(testJson['scene']['models'][1]);
-
       expect(model.position == new Vector3(0.0, 0.0, 0.0),isTrue);
+    });
+  });
+
+  group("test scene", () {
+    test("scene creation", () {
+      Scene scene = Scene.createFromJson(testJson['scene']);
+      expect(scene,isNotNull);
+    });
+
+    test("scene background color", () {
+      Scene scene = Scene.createFromJson(testJson['scene']);
+      expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
+      1.0,
+      0.2,
+      1.0])));
+    });
+
+    test("scene camera", () {
+      Scene scene = Scene.createFromJson(testJson['scene']);
+      expect(scene.cameras.length == 1, isTrue);
+    });
+
+    test("scene models", () {
+      Scene scene = Scene.createFromJson(testJson['scene']);
+      expect(scene.models.length == 2, isTrue);
     });
   });
 }

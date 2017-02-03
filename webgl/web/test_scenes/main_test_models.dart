@@ -32,6 +32,7 @@ class Webgl01 {
   WebGLBuffer indicesBuffer;
 
   List<Model> models = new List();
+  List<Camera> cameras = new List();
 
   WebGLProgram shaderProgram;
 
@@ -139,7 +140,7 @@ class Webgl01 {
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
       ..position = new Vector3(5.0, 5.0, -5.0)
       ..showGizmo = true;
-    models.add(camera2);
+    cameras.add(camera2);
 
 //    models.addAll(Utils.unProjectMultiScreenPoints(camera2));
 

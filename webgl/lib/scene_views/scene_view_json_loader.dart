@@ -19,35 +19,29 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewJsonLoader extends Scene{
 
-  SceneViewJsonLoader();
+  String jsonScenePath;
+
+  SceneViewJsonLoader(this.jsonScenePath);
 
   @override
   Future setupScene() async {
-    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    Context.mainCamera = new
-    Camera(radians(25.0), 0.1, 100.0)
-      ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(10.0, 10.0, 10.0)
-      ..cameraController = new CameraController();
+    Map json = await Utils.loadJSONResource(jsonScenePath);
+    buildJsonScene(json['scene']);
 
-    //
-//    Map susanJson = await Utils.loadJSONResource('./objects/susan/susan.json');
-//    MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
-//      ..texture = await TextureUtils.getTextureFromFile(
-//          './objects/susan/susan_texture.png');
-//    JsonObject jsonModel = new JsonObject(susanJson)
-//      ..transform.translate(0.0, 0.0, 0.0)
-//      ..transform.rotateX(radians(-90.0))
-//      ..material = susanMaterialBaseTexture;
-//    models.add(jsonModel);
+  }
 
-//    Map testJson = await Utils.loadJSONResource('./objects/test.json');
-//    String result = JSON.encode(testJson);
-//    print(result);
+  void buildJsonScene(Map jsonScene){
+    backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"]);
 
-    Map testJson = await Utils.loadJSONResource('./objects/test.json');
-    bool test = testJson[models][1].type == "QuadModel";
+    for(var item in jsonScene["cameras"] as List){
+      Camera camera = Camera.createFromJson(item);
+      cameras.add(camera);
+    }
 
+    for(var item in jsonScene["models"] as List){
+      Model model = Model.createFromJson(item);
+      models.add(model);
+    }
   }
 }

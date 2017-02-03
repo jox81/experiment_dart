@@ -48,7 +48,21 @@ enum ModelType{
   grid,
 }
 
-abstract class Model extends IEditElement {
+abstract class Object3d extends IEditElement {
+  final Matrix4 _transform = new Matrix4.identity();
+  Matrix4 get transform => _transform;
+  set transform(Matrix4 value) => _transform.setFrom(value);
+
+  Vector3 get position => transform.getTranslation();
+  set position(Vector3 value) => transform.setTranslation(value);
+
+  Matrix3 get rotation => transform.getRotation();
+  set rotation(Matrix3 value) => transform.setRotation(value);
+
+  void render();
+}
+
+abstract class Model extends Object3d{
   String _name = '';
 
   //Todo : S'assurer que les noms soient uniques ?!
@@ -59,16 +73,6 @@ abstract class Model extends IEditElement {
   bool get visible => _visible;
   set visible(bool value) =>
       _visible = value; //Transform : position, rotation, scale
-
-  final Matrix4 _transform = new Matrix4.identity();
-  Matrix4 get transform => _transform;
-  set transform(Matrix4 value) => _transform.setFrom(value);
-
-  Vector3 get position => transform.getTranslation();
-  set position(Vector3 value) => transform.setTranslation(value);
-
-  Matrix3 get rotation => transform.getRotation();
-  set rotation(Matrix3 value) => transform.setRotation(value);
 
   Mesh _mesh = new Mesh();
   Mesh get mesh => _mesh;
@@ -152,7 +156,7 @@ abstract class Model extends IEditElement {
 
   static Model createFromJson(Map json){
     ModelType modelType = ModelType.values.firstWhere((m)=> m.toString() == 'ModelType.${json["type"]}', orElse: ()=>null);
-    Model model = Model.createByType(modelType,doInitMaterial: false)
+    Model model = Model.createByType(modelType,doInitMaterial: true)
     ..name = json["name"]
     ..position = new Vector3.fromFloat32List(json["position"]);
     return model;

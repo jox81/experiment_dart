@@ -42,7 +42,7 @@ class SceneViewPrimitives extends Scene{
       ..position = new Vector3(5.0, 7.5, 10.0)
       ..cameraController = new CameraController()
       ..showGizmo = true;
-    models.add(camera);
+    cameras.add(camera);
     Context.mainCamera = camera;
 
 //    camera2 = new Camera(radians(37.0), 0.5, 10.0)

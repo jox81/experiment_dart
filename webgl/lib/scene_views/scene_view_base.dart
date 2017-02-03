@@ -47,12 +47,12 @@ class SceneViewBase extends Scene{
     DirectionalLight directionalLight = new DirectionalLight()
       ..color.setFrom(directionalColor)
       ..direction.setFrom(directionalColor);
-    models.add(directionalLight);
+    lights.add(directionalLight);
 
     PointLight pointLight = new PointLight()
       ..color.setFrom(directionalColor)
       ..position = new Vector3(20.0, 20.0, 20.0);
-    models.add(pointLight);
+    lights.add(pointLight);
 
     //Materials
     MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0 ,color:new Vector4(1.0,1.0,0.0,1.0))

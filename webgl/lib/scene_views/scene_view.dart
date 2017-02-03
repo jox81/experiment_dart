@@ -20,7 +20,7 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 // - charger  /décharger une scene proprement
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
-   new SceneViewJsonLoader(),
+   new SceneViewJsonLoader('./objects/json_scene.json'),
 //   new SceneViewStart(),
 //   new SceneViewBase(),
 //   new SceneViewTexturing(),

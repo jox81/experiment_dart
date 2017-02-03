@@ -11,7 +11,7 @@ import 'package:webgl/src/models.dart';
     override: '*')
 import 'dart:mirrors';
 
-class Light extends Model{
+class Light extends Object3d{
   Vector3 color;
   Light();
 

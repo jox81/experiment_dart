@@ -12,7 +12,7 @@ import 'package:webgl/src/models.dart';
     override: '*')
 import 'dart:mirrors';
 
-class Camera extends Model {
+class Camera extends Object3d {
 
   bool _isActive = false;
   bool get isActive => _isActive;
