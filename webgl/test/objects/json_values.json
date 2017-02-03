@@ -1,0 +1,26 @@
+{
+  "array": [
+    1,
+    2,
+    3
+  ],
+  "boolean": true,
+  "null": null,
+  "int": 120,
+  "num": 123.5,
+  "double":125.32,
+  "object": {
+    "a": "b",
+    "c": "d",
+    "e": "f"
+  },
+  "string": "Hello World",
+  "vector3Array":[
+    10.0,15.0,20.0
+  ],
+  "vector3Object":{
+    "x":25.0,
+    "y":30.0,
+    "z":35.0
+  }
+}

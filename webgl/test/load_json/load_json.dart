@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'dart:convert';
 import 'dart:html';
+import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
@@ -67,18 +68,28 @@ Future main() async {
       Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
       expect(camera.zFar == 100.0,isTrue);
     });
+    test("test camera targetPosition", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
+    });
+    test("test camera targetPosition new", () {
+      Camera camera = new Camera(25.0,1.0,10.0)
+        ..targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['targetPosition']));;
+      expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
+    });
     test("test camera position", () {
       Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
-//    test("test camera targetPosition", () {
-//      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
-//      expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
-//    });
-//    test("test camera showGizmo", () {
-//      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
-//      expect(camera.showGizmo,isTrue);
-//    });
+    test("test camera position new", () {
+      Camera camera = new Camera(25.0,1.0,10.0)
+        ..position = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['position']));;
+      expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
+    });
+    test("test camera showGizmo", () {
+      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      expect(camera.showGizmo,isTrue);
+    });
   });
 
   group("test modelTest01", () {

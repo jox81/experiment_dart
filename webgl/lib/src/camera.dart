@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -55,7 +56,7 @@ class Camera extends Model {
     update();
   }
 
-  Vector3 _targetPosition;
+  Vector3 _targetPosition = new Vector3.all(0.0);
   Vector3 get targetPosition => _targetPosition;
   set targetPosition(Vector3 value) {
     _targetPosition = value;
@@ -167,10 +168,9 @@ class Camera extends Model {
 
   static Camera createFromJson(Map json) {
     Camera camera =  new Camera(json['fov'] as num, json['zNear'] as num, json['zFar'] as num);
-    Vector3 position =  new Vector3.fromFloat32List(json['position']);
-    camera.position = new Vector3.copy(position);
-//    camera.targetPosition = new Vector3(json['targetPosition'][0] as num, json['targetPosition'][1] as num, json['targetPosition'][2] as num);
-//    camera.showGizmo = json['showGizmo'] as bool;
+    camera.targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition']));
+    camera.position = new Vector3.fromFloat32List(new Float32List.fromList(json['position']));
+    camera.showGizmo = json['showGizmo'] as bool;
     return camera;
   }
 }
