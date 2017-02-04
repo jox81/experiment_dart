@@ -6,6 +6,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/models.dart';
@@ -113,12 +114,12 @@ Future main() async {
 
   group("test scene", () {
     test("scene creation", () {
-      Scene scene = Scene.createFromJson(testJson['scene']);
+      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
       expect(scene,isNotNull);
     });
 
     test("scene background color", () {
-      Scene scene = Scene.createFromJson(testJson['scene']);
+      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
       expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
       1.0,
       0.2,
@@ -126,12 +127,12 @@ Future main() async {
     });
 
     test("scene camera", () {
-      Scene scene = Scene.createFromJson(testJson['scene']);
+      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
       expect(scene.cameras.length == 1, isTrue);
     });
 
     test("scene models", () {
-      Scene scene = Scene.createFromJson(testJson['scene']);
+      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
       expect(scene.models.length == 2, isTrue);
     });
   });

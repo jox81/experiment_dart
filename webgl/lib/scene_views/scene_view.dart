@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:webgl/scene_views/scene_view_cubemap.dart';
 import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
@@ -20,7 +21,7 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 // - charger  /décharger une scene proprement
 class ServiceScene {
  static  List<Scene> getSceneViews() => [
-   new SceneViewJsonLoader('./objects/json_scene.json'),
+   new SceneViewJsonLoader.createWithFilePath('./objects/json_scene.json'),
 //   new SceneViewStart(),
 //   new SceneViewBase(),
 //   new SceneViewTexturing(),

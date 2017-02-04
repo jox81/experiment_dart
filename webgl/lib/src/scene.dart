@@ -5,6 +5,7 @@
     override: '*')
 import 'dart:mirrors';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -121,34 +122,5 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   @override
   UpdateUserInput updateUserInputFunction;
 
-  // Json
-
-  static Scene createFromJson(Map json) {
-    Scene scene =  new _SceneJson(json);
-    return scene;
-  }
-}
-
-class _SceneJson extends Scene{
-
-  _SceneJson(Map json){
-    backgroundColor = new Vector4.fromFloat32List(json["backgroundColor"]);
-
-    for(var item in json["cameras"] as List){
-      Camera camera = Camera.createFromJson(item);
-      cameras.add(camera);
-    }
-
-    for(var item in json["models"] as List){
-      Model model = Model.createFromJson(item);
-      models.add(model);
-    }
-  }
-
-  @override
-  Future setupScene() {
-    // TODO: implement setupScene
-    return new Future.value();
-  }
 
 }

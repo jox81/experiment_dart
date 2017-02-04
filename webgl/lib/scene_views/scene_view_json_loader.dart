@@ -21,14 +21,27 @@ class SceneViewJsonLoader extends Scene{
 
   String jsonScenePath;
 
-  SceneViewJsonLoader(this.jsonScenePath);
+  SceneViewJsonLoader.createWithFilePath(this.jsonScenePath);
+
+  // Json
+  static Future<Scene> createFromFilePath(String jsonScenePath) async {
+    Map json = await Utils.loadJSONResource('../objects/json_scene.json');
+    Scene scene =  new SceneViewJsonLoader.fromMap(json);
+    return scene;
+  }
+
+  Map json;
+
+  SceneViewJsonLoader.fromMap(this.json){
+    buildJsonScene(json['scene']);
+  }
 
   @override
   Future setupScene() async {
-
-    Map json = await Utils.loadJSONResource(jsonScenePath);
-    buildJsonScene(json['scene']);
-
+    if(json == null && jsonScenePath != null){
+      json = await Utils.loadJSONResource('../objects/json_scene.json');
+      buildJsonScene(json['scene']);
+    }
   }
 
   void buildJsonScene(Map jsonScene){
