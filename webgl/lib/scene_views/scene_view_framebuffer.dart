@@ -27,8 +27,7 @@ class SceneViewFrameBuffer extends Scene{
     //Cameras
     Camera camera = new Camera(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(5.0, 5.0, 5.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(5.0, 5.0, 5.0);
     Context.mainCamera = camera;
 
     //

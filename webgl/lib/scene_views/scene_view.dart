@@ -1,13 +1,11 @@
 import 'dart:async';
 import 'package:webgl/scene_views/scene_view_cubemap.dart';
-import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
-import 'package:webgl/scene_views/scene_view_start.dart';
 import 'package:webgl/scene_views/scene_view_texturing.dart';
 import 'package:webgl/scene_views/scene_view_vectors.dart';
 import 'package:webgl/scene_views/scene_view_webgl_edit.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/scene_views/scene_view_base.dart';
+import 'package:webgl/scene_views/scene_view_tests.dart';
 import 'package:webgl/scene_views/scene_view_experiment/scene_view_experiment.dart';
 import 'package:webgl/scene_views/scene_view_framebuffer.dart';
 import 'package:webgl/scene_views/scene_view_particle.dart';
@@ -21,21 +19,20 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 // - charger  /décharger une scene proprement
 class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
-//  await SceneViewJsonLoader.fromJsonFilePath('./objects/json_scene.json'),
-  new SceneViewJsonLoader(),
-//   new SceneViewStart(),
-//   new SceneViewBase(),
-//   new SceneViewTexturing(),
-//    new SceneViewWebGLEdit(),
-//    new SceneViewVectors(),
-//    new SceneViewCubeMap(),
-//    new SceneViewFrameBuffer(),
-//    new SceneViewParticle(),
-//    new SceneViewParticleSimple(),
-//    new SceneViewPBR(),
-//    new SceneViewPerformanceTest(),
-//    new SceneViewPrimitives(),
-//    new SceneViewShaderLearning01(),
-//    new SceneViewExperiment(),
+  new Scene(),
+//  await Scene.fromJsonFilePath('./objects/json_scene.json'),
+// new SceneViewTests(),
+// new SceneViewTexturing(),
+// new SceneViewWebGLEdit(),
+// new SceneViewVectors(),
+// new SceneViewCubeMap(),
+// new SceneViewFrameBuffer(),
+// new SceneViewParticle(),
+// new SceneViewParticleSimple(),
+// new SceneViewPBR(),
+// new SceneViewPerformanceTest(),
+// new SceneViewPrimitives(),
+// new SceneViewShaderLearning01(),
+// new SceneViewExperiment(),
  ];
 }

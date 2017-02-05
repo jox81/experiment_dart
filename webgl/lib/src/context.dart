@@ -3,6 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/utils.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
@@ -22,8 +23,18 @@ class Context{
   static Camera get mainCamera => _mainCamera;
   static set mainCamera(Camera value) {
     _mainCamera?.isActive = false;
+
     _mainCamera = value;
     _mainCamera.isActive = true;
+    _mainCamera.cameraController = cameraController;
+  }
+
+  static CameraController _cameraController;
+  static CameraController get cameraController{
+    if(_cameraController == null){
+      _cameraController = new CameraController();
+    }
+    return _cameraController;
   }
 
   //Todo : splitter model et view

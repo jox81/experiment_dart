@@ -35,8 +35,7 @@ class SceneViewVectors extends Scene{
     //Cameras
     Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(3.0, 10.0, 10.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(3.0, 10.0, 10.0);
     Context.mainCamera = camera;
 
     matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));

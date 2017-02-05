@@ -20,6 +20,17 @@ class Light extends Object3d{
   void render() {
     // TODO: implement render
   }
+
+  // >> JSON
+
+  factory Light.fromJson(Map json) {
+    return null;
+  }
+
+  Map toJson() {
+    Map json = new Map();
+    return json;
+  }
 }
 
 class AmbientLight extends Light{

@@ -6,11 +6,9 @@ import 'dart:convert';
     override: '*')
 import 'dart:mirrors';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material.dart';
@@ -19,8 +17,10 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_math.dart';
 
-abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
+class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
   @override
   IEditElement currentSelection;
@@ -44,8 +44,7 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
     Context.mainCamera = new
     Camera(radians(25.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 20.0, 20.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(20.0, 20.0, 20.0);
   }
 
   bool _isSetuped = false;
@@ -97,6 +96,11 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   }
 
   @override
+  Future setupScene() {
+    return new Future.value();
+  }
+
+  @override
   void render(){
     for (Model model in models) {
       model.render();
@@ -126,7 +130,7 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
 
   //permet de merger un json à la scene actuelle
   //bug: le controller sur la camera active est perdu
-  void loadJson(String jsonContent) {
+  void mergeJson(String jsonContent) {
     Map json = JSON.decode(jsonContent);
     Map jsonScene = json['scene'];
 
@@ -141,5 +145,61 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
       Model model = new Model.fromJson(item);
       models.add(model);
     }
+  }
+
+  // JSON
+
+  static Future<Scene> fromJsonFilePath(String jsonFilePath) async {
+    Map json = await Utils.loadJSONResource('../objects/json_scene.json');
+    return new Scene.fromJson(json);
+  }
+
+  Scene.fromJson(Map json){
+    Map jsonScene = json['scene'];
+
+    backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"]);
+
+    if(jsonScene["cameras"] != null) {
+      for (var item in jsonScene["cameras"] as List) {
+        Camera camera = new Camera.fromJson(item);
+        cameras.add(camera);
+      }
+
+      if(cameras.length > 0) {
+        Context.mainCamera = cameras[0];
+      }
+    }
+
+    if(jsonScene["lights"] != null) {
+      for (var item in jsonScene["lights"] as List) {
+        Light light = new Light.fromJson(item);
+        lights.add(light);
+      }
+    }
+
+    for(var item in jsonScene["models"] as List){
+      Model model = new Model.fromJson(item);
+      models.add(model);
+    }
+  }
+
+  Map toJson(){
+
+    Map jsonScene = new Map();
+    jsonScene["backgroundColor"] = backgroundColor.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+
+    if(lights.length > 0) {
+      jsonScene["cameras"] = cameras;
+    }
+
+    if(lights.length > 0) {
+      jsonScene["lights"] = lights;
+    }
+
+    jsonScene["models"] = models;
+
+    Map json = new Map();
+    json['scene'] = jsonScene;
+    return json;
   }
 }

@@ -40,7 +40,6 @@ class SceneViewPrimitives extends Scene{
     camera = new Camera(radians(45.0), 5.0, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(5.0, 7.5, 10.0)
-      ..cameraController = new CameraController()
       ..showGizmo = true;
     cameras.add(camera);
     Context.mainCamera = camera;
@@ -48,7 +47,6 @@ class SceneViewPrimitives extends Scene{
 //    camera2 = new Camera(radians(37.0), 0.5, 10.0)
 //      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
 //      ..position = new Vector3(2.0, 2.0, 2.0)
-//      ..cameraController = new CameraController()
 //      ..showGizmo = true;
 //    models.add(camera2);
 
@@ -56,7 +54,6 @@ class SceneViewPrimitives extends Scene{
 //      ..aspectRatio = Context.viewAspectRatio
 //      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
 //      ..position = new Vector3(10.0, 10.0, 10.0)
-//      ..cameraController = new CameraController()
 //      ..showGizmo = true;
 //    models.add(camera3);
 

@@ -35,8 +35,7 @@ class SceneViewTexturing extends Scene{
     Context.mainCamera = new
     Camera(radians(25.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 20.0, 20.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(20.0, 20.0, 20.0);
 
     //Lights
     ambientLight.color.setFrom(ambientColor);

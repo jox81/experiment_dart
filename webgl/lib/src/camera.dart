@@ -12,6 +12,7 @@ import 'package:webgl/src/models.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/utils_math.dart';
 
 class Camera extends Object3d {
 
@@ -180,11 +181,11 @@ class Camera extends Object3d {
 
   Map toJson(){
     Map json = new Map();
-    json['fov'] = _fov;//.toDouble();
-    json['zNear'] = _zNear;//.toDouble();
-    json['zFar'] = _zFar;//.toDouble();
-    json['targetPosition'] = targetPosition.storage;//.map((v)=>v.toDouble()).toList();
-    json['position'] = position.storage;//.map((v)=>v.toDouble()).toList();
+    json['fov'] = UtilsMath.roundPrecision(_fov);//.toDouble();
+    json['zNear'] = UtilsMath.roundPrecision(_zNear);//.toDouble();
+    json['zFar'] = UtilsMath.roundPrecision(_zFar);//.toDouble();
+    json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
+    json['position'] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     json['showGizmo'] = showGizmo;
     return json;
   }

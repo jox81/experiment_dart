@@ -6,6 +6,7 @@ import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/material.dart';
 import 'package:webgl/src/meshes.dart';
 import 'package:webgl/src/materials.dart';
+import 'package:webgl/src/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(targets: const [
   ModelType,
@@ -53,10 +54,6 @@ enum ModelType {
 }
 
 abstract class Model extends Object3d {
-  //Todo : S'assurer que les noms soient uniques ?!
-  String _name = '';
-  String get name => _name;
-  set name(String value) => _name = value;
 
   ModelType modelType;
 
@@ -155,17 +152,24 @@ abstract class Model extends Object3d {
     ModelType modelType = ModelType.values.firstWhere(
         (m) => m.toString() == json["type"],
         orElse: () => null);
-    Model model = new Model.createByType(modelType, doInitMaterial: true)
+
+    Object3d object3d = new Model.createByType(modelType, doInitMaterial: true)
       ..name = json["name"]
-      ..position = new Vector3.fromFloat32List(json["position"]);
-    return model;
+//      ..position = new Vector3.fromFloat32List(json["position"])
+//      ..rotation = new Matrix3.fromList(json["rotation"])
+//      ..scale = ??;
+    ..transform = new Matrix4.fromList(json["transform"]);
+    return object3d;
   }
 
   Map toJson() {
     Map json = new Map();
     json["type"] = modelType.toString();
     json["name"] = name;
-    json["position"] = position.storage;//.map((v)=>v.toDouble()).toList();
+//    json["position"] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+//    json["rotation"] = rotation.storage;//.map((v)=>UtilsMath.roundPrecision(v)).toList();
+//    json["scale"] = ??;
+    json["transform"] = transform.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     return json;
   }
 }

@@ -11,17 +11,17 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @MirrorsUsed(
     targets: const [
-      SceneViewBase,
+      SceneViewTests,
     ],
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewBase extends Scene{
+class SceneViewTests extends Scene{
 
 //  @override
 //  bool isEditing = true;
 
-  SceneViewBase();
+  SceneViewTests();
 
   @override
   Future setupScene() async {
@@ -38,8 +38,7 @@ class SceneViewBase extends Scene{
     Context.mainCamera = new
     Camera(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 20.0, 20.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(20.0, 20.0, 20.0);
 
     //Lights
     ambientLight.color.setFrom(ambientColor);

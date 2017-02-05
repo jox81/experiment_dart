@@ -55,8 +55,7 @@ class Webgl01 {
   setupCamera() {
     Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(0.0,5.0,10.0)
-      ..cameraController = new CameraController();
+      ..position = new Vector3(0.0,5.0,10.0);
   }
 
   void buildMeshData() {

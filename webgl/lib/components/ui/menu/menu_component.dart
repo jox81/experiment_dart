@@ -1,8 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:webgl/directives/clickoutside_directive.dart';
-import 'package:webgl/scene_views/scene_view_json_loader.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
@@ -48,6 +48,14 @@ class MenuComponent{
 
   // >> Files
 
+  Future<bool> reset(Event event)async {
+    Scene newScene = new Scene();
+    await newScene.setup();
+    Application.currentScene = newScene;
+    closeAllMenus();
+    return false;
+  }
+
   bool download(Event event){
 
     String fileName = 'scene.json';
@@ -65,7 +73,7 @@ class MenuComponent{
     FileReader reader = new FileReader()..readAsText(file);
     reader.onLoadEnd.listen((_)async {
       String jsonContent = reader.result;
-      Scene newScene = new SceneViewJsonLoader.fromJson(JSON.decode(jsonContent));
+      Scene newScene = new Scene.fromJson(JSON.decode(jsonContent));
       await newScene.setup();
       Application.currentScene = newScene;
     });
