@@ -1,4 +1,5 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/Object3d.dart';
 import 'package:webgl/src/models.dart';
 @MirrorsUsed(
     targets: const [

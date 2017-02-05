@@ -6,6 +6,7 @@
 import 'dart:mirrors';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/scene_views/scene_view_json_loader.dart';
+import 'package:webgl/src/Object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -78,7 +79,7 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   }
 
   void createModelByType(ModelType modelType){
-    add(Model.createByType(modelType));
+    add(new Model.createByType(modelType));
   }
 
   void assignMaterial(MaterialType materialType) {

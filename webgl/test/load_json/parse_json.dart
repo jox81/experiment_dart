@@ -14,7 +14,7 @@ import 'package:webgl/src/utils.dart';
 
 Future main() async {
 
-  var testJson = await Utils.loadJSONResource('../objects/json_values.json');
+  Map testJson = await Utils.loadJSONResource('../objects/json_values.json');
 
   setUp(() async {
   });
@@ -22,7 +22,7 @@ Future main() async {
   tearDown(() async {
   });
 
-  group("json parse", () {
+  group("json read", () {
     test("int", () {
       int value = testJson['int'] as int;
       expect(value == 120, isTrue);
@@ -53,11 +53,26 @@ Future main() async {
       expect(value == new Vector3(10.0,15.0,20.0), isTrue);
     });
 
-    // >> vector3Object
-//    test("vector3Object", () {
-//      Vector3 value = testJson['vector3Object'] as Vector3;
-//      expect(value.x == 25.0, isTrue);
-//    });
+  });
+
+  group("json write", () {
+    test("change compare", () {
+      String jsonString = '{"int":12}';
+      Map jsonMap = JSON.decode(jsonString);
+      String jsonEncoded = (JSON.encode(jsonMap));
+      expect(jsonString == jsonEncoded, isTrue);
+    });
+    test("change value", () {
+      String jsonString = '{"int":12}';
+      Map jsonMap = JSON.decode(jsonString);
+
+      jsonMap['int'] += 5;
+
+      String jsonEncoded = (JSON.encode(jsonMap));
+      expect(jsonEncoded == '{"int":17}', isTrue);
+    });
   });
 
 }
+
+

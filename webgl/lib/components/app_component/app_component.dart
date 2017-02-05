@@ -69,9 +69,8 @@ class AppComponent implements OnInit{
   @override
   ngOnInit() async {
     application = await Application.create(canvasComponent.canvas);
-    scenes = ServiceScene.getSceneViews();
+    scenes = await ServiceScene.getSceneViews();
     await switchScene ();
-//    isEditing = currentScene.isEditing;
   }
 
   bool isEditing = true;

@@ -7,7 +7,7 @@ import 'package:webgl/src/scene.dart';
 Future main() async {
   CanvasElement canvas = querySelector('#glCanvas');
   Application application = await Application.create(canvas);
-  Scene scene = ServiceScene.getSceneViews()[0];
+  Scene scene = await ServiceScene.getSceneViews().then((s) => s[0]);
   await scene.setup();
   application.render(scene);
 }

@@ -1,6 +1,14 @@
 <!-- menu -->
 <ul clickOutside (clickOutside)="closeAllMenus()">
-    <li><a>File</a></li>
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId0')">
+        <a href="javascript:void(0)"
+           class="dropbtn"
+           (click)="headerClick('headerId0')">File</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId0')">
+            <a href="#" (click)="loadFile()">open scene - json</a>
+            <a href="#" (click)="download($event)">download scene - json</a>
+        </div>
+    </li>
     <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId1')">
         <a href="javascript:void(0)"
            class="dropbtn"

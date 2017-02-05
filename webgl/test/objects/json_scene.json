@@ -26,7 +26,7 @@
     ],
     "models": [
       {
-        "type": "quad",
+        "type": "ModelType.quad",
         "name": "quad",
         "position": [
           5.0,
@@ -35,7 +35,7 @@
         ]
       },
       {
-        "type": "cube",
+        "type": "ModelType.cube",
         "name": "cube",
         "position": [
           0.0,

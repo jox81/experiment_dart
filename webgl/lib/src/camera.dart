@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
+import 'package:webgl/src/Object3d.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
@@ -166,12 +167,26 @@ class Camera extends Object3d {
     return 'camera position : $position -> target : $targetPosition';
   }
 
-  static Camera createFromJson(Map json) {
-    Camera camera =  new Camera(json['fov'] as num, json['zNear'] as num, json['zFar'] as num);
-    camera.targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition']));
-    camera.position = new Vector3.fromFloat32List(new Float32List.fromList(json['position']));
-    camera.showGizmo = json['showGizmo'] as bool;
-    return camera;
+  // >> JSON
+
+  Camera.fromJson(Map json) {
+    _fov = json['fov'] as num;
+    _zNear = json['zNear'] as num;
+    _zFar = json['zFar'] as num;
+    targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition']));
+    position = new Vector3.fromFloat32List(new Float32List.fromList(json['position']));
+    showGizmo = json['showGizmo'] as bool;
+  }
+
+  Map toJson(){
+    Map json = new Map();
+    json['fov'] = _fov;//.toDouble();
+    json['zNear'] = _zNear;//.toDouble();
+    json['zFar'] = _zFar;//.toDouble();
+    json['targetPosition'] = targetPosition.storage;//.map((v)=>v.toDouble()).toList();
+    json['position'] = position.storage;//.map((v)=>v.toDouble()).toList();
+    json['showGizmo'] = showGizmo;
+    return json;
   }
 }
 

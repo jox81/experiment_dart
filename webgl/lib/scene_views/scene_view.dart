@@ -20,8 +20,8 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 // - créer un vrai service angular ?
 // - charger  /décharger une scene proprement
 class ServiceScene {
- static  List<Scene> getSceneViews() => [
-   new SceneViewJsonLoader.createWithFilePath('./objects/json_scene.json'),
+ static  Future<List<Scene>> getSceneViews() async => [
+  await SceneViewJsonLoader.fromJsonFilePath('./objects/json_scene.json'),
 //   new SceneViewStart(),
 //   new SceneViewBase(),
 //   new SceneViewTexturing(),

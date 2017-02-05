@@ -7,13 +7,13 @@ import 'package:angular2/core.dart';
     styleUrls: const ['canvas_component.css'])
 class CanvasComponent implements AfterViewInit{
 
-  @ViewChild("myCanvas")
-  ElementRef myCanvas;
+  @ViewChild("appCanvas")
+  ElementRef appCanvas;
 
   CanvasElement canvas;
 
   @override
   ngAfterViewInit() {
-    canvas = myCanvas.nativeElement;
+    canvas = appCanvas.nativeElement;
   }
 }

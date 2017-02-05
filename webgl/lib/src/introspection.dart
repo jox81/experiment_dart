@@ -1,3 +1,4 @@
+import 'dart:convert';
 @MirrorsUsed(targets:const[IntrospectionManager, IEditElement, CustomEditElement], override:'*')
 import 'dart:mirrors';
 import 'package:webgl/src/animation_property.dart';
@@ -18,24 +19,25 @@ class IntrospectionManager {
   Map<String, EditableProperty> getPropertiesInfos(dynamic element) {
     Map<String, EditableProperty> propertiesInfos = {};
 
-    InstanceMirror instance_mirror = reflect(element);
-    var class_mirror = instance_mirror.type;
+    InstanceMirror im = reflect(element);
+    ClassMirror cm = im.type;
 
     Map<String, MethodMirror> instance_mirror_getters = new Map();
     Map<String, MethodMirror> instance_mirror_setters = new Map();
     Map<String, MethodMirror> instance_mirror_functions = new Map();
 
-    for (DeclarationMirror v in class_mirror.instanceMembers.values) {
-      String name = MirrorSystem.getName(v.simpleName);
+    for (DeclarationMirror dm in cm.instanceMembers.values) {
+      String name = MirrorSystem.getName(dm.simpleName);
 
-      if (v is VariableMirror) {} else if (v is MethodMirror &&
-          v.isGetter &&
-          !v.isPrivate && MirrorSystem.getName(v.owner.simpleName) != "Object") {
-        instance_mirror_getters[name] = v;
-      } else if (v is MethodMirror && v.isSetter && !v.isPrivate) {
-        instance_mirror_setters[name] = v;
-      } else if (v is MethodMirror && v.isRegularMethod && MirrorSystem.getName(v.owner.simpleName) != "Object") {
-        instance_mirror_functions[name] = v;
+      if (dm is VariableMirror) {}
+      else if (dm is MethodMirror &&
+          dm.isGetter &&
+          !dm.isPrivate && MirrorSystem.getName(dm.owner.simpleName) != "Object") {
+        instance_mirror_getters[name] = dm;
+      } else if (dm is MethodMirror && dm.isSetter && !dm.isPrivate) {
+        instance_mirror_setters[name] = dm;
+      } else if (dm is MethodMirror && dm.isRegularMethod && MirrorSystem.getName(dm.owner.simpleName) != "Object") {
+        instance_mirror_functions[name] = dm;
       }
     }
 
@@ -61,11 +63,11 @@ class IntrospectionManager {
         PropertyGetter getter;
         PropertySetter setter;
 
-        type = instance_mirror.getField(fieldSymbol).reflectee.runtimeType;
-        getter = () => instance_mirror.getField(fieldSymbol).reflectee;
+        type = im.getField(fieldSymbol).reflectee.runtimeType;
+        getter = () => im.getField(fieldSymbol).reflectee;
 
         if (instance_mirror_setters.containsKey('$key=')) {
-          setter = (v) => instance_mirror.setField(fieldSymbol, v).reflectee;
+          setter = (v) => im.setField(fieldSymbol, v).reflectee;
         } else {
           setter = null;
         }
@@ -76,12 +78,12 @@ class IntrospectionManager {
 
     //Rempli les fonctions
     for (String key in instance_mirror_functions.keys) {
-      MethodMirror methodMirror = instance_mirror_functions[key];
+      MethodMirror mm = instance_mirror_functions[key];
 
-      Symbol fieldSymbol = methodMirror.simpleName;
+      Symbol fieldSymbol = mm.simpleName;
 
-      Function function = instance_mirror.getField(fieldSymbol).reflectee;
-      FunctionModel functionModel = new FunctionModel(function, instance_mirror, methodMirror);
+      Function function = im.getField(fieldSymbol).reflectee;
+      FunctionModel functionModel = new FunctionModel(function, im, mm);
 
       propertiesInfos[key] = new EditableProperty(FunctionModel,
           () => functionModel, null);
@@ -318,6 +320,24 @@ abstract class IEditElement {
       elementToCheck = (this as CustomEditElement).element;
     }
     return IntrospectionManager.instance.getPropertiesInfos(elementToCheck);
+  }
+
+  ///From : http://stackoverflow.com/questions/20024298/add-json-serializer-to-every-model-class
+  ///The toJson method is necessary to use JSON.encode(..)
+  Map toJson() {
+    Map map = new Map();
+
+    InstanceMirror im = reflect(this);
+    ClassMirror cm = im.type;
+
+    var decls = cm.declarations.values.where((dm) => dm is VariableMirror);
+    decls.forEach((dm) {
+      var key = MirrorSystem.getName(dm.simpleName);
+      var val = im.getField(dm.simpleName).reflectee;
+      map[key] = val;
+    });
+
+    return map;
   }
 }
 

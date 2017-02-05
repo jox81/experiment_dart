@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:webgl/directives/clickoutside_directive.dart';
 import 'package:webgl/src/context.dart';
@@ -20,6 +22,7 @@ class MenuComponent{
   Scene currentScene;
 
   Map<String, bool> openedMenus = {
+    'headerId0' : false,
     'headerId1' : false,
     'headerId2' : false,
     'headerId3' : false
@@ -40,6 +43,20 @@ class MenuComponent{
 
   void closeThisMenus(String headerId){
     openedMenus[headerId] = false;
+  }
+
+  // >> Files
+
+  download(Event event){
+
+    String fileName = 'scene.json';
+    String content = Uri.encodeFull(JSON.encode(currentScene.toJson()));
+
+//    event.matchingTarget as AnchorElement
+    AnchorElement anchor = event.currentTarget as AnchorElement;
+    anchor.href = 'data:text/plain;charset=utf-8,' + content;
+    anchor.download = fileName;
+    closeAllMenus();
   }
 
   // >> Models

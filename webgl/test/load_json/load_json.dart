@@ -39,23 +39,23 @@ Future main() async {
 
   group("test camera", () {
     test("test camera creation", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera != null,isTrue);
     });
     test("test camera fov", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera.fov == 25.0,isTrue);
     });
     test("test camera zNear", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera.zNear == 0.1,isTrue);
     });
     test("test camera zFar", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera.zFar == 100.0,isTrue);
     });
     test("test camera targetPosition", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
     });
     test("test camera targetPosition new", () {
@@ -64,7 +64,7 @@ Future main() async {
       expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
     });
     test("test camera position", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera position new", () {
@@ -73,24 +73,24 @@ Future main() async {
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera showGizmo", () {
-      Camera camera = Camera.createFromJson(testJson['scene']['cameras'][0]);
+      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
       expect(camera.showGizmo,isTrue);
     });
   });
 
   group("test model 01", () {
     test("test model", () {
-      Model model = Model.createFromJson(testJson['scene']['models'][0]);
+      Model model = new Model.fromJson(testJson['scene']['models'][0]);
 
       expect(model is QuadModel,isTrue);
     });
     test("test model name", () {
-      Model model = Model.createFromJson(testJson['scene']['models'][0]);
+      Model model = new Model.fromJson(testJson['scene']['models'][0]);
 
       expect(model.name == 'quad',isTrue);
     });
     test("test model position", () {
-      Model model = Model.createFromJson(testJson['scene']['models'][0]);
+      Model model = new Model.fromJson(testJson['scene']['models'][0]);
 
       expect(model.position == new Vector3(5.0, 0.0, -5.0),isTrue);
     });
@@ -98,28 +98,28 @@ Future main() async {
 
   group("test model 02", () {
     test("test model", () {
-      Model model = Model.createFromJson(testJson['scene']['models'][1]);
+      Model model = new Model.fromJson(testJson['scene']['models'][1]);
 
       expect(model is CubeModel,isTrue);
     });
     test("test model name", () {
-      Model model = Model.createFromJson(testJson['scene']['models'][1]);
+      Model model = new Model.fromJson(testJson['scene']['models'][1]);
       expect(model.name == 'cube',isTrue);
     });
     test("test model position", () {
-      Model model = Model.createFromJson(testJson['scene']['models'][1]);
+      Model model = new Model.fromJson(testJson['scene']['models'][1]);
       expect(model.position == new Vector3(0.0, 0.0, 0.0),isTrue);
     });
   });
 
   group("test scene", () {
     test("scene creation", () {
-      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
+      Scene scene = new SceneViewJsonLoader.fromJson(testJson);
       expect(scene,isNotNull);
     });
 
     test("scene background color", () {
-      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
+      Scene scene = new SceneViewJsonLoader.fromJson(testJson);
       expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
       1.0,
       0.2,
@@ -127,12 +127,12 @@ Future main() async {
     });
 
     test("scene camera", () {
-      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
+      Scene scene = new SceneViewJsonLoader.fromJson(testJson);
       expect(scene.cameras.length == 1, isTrue);
     });
 
     test("scene models", () {
-      Scene scene = new SceneViewJsonLoader.fromMap(testJson);
+      Scene scene = new SceneViewJsonLoader.fromJson(testJson);
       expect(scene.models.length == 2, isTrue);
     });
   });

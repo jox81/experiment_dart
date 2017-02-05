@@ -12,7 +12,7 @@
         "zNear": 0.1,
         "zFar": 100,
         "targetPosition": [
-          3.0,
+          0.0,
           0.0,
           0.0
         ],
@@ -26,7 +26,7 @@
     ],
     "models": [
       {
-        "type": "quad",
+        "type": "ModelType.quad",
         "name": "quad",
         "position": [
           5.0,
@@ -35,11 +35,11 @@
         ]
       },
       {
-        "type": "cube",
+        "type": "ModelType.cube",
         "name": "cube",
         "position": [
           0.0,
-          5.0,
+          0.0,
           0.0
         ]
       }
