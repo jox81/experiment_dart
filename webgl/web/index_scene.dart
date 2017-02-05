@@ -9,5 +9,6 @@ Future main() async {
   Application application = await Application.create(canvas);
   Scene scene = await ServiceScene.getSceneViews().then((s) => s[0]);
   await scene.setup();
-  application.render(scene);
+  Application.currentScene = scene;
+  application.render();
 }

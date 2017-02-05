@@ -35,6 +35,7 @@ li.dropdown {
     display: inline-block;
 }
 
+/* menu panel */
 .dropdown-content {
     display: none;
     position: absolute;
@@ -49,10 +50,38 @@ li.dropdown {
     text-decoration: none;
     display: block;
     text-align: left;
+    cursor: pointer;
 }
 
-.dropdown-content a:hover {background-color: #f3f3f3}
+.dropdown-content a:hover{
+    background-color: #f3f3f3
+}
 
 .show {
     display:block;
 }
+
+/*input download file*/
+
+div #inputJson {
+    position:relative;
+}
+#inputJson a {
+  position: relative;
+  overflow: hidden;
+}
+#inputJson div:hover a {
+  color: red;
+}
+#inputJson a+input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height:100%;
+  width:100%;
+  opacity: 0;
+  font-size:0;
+  cursor:pointer;
+  /*border:1px solid red;*//*debug*/
+}
+

@@ -5,8 +5,8 @@
            class="dropbtn"
            (click)="headerClick('headerId0')">File</a>
         <div class="dropdown-content" [class.show]="isMenuVisible('headerId0')">
-            <a href="#" (click)="loadFile()">open scene - json</a>
-            <a href="#" (click)="download($event)">download scene - json</a>
+            <div id="inputJson"><a href='#'>Load scene</a><input type='file' (click)="closeThisMenus('headerId0')" (change)="open($event)"/></div>
+            <a href="#" (click)="download($event)">Save scene</a>
         </div>
     </li>
     <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId1')">

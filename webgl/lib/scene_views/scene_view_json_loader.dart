@@ -25,18 +25,6 @@ class SceneViewJsonLoader extends Scene{
   @override
   Future setupScene() async {
 
-    Element canvas = querySelector('#appCanvas');
-
-    String fileName = 'scene.json';
-    String content = Uri.encodeFull(JSON.encode(toJson()));
-
-    AnchorElement pom = new AnchorElement();
-    pom.text = 'down';
-    pom.href = 'data:text/plain;charset=utf-8,' + content;
-    pom.download = fileName;
-
-    canvas.parent.children.add(pom);
-
   }
 
   // JSON
@@ -72,24 +60,5 @@ class SceneViewJsonLoader extends Scene{
     Map json = new Map();
     json['scene'] = jsonScene;
     return json;
-  }
-
-  void download(filename, text) {
-    AnchorElement pom = new AnchorElement();
-    pom.text = 'down';
-    pom.href = 'data:text/plain;charset=utf-8,' + Uri.encodeFull(text);
-    pom.download = filename;
-    Element fps = querySelector('#fps');
-    fps.children.add(pom);
-
-//
-//    if (document.createEvent) {
-//      var event = document.createEvent('MouseEvents');
-//      event.initEvent('click', true, true);
-//      pom.dispatchEvent(event);
-//    }
-//    else {
-//      pom.click();
-//    }
   }
 }

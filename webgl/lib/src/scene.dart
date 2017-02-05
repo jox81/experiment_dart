@@ -1,3 +1,4 @@
+import 'dart:convert';
 @MirrorsUsed(
     targets: const [
       Scene,
@@ -6,7 +7,7 @@
 import 'dart:mirrors';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/scene_views/scene_view_json_loader.dart';
-import 'package:webgl/src/Object3d.dart';
+import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -123,5 +124,22 @@ abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScen
   @override
   UpdateUserInput updateUserInputFunction;
 
+  //permet de merger un json à la scene actuelle
+  //bug: le controller sur la camera active est perdu
+  void loadJson(String jsonContent) {
+    Map json = JSON.decode(jsonContent);
+    Map jsonScene = json['scene'];
 
+    backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"]);
+
+    for(var item in jsonScene["cameras"] as List){
+      Camera camera = new Camera.fromJson(item);
+      cameras.add(camera);
+    }
+
+    for(var item in jsonScene["models"] as List){
+      Model model = new Model.fromJson(item);
+      models.add(model);
+    }
+  }
 }

@@ -20,7 +20,7 @@ import 'package:webgl/src/ui_models/toolbar.dart';
 class AppComponent implements OnInit{
 
   Application application;
-  Scene currentScene;
+  Scene get currentScene => Application.currentScene;
 
   IEditElement _currentElement;
   IEditElement get currentElement {
@@ -45,9 +45,9 @@ class AppComponent implements OnInit{
     sceneId++;
     sceneId %= scenes.length;
 
-    currentScene = scenes[sceneId];
-    await currentScene.setup();
-    application.render(currentScene);
+    await scenes[sceneId].setup();
+    Application.currentScene = scenes[sceneId];
+    application.render();
   }
 
   void selectElement(IEditElement element){

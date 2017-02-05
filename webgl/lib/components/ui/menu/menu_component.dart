@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:html';
 import 'package:angular2/core.dart';
 import 'package:webgl/directives/clickoutside_directive.dart';
+import 'package:webgl/scene_views/scene_view_json_loader.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
@@ -18,8 +20,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
     directives: const [ClickOutsideDirective])
 class MenuComponent{
 
-  @Input()
-  Scene currentScene;
+  Scene get currentScene => Application.currentScene;
 
   Map<String, bool> openedMenus = {
     'headerId0' : false,
@@ -47,15 +48,27 @@ class MenuComponent{
 
   // >> Files
 
-  download(Event event){
+  bool download(Event event){
 
     String fileName = 'scene.json';
     String content = Uri.encodeFull(JSON.encode(currentScene.toJson()));
 
-//    event.matchingTarget as AnchorElement
     AnchorElement anchor = event.currentTarget as AnchorElement;
     anchor.href = 'data:text/plain;charset=utf-8,' + content;
     anchor.download = fileName;
+    closeAllMenus();
+    return true; //need to continue link effect
+  }
+
+  open(Event event){
+    File file = (event.target as FileUploadInputElement).files[0];
+    FileReader reader = new FileReader()..readAsText(file);
+    reader.onLoadEnd.listen((_)async {
+      String jsonContent = reader.result;
+      Scene newScene = new SceneViewJsonLoader.fromJson(JSON.decode(jsonContent));
+      await newScene.setup();
+      Application.currentScene = newScene;
+    });
     closeAllMenus();
   }
 

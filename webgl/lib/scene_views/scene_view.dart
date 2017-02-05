@@ -21,7 +21,8 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 // - charger  /décharger une scene proprement
 class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
-  await SceneViewJsonLoader.fromJsonFilePath('./objects/json_scene.json'),
+//  await SceneViewJsonLoader.fromJsonFilePath('./objects/json_scene.json'),
+  new SceneViewJsonLoader(),
 //   new SceneViewStart(),
 //   new SceneViewBase(),
 //   new SceneViewTexturing(),

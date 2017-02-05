@@ -1,5 +1,5 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/Object3d.dart';
+import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/interface/IScene.dart';

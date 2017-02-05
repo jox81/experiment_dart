@@ -22,6 +22,10 @@ class Application {
 
   static IUpdatableScene _currentScene;
   static IUpdatableScene get currentScene => _currentScene;
+  static set currentScene(IUpdatableScene value) {
+    _currentScene = null;
+    _currentScene = value;
+  }
 
   CanvasElement _canvas;
 
@@ -133,8 +137,7 @@ class Application {
     }
   }
 
-  void render(IUpdatableScene scene) {
-    _currentScene = scene;
+  void render() {
     resizeCanvas();
     _render();
   }
