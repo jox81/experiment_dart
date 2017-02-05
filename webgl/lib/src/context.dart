@@ -4,13 +4,11 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
 import 'package:webgl/src/context/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/utils.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/render_setting.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 @MirrorsUsed(
     targets: const [
       Context,
-      RenderSetting,
     ],
     override: '*')
 import 'dart:mirrors';
@@ -94,53 +92,5 @@ class Context{
   static WebglParameters get webglParameters => WebglParameters.instance();
 }
 
-class RenderSetting{
-  RenderSetting();
-
-  void showBackFace(bool visible){
-    if(!visible) {
-      gl.cullFace = true;
-      gl.cullFaceMode = FacingType.BACK;
-    }
-  }
-
-  void enableDepth(bool enable) {
-    if(enable) {
-      gl.clear([ClearBufferMask.DEPTH_BUFFER_BIT]);
-      gl.depthTest = true;
-    }
-  }
-
-  void logSupportedExtensions(){
-    Utils.log('Supported extensions',(){
-      for(String extension in gl.supportedExtensions){
-        print(extension);
-      }
-    });
-  }
-
-  void enableExtensions({bool log : false}) {
-    List<String> extensionNames = [
-      'OES_texture_float',
-      'OES_depth_texture',
-      'WEBGL_depth_texture',
-      'WEBKIT_WEBGL_depth_texture',
-    ];
-
-    Map extensions = new Map();
-    for(String extensionName in extensionNames){
-      var extension = gl.getExtension(extensionName);
-      extensions[extensionName] = extension;
-    }
-
-    if(log) {
-      Utils.log('Enabling extensions', () {
-        extensions.forEach((key, value) {
-          print('$key : ${(value != null) ? 'enabled' : 'not available'}');
-        });
-      });
-    }
-  }
-}
 
 

@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -156,7 +156,7 @@ class WebGLProgram extends WebGLObject{
   int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
 
   void logProgramInfos() {
-    Utils.log("Program Infos", () {
+    UtilsAssets.log("Program Infos", () {
       print('isProgram : ${isProgram}');
       print('linkStatus : ${linkStatus}');
       print('validateStatus : ${validateStatus}');

@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/utils_geometry.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -19,7 +19,7 @@ Map susanJson;
 Future main() async {
 
   await ShaderSource.loadShaders();
-  susanJson = await Utils.loadJSONResource('../objects/susan/susan.json');
+  susanJson = await UtilsAssets.loadJSONResource('../objects/susan/susan.json');
 
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
   webgl01.setup();
@@ -206,13 +206,13 @@ class Webgl01 {
 
     List<Model> modelsHit = [triangleModel, triangleModel2];
 
-    models.addAll(Utils.drawModelVertices(modelsHit[0]));
+    models.addAll(UtilsGeometry.drawModelVertices(modelsHit[0]));
 
     gl.canvas.onMouseUp.listen((MouseEvent e) {
-      Ray ray = Utils.findRay(Context.mainCamera, e.offset.x, e.offset.y);
+      Ray ray = UtilsGeometry.findRay(Context.mainCamera, e.offset.x, e.offset.y);
 
-      models.addAll(Utils.findModelHitPoint(modelsHit[1],ray));
-      print(Utils.findModelHit(modelsHit, ray)?.name);
+      models.addAll(UtilsGeometry.findModelHitPoint(modelsHit[1],ray));
+      print(UtilsGeometry.findModelHit(modelsHit, ray)?.name);
     });
 
   }

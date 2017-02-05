@@ -1,6 +1,6 @@
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 @MirrorsUsed(
@@ -57,7 +57,7 @@ class WebGLBuffer extends WebGLObject{
 
 
   void logBufferInfos() {
-    Utils.log("Buffer Infos", () {
+    UtilsAssets.log("Buffer Infos", () {
       print('isBuffer : ${isBuffer}');
 
       print('..................................................................');

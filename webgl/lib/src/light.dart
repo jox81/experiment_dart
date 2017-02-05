@@ -12,7 +12,16 @@ import 'package:webgl/src/models.dart';
     override: '*')
 import 'dart:mirrors';
 
-class Light extends Object3d{
+enum LightType {
+  ambient,
+  point,
+  directional,
+}
+
+abstract class Light extends Object3d {
+
+  LightType lightType;
+
   Vector3 color;
   Light();
 
@@ -34,12 +43,16 @@ class Light extends Object3d{
 }
 
 class AmbientLight extends Light{
+  LightType get lightType => LightType.ambient;
+
   AmbientLight() {
     color = new Vector3(1.0, 1.0, 1.0);
   }
 }
 
 class PointLight extends Light{
+  LightType get lightType => LightType.point;
+
   Vector3 position;
 
   PointLight() {
@@ -49,6 +62,8 @@ class PointLight extends Light{
 }
 
 class DirectionalLight extends Light{
+  LightType get lightType => LightType.directional;
+
   Vector3 direction;
 
   DirectionalLight() {

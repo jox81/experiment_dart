@@ -10,11 +10,11 @@ import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 Future main() async {
 
-  Map testJson = await Utils.loadJSONResource('../objects/json_values.json');
+  Map testJson = await UtilsAssets.loadJSONResource('../objects/json_values.json');
 
   setUp(() async {
   });

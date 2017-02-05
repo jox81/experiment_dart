@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -80,8 +80,8 @@ class WebglTest {
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
         64,
@@ -118,8 +118,8 @@ class WebglTest {
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//        TextureAttachmentTarget.TEXTURE_2D,
         0,
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
         64,
@@ -177,8 +177,8 @@ class WebglTest {
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
     try {
-      gl.activeTexture.texImage2DWithWidthAndHeight(
-          TextureAttachmentTarget.TEXTURE_2D,
+      gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
           width,
@@ -189,7 +189,7 @@ class WebglTest {
           null);
     } catch (e) {
       // https://code.google.com/p/dart/issues/detail?id=11498
-      Utils.log("gl.texImage2D: exception: $e", null);
+      UtilsAssets.log("gl.texImage2D: exception: $e", null);
     }
 
     // 2. Init Render Buffer

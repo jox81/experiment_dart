@@ -1,7 +1,7 @@
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/context/webgl_constants.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 class WebglParameters{
 
@@ -33,7 +33,7 @@ class WebglParameters{
   }
 
   void logValues() {
-    Utils.log('Webgl Parameters',(){
+    UtilsAssets.log('Webgl Parameters',(){
       values.forEach((p) {
         print('${p.toString()}');
       });
@@ -71,7 +71,7 @@ class WebglParameters{
   }
 
   void testGetParameter() {
-    Utils.log('Test Get Parameters',(){
+    UtilsAssets.log('Test Get Parameters',(){
       print('TEXTURE0 : 0x84C0 = ${0x84C0}'); // == 33984
       print('ACTIVE_TEXTURE : 0x84E0 = ${0x84E0}'); // == 34016
       print(Context.webglParameters.getParameter(RenderingContext.ACTIVE_TEXTURE));

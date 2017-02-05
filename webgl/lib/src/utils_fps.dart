@@ -15,7 +15,7 @@ class UtilsFps {
     timeNow = new DateTime.now();
     fps++;
 
-    if ( timeNow.millisecondsSinceEpoch - timeLast.millisecondsSinceEpoch >= 1000) {
+    if (timeNow.millisecondsSinceEpoch - timeLast.millisecondsSinceEpoch >= 1000) {
 
       _computedFps = fps * 1000.0 / (timeNow.millisecondsSinceEpoch - timeLast.millisecondsSinceEpoch);
 

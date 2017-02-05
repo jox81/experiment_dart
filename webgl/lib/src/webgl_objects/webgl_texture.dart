@@ -7,7 +7,7 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
@@ -37,7 +37,7 @@ class WebGLTexture extends EditTexture {
   void delete() => gl.ctx.deleteTexture(webGLTexture);
 
   void logTextureInfos() {
-    Utils.log("WebGLTexture Infos", () {
+    UtilsAssets.log("WebGLTexture Infos", () {
 
       print('editTextureUnit : ${editTextureUnit}');
       print('webGLTexture : ${webGLTexture}');
@@ -203,8 +203,7 @@ class TextureUtils {
         TextureMagnificationFilterType.LINEAR);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    gl.activeTexture.texImage2D(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2D(
         0,
         TextureInternalFormat.RGBA,
         TextureInternalFormat.RGBA,
@@ -231,8 +230,7 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
         0,
         TextureInternalFormat.RGBA,
         size,
@@ -263,8 +261,7 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.MIRRORED_REPEAT);
 //    gl.activeTexture.textureCubeMap.generateMipmap();
 
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_CUBE_MAP_POSITIVE_X,
+    gl.activeTexture.textureCubeMap.attachmentPositiveX.texImage2DWithWidthAndHeight(
         0,
         TextureInternalFormat.RGBA,
         size,
@@ -300,8 +297,7 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
     gl.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
         0,
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
         size,
@@ -546,8 +542,8 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
     for (int i = 0; i < cubeMapImages.length; i++) {
-      gl.activeTexture.texImage2D(
-          TextureAttachmentTarget.TEXTURE_CUBE_MAPS[i],
+      gl.activeTexture.textureCubeMap.attachments[i].texImage2D(
+//          TextureAttachmentTarget.TEXTURE_CUBE_MAPS[i],
           0,
           TextureInternalFormat.RGBA,
           TextureInternalFormat.RGBA,

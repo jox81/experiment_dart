@@ -7,13 +7,13 @@ import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 @TestOn("dartium")
 
 Future main() async {
 
-  var testJson = await Utils.loadJSONResource('../objects/json_scene.json');
+  var testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
 
   Application application;
   CanvasElement canvas;

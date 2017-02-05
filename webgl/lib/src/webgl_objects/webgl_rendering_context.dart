@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context/context_attributs.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -504,7 +504,7 @@ class WebGLRenderingContext extends IEditElement {
 
 
   void logRenderingContextInfos() {
-    Utils.log("RenderingContext Infos", () {
+    UtilsAssets.log("RenderingContext Infos", () {
       print('vendor : ${vendor}');
       print('renderer : ${renderer}');
       print('version : ${version}');

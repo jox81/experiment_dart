@@ -2,7 +2,7 @@ import 'dart:convert';
 @MirrorsUsed(targets:const[IntrospectionManager, IEditElement, CustomEditElement], override:'*')
 import 'dart:mirrors';
 import 'package:webgl/src/animation_property.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 class IntrospectionManager {
   static IntrospectionManager _instance;
@@ -106,7 +106,7 @@ class IntrospectionManager {
   }) {
     ClassMirror classMirror = reflectClass(type);
 
-    Utils.log('', () {
+    UtilsAssets.log('', () {
       if (showBaseInfo) {
         String simpleName = MirrorSystem.getName(classMirror.simpleName);
         print('### $simpleName');
@@ -243,7 +243,7 @@ class IntrospectionManager {
     }
 
     if (log) {
-      Utils.log('Webgl Constants', () {
+      UtilsAssets.log('Webgl Constants', () {
         methodNames.forEach((n) {
           print('$n');
         });

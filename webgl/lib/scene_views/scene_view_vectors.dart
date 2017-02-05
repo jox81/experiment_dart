@@ -93,7 +93,7 @@ class SceneViewVectors extends Scene{
   void test03() {
 
     Matrix4 uModelViewMatrix = Context.modelViewMatrix;
-    Matrix4 uProjectionMatrix = Context.mainCamera.viewProjecionMatrix;
+    Matrix4 uProjectionMatrix = Context.mainCamera.viewProjectionMatrix;
 
     VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;

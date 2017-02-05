@@ -86,7 +86,7 @@ class MaterialPoint extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
     setShaderUniform("pointSize", pointSize);
   }
 }
@@ -110,7 +110,7 @@ class MaterialBase extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
   }
 }
 
@@ -137,7 +137,7 @@ class MaterialBaseColor extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
     setShaderUniform("uColor", color.storage);
   }
 }
@@ -165,7 +165,7 @@ class MaterialBaseVertexColor extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
   }
 }
 
@@ -204,7 +204,7 @@ class MaterialBaseTexture extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
     setShaderUniform('uSampler', 0);
     setShaderUniform('uTextureMatrix', texture.textureMatrix);
   }
@@ -245,7 +245,7 @@ class MaterialBaseTextureNormal extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
@@ -308,7 +308,7 @@ class MaterialPBR extends Material {
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
@@ -351,7 +351,7 @@ class MaterialDepthTexture extends Material {
     setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
 
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjecionMatrix);
+        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
 
     setShaderUniform('uSampler', 0);
 

@@ -7,6 +7,13 @@ abstract class Object3d extends IEditElement {
   String get name => _name;
   set name(String value) => _name = value;
 
+  bool _visible = true;
+  bool get visible => _visible;
+  set visible(bool value) =>
+      _visible = value; //Transform : position, rotation, scale
+
+  // >> trsnforms
+
   final Matrix4 _transform = new Matrix4.identity();
   Matrix4 get transform => _transform;
   set transform(Matrix4 value) => _transform.setFrom(value);
@@ -16,6 +23,10 @@ abstract class Object3d extends IEditElement {
 
   Matrix3 get rotation => transform.getRotation();
   set rotation(Matrix3 value) => transform.setRotation(value);
+
+  void translate(Vector3 vector3) {
+    this.position += vector3;
+  }
 
   void render();
 }

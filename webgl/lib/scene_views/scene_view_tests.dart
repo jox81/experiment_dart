@@ -5,7 +5,7 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -144,7 +144,7 @@ class SceneViewTests extends Scene{
     models.add(cube);
 
     //SusanModel
-    var susanJson = await Utils.loadJSONResource('./objects/susan/susan.json');
+    var susanJson = await UtilsAssets.loadJSONResource('./objects/susan/susan.json');
     MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
       ..texture = await TextureUtils.getTextureFromFile(
           './objects/susan/susan_texture.png');

@@ -81,10 +81,6 @@ class Camera extends Object3d {
   Camera(this._fov, this._zNear, this._zFar) {
   }
 
-  void translate(Vector3 value) {
-    this.position += value;
-  }
-
   //roll on y
   double get yaw {
     Vector3 z = new Vector3(0.0, 0.0, 1.0);
@@ -132,7 +128,7 @@ class Camera extends Object3d {
   }
 
   //viewProjectionMatrix
-  Matrix4 get viewProjecionMatrix {
+  Matrix4 get viewProjectionMatrix {
     return perspectiveMatrix * lookAtMatrix;
   }
 

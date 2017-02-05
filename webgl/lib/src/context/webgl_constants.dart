@@ -2,7 +2,7 @@
 import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 class WebglConstants{
 
@@ -26,7 +26,7 @@ class WebglConstants{
   }
 
   void logConstants() {
-    Utils.log('Webgl Constants',(){
+    UtilsAssets.log('Webgl Constants',(){
       values.forEach((c)=> print(c));
     });
   }
@@ -69,7 +69,7 @@ class WebglConstants{
   }
 
   void logParameters() {
-    Utils.log('Webgl Parameters',(){
+    UtilsAssets.log('Webgl Parameters',(){
       parameters.forEach((c)=> print(c));
     });
   }

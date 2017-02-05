@@ -5,9 +5,10 @@ import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/utils_fps.dart';
+import 'package:webgl/src/utils_geometry.dart';
 
 class Interaction {
 
@@ -122,7 +123,7 @@ class Interaction {
 
 //    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
 
-    Model modelHit = Utils.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
+    Model modelHit = UtilsGeometry.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
     tempSelection = modelHit;
   }
 

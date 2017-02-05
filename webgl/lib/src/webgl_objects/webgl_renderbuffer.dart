@@ -1,6 +1,6 @@
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 @MirrorsUsed(
@@ -66,7 +66,7 @@ class WebGLRenderBuffer extends WebGLObject{
   RenderBufferInternalFormatType get renderBufferInterrnalFormat => RenderBufferInternalFormatType.getByIndex(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index));
 
   void logRenderBufferInfos() {
-    Utils.log("RenderBuffer Infos", () {
+    UtilsAssets.log("RenderBuffer Infos", () {
       print('isRenderbuffer : ${isRenderbuffer}');
       print('renderBufferWidth : ${renderBufferWidth}');
       print('renderBufferHeight : ${renderBufferHeight}');

@@ -57,11 +57,6 @@ abstract class Model extends Object3d {
 
   ModelType modelType;
 
-  bool _visible = true;
-  bool get visible => _visible;
-  set visible(bool value) =>
-      _visible = value; //Transform : position, rotation, scale
-
   Mesh _mesh = new Mesh();
   Mesh get mesh => _mesh;
   set mesh(Mesh value) => _mesh = value;
@@ -77,10 +72,6 @@ abstract class Model extends Object3d {
   UpdateFunction _updateFunction;
   UpdateFunction get updateFunction => _updateFunction;
   set updateFunction(UpdateFunction value) => _updateFunction = value;
-
-  void translate(Vector3 vector3) {
-    this.position += vector3;
-  }
 
   List<Triangle> _faces;
   List<Triangle> getFaces() {
@@ -299,7 +290,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   bool visible = false;
 
   final Camera _camera;
-  Matrix4 get _vpmatrix => _camera.viewProjecionMatrix;
+  Matrix4 get _vpmatrix => _camera.viewProjectionMatrix;
 
   Vector4 _positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
   Vector4 _frustrumColor = new Vector4(0.0, 0.7, 1.0, 1.0);
@@ -327,7 +318,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   List<Model> gizmoModels = [];
 
   FrustrumGizmo(Camera camera) : _camera = camera {
-    _createFrustrumModel(_camera.viewProjecionMatrix);
+    _createFrustrumModel(_camera.viewProjectionMatrix);
   }
 
   _createFrustrumModel(Matrix4 cameraMatrix) {

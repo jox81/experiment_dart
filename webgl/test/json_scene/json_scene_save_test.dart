@@ -5,14 +5,14 @@ import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 @TestOn("dartium")
 
 Future main() async {
 
-  Map testJson = await Utils.loadJSONResource('../objects/json_scene.json');
-  String testJonString = await Utils.loadTextResource('../objects/json_scene.json');
+  Map testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
+  String testJonString = await UtilsAssets.loadTextResource('../objects/json_scene.json');
 
   Application application;
   CanvasElement canvas;

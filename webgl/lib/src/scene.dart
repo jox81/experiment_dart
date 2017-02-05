@@ -17,7 +17,7 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/utils_math.dart';
 
 class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
@@ -41,10 +41,12 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   Interaction interaction;
 
   Scene(){
-    Context.mainCamera = new
-    Camera(radians(25.0), 0.1, 1000.0)
-      ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 20.0, 20.0);
+    if(Context.mainCamera == null){
+      Context.mainCamera = new
+      Camera(radians(25.0), 0.1, 1000.0)
+        ..targetPosition = new Vector3.zero()
+        ..position = new Vector3(20.0, 20.0, 20.0);
+    }
   }
 
   bool _isSetuped = false;
@@ -150,7 +152,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   // JSON
 
   static Future<Scene> fromJsonFilePath(String jsonFilePath) async {
-    Map json = await Utils.loadJSONResource('../objects/json_scene.json');
+    Map json = await UtilsAssets.loadJSONResource(jsonFilePath);
     return new Scene.fromJson(json);
   }
 
@@ -168,6 +170,13 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       if(cameras.length > 0) {
         Context.mainCamera = cameras[0];
       }
+    }
+
+    if(Context.mainCamera == null){
+      Context.mainCamera = new
+      Camera(radians(25.0), 0.1, 1000.0)
+        ..targetPosition = new Vector3.zero()
+        ..position = new Vector3(20.0, 20.0, 20.0);
     }
 
     if(jsonScene["lights"] != null) {

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -76,7 +76,7 @@ class WebGLShader extends WebGLObject{
   }
 
   void logShaderInfos() {
-    Utils.log("Shader Infos", () {
+    UtilsAssets.log("Shader Infos", () {
       print('shaderType : ${shaderType}');
       print('isShader : ${isShader}');
       print('compileStatus : ${compileStatus}');
@@ -157,7 +157,7 @@ class ShaderSource{
   ShaderSource();
 
   Future _loadShader()async {
-    vsCode = await Utils.loadGlslShader(vertexShaderPath);
-    fsCode = await Utils.loadGlslShader(fragmentShaderPath);
+    vsCode = await UtilsAssets.loadGlslShader(vertexShaderPath);
+    fsCode = await UtilsAssets.loadGlslShader(fragmentShaderPath);
   }
 }

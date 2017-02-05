@@ -1,8 +1,3 @@
-import 'dart:core';
-import 'dart:html';
-import 'dart:math';
-import 'dart:convert';
-import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -10,108 +5,7 @@ import 'package:webgl/src/material.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
 
-class Utils{
-
-  ///Load a text resource from a file over the network
-  static Future loadTextResource (url) {
-    Completer completer = new Completer();
-
-    Random random = new Random();
-    var request = new HttpRequest();
-    request.open('GET', '${url}?please-dont-cache=${random.nextInt(1000)}', async:true);
-    request.onLoadEnd.listen((_) {
-      if (request.status < 200 || request.status > 299) {
-        String fsErr = 'Error: HTTP Status ' + request.status + ' on resource ' + url;
-        window.alert('Fatal error getting text ressource (see console)');
-        print(fsErr);
-        return completer.completeError(fsErr);
-      } else {
-        completer.complete(request.responseText);
-      }
-    });
-    request.send();
-
-    return completer.future;
-  }
-
-  ///Load a text resource from a file over the network
-  static String loadTextResourceSync (url) {
-    Completer completer = new Completer();
-
-    Random random = new Random();
-    var request = new HttpRequest();
-    request.open('GET', '${url}?please-dont-cache=${random.nextInt(1000)}', async:false);
-    request.onLoadEnd.listen((_) {
-      if (request.status < 200 || request.status > 299) {
-        String fsErr = 'Error: HTTP Status ' + request.status + ' on resource ' + url;
-        window.alert('Fatal error getting text ressource (see console)');
-        print(fsErr);
-        return completer.completeError(fsErr);
-      } else {
-        completer.complete(request.responseText);
-      }
-    });
-    request.send();
-
-    return request.responseText;
-  }
-
-  ///Load a Glsl from a file url
-  static Future<String> loadGlslShader(String url) async {
-    Completer completer = new Completer();
-    await loadTextResource(url).then((String result){
-      try {
-        completer.complete(result);
-      } catch (e) {
-        completer.completeError(e);
-      }
-    });
-
-    return completer.future;
-  }
-
-  ///Load a Glsl from a file url synchronously
-  static String loadGlslShaderSync(String url) {
-    String result;
-    try {
-      result = loadTextResourceSync(url);
-    } catch (e) {
-      print('error in loadGlslShader');
-    }
-
-    return result;
-  }
-
-  static Future loadJSONResource (url) async {
-    Completer completer = new Completer();
-    await loadTextResource(url).then((String result){
-      try {
-          var json = JSON.decode(result);
-          completer.complete(json);
-        } catch (e) {
-          completer.completeError(e);
-        }
-    });
-
-    return completer.future;
-  }
-
-  void makeRequest(Event e) {
-    var path = 'shaderModel.vs.glsl';
-    var httpRequest = new HttpRequest();
-    httpRequest
-      ..open('GET', path)
-      ..onLoadEnd.listen((e) => requestComplete(httpRequest))
-      ..send('');
-  }
-
-  requestComplete(HttpRequest request) {
-    if (request.status == 200) {
-      print("200");
-    } else {
-      print('Request failed, status=${request.status}');
-    }
-  }
+class UtilsGeometry{
 
   /// Permet de retorver un point en WORLD depuis un point en SREEN
   /// il faut concidérer l'origine de screen en haut à gauche, y pointant vers le bas
@@ -124,18 +18,18 @@ class Utils{
     num pickX = screenX;
     num pickY = Context.height - screenY;
 
-    bool unProjected = unproject(camera.viewProjecionMatrix, 0, Context.width,
+    bool unProjected = unproject(camera.viewProjectionMatrix, 0, Context.width,
         0, Context.height, pickX, pickY, pickZ, pickWorld);
 
     return unProjected;
   }
 
   static bool pickRayFromScreenPoint(Camera camera, Vector3 outRayNear,
-    Vector3 outRayFar, num screenX, num screenY) {
+      Vector3 outRayFar, num screenX, num screenY) {
     num pickX = screenX;
     num pickY = screenY;
 
-    bool rayPicked = pickRay(camera.viewProjecionMatrix, 0, Context.width,
+    bool rayPicked = pickRay(camera.viewProjectionMatrix, 0, Context.width,
         0, Context.height, pickX, pickY, outRayNear, outRayFar);
 
     return rayPicked;
@@ -153,7 +47,7 @@ class Utils{
 
     for (num i = 0.0; i < 1.0; i += 0.1) {
       pickX = i * Context.width;
-      Utils.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
+      UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
       resultPoints.add(new PointModel()
         ..position = pickWorld
@@ -192,7 +86,7 @@ class Utils{
   /// Find ray with mouse coord in the camera
   static Ray findRay(Camera camera, num screenX, num screenY) {
     Vector3 outRayNear = new Vector3.zero();
-    Utils.unProjectScreenPoint(camera, outRayNear, screenX, screenY);
+    UtilsGeometry.unProjectScreenPoint(camera, outRayNear, screenX, screenY);
 
     Vector3 direction = outRayNear - camera.position;
     return new Ray.originDirection(outRayNear, direction);
@@ -217,8 +111,8 @@ class Utils{
   }
 
   static Model findModelFromMouseCoords(Camera camera, num x, num y, List<Model> models) {
-    Ray ray = Utils.findRay(camera, x, y);
-    Model modelHit = Utils.findModelHit(models, ray);
+    Ray ray = UtilsGeometry.findRay(camera, x, y);
+    Model modelHit = UtilsGeometry.findModelHit(models, ray);
     return modelHit;
   }
 
@@ -241,17 +135,5 @@ class Utils{
     }
 
     return modelHit;
-  }
-
-  static void log(String message, Function function){
-    if (message != null && message.length > 0) {
-      print('##################################################################');
-      print('### $message');
-      print('##################################################################');
-    }
-    function();
-    if (message != null && message.length > 0) {
-      print('##################################################################');
-    }
   }
 }

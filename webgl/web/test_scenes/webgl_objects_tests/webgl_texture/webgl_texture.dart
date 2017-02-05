@@ -59,8 +59,8 @@ class WebglTest {
       gl.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
-      gl.activeTexture.texImage2DWithWidthAndHeight(
-          TextureAttachmentTarget.TEXTURE_2D,
+      gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
           size,
@@ -90,8 +90,8 @@ class WebglTest {
       gl.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
 
-      gl.activeTexture.texImage2DWithWidthAndHeight(
-          TextureAttachmentTarget.TEXTURE_2D,
+      gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
           size,
@@ -130,8 +130,8 @@ class WebglTest {
     gl.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
     int size = 64;
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
         size,
@@ -183,8 +183,8 @@ class WebglTest {
     gl.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
     int size = 64;
-    gl.activeTexture.texImage2DWithWidthAndHeight(
-        TextureAttachmentTarget.TEXTURE_2D,
+    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+//        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
         size,
