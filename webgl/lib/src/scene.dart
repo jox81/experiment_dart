@@ -5,6 +5,7 @@ import 'dart:convert';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/camera.dart';
@@ -159,7 +160,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   Scene.fromJson(Map json){
     Map jsonScene = json['scene'];
 
-    backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"]);
+    backgroundColor = new Vector4.fromFloat32List(new Float32List.fromList(jsonScene["backgroundColor"]));
 
     if(jsonScene["cameras"] != null) {
       for (var item in jsonScene["cameras"] as List) {
@@ -186,9 +187,11 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       }
     }
 
-    for(var item in jsonScene["models"] as List){
-      Model model = new Model.fromJson(item);
-      models.add(model);
+    if(jsonScene["models"] != null) {
+      for (var item in jsonScene["models"] as List) {
+        Model model = new Model.fromJson(item);
+        models.add(model);
+      }
     }
   }
 

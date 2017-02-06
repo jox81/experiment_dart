@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/shader_source.dart';
 import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -80,7 +81,7 @@ class WebglTest {
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
-    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
@@ -118,7 +119,7 @@ class WebglTest {
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
-    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
@@ -177,7 +178,7 @@ class WebglTest {
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
     try {
-      gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+      gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,

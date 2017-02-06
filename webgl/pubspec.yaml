@@ -17,6 +17,8 @@ dev_dependencies:
   dart_to_js_script_rewriter: '^1.0.1'
 
 transformers:
+- test/pub_serve:
+    $include: web/
 - angular2:
     platform_directives:
     - 'package:angular2/common.dart#COMMON_DIRECTIVES'

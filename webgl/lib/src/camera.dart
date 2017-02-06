@@ -167,9 +167,9 @@ class Camera extends Object3d {
   // >> JSON
 
   Camera.fromJson(Map json) {
-    _fov = json['fov'] as num;
-    _zNear = json['zNear'] as num;
-    _zFar = json['zFar'] as num;
+    _fov = json['fov'].toDouble();
+    _zNear = json['zNear'].toDouble();
+    _zFar = json['zFar'].toDouble();
     targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition']));
     position = new Vector3.fromFloat32List(new Float32List.fromList(json['position']));
     showGizmo = json['showGizmo'] as bool;

@@ -203,7 +203,7 @@ class TextureUtils {
         TextureMagnificationFilterType.LINEAR);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    gl.activeTexture.texture2d.attachment.texImage2D(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2D(
         0,
         TextureInternalFormat.RGBA,
         TextureInternalFormat.RGBA,
@@ -230,7 +230,7 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
         0,
         TextureInternalFormat.RGBA,
         size,
@@ -297,7 +297,7 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
     gl.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
         0,
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
         size,
@@ -484,28 +484,28 @@ class TextureUtils {
       String cubeMapName) async {
     Map<String, List<String>> cubeMapsPath = {
       'test': [
-        "/images/cubemap/test/test_px.png",
-        "/images/cubemap/test/test_nx.png",
-        "/images/cubemap/test/test_py.png",
-        "/images/cubemap/test/test_ny.png",
-        "/images/cubemap/test/test_pz.png",
-        "/images/cubemap/test/test_nz.png",
+        "images/cubemap/test/test_px.png",
+        "images/cubemap/test/test_nx.png",
+        "images/cubemap/test/test_py.png",
+        "images/cubemap/test/test_ny.png",
+        "images/cubemap/test/test_pz.png",
+        "images/cubemap/test/test_nz.png",
       ],
       'kitchen': [
-        "/images/cubemap/kitchen/c00.bmp",
-        "/images/cubemap/kitchen/c01.bmp",
-        "/images/cubemap/kitchen/c02.bmp",
-        "/images/cubemap/kitchen/c03.bmp",
-        "/images/cubemap/kitchen/c04.bmp",
-        "/images/cubemap/kitchen/c05.bmp"
+        "images/cubemap/kitchen/c00.bmp",
+        "images/cubemap/kitchen/c01.bmp",
+        "images/cubemap/kitchen/c02.bmp",
+        "images/cubemap/kitchen/c03.bmp",
+        "images/cubemap/kitchen/c04.bmp",
+        "images/cubemap/kitchen/c05.bmp"
       ],
       'pisa': [
-        "/images/cubemap/pisa/pisa_posx.jpg",
-        "/images/cubemap/pisa/pisa_negx.jpg",
-        "/images/cubemap/pisa/pisa_posy.jpg",
-        "/images/cubemap/pisa/pisa_negy.jpg",
-        "/images/cubemap/pisa/pisa_posz.jpg",
-        "/images/cubemap/pisa/pisa_negz.jpg",
+        "images/cubemap/pisa/pisa_posx.jpg",
+        "images/cubemap/pisa/pisa_negx.jpg",
+        "images/cubemap/pisa/pisa_posy.jpg",
+        "images/cubemap/pisa/pisa_negy.jpg",
+        "images/cubemap/pisa/pisa_posz.jpg",
+        "images/cubemap/pisa/pisa_negz.jpg",
       ]
     };
 

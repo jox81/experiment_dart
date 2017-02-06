@@ -772,7 +772,7 @@ class TextureAttachmentTarget extends WebGLEnum {
       WebGLEnum.findTypeByIndex(TextureAttachmentTarget, index);
 
   static const TextureAttachmentTarget TEXTURE_2D =
-      const TextureAttachmentTarget(WebGL.RenderingContext.TEXTURE_2D, '');
+      const TextureAttachmentTarget(WebGL.RenderingContext.TEXTURE_2D, 'TEXTURE_2D');
   static const TextureAttachmentTarget TEXTURE_CUBE_MAP_POSITIVE_X =
       const TextureAttachmentTarget(
           WebGL.RenderingContext.TEXTURE_CUBE_MAP_POSITIVE_X,

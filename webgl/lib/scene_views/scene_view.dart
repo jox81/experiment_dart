@@ -11,7 +11,6 @@ import 'package:webgl/scene_views/scene_view_framebuffer.dart';
 import 'package:webgl/scene_views/scene_view_particle.dart';
 import 'package:webgl/scene_views/scene_view_particle_simple.dart';
 import 'package:webgl/scene_views/scene_view_pbr.dart';
-import 'package:webgl/scene_views/scene_view_performance_test.dart';
 import 'package:webgl/scene_views/scene_view_primitives.dart';
 
 //Todo :
@@ -20,17 +19,17 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
 //  new Scene(),
-  await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
+//  await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
 // new SceneViewTests(),
 // new SceneViewTexturing(),
 // new SceneViewWebGLEdit(),
 // new SceneViewVectors(),
-// new SceneViewCubeMap(),
+ new SceneViewCubeMap(),
 // new SceneViewFrameBuffer(),
 // new SceneViewParticle(),
 // new SceneViewParticleSimple(),
 // new SceneViewPBR(),
-// new SceneViewPerformanceTest(),
+// new SceneViewPerformance(),
 // new SceneViewPrimitives(),
 // new SceneViewShaderLearning01(),
 // new SceneViewExperiment(),

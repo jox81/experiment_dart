@@ -13,12 +13,15 @@ import 'package:webgl/src/utils_assets.dart';
 
 Future main() async {
 
-  var testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
+  UtilsAssets.useWebPath = true;
+
+  var testJson;
 
   Application application;
   CanvasElement canvas;
 
   setUp(() async {
+    testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
     CanvasElement canvas = querySelector('#glCanvas');
     application = await Application.create(canvas);
   });
@@ -26,6 +29,7 @@ Future main() async {
   tearDown(() async {
     canvas = null;
     application = null;
+//    testJson = null;
   });
 
   group("json read", () {
@@ -46,6 +50,7 @@ Future main() async {
     });
     test("test camera zNear", () {
       Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
+      print(camera.zNear);
       expect(camera.zNear == 0.1,isTrue);
     });
     test("test camera zFar", () {
@@ -118,10 +123,10 @@ Future main() async {
 
     test("scene background color", () {
       Scene scene = new Scene.fromJson(testJson);
-      expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
+      expect(scene.backgroundColor,equals(new Vector4.fromFloat32List(new Float32List.fromList([0.5,
       1.0,
       0.2,
-      1.0])));
+      1.0]))));
     });
 
     test("scene camera", () {

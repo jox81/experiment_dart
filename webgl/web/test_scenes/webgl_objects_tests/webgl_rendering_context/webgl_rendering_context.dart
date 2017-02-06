@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';

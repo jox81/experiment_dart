@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -59,7 +60,7 @@ class WebglTest {
       gl.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
-      gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+      gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
@@ -90,7 +91,7 @@ class WebglTest {
       gl.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
 
-      gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+      gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
@@ -130,7 +131,7 @@ class WebglTest {
     gl.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
     int size = 64;
-    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
@@ -183,7 +184,7 @@ class WebglTest {
     gl.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
     int size = 64;
-    gl.activeTexture.texture2d.attachment.texImage2DWithWidthAndHeight(
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,

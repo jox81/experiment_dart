@@ -3,6 +3,7 @@ import 'package:webgl/src/material.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';

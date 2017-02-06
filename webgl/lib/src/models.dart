@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/camera.dart';
@@ -145,11 +146,13 @@ abstract class Model extends Object3d {
         orElse: () => null);
 
     Object3d object3d = new Model.createByType(modelType, doInitMaterial: true)
-      ..name = json["name"]
+      ..name = json["name"];
 //      ..position = new Vector3.fromFloat32List(json["position"])
 //      ..rotation = new Matrix3.fromList(json["rotation"])
 //      ..scale = ??;
-    ..transform = new Matrix4.fromList(json["transform"]);
+    if(json["transform"] != null) {
+      object3d.transform = new Matrix4.fromFloat32List(new Float32List.fromList(json["transform"]));
+    }
     return object3d;
   }
 

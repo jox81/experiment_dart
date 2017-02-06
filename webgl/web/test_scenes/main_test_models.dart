@@ -4,6 +4,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/shader_source.dart';
 import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/utils_geometry.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';

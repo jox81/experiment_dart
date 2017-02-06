@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
+import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
@@ -11,13 +12,16 @@ import 'package:webgl/src/utils_assets.dart';
 
 Future main() async {
 
-  Map testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
-  String testJonString = await UtilsAssets.loadTextResource('../objects/json_scene.json');
+  UtilsAssets.useWebPath = true;
 
+  Map testJson;
+  String testJonString;
   Application application;
   CanvasElement canvas;
 
   setUp(() async {
+    testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
+    testJonString = await UtilsAssets.loadTextResource('../objects/json_scene.json');
     CanvasElement canvas = querySelector('#glCanvas');
     application = await Application.create(canvas);
   });
@@ -25,6 +29,8 @@ Future main() async {
   tearDown(() async {
     canvas = null;
     application = null;
+    testJson = null;
+    testJonString = null;
   });
 
   group("json read", () {
@@ -42,15 +48,18 @@ Future main() async {
 
     test("scene background color", () {
       Scene scene = new Scene.fromJson(testJson);
-      expect(scene.backgroundColor,equals(new Vector4.fromFloat32List([0.5,
+      var result = scene.backgroundColor;
+      var value = new Vector4.fromFloat32List(new Float32List.fromList([0.5,
       1.0,
       0.2,
-      1.0])));
+      1.0]));
+      expect(result == value,isTrue);
     });
 
     test("scene camera", () {
       Scene scene = new Scene.fromJson(testJson);
-      expect(scene.cameras.length == 1, isTrue);
+      var result = scene.cameras.length;
+      expect(result == 1, isTrue);
     });
 
     test("scene models", () {

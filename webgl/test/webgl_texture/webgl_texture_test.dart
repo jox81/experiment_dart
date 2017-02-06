@@ -3,14 +3,18 @@
 import 'dart:html';
 import "package:test/test.dart";
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 void main() {
 
+  UtilsAssets.useWebPath = true;
+
   CanvasElement canvas;
 
   setUp(() async {
+
     canvas = new Element.html('<canvas/>');
     canvas.width = 500;
     canvas.height = 500;

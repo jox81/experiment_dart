@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/shader_source.dart';
 import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';

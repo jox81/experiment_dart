@@ -14,12 +14,14 @@ import 'package:webgl/src/utils_assets.dart';
 
 Future main() async {
 
-  Map testJson = await UtilsAssets.loadJSONResource('../objects/json_values.json');
+  Map testJson;
 
   setUp(() async {
+    testJson = await UtilsAssets.loadJSONResource('../objects/json_values.json');
   });
 
   tearDown(() async {
+    testJson = null;
   });
 
   group("json read", () {

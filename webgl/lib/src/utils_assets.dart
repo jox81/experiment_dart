@@ -12,16 +12,33 @@ import 'package:webgl/src/models.dart';
 
 class UtilsAssets{
 
+  static const String WEB_PATH_RELATIVE = '../';
+  static const String WEB_PATH_WEB = 'http://localhost:8080/';
+
+  // This webPath is used within the webFolder but it can be replaced with 'http://localhost:8080/' to use in unit test
+  static String _webPath = '../';
+  static set useWebPath(bool value){
+    if(value){
+      _webPath = WEB_PATH_WEB;
+    }else{
+      _webPath = WEB_PATH_RELATIVE;
+    }
+  }
+
   ///Load a text resource from a file over the network
-  static Future loadTextResource (url) {
+  static Future loadTextResource (String url) {
     Completer completer = new Completer();
+
+    if(url.startsWith('../')){
+      url = url.substring(3);
+    }
 
     Random random = new Random();
     var request = new HttpRequest();
-    request.open('GET', '${url}?please-dont-cache=${random.nextInt(1000)}', async:true);
+    request.open('GET', '${_webPath}${url}?please-dont-cache=${random.nextInt(1000)}', async:true);
     request.onLoadEnd.listen((_) {
       if (request.status < 200 || request.status > 299) {
-        String fsErr = 'Error: HTTP Status ' + request.status + ' on resource ' + url;
+        String fsErr = 'Error: HTTP Status ${request.status} on resource: ${_webPath}${url}';
         window.alert('Fatal error getting text ressource (see console)');
         print(fsErr);
         return completer.completeError(fsErr);

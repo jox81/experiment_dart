@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
@@ -10,12 +9,12 @@ import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
-      SceneViewPerformanceTest,
+      SceneViewPerformance,
     ],
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewPerformanceTest extends Scene{
+class SceneViewPerformance extends Scene{
 
   /// implements ISceneViewBase
   String message = 'test';
@@ -26,7 +25,7 @@ class SceneViewPerformanceTest extends Scene{
   Vector3 ambientColor = new Vector3.all(0.0);
   Vector3 directionalColor = new Vector3(0.8, 0.8, 0.8);
 
-  SceneViewPerformanceTest();
+  SceneViewPerformance();
 
   @override
   Future setupScene() async {

@@ -4,8 +4,12 @@ import 'dart:async';
 import 'dart:html';
 import "package:test/test.dart";
 import 'package:webgl/src/application.dart';
+import 'package:webgl/src/shader_source.dart';
+import 'package:webgl/src/utils_assets.dart';
 
 Future main() async {
+
+  UtilsAssets.useWebPath = true;
 
   CanvasElement canvas;
 
