@@ -31,7 +31,7 @@ class WebglTest {
   }
 
   void test01() {
-     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
+    WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
       ..source = ShaderSource.sources['material_point'].vsCode
       ..compile();
     vertexShader.logShaderInfos();

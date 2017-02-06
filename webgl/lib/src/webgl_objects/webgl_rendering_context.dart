@@ -127,7 +127,7 @@ class WebGLRenderingContext extends IEditElement {
   int get subPixelBits => ctx.getParameter(ContextParameter.SUBPIXEL_BITS.index);
 
   // > COLOR_CLEAR_VALUE [4]
-  Vector4 get colorClear => new Vector4.fromFloat32List(ctx.getParameter(ContextParameter.COLOR_CLEAR_VALUE.index));
+  Vector4 get clearColor => new Vector4.fromFloat32List(ctx.getParameter(ContextParameter.COLOR_CLEAR_VALUE.index));
   set clearColor(Vector4 color) => ctx.clearColor(color.r, color.g, color.b, color.a);
 
   // > COLOR_WRITEMASK [4]
@@ -525,7 +525,7 @@ class WebGLRenderingContext extends IEditElement {
       print('depthBits : ${depthBits}');
       print('stencilBits : ${stencilBits}');
       print('subPixelBits : ${subPixelBits}');
-      print('colorClear : ${colorClear}');
+      print('colorClear : ${clearColor}');
       print('colorMask : ${colorMask}');
       print('compressTextureFormats : ${compressTextureFormats}');
       print('maxVertexTextureImageUnits : ${maxVertexTextureImageUnits}');

@@ -225,9 +225,9 @@ class TextureUtils {
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.NEAREST);
     gl.activeTexture.texture2d.setParameterInt(
-        TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+        TextureParameter.TEXTURE_WRAP_S, TextureWrapType.REPEAT);
     gl.activeTexture.texture2d.setParameterInt(
-        TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
+        TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
 //    gl.activeTexture.texture2d.generateMipmap();
 
     gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
@@ -241,7 +241,6 @@ class TextureUtils {
         null);
 
     gl.activeTexture.texture2d.unBind();
-
     return texture;
   }
 
@@ -333,11 +332,14 @@ class TextureUtils {
         TextureAttachmentTarget.TEXTURE_2D,
         colorTexture,
         0);
-    gl.activeFrameBuffer.framebufferRenderbuffer(
-        FrameBufferTarget.FRAMEBUFFER,
-        FrameBufferAttachment.DEPTH_ATTACHMENT,
-        RenderBufferTarget.RENDERBUFFER,
-        depthRenderbuffer);
+
+    if(depthRenderbuffer != null) {
+      gl.activeFrameBuffer.framebufferRenderbuffer(
+          FrameBufferTarget.FRAMEBUFFER,
+          FrameBufferAttachment.DEPTH_ATTACHMENT,
+          RenderBufferTarget.RENDERBUFFER,
+          depthRenderbuffer);
+    }
     gl.activeFrameBuffer.unBind();
 
     if (gl.activeFrameBuffer.checkStatus() !=
@@ -377,6 +379,38 @@ class TextureUtils {
     }
 
     return framebuffer;
+  }
+
+  static WebGLTexture getDefaultColoredTexture() {
+    WebGLTexture _defaultColoredTexture = createColorTexture(1);
+
+    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+
+    gl.activeFrameBuffer.bind(framebuffer);
+    gl.activeFrameBuffer.framebufferTexture2D(
+        FrameBufferTarget.FRAMEBUFFER,
+        FrameBufferAttachment.COLOR_ATTACHMENT0,
+        TextureAttachmentTarget.TEXTURE_2D,
+        _defaultColoredTexture,
+        0);
+
+    Rectangle previousViewport =
+    new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+
+    // draw pixels
+    {
+      //Each frameBuffer component will be filled up
+      gl.clearColor = new Vector4(1.0, 0.0, 1.0, 1.0); // green;
+      gl.viewport = new Rectangle(0, 0, 1, 1);
+      gl.clear([ClearBufferMask.COLOR_BUFFER_BIT]);
+    }
+    // End draw
+
+    // Unbind the framebuffer
+    gl.activeFrameBuffer.unBind();
+    gl.viewport = previousViewport;
+
+    return _defaultColoredTexture;
   }
 
   ///

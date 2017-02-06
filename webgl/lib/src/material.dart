@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/light.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
@@ -18,6 +19,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 abstract class Material extends IEditElement {
   static bool debugging = false;
@@ -55,18 +57,28 @@ abstract class Material extends IEditElement {
           ..material = new MaterialBaseVertexColor();
         break;
       case MaterialType.MaterialBaseTexture:
+        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
+        MaterialBaseTexture material = new MaterialBaseTexture()
+        ..texture = texture;
         model
           ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialBaseTexture();
+          ..material = material;
         break;
       case MaterialType.MaterialBaseTextureNormal:
+        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
+        MaterialBaseTextureNormal material = new MaterialBaseTextureNormal()
+          ..texture = texture;
         model
           ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialBaseTextureNormal();
+          ..material = material;
         break;
-//      case MaterialType.MaterialPBR:
-//        newMaterial = new MaterialPBR();
-//        break;
+      case MaterialType.MaterialPBR:
+        PointLight light = new PointLight();
+        MaterialPBR material = new MaterialPBR(light);
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = material;
+        break;
       case MaterialType.MaterialDepthTexture:
         model
           ..mesh.mode = DrawMode.TRIANGLES

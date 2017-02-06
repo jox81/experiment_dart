@@ -207,7 +207,7 @@ class MaterialBaseTexture extends Material {
     setShaderUniform(
         "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
     setShaderUniform('uSampler', 0);
-    setShaderUniform('uTextureMatrix', texture.textureMatrix);
+    setShaderUniform('uTextureMatrix', texture?.textureMatrix);
   }
 }
 
@@ -215,9 +215,9 @@ class MaterialBaseTextureNormal extends Material {
 
   //External Parameters
   WebGLTexture texture;
-  Vector3 ambientColor;
+  Vector3 ambientColor = new Vector3.all(1.0);
   DirectionalLight directionalLight;
-  bool useLighting = true;
+  bool useLighting = false;
 
   MaterialBaseTextureNormal._internal(String vsSource, String fsSource)
       : super(vsSource, fsSource);

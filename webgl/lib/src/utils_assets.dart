@@ -12,11 +12,11 @@ import 'package:webgl/src/models.dart';
 
 class UtilsAssets{
 
-  static const String WEB_PATH_RELATIVE = '../';
+  static const String WEB_PATH_RELATIVE = '/';
   static const String WEB_PATH_WEB = 'http://localhost:8080/';
 
   // This webPath is used within the webFolder but it can be replaced with 'http://localhost:8080/' to use in unit test
-  static String _webPath = '../';
+  static String _webPath = '/';
   static set useWebPath(bool value){
     if(value){
       _webPath = WEB_PATH_WEB;
@@ -29,6 +29,12 @@ class UtilsAssets{
   static Future loadTextResource (String url) {
     Completer completer = new Completer();
 
+    if(url.startsWith('/')){
+      url = url.substring(1);
+    }
+    if(url.startsWith('./')){
+      url = url.substring(2);
+    }
     if(url.startsWith('../')){
       url = url.substring(3);
     }

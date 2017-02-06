@@ -57,7 +57,7 @@ class PointLight extends Light{
 
   PointLight() {
     color = new Vector3(1.0, 1.0, 1.0);
-    position = new Vector3(0.0, 0.0, 0.0);
+    position = new Vector3(100.0, 100.0, 100.0);
   }
 }
 

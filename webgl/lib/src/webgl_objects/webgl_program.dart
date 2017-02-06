@@ -105,7 +105,7 @@ class WebGLProgram extends WebGLObject{
   ///Return a new WebGLUniformLocation that represents the location of a
   ///specific uniform variable within a program object.
   WebGLUniformLocation getUniformLocation(String variableName){
-    return new WebGLUniformLocation(gl.ctx.getUniformLocation(webGLProgram,variableName));
+    return new WebGLUniformLocation(this,variableName);
   }
 
   ///Return the uniform value at the passed location in the passed program.

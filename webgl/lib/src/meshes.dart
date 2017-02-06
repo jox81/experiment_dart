@@ -267,20 +267,38 @@ class _SquareMesh extends Mesh {
 class _PyramidMesh extends Mesh {
   _PyramidMesh() {
     vertices = [
-      0.0, 1.0, 0.0, //top vertex
-      1.0, -1.0, 1.0,
-      1.0, -1.0, -1.0,
-      -1.0, -1.0, -1.0,
-      -1.0, -1.0, 1.0,
+      1.0, 0.0, 1.0,
+      1.0, 0.0, -1.0,
+      0.0, 2.0, 0.0,
+
+      1.0, 0.0, -1.0,
+      -1.0, 0.0, -1.0,
+      0.0, 2.0, 0.0,
+
+      -1.0, 0.0, -1.0,
+      -1.0, 0.0, 1.0,
+      0.0, 2.0, 0.0,
+
+      -1.0, 0.0, 1.0,
+      1.0, 0.0, 1.0,
+      0.0, 2.0, 0.0,
+
+      1.0, 0.0, 1.0,
+      1.0, 0.0, -1.0,
+      -1.0, 0.0, -1.0,
+
+      1.0, 0.0, 1.0,
+      -1.0, 0.0, -1.0,
+      1.0, 0.0, -1.0,
     ];
 
     indices = [
       0, 1, 2, // right face
-      0, 2, 3, // front face
-      0, 3, 4, // left face
-      0, 4, 1, // back face
-      1, 2, 3, // bottom face
-      1, 3, 4, // bottom face
+      3, 4, 5, // front face
+      6, 7, 8, // left face
+      9, 10, 11, // back face
+      12, 13, 14, // bottom face
+      15, 16, 17, // bottom face
     ];
 
     textureCoords = [
@@ -316,6 +334,14 @@ class _PyramidMesh extends Mesh {
       0.0, 0.0, 1.0, 1.0,
       0.0, 1.0, 0.0, 1.0,
     ];
+
+    vertexNormals = []
+    ..addAll(new Plane.components(vertices[0], vertices[1], vertices[2], 1.0).normal.storage)
+    ..addAll(new Plane.components(vertices[3], vertices[4], vertices[5], 1.0).normal.storage)
+    ..addAll(new Plane.components(vertices[6], vertices[7], vertices[8], 1.0).normal.storage)
+    ..addAll(new Plane.components(vertices[9], vertices[10], vertices[11], 1.0).normal.storage)
+    ..addAll(new Vector3(0.0,-1.0,0.0).storage)
+    ..addAll(new Vector3(0.0,-1.0,0.0).storage);
   }
 }
 
