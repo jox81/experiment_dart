@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/scene_views/test_anim.dart';
 import 'package:webgl/src/object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';

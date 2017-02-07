@@ -29,7 +29,7 @@ class SceneViewParticle extends Scene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    CustomObject customObject = experiment(Application.currentScene);
+    CustomObject customObject = experiment(Application.instance.currentScene);
     materials.add(customObject.material);
     models.add(customObject);
 

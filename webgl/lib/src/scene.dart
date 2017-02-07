@@ -18,6 +18,7 @@ import 'dart:async';
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/models.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/utils_math.dart';
 
@@ -91,8 +92,12 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
     }
   }
 
+
   @override
   void update(num time) {
+    for (Model model in models) {
+      model.update();
+    }
     if(updateFunction != null) {
       updateFunction(time);
     }

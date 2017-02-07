@@ -327,14 +327,6 @@ class _PyramidMesh extends Mesh {
       0.0, 1.0,
     ];
 
-    colors = [
-      1.0, 0.0, 0.0, 1.0,//top vertex
-      0.0, 0.0, 1.0, 1.0,
-      0.0, 1.0, 0.0, 1.0,
-      0.0, 0.0, 1.0, 1.0,
-      0.0, 1.0, 0.0, 1.0,
-    ];
-
     vertexNormals = []
     ..addAll(new Plane.components(vertices[0], vertices[1], vertices[2], 1.0).normal.storage)
     ..addAll(new Plane.components(vertices[3], vertices[4], vertices[5], 1.0).normal.storage)

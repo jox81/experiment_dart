@@ -1,5 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/introspection.dart';
+import 'package:webgl/src/interface/IComponent.dart';
 
 abstract class Object3d extends IEditElement {
   //Todo : S'assurer que les noms soient uniques ?!
@@ -26,6 +27,11 @@ abstract class Object3d extends IEditElement {
 
   void translate(Vector3 vector3) {
     this.position += vector3;
+  }
+
+  List<IComponent> components = new List();
+  void update(){
+    components.forEach((c)=> c.update());
   }
 
   void render();

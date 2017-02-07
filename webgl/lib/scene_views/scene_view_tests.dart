@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/scene_views/test_anim.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/utils_assets.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
@@ -154,6 +156,8 @@ class SceneViewTests extends Scene{
       ..material = susanMaterialBaseTexture;
     models.add(jsonModel);
 
+    jsonModel.components.add(new TestAnim(jsonModel));
+
     //Sphere
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
       ..transform.translate(0.0, 0.0, -10.0)
@@ -167,10 +171,12 @@ class SceneViewTests extends Scene{
       double animationStep = time - _lastTime;
       //Do Animation here
 
-      triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
-      squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
-      pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
-      cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
+//      Time.deltaTime = animationStep;
+
+//      triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
+//      squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
+//      pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
+//      cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
 
       materialBaseTextureNormal..useLighting = useLighting;
 

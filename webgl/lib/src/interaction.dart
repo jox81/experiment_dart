@@ -1,18 +1,16 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
-
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/models.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils_assets.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/utils_fps.dart';
 import 'package:webgl/src/utils_geometry.dart';
 
 class Interaction {
 
-  Scene get scene => Application.currentScene as Scene;
+  Scene get scene => Application.instance.currentScene as Scene;
 
   //Debug div
   Element elementDebugInfoText;

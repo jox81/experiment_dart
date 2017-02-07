@@ -20,7 +20,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
     directives: const [ClickOutsideDirective])
 class MenuComponent{
 
-  Scene get currentScene => Application.currentScene;
+  Scene get currentScene => Application.instance.currentScene;
 
   Map<String, bool> openedMenus = {
     'headerId0' : false,
@@ -51,7 +51,7 @@ class MenuComponent{
   Future<bool> reset(Event event)async {
     Scene newScene = new Scene();
     await newScene.setup();
-    Application.currentScene = newScene;
+    Application.instance.currentScene = newScene;
     closeAllMenus();
     return false;
   }
@@ -75,7 +75,7 @@ class MenuComponent{
       String jsonContent = reader.result;
       Scene newScene = new Scene.fromJson(JSON.decode(jsonContent));
       await newScene.setup();
-      Application.currentScene = newScene;
+      Application.instance.currentScene = newScene;
     });
     closeAllMenus();
   }

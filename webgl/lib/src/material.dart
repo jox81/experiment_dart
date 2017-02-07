@@ -52,9 +52,10 @@ abstract class Material extends IEditElement {
           ..material = new MaterialBaseColor(new Vector4.all(1.0));
         break;
       case MaterialType.MaterialBaseVertexColor:
+        MaterialBaseVertexColor material = new MaterialBaseVertexColor();
         model
           ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialBaseVertexColor();
+          ..material = material;
         break;
       case MaterialType.MaterialBaseTexture:
         WebGLTexture texture = TextureUtils.getDefaultColoredTexture();

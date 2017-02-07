@@ -2,11 +2,13 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/shader_source.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader.dart';
+import 'package:webgl/src/context.dart' as ctx;
+
 @MirrorsUsed(
     targets: const [
       AxisType,
@@ -15,18 +17,39 @@ import 'package:webgl/src/webgl_objects/webgl_shader.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 enum AxisType { view, x, y, z, any }
 enum ToolType { select, move, rotate, scale }
 
 class Application {
 
-  static IUpdatableScene _currentScene;
-  static IUpdatableScene get currentScene => _currentScene;
-  static set currentScene(IUpdatableScene value) {
+  //Singleton
+  static Application _instance;
+  static Application get instance => _instance;
+  static Future<Application> create(CanvasElement canvas) async {
+    if (_instance == null) {
+      _instance = new Application._internal(canvas);
+      await ShaderSource.loadShaders();
+    }
+
+    return _instance;
+  }
+
+  Application._internal(this._canvas) {
+    _initGL(_canvas);
+    resizeCanvas();
+    _initToolBars();
+  }
+
+  IUpdatableScene _currentScene;
+  IUpdatableScene get currentScene => _currentScene;
+  set currentScene(IUpdatableScene value) {
     _currentScene = null;
     _currentScene = value;
   }
+
+  WebGLRenderingContext get gl => ctx.gl;
 
   CanvasElement _canvas;
 
@@ -70,24 +93,6 @@ class Application {
   }
 
   Map<String, ToolBar> toolBars;
-
-  //Singleton
-  static Application _instance;
-  static Application get instance => _instance;
-  static Future<Application> create(CanvasElement canvas) async {
-    if (_instance == null) {
-      _instance = new Application._internal(canvas);
-      await ShaderSource.loadShaders();
-    }
-
-    return _instance;
-  }
-
-  Application._internal(this._canvas) {
-    _initGL(_canvas);
-    resizeCanvas();
-    _initToolBars();
-  }
 
   void _initToolBars() {
     toolBars = {};
@@ -143,7 +148,10 @@ class Application {
     _render();
   }
 
+  num _lastTime = 0.0;
   void _render({num time: 0.0}) {
+    Time.deltaTime = time - _lastTime;
+
     gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     clear(_currentScene.backgroundColor);
 
@@ -154,6 +162,7 @@ class Application {
     window.requestAnimationFrame((num time) {
       this._render(time: time);
     });
+    _lastTime = time;
   }
 
   void clear(Vector4 color) {
