@@ -2,11 +2,10 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/models.dart';
-import 'package:webgl/src/shader_source.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 Future main() async {
   await ShaderSource.loadShaders();

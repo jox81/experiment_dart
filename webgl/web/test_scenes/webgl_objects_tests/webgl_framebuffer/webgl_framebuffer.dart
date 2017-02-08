@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/shader_source.dart';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/material/shader_source.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future main() async {

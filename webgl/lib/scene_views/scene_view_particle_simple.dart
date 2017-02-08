@@ -1,11 +1,12 @@
 import 'package:webgl/src/application.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/geometry/meshes.dart';
 import 'dart:typed_data';
 import 'dart:async';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(
     targets: const [
@@ -28,12 +29,8 @@ class SceneViewParticleSimple extends Scene{
     models.add(customObject);
 
     //Animation
-//    num _lastTime = 0.0;
-    updateFunction = (num time) {
-//      double animationStep = time - _lastTime;
-      //... custom animation here
-      customObject.updateFunction(time);
-//      _lastTime = time;
+    updateFunction = () {
+      customObject.updateFunction();
     };
   }
 
@@ -100,8 +97,8 @@ class SceneViewParticleSimple extends Scene{
     ..mesh.vertices = pstart
     ..material = materialCustom;
 
-    customObject.updateFunction = (num time) {
-      shaderTime = time / 20000;
+    customObject.updateFunction = () {
+      shaderTime = Time.currentTime / 20000;
     };
 
     return customObject;

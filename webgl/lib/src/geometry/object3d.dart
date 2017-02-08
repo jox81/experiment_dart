@@ -30,6 +30,12 @@ abstract class Object3d extends IEditElement {
   }
 
   List<IComponent> components = new List();
+
+  void addComponent(IComponent component) {
+    components.add(component
+    ..object3d = this);
+  }
+
   void update(){
     components.forEach((c)=> c.update());
   }

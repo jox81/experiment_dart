@@ -2,7 +2,7 @@
 import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 
 class WebglConstants{
 

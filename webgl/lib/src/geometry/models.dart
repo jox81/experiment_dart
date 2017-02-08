@@ -1,14 +1,13 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/scene_views/test_anim.dart';
-import 'package:webgl/src/object3d.dart';
+import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/material.dart';
-import 'package:webgl/src/meshes.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/utils_math.dart';
+import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/material/material.dart';
+import 'package:webgl/src/material/materials.dart';
+import 'package:webgl/src/utils/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(targets: const [
   ModelType,

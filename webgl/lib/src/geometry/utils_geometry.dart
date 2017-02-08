@@ -1,9 +1,9 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/material.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/material.dart';
+import 'package:webgl/src/material/materials.dart';
 
 class UtilsGeometry{
 

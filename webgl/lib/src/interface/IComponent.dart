@@ -1,8 +1,8 @@
-import 'package:webgl/src/object3d.dart';
+import 'package:webgl/src/geometry/object3d.dart';
 
 abstract class IComponent {
 
-  IComponent(this.object3d);
+  IComponent();
 
   Object3d object3d;
   update();

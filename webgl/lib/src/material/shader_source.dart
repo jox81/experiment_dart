@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 @MirrorsUsed(
     targets: const [
       ShaderSource,

@@ -1,18 +1,18 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
-import 'package:webgl/src/object3d.dart';
+import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
 @MirrorsUsed(
     targets: const [
       Camera,
     ],
     override: '*')
 import 'dart:mirrors';
-import 'package:webgl/src/utils_math.dart';
+import 'package:webgl/src/utils/utils_math.dart';
 
 class Camera extends Object3d {
 

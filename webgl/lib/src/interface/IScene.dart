@@ -2,7 +2,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:async';
 import 'package:webgl/src/introspection.dart';
 
-typedef void UpdateFunction(num time);
+typedef void UpdateFunction();
 typedef void UpdateUserInput();
 
 abstract class IUpdatable{
@@ -14,7 +14,7 @@ abstract class IUpdatableScene implements IUpdatable{
   IEditElement currentSelection;
 
   updateUserInput();
-  update(time);
+  update();
   render();
 }
 

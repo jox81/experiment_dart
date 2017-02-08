@@ -2,11 +2,11 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/scene.dart';
 import 'dart:typed_data';
-import 'package:webgl/src/utils_fps.dart';
-import 'package:webgl/src/utils_geometry.dart';
+import 'package:webgl/src/utils/utils_fps.dart';
+import 'package:webgl/src/geometry/utils_geometry.dart';
 
 class Interaction {
 
@@ -133,9 +133,9 @@ class Interaction {
 
       dragging = true;
 
-      if(Application.instance.activeTool == ToolType.move ||
-        Application.instance.activeTool == ToolType.rotate ||
-        Application.instance.activeTool == ToolType.scale) {
+      if(Application.instance.activeTool == ActiveToolType.move ||
+        Application.instance.activeTool == ActiveToolType.rotate ||
+        Application.instance.activeTool == ActiveToolType.scale) {
         scene.currentSelection = tempSelection;
       }
 
@@ -154,14 +154,14 @@ class Interaction {
             ? 1
             : 0) * delta;
 
-        if (Application.instance.activeTool == ToolType.move) {
+        if (Application.instance.activeTool == ActiveToolType.move) {
           num moveFactor = 1.0;
 
           currentModel.transform.translate(
               new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
         }
 
-        if (Application.instance.activeTool == ToolType.rotate) {
+        if (Application.instance.activeTool == ActiveToolType.rotate) {
           num rotateFactor = 1.0;
 
           currentModel.transform.rotateX(deltaMoveX * rotateFactor);
@@ -169,7 +169,7 @@ class Interaction {
           currentModel.transform.rotateY(deltaMoveZ * rotateFactor);
         }
 
-        if (Application.instance.activeTool == ToolType.scale) {
+        if (Application.instance.activeTool == ActiveToolType.scale) {
           num scaleFactor = 0.03;
 
           currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);

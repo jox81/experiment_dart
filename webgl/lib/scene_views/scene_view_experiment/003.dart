@@ -1,8 +1,9 @@
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/geometry/models.dart';
 import 'dart:async';
+import 'package:webgl/src/material/materials.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
@@ -67,9 +68,9 @@ Future<Model> experiment() async {
     ..mesh = mesh
     ..material = materialCustom;
 
-  customObject.updateFunction = (num time){
-    shaderTime = time;
-//    print(10.0 + 100.0 * cos(time / 500.0));
+  customObject.updateFunction = (){
+    shaderTime = Time.currentTime;
+//    print(10.0 + 100.0 * cos(Time.currentTime / 500.0));
   };
 
   return customObject;

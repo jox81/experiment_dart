@@ -22,6 +22,9 @@ class WebGLUniformLocation{
   final String variableName;
 
   WebGL.UniformLocation _webGLUniformLocation;
+
+  var data;
+
   WebGL.UniformLocation get webGLUniformLocation => _webGLUniformLocation;
 
   WebGLUniformLocation(this.program, this.variableName){

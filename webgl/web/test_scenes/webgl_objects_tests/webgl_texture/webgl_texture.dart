@@ -1,9 +1,8 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/shader_source.dart';
+import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future main() async {

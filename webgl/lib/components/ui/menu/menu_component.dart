@@ -5,8 +5,8 @@ import 'package:angular2/core.dart';
 import 'package:webgl/directives/clickoutside_directive.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 

@@ -1,14 +1,12 @@
-
+import 'package:webgl/src/context.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(
     targets: const [
       RenderSetting,
     ],
     override: '*')
 import 'dart:mirrors';
-
-import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils_assets.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class RenderSetting{
   RenderSetting();

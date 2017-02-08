@@ -1,7 +1,7 @@
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/context/webgl_constants.dart';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/webgl_objects/webgl_constants.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 
 class WebglParameters{
 

@@ -2,7 +2,6 @@ import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -10,7 +9,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 @MirrorsUsed(
@@ -30,75 +29,6 @@ abstract class Material extends IEditElement {
   static const String GLSL_PRAGMA_OPTIMIZE_ON =
   "#pragma optimize(on)\n"; //Default
   static const String GLSL_PRAGMA_OPTIMIZE_OFF = "#pragma optimize(off)\n";
-
-  static void assignMaterialTypeToModel(MaterialType materialType, Model model) {
-    switch(materialType){
-//      case MaterialType.MaterialCustom:
-//        newMaterial = new MaterialCustom();
-//        break;
-      case MaterialType.MaterialPoint:
-        model
-          ..mesh.mode = DrawMode.POINTS
-          ..material = new MaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
-        break;
-      case MaterialType.MaterialBase:
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialBase();
-        break;
-      case MaterialType.MaterialBaseColor:
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialBaseColor(new Vector4.all(1.0));
-        break;
-      case MaterialType.MaterialBaseVertexColor:
-        MaterialBaseVertexColor material = new MaterialBaseVertexColor();
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = material;
-        break;
-      case MaterialType.MaterialBaseTexture:
-        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
-        MaterialBaseTexture material = new MaterialBaseTexture()
-        ..texture = texture;
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = material;
-        break;
-      case MaterialType.MaterialBaseTextureNormal:
-        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
-        MaterialBaseTextureNormal material = new MaterialBaseTextureNormal()
-          ..texture = texture;
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = material;
-        break;
-      case MaterialType.MaterialPBR:
-        PointLight light = new PointLight();
-        MaterialPBR material = new MaterialPBR(light);
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = material;
-        break;
-      case MaterialType.MaterialDepthTexture:
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialDepthTexture();
-        break;
-      case MaterialType.MaterialSkyBox:
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialSkyBox();
-        break;
-      case MaterialType.MaterialReflection:
-        model
-          ..mesh.mode = DrawMode.TRIANGLES
-          ..material = new MaterialReflection();
-        break;
-      default:
-        break;
-    }
-  }
 
   String name;
 
@@ -169,16 +99,25 @@ abstract class Material extends IEditElement {
     if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
     attributes[attributName].enabled = true;
-    gl.bufferData(
-        BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
+
+    if(buffers[attributName].data != arrayBuffer) {
+      buffers[attributName].data = arrayBuffer;
+      gl.bufferData(
+          BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
+    }
+
     attributes[attributName].vertexAttribPointer(dimension, ShaderVariableType.FLOAT, false, 0, 0);
   }
 
   void setShaderAttributElementArrayBuffer(String attributName, List<int> elementArrayBuffer){
     if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
-    gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elementArrayBuffer),
-        BufferUsageType.STATIC_DRAW);
+
+    if(buffers[attributName].data != elementArrayBuffer) {
+      buffers[attributName].data = elementArrayBuffer;
+      gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(elementArrayBuffer),
+      BufferUsageType.STATIC_DRAW);
+    }
   }
 
   void setShaderAttributData(String attributName, data) {
@@ -215,51 +154,59 @@ abstract class Material extends IEditElement {
   // >> Uniforms
 
   void setShaderUniform(String uniformName, data, [data1, data2, data3]) {
-    WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.name == uniformName, orElse:() => null);
 
-    if(activeInfo != null) {
-      switch (activeInfo.type) {
-        case ShaderVariableType.FLOAT_VEC2:
-          if (data1 == null) {
-            uniformLocations[uniformName].uniform2fv(data);
-          }else{
-            uniformLocations[uniformName].uniform2f(data, data1);
-          }
-          break;
-        case ShaderVariableType.FLOAT_VEC3:
-          if (data1 == null && data2 == null) {
-            uniformLocations[uniformName].uniform3fv(data);
-          } else {
-            uniformLocations[uniformName].uniform3f( data, data1, data2);
-          }
-          break;
-        case ShaderVariableType.FLOAT_VEC4:
-          if (data1 == null && data2 == null && data3 == null) {
-            uniformLocations[uniformName].uniform4fv(data);
-          } else {
-            uniformLocations[uniformName].uniform4f(data, data1, data2, data3);
-          }
-          break;
-        case ShaderVariableType.BOOL:
-        case ShaderVariableType.SAMPLER_2D:
-        case ShaderVariableType.SAMPLER_CUBE:
-          uniformLocations[uniformName].uniform1i(data);
-          break;
-        case ShaderVariableType.FLOAT:
-          uniformLocations[uniformName].uniform1f(data);
-          break;
-        case ShaderVariableType.FLOAT_MAT3:
-          uniformLocations[uniformName].uniformMatrix3fv(data, false);
-          break;
-        case ShaderVariableType.FLOAT_MAT4:
-          uniformLocations[uniformName].uniformMatrix4fv(data, false);
-          break;
-        default:
-          print(
-              'setShaderUniformWithName not set in material.dart for : ${activeInfo}');
-          break;
+    if(uniformLocations[uniformName].data != data){
+
+      WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.name == uniformName, orElse:() => null);
+
+      uniformLocations[uniformName].data = data;
+
+      if(activeInfo != null) {
+        switch (activeInfo.type) {
+          case ShaderVariableType.FLOAT_VEC2:
+            if (data1 == null) {
+              uniformLocations[uniformName].uniform2fv(data);
+            }else{
+              uniformLocations[uniformName].uniform2f(data, data1);
+            }
+            break;
+          case ShaderVariableType.FLOAT_VEC3:
+            if (data1 == null && data2 == null) {
+              uniformLocations[uniformName].uniform3fv(data);
+            } else {
+              uniformLocations[uniformName].uniform3f( data, data1, data2);
+            }
+            break;
+          case ShaderVariableType.FLOAT_VEC4:
+            if (data1 == null && data2 == null && data3 == null) {
+              uniformLocations[uniformName].uniform4fv(data);
+            } else {
+              uniformLocations[uniformName].uniform4f(data, data1, data2, data3);
+            }
+            break;
+          case ShaderVariableType.BOOL:
+          case ShaderVariableType.SAMPLER_2D:
+          case ShaderVariableType.SAMPLER_CUBE:
+            uniformLocations[uniformName].uniform1i(data);
+            break;
+          case ShaderVariableType.FLOAT:
+            uniformLocations[uniformName].uniform1f(data);
+            break;
+          case ShaderVariableType.FLOAT_MAT3:
+            uniformLocations[uniformName].uniformMatrix3fv(data, false);
+            break;
+          case ShaderVariableType.FLOAT_MAT4:
+            uniformLocations[uniformName].uniformMatrix4fv(data, false);
+            break;
+          default:
+            print(
+                'setShaderUniformWithName not set in material.dart for : ${activeInfo}');
+            break;
+        }
       }
+
     }
+
   }
 
   // > Animation and Hierarchy

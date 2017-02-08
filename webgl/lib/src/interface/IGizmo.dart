@@ -1,4 +1,4 @@
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
 
 abstract class IGizmo{
   List<Model> gizmoModels;

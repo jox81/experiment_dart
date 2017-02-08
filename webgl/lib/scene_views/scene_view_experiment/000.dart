@@ -1,7 +1,8 @@
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/geometry/meshes.dart';
 import 'dart:math';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 Model experiment() {
@@ -57,8 +58,8 @@ Model experiment() {
   ..mesh = mesh
   ..material = materialCustom;
 
-  customObject.updateFunction = (num time){
-    pointSize = 100 * cos(time / 100);
+  customObject.updateFunction = (){
+    pointSize = 100 * cos(Time.currentTime / 100);
   };
 
   return customObject;

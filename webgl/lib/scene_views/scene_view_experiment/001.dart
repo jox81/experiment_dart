@@ -1,8 +1,9 @@
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/geometry/meshes.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 Model experiment() {
@@ -53,10 +54,10 @@ Model experiment() {
     ..material = materialCustom;
 
   Vector4 position = new Vector4(0.0, 0.0, 0.0, 1.0);
-  customObject.updateFunction = (num time){
-    pointSize = 100 * cos(time / 500);
-    position.x = cos(time / 1000) * .4;
-    print(cos(time / 1000));
+  customObject.updateFunction = (){
+    pointSize = 100 * cos(Time.currentTime / 500);
+    position.x = cos(Time.currentTime / 1000) * .4;
+    print(cos(Time.currentTime / 1000));
     mesh.vertices = position.storage;
   };
 

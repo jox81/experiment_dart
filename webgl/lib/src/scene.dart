@@ -7,20 +7,19 @@ import 'dart:convert';
 import 'dart:mirrors';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/object3d.dart';
+import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/material.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
 import 'package:webgl/src/interaction.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/models.dart';
-import 'package:webgl/src/time/time.dart';
-import 'package:webgl/src/utils_assets.dart';
-import 'package:webgl/src/utils_math.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/material.dart';
+import 'package:webgl/src/material/materials.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_math.dart';
 
 class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 
@@ -88,18 +87,17 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   void assignMaterial(MaterialType materialType) {
     if(currentSelection is Model){
-      Material.assignMaterialTypeToModel(materialType, currentSelection as Model);
+      Materials.assignMaterialTypeToModel(materialType, currentSelection as Model);
     }
   }
 
-
   @override
-  void update(num time) {
+  void update() {
     for (Model model in models) {
       model.update();
     }
     if(updateFunction != null) {
-      updateFunction(time);
+      updateFunction();
     }
   }
 

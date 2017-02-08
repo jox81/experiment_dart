@@ -1,6 +1,6 @@
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 @MirrorsUsed(
@@ -13,6 +13,8 @@ import 'dart:mirrors';
 class WebGLBuffer extends WebGLObject{
 
   final WebGL.Buffer webGLBuffer;
+
+  var data;
 
   WebGLBuffer():this.webGLBuffer = gl.ctx.createBuffer();
   WebGLBuffer.fromWebGL(this.webGLBuffer);

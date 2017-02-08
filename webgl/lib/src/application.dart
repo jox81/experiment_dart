@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/shader_source.dart';
+import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/interface/IScene.dart';
@@ -12,7 +12,7 @@ import 'package:webgl/src/context.dart' as ctx;
 @MirrorsUsed(
     targets: const [
       AxisType,
-      ToolType,
+      ActiveToolType,
       Application,
     ],
     override: '*')
@@ -20,7 +20,7 @@ import 'dart:mirrors';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 enum AxisType { view, x, y, z, any }
-enum ToolType { select, move, rotate, scale }
+enum ActiveToolType { select, move, rotate, scale }
 
 class Application {
 
@@ -39,7 +39,6 @@ class Application {
   Application._internal(this._canvas) {
     _initGL(_canvas);
     resizeCanvas();
-    _initToolBars();
   }
 
   IUpdatableScene _currentScene;
@@ -53,7 +52,7 @@ class Application {
 
   CanvasElement _canvas;
 
-  ///
+  /// Active Axis
   Map<AxisType, bool> _activeAxis = {
     AxisType.x: false,
     AxisType.y: false,
@@ -64,55 +63,32 @@ class Application {
     _activeAxis = value;
   }
 
-  setActiveAxis(AxisType axisType, bool isActive) {
+  void setActiveAxis(AxisType axisType, bool isActive) {
     _activeAxis[axisType] = isActive;
     print(_activeAxis);
   }
 
-  ///
-  ToolType _activeTool = ToolType.select;
-  ToolType get activeTool => _activeTool;
+  ///Active Tool
+  ActiveToolType _activeTool = ActiveToolType.select;
+  ActiveToolType get activeTool => _activeTool;
 
-  setActiveTool(ToolType value) {
+  setActiveTool(ActiveToolType value) {
     _activeTool = value;
     print(_activeTool);
     switch (_activeTool){
-      case ToolType.select:
+      case ActiveToolType.select:
         Context.mainCamera.isActive = true;
         break;
-      case ToolType.move:
+      case ActiveToolType.move:
         Context.mainCamera.isActive = false;
         break;
-      case ToolType.rotate:
+      case ActiveToolType.rotate:
         Context.mainCamera.isActive = false;
         break;
-      case ToolType.scale:
+      case ActiveToolType.scale:
         Context.mainCamera.isActive = false;
         break;
     }
-  }
-
-  Map<String, ToolBar> toolBars;
-
-  void _initToolBars() {
-    toolBars = {};
-
-    ToolBar toolBarAxis = new ToolBar(ToolBarItemsType.multi)
-      ..toolBarItems = {
-        "x": (bool isActive) => setActiveAxis(AxisType.x, isActive),
-        "y": (bool isActive) => setActiveAxis(AxisType.y, isActive),
-        "z": (bool isActive) => setActiveAxis(AxisType.z, isActive),
-      };
-    toolBars['axis'] = toolBarAxis;
-
-    ToolBar toolBarTransformTools = new ToolBar(ToolBarItemsType.single)
-      ..toolBarItems = {
-        "s": (bool isActive) => setActiveTool(ToolType.select),
-        "M": (bool isActive) => setActiveTool(ToolType.move),
-        "R": (bool isActive) => setActiveTool(ToolType.rotate),
-        "S": (bool isActive) => setActiveTool(ToolType.scale),
-      };
-    toolBars['transformTool'] = toolBarTransformTools;
   }
 
   void _initGL(CanvasElement canvas) {
@@ -144,25 +120,28 @@ class Application {
   }
 
   void render() {
+    if(_currentScene == null) throw new Exception("Application currentScene must be set before rendering.");
     resizeCanvas();
     _render();
   }
 
-  num _lastTime = 0.0;
   void _render({num time: 0.0}) {
-    Time.deltaTime = time - _lastTime;
+    Time.currentTime = time;
 
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-    clear(_currentScene.backgroundColor);
-
-    _currentScene.updateUserInput();
-    _currentScene.update(time);
-    _currentScene.render();
+    _renderCurrentScene();
 
     window.requestAnimationFrame((num time) {
       this._render(time: time);
     });
-    _lastTime = time;
+  }
+
+  void _renderCurrentScene() {
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    clear(_currentScene.backgroundColor);
+
+    _currentScene.updateUserInput();
+    _currentScene.update();
+    _currentScene.render();
   }
 
   void clear(Vector4 color) {

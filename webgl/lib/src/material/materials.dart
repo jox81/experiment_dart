@@ -1,13 +1,14 @@
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/material.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/models.dart';
-import 'package:webgl/src/shader_source.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/material.dart';
+import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @MirrorsUsed(targets: const [
+  MaterialType,
+  Materials,
   SetShaderVariables,
   MaterialCustom,
   MaterialPoint,
@@ -37,6 +38,76 @@ enum MaterialType {
   MaterialReflection
 }
 
+class Materials{
+  static void assignMaterialTypeToModel(MaterialType materialType, Model model) {
+    switch(materialType){
+//      case MaterialType.MaterialCustom:
+//        newMaterial = new MaterialCustom();
+//        break;
+      case MaterialType.MaterialPoint:
+        model
+          ..mesh.mode = DrawMode.POINTS
+          ..material = new MaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
+        break;
+      case MaterialType.MaterialBase:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBase();
+        break;
+      case MaterialType.MaterialBaseColor:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialBaseColor(new Vector4.all(1.0));
+        break;
+      case MaterialType.MaterialBaseVertexColor:
+        MaterialBaseVertexColor material = new MaterialBaseVertexColor();
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = material;
+        break;
+      case MaterialType.MaterialBaseTexture:
+        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
+        MaterialBaseTexture material = new MaterialBaseTexture()
+          ..texture = texture;
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = material;
+        break;
+      case MaterialType.MaterialBaseTextureNormal:
+        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
+        MaterialBaseTextureNormal material = new MaterialBaseTextureNormal()
+          ..texture = texture;
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = material;
+        break;
+      case MaterialType.MaterialPBR:
+        PointLight light = new PointLight();
+        MaterialPBR material = new MaterialPBR(light);
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = material;
+        break;
+      case MaterialType.MaterialDepthTexture:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialDepthTexture();
+        break;
+      case MaterialType.MaterialSkyBox:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialSkyBox();
+        break;
+      case MaterialType.MaterialReflection:
+        model
+          ..mesh.mode = DrawMode.TRIANGLES
+          ..material = new MaterialReflection();
+        break;
+      default:
+        break;
+    }
+  }
+}
 typedef void SetShaderVariables(Model model);
 
 class MaterialCustom extends Material {

@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @MirrorsUsed(
@@ -105,18 +105,11 @@ class SceneViewTexturing extends Scene{
     models.add(sphere);
 
     //Animation
-    num _lastTime = 0.0;
-    updateFunction = (num time) {
-      double animationStep = time - _lastTime;
-      //Do Animation here
-
-      triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
-      squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
-      pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
-      cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
-
-      //
-      _lastTime = time;
+    updateFunction = () {
+      triangle.transform.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
+      squareX.transform.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
+      pyramid..transform.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
+      cube.transform.rotateY((radians(45.0) * Time.deltaTime) / 1000.0);
     };
 
   }

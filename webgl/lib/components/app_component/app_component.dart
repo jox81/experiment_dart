@@ -60,8 +60,8 @@ class AppComponent implements OnInit{
 
   ToolBar getToolBar(String toolBarName){
     if(application != null) {
-      if (application.toolBars.containsKey(toolBarName)) {
-        return application.toolBars[toolBarName];
+      if (ToolBars.instance.toolBars.containsKey(toolBarName)) {
+        return ToolBars.instance.toolBars[toolBarName];
       }
     }
     return null;

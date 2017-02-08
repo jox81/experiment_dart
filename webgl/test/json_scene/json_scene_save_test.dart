@@ -6,7 +6,7 @@ import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 
 @TestOn("dartium")
 

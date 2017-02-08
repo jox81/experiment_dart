@@ -2,14 +2,13 @@ import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/scene_views/test_anim.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
+import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/time/time.dart';
-import 'package:webgl/src/utils_assets.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @MirrorsUsed(
     targets: const [
@@ -142,7 +141,10 @@ class SceneViewTests extends Scene{
     cube.transform.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
     await TextureUtils.getTextureFromFile("./images/crate.gif");
-    cube.material = materialBaseTextureNormal;
+    cube
+      ..material = materialBaseTextureNormal
+      ..addComponent(new TestAnim());
+
     models.add(cube);
 
     //SusanModel
@@ -153,10 +155,9 @@ class SceneViewTests extends Scene{
     JsonObject jsonModel = new JsonObject(susanJson)
       ..transform.translate(10.0, 0.0, -5.0)
       ..transform.rotateX(radians(-90.0))
-      ..material = susanMaterialBaseTexture;
+      ..material = susanMaterialBaseTexture
+      ..addComponent(new TestAnim());
     models.add(jsonModel);
-
-    jsonModel.components.add(new TestAnim(jsonModel));
 
     //Sphere
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
@@ -166,17 +167,10 @@ class SceneViewTests extends Scene{
     models.add(sphere);
 
     //Animation
-    num _lastTime = 0.0;
-    updateFunction = (num time) {
-      double animationStep = time - _lastTime;
-      //Do Animation here
+    updateFunction = () {
 
-//      Time.deltaTime = animationStep;
-
-//      triangle.transform.rotateZ((radians(60.0) * animationStep) / 1000.0);
-//      squareX.transform.rotateX((radians(180.0) * animationStep) / 1000.0);
-//      pyramid..transform.rotateY((radians(90.0) * animationStep) / 1000.0);
-//      cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
+      squareX.transform.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
+      pyramid..transform.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
 
       materialBaseTextureNormal..useLighting = useLighting;
 
@@ -186,7 +180,6 @@ class SceneViewTests extends Scene{
         ..color.setFrom(directionalColor);
 
       //
-      _lastTime = time;
     };
 
   }

@@ -12,12 +12,12 @@ import 'package:webgl/components/value_components/vector2_component/vector2_comp
 import 'package:webgl/components/value_components/vector3_component/vector3_component.dart';
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/components/value_components/webglenum_component/webglenum_component.dart';
-import 'package:webgl/src/animation_property.dart';
+import 'package:webgl/src/animation/animation_property.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/material.dart';
-import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';

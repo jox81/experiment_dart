@@ -1,9 +1,9 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/materials.dart';
-import 'package:webgl/src/meshes.dart';
+import 'package:webgl/src/geometry/meshes.dart';
 import 'dart:async';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
@@ -11,6 +11,7 @@ import 'package:webgl/src/scene.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/time/time.dart';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
 class SceneViewShaderLearning01 extends Scene{
@@ -27,12 +28,8 @@ class SceneViewShaderLearning01 extends Scene{
     models.add(customObject);
 
     //Animation
-//    num _lastTime = 0.0;
-    updateFunction = (num time) {
-//      double animationStep = time - _lastTime;
-      //... custom animation here
-      customObject.updateFunction(time);
-//      _lastTime = time;
+    updateFunction = () {
+      customObject.updateFunction();
     };
   }
 
@@ -183,8 +180,8 @@ class SceneViewShaderLearning01 extends Scene{
       ..mesh = new Mesh.Rectangle()
       ..material = materialCustom;
 
-    customObject.updateFunction = (num time) {
-      shaderTime = time / 10000;
+    customObject.updateFunction = () {
+      shaderTime = Time.currentTime / 10000;
     };
 
     return customObject;

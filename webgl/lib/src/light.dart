@@ -1,6 +1,6 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/object3d.dart';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/object3d.dart';
+import 'package:webgl/src/geometry/models.dart';
 @MirrorsUsed(
     targets: const [
       Light,

@@ -4,7 +4,7 @@ import '001.dart' as exp001;
 import '002.dart' as exp002;
 import '003.dart' as exp003;
 import 'dart:async';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
@@ -27,10 +27,8 @@ class SceneViewExperiment extends Scene{
     models.add(model);
 
     //Animation
-//    num _lastTime = 0.0;
-    updateFunction = (num time) {
-      model.updateFunction(time);
-//      _lastTime = time;
+    updateFunction = () {
+      model.updateFunction();
     };
   }
 }

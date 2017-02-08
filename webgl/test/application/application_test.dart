@@ -4,8 +4,7 @@ import 'dart:async';
 import 'dart:html';
 import "package:test/test.dart";
 import 'package:webgl/src/application.dart';
-import 'package:webgl/src/shader_source.dart';
-import 'package:webgl/src/utils_assets.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {
 

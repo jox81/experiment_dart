@@ -2,10 +2,10 @@ import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/materials.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:math';
-import 'package:webgl/src/models.dart';
+import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
@@ -81,12 +81,8 @@ class SceneViewPerformance extends Scene{
       models.add(cube);
     }
     // Animation
-//    num _lastTime = 0.0;
-    updateFunction = (num time) {
-//      double animationStep = time - _lastTime;
-      // Do animation
+    updateFunction = () {
 //    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
-//      _lastTime = time;
 
 //    materialBaseTextureNormal..useLighting = useLighting;
 //
