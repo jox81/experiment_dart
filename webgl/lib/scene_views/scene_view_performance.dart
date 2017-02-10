@@ -81,7 +81,7 @@ class SceneViewPerformance extends Scene{
       models.add(cube);
     }
     // Animation
-    updateFunction = () {
+    updateSceneFunction = () {
 //    cube.transform.rotateY((radians(45.0) * animationStep) / 1000.0);
 
 //    materialBaseTextureNormal..useLighting = useLighting;

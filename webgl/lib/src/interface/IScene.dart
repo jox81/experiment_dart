@@ -6,24 +6,28 @@ typedef void UpdateFunction();
 typedef void UpdateUserInput();
 
 abstract class IUpdatable{
-
 }
+
 abstract class IUpdatableScene implements IUpdatable{
   Vector4 backgroundColor;
 
   IEditElement currentSelection;
 
-  updateUserInput();
   update();
+  updateUserInput();
+  updateScene();
+
   render();
+
 }
 
 abstract class IUpdatableSceneFunction{
   UpdateUserInput updateUserInputFunction;
-  UpdateFunction updateFunction;
+  UpdateFunction updateSceneFunction;
 }
 
 abstract class ISetupScene{
+  setup();
   setupUserInput();
   Future setupScene();
 }

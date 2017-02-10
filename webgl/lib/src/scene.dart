@@ -39,7 +39,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   Material defaultMaterial = new MaterialBase();
 
-  Interaction interaction;
+  Interaction interaction = new Interaction();
 
   Scene(){
     if(Context.mainCamera == null){
@@ -52,9 +52,10 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   bool _isSetuped = false;
 
-  Future setup() async{
+  // >> setup
 
-    interaction = new Interaction();
+  /// Il faut appeler cette fonction juste après l'instanciation
+  Future setup() async{
 
     if(!_isSetuped){
       _isSetuped = true;
@@ -68,6 +69,68 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       models.add(axis);
     }
   }
+
+  @override
+  setupUserInput() {
+
+    //Lazy init here if null
+    if(updateUserInputFunction == null) {
+      updateUserInputFunction = () {
+        interaction.update();
+      };
+    }
+
+    //why here ?
+    //updateUserInputFunction();
+  }
+
+  ///Fonction à surcharger pour setuper la scene
+  @override
+  Future setupScene() {
+    return new Future.value();
+  }
+
+  // >> Update
+
+  @override
+  void update(){
+    updateUserInput();
+    updateScene();
+  }
+
+  @override
+  UpdateUserInput updateUserInputFunction;
+
+  @override
+  void updateUserInput() {
+    updateUserInputFunction();
+  }
+
+  ///Fonction à surcharger dans la scene descendante permettant d'indiquer
+  ///les updates à réaliser avec les objects qui y sont créés
+  @override
+  UpdateFunction updateSceneFunction = (){};
+
+  @override
+  void updateScene() {
+    for (Model model in models) {
+      model.update();
+    }
+    if(updateSceneFunction != null) {
+      updateSceneFunction();
+    }
+  }
+
+  // >>
+
+  @override
+  void render(){
+    for (Model model in models) {
+      model.render();
+    }
+  }
+
+  // >>
 
   void add(Object3d object3d){
     if(object3d is Model) {
@@ -91,48 +154,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
     }
   }
 
-  @override
-  void update() {
-    for (Model model in models) {
-      model.update();
-    }
-    if(updateFunction != null) {
-      updateFunction();
-    }
-  }
-
-  @override
-  Future setupScene() {
-    return new Future.value();
-  }
-
-  @override
-  void render(){
-    for (Model model in models) {
-      model.render();
-    }
-  }
-
-  @override
-  void updateUserInput() {
-    updateUserInputFunction();
-  }
-
-  @override
-  setupUserInput() {
-    if(updateUserInputFunction == null) {
-      updateUserInputFunction = () {
-        interaction.update();
-      };
-    }
-    updateUserInputFunction();
-  }
-
-  @override
-  UpdateFunction updateFunction;
-
-  @override
-  UpdateUserInput updateUserInputFunction;
+  // JSON
 
   //permet de merger un json à la scene actuelle
   //bug: le controller sur la camera active est perdu
@@ -152,8 +174,6 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       models.add(model);
     }
   }
-
-  // JSON
 
   static Future<Scene> fromJsonFilePath(String jsonFilePath) async {
     Map json = await UtilsAssets.loadJSONResource(jsonFilePath);

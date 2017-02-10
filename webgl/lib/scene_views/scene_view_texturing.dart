@@ -105,7 +105,7 @@ class SceneViewTexturing extends Scene{
     models.add(sphere);
 
     //Animation
-    updateFunction = () {
+    updateSceneFunction = () {
       triangle.transform.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
       squareX.transform.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
       pyramid..transform.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);

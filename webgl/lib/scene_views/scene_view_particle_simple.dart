@@ -29,7 +29,7 @@ class SceneViewParticleSimple extends Scene{
     models.add(customObject);
 
     //Animation
-    updateFunction = () {
+    updateSceneFunction = () {
       customObject.updateFunction();
     };
   }

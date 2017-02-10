@@ -139,7 +139,6 @@ class Application {
     gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     clear(_currentScene.backgroundColor);
 
-    _currentScene.updateUserInput();
     _currentScene.update();
     _currentScene.render();
   }

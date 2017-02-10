@@ -27,7 +27,7 @@ class SceneViewExperiment extends Scene{
     models.add(model);
 
     //Animation
-    updateFunction = () {
+    updateSceneFunction = () {
       model.updateFunction();
     };
   }

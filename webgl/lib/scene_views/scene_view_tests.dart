@@ -167,7 +167,7 @@ class SceneViewTests extends Scene{
     models.add(sphere);
 
     //Animation
-    updateFunction = () {
+    updateSceneFunction = () {
 
       squareX.transform.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
       pyramid..transform.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
