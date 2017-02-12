@@ -5,7 +5,7 @@ import 'package:webgl/scene_views/scene_view_texturing.dart';
 import 'package:webgl/scene_views/scene_view_vectors.dart';
 import 'package:webgl/scene_views/scene_view_webgl_edit.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/scene_views/scene_view_tests.dart';
+import 'package:webgl/scene_views/scene_view_base.dart';
 import 'package:webgl/scene_views/scene_view_experiment/scene_view_experiment.dart';
 import 'package:webgl/scene_views/scene_view_framebuffer.dart';
 import 'package:webgl/scene_views/scene_view_particle.dart';
@@ -23,10 +23,10 @@ class ServiceScene {
 //  new SceneViewCubeMap(),
 // new SceneViewTexturing(),
 // new SceneViewPrimitives(),
- new SceneViewTests(),
+// new SceneViewBase(),
 // new SceneViewWebGLEdit(),
 // new SceneViewVectors(),
-// new SceneViewFrameBuffer(),
+ new SceneViewFrameBuffer(),
 // new SceneViewParticle(),
 // new SceneViewParticleSimple(),
 // new SceneViewPBR(),

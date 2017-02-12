@@ -32,7 +32,7 @@ class WebglTest {
     List<ImageElement> cubeMapImages =
         await TextureUtils.loadCubeMapImages('kitchen');
     WebGLTexture cubeMapTexture =
-        TextureUtils.createCubeMapFromElements(cubeMapImages);
+        TextureUtils.createCubeMapWithImages(cubeMapImages);
     gl.activeTexture.textureCubeMap.bind(cubeMapTexture);
 
     gl.activeTexture.logActiveTextureInfo();

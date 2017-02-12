@@ -226,7 +226,7 @@ class WebglTest {
     int height = 64;
 
     // 1. Init Texture
-    List<WebGLTexture> renderedTextures = TextureUtils.createRenderedTextures();
+    List<WebGLTexture> renderedTextures = TextureUtils.buildRenderedTextures();
 
     // 2. Init Render Buffer
     WebGLRenderBuffer renderbuffer = new WebGLRenderBuffer();

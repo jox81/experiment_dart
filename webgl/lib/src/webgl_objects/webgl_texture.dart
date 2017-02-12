@@ -25,6 +25,8 @@ class WebGLTexture extends EditTexture {
   final WebGL.Texture webGLTexture;
   final TextureTarget textureTarget;
 
+  ImageElement image;
+
   Matrix4 textureMatrix = new Matrix4.identity();
 
   bool get isTexture => gl.ctx.isTexture(webGLTexture);
@@ -133,7 +135,7 @@ abstract class EditTexture extends WebGLObject{
 }
 
 class TextureUtils {
-  static Future<ImageElement> getImageFromFile(String fileUrl) {
+  static Future<ImageElement> loadImage(String fileUrl) {
     Completer completer = new Completer();
 
     ImageElement image;
@@ -147,26 +149,20 @@ class TextureUtils {
     return completer.future;
   }
 
-  static Future<WebGLTexture> getTextureFromFile(String fileUrl,
+  static Future<WebGLTexture> createTexture2DFromFile(String fileUrl,
       {bool repeatU: false,
       bool mirrorU: false,
       bool repeatV: false,
-      bool mirrorV: false}) {
-    Completer completer = new Completer();
+      bool mirrorV: false}) async {
 
-    ImageElement image;
+    ImageElement image = await loadImage(fileUrl);
+    WebGLTexture texture = createTexture2DWithImage(image,
+        repeatU: repeatU,
+        mirrorU: mirrorU,
+        repeatV: repeatV,
+        mirrorV: mirrorV);
 
-    image = new ImageElement()
-      ..src = fileUrl
-      ..onLoad.listen((e) {
-        completer.complete(createColorTextureFromElement(image,
-            repeatU: repeatU,
-            mirrorU: mirrorU,
-            repeatV: repeatV,
-            mirrorV: mirrorV));
-      });
-
-    return completer.future;
+    return texture;
   }
 
   // To use float :
@@ -174,7 +170,7 @@ class TextureUtils {
   //  gl.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.FLOAT, textureImage);
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-  static WebGLTexture createColorTextureFromElement(ImageElement image,
+  static WebGLTexture createTexture2DWithImage(ImageElement image,
       {bool repeatU: false,
       bool mirrorU: false,
       bool repeatV: false,
@@ -211,10 +207,13 @@ class TextureUtils {
         image);
 
     gl.activeTexture.texture2d.unBind();
+
+    texture.image = image;
+
     return texture;
   }
 
-  static WebGLTexture createColorTexture(int size) {
+  static WebGLTexture createEmptyTexture2D(int size) {
     WebGLTexture texture = new WebGLTexture.texture2d();
     gl.activeTexture.texture2d.bind(texture);
 
@@ -241,10 +240,12 @@ class TextureUtils {
         null);
 
     gl.activeTexture.texture2d.unBind();
+
+
     return texture;
   }
 
-  static WebGLTexture createColorCubeMapTexture(int size) {
+  static WebGLTexture createEmptyTextureCubeMap(int size) {
     WebGLTexture texture = new WebGLTexture.textureCubeMap();
     gl.activeTexture.textureCubeMap.bind(texture);
 
@@ -275,7 +276,7 @@ class TextureUtils {
     return texture;
   }
 
-  static WebGLTexture createDepthTexture(int size) {
+  static WebGLTexture createDepthTexture2D(int size) {
     //need extensions
     var OES_texture_float = gl.getExtension('OES_texture_float');
     assert(OES_texture_float != null);
@@ -310,7 +311,7 @@ class TextureUtils {
     return depthTexture;
   }
 
-  static WebGLRenderBuffer createRenderBuffer(int size) {
+  static WebGLRenderBuffer createEmptyRenderBuffer(int size) {
     WebGLRenderBuffer renderBuffer = new WebGLRenderBuffer();
 
     renderBuffer.bind();
@@ -381,8 +382,9 @@ class TextureUtils {
     return framebuffer;
   }
 
+  /// Default 1px Texture2D to assign new objects
   static WebGLTexture getDefaultColoredTexture() {
-    WebGLTexture _defaultColoredTexture = createColorTexture(1);
+    WebGLTexture _defaultColoredTexture = createEmptyTexture2D(1);
 
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
@@ -413,12 +415,12 @@ class TextureUtils {
     return _defaultColoredTexture;
   }
 
-  ///
-  static List<WebGLTexture> createRenderedTextures({int size: 1024}) {
+  /// build a frameBuffer and render something to it
+  static List<WebGLTexture> buildRenderedTextures({int size: 1024}) {
     //
-    WebGLTexture colorTexture = createColorTexture(size);
+    WebGLTexture colorTexture = createEmptyTexture2D(size);
 //    WebGLRenderBuffer depthRenderbuffer = createRenderBuffer(size);
-    WebGLTexture depthTexture = createDepthTexture(size);
+    WebGLTexture depthTexture = createDepthTexture2D(size);
 
 //    WebGLFrameBuffer framebufferWithDepthRenderBuffer =
 //        createFrameBuffer(colorTexture, depthRenderbuffer);
@@ -477,12 +479,78 @@ class TextureUtils {
         Context.mainCamera = baseCam;
       }
     }
+
     //...
     //End draw
 
     //readPixels(rectangle:new Rectangle(0,0,20,20)); doesn't work !...
 
     return [colorTexture, depthTexture];
+  }
+
+  static ImageElement createImageFromTexture(WebGLTexture texture, width, height) {
+    // Create a framebuffer backed by the texture
+    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+    gl.activeFrameBuffer.bind(framebuffer);
+    gl.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
+
+    gl.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, 512, 512, 0);
+
+    // Read the contents of the framebuffer
+    Uint8List data = new Uint8List(width * height * 4);
+    gl.readPixels(0, 0, width, height, ReadPixelDataFormat.RGBA, ReadPixelDataType.UNSIGNED_BYTE, data);
+    Uint8ClampedList dataClamped = new Uint8ClampedList.fromList(data.toList());
+    framebuffer.delete();
+
+    // Create a 2D canvas to store the result
+    CanvasElement canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    var context = canvas.getContext('2d');
+
+    // Copy the pixels to a 2D canvas
+    ImageData imgData = new ImageData(dataClamped, width);
+
+    ImageData imageData = context.createImageData(imgData);
+
+    context.putImageData(imageData, 0, 0);
+
+    var img = new ImageElement();
+    img.src = canvas.toDataUrl();
+    return img;
+  }
+
+  static ImageElement createImageFromTextureNoReadPixel(WebGLTexture texture, width, height) {
+    // Create a framebuffer backed by the texture
+//    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
+//    gl.activeFrameBuffer.bind(framebuffer);
+//    gl.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
+
+    // Read the contents of the framebuffer
+    Uint8List data = new Uint8List(width * height * 4);
+    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, width, height, data);
+
+//    gl.readPixels(0, 0, width, height, ReadPixelDataFormat.RGBA, ReadPixelDataType.UNSIGNED_BYTE, data);
+//    Uint8ClampedList dataClamped = new Uint8ClampedList.fromList(data.toList());
+//    framebuffer.delete();
+
+    // Create a 2D canvas to store the result
+    CanvasElement canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    var context = canvas.getContext('2d');
+
+    // Copy the pixels to a 2D canvas
+    ImageData imgData = new ImageData(data, width);
+
+    ImageData imageData = context.createImageData(imgData);
+
+    context.putImageData(imageData, 0, 0);
+
+    var img = new ImageElement();
+    img.src = canvas.toDataUrl();
+    return img;
   }
 
   static void readPixels({Rectangle rectangle}) {
@@ -548,13 +616,13 @@ class TextureUtils {
     List<ImageElement> imageElements = new List(6);
 
     for (int i = 0; i < 6; i++) {
-      imageElements[i] = await TextureUtils.getImageFromFile(paths[i]);
+      imageElements[i] = await TextureUtils.loadImage(paths[i]);
     }
 
     return imageElements;
   }
 
-  static WebGLTexture createCubeMapFromElements(
+  static WebGLTexture createCubeMapWithImages(
       List<ImageElement> cubeMapImages,
       {bool flip: true}) {
     assert(cubeMapImages.length == 6);

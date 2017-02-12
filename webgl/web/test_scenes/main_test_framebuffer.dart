@@ -19,7 +19,7 @@ Future main() async {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
 
   await ShaderSource.loadShaders();
-  textureCrate = await TextureUtils.getTextureFromFile("../images/crate.gif");
+  textureCrate = await TextureUtils.createTexture2DFromFile("../images/crate.gif");
 
   webgl01.setup();
   webgl01.render();

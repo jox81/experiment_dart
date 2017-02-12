@@ -67,6 +67,10 @@ label{
     padding-left: 0px;
 }
 
+img{
+    heigth : 60px;
+}
+
 hr{
     border-color:#DDD;
 }

@@ -38,7 +38,7 @@ Future<Model> experiment() async {
 
   num shaderTime = 0.0;
 
-  WebGLTexture texture = await TextureUtils.getTextureFromFile("./images/crate.gif");
+  WebGLTexture texture = await TextureUtils.createTexture2DFromFile("./images/crate.gif");
 
   //Material
   MaterialCustom materialCustom = new MaterialCustom(vs, fs);

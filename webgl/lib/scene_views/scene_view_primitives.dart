@@ -101,7 +101,7 @@ class SceneViewPrimitives extends Scene{
       'crate' : "./images/crate.gif"
     };
 
-    WebGLTexture texture = await TextureUtils.getTextureFromFile(textures['crate']);
+    WebGLTexture texture = await TextureUtils.createTexture2DFromFile(textures['crate']);
 
     MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture()
         ..texture = texture;

@@ -1,6 +1,8 @@
+import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/components/ui/properties_component/dynamic_load_html_component.dart';
 import 'package:webgl/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl/components/value_components/function_component/dynamic_load_component.dart';
 import 'package:webgl/components/value_components/function_component/function_component.dart';
@@ -26,11 +28,24 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @Component(
     selector: 'properties',
     templateUrl: 'properties_component.html',
-    styleUrls: const ['properties_component.css'],
-    directives: const [DynamicLoaderComponent, Vector2Component, Vector3Component, Vector4Component, Matrix3Component, Matrix4Component, ListComponent, MapComponent, BoolComponent, WebGLEnumComponent, FunctionComponent]
-)
-class PropertiesComponent{
-
+    styleUrls: const [
+      'properties_component.css'
+    ],
+    directives: const [
+      DynamicLoaderComponent,
+      Vector2Component,
+      Vector3Component,
+      Vector4Component,
+      Matrix3Component,
+      Matrix4Component,
+      ListComponent,
+      MapComponent,
+      BoolComponent,
+      WebGLEnumComponent,
+      FunctionComponent,
+      DynamicLoaderHtmlComponent
+    ])
+class PropertiesComponent {
   @Input()
   IEditElement iEditElement;
 
@@ -38,159 +53,187 @@ class PropertiesComponent{
   EventEmitter innerSelectionChange = new EventEmitter<IEditElement>();
 
   //Null
-  bool isNull(EditableProperty animationProperty){
+  bool isNull(EditableProperty animationProperty) {
     return animationProperty.type == Null;
   }
 
   //String
-  bool isString(EditableProperty animationProperty){
+  bool isString(EditableProperty animationProperty) {
     bool result = compareType(animationProperty.type, String);
-    if(result){
-//      print('');
-    }
     return result;
   }
-  setStringValue(EditableProperty animationProperty, event){
+
+  setStringValue(EditableProperty animationProperty, event) {
     animationProperty.setter(event.target.value);
   }
 
   //bool
-  bool isBool(EditableProperty animationProperty){
+  bool isBool(EditableProperty animationProperty) {
     return animationProperty.type == bool;
   }
-  setBoolValue(EditableProperty animationProperty, event){
+
+  setBoolValue(EditableProperty animationProperty, event) {
     animationProperty.setter(event.target.checked);
   }
 
   //int
-  bool isInt(EditableProperty animationProperty){
+  bool isInt(EditableProperty animationProperty) {
     return animationProperty.type == int;
   }
-  setIntValue(EditableProperty animationProperty, event){
-    animationProperty.setter(int.parse(event.target.value, onError:(s)=>0));
+
+  setIntValue(EditableProperty animationProperty, event) {
+    animationProperty.setter(int.parse(event.target.value, onError: (s) => 0));
   }
 
   //num
-  bool isNum(EditableProperty animationProperty){
+  bool isNum(EditableProperty animationProperty) {
     return animationProperty.type == num || animationProperty.type == double;
   }
-  setNumValue(EditableProperty animationProperty, event){
-    animationProperty.setter(double.parse(event.target.value, (s)=>0.0));
+
+  setNumValue(EditableProperty animationProperty, event) {
+    animationProperty.setter(double.parse(event.target.value, (s) => 0.0));
   }
 
   //Function
-  bool isFunction(EditableProperty animationProperty){
+  bool isFunction(EditableProperty animationProperty) {
     return animationProperty.type == FunctionModel;
   }
 
   //Custom components
 
   //Vector2
-  bool isVector2(EditableProperty animationProperty){
+  bool isVector2(EditableProperty animationProperty) {
     return animationProperty.type == Vector2;
   }
-  setVector2Value(EditableProperty animationProperty, event){
+
+  setVector2Value(EditableProperty animationProperty, event) {
     animationProperty.setter(event as Vector2);
   }
+
   //Vector3
-  bool isVector3(EditableProperty animationProperty){
+  bool isVector3(EditableProperty animationProperty) {
     return animationProperty.type == Vector3;
   }
-  setVector3Value(EditableProperty animationProperty, event){
+
+  setVector3Value(EditableProperty animationProperty, event) {
     animationProperty.setter(event as Vector3);
   }
+
   //Vector4
-  bool isVector4(EditableProperty animationProperty){
+  bool isVector4(EditableProperty animationProperty) {
     return animationProperty.type == Vector4;
   }
-  setVector4Value(EditableProperty animationProperty, event){
+
+  setVector4Value(EditableProperty animationProperty, event) {
     animationProperty.setter(event as Vector4);
   }
+
   //Matrix3
-  bool isMatrix3(EditableProperty animationProperty){
+  bool isMatrix3(EditableProperty animationProperty) {
     return animationProperty.type == Matrix3;
   }
-  setMatrix3Value(EditableProperty animationProperty, event){
+
+  setMatrix3Value(EditableProperty animationProperty, event) {
     animationProperty.setter(event as Matrix3);
   }
+
   //Matrix4
-  bool isMatrix4(EditableProperty animationProperty){
+  bool isMatrix4(EditableProperty animationProperty) {
     return animationProperty.type == Matrix4;
   }
-  setMatrix4Value(EditableProperty animationProperty, event){
+
+  setMatrix4Value(EditableProperty animationProperty, event) {
     animationProperty.setter(event as Matrix4);
   }
+
   //List
-  bool isList(EditableProperty animationProperty){
+  bool isList(EditableProperty animationProperty) {
     return animationProperty.type.toString() == 'List';
   }
-  setSelection(event){
+
+  setSelection(event) {
     IEditElement selection;
-    if(event is IEditElement) {
+    if (event is IEditElement) {
       selection = event;
-    }else{
+    } else {
       selection = new CustomEditElement(event);
     }
     innerSelectionChange.emit(selection);
   }
+
   //Map
-  bool isMap(EditableProperty animationProperty){
+  bool isMap(EditableProperty animationProperty) {
     return animationProperty.type.toString() == '_InternalLinkedHashMap';
   }
 
   //isWebGLEnum
-  bool isWebGLEnum(EditableProperty animationProperty){
+  bool isWebGLEnum(EditableProperty animationProperty) {
     return compareType(animationProperty.type, WebGLEnum);
   }
-  setWebGLEnumSelection(EditableProperty animationProperty, event){
+
+  setWebGLEnumSelection(EditableProperty animationProperty, event) {
     animationProperty.setter(event);
   }
+
   List<WebGLEnum> getWebglEnumItems(Type type) {
     return WebGLEnum.getItems(type);
   }
 
   //Material
-  bool isMaterial(EditableProperty animationProperty){
+  bool isMaterial(EditableProperty animationProperty) {
     return compareType(animationProperty.type, Material);
   }
 
   //Texture
-  bool isTexture(EditableProperty animationProperty){
+  bool isTexture(EditableProperty animationProperty) {
     return compareType(animationProperty.type, Texture);
   }
 
   //WebGLTexture
-  bool isWebGLTexture(EditableProperty animationProperty){
+  bool isWebGLTexture(EditableProperty animationProperty) {
     return compareType(animationProperty.type, WebGLTexture);
   }
 
-  setSelectionWebGLTexture(event){
+  setSelectionWebGLTexture(event) {
     (event as WebGLTexture).edit();
     setSelection(event);
   }
 
   //WebGLBuffer
-  bool isWebGLBuffer(EditableProperty animationProperty){
+  bool isWebGLBuffer(EditableProperty animationProperty) {
     return compareType(animationProperty.type, WebGLBuffer);
   }
 
   //Mesh
-  bool isMesh(EditableProperty animationProperty){
+  bool isMesh(EditableProperty animationProperty) {
     return compareType(animationProperty.type, Mesh);
   }
 
   //Camera
-  bool isCamera(EditableProperty animationProperty){
+  bool isCamera(EditableProperty animationProperty) {
     return compareType(animationProperty.type, Camera);
   }
 
   //Light
-  bool isLight(EditableProperty animationProperty){
+  bool isLight(EditableProperty animationProperty) {
     return compareType(animationProperty.type, Light);
   }
 
+  // >> Html
+
+  //ImageElement
+  bool isImageElement(EditableProperty animationProperty) {
+    bool result = compareType(animationProperty.type, ImageElement);
+    if (result) {
+      print('');
+    }
+    return result;
+  }
+
+  // >>
+
   /// Return true if type is the same or if it's a subType
-  bool compareType(Type elementType, Type compareType){
+  bool compareType(Type elementType, Type compareType) {
     ClassMirror elementTypeMirror = reflectClass(elementType);
     ClassMirror compareTypeMirror = reflectClass(compareType);
     return elementTypeMirror.isSubtypeOf(compareTypeMirror);

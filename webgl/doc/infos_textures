@@ -1,0 +1,4 @@
+String > loadCubeMapImages > List<ImageElement>    > createCubeMapWithImages    > WebGLTexture.cubeMap
+
+String > getImageFromFile  > ImageElement          > createTexture2DWithImage   > WebGLTexture.texture2D
+String > createTexture2DWithImage                  > createTexture2DWithImage   > WebGLTexture.texture2D

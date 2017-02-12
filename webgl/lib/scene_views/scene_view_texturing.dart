@@ -51,7 +51,7 @@ class SceneViewTexturing extends Scene{
     lights.add(pointLight);
 
     //Materials
-    WebGLTexture texture = await TextureUtils.getTextureFromFile("./images/crate.gif")
+    WebGLTexture texture = await TextureUtils.createTexture2DFromFile("./images/crate.gif")
         ..textureWrapS = TextureWrapType.REPEAT
         ..textureWrapT = TextureWrapType.REPEAT
         ..textureMatrix = new Matrix4.columns(

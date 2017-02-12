@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -34,7 +35,10 @@ class SceneViewFrameBuffer extends Scene{
     light = directionalLight;
 
     //
-    List<WebGLTexture> renderedTextures = TextureUtils.createRenderedTextures();
+    List<WebGLTexture> renderedTextures = TextureUtils.buildRenderedTextures();
+    ImageElement image = TextureUtils.createImageFromTextureNoReadPixel(renderedTextures[0], 32,32);
+    DivElement elementFPSText = querySelector("#fps");
+    elementFPSText.children.add(image);
 
     //Model
     MaterialBaseTexture materialBaseTextureNormal =
@@ -61,6 +65,7 @@ class SceneViewFrameBuffer extends Scene{
       ..material = materialDepthTextureNormal
       ..transform.rotateZ(radians(90.0));
     models.add(quadDepth);
+
 
 
   }

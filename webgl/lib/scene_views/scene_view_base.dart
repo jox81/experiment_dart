@@ -12,17 +12,17 @@ import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @MirrorsUsed(
     targets: const [
-      SceneViewTests,
+      SceneViewBase  ,
     ],
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewTests extends Scene{
+class SceneViewBase extends Scene{
 
 //  @override
 //  bool isEditing = true;
 
-  SceneViewTests();
+  SceneViewBase();
 
   @override
   Future setupScene() async {
@@ -140,7 +140,7 @@ class SceneViewTests extends Scene{
     CubeModel cube = new CubeModel();
     cube.transform.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
-    await TextureUtils.getTextureFromFile("./images/crate.gif");
+    await TextureUtils.createTexture2DFromFile("./images/crate.gif");
     cube
       ..material = materialBaseTextureNormal
       ..addComponent(new TestAnim());
@@ -150,7 +150,7 @@ class SceneViewTests extends Scene{
     //SusanModel
     var susanJson = await UtilsAssets.loadJSONResource('./objects/susan/susan.json');
     MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
-      ..texture = await TextureUtils.getTextureFromFile(
+      ..texture = await TextureUtils.createTexture2DFromFile(
           './objects/susan/susan_texture.png');
     JsonObject jsonModel = new JsonObject(susanJson)
       ..transform.translate(10.0, 0.0, -5.0)
