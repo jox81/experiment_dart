@@ -135,6 +135,26 @@ abstract class EditTexture extends WebGLObject{
 }
 
 class TextureUtils {
+  static List<String> pathes = [
+    "images/crate.gif",
+    "images/fabric_bump.jpg",
+  ];
+
+  static List<ImageElement> images;
+
+  static List<ImageElement> loadImages() {
+
+    images = [];
+
+    for(String fileUrl in pathes) {
+      ImageElement image = new ImageElement()
+        ..src = fileUrl;
+      images.add(image);
+    }
+
+    return images;
+  }
+
   static Future<ImageElement> loadImage(String fileUrl) {
     Completer completer = new Completer();
 

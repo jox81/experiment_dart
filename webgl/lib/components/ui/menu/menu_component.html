@@ -29,8 +29,16 @@
     <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId2')">
         <a href="javascript:void(0)"
            class="dropbtn"
-           (click)="headerClick('headerId2')">Materials</a>
+           (click)="headerClick('headerId2')">Texture</a>
         <div class="dropdown-content" [class.show]="isMenuVisible('headerId2')">
+            <a href="#" (click)="editTextures()">Textures</a>
+        </div>
+    </li>
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId3')">
+        <a href="javascript:void(0)"
+           class="dropbtn"
+           (click)="headerClick('headerId3')">Materials</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId3')">
             <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialCustom')">MaterialCustom</a>-->
             <a href="#" (click)="assignMaterial('MaterialType.MaterialPoint')">MaterialPoint</a>
             <a href="#" (click)="assignMaterial('MaterialType.MaterialBase')">MaterialBase</a>
@@ -44,11 +52,11 @@
             <!--<a href="#" (click)="assignMaterial('MaterialType.MaterialReflection')">MaterialReflection</a>-->
         </div>
     </li>
-    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId3')">
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId4')">
         <a href="javascript:void(0)"
            class="dropbtn"
-           (click)="headerClick('headerId3')">Settings</a>
-        <div class="dropdown-content" [class.show]="isMenuVisible('headerId3')">
+           (click)="headerClick('headerId4')">Settings</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId4')">
             <a href="#" (click)="editCustomSettings()">CustomSettings</a>
             <a href="#" (click)="editRenderingContext()">RenderingContext</a>
             <a href="#" (click)="editContextAttributs()">ContextAttributs</a>

@@ -36,9 +36,6 @@ class SceneViewFrameBuffer extends Scene{
 
     //
     List<WebGLTexture> renderedTextures = TextureUtils.buildRenderedTextures();
-    ImageElement image = TextureUtils.createImageFromTextureNoReadPixel(renderedTextures[0], 32,32);
-    DivElement elementFPSText = querySelector("#fps");
-    elementFPSText.children.add(image);
 
     //Model
     MaterialBaseTexture materialBaseTextureNormal =

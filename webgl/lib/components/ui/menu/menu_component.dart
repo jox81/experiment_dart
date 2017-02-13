@@ -8,6 +8,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/textures/texture_library.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 
 // Suivant l'exemple :
@@ -94,6 +95,14 @@ class MenuComponent{
       print('$modelTypeString not created');
     }
 
+    closeAllMenus();
+    return false;
+  }
+
+  // >> Textures
+
+  bool editTextures(){
+    currentScene?.currentSelection = TextureLibrary.instance;
     closeAllMenus();
     return false;
   }
