@@ -15,6 +15,7 @@ import 'package:webgl/components/value_components/vector3_component/vector3_comp
 import 'package:webgl/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation/animation_property.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
@@ -225,9 +226,24 @@ class PropertiesComponent {
   bool isImageElement(EditableProperty animationProperty) {
     bool result = compareType(animationProperty.type, ImageElement);
     if (result) {
-      print('');
+//      print('');
     }
     return result;
+  }
+
+  selectTexture(Event event){
+    File file = (event.target as FileUploadInputElement).files[0];
+
+    FileReader reader = new FileReader();
+    reader
+      ..onLoadEnd.listen((_)async {
+        ImageElement image = new ImageElement(src : reader.result);
+        (Application.instance.currentScene.currentSelection as WebGLTexture).image = image;
+      });
+
+    if(file != null){
+      reader.readAsDataUrl(file);
+    }
   }
 
   // >>

@@ -335,6 +335,8 @@
                         <legend></legend>
                         <section>
                             <htmlComponentLoader [element]='iEditElement.properties[key].getter()'></htmlComponentLoader>
+                            <br/>
+                            <input type='file' (change)="selectTexture($event)"/>
                         </section>
                     </div>
 

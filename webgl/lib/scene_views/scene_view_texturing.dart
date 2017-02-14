@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -51,7 +52,9 @@ class SceneViewTexturing extends Scene{
     lights.add(pointLight);
 
     //Materials
-    WebGLTexture texture = await TextureUtils.createTexture2DFromFile("./images/crate.gif")
+    ImageElement imageCrate = await TextureUtils.loadImage("./images/crate.gif");
+
+    WebGLTexture texture = await TextureUtils.createTexture2DFromImage(imageCrate)
         ..textureWrapS = TextureWrapType.REPEAT
         ..textureWrapT = TextureWrapType.REPEAT
         ..textureMatrix = new Matrix4.columns(
@@ -60,6 +63,7 @@ class SceneViewTexturing extends Scene{
           new Vector4(0.0,0.0,1.0,0.0),
           new Vector4(0.0,0.0,0.0,1.0),
           ).transposed();
+
     MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture()
     ..texture = texture;
     materials.add(materialBaseTexture);
@@ -103,6 +107,9 @@ class SceneViewTexturing extends Scene{
       ..transform.translate(0.0, 0.0, -5.0)
       ..material = materialBaseTexture;
     models.add(sphere);
+
+//    ImageElement imageFabricBump = await TextureUtils.loadImage("./images/fabric_bump.jpg");
+//    texture.image = imageFabricBump;
 
     //Animation
     updateSceneFunction = () {

@@ -25,7 +25,18 @@ class WebGLTexture extends EditTexture {
   final WebGL.Texture webGLTexture;
   final TextureTarget textureTarget;
 
-  ImageElement image;
+  ImageElement _image;
+  ImageElement get image => _image;
+  set image(ImageElement value){
+    _image = value;
+//    if(value != null) {
+//      _image.onClick.listen(null);
+//      _image.onClick.listen((e) {
+//
+//      });
+//    }
+    _replaceImage(value);
+  }
 
   Matrix4 textureMatrix = new Matrix4.identity();
 
@@ -67,6 +78,25 @@ class WebGLTexture extends EditTexture {
         ActiveTexture.instance.textureCubeMap.bind(this);
         break;
     }
+
+    ActiveTexture.instance.activeUnit = lastTextureUnit;
+  }
+
+  void _replaceImage(ImageElement image) {
+    TextureUnit lastTextureUnit = ActiveTexture.instance.activeUnit;
+
+    ActiveTexture.instance.activeUnit = editTextureUnit;
+
+    gl.activeTexture.texture2d.bind(this);
+
+    gl.activeTexture.texture2d.attachmentTexture2d.texImage2D(
+        0,
+        TextureInternalFormat.RGBA,
+        TextureInternalFormat.RGBA,
+        TexelDataType.UNSIGNED_BYTE,
+        image);
+
+    gl.activeTexture.texture2d.unBind();
 
     ActiveTexture.instance.activeUnit = lastTextureUnit;
   }
@@ -163,7 +193,9 @@ class TextureUtils {
     image = new ImageElement()
       ..src = fileUrl
       ..onLoad.listen((e) {
-        completer.complete(image);
+        if(!completer.isCompleted) {
+          completer.complete(image);
+        }
       });
 
     return completer.future;
@@ -176,7 +208,7 @@ class TextureUtils {
       bool mirrorV: false}) async {
 
     ImageElement image = await loadImage(fileUrl);
-    WebGLTexture texture = createTexture2DWithImage(image,
+    WebGLTexture texture = createTexture2DFromImage(image,
         repeatU: repeatU,
         mirrorU: mirrorU,
         repeatV: repeatV,
@@ -190,12 +222,13 @@ class TextureUtils {
   //  gl.texImage2D(RenderingContext.TEXTURE_2D, 0, RenderingContext.RGBA, RenderingContext.RGBA, RenderingContext.FLOAT, textureImage);
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MIN_FILTER, RenderingContext.NEAREST);
   //  gl.texParameteri(RenderingContext.TEXTURE_2D, RenderingContext.TEXTURE_MAG_FILTER, RenderingContext.NEAREST);
-  static WebGLTexture createTexture2DWithImage(ImageElement image,
+  static WebGLTexture createTexture2DFromImage(ImageElement image,
       {bool repeatU: false,
       bool mirrorU: false,
       bool repeatV: false,
       bool mirrorV: false}) {
     WebGLTexture texture = new WebGLTexture.texture2d();
+
     gl.activeTexture.texture2d.bind(texture);
 
     gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 1);
@@ -218,13 +251,6 @@ class TextureUtils {
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.LINEAR);
 //    gl.activeTexture.texture2d.generateMipmap();
-
-    gl.activeTexture.texture2d.attachmentTexture2d.texImage2D(
-        0,
-        TextureInternalFormat.RGBA,
-        TextureInternalFormat.RGBA,
-        TexelDataType.UNSIGNED_BYTE,
-        image);
 
     gl.activeTexture.texture2d.unBind();
 
@@ -249,18 +275,9 @@ class TextureUtils {
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    gl.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
-        0,
-        TextureInternalFormat.RGBA,
-        size,
-        size,
-        0,
-        TextureInternalFormat.RGBA,
-        TexelDataType.UNSIGNED_BYTE,
-        null);
-
     gl.activeTexture.texture2d.unBind();
 
+    texture.image = null;
 
     return texture;
   }
