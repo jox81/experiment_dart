@@ -52,12 +52,12 @@ class SceneViewCubeMap extends Scene{
       ..material = materialReflection;
     models.add(sphere);
 
-//    QuadModel plane = new QuadModel()
-//      ..transform.translate(0.0, 0.0, 0.0)
-//      ..transform.scale(1.0)
-//      ..transform.rotateX(radians(-90.0))
-//      ..material = materialReflection;
-//    models.add(plane);
+    QuadModel plane = new QuadModel()
+      ..transform.translate(0.0, 0.0, 0.0)
+      ..transform.scale(1.0)
+      ..transform.rotateX(radians(-90.0))
+      ..material = materialReflection;
+    models.add(plane);
 
 //    CubeModel cube = new CubeModel()
 //      ..transform.translate(0.0, 0.0, 0.0)

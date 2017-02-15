@@ -238,7 +238,9 @@ class PropertiesComponent {
     reader
       ..onLoadEnd.listen((_)async {
         ImageElement image = new ImageElement(src : reader.result);
-        (Application.instance.currentScene.currentSelection as WebGLTexture).image = image;
+        WebGLTexture currentTexture = Application.instance.currentScene.currentSelection as WebGLTexture;
+        currentTexture.image.src = reader.result; // need this to update current property editor
+        currentTexture.image = image;
       });
 
     if(file != null){

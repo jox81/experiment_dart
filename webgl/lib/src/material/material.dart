@@ -155,7 +155,7 @@ abstract class Material extends IEditElement {
 
   void setShaderUniform(String uniformName, data, [data1, data2, data3]) {
 
-    if(uniformLocations[uniformName].data != data){
+    if(uniformLocations[uniformName] != null && uniformLocations[uniformName].data != data){
 
       WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.name == uniformName, orElse:() => null);
 
