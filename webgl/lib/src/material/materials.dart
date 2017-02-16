@@ -473,11 +473,6 @@ class MaterialSkyBox extends Material {
 
     setShaderUniform("uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
-    /// The normal matrix is the transpose inverse of the modelview matrix.
-    Matrix4 normalMatrix = new Matrix4.inverted(Context.modelViewMatrix).transposed();//  Context.modelViewMatrix.inve.intranspose(inverse(modelView));
-//    Matrix3 normalMatrix = Context.modelViewMatrix.getNormalMatrix();
-    setShaderUniform("uNormalMatrix", normalMatrix);
-
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.textureCubeMap.bind(skyboxTexture);
     setShaderUniform('uEnvMap', 0);
@@ -532,7 +527,7 @@ class MaterialReflection extends Material {
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.textureCubeMap.bind(skyboxTexture);
-    setShaderUniform('uSkybox', 0);
+    setShaderUniform('uEnvMap', 0);
   }
 }
 
