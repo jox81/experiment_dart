@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/geometry/object3d.dart';
@@ -84,6 +85,7 @@ abstract class Model extends Object3d {
   }
 
   void render() {
+    window.console.time('models::render');
     if (material == null) {
       throw new Exception(
           "Can't render object : the material mustn't be null to render the mesh in ${this.runtimeType}");
@@ -92,6 +94,7 @@ abstract class Model extends Object3d {
     if (!visible) return;
 
     material.render(this);
+    window.console.timeEnd('models::render');
   }
 
   factory Model.createByType(ModelType modelType, {bool doInitMaterial: true}) {

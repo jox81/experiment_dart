@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/light.dart';
@@ -154,12 +155,12 @@ abstract class Material extends IEditElement {
   // >> Uniforms
 
   void setShaderUniform(String uniformName, data, [data1, data2, data3]) {
-
+    window.console.time('material::setShaderUniform');
     if(uniformLocations[uniformName] == null){
       print(uniformName);
     }
 
-    if( uniformLocations[uniformName].data != data){
+    if(uniformLocations[uniformName].data != data){
 
       WebGLActiveInfo activeInfo = programInfo.uniforms.firstWhere((a)=> a.name == uniformName, orElse:() => null);
 
@@ -210,7 +211,7 @@ abstract class Material extends IEditElement {
       }
 
     }
-
+    window.console.timeEnd('material::setShaderUniform');
   }
 
   // > Animation and Hierarchy
@@ -230,25 +231,46 @@ abstract class Material extends IEditElement {
   // >> Rendering
 
   render(Model model) {
+    window.console.time('material::render');
     _mvPushMatrix();
     Context.modelViewMatrix.multiply(model.transform);
 
+    window.console.time('material::beforeRender');
     beforeRender(model);
+    window.console.timeEnd('material::beforeRender');
+
+    window.console.time('material::draw');
     if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
       gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
+    window.console.timeEnd('material::draw');
+
+    window.console.time('material::afterRender');
     afterRender(model);
+    window.console.timeEnd('material::afterRender');
 
     _mvPopMatrix();
+    window.console.timeEnd('material::render');
   }
 
   beforeRender(Model model) {
+    window.console.time('material::beforeRender:program.use');
     program.use();
+    window.console.timeEnd('material::beforeRender:program.use');
+
+    window.console.time('material::beforeRender:setShaderAttributs');
     setShaderAttributs(model);
+    window.console.timeEnd('material::beforeRender:setShaderAttributs');
+
+    window.console.time('material::beforeRender:setShaderUniforms');
     setShaderUniforms(model);
+    window.console.timeEnd('material::beforeRender:setShaderUniforms');
+
+    window.console.time('material::beforeRender:setupBeforeRender');
     setupBeforeRender();
+    window.console.timeEnd('material::beforeRender:setupBeforeRender');
   }
 
   setShaderAttributs(Model model);

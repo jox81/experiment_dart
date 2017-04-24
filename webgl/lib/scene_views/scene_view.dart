@@ -20,9 +20,9 @@ class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
 //  new Scene(),
 //  await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
-  new SceneViewCubeMap(),
+//  new SceneViewCubeMap(),
 // new SceneViewTexturing(),
-// new SceneViewPrimitives(),
+ new SceneViewPrimitives(),
 // new SceneViewBase(),
 // new SceneViewWebGLEdit(),
 // new SceneViewVectors(),

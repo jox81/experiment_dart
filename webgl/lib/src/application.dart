@@ -136,11 +136,15 @@ class Application {
   }
 
   void _renderCurrentScene() {
+    window.console.time('application::_renderCurrentScene');
+
     gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     clear(_currentScene.backgroundColor);
 
     _currentScene.update();
     _currentScene.render();
+
+    window.console.timeEnd('application::_renderCurrentScene');
   }
 
   void clear(Vector4 color) {
