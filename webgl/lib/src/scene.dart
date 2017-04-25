@@ -95,10 +95,10 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   @override
   void update(){
-    window.console.time('scene::update');
+    window.console.time('02_scene::update');
     updateUserInput();
     updateScene();
-    window.console.timeEnd('scene::update');
+    window.console.timeEnd('02_scene::update');
   }
 
   @override
@@ -128,11 +128,11 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   @override
   void render(){
-    window.console.time('scene::render');
+    window.console.time('02_scene::render');
     for (Model model in models) {
       model.render();
     }
-    window.console.timeEnd('scene::render');
+    window.console.timeEnd('02_scene::render');
   }
 
   // >>

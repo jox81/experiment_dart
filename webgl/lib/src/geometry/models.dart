@@ -84,8 +84,13 @@ abstract class Model extends Object3d {
     return _faces;
   }
 
+  void update(){
+    super.update();
+    material.update(this);
+  }
+
   void render() {
-    window.console.time('models::render');
+    window.console.time('03_models::render');
     if (material == null) {
       throw new Exception(
           "Can't render object : the material mustn't be null to render the mesh in ${this.runtimeType}");
@@ -94,7 +99,7 @@ abstract class Model extends Object3d {
     if (!visible) return;
 
     material.render(this);
-    window.console.timeEnd('models::render');
+    window.console.timeEnd('03_models::render');
   }
 
   factory Model.createByType(ModelType modelType, {bool doInitMaterial: true}) {

@@ -155,7 +155,7 @@ abstract class Material extends IEditElement {
   // >> Uniforms
 
   void setShaderUniform(String uniformName, data, [data1, data2, data3]) {
-    window.console.time('material::setShaderUniform');
+    window.console.time('05_03_01_material::setShaderUniform');
     if(uniformLocations[uniformName] == null){
       print(uniformName);
     }
@@ -211,7 +211,7 @@ abstract class Material extends IEditElement {
       }
 
     }
-    window.console.timeEnd('material::setShaderUniform');
+    window.console.timeEnd('05_03_01_material::setShaderUniform');
   }
 
   // > Animation and Hierarchy
@@ -228,49 +228,59 @@ abstract class Material extends IEditElement {
     Context.modelViewMatrix = _mvMatrixStack.removeFirst();
   }
 
+  update(Model model) {
+//    window.console.time('04_00_material::render');
+//    _mvPushMatrix();
+//    Context.modelViewMatrix.multiply(model.transform);
+//
+//    window.console.time('04_01_material::beforeRender');
+//    beforeRender(model);
+//    window.console.timeEnd('04_01_material::beforeRender');
+  }
+
   // >> Rendering
 
   render(Model model) {
-    window.console.time('material::render');
+    window.console.time('04_00_material::render');
     _mvPushMatrix();
     Context.modelViewMatrix.multiply(model.transform);
 
-    window.console.time('material::beforeRender');
+    window.console.time('04_01_material::beforeRender');
     beforeRender(model);
-    window.console.timeEnd('material::beforeRender');
+    window.console.timeEnd('04_01_material::beforeRender');
 
-    window.console.time('material::draw');
+    window.console.time('04_02_material::render');
     if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
       gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
     } else {
       gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
     }
-    window.console.timeEnd('material::draw');
+    window.console.timeEnd('04_02_material::render');
 
-    window.console.time('material::afterRender');
+    window.console.time('04_03_material::afterRender');
     afterRender(model);
-    window.console.timeEnd('material::afterRender');
+    window.console.timeEnd('04_03_material::afterRender');
 
     _mvPopMatrix();
-    window.console.timeEnd('material::render');
+    window.console.timeEnd('04_00_material::render');
   }
 
   beforeRender(Model model) {
-    window.console.time('material::beforeRender:program.use');
+    window.console.time('05_01_material::beforeRender:program.use');
     program.use();
-    window.console.timeEnd('material::beforeRender:program.use');
+    window.console.timeEnd('05_01_material::beforeRender:program.use');
 
-    window.console.time('material::beforeRender:setShaderAttributs');
+    window.console.time('05_02_material::beforeRender:setShaderAttributs');
     setShaderAttributs(model);
-    window.console.timeEnd('material::beforeRender:setShaderAttributs');
+    window.console.timeEnd('05_02_material::beforeRender:setShaderAttributs');
 
-    window.console.time('material::beforeRender:setShaderUniforms');
+    window.console.time('05_03_material::beforeRender:setShaderUniforms');
     setShaderUniforms(model);
-    window.console.timeEnd('material::beforeRender:setShaderUniforms');
+    window.console.timeEnd('05_03_material::beforeRender:setShaderUniforms');
 
-    window.console.time('material::beforeRender:setupBeforeRender');
+    window.console.time('05_04_material::beforeRender:setupBeforeRender');
     setupBeforeRender();
-    window.console.timeEnd('material::beforeRender:setupBeforeRender');
+    window.console.timeEnd('05_04_material::beforeRender:setupBeforeRender');
   }
 
   setShaderAttributs(Model model);
