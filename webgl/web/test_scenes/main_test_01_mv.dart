@@ -31,7 +31,8 @@ class Webgl01 {
   WebGLAttributLocation vertexPositionAttribute;
 
   WebGLUniformLocation pMatrixUniform;
-  WebGLUniformLocation mvMatrixUniform;
+  WebGLUniformLocation vMatrixUniform;
+  WebGLUniformLocation mMatrixUniform;
 
   Webgl01(CanvasElement canvas){
 
@@ -91,7 +92,8 @@ class Webgl01 {
     vertexPositionAttribute.enabled = true;
 
     pMatrixUniform = shaderProgram.getUniformLocation("uProjectionMatrix");
-    mvMatrixUniform = shaderProgram.getUniformLocation("uModelViewMatrix");
+    vMatrixUniform = shaderProgram.getUniformLocation("uViewMatrix");
+    mMatrixUniform = shaderProgram.getUniformLocation("uModelMatrix");
   }
 
   _getShader(WebGLRenderingContext gl, id) {
@@ -145,8 +147,6 @@ class Webgl01 {
     gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT,ClearBufferMask.DEPTH_BUFFER_BIT]);
 
-    Context.modelViewMatrix = Context.mainCamera.lookAtMatrix * models[0].transform;
-
     gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
@@ -163,8 +163,9 @@ class Webgl01 {
   }
 
   void _setMatrixUniforms() {
+    mMatrixUniform.uniformMatrix4fv(models[0].transform, false);
+    vMatrixUniform.uniformMatrix4fv(Context.mainCamera.lookAtMatrix, false);
     pMatrixUniform.uniformMatrix4fv(Context.mainCamera.perspectiveMatrix, false);
-    mvMatrixUniform.uniformMatrix4fv(Context.modelViewMatrix, false);
   }
 
 }

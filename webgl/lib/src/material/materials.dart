@@ -510,12 +510,19 @@ class MaterialReflection extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelMatrix", model.transform);
+    print("###############");
+    setShaderUniform("uModelMatrix", Context.modelViewMatrix);
+    print("uModelMatrix: \n${Context.modelViewMatrix}");
     setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
-    setShaderUniform("uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
+    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
+    setShaderUniform("uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+    print("uProjectionMatrix: \n${Context.mainCamera.viewProjectionMatrix}");
+    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    print("uModelViewMatrix: \n${Context.modelViewMatrix}");
 
     setShaderUniform("uInverseViewMatrix",
         new Matrix4.inverted(Context.mainCamera.lookAtMatrix));
+    print("uInverseViewMatrix: \n${new Matrix4.inverted(Context.mainCamera.lookAtMatrix)}");
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
@@ -524,6 +531,7 @@ class MaterialReflection extends Material {
     Matrix3 normalMatrix =
         (Context.mainCamera.lookAtMatrix * model.transform).getNormalMatrix();
     setShaderUniform("uNormalMatrix", normalMatrix);
+    print("uNormalMatrix: \n$normalMatrix");
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.textureCubeMap.bind(skyboxTexture);

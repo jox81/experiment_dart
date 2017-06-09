@@ -54,8 +54,9 @@ class SceneViewVectors extends Scene{
 
 //    test01();
 //    test02();
-//    test03();
-    testViewProjectionMatrix();
+    test03();
+//    testViewProjectionMatrix();
+//    testViewProjectionMatrix2();
 //    testDisplayNormals();
   }
 
@@ -141,6 +142,27 @@ class SceneViewVectors extends Scene{
     Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.lookAtMatrix) * new Matrix4.identity();
     gridTest.transform = finalMatrix * gridTest.transform;
     axisTest.transform = finalMatrix * axisTest.transform;
+
+  }
+
+  //Projection view Matrix test
+  void testViewProjectionMatrix2() {
+    Vector3 cameraPosition = new Vector3(0.0,1.0,3.0);
+    Vector3 cameraTargetPosition = new Vector3(0.0,0.0,0.0);
+
+    cameraTest
+      ..fov = radians(45.0)
+      ..targetPosition = cameraTargetPosition
+      ..position = cameraPosition;
+
+    AxisModel axisTest = new AxisModel()
+      ..position = new Vector3(0.0,0.0,0.0)
+      ..transform.rotateY(radians(0.0));
+    models.add(axisTest);
+
+    // à tester :
+
+    axisTest.transform = cameraTest.transform;
 
   }
 
