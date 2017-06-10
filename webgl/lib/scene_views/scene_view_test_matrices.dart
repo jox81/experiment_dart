@@ -44,8 +44,8 @@ class SceneViewTestMatrices extends Scene{
     models.add(model);
 
     print('model.transform : \n${model.transform}');
-    print('Context.modelViewMatrix : \n${Context.modelViewMatrix}');
-    print('Context.modelViewMatrix m : \n${Context.modelViewMatrix * model.transform}');
+    print('Context.modelMatrix : \n${Context.modelMatrix}');
+    print('Context.modelMatrix m : \n${Context.modelMatrix * model.transform}');
 
 
     /// from refelctions.vs.glsl
@@ -61,11 +61,10 @@ class SceneViewTestMatrices extends Scene{
     //
     aVertexPosition = new Vector3(0.0,0.0,0.0);
 
-
-    uModelViewMatrix = Context.modelViewMatrix;
-    uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
-    uViewMatrix = Context.mainCamera.lookAtMatrix;
     uModelMatrix = model.transform;
+    uViewMatrix = Context.mainCamera.lookAtMatrix;
+    uModelViewMatrix = Context.mainCamera.lookAtMatrix * uModelMatrix;
+    uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
     uNormalMatrix;
 
     print("${uProjectionMatrix * uViewMatrix * uModelMatrix * aVertexPosition}");
@@ -74,8 +73,8 @@ class SceneViewTestMatrices extends Scene{
     updateSceneFunction = () {
       print('##');
       print('model.transform : \n${model.transform}');
-      print('Context.modelViewMatrix : \n${Context.modelViewMatrix}');
-      print('Context.modelViewMatrix m : \n${Context.modelViewMatrix * model.transform}');
+      print('Context.modelMatrix : \n${Context.modelMatrix}');
+      print('Context.modelMatrix m : \n${Context.modelMatrix * model.transform}');
     };
   }
 }

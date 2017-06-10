@@ -156,9 +156,9 @@ class MaterialPoint extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
     setShaderUniform("pointSize", pointSize);
   }
 }
@@ -180,9 +180,9 @@ class MaterialBase extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
   }
 }
 
@@ -207,9 +207,9 @@ class MaterialBaseColor extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
     setShaderUniform("uColor", color.storage);
   }
 }
@@ -240,9 +240,9 @@ class MaterialBaseVertexColor extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
   }
 }
 
@@ -279,9 +279,9 @@ class MaterialBaseTexture extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
     setShaderUniform('uSampler', 0);
     setShaderUniform('uTextureMatrix', texture?.textureMatrix);
   }
@@ -320,13 +320,13 @@ class MaterialBaseTextureNormal extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.modelViewMatrix).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     //Light
@@ -388,13 +388,13 @@ class MaterialPBR extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.modelViewMatrix).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     setShaderUniform("uLightPos", pointLight.position.storage);
@@ -430,10 +430,10 @@ class MaterialDepthTexture extends Material {
   }
 
   setShaderUniforms(Model model) {
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
 
     setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
+        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
     setShaderUniform('uSampler', 0);
 
@@ -510,28 +510,28 @@ class MaterialReflection extends Material {
   }
 
   setShaderUniforms(Model model) {
+
     print("###############");
-    setShaderUniform("uModelMatrix", Context.modelViewMatrix);
-    print("uModelMatrix: \n${Context.modelViewMatrix}");
-    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
-    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
-    setShaderUniform("uProjectionMatrix", Context.mainCamera.viewProjectionMatrix);
-    print("uProjectionMatrix: \n${Context.mainCamera.viewProjectionMatrix}");
-    setShaderUniform("uModelViewMatrix", Context.modelViewMatrix);
-    print("uModelViewMatrix: \n${Context.modelViewMatrix}");
+
+//    print("uModelMatrix: \n${Context.modelMatrix}");
+//    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
+//    setShaderUniform("uModelMatrix", Context.modelMatrix);
+//    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
+//use in common with vertex shader ?
+
+    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
+
+
+    setShaderUniform("uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
 
     setShaderUniform("uInverseViewMatrix",
         new Matrix4.inverted(Context.mainCamera.lookAtMatrix));
-    print("uInverseViewMatrix: \n${new Matrix4.inverted(Context.mainCamera.lookAtMatrix)}");
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    /// why ? !!do not use : Matrix3 normalMatrix = Context.modelViewMatrix.getNormalMatrix();
-    /// but :
-    Matrix3 normalMatrix =
-        (Context.mainCamera.lookAtMatrix * model.transform).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
     setShaderUniform("uNormalMatrix", normalMatrix);
-    print("uNormalMatrix: \n$normalMatrix");
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
     gl.activeTexture.textureCubeMap.bind(skyboxTexture);

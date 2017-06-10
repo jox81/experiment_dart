@@ -92,8 +92,8 @@ class SceneViewVectors extends Scene{
   /// camera
   void test03() {
 
-    Matrix4 uModelViewMatrix = Context.modelViewMatrix;
-    Matrix4 uProjectionMatrix = Context.mainCamera.viewProjectionMatrix;
+    Matrix4 uModelViewMatrix = Context.mainCamera.lookAtMatrix * Context.modelMatrix;
+    Matrix4 uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
 
     VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;

@@ -27,7 +27,7 @@ class SceneViewCubeMap extends Scene{
     //Cameras
     Camera camera = new Camera(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(0.0, 0.0, -1.0);
+      ..position = new Vector3(0.0, 5.0, -10.0);
     Context.mainCamera = camera;
 
     List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
@@ -51,23 +51,23 @@ class SceneViewCubeMap extends Scene{
     GridModel grid = new GridModel();
     models.add(grid);
 
-//    SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 32, segmentH: 32)
-//      ..transform.translate(0.0, 0.0, 0.0)
-//      ..transform.scale(1.0)
-//      ..material = material;
-//    models.add(sphere);
+    SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 32, segmentH: 32)
+      ..transform.translate(0.0, 0.0, 0.0)
+      ..transform.scale(1.0)
+      ..material = material;
+    models.add(sphere);
 
     QuadModel plane = new QuadModel()
-      ..transform.translate(0.0, 0.0, 0.0)
+      ..transform.translate(2.0, 0.0, 0.0)
       ..transform.scale(1.0)
       ..transform.rotateX(radians(-90.0))
       ..material = material;
     models.add(plane);
 
-//    CubeModel cube = new CubeModel()
-//      ..transform.translate(0.0, 1.0, 2.0)
-//      ..transform.scale(1.0)
-//      ..material = material;
-//    models.add(cube);
+    CubeModel cube = new CubeModel()
+      ..transform.translate(0.0, 1.0, 2.0)
+      ..transform.scale(1.0)
+      ..material = material;
+    models.add(cube);
   }
 }

@@ -35,8 +35,8 @@ class Context{
     return _cameraController;
   }
 
-  //Todo : splitter model et view
-  static Matrix4 modelViewMatrix = new Matrix4.identity();
+  //Use to add parenting models space (hierarchy)
+  static Matrix4 modelMatrix = new Matrix4.identity();
 
   static num get width => gl.drawingBufferWidth;
   static num get height => gl.drawingBufferHeight;

@@ -218,14 +218,14 @@ abstract class Material extends IEditElement {
   Queue<Matrix4> _mvMatrixStack = new Queue();
 
   void _mvPushMatrix() {
-    _mvMatrixStack.addFirst(Context.modelViewMatrix.clone());
+    _mvMatrixStack.addFirst(Context.modelMatrix.clone());
   }
 
   void _mvPopMatrix() {
     if (_mvMatrixStack.length == 0) {
       throw new Exception("Invalid popMatrix!"); /// ça veut dire qu'on a fait un pop de trop.
     }
-    Context.modelViewMatrix = _mvMatrixStack.removeFirst();
+    Context.modelMatrix = _mvMatrixStack.removeFirst();
   }
 
   update(Model model) {
@@ -243,7 +243,7 @@ abstract class Material extends IEditElement {
   render(Model model) {
 //    window.console.time('04_00_material::render');
     _mvPushMatrix();
-    Context.modelViewMatrix.multiply(model.transform);
+    Context.modelMatrix.multiply(model.transform);
     //idem : Context.modelViewMatrix = Context.modelViewMatrix * model.transform;
 
 //    window.console.time('04_01_material::beforeRender');
