@@ -181,6 +181,7 @@ class MaterialBase extends Material {
 
   setShaderUniforms(Model model) {
     setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
+
     setShaderUniform(
         "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
   }

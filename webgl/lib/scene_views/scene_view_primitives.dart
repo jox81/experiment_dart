@@ -93,24 +93,5 @@ class SceneViewPrimitives extends Scene{
       ..position = new Vector3(5.0, 0.0, 0.0);
     models.add(sphere);
 
-
-    //Texturing
-
-
-    Map<String, String> textures = {
-      'crate' : "./images/crate.gif"
-    };
-
-    WebGLTexture texture = await TextureUtils.createTexture2DFromFile(textures['crate']);
-
-    MaterialBaseTexture materialBaseTexture = new MaterialBaseTexture()
-        ..texture = texture;
-    materials.add(materialBaseTexture);
-
-    CubeModel cube2 = new CubeModel()
-      ..name = "cube2"
-      ..position = new Vector3(0.0, 0.0, -2.0)
-      ..material = materialBaseTexture;
-    models.add(cube2);
   }
 }

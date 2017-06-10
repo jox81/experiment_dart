@@ -111,6 +111,7 @@ class SceneViewTexturing extends Scene{
 //    ImageElement imageFabricBump = await TextureUtils.loadImage("./images/fabric_bump.jpg");
 //    texture.image = imageFabricBump;
 
+
     //Animation
     updateSceneFunction = () {
       triangle.transform.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
