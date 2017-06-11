@@ -180,7 +180,7 @@ class WebGLProgram extends WebGLObject{
         WebGLActiveInfo activeInfo = getActiveUniform(i);
         print('${activeInfo}');
         WebGLUniformLocation uniformLocation = getUniformLocation(activeInfo.name);
-//        print('getUniformLocation : ${uniformLocation}'); //Inutile car il n'y a aucune infos associées
+//        print('getUniformLocation : ${uniformLocation}'); //Inutile car il n'y a aucune infos_todo associées
         print('getUniformValue : ${getUniformValue(uniformLocation)}');
       }
 

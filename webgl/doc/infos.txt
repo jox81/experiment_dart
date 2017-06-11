@@ -1,0 +1,3 @@
+- le panneau de gauche est le panneau des propriétés : properties_component.html
+    - l'informationn est injectée depuis un IEditElement current element dont la scene et les objects héritent. Dans intropsection.dart
+    - utilisation de currentScene.currentSelection

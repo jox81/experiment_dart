@@ -23,7 +23,7 @@ class Mesh {
 
   DrawMode mode = DrawMode.TRIANGLE_STRIP;
 
-  //Vertices infos
+  //Vertices infos_todo
   int _vertexDimensions = 3;
   int get vertexDimensions => _vertexDimensions;
   set vertexDimensions(int d) {
@@ -39,7 +39,7 @@ class Mesh {
 
   int get vertexCount => vertices.length ~/ _vertexDimensions;
 
-  //Color infos
+  //Color infos_todo
   int _colorDimensions = 4;
   int get colorDimensions => _colorDimensions;
   List<double> _colors = new List();
@@ -59,7 +59,7 @@ class Mesh {
 
   int get indiceCount => _indices.length;
 
-  //TextureCoords infos
+  //TextureCoords infos_todo
   int _textureCoordsDimensions = 2;
   int get textureCoordsDimensions => _textureCoordsDimensions;
   List<double> _textureCoords = new List();
@@ -71,7 +71,7 @@ class Mesh {
   int get textureCoordsCount =>
       _textureCoords.length ~/ _textureCoordsDimensions;
 
-  //vertexNormals infos
+  //vertexNormals infos_todo
   int _vertexNormalsDimensions = 3;
   int get vertexNormalsDimensions => _vertexNormalsDimensions;
 

@@ -1,14 +1,14 @@
 <section id="properties">
     <template [ngIf]="iEditElement != null">
         <h1>Properties - {{iEditElement.runtimeType}}</h1>
+
         <div id="content">
-            <div *ngFor="let key of iEditElement.properties.keys">
+            <div *ngFor="let key of iEditElement.properties.keys">{{key}}--
                 <fieldset>
                     <legend *ngIf="!isString(iEditElement.properties[key])&&
                     !isBool(iEditElement.properties[key]) &&
                     !isNum(iEditElement.properties[key]) &&
                     !isInt(iEditElement.properties[key]) &&
-                    !isFunction(iEditElement.properties[key]) &&
                     !isVector2(iEditElement.properties[key]) &&
                     !isVector3(iEditElement.properties[key]) &&
                     !isVector4(iEditElement.properties[key]) &&
@@ -24,7 +24,8 @@
                     !isWebGLBuffer(iEditElement.properties[key]) &&
                     !isMesh(iEditElement.properties[key]) &&
                     !isCamera(iEditElement.properties[key]) &&
-                    !isLight(iEditElement.properties[key])">
+                    !isLight(iEditElement.properties[key]) &&
+                    !isFunction(iEditElement.properties[key])">
                         <p>{{key}} - Type : {{iEditElement.properties[key].type}}</p>
                         <p style='text-align: right; margin: 18px 0px;'>{{iEditElement.properties[key].getter()}}</p>
                     </legend>
@@ -291,8 +292,6 @@
                                    (click)="setSelection(iEditElement.properties[key].getter())" value="Edit WebGLBuffer">
                         </section>
                     </div>
-
-
 
                     <div *ngIf="isMesh(iEditElement.properties[key])">
                         <legend>

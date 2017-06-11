@@ -155,7 +155,7 @@ class IntrospectionManager {
 
     if (showBaseInfo) {
       print('');
-      print('### $simpleName : declarations infos ###');
+      print('### $simpleName : declarations infos_todo ###');
       print(
           'simpleName : $simpleName / className : $className / ownerName : $ownerName');
       print(

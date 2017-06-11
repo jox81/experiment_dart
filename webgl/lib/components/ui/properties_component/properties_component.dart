@@ -47,8 +47,10 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
       DynamicLoaderHtmlComponent
     ])
 class PropertiesComponent {
+  IEditElement _iEditElement;
   @Input()
-  IEditElement iEditElement;
+  set iEditElement(IEditElement value) => _iEditElement = value;
+  IEditElement get iEditElement => _iEditElement;
 
   @Output()
   EventEmitter innerSelectionChange = new EventEmitter<IEditElement>();
