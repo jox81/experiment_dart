@@ -549,6 +549,59 @@ class MaterialReflection extends Material {
   }
 }
 
+//Todo
+class MaterialNormalMapping extends Material {
+
+  //External parameters
+  WebGLTexture skyboxTexture;
+
+  MaterialNormalMapping._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+
+  factory MaterialNormalMapping() {
+    ShaderSource shaderSource = ShaderSource.sources['material_reflection'];
+    return new MaterialNormalMapping._internal(
+        shaderSource.vsCode, shaderSource.fsCode);
+  }
+
+  setShaderAttributs(Model model) {
+    setShaderAttributArrayBuffer(
+        'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);
+    setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
+    setShaderAttributArrayBuffer('aNormal', model.mesh.vertexNormals,
+        model.mesh.vertexNormalsDimensions);
+  }
+
+  setShaderUniforms(Model model) {
+
+    print("###############");
+
+//    print("uModelMatrix: \n${Context.modelMatrix}");
+//    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
+//    setShaderUniform("uModelMatrix", Context.modelMatrix);
+//    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
+//use in common with vertex shader ?
+
+    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
+
+
+    setShaderUniform("uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
+
+    setShaderUniform("uInverseViewMatrix",
+        new Matrix4.inverted(Context.mainCamera.lookAtMatrix));
+
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
+    setShaderUniform("uNormalMatrix", normalMatrix);
+
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
+    gl.activeTexture.textureCubeMap.bind(skyboxTexture);
+    setShaderUniform('uEnvMap', 0);
+  }
+}
+
 /*
 //Loading glsl files....
   //may be used to load code async
