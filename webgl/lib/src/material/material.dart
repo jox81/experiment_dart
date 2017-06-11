@@ -243,8 +243,9 @@ abstract class Material extends IEditElement {
   render(Model model) {
 //    window.console.time('04_00_material::render');
     _mvPushMatrix();
-    Context.modelMatrix.multiply(model.transform);
-    //idem : Context.modelViewMatrix = Context.modelViewMatrix * model.transform;
+//    Context.modelMatrix.multiply(model.transform);
+//    idem :
+    Context.modelMatrix = Context.modelMatrix * model.transform;
 
 //    window.console.time('04_01_material::beforeRender');
     beforeRender(model);

@@ -180,11 +180,20 @@ class MaterialBase extends Material {
   }
 
   setShaderUniforms(Model model) {
+    setShaderUniform("uModelMatrix", Context.modelMatrix);
+    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
+//    print('#');
+//    logInfo("uViewMatrix-", Context.mainCamera.lookAtMatrix);
+//    logInfo("uViewMatrix*", Context.mainCamera.lookAtMatrix * new Matrix4.identity());
+
     setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
 
-    setShaderUniform(
-        "uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
+    setShaderUniform("uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
   }
+}
+
+void logInfo(String name, value){
+  print('$name : $value');
 }
 
 class MaterialBaseColor extends Material {

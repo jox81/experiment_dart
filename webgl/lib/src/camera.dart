@@ -124,7 +124,7 @@ class Camera extends Object3d {
   //viewMatrix
   Matrix4 _lookAtMatrix = new Matrix4.identity();
   Matrix4 get lookAtMatrix {
-    return _lookAtMatrix;
+    return _lookAtMatrix * new Matrix4.identity(); // Why is it needed to update shader !!?
   }
 
   //viewProjectionMatrix
