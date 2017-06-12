@@ -57,7 +57,8 @@ class PropertiesComponent {
 
   //Null
   bool isNull(EditableProperty animationProperty) {
-    return animationProperty.type == Null;
+    bool result = animationProperty.type == Null;
+    return result;
   }
 
   //String
@@ -254,8 +255,12 @@ class PropertiesComponent {
 
   /// Return true if type is the same or if it's a subType
   bool compareType(Type elementType, Type compareType) {
+
+
+
     ClassMirror elementTypeMirror = reflectClass(elementType);
     ClassMirror compareTypeMirror = reflectClass(compareType);
-    return elementTypeMirror.isSubtypeOf(compareTypeMirror);
+    bool result = (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);
+    return result;
   }
 }

@@ -3,7 +3,7 @@
         <h1>Properties - {{iEditElement.runtimeType}}</h1>
 
         <div id="content">
-            <div *ngFor="let key of iEditElement.properties.keys">{{key}}--
+            <div *ngFor="let key of iEditElement.properties.keys">{{key}}
                 <fieldset>
                     <legend *ngIf="!isString(iEditElement.properties[key])&&
                     !isBool(iEditElement.properties[key]) &&
