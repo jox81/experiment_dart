@@ -114,7 +114,7 @@ class Camera extends Object3d {
   //projectionMatrix
   Matrix4 _perspectiveMatrix = new Matrix4.identity();
   Matrix4 get perspectiveMatrix {
-    return _perspectiveMatrix;
+    return _perspectiveMatrix * new Matrix4.identity();// Why is it needed to update shader uniform!!?
   }
   set perspectiveMatrix(Matrix4 value){
     _perspectiveMatrix = value;
@@ -124,7 +124,7 @@ class Camera extends Object3d {
   //viewMatrix
   Matrix4 _lookAtMatrix = new Matrix4.identity();
   Matrix4 get lookAtMatrix {
-    return _lookAtMatrix * new Matrix4.identity(); // Why is it needed to update shader !!?
+    return _lookAtMatrix * new Matrix4.identity(); // Why is it needed to update shader shader uniform!!?
   }
 
   //viewProjectionMatrix
@@ -150,6 +150,7 @@ class Camera extends Object3d {
     }
     _gizmo.visible = value;
   }
+
 
   update() {
     setPerspectiveMatrix(_perspectiveMatrix, _fov, aspectRatio, _zNear, _zFar);
