@@ -33,6 +33,7 @@ class SceneViewPBR extends Scene{
     PointLight pointlLight = new PointLight()
       ..position = new Vector3(10.0, 10.0, 10.0);
     light = pointlLight;
+    lights.add(pointlLight);
 
     //Materials
 //  MaterialBase materialBase = new MaterialBase();

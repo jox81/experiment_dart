@@ -16,8 +16,8 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 class SceneViewPrimitives extends Scene{
 
   Camera camera;
-//  Camera camera2;
-//  Camera camera3;
+  Camera camera2;
+  Camera camera3;
 
   int cameraIndex = 0;
 
@@ -43,18 +43,18 @@ class SceneViewPrimitives extends Scene{
     cameras.add(camera);
     Context.mainCamera = camera;
 
-//    camera2 = new Camera(radians(37.0), 0.5, 10.0)
-//      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-//      ..position = new Vector3(2.0, 2.0, 2.0)
-//      ..showGizmo = true;
-//    models.add(camera2);
+    camera2 = new Camera(radians(37.0), 0.5, 10.0)
+      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
+      ..position = new Vector3(2.0, 2.0, 2.0)
+      ..showGizmo = true;
+    cameras.add(camera2);
 
-//    camera3 = new Camera(radians(37.0), 1.0, 100.0)
-//      ..aspectRatio = Context.viewAspectRatio
-//      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-//      ..position = new Vector3(10.0, 10.0, 10.0)
-//      ..showGizmo = true;
-//    models.add(camera3);
+    camera3 = new Camera(radians(37.0), 1.0, 100.0)
+      ..aspectRatio = Context.viewAspectRatio
+      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
+      ..position = new Vector3(10.0, 10.0, 10.0)
+      ..showGizmo = false;
+    cameras.add(camera3);
 
     //Material
 //    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);

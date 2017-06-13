@@ -132,6 +132,10 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
     for (Model model in models) {
       model.render();
     }
+
+    for (Camera camera in cameras) {
+      camera.render();
+    }
 //    window.console.timeEnd('02_scene::render');
   }
 
