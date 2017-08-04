@@ -1,0 +1,7 @@
+https://github.com/drojdjou/J3D
+
+Test 1
+Simple cube avec animation en position/rotation/scale et un material de base
+
+L'export donne la possibilité de choisir le dossier de destination.
+ici Test01.json
