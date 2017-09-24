@@ -11,6 +11,7 @@ import 'package:webgl/src/scene.dart';
     ],
     override: '*')
 import 'dart:mirrors';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewPrimitives extends Scene{
@@ -32,6 +33,9 @@ class SceneViewPrimitives extends Scene{
 
   @override
   Future setupScene() async {
+
+    Debug.printTrace();
+
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
@@ -65,7 +69,7 @@ class SceneViewPrimitives extends Scene{
 
     PointModel point = new PointModel()
       ..name = 'point'
-      ..position = new Vector3(-5.0, 0.0, -5.0);
+      ..position = new Vector3(-5.0, 0.0, -3.0);
     models.add(point);
 
     TriangleModel triangle = new TriangleModel()

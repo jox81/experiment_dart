@@ -2,37 +2,117 @@ import 'dart:async';
 @TestOn("dartium")
 
 import 'dart:html';
+import 'dart:math';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 
 Future main() async {
 
-  UtilsAssets.useWebPath = true;
+//  UtilsAssets.useWebPath = true;
 
-  CanvasElement canvas;
+//  CanvasElement canvas;
 
-  setUp(() async {
-    canvas = querySelector('#glCanvas');
-  });
+//  setUp(() async {
+//    canvas = querySelector('#glCanvas');
+//  });
+//
+//  tearDown(() async {
+//    canvas = null;
+//  });
 
-  tearDown(() async {
-    canvas = null;
-  });
+//  group("Application Init", () {
+//    test("application create test2", () async {
+//      Application application = await Application.create(canvas);
+//
+//      Camera camera = new Camera(radians(37.0), 0.1, 100.0)
+//        ..targetPosition = new Vector3.zero()
+//        ..position = new Vector3(0.0, 0.0, -1.0);
+//      Context.mainCamera = camera;
+//
+//      //Todo ?...
+//    });
+//  });
 
-  group("Application Init", () {
-    test("application create test2", () async {
-      Application application = await Application.create(canvas);
+  group("Base", () {
+    test("identity", () async {
+      Matrix3 m1 = new Matrix3.identity();
+      Matrix3 m2 = new Matrix3(
+          1.0, 0.0, 0.0,
+          0.0, 1.0, 0.0,
+          0.0, 0.0, 1.0,
+      );
 
-      Camera camera = new Camera(radians(37.0), 0.1, 100.0)
-        ..targetPosition = new Vector3.zero()
-        ..position = new Vector3(0.0, 0.0, -1.0);
-      Context.mainCamera = camera;
+      expect(m1, m2);
+    });
 
-      //Todo ?...
+    test("setRotationX", () async {
+      num angle = radians(90.0);
+
+      num c = cos(angle);
+      num s = sin(angle);
+
+      Matrix3 m1 = new Matrix3(
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0,
+      );
+      m1.setRotationX(angle);
+
+      Matrix3 m2 = new Matrix3(
+        1.0, 0.0, 0.0,
+        0.0, c, s,
+        0.0, -s, c,
+      );
+
+      expect(m1, m2);
+    });
+
+    test("setRotationY", () async {
+      num angle = radians(90.0);
+
+      num c = cos(angle);
+      num s = sin(angle);
+
+      Matrix3 m1 = new Matrix3(
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0,
+      );
+      m1.setRotationY(angle);
+
+      Matrix3 m2 = new Matrix3(
+        c, 0.0, s,
+        0.0, 1.0, 0.0,
+        -s, 0.0, c,
+      );
+
+      expect(m1, m2);
+    });
+
+    test("setRotationZ", () async {
+      num angle = radians(90.0);
+
+      num c = cos(angle);
+      num s = sin(angle);
+
+      Matrix3 m1 = new Matrix3(
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 0.0, 1.0,
+      );
+      m1.setRotationZ(angle);
+
+      Matrix3 m2 = new Matrix3(
+          c, s, 0.0,
+          -s, c, 0.0,
+          0.0, 0.0, 1.0
+      );
+      expect(m1, m2);
     });
   });
 
