@@ -1,26 +1,21 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:math';
-
 import '../known_types.dart';
 
-
-abstract class ServiceAware{
-  StreamController dataChangeController = new StreamController();
+abstract class ServiceAware extends Service{
+  StreamController dataChangeController = new StreamController.broadcast();
   Stream get onChange => dataChangeController.stream;
 
-  OnResponse(_data){
-    dataChangeController.add(_data);
-  }
+  //tell it can give some type of data
+  List<Type> dataToGive;
 }
-
 
 abstract class Service{
 
   int data;
 
-  void update() {
-    sleep(const Duration(seconds:1));
+  Future update() async {
+    await new Future.delayed(const Duration(seconds: 1), () => "1");
     OnResponse(new Random().nextInt(20));
   }
 
@@ -32,12 +27,22 @@ abstract class Service{
 class CharacterService extends Service with ServiceAware{
   static Character get characterData => new Character();
 
-  Future update()async {
-    await super.update();
+  List<Type> dataToGive = [Character];
+
+  OnResponse(_data){
+    super.OnResponse(_data);
+    dataChangeController.add('CharacterService update his data : $_data');
   }
 
 }
 
 class PaytableService extends Service with ServiceAware{
   static Paytable get paytableData => new Paytable();
+
+  List<Type> dataToGive = [Paytable, Stake];
+
+  OnResponse(_data){
+    super.OnResponse(_data);
+    dataChangeController.add('PaytableService update his data : $_data');
+  }
 }

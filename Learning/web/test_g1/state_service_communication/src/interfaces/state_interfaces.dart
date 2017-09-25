@@ -8,5 +8,14 @@ abstract class IStateManager{
 }
 
 abstract class IStateController{
+
+  List<Type> dataNeeded;
+
   Future play();
+
+  update(data){
+    print('the $this was updated with data : ($data)');
+  }
+
+  //tell it need some type of data
 }
