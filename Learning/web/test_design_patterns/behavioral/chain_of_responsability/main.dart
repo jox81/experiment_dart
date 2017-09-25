@@ -21,9 +21,7 @@ Future main() async {
   }
 }
 
-/// <summary>
 /// The 'Handler' abstract class
-/// </summary>
 abstract class Handler {
   Handler successor;
 
@@ -34,9 +32,7 @@ abstract class Handler {
   void HandleRequest(int request);
 }
 
-/// <summary>
 /// The 'ConcreteHandler1' class
-/// </summary>
 class ConcreteHandler1 extends Handler {
   void HandleRequest(int request) {
     if (request >= 0 && request < 10) {
@@ -47,9 +43,7 @@ class ConcreteHandler1 extends Handler {
   }
 }
 
-/// <summary>
 /// The 'ConcreteHandler2' class
-/// </summary>
 class ConcreteHandler2 extends Handler {
   void HandleRequest(int request) {
     if (request >= 10 && request < 20) {
@@ -60,9 +54,7 @@ class ConcreteHandler2 extends Handler {
   }
 }
 
-/// <summary>
 /// The 'ConcreteHandler3' class
-/// </summary>
 class ConcreteHandler3 extends Handler {
   void HandleRequest(int request) {
     if (request >= 20 && request < 30) {

@@ -19,9 +19,7 @@ Future main() async {
   context.ContextInterface();
 }
 
-/// <summary>
 /// The 'Context' class
-/// </summary>
 class Context {
   Strategy _strategy;
 
@@ -35,34 +33,26 @@ class Context {
   }
 }
 
-/// <summary>
 /// The 'Strategy' abstract class
-/// </summary>
 abstract class Strategy {
   void AlgorithmInterface();
 }
 
-/// <summary>
 /// A 'ConcreteStrategy' class
-/// </summary>
 class ConcreteStrategyA extends Strategy {
   void AlgorithmInterface() {
     print("Called ConcreteStrategyA.AlgorithmInterface()");
   }
 }
 
-/// <summary>
 /// A 'ConcreteStrategy' class
-/// </summary>
 class ConcreteStrategyB extends Strategy {
   void AlgorithmInterface() {
     print("Called ConcreteStrategyB.AlgorithmInterface()");
   }
 }
 
-/// <summary>
 /// A 'ConcreteStrategy' class
-/// </summary>
 class ConcreteStrategyC extends Strategy {
   void AlgorithmInterface() {
     print("Called ConcreteStrategyC.AlgorithmInterface()");
