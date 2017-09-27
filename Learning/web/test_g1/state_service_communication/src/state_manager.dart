@@ -27,10 +27,10 @@ class StateManager extends IStateManager{
   }
 
   void _initServices() {
-    Service characterService = new CharacterService();
-    Service paytableService = new PaytableService();
+    ServiceAware characterService = new CharacterService();
+    ServiceAware paytableService = new PaytableService();
 
-    for (Service service in [characterService, paytableService]) {
+    for (ServiceAware service in [characterService, paytableService]) {
       _services.add(service);
     }
   }
@@ -52,7 +52,7 @@ class StateManager extends IStateManager{
       //on passe en revue chaque data needed
       for (Type t in stateController.dataNeeded){
 
-        //on cherche les services qui propose ces datas
+        //on cherche les services qui proposent ces datas
         List services = _services.where((s)=> s.dataToGive.contains(t)).toList();
 
         //on abonne le sateController au service

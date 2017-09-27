@@ -2,14 +2,6 @@ import 'dart:async';
 import 'dart:math';
 import '../known_types.dart';
 
-abstract class ServiceAware extends Service{
-  StreamController dataChangeController = new StreamController.broadcast();
-  Stream get onChange => dataChangeController.stream;
-
-  //tell it can give some type of data
-  List<Type> dataToGive;
-}
-
 abstract class Service{
 
   int data;
@@ -24,8 +16,17 @@ abstract class Service{
   }
 }
 
+abstract class ServiceAware{
+  StreamController dataChangeController = new StreamController.broadcast();
+  Stream get onChange => dataChangeController.stream;
+
+  //tell the type of data it can give
+  List<Type> dataToGive;
+
+  Future update();
+}
+
 class CharacterService extends Service with ServiceAware{
-  static Character get characterData => new Character();
 
   List<Type> dataToGive = [Character];
 
@@ -37,7 +38,6 @@ class CharacterService extends Service with ServiceAware{
 }
 
 class PaytableService extends Service with ServiceAware{
-  static Paytable get paytableData => new Paytable();
 
   List<Type> dataToGive = [Paytable, Stake];
 

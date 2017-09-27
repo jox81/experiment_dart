@@ -1,0 +1,2 @@
+dart:
+http://theburningmonk.com/2013/09/dart-implementing-the-singleton-pattern-with-factory-constructors/
