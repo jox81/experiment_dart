@@ -12,39 +12,39 @@ Future main() async {
   MathProxy proxy = new MathProxy();
 
   // Do the math
-  print("4 + 2 = ${proxy.Add(4, 2)}");
-  print("4 - 2 = ${proxy.Sub(4, 2)}");
-  print("4 * 2 = ${proxy.Mul(4, 2)}");
-  print("4 / 2 = ${proxy.Div(4, 2)}");
+  print("4 + 2 = ${proxy.add(4, 2)}");
+  print("4 - 2 = ${proxy.sub(4, 2)}");
+  print("4 * 2 = ${proxy.mul(4, 2)}");
+  print("4 / 2 = ${proxy.div(4, 2)}");
 }
 
 /// <summary>
 /// The 'Subject interface
 /// </summary>
 abstract class IMath {
-  num Add(num x, num y);
-  num Sub(num x, num y);
-  num Mul(num x, num y);
-  num Div(num x, num y);
+  num add(num x, num y);
+  num sub(num x, num y);
+  num mul(num x, num y);
+  num div(num x, num y);
 }
 
 /// <summary>
 /// The 'RealSubject' class
 /// </summary>
 class Math extends IMath {
-  num Add(num x, num y) {
+  num add(num x, num y) {
     return x + y;
   }
 
-  num Sub(num x, num y) {
+  num sub(num x, num y) {
     return x - y;
   }
 
-  num Mul(num x, num y) {
+  num mul(num x, num y) {
     return x * y;
   }
 
-  num Div(num x, num y) {
+  num div(num x, num y) {
     return x / y;
   }
 }
@@ -55,19 +55,19 @@ class Math extends IMath {
 class MathProxy extends IMath {
   Math _math = new Math();
 
-  num Add(num x, num y) {
-    return _math.Add(x, y);
+  num add(num x, num y) {
+    return _math.add(x, y);
   }
 
-  num Sub(num x, num y) {
-    return _math.Sub(x, y);
+  num sub(num x, num y) {
+    return _math.sub(x, y);
   }
 
-  num Mul(num x, num y) {
-    return _math.Mul(x, y);
+  num mul(num x, num y) {
+    return _math.mul(x, y);
   }
 
-  num Div(num x, num y) {
-    return _math.Div(x, y);
+  num div(num x, num y) {
+    return _math.div(x, y);
   }
 }
