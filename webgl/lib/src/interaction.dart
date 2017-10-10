@@ -48,13 +48,44 @@ class Interaction {
     gl.canvas.onMouseDown.listen(_onMouseDown);
     gl.canvas.onMouseMove.listen(_onMouseMove);
     gl.canvas.onMouseUp.listen(_onMouseUp);
+
+    //cameraController
+
+    // Assign a mouse down handler to the HTML element.
+    gl.canvas.onMouseDown.listen((MouseEvent event) {
+        int screenX = event.client.x.toInt();
+        int screenY = event.client.y.toInt();
+        updateMouseInfos(screenX, screenY);
+        Context.mainCamera.cameraController.beginOrbit(Context.mainCamera, screenX, screenY);
+    });
+
+    // Assign a mouse up handler to the HTML element.
+    gl.canvas.onMouseUp.listen((MouseEvent event) {
+        int screenX = event.client.x.toInt();
+        int screenY = event.client.y.toInt();
+        updateMouseInfos(screenX, screenY);
+        Context.mainCamera.cameraController.endOrbit(Context.mainCamera);
+    });
+
+    // Assign a mouse move handler to the HTML element.
+    gl.canvas.onMouseMove.listen((MouseEvent event) {
+      int screenX = event.client.x.toInt();
+      int screenY = event.client.y.toInt();
+      updateMouseInfos(screenX, screenY);
+      Context.mainCamera.cameraController.updateCameraPosition(Context.mainCamera, screenX, screenY, event.button);
+    });
+
+    gl.canvas.onMouseWheel.listen((WheelEvent event) {
+      num delatY = -event.deltaY;
+      Context.mainCamera.cameraController.updateCamerFov(Context.mainCamera, delatY);
+    });
   }
 
   ///
   /// Window
   ///
 
-  _onWindowResize (event) {
+  void _onWindowResize (Event event) {
     Application.instance.resizeCanvas();
   }
 
@@ -112,7 +143,9 @@ class Interaction {
 
   Model tempSelection;
   void _onMouseDown(MouseEvent event) {
-    updateMouseInfos(event);
+    int screenX = event.client.x.toInt();
+    int screenY = event.client.y.toInt();
+    updateMouseInfos(screenX, screenY);
     dragging = false;
     mouseDown = true;
 
@@ -126,7 +159,9 @@ class Interaction {
   }
 
   void _onMouseMove(MouseEvent event) {
-    updateMouseInfos(event);
+    int screenX = event.client.x.toInt();
+    int screenY = event.client.y.toInt();
+    updateMouseInfos(screenX, screenY);
 //    print('_onMouseMove ${dragging} : ${event.client.x} / ${event.client.y}');
 
     if(mouseDown /*&& (event.client.x != mouseMoveX || event.client.y != mouseMoveY)*/) {
@@ -143,19 +178,19 @@ class Interaction {
 
         Model currentModel = scene.currentSelection as Model;
 
-        num delta = deltaX; // get mouse delta
-        num deltaMoveX = (Application.instance.activeAxis[AxisType.x]
+        double delta = deltaX.toDouble(); // get mouse delta
+        double deltaMoveX = (Application.instance.activeAxis[AxisType.x]
             ? 1
             : 0) * delta;
-        num deltaMoveY = (Application.instance.activeAxis[AxisType.y]
+        double deltaMoveY = (Application.instance.activeAxis[AxisType.y]
             ? 1
             : 0) * delta;
-        num deltaMoveZ = (Application.instance.activeAxis[AxisType.z]
+        double deltaMoveZ = (Application.instance.activeAxis[AxisType.z]
             ? 1
             : 0) * delta;
 
         if (Application.instance.activeTool == ActiveToolType.move) {
-          num moveFactor = 1.0;
+          double moveFactor = 1.0;
 
           currentModel.transform.translate(
               new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
@@ -191,13 +226,12 @@ class Interaction {
     mouseDown = false;
   }
 
-  void updateMouseInfos(MouseEvent event) {
-    int tempScreenX = event.client.x;
-    int tempScreenY = event.client.y;
-    deltaX = (currentX - tempScreenX) / scaleFactor;
-    deltaY = (currentY - tempScreenY) / scaleFactor;
-    currentX = tempScreenX;
-    currentY = tempScreenY;
+  // Determine how far we have moved since the last mouse move event.
+  void updateMouseInfos(int screenX, int screenY) {
+    deltaX = (currentX - screenX) / scaleFactor;
+    deltaY = (currentY - screenY) / scaleFactor;
+    currentX = screenX;
+    currentY = screenY;
   }
 
   String getMouseInfos(){

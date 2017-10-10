@@ -161,16 +161,16 @@ void main() {
   canvas.onClick.listen((MouseEvent e) {
     log("mouse offset: x=${e.offset.x} y=${e.offset.y}");
     
-    int x = e.offset.x;
-    int y = canvas.height - e.offset.y;
+    int x = e.offset.x as int;
+    int y = (canvas.height - e.offset.y) as int;
     
     readColor("screen", gl, x, y, null);         // read color from canvas framebuffer
     readColor("offscreen", gl, x, y, offscreen); // read color from offscreen framebuffer
   }); 
 }
 
-var _jsReadPixels;
-get jsReadPixels {
+dynamic _jsReadPixels;
+dynamic get jsReadPixels {
   if (_jsReadPixels != null) return _jsReadPixels;
   js.context['eval'].apply(['function readPixelsDartium_(gl, x, y) { '
       '  var pixels = new Uint8Array(4); '
@@ -182,7 +182,7 @@ get jsReadPixels {
   return _jsReadPixels;
 }
 
-readPixelsDartium(WebGLRenderingContext gl, x, y) {
+dynamic readPixelsDartium(WebGLRenderingContext gl, int x, int y) {
   // If we're in dart2js, just call the method.
   if (1.0 is int) {
     Uint8List color = new Uint8List(4);

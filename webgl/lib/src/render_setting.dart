@@ -1,5 +1,5 @@
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(
     targets: const [
@@ -26,7 +26,7 @@ class RenderSetting{
   }
 
   void logSupportedExtensions(){
-    UtilsAssets.log('Supported extensions',(){
+    Debug.log('Supported extensions',(){
       for(String extension in gl.supportedExtensions){
         print(extension);
       }
@@ -41,15 +41,15 @@ class RenderSetting{
       'WEBKIT_WEBGL_depth_texture',
     ];
 
-    Map extensions = new Map();
+    Map extensions = new Map<String, Object>();
     for(String extensionName in extensionNames){
-      var extension = gl.getExtension(extensionName);
+      dynamic extension = gl.getExtension(extensionName);
       extensions[extensionName] = extension;
     }
 
     if(log) {
-      UtilsAssets.log('Enabling extensions', () {
-        extensions.forEach((key, value) {
+      Debug.log('Enabling extensions', () {
+        extensions.forEach((dynamic key, dynamic value) {
           print('$key : ${(value != null) ? 'enabled' : 'not available'}');
         });
       });

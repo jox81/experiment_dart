@@ -16,10 +16,10 @@ class ListComponent {
   dynamic element;
 
   @Output()
-  EventEmitter elementSelected = new EventEmitter();
+  EventEmitter elementSelected = new EventEmitter<dynamic >();
 
-  void selectionChange(event){
-    var selection = list[event.target.selectedIndex];
+  void selectionChange(dynamic event){
+    dynamic selection = list[event.target.selectedIndex as int];
     elementSelected.emit(selection);
   }
 

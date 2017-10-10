@@ -18,7 +18,7 @@ class WebGLActiveInfo{
   String get name => _webGLActiveInfo.name;
 
   ///The data type of the requested variable.
-  ShaderVariableType get type => ShaderVariableType.getByIndex(_webGLActiveInfo.type);
+  ShaderVariableType get type => ShaderVariableType.getByIndex(_webGLActiveInfo.type) as ShaderVariableType;
 
   ///The size of the requested variable.
   int get size => _webGLActiveInfo.size;

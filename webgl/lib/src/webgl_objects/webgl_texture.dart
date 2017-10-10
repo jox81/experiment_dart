@@ -7,7 +7,7 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/geometry/models.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
@@ -50,7 +50,7 @@ class WebGLTexture extends EditTexture {
   void delete() => gl.ctx.deleteTexture(webGLTexture);
 
   void logTextureInfos() {
-    UtilsAssets.log("WebGLTexture Infos", () {
+    Debug.log("WebGLTexture Infos", () {
 
       print('editTextureUnit : ${editTextureUnit}');
       print('webGLTexture : ${webGLTexture}');
@@ -116,13 +116,13 @@ abstract class EditTexture extends WebGLObject{
     if(textureUnit != null){
       gl.activeTexture.activeUnit = textureUnit;
     }
-    gl.activeTexture.bind(this, textureTarget);
+    gl.activeTexture.bind(this as WebGLTexture, textureTarget);
   }
 
   // > TEXTURE_MAG_FILTER
   TextureMagnificationFilterType get textureMagFilter{
     bind(textureUnit: editTextureUnit);
-    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index));
+    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index) as int) as TextureMagnificationFilterType;
   }
   set textureMagFilter(TextureMagnificationFilterType  textureMagnificationFilterType){
     bind(textureUnit: editTextureUnit);
@@ -134,7 +134,7 @@ abstract class EditTexture extends WebGLObject{
     bind(textureUnit: editTextureUnit);
     return TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(
         textureTarget.index,
-        TextureParameter.TEXTURE_MIN_FILTER.index));
+        TextureParameter.TEXTURE_MIN_FILTER.index) as int) as TextureMinificationFilterType;
   }
   set textureMinFilter(TextureMinificationFilterType  textureMinificationFilterType){
     bind(textureUnit: editTextureUnit);
@@ -145,7 +145,7 @@ abstract class EditTexture extends WebGLObject{
   TextureWrapType get textureWrapS
   {
     bind(textureUnit: editTextureUnit);
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index));
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index) as int) as TextureWrapType;
   }
   set textureWrapS(TextureWrapType  textureWrapType){
     bind(textureUnit: editTextureUnit);
@@ -155,7 +155,7 @@ abstract class EditTexture extends WebGLObject{
   // > TEXTURE_WRAP_T
   TextureWrapType get textureWrapT {
     bind(textureUnit: editTextureUnit);
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index));
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index) as int) as TextureWrapType;
   }
   set textureWrapT(TextureWrapType  textureWrapType){
     bind(textureUnit: editTextureUnit);
@@ -186,7 +186,7 @@ class TextureUtils {
   }
 
   static Future<ImageElement> loadImage(String fileUrl) {
-    Completer completer = new Completer();
+    Completer completer = new Completer<ImageElement>();
 
     ImageElement image;
 
@@ -198,7 +198,7 @@ class TextureUtils {
         }
       });
 
-    return completer.future;
+    return completer.future as Future<ImageElement>;
   }
 
   static Future<WebGLTexture> createTexture2DFromFile(String fileUrl,
@@ -315,10 +315,10 @@ class TextureUtils {
 
   static WebGLTexture createDepthTexture2D(int size) {
     //need extensions
-    var OES_texture_float = gl.getExtension('OES_texture_float');
+    dynamic OES_texture_float = gl.getExtension('OES_texture_float');
     assert(OES_texture_float != null);
 
-    var WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
+    dynamic WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
     assert(WEBGL_depth_texture != null);
 
     WebGLTexture depthTexture = new WebGLTexture.texture2d();
@@ -433,8 +433,8 @@ class TextureUtils {
         _defaultColoredTexture,
         0);
 
-    Rectangle previousViewport =
-    new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    Rectangle<int> previousViewport =
+    new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
     // draw pixels
     {
@@ -470,13 +470,13 @@ class TextureUtils {
       List<Model> models = new List();
 
       //backup camera
-      Camera baseCam = Context.mainCamera;
-      Rectangle previousViewport =
-          new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      CameraPerspective baseCam = Context.mainCamera;
+      Rectangle<int> previousViewport =
+          new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
       gl.activeFrameBuffer.bind(framebufferWithDepthTexture);
 
-      Camera cameraTexture = new Camera(radians(45.0), 0.1, 100.0)
+      CameraPerspective cameraTexture = new CameraPerspective(radians(45.0), 0.1, 100.0)
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
         ..position = new Vector3(5.0, 15.0, 15.0);
 
@@ -525,7 +525,7 @@ class TextureUtils {
     return [colorTexture, depthTexture];
   }
 
-  static ImageElement createImageFromTexture(WebGLTexture texture, width, height) {
+  static ImageElement createImageFromTexture(WebGLTexture texture, int width, int height) {
     // Create a framebuffer backed by the texture
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
     gl.activeFrameBuffer.bind(framebuffer);
@@ -540,15 +540,15 @@ class TextureUtils {
     framebuffer.delete();
 
     // Create a 2D canvas to store the result
-    CanvasElement canvas = document.createElement('canvas');
+    CanvasElement canvas = document.createElement('canvas') as CanvasElement;
     canvas.width = width;
     canvas.height = height;
-    var context = canvas.getContext('2d');
+    dynamic context = canvas.getContext('2d');
 
     // Copy the pixels to a 2D canvas
     ImageData imgData = new ImageData(dataClamped, width);
 
-    ImageData imageData = context.createImageData(imgData);
+    ImageData imageData = context.createImageData(imgData) as ImageData;
 
     context.putImageData(imageData, 0, 0);
 
@@ -557,7 +557,7 @@ class TextureUtils {
     return img;
   }
 
-  static ImageElement createImageFromTextureNoReadPixel(WebGLTexture texture, width, height) {
+  static ImageElement createImageFromTextureNoReadPixel(WebGLTexture texture, int width, int height) {
     // Create a framebuffer backed by the texture
 //    WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 //    gl.activeFrameBuffer.bind(framebuffer);
@@ -566,22 +566,22 @@ class TextureUtils {
     // Read the contents of the framebuffer
     Uint8List data = new Uint8List(width * height * 4);
     gl.activeTexture.texture2d.bind(texture);
-    gl.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, width, height, data);
+    gl.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, width, height, 0);
 
 //    gl.readPixels(0, 0, width, height, ReadPixelDataFormat.RGBA, ReadPixelDataType.UNSIGNED_BYTE, data);
 //    Uint8ClampedList dataClamped = new Uint8ClampedList.fromList(data.toList());
 //    framebuffer.delete();
 
     // Create a 2D canvas to store the result
-    CanvasElement canvas = document.createElement('canvas');
+    CanvasElement canvas = document.createElement('canvas') as CanvasElement;
     canvas.width = width;
     canvas.height = height;
-    var context = canvas.getContext('2d');
+    dynamic context = canvas.getContext('2d');
 
     // Copy the pixels to a 2D canvas
     ImageData imgData = new ImageData(data, width);
 
-    ImageData imageData = context.createImageData(imgData);
+    ImageData imageData = context.createImageData(imgData) as ImageData;
 
     context.putImageData(imageData, 0, 0);
 
@@ -590,9 +590,9 @@ class TextureUtils {
     return img;
   }
 
-  static void readPixels({Rectangle rectangle}) {
+  static void readPixels({Rectangle<int> rectangle}) {
     if (rectangle == null)
-      rectangle = new Rectangle(0, 0, Context.width, Context.height);
+      rectangle = new Rectangle(0, 0, Context.width.toInt(), Context.height.toInt());
 
     var pixels = new Uint8List(rectangle.width * rectangle.height * 4);
 //    var pixels = new Float32List(rectangle.width * rectangle.height * 4);

@@ -1,8 +1,7 @@
-import 'dart:convert';
 @MirrorsUsed(targets:const[IntrospectionManager, IEditElement, CustomEditElement], override:'*')
 import 'dart:mirrors';
 import 'package:webgl/src/animation/animation_property.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 
 class IntrospectionManager {
   static IntrospectionManager _instance;
@@ -63,16 +62,16 @@ class IntrospectionManager {
         PropertyGetter getter;
         PropertySetter setter;
 
-        type = im.getField(fieldSymbol).reflectee.runtimeType;
+        type = im.getField(fieldSymbol).reflectee.runtimeType as Type;
         getter = () => im.getField(fieldSymbol).reflectee;
 
         if (instance_mirror_setters.containsKey('$key=')) {
-          setter = (v) => im.setField(fieldSymbol, v).reflectee;
+          setter = (dynamic v) => im.setField(fieldSymbol, v).reflectee;
         } else {
           setter = null;
         }
 
-        propertiesInfos[key] = new EditableProperty(type, getter, setter);
+        propertiesInfos[key] = new EditableProperty<dynamic>(type, getter, setter);
       }
     }
 
@@ -82,10 +81,10 @@ class IntrospectionManager {
 
       Symbol fieldSymbol = mm.simpleName;
 
-      Function function = im.getField(fieldSymbol).reflectee;
+      Function function = im.getField(fieldSymbol).reflectee as Function;
       FunctionModel functionModel = new FunctionModel(function, im, mm);
 
-      propertiesInfos[key] = new EditableProperty(FunctionModel,
+      propertiesInfos[key] = new EditableProperty<dynamic>(FunctionModel,
           () => functionModel, null);
     }
 
@@ -106,7 +105,7 @@ class IntrospectionManager {
   }) {
     ClassMirror classMirror = reflectClass(type);
 
-    UtilsAssets.log('', () {
+    Debug.log('', () {
       if (showBaseInfo) {
         String simpleName = MirrorSystem.getName(classMirror.simpleName);
         print('### $simpleName');
@@ -243,7 +242,7 @@ class IntrospectionManager {
     }
 
     if (log) {
-      UtilsAssets.log('Webgl Constants', () {
+      Debug.log('Webgl Constants', () {
         methodNames.forEach((n) {
           print('$n');
         });
@@ -317,7 +316,7 @@ abstract class IEditElement {
   Map<String, EditableProperty> getPropertiesInfos() {
     var elementToCheck = this;
     if (this is CustomEditElement) {
-      elementToCheck = (this as CustomEditElement).element;
+      elementToCheck = (this as CustomEditElement).element as IEditElement;
     }
     return IntrospectionManager.instance.getPropertiesInfos(elementToCheck);
   }
@@ -325,15 +324,15 @@ abstract class IEditElement {
   ///From : http://stackoverflow.com/questions/20024298/add-json-serializer-to-every-model-class
   ///The toJson method is necessary to use JSON.encode(..)
   Map toJson() {
-    Map map = new Map();
+    Map map = new Map<String, dynamic>();
 
     InstanceMirror im = reflect(this);
     ClassMirror cm = im.type;
 
     var decls = cm.declarations.values.where((dm) => dm is VariableMirror);
     decls.forEach((dm) {
-      var key = MirrorSystem.getName(dm.simpleName);
-      var val = im.getField(dm.simpleName).reflectee;
+      String key = MirrorSystem.getName(dm.simpleName);
+      dynamic val = im.getField(dm.simpleName).reflectee;
       map[key] = val;
     });
 

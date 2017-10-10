@@ -51,10 +51,10 @@ Future main() async {
     });
 
     test("setRotationX", () async {
-      num angle = radians(90.0);
+      double angle = radians(90.0);
 
-      num c = cos(angle);
-      num s = sin(angle);
+      double c = cos(angle);
+      double s = sin(angle);
 
       Matrix3 m1 = new Matrix3(
         1.0, 0.0, 0.0,
@@ -73,10 +73,10 @@ Future main() async {
     });
 
     test("setRotationY", () async {
-      num angle = radians(90.0);
+      double angle = radians(90.0);
 
-      num c = cos(angle);
-      num s = sin(angle);
+      double c = cos(angle);
+      double s = sin(angle);
 
       Matrix3 m1 = new Matrix3(
         1.0, 0.0, 0.0,
@@ -95,10 +95,10 @@ Future main() async {
     });
 
     test("setRotationZ", () async {
-      num angle = radians(90.0);
+      double angle = radians(90.0);
 
-      num c = cos(angle);
-      num s = sin(angle);
+      double c = cos(angle);
+      double s = sin(angle);
 
       Matrix3 m1 = new Matrix3(
         1.0, 0.0, 0.0,

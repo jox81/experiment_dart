@@ -14,15 +14,15 @@ class Vector3Component {
   @Output()
   EventEmitter valueChange = new EventEmitter<Vector3>();
 
-  updateRow(int rowIndex, event){
-    value[rowIndex] = double.parse(event.target.value, (s)=>0.0);
+  void updateRow(int rowIndex, dynamic event){
+    value[rowIndex] = double.parse(event.target.value as String, (s)=>0.0);
     valueChange.emit(value);
   }
 
-  static void initDynamicComponent(Vector3Component component, defaultValue, Function callBack) {
+  static void initDynamicComponent(Vector3Component component, Vector3 defaultValue, Function callBack) {
     component
       ..value = defaultValue is Vector3 ? defaultValue : new Vector3.zero()
-      ..valueChange.listen((d){
+      ..valueChange.listen((dynamic d){
         if(callBack != null){
           callBack(d);
         }

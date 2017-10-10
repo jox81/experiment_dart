@@ -7,23 +7,23 @@ class ContextAttributs extends IEditElement {
 
   ContextAttributs(this._values);
 
-  bool get alpha => values['alpha'];
-  bool get antialias => values['alpha'];
-  bool get depth => values['alpha'];
-  bool get failIfMajorPerformanceCaveat => values['alpha'];
-  bool get premultipliedAlpha => values['alpha'];
-  bool get preserveDrawingBuffer => values['alpha'];
-  bool get stencil => values['alpha'];
+  bool get alpha => values['alpha'] as bool;
+  bool get antialias => values['alpha'] as bool;
+  bool get depth => values['alpha'] as bool;
+  bool get failIfMajorPerformanceCaveat => values['alpha'] as bool;
+  bool get premultipliedAlpha => values['alpha'] as bool;
+  bool get preserveDrawingBuffer => values['alpha'] as bool;
+  bool get stencil => values['alpha'] as bool;
 
   Map get values {
-    return _values.toMap;
+    return _values.toMap as Map;
   }
 
   void logValues(){
     print('##################################################################');
     print('### Webgl Context Attributs');
     print('##################################################################');
-    values.forEach((key,v){
+    values.forEach((dynamic key,dynamic v){
       print('$key : $v');
     });
     print('##################################################################');
@@ -40,7 +40,7 @@ class WebGLDictionary extends _ReturnedDictionary {
 class _ReturnedDictionary {
   Map _values;
 
-  noSuchMethod(Invocation invocation) {
+  void noSuchMethod(Invocation invocation) {
     var key = MirrorSystem.getName(invocation.memberName);
     if (invocation.isGetter) {
       return _values[key];
@@ -52,6 +52,6 @@ class _ReturnedDictionary {
 
   Map get toMap => _values;
 
-  _ReturnedDictionary(Map value) : _values = value != null ? value : {};
+  _ReturnedDictionary(Map value) : _values = value != null ? value : new Map<dynamic, dynamic>();
 }
 

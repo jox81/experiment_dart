@@ -153,7 +153,7 @@ class Mesh {
     return new _CubeMesh();
   }
 
-  factory Mesh.Sphere({num radius : 1, int segmentV: 32, int segmentH: 32}) {
+  factory Mesh.Sphere({double radius : 1.0, int segmentV: 32, int segmentH: 32}) {
     return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
   }
 
@@ -494,7 +494,7 @@ class _SphereMesh extends Mesh {
   List<Vector3> sphereVerticesVector = [];
   List<double> uvs = [];
 
-  _SphereMesh({num radius : 1, int segmentV: 32, int segmentH : 32}) {
+  _SphereMesh({double radius : 1.0, int segmentV: 32, int segmentH : 32}) {
 
     mode = DrawMode.TRIANGLES;
 
@@ -506,14 +506,14 @@ class _SphereMesh extends Mesh {
     for (int zRotationStep = 0;
         zRotationStep <= totalZRotationSteps;
         zRotationStep++) {
-      num normalizedZ = zRotationStep / totalZRotationSteps;
-      num angleZ = (normalizedZ * PI);//part of vertical half circle
+      double normalizedZ = zRotationStep / totalZRotationSteps;
+      double angleZ = (normalizedZ * PI);//part of vertical half circle
 
       for (int yRotationStep = 0;
           yRotationStep <= totalYRotationSteps;
           yRotationStep++) {
-        num normalizedY = yRotationStep / totalYRotationSteps;
-        num angleY = normalizedY * PI * 2;//part of horizontal full circle
+        double normalizedY = yRotationStep / totalYRotationSteps;
+        double angleY = normalizedY * PI * 2;//part of horizontal full circle
 
         _matRotZ.setIdentity();//reset
         _matRotZ.rotateZ(-angleZ);
@@ -521,7 +521,7 @@ class _SphereMesh extends Mesh {
         _matRotY.setIdentity();//reset
         _matRotY.rotateY(angleY);
 
-        _tmpVec3 = _matRotY * _matRotZ * _up ;//up vector transformed by the 2 rotations
+        _tmpVec3 = (_matRotY * _matRotZ * _up) as Vector3;//up vector transformed by the 2 rotations
 
         _tmpVec3.scale(-radius);// why - ?
         vertices.addAll(_tmpVec3.storage);

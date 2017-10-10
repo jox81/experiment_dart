@@ -1,4 +1,3 @@
-import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/geometry/object3d.dart';
@@ -153,19 +152,19 @@ abstract class Model extends Object3d {
         (m) => m.toString() == json["type"],
         orElse: () => null);
 
-    Object3d object3d = new Model.createByType(modelType, doInitMaterial: true)
-      ..name = json["name"];
-//      ..position = new Vector3.fromFloat32List(json["position"])
+    Model object3d = new Model.createByType(modelType, doInitMaterial: true)
+      ..name = json["name"].toString()
+      ..position = new Vector3.fromFloat32List(new Float32List.fromList(json["position"]as List<double>));
 //      ..rotation = new Matrix3.fromList(json["rotation"])
 //      ..scale = ??;
     if(json["transform"] != null) {
-      object3d.transform = new Matrix4.fromFloat32List(new Float32List.fromList(json["transform"]));
+      object3d.transform = new Matrix4.fromFloat32List(new Float32List.fromList(json["transform"] as List<double>));
     }
     return object3d;
   }
 
   Map toJson() {
-    Map json = new Map();
+    Map json = new Map<String, dynamic>();
     json["type"] = modelType.toString();
     json["name"] = name;
 //    json["position"] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
@@ -185,10 +184,10 @@ class JsonObject extends Model {
   ModelType get modelType => ModelType.json;
   JsonObject(Map jsonFile, {bool doInitMaterial: true}) {
     mesh
-      ..vertices = jsonFile['meshes'][0]['vertices']
-      ..indices = jsonFile['meshes'][0]['faces'].expand((i) => i).toList()
-      ..textureCoords = jsonFile['meshes'][0]['texturecoords'][0]
-      ..vertexNormals = jsonFile['meshes'][0]['normals'];
+      ..vertices = jsonFile['meshes'][0]['vertices'] as List<double>
+      ..indices = (jsonFile['meshes'][0]['faces']).expand((int i) => i).toList() as List<int>
+      ..textureCoords = jsonFile['meshes'][0]['texturecoords'][0] as List<double>
+      ..vertexNormals = jsonFile['meshes'][0]['normals'] as List<double>;
     material = new MaterialBase();
   }
 }
@@ -219,7 +218,7 @@ class LineModel extends Model {
     super.render();
   }
 
-  _update() {
+  void _update() {
     mesh.vertices = [];
     mesh.vertices..addAll(point1.storage)..addAll(point2.storage);
   }
@@ -268,7 +267,7 @@ class CubeModel extends Model {
 class SphereModel extends Model {
   ModelType get modelType => ModelType.sphere;
   SphereModel(
-      {num radius: 1.0,
+      {double radius: 1.0,
       int segmentV: 16,
       int segmentH: 16,
       bool doInitMaterial: true}) {
@@ -300,7 +299,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   @override
   bool visible = false;
 
-  final Camera _camera;
+  final CameraPerspective _camera;
   Matrix4 get _vpmatrix => _camera.viewProjectionMatrix;
 
   Vector4 _positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
@@ -328,11 +327,11 @@ class FrustrumGizmo extends Model implements IGizmo {
   @override
   List<Model> gizmoModels = [];
 
-  FrustrumGizmo(Camera camera) : _camera = camera {
+  FrustrumGizmo(CameraPerspective camera) : _camera = camera {
     _createFrustrumModel(_camera.viewProjectionMatrix);
   }
 
-  _createFrustrumModel(Matrix4 cameraMatrix) {
+  void _createFrustrumModel(Matrix4 cameraMatrix) {
     MaterialPoint frustrumPositionPointMaterial =
         new MaterialPoint(pointSize: _positionPointSize, color: _positionColor);
 

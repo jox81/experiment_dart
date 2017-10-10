@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:webgl/src/geometry/object3d.dart';
 
 abstract class IComponent {
@@ -5,5 +7,5 @@ abstract class IComponent {
   IComponent();
 
   Object3d object3d;
-  update();
+  Future update();
 }

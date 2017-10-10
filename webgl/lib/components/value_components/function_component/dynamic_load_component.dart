@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/components/value_components/bool_component/bool_component.dart';
@@ -26,7 +28,7 @@ class DynamicLoaderComponent implements AfterViewInit{
 
   DynamicLoaderComponent(this.componentResolver);
 
-  createDynamicComponentType(Type newType, defaultValue, Function callBack)async {
+  Future createDynamicComponentType(Type newType, dynamic defaultValue, Function callBack)async {
 
     Type componentType = ComponentTypes.getComponentBaseType(newType);
 
@@ -38,22 +40,22 @@ class DynamicLoaderComponent implements AfterViewInit{
 
     switch(componentType){
       case BoolComponent:
-        BoolComponent.initDynamicComponent(cdRef.instance, defaultValue, callBack);
+        BoolComponent.initDynamicComponent(cdRef.instance as BoolComponent, defaultValue as bool, callBack);
         break;
       case StringComponent:
-        StringComponent.initDynamicComponent(cdRef.instance, defaultValue, callBack);
+        StringComponent.initDynamicComponent(cdRef.instance as StringComponent, defaultValue as String, callBack);
         break;
       case IntComponent:
-        IntComponent.initDynamicComponent(cdRef.instance, defaultValue, callBack);
+        IntComponent.initDynamicComponent(cdRef.instance as IntComponent, defaultValue as int, callBack);
         break;
       case NumComponent:
-        NumComponent.initDynamicComponent(cdRef.instance, defaultValue, callBack);
+        NumComponent.initDynamicComponent(cdRef.instance as NumComponent, defaultValue as num, callBack);
         break;
       case Vector2Component:
-        Vector2Component.initDynamicComponent(cdRef.instance, defaultValue, callBack);
+        Vector2Component.initDynamicComponent(cdRef.instance as Vector2Component, defaultValue as Vector2, callBack);
         break;
       case Vector3Component:
-        Vector3Component.initDynamicComponent(cdRef.instance, defaultValue, callBack);
+        Vector3Component.initDynamicComponent(cdRef.instance as Vector3Component, defaultValue as Vector3, callBack);
         break;
       default:
         throw new Exception('DynamicLoaderComponent::createDynamicComponent : No component for $componentType');
@@ -63,13 +65,13 @@ class DynamicLoaderComponent implements AfterViewInit{
 //    print("Component created : ${cdRef.instance.runtimeType}");
   }
 
-  createDynamicComponentBaseType(Type newType, defaultValue, Function callBack, {String name})async {
+  Future createDynamicComponentBaseType(Type newType, dynamic defaultValue, Function callBack, {String name})async {
     //parameter name
     if(name != null) {
       ComponentFactory nameFactory = await componentResolver.resolveComponent(
           ParameterNameComponent);
       ComponentRef cdRefName = target.createComponent(nameFactory, -1, injector);
-      ParameterNameComponent parameterNameComponent = cdRefName.instance;
+      ParameterNameComponent parameterNameComponent = cdRefName.instance as ParameterNameComponent;
       parameterNameComponent.name = name;
     }
 
@@ -77,7 +79,7 @@ class DynamicLoaderComponent implements AfterViewInit{
   }
 
   @override
-  ngAfterViewInit() {
+  void ngAfterViewInit() {
     injector = target.injector;
   }
 }

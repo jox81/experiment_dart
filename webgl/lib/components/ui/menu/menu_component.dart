@@ -6,6 +6,7 @@ import 'package:webgl/directives/clickoutside_directive.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/textures/texture_library.dart';
@@ -18,10 +19,10 @@ import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
     selector: 'menuBase',
     templateUrl: 'menu_component.html',
     styleUrls: const ['menu_component.css'],
-    directives: const [ClickOutsideDirective])
+    directives: const <dynamic>[ClickOutsideDirective])
 class MenuComponent{
 
-  Scene get currentScene => Application.instance.currentScene;
+  Scene get currentScene => Application.instance.currentScene as Scene;
 
   Map<String, bool> openedMenus = {
     'headerId0' : false,
@@ -34,7 +35,7 @@ class MenuComponent{
     return openedMenus[headerId];
   }
 
-  headerClick(String headerId){
+  void headerClick(String headerId){
     openedMenus[headerId] = !openedMenus[headerId];
 //    print('toggle menu $headerId : visible = ${openedMenus[headerId]}');
   }
@@ -69,12 +70,12 @@ class MenuComponent{
     return true; //need to continue link effect
   }
 
-  open(Event event){
+  void open(Event event){
     File file = (event.target as FileUploadInputElement).files[0];
     FileReader reader = new FileReader()..readAsText(file);
     reader.onLoadEnd.listen((_)async {
-      String jsonContent = reader.result;
-      Scene newScene = new Scene.fromJson(JSON.decode(jsonContent));
+      String jsonContent = reader.result as String;
+      Scene newScene = new Scene.fromJson(JSON.decode(jsonContent) as Map);
       await newScene.setup();
       Application.instance.currentScene = newScene;
     });

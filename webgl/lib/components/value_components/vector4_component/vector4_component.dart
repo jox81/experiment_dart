@@ -14,8 +14,8 @@ class Vector4Component {
   @Output()
   EventEmitter valueChange = new EventEmitter<Vector4>();
 
-  updateRow(int rowIndex, event){
-    value[rowIndex] = double.parse(event.target.value, (s)=>0.0);
+  void updateRow(int rowIndex, dynamic event){
+    value[rowIndex] = double.parse(event.target.value as String, (s)=>0.0);
     valueChange.emit(value);
   }
 

@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -143,20 +143,20 @@ class WebGLProgram extends WebGLObject{
   // >>> single getParameter
 
   // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index);
+  bool get deleteStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index) as bool;
   // > LINK_STATUS
-  bool get linkStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index);
+  bool get linkStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index) as bool;
   // > VALIDATE_STATUS
-  bool get validateStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index);
+  bool get validateStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool;
   // > ATTACHED_SHADERS
-  int get attachedShadersCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index);
+  int get attachedShadersCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index) as int;
   // > ACTIVE_ATTRIBUTES
-  int get activeAttributsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index);
+  int get activeAttributsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index) as int;
   // > ACTIVE_UNIFORMS
-  int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index);
+  int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index) as int;
 
   void logProgramInfos() {
-    UtilsAssets.log("Program Infos", () {
+    Debug.log("Program Infos", () {
       print('isProgram : ${isProgram}');
       print('linkStatus : ${linkStatus}');
       print('validateStatus : ${validateStatus}');

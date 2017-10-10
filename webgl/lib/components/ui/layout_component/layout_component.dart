@@ -16,6 +16,6 @@ class LayoutComponent {
   }
 
   Map getOrientationType(){
-    return {'vertical':_type =="vertical", 'horizontal':_type !="vertical"};
+    return <String, bool>{'vertical':_type =="vertical", 'horizontal':_type !="vertical"};
   }
 }

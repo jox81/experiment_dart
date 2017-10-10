@@ -17,7 +17,7 @@ class SceneViewVectors extends Scene{
 
   SceneViewVectors();
 
-  Camera cameraTest;
+  CameraPerspective cameraTest;
 
   MaterialBaseColor matVectorA;
   MaterialBaseColor matVectorB;
@@ -32,7 +32,7 @@ class SceneViewVectors extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    Camera camera = new Camera(radians(37.0), 0.1, 1000.0)
+    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(3.0, 10.0, 10.0);
     Context.mainCamera = camera;
@@ -41,7 +41,7 @@ class SceneViewVectors extends Scene{
     matVectorB = new MaterialBaseColor(new Vector4(0.0,0.0,1.0,1.0));
     matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
 
-    cameraTest = new Camera(radians(45.0), 0.2, 5.0)
+    cameraTest = new CameraPerspective(radians(45.0), 0.2, 5.0)
       ..targetPosition = new Vector3(1.0, 0.0, 0.0)
       ..position = new Vector3(3.0, 3.0, 3.0)
       ..showGizmo = true;
@@ -84,7 +84,7 @@ class SceneViewVectors extends Scene{
       ..material = matVectorA;
     models.add(vectorModelA);
 
-    VectorModel vectorModelR = new VectorModel(matrixTest * vectorModelA.vec)
+    VectorModel vectorModelR = new VectorModel((matrixTest * vectorModelA.vec) as Vector3)
       ..material = matVectorResult;
     models.add(vectorModelR);
   }
@@ -92,14 +92,14 @@ class SceneViewVectors extends Scene{
   /// camera
   void test03() {
 
-    Matrix4 uModelViewMatrix = Context.mainCamera.lookAtMatrix * Context.modelMatrix;
+    Matrix4 uModelViewMatrix = Context.mainCamera.lookAtMatrix.multiplied(Context.modelMatrix);
     Matrix4 uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
 
     VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;
     models.add(vectorModelA);
 
-    VectorModel vectorModelR = new VectorModel(uProjectionMatrix * uModelViewMatrix * vectorModelA.vec)
+    VectorModel vectorModelR = new VectorModel((uProjectionMatrix * uModelViewMatrix * vectorModelA.vec) as Vector3)
       ..material = matVectorResult;
     models.add(vectorModelR);
   }
@@ -111,7 +111,7 @@ class SceneViewVectors extends Scene{
     Vector3 cameraTargetPosition = new Vector3(0.0,0.0,1.0);
 
     cameraTest
-      ..fov = radians(150.0)
+      ..yfov = radians(150.0)
       ..targetPosition = cameraTargetPosition
       ..position = cameraPosition;
 
@@ -139,9 +139,9 @@ class SceneViewVectors extends Scene{
 //    gridTest.transform = finalMatrix * gridTest.transform;
 //    axisTest.transform = finalMatrix * axisTest.transform;
 
-    Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.lookAtMatrix) * new Matrix4.identity();
-    gridTest.transform = finalMatrix * gridTest.transform;
-    axisTest.transform = finalMatrix * axisTest.transform;
+    Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.lookAtMatrix).multiplied(new Matrix4.identity());
+    gridTest.transform = (finalMatrix * gridTest.transform) as Matrix4;
+    axisTest.transform = (finalMatrix * axisTest.transform) as Matrix4;
 
   }
 
@@ -151,7 +151,7 @@ class SceneViewVectors extends Scene{
     Vector3 cameraTargetPosition = new Vector3(0.0,0.0,0.0);
 
     cameraTest
-      ..fov = radians(45.0)
+      ..yfov = radians(45.0)
       ..targetPosition = cameraTargetPosition
       ..position = cameraPosition;
 
@@ -184,15 +184,15 @@ class SceneViewVectors extends Scene{
     for(int i = 0; i < model.mesh.vertexNormalsCount; i++){
 
       //the normal
-      num nX = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 0];
-      num nY = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 1];
-      num nZ = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 2];
+      double nX = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 0];
+      double nY = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 1];
+      double nZ = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 2];
       Vector3 normal = new Vector3(nX, nY, nZ);
 
       //position of the normal
-      num pX = model.mesh.vertices[i * model.mesh.vertexDimensions + 0];
-      num pY = model.mesh.vertices[i * model.mesh.vertexDimensions + 1];
-      num pZ = model.mesh.vertices[i * model.mesh.vertexDimensions + 2];
+      double pX = model.mesh.vertices[i * model.mesh.vertexDimensions + 0];
+      double pY = model.mesh.vertices[i * model.mesh.vertexDimensions + 1];
+      double pZ = model.mesh.vertices[i * model.mesh.vertexDimensions + 2];
       Vector3 vertex = new Vector3(pX, pY, pZ);
 
       normalPoints.add(vertex);

@@ -13,7 +13,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 
 Future main() async {
   WebglTestParameters webglTestParameters =
-      new WebglTestParameters(querySelector('#glCanvas'));
+      new WebglTestParameters(querySelector('#glCanvas') as CanvasElement);
 
   await ShaderSource.loadShaders();
   webglTestParameters.setup();
@@ -50,7 +50,7 @@ class WebglTestParameters {
   }
 
   void setupCamera() {
-    Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
+    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(10.0, 10.0, 10.0);
   }
@@ -63,7 +63,7 @@ class WebglTestParameters {
   }
 
   void render({num time: 0.0}) {
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(
         [ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 

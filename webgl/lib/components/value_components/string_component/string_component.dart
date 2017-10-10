@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:angular2/core.dart';
 
 @Component(
@@ -13,14 +15,14 @@ class StringComponent {
   @Output()
   EventEmitter valueChange = new EventEmitter<String>();
 
-  update(event){
+  void update(dynamic event){
     valueChange.emit(event.target.value);
   }
 
-  static void initDynamicComponent(StringComponent component, defaultValue, Function callBack) {
+  static void initDynamicComponent(StringComponent component, String defaultValue, Function callBack) {
     component
       ..value = defaultValue is String ? defaultValue : ''
-      ..valueChange.listen((d){
+      ..valueChange.listen((dynamic d){
         if(callBack != null){
           callBack(d);
         }

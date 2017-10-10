@@ -11,10 +11,10 @@ class BoolComponent{
   @Output()
   EventEmitter valueChange = new EventEmitter<bool>();
 
-  static void initDynamicComponent(BoolComponent component, defaultValue, Function callBack) {
+  static void initDynamicComponent(BoolComponent component, bool defaultValue, Function callBack) {
     component
       ..checked = defaultValue is bool ? defaultValue : false
-      ..valueChange.listen((d){
+      ..valueChange.listen((dynamic d){
         if(callBack != null){
           callBack(d);
         }

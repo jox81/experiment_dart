@@ -23,7 +23,7 @@ class WebGLUniformLocation{
 
   WebGL.UniformLocation _webGLUniformLocation;
 
-  var data;
+  dynamic data;
 
   WebGL.UniformLocation get webGLUniformLocation => _webGLUniformLocation;
 

@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -23,9 +23,9 @@ class WebGLShader extends WebGLObject{
   bool get isShader => gl.ctx.isShader(webGLShader);
 
   // > SHADER_TYPE
-  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index));
+  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index) as int) as ShaderType;
   // > COMPILE_STATUS
-  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index);
+  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index) as bool;
 
 
   String get source => gl.ctx.getShaderSource(webGLShader);
@@ -36,7 +36,7 @@ class WebGLShader extends WebGLObject{
   }
 
   // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index);
+  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index) as bool;
 
   @override
   void delete() => gl.ctx.deleteShader(webGLShader);
@@ -74,7 +74,7 @@ class WebGLShader extends WebGLObject{
   }
 
   void logShaderInfos() {
-    UtilsAssets.log("Shader Infos", () {
+    Debug.log("Shader Infos", () {
       print('shaderType : ${shaderType}');
       print('isShader : ${isShader}');
       print('compileStatus : ${compileStatus}');

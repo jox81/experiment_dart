@@ -17,7 +17,9 @@ void main() {
   CanvasElement canvas;
 
   setUp(() async {
-    canvas = new Element.html('<canvas/>');
+    await ShaderSource.loadShaders();
+
+    canvas = new Element.html('<canvas/>') as CanvasElement;
     canvas.width = 10;
     canvas.height = 10;
 

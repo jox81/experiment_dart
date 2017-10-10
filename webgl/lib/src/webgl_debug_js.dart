@@ -12,10 +12,10 @@ import 'dart:typed_data';
 class WebGLDebugUtils {
   external factory WebGLDebugUtils();
   external static RenderingContextWrapper makeDebugContext(RenderingContext name, [Function opt_onErrorFunc, Function opt_onFunc, Function opt_err_ctx]);
-  external static glFunctionArgsToString(functionName, args);
-  external static glEnumToString(err);
-  external static init(ctx);
-  external getError();
+  external static String glFunctionArgsToString(String functionName, dynamic args);
+  external static String glEnumToString(dynamic err);
+  external static void init(dynamic ctx);
+  external void getError();
 }
 
 //@anonymous
@@ -35,9 +35,9 @@ class RenderingContextWrapper extends RenderingContext{
   external blendEquationSeparate(int modeRGB, int modeAlpha) ;
   external blendFunc(int sfactor, int dfactor) ;
   external blendFuncSeparate(int srcRGB, int dstRGB, int srcAlpha, int dstAlpha) ;
-  external bufferData(int target, data_OR_size, int usage) ;
+  external bufferData(int target, dynamic data_OR_size, int usage) ;
   external bufferDataTyped(int target, TypedData data, int usage) ;
-  external bufferSubData(int target, int offset, data) ;
+  external bufferSubData(int target, int offset, dynamic data) ;
   external bufferSubDataTyped(int target, int offset, TypedData data) ;
   external CanvasElement get canvas;
   external int checkFramebufferStatus(int target) ;
@@ -197,59 +197,59 @@ class RenderingContextWrapper extends RenderingContext{
 
   external stencilOpSeparate(int face, int fail, int zfail, int zpass) ;
 
-  external texImage2D(int target, int level, int internalformat, int format_OR_width, int height_OR_type, border_OR_canvas_OR_image_OR_pixels_OR_video, [int format, int type, TypedData pixels]) ;
+  external texImage2D(int target, int level, int internalformat, int format_OR_width, int height_OR_type, dynamic border_OR_canvas_OR_image_OR_pixels_OR_video, [int format, int type, TypedData pixels]) ;
 
   external texImage2DTyped(int targetTexture, int levelOfDetail, int internalFormat, int width, int height, int border, int format, int type, TypedData data) ;
 
-  external texImage2DUntyped(int targetTexture, int levelOfDetail, int internalFormat, int format, int type, data) ;
+  external texImage2DUntyped(int targetTexture, int levelOfDetail, int internalFormat, int format, int type, dynamic data) ;
 
   external texParameterf(int target, int pname, num param) ;
 
   external texParameteri(int target, int pname, int param) ;
 
-  external texSubImage2D(int target, int level, int xoffset, int yoffset, int format_OR_width, int height_OR_type, canvas_OR_format_OR_image_OR_pixels_OR_video, [int type, TypedData pixels]) ;
+  external texSubImage2D(int target, int level, int xoffset, int yoffset, int format_OR_width, int height_OR_type, dynamic canvas_OR_format_OR_image_OR_pixels_OR_video, [int type, TypedData pixels]) ;
 
   external texSubImage2DTyped(int targetTexture, int levelOfDetail, int xOffset, int yOffset, int width, int height, int border, int format, int type, TypedData data) ;
 
-  external texSubImage2DUntyped(int targetTexture, int levelOfDetail, int xOffset, int yOffset, int format, int type, data) ;
+  external texSubImage2DUntyped(int targetTexture, int levelOfDetail, int xOffset, int yOffset, int format, int type, dynamic data) ;
 
   external uniform1f(UniformLocation location, num x) ;
 
-  external uniform1fv(UniformLocation location, v) ;
+  external uniform1fv(UniformLocation location, dynamic v);
 
   external uniform1i(UniformLocation location, int x) ;
 
-  external uniform1iv(UniformLocation location, v) ;
+  external uniform1iv(UniformLocation location, dynamic v) ;
 
   external uniform2f(UniformLocation location, num x, num y) ;
 
-  external uniform2fv(UniformLocation location, v) ;
+  external uniform2fv(UniformLocation location, dynamic v) ;
 
   external uniform2i(UniformLocation location, int x, int y) ;
 
-  external uniform2iv(UniformLocation location, v) ;
+  external uniform2iv(UniformLocation location, dynamic v) ;
 
   external uniform3f(UniformLocation location, num x, num y, num z) ;
 
-  external uniform3fv(UniformLocation location, v) ;
+  external uniform3fv(UniformLocation location, dynamic v) ;
 
   external uniform3i(UniformLocation location, int x, int y, int z) ;
 
-  external uniform3iv(UniformLocation location, v) ;
+  external uniform3iv(UniformLocation location, dynamic v) ;
 
   external uniform4f(UniformLocation location, num x, num y, num z, num w) ;
 
-  external uniform4fv(UniformLocation location, v) ;
+  external uniform4fv(UniformLocation location, dynamic v) ;
 
   external uniform4i(UniformLocation location, int x, int y, int z, int w) ;
 
-  external uniform4iv(UniformLocation location, v) ;
+  external uniform4iv(UniformLocation location, dynamic v) ;
 
-  external uniformMatrix2fv(UniformLocation location, bool transpose, array) ;
+  external uniformMatrix2fv(UniformLocation location, bool transpose, dynamic array) ;
 
-  external uniformMatrix3fv(UniformLocation location, bool transpose, array) ;
+  external uniformMatrix3fv(UniformLocation location, bool transpose, dynamic array) ;
 
-  external uniformMatrix4fv(UniformLocation location, bool transpose, array) ;
+  external uniformMatrix4fv(UniformLocation location, bool transpose, dynamic array) ;
 
   external useProgram(Program program) ;
 
@@ -257,19 +257,19 @@ class RenderingContextWrapper extends RenderingContext{
 
   external vertexAttrib1f(int indx, num x) ;
 
-  external vertexAttrib1fv(int indx, values) ;
+  external vertexAttrib1fv(int indx, dynamic values) ;
 
   external vertexAttrib2f(int indx, num x, num y) ;
 
-  external vertexAttrib2fv(int indx, values) ;
+  external vertexAttrib2fv(int indx, dynamic values) ;
 
   external vertexAttrib3f(int indx, num x, num y, num z) ;
 
-  external vertexAttrib3fv(int indx, values) ;
+  external vertexAttrib3fv(int indx, dynamic values) ;
 
   external vertexAttrib4f(int indx, num x, num y, num z, num w) ;
 
-  external vertexAttrib4fv(int indx, values) ;
+  external vertexAttrib4fv(int indx, dynamic values) ;
 
   external vertexAttribPointer(int indx, int size, int type, bool normalized, int stride, int offset) ;
 
@@ -280,11 +280,11 @@ class RenderingContextWrapper extends RenderingContext{
 /// Custom Kronos debug functions
 ///
 
-void throwOnGLError(err, funcName, args) {
+void throwOnGLError(dynamic err, String funcName, dynamic args) {
   throw WebGLDebugUtils.glEnumToString(err) + " was caused by call to: " + funcName;
 }
 
-void logAndValidate(functionName, args) {
+void logAndValidate(String functionName, List<dynamic> args) {
 
 
 
@@ -292,12 +292,12 @@ void logAndValidate(functionName, args) {
   validateNoneOfTheArgsAreUndefined (functionName, args);
 }
 
-void logGLCall(functionName, args) {
-  print("gl." + functionName + "(" +
+void logGLCall(String functionName, dynamic args) {
+  print("gl.$functionName (" +
       WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ")");
 }
 
-void validateNoneOfTheArgsAreUndefined(functionName, args) {
+void validateNoneOfTheArgsAreUndefined(String functionName, List<dynamic> args) {
   for (var ii = 0; ii < args.length; ++ii) {
     if (args[ii] == null) {
       print("undefined passed to gl." + functionName + "(" +

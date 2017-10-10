@@ -16,7 +16,7 @@ class DebugRenderingContext implements RenderingContext {
   dynamic noSuchMethod(Invocation invocation) {
     // Invoke the method and get the result
     var mirror = reflect(_gl);
-    var result = mirror.delegate(invocation);
+    dynamic result = mirror.delegate(invocation);
 
     // See if there was an error
     var errorCode = _gl.getError();
@@ -49,7 +49,7 @@ class RenderingErrorEvent {
 
   /// Retrieves a human readable error message.
   String get message {
-    var errorMessage;
+    String errorMessage;
 
     switch (error) {
       case RenderingContext.INVALID_ENUM:

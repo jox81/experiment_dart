@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 @MirrorsUsed(
     targets: const [
       Scene,
@@ -35,7 +34,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   List<Material> materials = new List();
   List<Model> models = new List();
-  List<Camera> cameras = new List();
+  List<CameraPerspective> cameras = new List();
   List<Light> lights = new List();
 
   Material defaultMaterial = new MaterialBase();
@@ -45,7 +44,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   Scene(){
     if(Context.mainCamera == null){
       Context.mainCamera = new
-      Camera(radians(25.0), 0.1, 1000.0)
+      CameraPerspective(radians(25.0), 0.1, 1000.0)
         ..targetPosition = new Vector3.zero()
         ..position = new Vector3(20.0, 20.0, 20.0);
     }
@@ -72,7 +71,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   }
 
   @override
-  setupUserInput() {
+  void setupUserInput() {
 
     //Lazy init here if null
     if(updateUserInputFunction == null) {
@@ -87,8 +86,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   ///Fonction à surcharger pour setuper la scene
   @override
-  Future setupScene() {
-    return new Future.value();
+  void setupScene() {
   }
 
   // >> Update
@@ -168,18 +166,18 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   //permet de merger un json à la scene actuelle
   //bug: le controller sur la camera active est perdu
   void mergeJson(String jsonContent) {
-    Map json = JSON.decode(jsonContent);
-    Map jsonScene = json['scene'];
+    Map json = JSON.decode(jsonContent) as Map;
+    Map jsonScene = json['scene'] as Map;
 
-    backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"]);
+    backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"] as Float32List);
 
     for(var item in jsonScene["cameras"] as List){
-      Camera camera = new Camera.fromJson(item);
+      CameraPerspective camera = new CameraPerspective.fromJson(item as Map);
       cameras.add(camera);
     }
 
     for(var item in jsonScene["models"] as List){
-      Model model = new Model.fromJson(item);
+      Model model = new Model.fromJson(item as Map);
       models.add(model);
     }
   }
@@ -190,13 +188,13 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   }
 
   Scene.fromJson(Map json){
-    Map jsonScene = json['scene'];
+    Map jsonScene = json['scene'] as Map;
 
-    backgroundColor = new Vector4.fromFloat32List(new Float32List.fromList(jsonScene["backgroundColor"]));
+    backgroundColor = new Vector4.fromFloat32List(new Float32List.fromList(jsonScene["backgroundColor"] as List<double>));
 
     if(jsonScene["cameras"] != null) {
       for (var item in jsonScene["cameras"] as List) {
-        Camera camera = new Camera.fromJson(item);
+        CameraPerspective camera = new CameraPerspective.fromJson(item as Map);
         cameras.add(camera);
       }
 
@@ -207,21 +205,21 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     if(Context.mainCamera == null){
       Context.mainCamera = new
-      Camera(radians(25.0), 0.1, 1000.0)
+      CameraPerspective(radians(25.0), 0.1, 1000.0)
         ..targetPosition = new Vector3.zero()
         ..position = new Vector3(20.0, 20.0, 20.0);
     }
 
     if(jsonScene["lights"] != null) {
       for (var item in jsonScene["lights"] as List) {
-        Light light = new Light.fromJson(item);
+        Light light = new Light.fromJson(item as Map);
         lights.add(light);
       }
     }
 
     if(jsonScene["models"] != null) {
       for (var item in jsonScene["models"] as List) {
-        Model model = new Model.fromJson(item);
+        Model model = new Model.fromJson(item as Map);
         models.add(model);
       }
     }
@@ -229,7 +227,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   Map toJson(){
 
-    Map jsonScene = new Map();
+    Map jsonScene = new Map<String, Object>();
     jsonScene["backgroundColor"] = backgroundColor.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
 
     if(lights.length > 0) {
@@ -242,7 +240,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     jsonScene["models"] = models;
 
-    Map json = new Map();
+    Map json = new Map<String, Object>();
     json['scene'] = jsonScene;
     return json;
   }

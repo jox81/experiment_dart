@@ -5,6 +5,7 @@ import 'package:webgl/src/geometry/meshes.dart';
 import 'dart:typed_data';
 import 'dart:async';
 import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/time/time.dart';
@@ -30,7 +31,7 @@ class SceneViewParticle extends Scene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    CustomObject customObject = experiment(Application.instance.currentScene);
+    CustomObject customObject = experiment(Application.instance.currentScene) as CustomObject;
     materials.add(customObject.material);
     models.add(customObject);
 
@@ -40,7 +41,7 @@ class SceneViewParticle extends Scene{
     };
   }
 
-  Model experiment(Scene scene) {
+  Model experiment(IUpdatableScene scene) {
     num shaderTime = 0.0;
 
     //Material

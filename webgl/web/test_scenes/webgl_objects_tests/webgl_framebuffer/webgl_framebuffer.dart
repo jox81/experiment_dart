@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/shader_source.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -12,7 +12,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 Future main() async {
   await ShaderSource.loadShaders();
 
-  WebglTest webglTest = new WebglTest(querySelector('#glCanvas'));
+  WebglTest webglTest = new WebglTest(querySelector('#glCanvas') as CanvasElement);
 
   webglTest.setup();
 }
@@ -105,10 +105,10 @@ class WebglTest {
 
   void createFrameBufferDepthTextureAttachment() {
     //need extensions
-    var OES_texture_float = gl.getExtension('OES_texture_float');
+    dynamic OES_texture_float = gl.getExtension('OES_texture_float');
     assert(OES_texture_float != null);
 
-    var WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
+    dynamic WEBGL_depth_texture = gl.getExtension('WEBGL_depth_texture');
     assert(WEBGL_depth_texture != null);
 
     //
@@ -189,7 +189,7 @@ class WebglTest {
           null);
     } catch (e) {
       // https://code.google.com/p/dart/issues/detail?id=11498
-      UtilsAssets.log("gl.texImage2D: exception: $e", null);
+      Debug.log("gl.texImage2D: exception: $e", null);
     }
 
     // 2. Init Render Buffer

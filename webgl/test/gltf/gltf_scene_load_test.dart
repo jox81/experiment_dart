@@ -1,17 +1,19 @@
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:gltf/gltf.dart';
-import 'dart:io';
+import 'package:gltf/gltf.dart' as glTF;
 
+import 'package:webgl/src/utils/utils_gltf.dart';
+
+@TestOn("dartium")
 
 Future main() async {
 
-  group("json read", () {
-    test("test 01", () async {
-      final reader = new GltfJsonReader(
-          new File('web/gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf').openRead());
-      final result = await reader.read();
-      expect(result.gltf, const isInstanceOf<Gltf>());
+  group("test camera", () {
+    test("test camera creation", () async {
+      glTF.Gltf gltf = await GLTFObject.loadGLTFResource('gltf/tests/base/data/camera/empty.gltf', useWebPath:true);
+
+      GLTFObject gltfObject = new GLTFObject.fromGltf(gltf);
+      expect(gltfObject, isNotNull);
     });
   });
 }

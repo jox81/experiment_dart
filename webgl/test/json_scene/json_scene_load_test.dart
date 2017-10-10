@@ -15,14 +15,14 @@ Future main() async {
 
   UtilsAssets.useWebPath = true;
 
-  var testJson;
+  Map testJson;
 
   Application application;
   CanvasElement canvas;
 
   setUp(() async {
     testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
-    CanvasElement canvas = querySelector('#glCanvas');
+    CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
     application = await Application.create(canvas);
   });
 
@@ -34,66 +34,66 @@ Future main() async {
 
   group("json read", () {
     test("test 01", () {
-      String type = testJson['scene']['models'][0]["type"];
+      String type = testJson['scene']['models'][0]["type"] as String;
       expect(type, equals("ModelType.quad"));
     });
   });
 
-  group("test camera", () {
+  group("test CameraPerspective", () {
     test("test camera creation", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera != null,isTrue);
     });
     test("test camera fov", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
-      expect(camera.fov == 25.0,isTrue);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      expect(camera.yfov == 25.0,isTrue);
     });
     test("test camera zNear", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
-      print(camera.zNear);
-      expect(camera.zNear == 0.1,isTrue);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      print(camera.znear);
+      expect(camera.znear == 0.1,isTrue);
     });
     test("test camera zFar", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
-      expect(camera.zFar == 100.0,isTrue);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      expect(camera.zfar == 100.0,isTrue);
     });
     test("test camera targetPosition", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
     });
     test("test camera targetPosition new", () {
-      Camera camera = new Camera(25.0,1.0,10.0)
-        ..targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['targetPosition']));;
+      CameraPerspective camera = new CameraPerspective(25.0,1.0,10.0)
+        ..targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['targetPosition'] as List<double>));
       expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
     });
     test("test camera position", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera position new", () {
-      Camera camera = new Camera(25.0,1.0,10.0)
-        ..position = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['position']));;
+      CameraPerspective camera = new CameraPerspective(25.0,1.0,10.0)
+        ..position = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['position'] as List<double>));
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera showGizmo", () {
-      Camera camera = new Camera.fromJson(testJson['scene']['cameras'][0]);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.showGizmo,isTrue);
     });
   });
 
   group("test model 01", () {
     test("test model", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][0]);
+      Model model = new Model.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model is QuadModel,isTrue);
     });
     test("test model name", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][0]);
+      Model model = new Model.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model.name == 'quad',isTrue);
     });
     test("test model position", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][0]);
+      Model model = new Model.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model.position == new Vector3(5.0, 0.0, -5.0),isTrue);
     });
@@ -101,16 +101,16 @@ Future main() async {
 
   group("test model 02", () {
     test("test model", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][1]);
+      Model model = new Model.fromJson(testJson['scene']['models'][1] as Map);
 
       expect(model is CubeModel,isTrue);
     });
     test("test model name", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][1]);
+      Model model = new Model.fromJson(testJson['scene']['models'][1] as Map);
       expect(model.name == 'cube',isTrue);
     });
     test("test model position", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][1]);
+      Model model = new Model.fromJson(testJson['scene']['models'][1] as Map);
       expect(model.position == new Vector3(0.0, 0.0, 0.0),isTrue);
     });
   });

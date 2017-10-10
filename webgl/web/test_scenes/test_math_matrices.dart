@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:vector_math/vector_math.dart';
 
 void main() {
-  num angle = radians(90.0);
+  double angle = radians(90.0);
 
   num c = cos(angle);
   num s = sin(angle);
@@ -18,24 +18,24 @@ void main() {
 //  Vector3 vr3 = T * v;
 
   //
-  Vector3 vR1 = T * R * S * v;
+  Vector3 vR1 = (T * R * S * v) as Vector3;
 
   //
-  Vector3 vr4 = S * v;
-  Vector3 vr5 = R * vr4;
-  Vector3 vR2 = T * vr5;
+  Vector3 vr4 = (S * v) as Vector3;
+  Vector3 vr5 = (R * vr4) as Vector3;
+  Vector3 vR2 = (T * vr5) as Vector3;
   bool same2 = vR1 == vR2;
 
   //
-  Matrix4 mr4 = T * R;
-  Matrix4 mr5 = mr4 * S;
-  Vector3 vR3 = mr5 * v;
+  Matrix4 mr4 = (T * R) as Matrix4;
+  Matrix4 mr5 = (mr4 * S) as Matrix4;
+  Vector3 vR3 = (mr5 * v) as Vector3;
   bool same3 = vR1 == vR3;
 
   //
-  Vector3 vr7 = S * v;
-  Vector3 vr8 = R * vr7;
-  Vector3 vR4 = T * vr8;
+  Vector3 vr7 = (S * v) as Vector3;
+  Vector3 vr8 = (R * vr7) as Vector3;
+  Vector3 vR4 = (T * vr8) as Vector3;
   bool same4 = vR1 == vR4;
 
   //

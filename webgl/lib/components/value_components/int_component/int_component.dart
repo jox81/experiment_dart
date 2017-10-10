@@ -13,14 +13,14 @@ class IntComponent {
   @Output()
   EventEmitter valueChange = new EventEmitter<int>();
 
-  update(event){
-    valueChange.emit(int.parse(event.target.value, onError:(s)=>0));
+  void update(dynamic event){
+    valueChange.emit(int.parse(event.target.value as String, onError:(s)=>0));
   }
 
-  static void initDynamicComponent(IntComponent component, defaultValue, Function callBack) {
+  static void initDynamicComponent(IntComponent component, int defaultValue, Function callBack) {
     component
       ..value = defaultValue is int ? defaultValue : 0
-      ..valueChange.listen((d){
+      ..valueChange.listen((dynamic d){
         if(callBack != null){
           callBack(d);
         }

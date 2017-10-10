@@ -31,7 +31,7 @@ class WebglEdit extends IEditElement {
 
   //getter only
   String _testString02 = "testString02";
-  get testString02 => _testString02;
+  String get testString02 => _testString02;
 
   // >> Test num
 
@@ -42,7 +42,7 @@ class WebglEdit extends IEditElement {
 
   //getter only
   num _testNum02 = 2.0;
-  get testNum02 => _testNum02;
+  num get testNum02 => _testNum02;
 
   // >> Test bool
 
@@ -53,7 +53,7 @@ class WebglEdit extends IEditElement {
 
   //getter only
   bool _testBool02 = false;
-  get testBool02 => _testBool02;
+  bool get testBool02 => _testBool02;
 
   // >> Test WebGLEnum
 

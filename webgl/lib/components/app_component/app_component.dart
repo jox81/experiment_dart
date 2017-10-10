@@ -15,12 +15,12 @@ import 'package:webgl/src/ui_models/toolbar.dart';
     selector: 'my-app',
     templateUrl: 'app_component.html',
     styleUrls: const ['app_component.css'],
-    directives: const [ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
+    directives: const <dynamic>[ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
 )
 class AppComponent implements OnInit{
 
   Application application;
-  Scene get currentScene => Application.instance?.currentScene;
+  Scene get currentScene => Application.instance?.currentScene as Scene;
 
   IEditElement _currentElement;
   IEditElement get currentElement {
@@ -67,7 +67,7 @@ class AppComponent implements OnInit{
     return null;
   }
   @override
-  ngOnInit() async {
+  Future ngOnInit() async {
     application = await Application.create(canvasComponent.canvas);
     scenes = await ServiceScene.getSceneViews();
     await switchScene ();

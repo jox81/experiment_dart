@@ -15,10 +15,10 @@ class WebGLTextureComponent{
   WebGLEnum element;
 
   @Output()
-  EventEmitter elementSelected = new EventEmitter();
+  EventEmitter elementSelected = new EventEmitter<Object>();
 
-  void selectionChange(event){
-    var selection = webglEnums[event.target.selectedIndex];
+  void selectionChange(dynamic event){
+    var selection = webglEnums[event.target.selectedIndex as int];
     elementSelected.emit(selection);
   }
 }

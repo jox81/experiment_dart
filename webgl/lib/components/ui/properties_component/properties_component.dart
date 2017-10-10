@@ -32,7 +32,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     styleUrls: const [
       'properties_component.css'
     ],
-    directives: const [
+    directives: const <dynamic>[
       DynamicLoaderComponent,
       Vector2Component,
       Vector3Component,
@@ -67,7 +67,7 @@ class PropertiesComponent {
     return result;
   }
 
-  setStringValue(EditableProperty animationProperty, event) {
+  void setStringValue(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event.target.value);
   }
 
@@ -76,7 +76,7 @@ class PropertiesComponent {
     return animationProperty.type == bool;
   }
 
-  setBoolValue(EditableProperty animationProperty, event) {
+  void setBoolValue(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event.target.checked);
   }
 
@@ -85,8 +85,8 @@ class PropertiesComponent {
     return animationProperty.type == int;
   }
 
-  setIntValue(EditableProperty animationProperty, event) {
-    animationProperty.setter(int.parse(event.target.value, onError: (s) => 0));
+  void setIntValue(EditableProperty animationProperty, dynamic event) {
+    animationProperty.setter(int.parse(event.target.value as String, onError: (s) => 0));
   }
 
   //num
@@ -94,8 +94,8 @@ class PropertiesComponent {
     return animationProperty.type == num || animationProperty.type == double;
   }
 
-  setNumValue(EditableProperty animationProperty, event) {
-    animationProperty.setter(double.parse(event.target.value, (s) => 0.0));
+  void setNumValue(EditableProperty animationProperty, dynamic event) {
+    animationProperty.setter(double.parse(event.target.value as String, (s) => 0.0));
   }
 
   //Function
@@ -110,7 +110,7 @@ class PropertiesComponent {
     return animationProperty.type == Vector2;
   }
 
-  setVector2Value(EditableProperty animationProperty, event) {
+  void setVector2Value(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event as Vector2);
   }
 
@@ -119,7 +119,7 @@ class PropertiesComponent {
     return animationProperty.type == Vector3;
   }
 
-  setVector3Value(EditableProperty animationProperty, event) {
+  void setVector3Value(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event as Vector3);
   }
 
@@ -128,7 +128,7 @@ class PropertiesComponent {
     return animationProperty.type == Vector4;
   }
 
-  setVector4Value(EditableProperty animationProperty, event) {
+  void setVector4Value(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event as Vector4);
   }
 
@@ -137,7 +137,7 @@ class PropertiesComponent {
     return animationProperty.type == Matrix3;
   }
 
-  setMatrix3Value(EditableProperty animationProperty, event) {
+  void setMatrix3Value(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event as Matrix3);
   }
 
@@ -146,8 +146,8 @@ class PropertiesComponent {
     return animationProperty.type == Matrix4;
   }
 
-  setMatrix4Value(EditableProperty animationProperty, event) {
-    animationProperty.setter(event as Matrix4);
+  void setMatrix4Value(EditableProperty animationProperty, Matrix4 event) {
+    animationProperty.setter(event);
   }
 
   //List
@@ -155,7 +155,7 @@ class PropertiesComponent {
     return animationProperty.type.toString() == 'List';
   }
 
-  setSelection(event) {
+  void setSelection(dynamic event) {
     IEditElement selection;
     if (event is IEditElement) {
       selection = event;
@@ -175,7 +175,7 @@ class PropertiesComponent {
     return compareType(animationProperty.type, WebGLEnum);
   }
 
-  setWebGLEnumSelection(EditableProperty animationProperty, event) {
+  void setWebGLEnumSelection(EditableProperty animationProperty, dynamic event) {
     animationProperty.setter(event);
   }
 
@@ -198,7 +198,7 @@ class PropertiesComponent {
     return compareType(animationProperty.type, WebGLTexture);
   }
 
-  setSelectionWebGLTexture(event) {
+  void setSelectionWebGLTexture(dynamic event) {
     (event as WebGLTexture).edit();
     setSelection(event);
   }
@@ -234,15 +234,15 @@ class PropertiesComponent {
     return result;
   }
 
-  selectTexture(Event event){
+  void selectTexture(Event event){
     File file = (event.target as FileUploadInputElement).files[0];
 
     FileReader reader = new FileReader();
     reader
       ..onLoadEnd.listen((_)async {
-        ImageElement image = new ImageElement(src : reader.result);
+        ImageElement image = new ImageElement(src : reader.result.toString());
         WebGLTexture currentTexture = Application.instance.currentScene.currentSelection as WebGLTexture;
-        currentTexture.image.src = reader.result; // need this to update current property editor
+        currentTexture.image.src = reader.result.toString(); // need this to update current property editor
         currentTexture.image = image;
       });
 

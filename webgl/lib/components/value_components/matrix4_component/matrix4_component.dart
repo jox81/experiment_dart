@@ -6,7 +6,7 @@ import 'package:webgl/components/value_components/vector4_component/vector4_comp
     selector: 'matrix4',
     templateUrl: 'matrix4_component.html',
     styleUrls: const ['matrix4_component.css'],
-    directives: const [Vector4Component]
+    directives: const <dynamic>[Vector4Component]
 )
 class Matrix4Component {
 
@@ -16,7 +16,7 @@ class Matrix4Component {
   @Output()
   EventEmitter valueChange = new EventEmitter<Matrix4>();
 
-  void updateRow(int rowIndex,event){
+  void updateRow(int rowIndex,Vector4 event){
     value.setRow(rowIndex, event);
     valueChange.emit(value);
   }

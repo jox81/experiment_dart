@@ -3,9 +3,9 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/context.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/geometry/models.dart';
+import 'package:gltf/gltf.dart' as glTF;
 @MirrorsUsed(
     targets: const [
       Camera,
@@ -14,39 +14,29 @@ import 'package:webgl/src/geometry/models.dart';
 import 'dart:mirrors';
 import 'package:webgl/src/utils/utils_math.dart';
 
-class Camera extends Object3d {
+
+enum CameraType{
+  perspective,
+  orthographic
+}
+
+abstract class Camera extends Object3d {
 
   bool _isActive = false;
+
+  static Camera fromGltf(glTF.Camera gltfCamera){
+    if(gltfCamera.perspective != null) return new CameraPerspective.fromGltf(gltfCamera.perspective);
+    if(gltfCamera.orthographic != null) return new CameraOrthographic.fromGltf(gltfCamera.orthographic);
+    return null;
+  }
+
   bool get isActive => _isActive;
+
+  CameraType _type;
+  CameraType get type => _type;
+
   set isActive(bool value) {
     _isActive = value;
-  }
-
-  double _aspectRatio;
-  set aspectRatio(double value){
-    _aspectRatio = value;
-  }
-  double get aspectRatio => _aspectRatio != null ? _aspectRatio : Context.viewAspectRatio;
-
-  double _fov;
-  double get fov => _fov;
-  set fov(num value) {
-    _fov = value;
-    update();
-  }
-
-  double _zNear;
-  double get zNear => _zNear;
-  set zNear(double value) {
-    _zNear = value;
-    update();
-  }
-
-  double _zFar;
-  double get zFar => _zFar;
-  set zFar(double value) {
-    _zFar = value;
-    update();
   }
 
   set position(Vector3 value) {
@@ -55,6 +45,66 @@ class Camera extends Object3d {
   }
   set transform(Matrix4 value) {
    super.transform = value;
+    update();
+  }
+
+  double _znear;
+  double get znear => _znear;
+  set znear(double value) {
+    _znear = value;
+    update();
+  }
+
+  double _zfar;
+  double get zfar => _zfar;
+  set zfar(double value) {
+    _zfar = value;
+    update();
+  }
+
+  CameraController _cameraController;
+  set cameraController(CameraController value) {
+    _cameraController = value;
+    _cameraController.init(this as CameraPerspective);// Todo (jpu) : ??
+  }
+  CameraController get cameraController => _cameraController;
+
+  @override
+  void render() {
+    if (_gizmo.visible && !_isActive) {
+      _gizmo.render();
+    }
+  }
+
+  //FrustrumGizmo
+  FrustrumGizmo _gizmo;
+  IGizmo get gizmo => _gizmo;
+
+  bool get showGizmo => _gizmo.visible;
+  set showGizmo(bool value) {
+    if(_gizmo == null){
+      _gizmo = new FrustrumGizmo(this as CameraPerspective);// Todo (jpu) : ??
+    }
+    _gizmo.visible = value;
+  }
+
+
+  void _updateGizmo() {
+    if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
+  }
+}
+
+class CameraPerspective extends Camera{
+  double _aspectRatio = 1.0;
+  double get aspectRatio => _aspectRatio;
+  set aspectRatio(double value){
+    _aspectRatio = value;
+  }
+
+  double _yfov;
+  double get yfov => _yfov;
+  set yfov(double value) {
+    _yfov = value;
     update();
   }
 
@@ -71,15 +121,6 @@ class Camera extends Object3d {
   Vector3 get zAxis => frontDirection.normalized();
   Vector3 get xAxis => zAxis.cross(upDirection);
   Vector3 get yAxis => zAxis.cross(xAxis);
-
-  CameraController _cameraController;
-  set cameraController(CameraController value) {
-    _cameraController = value;
-    _cameraController.init(this);
-  }
-
-  Camera(this._fov, this._zNear, this._zFar) {
-  }
 
   //roll on y
   double get yaw {
@@ -107,14 +148,14 @@ class Camera extends Object3d {
         new Vector3(targetPosition.x, 0.0, targetPosition.z) -
             new Vector3(position.x, 0.0, position.z);
     forwardHorizontal.normalize();
-    num mirrorFactor = forwardHorizontal.x > 0 ? 1.0 : -1.0;
+    double mirrorFactor = forwardHorizontal.x > 0 ? 1.0 : -1.0;
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
   }
 
   //projectionMatrix
   Matrix4 _perspectiveMatrix = new Matrix4.identity();
   Matrix4 get perspectiveMatrix {
-    return _perspectiveMatrix * new Matrix4.identity();// Why is it needed to update shader uniform!!?
+    return (_perspectiveMatrix * new Matrix4.identity()) as Matrix4;// Why is it needed to update shader uniform!!?
   }
   set perspectiveMatrix(Matrix4 value){
     _perspectiveMatrix = value;
@@ -124,41 +165,23 @@ class Camera extends Object3d {
   //viewMatrix
   Matrix4 _lookAtMatrix = new Matrix4.identity();
   Matrix4 get lookAtMatrix {
-    return _lookAtMatrix * new Matrix4.identity(); // Why is it needed to update shader shader uniform!!?
+    return (_lookAtMatrix * new Matrix4.identity()) as Matrix4; // Why is it needed to update shader shader uniform!!?
   }
 
   //viewProjectionMatrix
   Matrix4 get viewProjectionMatrix {
-    return perspectiveMatrix * lookAtMatrix;
+    return (perspectiveMatrix * lookAtMatrix) as Matrix4;
   }
 
-  @override
-  void render() {
-    if (_gizmo.visible && !_isActive) {
-      _gizmo.render();
-    }
+  CameraPerspective(this._yfov, double znear, double _zfar){
+   super._znear = znear;
+   super._zfar = _zfar;
   }
-
-  //FrustrumGizmo
-  FrustrumGizmo _gizmo;
-  IGizmo get gizmo => _gizmo;
-
-  bool get showGizmo => _gizmo.visible;
-  set showGizmo(bool value) {
-    if(_gizmo == null){
-      _gizmo = new FrustrumGizmo(this);
-    }
-    _gizmo.visible = value;
-  }
-
 
   update() {
-    setPerspectiveMatrix(_perspectiveMatrix, _fov, aspectRatio, _zNear, _zFar);
+    setPerspectiveMatrix(_perspectiveMatrix, _yfov, aspectRatio, _znear, _zfar);
     setViewMatrix(_lookAtMatrix, position, _targetPosition, upDirection);
     _updateGizmo();
-  }
-  _updateGizmo() {
-    if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
   }
 
   String toString() {
@@ -167,26 +190,88 @@ class Camera extends Object3d {
 
   // >> JSON
 
-  Camera.fromJson(Map json) {
-    _fov = json['fov'].toDouble();
-    _zNear = json['zNear'].toDouble();
-    _zFar = json['zFar'].toDouble();
-    targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition']));
-    position = new Vector3.fromFloat32List(new Float32List.fromList(json['position']));
+  CameraPerspective.fromJson(Map json) {
+    _yfov = json['fov'] as double;
+    _znear = json['zNear'] as double;
+    _zfar = json['zFar'] as double;
+    targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition'] as List<double>));
+    position = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
     showGizmo = json['showGizmo'] as bool;
   }
 
   Map toJson(){
-    Map json = new Map();
-    json['fov'] = UtilsMath.roundPrecision(_fov);//.toDouble();
-    json['zNear'] = UtilsMath.roundPrecision(_zNear);//.toDouble();
-    json['zFar'] = UtilsMath.roundPrecision(_zFar);//.toDouble();
+    Map json = new Map<String, dynamic>();
+    json['fov'] = UtilsMath.roundPrecision(_yfov);//.toDouble();
+    json['zNear'] = UtilsMath.roundPrecision(_znear);//.toDouble();
+    json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
     json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
     json['position'] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     json['showGizmo'] = showGizmo;
     return json;
   }
+
+  // >> glTF
+
+  factory CameraPerspective.fromGltf(glTF.CameraPerspective gltfCamera){
+    CameraPerspective camera = new CameraPerspective(gltfCamera.yfov, gltfCamera.znear, gltfCamera.zfar);
+    camera
+      .._type = CameraType.perspective
+      .._aspectRatio = gltfCamera.aspectRatio;
+    // Todo (jpu) :
+//      cameraPerspective.extensions;
+//      cameraPerspective.extras;
+
+    return camera;
+  }
 }
 
+class CameraOrthographic extends Camera{
 
+  double _ymag;
+  double get ymag => _ymag;
+  set ymag(double value) {
+    _ymag = value;
+    update();
+  }
 
+  double _xmag;
+  double get xmag => _xmag;
+  set xmag(double value) {
+    _xmag = value;
+    update();
+  }
+
+  CameraOrthographic();
+
+  // >> JSON
+
+  CameraOrthographic.fromJson(Map json) {
+    position = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
+    showGizmo = json['showGizmo'] as bool;
+  }
+
+  Map toJson(){
+    Map json = new Map<String, dynamic>();
+    json['position'] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+    json['showGizmo'] = showGizmo;
+    return json;
+  }
+
+  // >> glTF
+
+  factory CameraOrthographic.fromGltf(glTF.CameraOrthographic gltfCamera){
+    CameraOrthographic camera = new CameraOrthographic()
+      .._type = CameraType.orthographic
+      .._znear = gltfCamera.znear
+      .._zfar = gltfCamera.zfar
+      .._xmag = gltfCamera.xmag
+      .._ymag = gltfCamera.ymag;
+
+      // Todo (jpu) :
+//      cameraPerspective.extensions;
+//      cameraPerspective.extras;
+
+    return camera;
+  }
+
+}

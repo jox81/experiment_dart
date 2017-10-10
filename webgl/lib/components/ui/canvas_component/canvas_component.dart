@@ -13,7 +13,7 @@ class CanvasComponent implements AfterViewInit{
   CanvasElement canvas;
 
   @override
-  ngAfterViewInit() {
-    canvas = appCanvas.nativeElement;
+  void ngAfterViewInit() {
+    canvas = appCanvas.nativeElement as CanvasElement;
   }
 }

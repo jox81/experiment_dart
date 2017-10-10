@@ -3,7 +3,6 @@ import 'dart:html';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/time/time.dart';
-import 'package:webgl/src/ui_models/toolbar.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -72,7 +71,7 @@ class Application {
   ActiveToolType _activeTool = ActiveToolType.select;
   ActiveToolType get activeTool => _activeTool;
 
-  setActiveTool(ActiveToolType value) {
+  void setActiveTool(ActiveToolType value) {
     _activeTool = value;
     print(_activeTool);
     switch (_activeTool){
@@ -114,7 +113,7 @@ class Application {
       gl.canvas.width = displayWidth;
       gl.canvas.height = displayHeight;
 
-      gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+      gl.viewport = new Rectangle<int>(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
       Context.mainCamera?.update();
     }
   }
@@ -138,7 +137,7 @@ class Application {
   void _renderCurrentScene() {
 //    window.console.time('01_application::_renderCurrentScene');
 
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     clear(_currentScene.backgroundColor);
 
     _currentScene.update();

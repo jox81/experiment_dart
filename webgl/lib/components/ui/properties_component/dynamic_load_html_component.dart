@@ -20,7 +20,7 @@ class DynamicLoaderHtmlComponent implements AfterViewInit{
 
   DynamicLoaderHtmlComponent(this.componentResolver);
 
-  createDynamicHtmlComponent(){
+  void createDynamicHtmlComponent(){
     if(element != null) {
       (target.element.nativeElement as Element).children.add(element);
       if(element is ImageElement){
@@ -31,7 +31,7 @@ class DynamicLoaderHtmlComponent implements AfterViewInit{
   }
 
   @override
-  ngAfterViewInit() {
+  void ngAfterViewInit() {
     createDynamicHtmlComponent();
   }
 }

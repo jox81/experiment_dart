@@ -1,8 +1,6 @@
 import 'dart:collection';
-import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/light.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -19,7 +17,6 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
     ],
     override: '*')
 import 'dart:mirrors';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 abstract class Material extends IEditElement {
   static bool debugging = false;
@@ -96,7 +93,7 @@ abstract class Material extends IEditElement {
 
   // >> Attributs
 
-  void setShaderAttributArrayBuffer(String attributName, List arrayBuffer, int dimension){
+  void setShaderAttributArrayBuffer(String attributName, List<double> arrayBuffer, int dimension){
     if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
     attributes[attributName].enabled = true;
@@ -121,26 +118,26 @@ abstract class Material extends IEditElement {
     }
   }
 
-  void setShaderAttributData(String attributName, data) {
+  void setShaderAttributData(String attributName, dynamic data) {
 
     WebGLActiveInfo activeInfo = programInfo.attributes.firstWhere((a)=> a.name == attributName, orElse:() => null);
 
     if(activeInfo != null) {
       switch (activeInfo.type) {
         case ShaderVariableType.FLOAT:
-          num vector1Value = data;
+          num vector1Value = data as num;
           attributes[attributName].vertexAttrib1f(vector1Value);
           break;
         case ShaderVariableType.FLOAT_VEC2:
-          Vector2 vector2Value = data;
+          Vector2 vector2Value = data as Vector2;
           attributes[attributName].vertexAttrib2f(vector2Value.x, vector2Value.y);
           break;
         case ShaderVariableType.FLOAT_VEC3:
-          Vector3 vector3Value = data;
+          Vector3 vector3Value = data as Vector3;
           attributes[attributName].vertexAttrib3f(vector3Value.x, vector3Value.y, vector3Value.z);
           break;
         case ShaderVariableType.FLOAT_VEC4:
-          Vector4 vector4Value = data;
+          Vector4 vector4Value = data as Vector4;
           attributes[attributName].vertexAttrib4f(vector4Value.x, vector4Value.y, vector4Value.z, vector4Value.w);
           break;
 
@@ -154,7 +151,7 @@ abstract class Material extends IEditElement {
 
   // >> Uniforms
 
-  void setShaderUniform(String uniformName, data, [data1, data2, data3]) {
+  void setShaderUniform(String uniformName, dynamic data, [dynamic data1, dynamic data2, dynamic data3]) {
 //    window.console.time('05_03_01_material::setShaderUniform');
     if(uniformLocations[uniformName] == null){
       print(uniformName);
@@ -170,38 +167,38 @@ abstract class Material extends IEditElement {
         switch (activeInfo.type) {
           case ShaderVariableType.FLOAT_VEC2:
             if (data1 == null) {
-              uniformLocations[uniformName].uniform2fv(data);
+              uniformLocations[uniformName].uniform2fv(data as Float32List);
             }else{
-              uniformLocations[uniformName].uniform2f(data, data1);
+              uniformLocations[uniformName].uniform2f(data as num, data1 as num);
             }
             break;
           case ShaderVariableType.FLOAT_VEC3:
             if (data1 == null && data2 == null) {
-              uniformLocations[uniformName].uniform3fv(data);
+              uniformLocations[uniformName].uniform3fv(data as Float32List);
             } else {
-              uniformLocations[uniformName].uniform3f( data, data1, data2);
+              uniformLocations[uniformName].uniform3f( data as num, data1 as num, data2 as num);
             }
             break;
           case ShaderVariableType.FLOAT_VEC4:
             if (data1 == null && data2 == null && data3 == null) {
-              uniformLocations[uniformName].uniform4fv(data);
+              uniformLocations[uniformName].uniform4fv(data as Float32List);
             } else {
-              uniformLocations[uniformName].uniform4f(data, data1, data2, data3);
+              uniformLocations[uniformName].uniform4f(data as num, data1 as num, data2 as num, data3 as num);
             }
             break;
           case ShaderVariableType.BOOL:
           case ShaderVariableType.SAMPLER_2D:
           case ShaderVariableType.SAMPLER_CUBE:
-            uniformLocations[uniformName].uniform1i(data);
+            uniformLocations[uniformName].uniform1i(data as int);
             break;
           case ShaderVariableType.FLOAT:
-            uniformLocations[uniformName].uniform1f(data);
+            uniformLocations[uniformName].uniform1f(data as num);
             break;
           case ShaderVariableType.FLOAT_MAT3:
-            uniformLocations[uniformName].uniformMatrix3fv(data, false);
+            uniformLocations[uniformName].uniformMatrix3fv(data as Matrix3, false);
             break;
           case ShaderVariableType.FLOAT_MAT4:
-            uniformLocations[uniformName].uniformMatrix4fv(data, false);
+            uniformLocations[uniformName].uniformMatrix4fv(data as Matrix4, false);
             break;
           default:
             print(
@@ -228,7 +225,7 @@ abstract class Material extends IEditElement {
     Context.modelMatrix = _mvMatrixStack.removeFirst();
   }
 
-  update(Model model) {
+  void update(Model model) {
 //    window.console.time('04_00_material::render');
 //    _mvPushMatrix();
 //    Context.modelViewMatrix.multiply(model.transform);
@@ -240,12 +237,12 @@ abstract class Material extends IEditElement {
 
   // >> Rendering
 
-  render(Model model) {
+  void render(Model model) {
 //    window.console.time('04_00_material::render');
     _mvPushMatrix();
 //    Context.modelMatrix.multiply(model.transform);
 //    idem :
-    Context.modelMatrix = Context.modelMatrix * model.transform;
+    Context.modelMatrix = (Context.modelMatrix * model.transform) as Matrix4;
 
 //    window.console.time('04_01_material::beforeRender');
     beforeRender(model);
@@ -267,7 +264,7 @@ abstract class Material extends IEditElement {
 //    window.console.timeEnd('04_00_material::render');
   }
 
-  beforeRender(Model model) {
+  void beforeRender(Model model) {
 //    window.console.time('05_01_material::beforeRender:program.use');
     program.use();
 //    window.console.timeEnd('05_01_material::beforeRender:program.use');
@@ -285,17 +282,17 @@ abstract class Material extends IEditElement {
 //    window.console.timeEnd('05_04_material::beforeRender:setupBeforeRender');
   }
 
-  setShaderAttributs(Model model);
-  setShaderUniforms(Model model);
-  setupBeforeRender(){}
-  setupAfterRender(){}
+  void setShaderAttributs(Model model);
+  void setShaderUniforms(Model model);
+  void setupBeforeRender(){}
+  void setupAfterRender(){}
 
-  afterRender(Model model){
+  void afterRender(Model model){
     setupAfterRender();
     disableVertexAttributs();
   }
 
-  disableVertexAttributs() {
+  void disableVertexAttributs() {
     for (String name in _attributsNames) {
       attributes[name].enabled = false;
     }

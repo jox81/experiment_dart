@@ -16,7 +16,7 @@ WebGLTexture textureCrate;
 
 Future main() async {
 
-  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
+  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas') as CanvasElement);
 
   await ShaderSource.loadShaders();
   textureCrate = await TextureUtils.createTexture2DFromFile("../images/crate.gif");
@@ -56,7 +56,7 @@ class Webgl01 {
   }
 
   void setupCamera()  {
-    Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
+    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(10.0,10.0,10.0);
   }
@@ -83,7 +83,7 @@ class Webgl01 {
   }
 
   void render({num time : 0.0}) {
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     for(Model model in models){

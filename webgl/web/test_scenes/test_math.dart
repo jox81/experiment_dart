@@ -4,27 +4,27 @@ void main() {
   num viewportX = 0.0;
   num viewportY = 0.0;
 
-  num viewportWidth = 100.0;
-  num viewportHeight = viewportWidth;
-  num aspectRatio = viewportWidth / viewportHeight;
+  double viewportWidth = 100.0;
+  double viewportHeight = viewportWidth;
+  double aspectRatio = viewportWidth / viewportHeight;
 
   num pickX = 0.0;
   num pickY = 0.0;
   num pickZ = 0.0;
 
-  num left = -viewportWidth * 0.5;
-  num right = viewportWidth * 0.5;
+  double left = -viewportWidth * 0.5;
+  double right = viewportWidth * 0.5;
 
-  num bottom = -viewportWidth * 0.5;
-  num top = viewportWidth * 0.5;
+  double bottom = -viewportWidth * 0.5;
+  double top = viewportWidth * 0.5;
 
-  num zNear = viewportWidth * 0.5;
-  num zFar = -viewportWidth * 0.5;
+  double zNear = viewportWidth * 0.5;
+  double zFar = -viewportWidth * 0.5;
 
   Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
   Vector3 cameraPosition = new Vector3(0.0, 0.0, viewportWidth * 0.5);
   Vector3 cameraFocusPosition = new Vector3(0.0, 0.0, 0.0);
-  num fovYRadians = radians(45.0);
+  double fovYRadians = radians(45.0);
 
   Vector3 pickWorld = new Vector3.zero(); //Screen to world found point
 

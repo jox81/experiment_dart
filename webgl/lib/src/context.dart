@@ -17,9 +17,9 @@ WebGLRenderingContext gl;
 
 class Context{
 
-  static Camera _mainCamera;
-  static Camera get mainCamera => _mainCamera;
-  static set mainCamera(Camera value) {
+  static CameraPerspective _mainCamera;
+  static CameraPerspective get mainCamera => _mainCamera;
+  static set mainCamera(CameraPerspective value) {
     _mainCamera?.isActive = false;
 
     _mainCamera = value;
@@ -41,11 +41,11 @@ class Context{
   static num get width => gl.drawingBufferWidth;
   static num get height => gl.drawingBufferHeight;
 
-  static num get viewAspectRatio {
+  static double get viewAspectRatio {
     if(gl != null) {
       return width / height;
     }
-    return 1;
+    return 1.0;
   }
 
   static RenderSetting _renderSetting;

@@ -13,14 +13,14 @@ class NumComponent {
   @Output()
   EventEmitter valueChange = new EventEmitter<num>();
 
-  update(event){
-    valueChange.emit(double.parse(event.target.value, (s)=>0.0));
+  void update(dynamic event){
+    valueChange.emit(double.parse(event.target.value as String, (s)=>0.0));
   }
 
-  static void initDynamicComponent(NumComponent component, defaultValue, Function callBack) {
+  static void initDynamicComponent(NumComponent component, num defaultValue, Function callBack) {
     component
       ..value = defaultValue is num ? defaultValue : 0.0
-      ..valueChange.listen((d){
+      ..valueChange.listen((dynamic d){
         if(callBack != null){
           callBack(d);
         }

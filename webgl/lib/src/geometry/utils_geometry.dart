@@ -14,7 +14,7 @@ class UtilsGeometry{
   ///Le pick Z indique la profondeur à laquelle il faut place le point dé-projeté, z ayant un range de 0.0 à 1.0
   ///En webgl, l'origine en screen se trouve en bas à gauche du plan near
   ///En webgl, l'axe y pointant vers le haut, x vers la droite
-  static bool unProjectScreenPoint(Camera camera, pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
+  static bool unProjectScreenPoint(CameraPerspective camera, Vector3 pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
     num pickX = screenX;
     num pickY = Context.height - screenY;
 
@@ -24,7 +24,7 @@ class UtilsGeometry{
     return unProjected;
   }
 
-  static bool pickRayFromScreenPoint(Camera camera, Vector3 outRayNear,
+  static bool pickRayFromScreenPoint(CameraPerspective camera, Vector3 outRayNear,
       Vector3 outRayFar, num screenX, num screenY) {
     num pickX = screenX;
     num pickY = screenY;
@@ -36,7 +36,7 @@ class UtilsGeometry{
   }
 
   /// Experiment with unProject
-  static List<PointModel> unProjectMultiScreenPoints(Camera camera) {
+  static List<PointModel> unProjectMultiScreenPoints(CameraPerspective camera) {
     List<PointModel> resultPoints = [];
 
     num pickX = 0.0;
@@ -61,7 +61,7 @@ class UtilsGeometry{
   /// How to hide vertices after shown ?
   static List<PointModel> drawModelVertices(Model model) {
     List<PointModel> resultPoints = [];
-    Material material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
+    MaterialPoint material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
 
     for(Triangle triangle in model.getFaces()){
       resultPoints.addAll(drawTriangleVertices(triangle, material));
@@ -84,7 +84,7 @@ class UtilsGeometry{
   }
 
   /// Find ray with mouse coord in the camera
-  static Ray findRay(Camera camera, num screenX, num screenY) {
+  static Ray findRay(CameraPerspective camera, num screenX, num screenY) {
     Vector3 outRayNear = new Vector3.zero();
     UtilsGeometry.unProjectScreenPoint(camera, outRayNear, screenX, screenY);
 
@@ -98,7 +98,7 @@ class UtilsGeometry{
     Material material = new MaterialPoint(pointSize:8.0 ,color: new Vector4(1.0, 0.0, 0.0, 1.0));
 
     for(Triangle triangle in model.getFaces()) {
-      num distance = ray.intersectsWithTriangle(triangle);
+      double distance = ray.intersectsWithTriangle(triangle);
 
       if(distance != null) {
         resultPoints.add(new PointModel()
@@ -110,7 +110,7 @@ class UtilsGeometry{
     return resultPoints;
   }
 
-  static Model findModelFromMouseCoords(Camera camera, num x, num y, List<Model> models) {
+  static Model findModelFromMouseCoords(CameraPerspective camera, num x, num y, List<Model> models) {
     Ray ray = UtilsGeometry.findRay(camera, x, y);
     Model modelHit = UtilsGeometry.findModelHit(models, ray);
     return modelHit;

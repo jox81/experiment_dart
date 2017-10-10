@@ -2,7 +2,6 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/meshes.dart';
 import 'package:webgl/src/geometry/models.dart';
@@ -15,7 +14,7 @@ import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 
 void main() {
-  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
+  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas') as CanvasElement);
   webgl01.render();
 }
 
@@ -51,8 +50,8 @@ class Webgl01 {
     Context.init(canvas,enableExtensions:true,logInfos:false);
   }
 
-  setupCamera() {
-    Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
+  void setupCamera() {
+    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(0.0,5.0,10.0);
   }
@@ -94,8 +93,8 @@ class Webgl01 {
     mvMatrixUniform = shaderProgram.getUniformLocation("uModelViewMatrix");
   }
 
-  _getShader(WebGLRenderingContext gl, id) {
-    ScriptElement shaderScript = document.getElementById(id);
+  WebGLShader _getShader(WebGLRenderingContext gl, String id) {
+    ScriptElement shaderScript = document.getElementById(id) as ScriptElement;
     if (shaderScript == null) {
       return null;
     }
@@ -123,7 +122,7 @@ class Webgl01 {
   }
 
   void initBuffers() {
-    List<num> vertices = models[0].mesh.vertices;
+    List<double> vertices = models[0].mesh.vertices;
     List<int> indices = models[0].mesh.indices;
 
     vertexBuffer = new WebGLBuffer();
@@ -142,7 +141,7 @@ class Webgl01 {
   /// Rendering part
   ///
   void render({num time : 0.0}) {
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT,ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     Context.modelMatrix = models[0].transform;
@@ -164,7 +163,7 @@ class Webgl01 {
 
   void _setMatrixUniforms() {
     pMatrixUniform.uniformMatrix4fv(Context.mainCamera.perspectiveMatrix, false);
-    mvMatrixUniform.uniformMatrix4fv(Context.mainCamera.lookAtMatrix * Context.modelMatrix, false);
+    mvMatrixUniform.uniformMatrix4fv((Context.mainCamera.lookAtMatrix * Context.modelMatrix) as Matrix4, false);
   }
 
 }

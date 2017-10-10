@@ -2,10 +2,10 @@ import 'dart:html';
 import 'dart:typed_data' as WebGlTypedData;
 import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/context_attributs.dart';
 import 'package:webgl/src/debug_rendering_context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -39,7 +39,7 @@ class WebGLRenderingContext extends IEditElement {
 
     for (int i = 0; i < names.length; ++i) {
       try {
-        ctx = canvas.getContext(names[i], options); //Normal context
+        ctx = canvas.getContext(names[i], options) as WebGL.RenderingContext; //Normal context
         if (debug) {
           ctx = new DebugRenderingContext(ctx);
         }
@@ -79,26 +79,26 @@ class WebGLRenderingContext extends IEditElement {
   // >>> single getParameter
 
   // > VENDOR
-  String get vendor => ctx.getParameter(ContextParameter.VENDOR.index);
+  String get vendor => ctx.getParameter(ContextParameter.VENDOR.index) as String;
   // > RENDERER
-  String get renderer => ctx.getParameter(ContextParameter.RENDERER.index);
+  String get renderer => ctx.getParameter(ContextParameter.RENDERER.index) as String;
   // > VERSION
-  String get version => ctx.getParameter(ContextParameter.VERSION.index);
+  String get version => ctx.getParameter(ContextParameter.VERSION.index) as String;
   // > SHADING_LANGUAGE_VERSION
-  String get shadingLanguageVersion => ctx.getParameter(ContextParameter.SHADING_LANGUAGE_VERSION.index);
+  String get shadingLanguageVersion => ctx.getParameter(ContextParameter.SHADING_LANGUAGE_VERSION.index) as String;
 
   num get drawingBufferWidth => ctx.drawingBufferWidth;
   num get drawingBufferHeight => ctx.drawingBufferHeight;
 
   // > MAX_VIEWPORT_DIMS
-  WebGlTypedData.Int32List get maxViewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index);
+  WebGlTypedData.Int32List get maxViewportDimensions => ctx.getParameter(ContextParameter.MAX_VIEWPORT_DIMS.index) as WebGlTypedData.Int32List;
 
   // > VIEWPORT
-  Rectangle get viewport {
-    WebGlTypedData.Int32List values = ctx.getParameter(ContextParameter.VIEWPORT.index);
-    return new Rectangle(values[0], values[1], values[2], values[3]);
+  Rectangle<int> get viewport {
+    WebGlTypedData.Int32List values = ctx.getParameter(ContextParameter.VIEWPORT.index) as WebGlTypedData.Int32List;
+    return new Rectangle<int>(values[0], values[1], values[2], values[3]);
   }
-  set viewport(Rectangle rect) {
+  set viewport(Rectangle<int> rect) {
     //int x, int y, num width, num height
     assert(rect.width >= 0 && rect.height >= 0);
     ctx.viewport(rect.left, rect.top, rect.width, rect.height);
@@ -106,82 +106,82 @@ class WebGLRenderingContext extends IEditElement {
 
 
   // > ALIASED_LINE_WIDTH_RANGE [2]
-  WebGlTypedData.Float32List get aliasedLineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index);
+  WebGlTypedData.Float32List get aliasedLineWidthRange => ctx.getParameter(ContextParameter.ALIASED_LINE_WIDTH_RANGE.index) as WebGlTypedData.Float32List;
 
   // > ALIASED_POINT_SIZE_RANGE [2]
-  WebGlTypedData.Float32List get aliasedPointSizeRange => ctx.getParameter(ContextParameter.ALIASED_POINT_SIZE_RANGE.index);
+  WebGlTypedData.Float32List get aliasedPointSizeRange => ctx.getParameter(ContextParameter.ALIASED_POINT_SIZE_RANGE.index) as WebGlTypedData.Float32List;
 
   // > RED_BITS
-  int get redBits => ctx.getParameter(ContextParameter.RED_BITS.index);
+  int get redBits => ctx.getParameter(ContextParameter.RED_BITS.index) as int;
   // > GREEN_BITS
-  int get greenBits => ctx.getParameter(ContextParameter.GREEN_BITS.index);
+  int get greenBits => ctx.getParameter(ContextParameter.GREEN_BITS.index) as int;
   // > BLUE_BITS
-  int get blueBits => ctx.getParameter(ContextParameter.BLUE_BITS.index);
+  int get blueBits => ctx.getParameter(ContextParameter.BLUE_BITS.index) as int;
   // > ALPHA_BITS
-  int get alphaBits => ctx.getParameter(ContextParameter.ALPHA_BITS.index);
+  int get alphaBits => ctx.getParameter(ContextParameter.ALPHA_BITS.index) as int;
   // > DEPTH_BITS
-  int get depthBits => ctx.getParameter(ContextParameter.DEPTH_BITS.index);
+  int get depthBits => ctx.getParameter(ContextParameter.DEPTH_BITS.index) as int;
   // > STENCIL_BITS
-  int get stencilBits => ctx.getParameter(ContextParameter.STENCIL_BITS.index);
+  int get stencilBits => ctx.getParameter(ContextParameter.STENCIL_BITS.index) as int;
   // > SUBPIXEL_BITS
-  int get subPixelBits => ctx.getParameter(ContextParameter.SUBPIXEL_BITS.index);
+  int get subPixelBits => ctx.getParameter(ContextParameter.SUBPIXEL_BITS.index) as int;
 
   // > COLOR_CLEAR_VALUE [4]
-  Vector4 get clearColor => new Vector4.fromFloat32List(ctx.getParameter(ContextParameter.COLOR_CLEAR_VALUE.index));
+  Vector4 get clearColor => new Vector4.fromFloat32List(ctx.getParameter(ContextParameter.COLOR_CLEAR_VALUE.index) as WebGlTypedData.Float32List);
   set clearColor(Vector4 color) => ctx.clearColor(color.r, color.g, color.b, color.a);
 
   // > COLOR_WRITEMASK [4]
-  List<bool> get colorMask => ctx.getParameter(ContextParameter.COLOR_WRITEMASK.index);
+  List<bool> get colorMask => ctx.getParameter(ContextParameter.COLOR_WRITEMASK.index) as List<bool>;
   set colorMask(List<bool> mask){
     assert(mask.length == 4);
     ctx.colorMask(mask[0], mask[1], mask[2], mask[3]);
   }
 
   // > COMPRESSED_TEXTURE_FORMATS [4]
-  WebGlTypedData.Uint32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index);
+  WebGlTypedData.Uint32List get compressTextureFormats => ctx.getParameter(ContextParameter.COMPRESSED_TEXTURE_FORMATS.index) as WebGlTypedData.Uint32List;
 
   // > CURRENT_PROGRAM
-  WebGLProgram get currentProgram => new WebGLProgram.fromWebGL(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index));
+  WebGLProgram get currentProgram => new WebGLProgram.fromWebGL(ctx.getParameter(ContextParameter.CURRENT_PROGRAM.index) as WebGL.Program);
 
   // > ARRAY_BUFFER_BINDING
-  WebGLBuffer get arrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ARRAY_BUFFER_BINDING.index));
+  WebGLBuffer get arrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ARRAY_BUFFER_BINDING.index)as WebGL.Buffer);
   // > ELEMENT_ARRAY_BUFFER_BINDING
-  WebGLBuffer get elementArrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ELEMENT_ARRAY_BUFFER_BINDING.index));
+  WebGLBuffer get elementArrayBufferBinding => new WebGLBuffer.fromWebGL(ctx.getParameter(ContextParameter.ELEMENT_ARRAY_BUFFER_BINDING.index) as WebGL.Buffer);
   // > RENDERBUFFER_BINDING
-  WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebGL(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index));
+  WebGLRenderBuffer get renderBufferBinding => new WebGLRenderBuffer.fromWebGL(ctx.getParameter(ContextParameter.RENDERBUFFER_BINDING.index) as WebGL.Renderbuffer);
 
   // > MAX_VERTEX_TEXTURE_IMAGE_UNITS
-  int get maxVertexTextureImageUnits => ctx.getParameter(ContextParameter.MAX_VERTEX_TEXTURE_IMAGE_UNITS.index);
+  int get maxVertexTextureImageUnits => ctx.getParameter(ContextParameter.MAX_VERTEX_TEXTURE_IMAGE_UNITS.index) as int;
   // > MAX_VERTEX_ATTRIBS
-  int get maxVertexAttributs => ctx.getParameter(ContextParameter.MAX_VERTEX_ATTRIBS.index);
+  int get maxVertexAttributs => ctx.getParameter(ContextParameter.MAX_VERTEX_ATTRIBS.index) as int;
   // > MAX_VERTEX_UNIFORM_VECTORS
-  int get maxVertexUnifromVectors => ctx.getParameter(ContextParameter.MAX_VERTEX_UNIFORM_VECTORS.index);
+  int get maxVertexUnifromVectors => ctx.getParameter(ContextParameter.MAX_VERTEX_UNIFORM_VECTORS.index) as int;
   // > MAX_VARYING_VECTORS
-  int get maxVaryingVectors => ctx.getParameter(ContextParameter.MAX_VARYING_VECTORS.index);
+  int get maxVaryingVectors => ctx.getParameter(ContextParameter.MAX_VARYING_VECTORS.index) as int;
   // > MAX_FRAGMENT_UNIFORM_VECTORS
-  int get maxFragmentUnifromVectors => ctx.getParameter(ContextParameter.MAX_FRAGMENT_UNIFORM_VECTORS.index);
+  int get maxFragmentUnifromVectors => ctx.getParameter(ContextParameter.MAX_FRAGMENT_UNIFORM_VECTORS.index) as int;
   // > MAX_RENDERBUFFER_SIZE
-  int get maxRenderBufferSize => ctx.getParameter(ContextParameter.MAX_RENDERBUFFER_SIZE.index);
+  int get maxRenderBufferSize => ctx.getParameter(ContextParameter.MAX_RENDERBUFFER_SIZE.index) as int;
 
 
   // > SAMPLES
-  int get samples => ctx.getParameter(ContextParameter.SAMPLES.index);
+  int get samples => ctx.getParameter(ContextParameter.SAMPLES.index) as int;
   // > SAMPLE_BUFFERS
-  int get sampleBuffers => ctx.getParameter(ContextParameter.SAMPLE_BUFFERS.index);
+  int get sampleBuffers => ctx.getParameter(ContextParameter.SAMPLE_BUFFERS.index) as int;
 
 
   // >> pixelStorei
 
   // > PACK_ALIGNMENT
-  int get packAlignment => ctx.getParameter(ContextParameter.PACK_ALIGNMENT.index);
+  int get packAlignment => ctx.getParameter(ContextParameter.PACK_ALIGNMENT.index) as int;
   // > UNPACK_ALIGNMENT
-  int get unpackAlignment => ctx.getParameter(ContextParameter.UNPACK_ALIGNMENT.index);
+  int get unpackAlignment => ctx.getParameter(ContextParameter.UNPACK_ALIGNMENT.index) as int;
   // > UNPACK_FLIP_Y_WEBGL
-  bool get unpackFlipYWebGL => ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index);
+  bool get unpackFlipYWebGL => ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index) as bool;
   // > UNPACK_PREMULTIPLY_ALPHA_WEBGL
-  bool get unpackPreMultiplyAlphaWebGL => ctx.getParameter(ContextParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.index);
+  bool get unpackPreMultiplyAlphaWebGL => ctx.getParameter(ContextParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.index) as bool;
   // > UNPACK_COLORSPACE_CONVERSION_WEBGL
-  PixelStorgeType get unpackColorSpaceConversionWebGL => PixelStorgeType.getByIndex(ctx.getParameter(ContextParameter.UNPACK_COLORSPACE_CONVERSION_WEBGL.index));
+  PixelStorgeType get unpackColorSpaceConversionWebGL => PixelStorgeType.getByIndex(ctx.getParameter(ContextParameter.UNPACK_COLORSPACE_CONVERSION_WEBGL.index) as int) as PixelStorgeType;
 
   void pixelStorei(PixelStorgeType storage, int value) => ctx.pixelStorei(storage.index, value);
 
@@ -189,12 +189,12 @@ class WebGLRenderingContext extends IEditElement {
   // >>
 
   // > IMPLEMENTATION_COLOR_READ_FORMAT // Todo : GLenum ?
-  int get implementationColorReadFormat => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_FORMAT.index);
+  int get implementationColorReadFormat => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_FORMAT.index) as int;
   // > IMPLEMENTATION_COLOR_READ_TYPE // Todo : GLenum ?
-  int get implementationColorReadType => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_TYPE.index);
+  int get implementationColorReadType => ctx.getParameter(ContextParameter.IMPLEMENTATION_COLOR_READ_TYPE.index) as int;
 
   // > LINE_WIDTH
-  num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index);
+  num get lineWidth => ctx.getParameter(ContextParameter.LINE_WIDTH.index) as num;
   set lineWidth(num width) => ctx.lineWidth(width);
 
 
@@ -207,13 +207,13 @@ class WebGLRenderingContext extends IEditElement {
   set cullFace(bool enable) => _setEnabled(EnableCapabilityType.CULL_FACE, enable);
 
   // > CULL_FACE_MODE
-  FacingType get cullFaceMode => FacingType.getByIndex(ctx.getParameter(ContextParameter.CULL_FACE_MODE.index));
+  FacingType get cullFaceMode => FacingType.getByIndex(ctx.getParameter(ContextParameter.CULL_FACE_MODE.index)as int) as FacingType;
   set cullFaceMode(FacingType mode) {
     ctx.cullFace(mode.index);
   }
 
   // > FRONT_FACE
-  FrontFaceDirection get frontFace => FrontFaceDirection.getByIndex(ctx.getParameter(ContextParameter.FRONT_FACE.index));
+  FrontFaceDirection get frontFace => FrontFaceDirection.getByIndex(ctx.getParameter(ContextParameter.FRONT_FACE.index)as int)as FrontFaceDirection;
   set frontFace(FrontFaceDirection mode) => ctx.frontFace(mode.index);
 
   //Depth
@@ -222,19 +222,19 @@ class WebGLRenderingContext extends IEditElement {
   set depthTest(bool enable) => _setEnabled(EnableCapabilityType.DEPTH_TEST, enable);
 
   // > DEPTH_WRITEMASK
-  bool get depthMask => ctx.getParameter(ContextParameter.DEPTH_WRITEMASK.index);
+  bool get depthMask => ctx.getParameter(ContextParameter.DEPTH_WRITEMASK.index) as bool;
   set depthMask(bool enable) => ctx.depthMask(enable);
 
   // > DEPTH_FUNC
-  ComparisonFunction get depthFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.DEPTH_FUNC.index));
+  ComparisonFunction get depthFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.DEPTH_FUNC.index) as int) as ComparisonFunction;
   set depthFunc(ComparisonFunction depthComparisionFunction) => ctx.depthFunc(depthComparisionFunction.index);
 
   // > DEPTH_RANGE [2]
-  WebGlTypedData.Float32List getDepthRange() => ctx.getParameter(ContextParameter.DEPTH_RANGE.index);
+  WebGlTypedData.Float32List getDepthRange() => ctx.getParameter(ContextParameter.DEPTH_RANGE.index) as WebGlTypedData.Float32List;
   void setDepthRange(num zNear, num zFar) => ctx.depthRange(zNear, zFar);
 
   // > DEPTH_CLEAR_VALUE
-  num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index);
+  num get clearDepth => ctx.getParameter(ContextParameter.DEPTH_CLEAR_VALUE.index) as num;
   set clearDepth(num depthValue){
     assert(0.0 <= depthValue && depthValue <= 1.0);
     ctx.clearDepth(depthValue);
@@ -248,11 +248,11 @@ class WebGLRenderingContext extends IEditElement {
 
 
   // > SCISSOR_BOX
-  Rectangle get scissor {
-    WebGlTypedData.Int32List values = ctx.getParameter(ContextParameter.SCISSOR_BOX.index);
+  Rectangle<int> get scissor {
+    WebGlTypedData.Int32List values = ctx.getParameter(ContextParameter.SCISSOR_BOX.index) as WebGlTypedData.Int32List;
     return new Rectangle(values[0], values[1], values[2], values[3]);
   }
-  set scissor(Rectangle rect) {
+  set scissor(Rectangle<int> rect) {
     //int x, int y, num width, num height
     assert(rect.width >= 0 && rect.height >= 0);
     ctx.scissor(rect.left, rect.top, rect.width, rect.height);
@@ -264,9 +264,9 @@ class WebGLRenderingContext extends IEditElement {
   set polygonOffset(bool enabled) =>_setEnabled(EnableCapabilityType.POLYGON_OFFSET_FILL, enabled);
 
   // > POLYGON_OFFSET_FACTOR
-  num get polygonOffsetFactor => ctx.getParameter(ContextParameter.POLYGON_OFFSET_FACTOR.index);
+  num get polygonOffsetFactor => ctx.getParameter(ContextParameter.POLYGON_OFFSET_FACTOR.index) as num;
   // > POLYGON_OFFSET_UNITS
-  num get polygonOffsetUnits => ctx.getParameter(ContextParameter.POLYGON_OFFSET_UNITS.index);
+  num get polygonOffsetUnits => ctx.getParameter(ContextParameter.POLYGON_OFFSET_UNITS.index) as num;
 
   void setPolygonOffest(num factor, num units){
     ctx.polygonOffset(factor, units);
@@ -280,9 +280,9 @@ class WebGLRenderingContext extends IEditElement {
   set sampleAlphaToCoverage(bool enabled) => _setEnabled(EnableCapabilityType.SAMPLE_ALPHA_TO_COVERAGE, enabled);
 
   // > SAMPLE_COVERAGE_VALUE
-  num get sampleCoverageValue => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_VALUE.index);
+  num get sampleCoverageValue => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_VALUE.index) as num;
   // > SAMPLE_COVERAGE_INVERT
-  bool get sampleCoverageInvert => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_INVERT.index);
+  bool get sampleCoverageInvert => ctx.getParameter(ContextParameter.SAMPLE_COVERAGE_INVERT.index) as bool;
   void setSampleCoverage(num value, bool invert) => ctx.sampleCoverage(value, invert);
 
   //Stencils
@@ -304,44 +304,44 @@ class WebGLRenderingContext extends IEditElement {
   set stencilTest (bool enabled) => _setEnabled(EnableCapabilityType.STENCIL_TEST, enabled);
 
   // > STENCIL_FUNC
-  ComparisonFunction get stencilFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FUNC.index));
+  ComparisonFunction get stencilFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FUNC.index)as int)as ComparisonFunction;
   // > STENCIL_BACK_FUNC
-  ComparisonFunction get stencilBackFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FUNC.index));
+  ComparisonFunction get stencilBackFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FUNC.index) as int) as ComparisonFunction;
   void setStencilFunc(ComparisonFunction comparisonFunction, int ref, int mask){
     ctx.stencilFunc(comparisonFunction.index, ref, mask);
   }
 
   // > STENCIL_VALUE_MASK
-  int get stencilValueMask => ctx.getParameter(ContextParameter.STENCIL_VALUE_MASK.index);
+  int get stencilValueMask => ctx.getParameter(ContextParameter.STENCIL_VALUE_MASK.index) as int;
   // > STENCIL_WRITEMASK
-  int get stencilWriteMask => ctx.getParameter(ContextParameter.STENCIL_WRITEMASK.index);
+  int get stencilWriteMask => ctx.getParameter(ContextParameter.STENCIL_WRITEMASK.index) as int;
   // > STENCIL_BACK_WRITEMASK
-  int get stencilBackWriteMask => ctx.getParameter(ContextParameter.STENCIL_BACK_WRITEMASK.index);
+  int get stencilBackWriteMask => ctx.getParameter(ContextParameter.STENCIL_BACK_WRITEMASK.index) as int;
   set stencilMaks(int value) => ctx.stencilMask(value);
 
   // > STENCIL_REF
-  int get stencilRef => ctx.getParameter(ContextParameter.STENCIL_REF.index);
+  int get stencilRef => ctx.getParameter(ContextParameter.STENCIL_REF.index) as int;
   // > STENCIL_BACK_REF
-  int get stencilBackRef => ctx.getParameter(ContextParameter.STENCIL_BACK_REF.index);
+  int get stencilBackRef => ctx.getParameter(ContextParameter.STENCIL_BACK_REF.index) as int;
   // > STENCIL_BACK_VALUE_MASK
-  int get stencilBackValueMask => ctx.getParameter(ContextParameter.STENCIL_BACK_VALUE_MASK.index);
+  int get stencilBackValueMask => ctx.getParameter(ContextParameter.STENCIL_BACK_VALUE_MASK.index)as int;
 
   // > STENCIL_CLEAR_VALUE
-  int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index);
+  int get clearStencil => ctx.getParameter(ContextParameter.STENCIL_CLEAR_VALUE.index)as int;
   set clearStencil(int index) => ctx.clearStencil(index);
 
   // > STENCIL_FAIL
-  StencilOpMode get stencilFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FAIL.index));
+  StencilOpMode get stencilFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FAIL.index) as int)as StencilOpMode;
   // > STENCIL_PASS_DEPTH_PASS
-  StencilOpMode get stencilPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index));
+  StencilOpMode get stencilPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index) as int)as StencilOpMode;
   // > STENCIL_PASS_DEPTH_FAIL
-  StencilOpMode get stencilPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index));
+  StencilOpMode get stencilPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index) as int)as StencilOpMode;
   // > STENCIL_BACK_FAIL
-  StencilOpMode get stencilBackFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index));
+  StencilOpMode get stencilBackFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index) as int)as StencilOpMode;
   // > STENCIL_BACK_PASS_DEPTH_PASS
-  StencilOpMode get stencilBackPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index));
+  StencilOpMode get stencilBackPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index) as int)as StencilOpMode;
   // > STENCIL_BACK_PASS_DEPTH_FAIL
-  StencilOpMode get stencilBackPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index));
+  StencilOpMode get stencilBackPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index) as int)as StencilOpMode;
 
   //Blend
   //Todo : ? identique à get parameter ? BLEND
@@ -362,21 +362,21 @@ class WebGLRenderingContext extends IEditElement {
     ctx.blendColor(red, green, blue, alpha);
   }
   // > BLEND_COLOR
-  WebGlTypedData.Float32List get blendColor => ctx.getParameter(ContextParameter.BLEND_COLOR.index);
+  WebGlTypedData.Float32List get blendColor => ctx.getParameter(ContextParameter.BLEND_COLOR.index)as WebGlTypedData.Float32List;
   set blendColor(WebGlTypedData.Float32List values){
     assert(values.length == 4);
     setBlendColor(values[0], values[1], values[2], values[3]);
   }
   // > BLEND_SRC_RGB, BLEND_DST_RGB, BLEND_SRC_ALPHA, BLEND_DST_ALPHA
-  BlendFactorMode get blendSrcRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_RGB.index));
-  BlendFactorMode get blendSrcAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_ALPHA.index));
-  BlendFactorMode get blendDstRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_RGB.index));
-  BlendFactorMode get blendDstAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_ALPHA.index));
+  BlendFactorMode get blendSrcRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_RGB.index)as int)as BlendFactorMode;
+  BlendFactorMode get blendSrcAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_ALPHA.index)as int)as BlendFactorMode;
+  BlendFactorMode get blendDstRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_RGB.index)as int)as BlendFactorMode;
+  BlendFactorMode get blendDstAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_ALPHA.index)as int)as BlendFactorMode;
 
   // > BLEND_EQUATION, BLEND_EQUATION_RGB, BLEND_EQUATION_ALPHA
-  BlendFunctionMode get blendEquation => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION.index));
-  BlendFunctionMode get blendEquationRGB => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_RGB.index));
-  BlendFunctionMode get blendEquationAlpha => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_ALPHA .index));
+  BlendFunctionMode get blendEquation => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION.index)as int)as BlendFunctionMode;
+  BlendFunctionMode get blendEquationRGB => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_RGB.index)as int)as BlendFunctionMode;
+  BlendFunctionMode get blendEquationAlpha => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_ALPHA .index)as int)as BlendFunctionMode;
   set blendEquation(BlendFunctionMode mode) => ctx.blendEquation(mode.index);
 
   void blendEquationSeparate(BlendFunctionMode modeRGB, BlendFunctionMode modeAlpha){
@@ -498,11 +498,11 @@ class WebGLRenderingContext extends IEditElement {
 
   //Errors
   ErrorCode getError(){
-    return ErrorCode.getByIndex(ctx.getError());
+    return ErrorCode.getByIndex(ctx.getError()) as ErrorCode;
   }
 
   void logRenderingContextInfos() {
-    UtilsAssets.log("RenderingContext Infos", () {
+    Debug.log("RenderingContext Infos", () {
       print('vendor : ${vendor}');
       print('renderer : ${renderer}');
       print('version : ${version}');

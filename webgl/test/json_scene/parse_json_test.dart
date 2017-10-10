@@ -13,7 +13,7 @@ import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {
-
+  UtilsAssets.useWebPath = true;
   Map testJson;
 
   setUp(() async {
@@ -48,7 +48,7 @@ Future main() async {
       expect(value == new Vector3(10.0,15.0,20.0), isTrue);
     });
     test("vector3Array", () {
-      Vector3 value = new Vector3.fromFloat32List(new Float32List.fromList(testJson['vector3Array']));
+      Vector3 value = new Vector3.fromFloat32List(new Float32List.fromList(testJson['vector3Array'] as List<double>));
       expect(value.x == 10.0, isTrue);
       expect(value.y == 15.0, isTrue);
       expect(value.z == 20.0, isTrue);
@@ -60,13 +60,13 @@ Future main() async {
   group("json write", () {
     test("change compare", () {
       String jsonString = '{"int":12}';
-      Map jsonMap = JSON.decode(jsonString);
+      Map jsonMap = JSON.decode(jsonString) as Map;
       String jsonEncoded = (JSON.encode(jsonMap));
       expect(jsonString == jsonEncoded, isTrue);
     });
     test("change value", () {
       String jsonString = '{"int":12}';
-      Map jsonMap = JSON.decode(jsonString);
+      Map jsonMap = JSON.decode(jsonString) as Map;
 
       jsonMap['int'] += 5;
 

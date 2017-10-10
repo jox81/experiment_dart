@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:webgl/components/value_components/function_component/dynamic_load_component.dart';
@@ -7,7 +8,7 @@ import 'package:webgl/src/introspection.dart';
     selector: 'function',
     templateUrl: 'function_component.html',
     styleUrls: const ['function_component.css'],
-    directives: const [DynamicLoaderComponent]
+    directives: const <dynamic>[DynamicLoaderComponent]
 )
 class FunctionComponent implements AfterViewInit{
 
@@ -40,13 +41,13 @@ class FunctionComponent implements AfterViewInit{
   List<ParameterMirror> getPositionalArguments(){
     List<ParameterMirror> positionalParameter = functionModel.getPositionalArguments();
     if(positionals == null){
-      positionals = {};
+      positionals = new Map<Symbol, dynamic>();
       positionalParameter.forEach((p)=> positionals[p.simpleName] = null);
     }
     return positionalParameter;
   }
 
-  void setPositionalValue(ParameterMirror parameter, event){
+  void setPositionalValue(ParameterMirror parameter, dynamic event){
     positionals[parameter.simpleName] = event;
   }
 
@@ -54,13 +55,13 @@ class FunctionComponent implements AfterViewInit{
   List<ParameterMirror> getNamedArguments(){
     List<ParameterMirror> namedParameters = functionModel.getNamedArguments();
     if(named == null){
-      named = {};
+      named = new Map<Symbol, dynamic>();
       namedParameters.forEach((p)=> named[p.simpleName] = null);
     }
     return namedParameters;
   }
 
-  void setNamedValue(ParameterMirror parameter, event){
+  void setNamedValue(ParameterMirror parameter, dynamic event){
     named[parameter.simpleName] = event;
   }
 
@@ -70,18 +71,18 @@ class FunctionComponent implements AfterViewInit{
   }
 
   @override
-  ngAfterViewInit() async {
+  Future ngAfterViewInit() async {
     for(ParameterMirror param in getPositionalArguments()) {
       await loaderPositionalArguments.createDynamicComponentBaseType(param.type.reflectedType,
         param.hasDefaultValue?param.defaultValue.reflectee:null,
-        (v)=> setPositionalValue(param, v),
+        (dynamic v)=> setPositionalValue(param, v),
         name:'${param.type.reflectedType} ${MirrorSystem.getName(param.simpleName)}');
     }
 
     for(ParameterMirror param in getNamedArguments()) {
       await loaderNamedArguments.createDynamicComponentBaseType(param.type.reflectedType,
         param.hasDefaultValue?param.defaultValue.reflectee:null,
-        (v)=> setNamedValue(param, v),
+        (dynamic v)=> setNamedValue(param, v),
         name:'{ ${param.type.reflectedType} ${MirrorSystem.getName(param.simpleName)} : ${param.hasDefaultValue ? '${param.defaultValue.reflectee}' : 'null'} }');
     }
   }

@@ -2,9 +2,10 @@ import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+import 'dart:web_gl' as WebGL;
 @MirrorsUsed(
     targets: const [
       WebGLAttributLocation,
@@ -19,7 +20,7 @@ class WebGLAttributLocation extends IEditElement{
   WebGLAttributLocation(this._location);
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_ENABLED
-  bool get enabled => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_ENABLED);
+  bool get enabled => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_ENABLED) as bool;
   set enabled(bool enabled) => _setEnabled(enabled);
 
   void _setEnabled(bool enabled){
@@ -46,30 +47,33 @@ class WebGLAttributLocation extends IEditElement{
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
   ///Returns the currently bound WebGLBuffer.
-  WebGLBuffer get bufferBound => new WebGLBuffer.fromWebGL(getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING));
+  WebGLBuffer get bufferBound {
+    WebGL.Buffer webGLBuffer = getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING) as WebGL.Buffer;
+    return new WebGLBuffer.fromWebGL(webGLBuffer);
+  }
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_SIZE
   ///Returns an int indicating the size of an element of the vertex array.
-  int get elementSize => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_SIZE);
+  int get elementSize => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_SIZE) as int;
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_STRIDE
   ///Returns a GLint indicating the number of bytes between successive elements
   ///in the array. 0 means that the elements are sequential.
-  int get stride => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_STRIDE);
+  int get stride => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_STRIDE) as int;
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_TYPE
   ///Returns a VertexAttribArrayType representing the array type.
-  VertexAttribArrayType get elementType => VertexAttribArrayType.getByIndex(getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE));
+  VertexAttribArrayType get elementType => VertexAttribArrayType.getByIndex(getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE) as int) as VertexAttribArrayType;
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_NORMALIZED
   ///Returns a GLboolean that is true if fixed-point data types are normalized
   ///for the vertex attribute array at the given index.
-  bool get isNormalized => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_NORMALIZED);
+  bool get isNormalized => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_NORMALIZED) as bool;
 
   // > getVertexAttrib CURRENT_VERTEX_ATTRIB [4]
   ///Returns a Vector4 representing the current value of
   ///the vertex attribute at the given index.
-  Vector4 get value => new Vector4.fromFloat32List(getVertexAttrib(_location, VertexAttribGlEnum.CURRENT_VERTEX_ATTRIB));
+  Vector4 get value => new Vector4.fromFloat32List(getVertexAttrib(_location, VertexAttribGlEnum.CURRENT_VERTEX_ATTRIB) as Float32List);
 
   ///specifies the data formats and locations of vertex attributes in a
   ///vertex attributes array.
@@ -117,7 +121,7 @@ class WebGLAttributLocation extends IEditElement{
   }
 
   void logVertexAttributInfos() {
-    UtilsAssets.log("Vertex Attribut Infos", (){
+    Debug.log("Vertex Attribut Infos", (){
         print('value : ${value}');
         print('enabled : ${enabled}');
         print('elementSize : ${elementSize}');

@@ -6,7 +6,7 @@ import 'package:webgl/components/value_components/vector3_component/vector3_comp
     selector: 'matrix3',
     templateUrl: 'matrix3_component.html',
     styleUrls: const ['matrix3_component.css'],
-    directives: const [Vector3Component]
+    directives: const <dynamic>[Vector3Component]
 )
 class Matrix3Component {
 
@@ -16,7 +16,7 @@ class Matrix3Component {
   @Output()
   EventEmitter valueChange = new EventEmitter<Matrix3>();
 
-  void updateRow(int rowIndex,event){
+  void updateRow(int rowIndex,Vector3 event){
     value.setRow(rowIndex, event);
     valueChange.emit(value);
   }

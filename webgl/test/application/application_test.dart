@@ -13,7 +13,7 @@ Future main() async {
   CanvasElement canvas;
 
   setUp(() async {
-    canvas = querySelector('#glCanvas');
+    canvas = querySelector('#glCanvas') as CanvasElement;
   });
 
   tearDown(() async {

@@ -25,7 +25,7 @@ class SceneViewFrameBuffer extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    Camera camera = new Camera(radians(37.0), 0.1, 100.0)
+    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(5.0, 5.0, 5.0);
     Context.mainCamera = camera;

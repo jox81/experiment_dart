@@ -2,7 +2,7 @@
 import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 
 class WebglConstants{
 
@@ -26,7 +26,7 @@ class WebglConstants{
   }
 
   void logConstants() {
-    UtilsAssets.log('Webgl Constants',(){
+    Debug.log('Webgl Constants',(){
       values.forEach((c)=> print(c));
     });
   }
@@ -44,7 +44,7 @@ class WebglConstants{
       if (className == ownerName) {
         if (decl is VariableMirror) {
           String name = MirrorSystem.getName(decl.simpleName);
-          int glEnum = classMirror.getField(decl.simpleName).reflectee;
+          int glEnum = classMirror.getField(decl.simpleName).reflectee as int;
 
           WebglConstant constant = new WebglConstant()
             ..glEnum = glEnum
@@ -65,11 +65,11 @@ class WebglConstants{
   }
 
   List<WebglConstant> get parameters {
-    return values.where((c)=> c.isParameter == true);
+    return values.where((c)=> c.isParameter == true).toList();
   }
 
   void logParameters() {
-    UtilsAssets.log('Webgl Parameters',(){
+    Debug.log('Webgl Parameters',(){
       parameters.forEach((c)=> print(c));
     });
   }

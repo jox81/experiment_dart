@@ -21,7 +21,7 @@ Future main() async {
   await ShaderSource.loadShaders();
   susanJson = await UtilsAssets.loadJSONResource('../objects/susan/susan.json');
 
-  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas'));
+  Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas') as CanvasElement);
   webgl01.setup();
   webgl01.render();
 }
@@ -58,7 +58,7 @@ class Webgl01 {
   }
 
   void setupCamera()  {
-    Context.mainCamera = new Camera(radians(45.0), 0.1, 100.0)
+    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(10.0,10.0,10.0);
   }
@@ -135,7 +135,7 @@ class Webgl01 {
 //    ..visible = true;
 //    models.add(frustrumGizmo);
 
-    Camera camera2 = new Camera(radians(37.0), 1.0, 5.0)
+    CameraPerspective camera2 = new CameraPerspective(radians(37.0), 1.0, 5.0)
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
       ..position = new Vector3(5.0, 5.0, -5.0)
       ..showGizmo = true;
@@ -218,7 +218,7 @@ class Webgl01 {
   }
 
   void render({num time : 0.0}) {
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
 
     for(Model model in models){

@@ -11,7 +11,7 @@ class WebGLDictionary extends _ReturnedDictionary {
 class _ReturnedDictionary {
   Map _values;
 
-  noSuchMethod(Invocation invocation) {
+  void noSuchMethod(Invocation invocation) {
     var key = MirrorSystem.getName(invocation.memberName);
     if (invocation.isGetter) {
       return _values[key];
@@ -23,5 +23,5 @@ class _ReturnedDictionary {
 
   Map get toMap => _values;
 
-  _ReturnedDictionary(Map value) : _values = value != null ? value : {};
+  _ReturnedDictionary(Map value) : _values = value != null ? value : new Map<dynamic, dynamic>();
 }

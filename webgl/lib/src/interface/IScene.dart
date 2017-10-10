@@ -13,11 +13,13 @@ abstract class IUpdatableScene implements IUpdatable{
 
   IEditElement currentSelection;
 
-  update();
-  updateUserInput();
-  updateScene();
+  void update();
+  void updateUserInput();
+  void updateScene();
 
-  render();
+  void render();
+
+  Map toJson();
 
 }
 
@@ -27,7 +29,7 @@ abstract class IUpdatableSceneFunction{
 }
 
 abstract class ISetupScene{
-  setup();
-  setupUserInput();
-  Future setupScene();
+  void setup();
+  void setupUserInput();
+  void setupScene();
 }

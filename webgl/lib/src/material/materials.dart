@@ -192,7 +192,7 @@ class MaterialBase extends Material {
   }
 }
 
-void logInfo(String name, value){
+void logInfo(String name, dynamic value){
   print('$name : $value');
 }
 
@@ -336,7 +336,7 @@ class MaterialBaseTextureNormal extends Material {
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     //Light
@@ -404,7 +404,7 @@ class MaterialPBR extends Material {
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     setShaderUniform("uLightPos", pointLight.position.storage);
@@ -540,7 +540,7 @@ class MaterialReflection extends Material {
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
@@ -593,7 +593,7 @@ class MaterialNormalMapping extends Material {
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix();
+    Matrix3 normalMatrix = (Context.mainCamera.lookAtMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;

@@ -36,7 +36,7 @@ abstract class Light extends Object3d {
   }
 
   Map toJson() {
-    Map json = new Map();
+    Map json = new Map<String, Object>();
     return json;
   }
 }

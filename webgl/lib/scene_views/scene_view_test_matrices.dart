@@ -25,7 +25,7 @@ class SceneViewTestMatrices extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    Camera camera = new Camera(radians(37.0), 0.1, 100.0)
+    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
       ..position = new Vector3(0.0, 2.0, -1.0);
     Context.mainCamera = camera;
@@ -63,7 +63,7 @@ class SceneViewTestMatrices extends Scene{
 
     uModelMatrix = model.transform;
     uViewMatrix = Context.mainCamera.lookAtMatrix;
-    uModelViewMatrix = Context.mainCamera.lookAtMatrix * uModelMatrix;
+    uModelViewMatrix = (Context.mainCamera.lookAtMatrix * uModelMatrix) as Matrix4;
     uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
     uNormalMatrix;
 
