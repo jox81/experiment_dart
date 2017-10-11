@@ -63,7 +63,7 @@ class WebGLRenderBuffer extends WebGLObject{
   // > RENDERBUFFER_STENCIL_SIZE
   int get renderBufferStencilSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_STENCIL_SIZE.index) as int;
   // > RENDERBUFFER_INTERNAL_FORMAT
-  RenderBufferInternalFormatType get renderBufferInterrnalFormat => RenderBufferInternalFormatType.getByIndex(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index) as int) as RenderBufferInternalFormatType;
+  RenderBufferInternalFormatType get renderBufferInterrnalFormat => RenderBufferInternalFormatType.getByIndex(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index) as int);
 
   void logRenderBufferInfos() {
     Debug.log("RenderBuffer Infos", () {

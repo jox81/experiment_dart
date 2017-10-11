@@ -5,7 +5,8 @@ import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/geometry/models.dart';
-import 'package:gltf/gltf.dart' as glTF;
+import 'package:gltf/gltf.dart' as glTF hide Context;
+import 'context.dart';
 @MirrorsUsed(
     targets: const [
       Camera,
@@ -13,7 +14,6 @@ import 'package:gltf/gltf.dart' as glTF;
     override: '*')
 import 'dart:mirrors';
 import 'package:webgl/src/utils/utils_math.dart';
-
 
 enum CameraType{
   perspective,
@@ -95,11 +95,11 @@ abstract class Camera extends Object3d {
 }
 
 class CameraPerspective extends Camera{
-  double _aspectRatio = 1.0;
+  double _aspectRatio = 0.1;
   double get aspectRatio => _aspectRatio;
-  set aspectRatio(double value){
-    _aspectRatio = value;
-  }
+//  set aspectRatio(double value){
+//    _aspectRatio = value;
+//  }
 
   double _yfov;
   double get yfov => _yfov;
@@ -179,7 +179,8 @@ class CameraPerspective extends Camera{
   }
 
   update() {
-    setPerspectiveMatrix(_perspectiveMatrix, _yfov, aspectRatio, _znear, _zfar);
+    _aspectRatio = Context.viewAspectRatio;
+    setPerspectiveMatrix(_perspectiveMatrix, _yfov, _aspectRatio, _znear, _zfar);
     setViewMatrix(_lookAtMatrix, position, _targetPosition, upDirection);
     _updateGizmo();
   }

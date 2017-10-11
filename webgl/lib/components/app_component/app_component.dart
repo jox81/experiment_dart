@@ -64,7 +64,7 @@ class AppComponent implements OnInit{
         return ToolBars.instance.toolBars[toolBarName];
       }
     }
-    return null;
+    return new ToolBar(ToolBarItemsType.single);
   }
   @override
   Future ngOnInit() async {

@@ -31,7 +31,7 @@ class CameraController {
     }
   }
 
-  void updateCameraPosition(CameraPerspective camera,int screenX, int screenY, int buttonType){
+  void updateCameraPosition(CameraPerspective camera,double deltaX, double deltaY, int buttonType){
     if (camera.isActive) {
       if (dragging) {
 
@@ -50,7 +50,7 @@ class CameraController {
   }
 
   /// Update the X and Y rotation angles based on the mouse motion.
-  void doOrbit(double deltaX, double deltaY) {
+  void doOrbit(num deltaX, num deltaY) {
     //LMB
     // Update the X and Y rotation angles based on the mouse motion.
     yRot = (yRot + deltaX) % 360;

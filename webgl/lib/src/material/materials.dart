@@ -521,7 +521,7 @@ class MaterialReflection extends Material {
 
   setShaderUniforms(Model model) {
 
-    print("###############");
+//    print("###############");
 
 //    print("uModelMatrix: \n${Context.modelMatrix}");
 //    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
@@ -529,7 +529,7 @@ class MaterialReflection extends Material {
 //    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
 //use in common with vertex shader ?
 
-    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
+//    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
     setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
 
 
@@ -574,7 +574,7 @@ class MaterialNormalMapping extends Material {
 
   setShaderUniforms(Model model) {
 
-    print("###############");
+//    print("###############");
 
 //    print("uModelMatrix: \n${Context.modelMatrix}");
 //    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
@@ -582,7 +582,7 @@ class MaterialNormalMapping extends Material {
 //    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
 //use in common with vertex shader ?
 
-    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
+//    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
     setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
 
 

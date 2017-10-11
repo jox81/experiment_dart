@@ -47,7 +47,7 @@ class ToolBars{
 
 class ToolBar {
   final ToolBarItemsType toolBarItemsType;
-  Map<String, UpdateToolBarItem> toolBarItems;
+  Map<String, UpdateToolBarItem> toolBarItems = {};
 
   ToolBar(this.toolBarItemsType);
 }

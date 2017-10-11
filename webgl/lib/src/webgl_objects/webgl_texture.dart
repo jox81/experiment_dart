@@ -145,7 +145,7 @@ abstract class EditTexture extends WebGLObject{
   TextureWrapType get textureWrapS
   {
     bind(textureUnit: editTextureUnit);
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index) as int) as TextureWrapType;
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index) as int);
   }
   set textureWrapS(TextureWrapType  textureWrapType){
     bind(textureUnit: editTextureUnit);
@@ -155,7 +155,7 @@ abstract class EditTexture extends WebGLObject{
   // > TEXTURE_WRAP_T
   TextureWrapType get textureWrapT {
     bind(textureUnit: editTextureUnit);
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index) as int) as TextureWrapType;
+    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index) as int);
   }
   set textureWrapT(TextureWrapType  textureWrapType){
     bind(textureUnit: editTextureUnit);

@@ -181,7 +181,7 @@ class WebGLRenderingContext extends IEditElement {
   // > UNPACK_PREMULTIPLY_ALPHA_WEBGL
   bool get unpackPreMultiplyAlphaWebGL => ctx.getParameter(ContextParameter.UNPACK_PREMULTIPLY_ALPHA_WEBGL.index) as bool;
   // > UNPACK_COLORSPACE_CONVERSION_WEBGL
-  PixelStorgeType get unpackColorSpaceConversionWebGL => PixelStorgeType.getByIndex(ctx.getParameter(ContextParameter.UNPACK_COLORSPACE_CONVERSION_WEBGL.index) as int) as PixelStorgeType;
+  PixelStorgeType get unpackColorSpaceConversionWebGL => PixelStorgeType.getByIndex(ctx.getParameter(ContextParameter.UNPACK_COLORSPACE_CONVERSION_WEBGL.index) as int);
 
   void pixelStorei(PixelStorgeType storage, int value) => ctx.pixelStorei(storage.index, value);
 
@@ -207,13 +207,13 @@ class WebGLRenderingContext extends IEditElement {
   set cullFace(bool enable) => _setEnabled(EnableCapabilityType.CULL_FACE, enable);
 
   // > CULL_FACE_MODE
-  FacingType get cullFaceMode => FacingType.getByIndex(ctx.getParameter(ContextParameter.CULL_FACE_MODE.index)as int) as FacingType;
+  FacingType get cullFaceMode => FacingType.getByIndex(ctx.getParameter(ContextParameter.CULL_FACE_MODE.index)as int);
   set cullFaceMode(FacingType mode) {
     ctx.cullFace(mode.index);
   }
 
   // > FRONT_FACE
-  FrontFaceDirection get frontFace => FrontFaceDirection.getByIndex(ctx.getParameter(ContextParameter.FRONT_FACE.index)as int)as FrontFaceDirection;
+  FrontFaceDirection get frontFace => FrontFaceDirection.getByIndex(ctx.getParameter(ContextParameter.FRONT_FACE.index)as int);
   set frontFace(FrontFaceDirection mode) => ctx.frontFace(mode.index);
 
   //Depth
@@ -226,7 +226,7 @@ class WebGLRenderingContext extends IEditElement {
   set depthMask(bool enable) => ctx.depthMask(enable);
 
   // > DEPTH_FUNC
-  ComparisonFunction get depthFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.DEPTH_FUNC.index) as int) as ComparisonFunction;
+  ComparisonFunction get depthFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.DEPTH_FUNC.index) as int);
   set depthFunc(ComparisonFunction depthComparisionFunction) => ctx.depthFunc(depthComparisionFunction.index);
 
   // > DEPTH_RANGE [2]
@@ -304,9 +304,9 @@ class WebGLRenderingContext extends IEditElement {
   set stencilTest (bool enabled) => _setEnabled(EnableCapabilityType.STENCIL_TEST, enabled);
 
   // > STENCIL_FUNC
-  ComparisonFunction get stencilFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FUNC.index)as int)as ComparisonFunction;
+  ComparisonFunction get stencilFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FUNC.index)as int);
   // > STENCIL_BACK_FUNC
-  ComparisonFunction get stencilBackFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FUNC.index) as int) as ComparisonFunction;
+  ComparisonFunction get stencilBackFunc => ComparisonFunction.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FUNC.index) as int);
   void setStencilFunc(ComparisonFunction comparisonFunction, int ref, int mask){
     ctx.stencilFunc(comparisonFunction.index, ref, mask);
   }
@@ -331,17 +331,17 @@ class WebGLRenderingContext extends IEditElement {
   set clearStencil(int index) => ctx.clearStencil(index);
 
   // > STENCIL_FAIL
-  StencilOpMode get stencilFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FAIL.index) as int)as StencilOpMode;
+  StencilOpMode get stencilFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_FAIL.index) as int);
   // > STENCIL_PASS_DEPTH_PASS
-  StencilOpMode get stencilPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index) as int)as StencilOpMode;
+  StencilOpMode get stencilPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_PASS.index) as int);
   // > STENCIL_PASS_DEPTH_FAIL
-  StencilOpMode get stencilPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index) as int)as StencilOpMode;
+  StencilOpMode get stencilPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_PASS_DEPTH_FAIL.index) as int);
   // > STENCIL_BACK_FAIL
-  StencilOpMode get stencilBackFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index) as int)as StencilOpMode;
+  StencilOpMode get stencilBackFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_FAIL.index) as int);
   // > STENCIL_BACK_PASS_DEPTH_PASS
-  StencilOpMode get stencilBackPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index) as int)as StencilOpMode;
+  StencilOpMode get stencilBackPassDepthPass => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_PASS.index) as int);
   // > STENCIL_BACK_PASS_DEPTH_FAIL
-  StencilOpMode get stencilBackPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index) as int)as StencilOpMode;
+  StencilOpMode get stencilBackPassDepthFail => StencilOpMode.getByIndex(ctx.getParameter(ContextParameter.STENCIL_BACK_PASS_DEPTH_FAIL.index) as int);
 
   //Blend
   //Todo : ? identique à get parameter ? BLEND
@@ -368,15 +368,15 @@ class WebGLRenderingContext extends IEditElement {
     setBlendColor(values[0], values[1], values[2], values[3]);
   }
   // > BLEND_SRC_RGB, BLEND_DST_RGB, BLEND_SRC_ALPHA, BLEND_DST_ALPHA
-  BlendFactorMode get blendSrcRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_RGB.index)as int)as BlendFactorMode;
-  BlendFactorMode get blendSrcAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_ALPHA.index)as int)as BlendFactorMode;
-  BlendFactorMode get blendDstRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_RGB.index)as int)as BlendFactorMode;
-  BlendFactorMode get blendDstAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_ALPHA.index)as int)as BlendFactorMode;
+  BlendFactorMode get blendSrcRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_RGB.index)as int);
+  BlendFactorMode get blendSrcAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_SRC_ALPHA.index)as int);
+  BlendFactorMode get blendDstRGB => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_RGB.index)as int);
+  BlendFactorMode get blendDstAlpha => BlendFactorMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_DST_ALPHA.index)as int);
 
   // > BLEND_EQUATION, BLEND_EQUATION_RGB, BLEND_EQUATION_ALPHA
-  BlendFunctionMode get blendEquation => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION.index)as int)as BlendFunctionMode;
-  BlendFunctionMode get blendEquationRGB => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_RGB.index)as int)as BlendFunctionMode;
-  BlendFunctionMode get blendEquationAlpha => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_ALPHA .index)as int)as BlendFunctionMode;
+  BlendFunctionMode get blendEquation => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION.index)as int);
+  BlendFunctionMode get blendEquationRGB => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_RGB.index)as int);
+  BlendFunctionMode get blendEquationAlpha => BlendFunctionMode.getByIndex(ctx.getParameter(ContextParameter.BLEND_EQUATION_ALPHA .index)as int);
   set blendEquation(BlendFunctionMode mode) => ctx.blendEquation(mode.index);
 
   void blendEquationSeparate(BlendFunctionMode modeRGB, BlendFunctionMode modeAlpha){
@@ -498,7 +498,7 @@ class WebGLRenderingContext extends IEditElement {
 
   //Errors
   ErrorCode getError(){
-    return ErrorCode.getByIndex(ctx.getError()) as ErrorCode;
+    return ErrorCode.getByIndex(ctx.getError());
   }
 
   void logRenderingContextInfos() {

@@ -108,7 +108,7 @@ class Mesh {
       List<Float32List> fullVertices = [];
       _faces = [];
       int stepVertices = 3;
-      for(int vertex = 0; vertex < vertices.length; vertex += stepVertices) {
+      for(int vertex = 0; vertex < vertices.length &&  vertices.length > stepVertices; vertex += stepVertices) {
         fullVertices.add(new Float32List.fromList([vertices[vertex + 0], vertices[vertex + 1], vertices[vertex + 2]]));
       }
 

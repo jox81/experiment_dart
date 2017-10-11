@@ -153,10 +153,12 @@ abstract class Model extends Object3d {
         orElse: () => null);
 
     Model object3d = new Model.createByType(modelType, doInitMaterial: true)
-      ..name = json["name"].toString()
-      ..position = new Vector3.fromFloat32List(new Float32List.fromList(json["position"]as List<double>));
+      ..name = json["name"].toString();
 //      ..rotation = new Matrix3.fromList(json["rotation"])
 //      ..scale = ??;
+    if(json["position"] != null) {
+      object3d.position = new Vector3.fromFloat32List(new Float32List.fromList(json["position"]as List<double>));
+    }
     if(json["transform"] != null) {
       object3d.transform = new Matrix4.fromFloat32List(new Float32List.fromList(json["transform"] as List<double>));
     }
@@ -185,7 +187,7 @@ class JsonObject extends Model {
   JsonObject(Map jsonFile, {bool doInitMaterial: true}) {
     mesh
       ..vertices = jsonFile['meshes'][0]['vertices'] as List<double>
-      ..indices = (jsonFile['meshes'][0]['faces']).expand((int i) => i).toList() as List<int>
+      ..indices = (jsonFile['meshes'][0]['faces']).expand((List<int> i) => i).toList() as List<int>
       ..textureCoords = jsonFile['meshes'][0]['texturecoords'][0] as List<double>
       ..vertexNormals = jsonFile['meshes'][0]['normals'] as List<double>;
     material = new MaterialBase();

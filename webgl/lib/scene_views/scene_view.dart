@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:webgl/scene_views/scene_view_cubemap.dart';
+import 'package:webgl/scene_views/scene_view_performance.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
 import 'package:webgl/scene_views/scene_view_test_matrices.dart';
 import 'package:webgl/scene_views/scene_view_texturing.dart';
@@ -20,15 +21,15 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
 //  new Scene(),
- new SceneViewPrimitives(),
+// new SceneViewPrimitives(),
 // new SceneViewTexturing(),
-// new SceneViewBase(),
+ new SceneViewBase(),
 // new SceneViewPBR(),
-//  new SceneViewCubeMap(),
-//  new SceneViewTestMatrices(),
+// new SceneViewCubeMap(),
+// new SceneViewTestMatrices(),
 // new SceneViewWebGLEdit(),
 // new SceneViewVectors(),
-// new SceneViewFrameBuffer(),
+// new SceneViewFrameBuffer(),// Todo (jpu) : soucis
 // new SceneViewParticle(),
 // new SceneViewParticleSimple(),
 // new SceneViewPerformance(),

@@ -28,7 +28,8 @@ class MenuComponent{
     'headerId0' : false,
     'headerId1' : false,
     'headerId2' : false,
-    'headerId3' : false
+    'headerId3' : false,
+    'headerId4' : false
   };
 
   bool isMenuVisible(String headerId){

@@ -63,7 +63,7 @@ class WebGLAttributLocation extends IEditElement{
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_TYPE
   ///Returns a VertexAttribArrayType representing the array type.
-  VertexAttribArrayType get elementType => VertexAttribArrayType.getByIndex(getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE) as int) as VertexAttribArrayType;
+  VertexAttribArrayType get elementType => VertexAttribArrayType.getByIndex(getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE) as int);
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_NORMALIZED
   ///Returns a GLboolean that is true if fixed-point data types are normalized

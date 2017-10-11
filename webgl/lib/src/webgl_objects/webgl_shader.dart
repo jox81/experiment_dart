@@ -23,7 +23,7 @@ class WebGLShader extends WebGLObject{
   bool get isShader => gl.ctx.isShader(webGLShader);
 
   // > SHADER_TYPE
-  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index) as int) as ShaderType;
+  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index) as int);
   // > COMPILE_STATUS
   bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index) as bool;
 

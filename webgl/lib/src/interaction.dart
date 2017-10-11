@@ -24,8 +24,8 @@ class Interaction {
 
   int currentX = 0;
   int currentY = 0;
-  num deltaX = 0.0;
-  num deltaY = 0.0;
+  double deltaX = 0.0;
+  double deltaY = 0.0;
 
   num scaleFactor = 3.0;
 
@@ -48,33 +48,6 @@ class Interaction {
     gl.canvas.onMouseDown.listen(_onMouseDown);
     gl.canvas.onMouseMove.listen(_onMouseMove);
     gl.canvas.onMouseUp.listen(_onMouseUp);
-
-    //cameraController
-
-    // Assign a mouse down handler to the HTML element.
-    gl.canvas.onMouseDown.listen((MouseEvent event) {
-        int screenX = event.client.x.toInt();
-        int screenY = event.client.y.toInt();
-        updateMouseInfos(screenX, screenY);
-        Context.mainCamera.cameraController.beginOrbit(Context.mainCamera, screenX, screenY);
-    });
-
-    // Assign a mouse up handler to the HTML element.
-    gl.canvas.onMouseUp.listen((MouseEvent event) {
-        int screenX = event.client.x.toInt();
-        int screenY = event.client.y.toInt();
-        updateMouseInfos(screenX, screenY);
-        Context.mainCamera.cameraController.endOrbit(Context.mainCamera);
-    });
-
-    // Assign a mouse move handler to the HTML element.
-    gl.canvas.onMouseMove.listen((MouseEvent event) {
-      int screenX = event.client.x.toInt();
-      int screenY = event.client.y.toInt();
-      updateMouseInfos(screenX, screenY);
-      Context.mainCamera.cameraController.updateCameraPosition(Context.mainCamera, screenX, screenY, event.button);
-    });
-
     gl.canvas.onMouseWheel.listen((WheelEvent event) {
       num delatY = -event.deltaY;
       Context.mainCamera.cameraController.updateCamerFov(Context.mainCamera, delatY);
@@ -146,6 +119,9 @@ class Interaction {
     int screenX = event.client.x.toInt();
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
+
+    Context.mainCamera.cameraController.beginOrbit(Context.mainCamera, screenX, screenY);
+
     dragging = false;
     mouseDown = true;
 
@@ -163,6 +139,8 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 //    print('_onMouseMove ${dragging} : ${event.client.x} / ${event.client.y}');
+
+    Context.mainCamera?.cameraController?.updateCameraPosition(Context.mainCamera, deltaX, deltaY, event.button);
 
     if(mouseDown /*&& (event.client.x != mouseMoveX || event.client.y != mouseMoveY)*/) {
 
@@ -216,6 +194,11 @@ class Interaction {
   }
 
   void _onMouseUp(MouseEvent event) {
+
+    int screenX = event.client.x.toInt();
+    int screenY = event.client.y.toInt();
+    updateMouseInfos(screenX, screenY);
+    Context.mainCamera.cameraController.endOrbit(Context.mainCamera);
 
     print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
     if(!dragging) {

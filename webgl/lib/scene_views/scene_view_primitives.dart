@@ -52,7 +52,6 @@ class SceneViewPrimitives extends Scene{
     cameras.add(camera2);
 
     camera3 = new CameraPerspective(radians(37.0), 1.0, 100.0)
-      ..aspectRatio = Context.viewAspectRatio
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(10.0, 10.0, 10.0)
       ..showGizmo = false;
