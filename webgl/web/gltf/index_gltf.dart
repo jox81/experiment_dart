@@ -33,8 +33,13 @@ List<String> gltfSamples = [
 
   ///Materials
 //  'gltf/tests/base/data/material/empty.gltf',
-  'gltf/tests/base/data/material/valid_full.gltf',
-  
+//  'gltf/tests/base/data/material/valid_full.gltf',
+
+  ///Accessors
+//  'gltf/tests/base/data/accessor/empty.gltf',
+  'gltf/tests/base/data/accessor/alignment.gltf',
+//  'gltf/tests/base/data/accessor/valid_full.gltf',
+
   ///Others scenes
 //  'gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf',
 //  'gltf/samples/gltf_2_0/minimal.gltf',
@@ -51,6 +56,7 @@ Future main() async {
   testSamplers();
   testTextures();
   testMaterials();
+  testAccessors();
 }
 
 Future loadGLTF() async {
@@ -142,6 +148,19 @@ void testMaterials() {
       print('> $i');
       GLTFMaterial material = gltf.materials[i];
       print('$material');
+    }
+    print('');
+  });
+}
+
+
+void testAccessors() {
+  Debug.log('Accessors', () {
+    print('accessors counts : ${gltf.accessors.length}');
+    for (int i = 0; i < gltf.accessors.length; ++i) {
+      print('> $i');
+      GLTFAccessor accessor = gltf.accessors[i];
+      print('$accessor');
     }
     print('');
   });

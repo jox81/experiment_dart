@@ -39,6 +39,7 @@ class GLTFObject {
   List<GLTFSampler> samplers = new List();
   List<GLTFTexture> textures = new List();
   List<GLTFMaterial> materials = new List();
+  List<GLTFAccessor> accessors = new List();
 
   GLTFObject._(this._gltfSource) {
     //Buffers
@@ -97,6 +98,14 @@ class GLTFObject {
       GLTFMaterial material = new GLTFMaterial.fromGltf(gltfMaterial);
       if (material != null) {
         materials.add(material);
+      }
+    }
+
+    //Accessors
+    for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
+      GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
+      if (accessor != null) {
+        accessors.add(accessor);
       }
     }
   }
@@ -571,9 +580,174 @@ class GLTFTextureInfo extends GltfProperty{
   int get hashCode => _gltfSource.hashCode ^ texCoord.hashCode ^ texture.hashCode;
 }
 
-//1.0 ?
-//class GLTFTechnique{
-//  Map<String, Object> attributs;//<name, parameter>
-//  Map<String, Object> uniforms;//<name, parameter>
-//  Map parameters;
-//}
+class GLTFAccessor extends GLTFChild{
+  glTF.Accessor _gltfSource;
+  glTF.Accessor get gltfSource => _gltfSource;
+
+  final int byteOffset;
+  final ShaderVariableType componentType;
+  final String typeString;
+  final ShaderVariableType type;
+  final int count;
+  final bool normalized;
+  final List<num> max;
+  final List<num> min;
+  final GLTFAccessorSparse sparse;
+
+  GLTFAccessor._(this._gltfSource):
+        this.byteOffset = _gltfSource.byteOffset,
+        this.componentType = ShaderVariableType.getByIndex(_gltfSource.componentType),
+        this.count = _gltfSource.count,
+        this.typeString = _gltfSource.type,
+        this.type = ShaderVariableType.getByComponentAndType(ShaderVariableType.getByIndex(_gltfSource.componentType).name, _gltfSource.type),
+        this.normalized = _gltfSource.normalized,
+        this.max = _gltfSource.max,
+        this.min = _gltfSource.min,
+        this.sparse = new GLTFAccessorSparse.fromGltf(_gltfSource.sparse);
+
+  GLTFAccessor(this.byteOffset, this.componentType, this.typeString, this.type, this.count,
+      this.normalized, this.max, this.min, this.sparse);
+
+  factory GLTFAccessor.fromGltf(glTF.Accessor gltfAccessorSource) {
+    if (gltfAccessorSource == null) return null;
+    return new GLTFAccessor._(gltfAccessorSource);
+  }
+
+  @override
+  String toString() {
+    return 'GLTFAccessor{byteOffset: $byteOffset, componentType: $componentType, typeString: $typeString, , type: $type, count: $count, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFAccessor &&
+              runtimeType == other.runtimeType &&
+              _gltfSource == other._gltfSource &&
+              byteOffset == other.byteOffset &&
+              componentType == other.componentType &&
+              typeString == other.typeString &&
+              type == other.type &&
+              count == other.count &&
+              normalized == other.normalized &&
+              max == other.max &&
+              min == other.min &&
+              sparse == other.sparse;
+
+  @override
+  int get hashCode =>
+      _gltfSource.hashCode ^
+      byteOffset.hashCode ^
+      componentType.hashCode ^
+      typeString.hashCode ^
+      type.hashCode ^
+      count.hashCode ^
+      normalized.hashCode ^
+      max.hashCode ^
+      min.hashCode ^
+      sparse.hashCode;
+}
+
+class GLTFAccessorSparse extends GltfProperty{
+  glTF.AccessorSparse _gltfSource;
+  glTF.AccessorSparse get gltfSource => _gltfSource;
+
+  final int count;
+  final GLTFAccessorSparseIndices indices;
+  final GLTFAccessorSparseValues values;
+
+  GLTFAccessorSparse(this.count, this.indices, this.values);
+
+  GLTFAccessorSparse.fromGltf(this._gltfSource)
+      : this.count = _gltfSource.count,
+       this.indices = new GLTFAccessorSparseIndices.fromGltf(_gltfSource.indices),
+       this.values = new GLTFAccessorSparseValues.fromGltf(_gltfSource.values);
+
+  @override
+  String toString() {
+    return 'GLTFAccessorSparse{count: $count, indices: $indices, values: $values}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFAccessorSparse &&
+              runtimeType == other.runtimeType &&
+              _gltfSource == other._gltfSource &&
+              count == other.count &&
+              indices == other.indices &&
+              values == other.values;
+
+  @override
+  int get hashCode =>
+      _gltfSource.hashCode ^
+      count.hashCode ^
+      indices.hashCode ^
+      values.hashCode;
+}
+
+class GLTFAccessorSparseIndices extends GltfProperty{
+  glTF.AccessorSparseIndices _gltfSource;
+  glTF.AccessorSparseIndices get gltfSource => _gltfSource;
+
+  final int byteOffset;
+  final ShaderVariableType componentType;
+
+  GLTFAccessorSparseIndices(this.byteOffset, this.componentType);
+
+  GLTFAccessorSparseIndices.fromGltf(this._gltfSource)
+      : this.byteOffset = _gltfSource.byteOffset,
+        this.componentType = ShaderVariableType.getByIndex(_gltfSource.componentType);
+
+  @override
+  String toString() {
+    return 'GLTFAccessorSparseIndices{byteOffset: $byteOffset, componentType: $componentType}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFAccessorSparseIndices &&
+              runtimeType == other.runtimeType &&
+              _gltfSource == other._gltfSource &&
+              byteOffset == other.byteOffset &&
+              componentType == other.componentType;
+
+  @override
+  int get hashCode =>
+      _gltfSource.hashCode ^
+      byteOffset.hashCode ^
+      componentType.hashCode;
+}
+
+class GLTFAccessorSparseValues extends GltfProperty{
+  glTF.AccessorSparseValues _gltfSource;
+  glTF.AccessorSparseValues get gltfSource => _gltfSource;
+
+  final int byteOffset;
+  final GLTFBufferView bufferView;
+
+  GLTFAccessorSparseValues(this.byteOffset, this.bufferView);
+
+  GLTFAccessorSparseValues.fromGltf(this._gltfSource)
+      : this.byteOffset = _gltfSource.byteOffset,
+        this.bufferView = new GLTFBufferView.fromGltf(_gltfSource.bufferView);
+
+  @override
+  String toString() {
+    return 'GLTFAccessorSparseValues{byteOffset: $byteOffset, bufferView: $bufferView}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFAccessorSparseValues &&
+              runtimeType == other.runtimeType &&
+              byteOffset == other.byteOffset &&
+              bufferView == other.bufferView;
+
+  @override
+  int get hashCode =>
+      byteOffset.hashCode ^
+      bufferView.hashCode;
+}
