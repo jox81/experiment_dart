@@ -58,7 +58,7 @@ class Webgl01 {
   }
 
   void setupCamera()  {
-    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
+    Context.mainCamera = new GLTFCameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(10.0,10.0,10.0);
   }
@@ -135,7 +135,7 @@ class Webgl01 {
 //    ..visible = true;
 //    models.add(frustrumGizmo);
 
-    CameraPerspective camera2 = new CameraPerspective(radians(37.0), 1.0, 5.0)
+    GLTFCameraPerspective camera2 = new GLTFCameraPerspective(radians(37.0), 1.0, 5.0)
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
       ..position = new Vector3(5.0, 5.0, -5.0)
       ..showGizmo = true;

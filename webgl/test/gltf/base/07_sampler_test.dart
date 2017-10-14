@@ -10,22 +10,22 @@ Future main() async {
 
   group("Sampler", () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/sampler/empty.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/sampler/empty.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFSampler> samplers = gltf.samplers;
       expect(samplers.length, 0);
     });
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/sampler/valid_full.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/sampler/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFSampler> samplers = gltf.samplers;
       expect(samplers.length, 1);
     });
     test("properties", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/sampler/valid_full.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/sampler/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFSampler> samplers = gltf.samplers;
       expect(samplers.length, 1);

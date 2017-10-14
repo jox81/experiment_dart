@@ -17,21 +17,21 @@ class CameraController {
 
   CameraController();
 
-  CameraPerspective _camera;
+  GLTFCameraPerspective _camera;
 
-  void init(CameraPerspective camera) {
+  void init(GLTFCameraPerspective camera) {
     _camera = camera;
     xRot = 90 - camera.pitch;
     yRot = camera.phiAngle;
   }
 
-  void updateCamerFov(CameraPerspective camera, num deltaY){
+  void updateCamerFov(GLTFCameraPerspective camera, num deltaY){
     if (camera.isActive) {
       changeCameraFov(camera, deltaY);
     }
   }
 
-  void updateCameraPosition(CameraPerspective camera,double deltaX, double deltaY, int buttonType){
+  void updateCameraPosition(GLTFCameraPerspective camera,double deltaX, double deltaY, int buttonType){
     if (camera.isActive) {
       if (dragging) {
 
@@ -75,7 +75,7 @@ class CameraController {
     dragging = false;
   }
 
-  void changeCameraFov(CameraPerspective camera, num deltaY) {
+  void changeCameraFov(GLTFCameraPerspective camera, num deltaY) {
     var delta = Math.max(-1, Math.min(1, deltaY));
     fov += delta / 50; //calcul du zoom
 

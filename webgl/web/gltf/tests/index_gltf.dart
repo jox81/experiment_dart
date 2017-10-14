@@ -12,6 +12,7 @@ List<String> gltfSamples = [
 
   ///BufferView tests
 //  'gltf/tests/base/data/buffer_view/empty.gltf',
+//  'gltf/tests/base/data/buffer_view/empty.gltf',
 //  'gltf/tests/base/data/buffer_view/valid_full.gltf',
 
   ///Camera tests
@@ -37,15 +38,29 @@ List<String> gltfSamples = [
 
   ///Accessors
 //  'gltf/tests/base/data/accessor/empty.gltf',
-  'gltf/tests/base/data/accessor/alignment.gltf',
+//  'gltf/tests/base/data/accessor/get_elements.gltf',
+//  'gltf/tests/base/data/accessor/alignment.gltf',
 //  'gltf/tests/base/data/accessor/valid_full.gltf',
+
+  /// Meshes
+//  'gltf/tests/base/data/mesh/empty.gltf',
+//  'gltf/tests/base/data/mesh/empty_object.gltf',
+//  'gltf/tests/base/data/mesh/valid_full.gltf',
+
+  ///Scenes
+//  'gltf/tests/base/data/scene/empty.gltf',
+//  'gltf/tests/base/data/scene/valid_full.gltf',
+
+  /// Nodes
+//  'gltf/tests/base/data/node/empty.gltf',
+  'gltf/tests/base/data/node/valid_full.gltf',
 
   ///Others scenes
 //  'gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf',
 //  'gltf/samples/gltf_2_0/minimal.gltf',
 ];
 
-GLTFObject gltf;
+GLTFProject gltf;
 
 Future main() async {
   await loadGLTF();
@@ -57,12 +72,16 @@ Future main() async {
   testTextures();
   testMaterials();
   testAccessors();
+  testMeshes();
+  testScenes();
+  testNodes();
 }
 
 Future loadGLTF() async {
   String gltfUrl = gltfSamples.first;
-  glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(gltfUrl, useWebPath:true);
-  gltf = new GLTFObject.fromGltf(gltfSource);
+  glTF.Gltf gltfSource =
+      await GLTFProject.loadGLTFResource(gltfUrl, useWebPath: true);
+  gltf = new GLTFProject.fromGltf(gltfSource);
   assert(gltf != null);
   print('');
   print('> gltf file loaded : ${gltfUrl}');
@@ -96,6 +115,8 @@ void testBufferViews() {
 void testCameras() {
   Debug.log('Cameras', () {
     print('Cameras counts : ${gltf.cameras.length}');
+
+    assert(gltf.cameras[0] is GLTFCameraPerspective);
     for (int i = 0; i < gltf.cameras.length; ++i) {
       print('> $i');
       Camera camera = gltf.cameras[i];
@@ -153,7 +174,6 @@ void testMaterials() {
   });
 }
 
-
 void testAccessors() {
   Debug.log('Accessors', () {
     print('accessors counts : ${gltf.accessors.length}');
@@ -161,6 +181,42 @@ void testAccessors() {
       print('> $i');
       GLTFAccessor accessor = gltf.accessors[i];
       print('$accessor');
+    }
+    print('');
+  });
+}
+
+void testMeshes() {
+  Debug.log('Meshes', () {
+    print('meshes counts : ${gltf.meshes.length}');
+    for (int i = 0; i < gltf.meshes.length; ++i) {
+      print('> $i');
+      GLTFMesh mesh = gltf.meshes[i];
+      print('$mesh');
+    }
+    print('');
+  });
+}
+
+void testScenes() {
+  Debug.log('Scenes', () {
+    print('meshes counts : ${gltf.scenes.length}');
+    for (int i = 0; i < gltf.scenes.length; ++i) {
+      print('> $i');
+      GLTFScene scene = gltf.scenes[i];
+      print('$scene');
+    }
+    print('');
+  });
+}
+
+void testNodes() {
+  Debug.log('Nodes', () {
+    print('nodes counts : ${gltf.nodes.length}');
+    for (int i = 0; i < gltf.nodes.length; ++i) {
+      print('> $i');
+      GLTFNode node = gltf.nodes[i];
+      print('$node');
     }
     print('');
   });

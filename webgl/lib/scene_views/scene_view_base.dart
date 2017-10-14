@@ -37,7 +37,7 @@ class SceneViewBase extends Scene{
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     Context.mainCamera = new
-    CameraPerspective(radians(37.0), 0.1, 1000.0)
+    GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(20.0, 20.0, 20.0);
 

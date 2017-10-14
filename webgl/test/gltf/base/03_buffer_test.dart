@@ -10,16 +10,16 @@ Future main() async {
 
   group("Buffer", () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/buffer/empty.gltf', useWebPath:true);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer/empty.gltf', useWebPath:true);
 
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 0);
     });
     test("Array length with empty data", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/buffer/valid_full.gltf', useWebPath:true);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer/valid_full.gltf', useWebPath:true);
 
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 2);
 
@@ -30,9 +30,9 @@ Future main() async {
       expect(buffers[1].data, isNotNull);
     });
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/samples/gltf_2_0/minimal.gltf', useWebPath:true);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/samples/gltf_2_0/minimal.gltf', useWebPath:true);
 
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 1);
 
@@ -43,9 +43,9 @@ Future main() async {
 
     });
     test("uri", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/image/valid_full.gltf', useWebPath:true);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/image/valid_full.gltf', useWebPath:true);
 
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 1);
 

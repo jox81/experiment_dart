@@ -25,8 +25,12 @@ abstract class Camera extends Object3d {
   bool _isActive = false;
 
   static Camera fromGltf(glTF.Camera gltfCamera){
-    if(gltfCamera.perspective != null) return new CameraPerspective.fromGltf(gltfCamera.perspective);
-    if(gltfCamera.orthographic != null) return new CameraOrthographic.fromGltf(gltfCamera.orthographic);
+    if(gltfCamera != null) {
+      if (gltfCamera.perspective != null)
+        return new GLTFCameraPerspective.fromGltf(gltfCamera.perspective);
+      if (gltfCamera.orthographic != null)
+        return new GLTFCameraOrthographic.fromGltf(gltfCamera.orthographic);
+    }
     return null;
   }
 
@@ -65,7 +69,7 @@ abstract class Camera extends Object3d {
   CameraController _cameraController;
   set cameraController(CameraController value) {
     _cameraController = value;
-    _cameraController.init(this as CameraPerspective);// Todo (jpu) : ??
+    _cameraController.init(this as GLTFCameraPerspective);// Todo (jpu) : ??
   }
   CameraController get cameraController => _cameraController;
 
@@ -83,7 +87,7 @@ abstract class Camera extends Object3d {
   bool get showGizmo => _gizmo.visible;
   set showGizmo(bool value) {
     if(_gizmo == null){
-      _gizmo = new FrustrumGizmo(this as CameraPerspective);// Todo (jpu) : ??
+      _gizmo = new FrustrumGizmo(this as GLTFCameraPerspective);// Todo (jpu) : ??
     }
     _gizmo.visible = value;
   }
@@ -92,9 +96,33 @@ abstract class Camera extends Object3d {
   void _updateGizmo() {
     if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is Camera &&
+              runtimeType == other.runtimeType &&
+              _isActive == other._isActive &&
+              _type == other._type &&
+              _znear == other._znear &&
+              _zfar == other._zfar &&
+              _cameraController == other._cameraController &&
+              _gizmo == other._gizmo;
+
+  @override
+  int get hashCode =>
+      _isActive.hashCode ^
+      _type.hashCode ^
+      _znear.hashCode ^
+      _zfar.hashCode ^
+      _cameraController.hashCode ^
+      _gizmo.hashCode;
+
+
+
 }
 
-class CameraPerspective extends Camera{
+class GLTFCameraPerspective extends Camera{
   double _aspectRatio = 0.1;
   double get aspectRatio => _aspectRatio;
 //  set aspectRatio(double value){
@@ -173,7 +201,7 @@ class CameraPerspective extends Camera{
     return (perspectiveMatrix * lookAtMatrix) as Matrix4;
   }
 
-  CameraPerspective(this._yfov, double znear, double _zfar){
+  GLTFCameraPerspective(this._yfov, double znear, double _zfar){
    super._znear = znear;
    super._zfar = _zfar;
   }
@@ -185,13 +213,14 @@ class CameraPerspective extends Camera{
     _updateGizmo();
   }
 
+  @override
   String toString() {
-    return 'camera position : $position -> target : $targetPosition';
+    return 'GLTFCameraPerspective{_aspectRatio: $_aspectRatio, _yfov: $_yfov, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_perspectiveMatrix, _lookAtMatrix: $_lookAtMatrix}';
   }
 
   // >> JSON
 
-  CameraPerspective.fromJson(Map json) {
+  GLTFCameraPerspective.fromJson(Map json) {
     _yfov = json['fov'] as double;
     _znear = json['zNear'] as double;
     _zfar = json['zFar'] as double;
@@ -213,8 +242,8 @@ class CameraPerspective extends Camera{
 
   // >> glTF
 
-  factory CameraPerspective.fromGltf(glTF.CameraPerspective gltfCamera){
-    CameraPerspective camera = new CameraPerspective(gltfCamera.yfov, gltfCamera.znear, gltfCamera.zfar);
+  factory GLTFCameraPerspective.fromGltf(glTF.CameraPerspective gltfCamera){
+    GLTFCameraPerspective camera = new GLTFCameraPerspective(gltfCamera.yfov, gltfCamera.znear, gltfCamera.zfar);
     camera
       .._type = CameraType.perspective
       .._aspectRatio = gltfCamera.aspectRatio;
@@ -224,9 +253,32 @@ class CameraPerspective extends Camera{
 
     return camera;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          super == other &&
+              other is GLTFCameraPerspective &&
+              runtimeType == other.runtimeType &&
+              _aspectRatio == other._aspectRatio &&
+              _yfov == other._yfov &&
+              _targetPosition == other._targetPosition &&
+              upDirection == other.upDirection &&
+              _perspectiveMatrix == other._perspectiveMatrix &&
+              _lookAtMatrix == other._lookAtMatrix;
+
+  @override
+  int get hashCode =>
+      super.hashCode ^
+      _aspectRatio.hashCode ^
+      _yfov.hashCode ^
+      _targetPosition.hashCode ^
+      upDirection.hashCode ^
+      _perspectiveMatrix.hashCode ^
+      _lookAtMatrix.hashCode;
 }
 
-class CameraOrthographic extends Camera{
+class GLTFCameraOrthographic extends Camera{
 
   double _ymag;
   double get ymag => _ymag;
@@ -242,11 +294,11 @@ class CameraOrthographic extends Camera{
     update();
   }
 
-  CameraOrthographic();
+  GLTFCameraOrthographic();
 
   // >> JSON
 
-  CameraOrthographic.fromJson(Map json) {
+  GLTFCameraOrthographic.fromJson(Map json) {
     position = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
     showGizmo = json['showGizmo'] as bool;
   }
@@ -260,8 +312,8 @@ class CameraOrthographic extends Camera{
 
   // >> glTF
 
-  factory CameraOrthographic.fromGltf(glTF.CameraOrthographic gltfCamera){
-    CameraOrthographic camera = new CameraOrthographic()
+  factory GLTFCameraOrthographic.fromGltf(glTF.CameraOrthographic gltfCamera){
+    GLTFCameraOrthographic camera = new GLTFCameraOrthographic()
       .._type = CameraType.orthographic
       .._znear = gltfCamera.znear
       .._zfar = gltfCamera.zfar
@@ -274,5 +326,11 @@ class CameraOrthographic extends Camera{
 
     return camera;
   }
+
+  @override
+  String toString() {
+    return 'GLTFCameraOrthographic{_ymag: $_ymag, _xmag: $_xmag}';
+  }
+
 
 }

@@ -470,13 +470,13 @@ class TextureUtils {
       List<Model> models = new List();
 
       //backup camera
-      CameraPerspective baseCam = Context.mainCamera;
+      GLTFCameraPerspective baseCam = Context.mainCamera;
       Rectangle<int> previousViewport =
           new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
       gl.activeFrameBuffer.bind(framebufferWithDepthTexture);
 
-      CameraPerspective cameraTexture = new CameraPerspective(radians(45.0), 0.1, 100.0)
+      GLTFCameraPerspective cameraTexture = new GLTFCameraPerspective(radians(45.0), 0.1, 100.0)
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
         ..position = new Vector3(5.0, 15.0, 15.0);
 

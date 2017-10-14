@@ -16,9 +16,9 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewPrimitives extends Scene{
 
-  CameraPerspective camera;
-  CameraPerspective camera2;
-  CameraPerspective camera3;
+  GLTFCameraPerspective camera;
+  GLTFCameraPerspective camera2;
+  GLTFCameraPerspective camera3;
 
   int cameraIndex = 0;
 
@@ -38,20 +38,20 @@ class SceneViewPrimitives extends Scene{
 
     //Cameras
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-    camera = new CameraPerspective(radians(45.0), 5.0, 1000.0)
+    camera = new GLTFCameraPerspective(radians(45.0), 5.0, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(5.0, 7.5, 10.0)
       ..showGizmo = true;
     cameras.add(camera);
     Context.mainCamera = camera;
 
-    camera2 = new CameraPerspective(radians(37.0), 0.5, 10.0)
+    camera2 = new GLTFCameraPerspective(radians(37.0), 0.5, 10.0)
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(2.0, 2.0, 2.0)
       ..showGizmo = true;
     cameras.add(camera2);
 
-    camera3 = new CameraPerspective(radians(37.0), 1.0, 100.0)
+    camera3 = new GLTFCameraPerspective(radians(37.0), 1.0, 100.0)
       ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
       ..position = new Vector3(10.0, 10.0, 10.0)
       ..showGizmo = false;

@@ -8,28 +8,28 @@ import 'package:gltf/gltf.dart' as glTF;
 Future main() async {
   group("Material", () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/empty.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFMaterial> materials = gltf.materials;
       expect(materials.length, 0);
     });
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/valid_full.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFMaterial> materials = gltf.materials;
       expect(materials.length, 1);
     });
     test("base properties", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/valid_full.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       GLTFMaterial material = gltf.materials[0];
       expect(material.emissiveFactor, <double>[0.0, 1.0, 0.0]);
@@ -38,10 +38,10 @@ Future main() async {
       expect(material.doubleSided, true);
     });
     test("properties pbrMetallicRoughness", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/valid_full.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       GLTFMaterial material = gltf.materials[0];
 
@@ -60,10 +60,10 @@ Future main() async {
 
     });
     test("properties normalTexture", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/valid_full.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       GLTFMaterial material = gltf.materials[0];
 
@@ -73,10 +73,10 @@ Future main() async {
       expect(normalTexture.scale, 2.1);
     });
     test("properties occlusionTexture", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/valid_full.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       GLTFMaterial material = gltf.materials[0];
 
@@ -86,10 +86,10 @@ Future main() async {
       expect(occlusionTexture.strength, 0.5);
     });
     test("properties emissiveTexture", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource(
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
           'gltf/tests/base/data/material/valid_full.gltf',
           useWebPath: true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       GLTFMaterial material = gltf.materials[0];
 

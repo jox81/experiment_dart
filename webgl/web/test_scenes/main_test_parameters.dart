@@ -50,7 +50,7 @@ class WebglTestParameters {
   }
 
   void setupCamera() {
-    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
+    Context.mainCamera = new GLTFCameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(10.0, 10.0, 10.0);
   }

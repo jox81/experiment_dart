@@ -17,9 +17,9 @@ WebGLRenderingContext gl;
 
 class Context{
 
-  static CameraPerspective _mainCamera;
-  static CameraPerspective get mainCamera => _mainCamera;
-  static set mainCamera(CameraPerspective value) {
+  static GLTFCameraPerspective _mainCamera;
+  static GLTFCameraPerspective get mainCamera => _mainCamera;
+  static set mainCamera(GLTFCameraPerspective value) {
     _mainCamera?.isActive = false;
 
     _mainCamera = value;

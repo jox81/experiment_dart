@@ -34,7 +34,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   List<Material> materials = new List();
   List<Model> models = new List();
-  List<CameraPerspective> cameras = new List();
+  List<GLTFCameraPerspective> cameras = new List();
   List<Light> lights = new List();
 
   Material defaultMaterial = new MaterialBase();
@@ -44,7 +44,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   Scene(){
     if(Context.mainCamera == null){
       Context.mainCamera = new
-      CameraPerspective(radians(25.0), 0.1, 1000.0)
+      GLTFCameraPerspective(radians(25.0), 0.1, 1000.0)
         ..targetPosition = new Vector3.zero()
         ..position = new Vector3(20.0, 20.0, 20.0);
     }
@@ -172,7 +172,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
     backgroundColor = new Vector4.fromFloat32List(jsonScene["backgroundColor"] as Float32List);
 
     for(var item in jsonScene["cameras"] as List){
-      CameraPerspective camera = new CameraPerspective.fromJson(item as Map);
+      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(item as Map);
       cameras.add(camera);
     }
 
@@ -194,7 +194,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     if(jsonScene["cameras"] != null) {
       for (var item in jsonScene["cameras"] as List) {
-        CameraPerspective camera = new CameraPerspective.fromJson(item as Map);
+        GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(item as Map);
         cameras.add(camera);
       }
 
@@ -205,7 +205,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     if(Context.mainCamera == null){
       Context.mainCamera = new
-      CameraPerspective(radians(25.0), 0.1, 1000.0)
+      GLTFCameraPerspective(radians(25.0), 0.1, 1000.0)
         ..targetPosition = new Vector3.zero()
         ..position = new Vector3(20.0, 20.0, 20.0);
     }

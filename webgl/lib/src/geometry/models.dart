@@ -301,7 +301,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   @override
   bool visible = false;
 
-  final CameraPerspective _camera;
+  final GLTFCameraPerspective _camera;
   Matrix4 get _vpmatrix => _camera.viewProjectionMatrix;
 
   Vector4 _positionColor = new Vector4(0.0, 1.0, 1.0, 1.0);
@@ -329,7 +329,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   @override
   List<Model> gizmoModels = [];
 
-  FrustrumGizmo(CameraPerspective camera) : _camera = camera {
+  FrustrumGizmo(GLTFCameraPerspective camera) : _camera = camera {
     _createFrustrumModel(_camera.viewProjectionMatrix);
   }
 

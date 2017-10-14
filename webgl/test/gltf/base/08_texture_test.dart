@@ -10,22 +10,22 @@ Future main() async {
 
   group("Texture", () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/texture/empty.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/texture/empty.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 0);
     });
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/texture/valid_full.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/texture/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 1);
     });
     test("properties", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/texture/valid_full.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/texture/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 1);

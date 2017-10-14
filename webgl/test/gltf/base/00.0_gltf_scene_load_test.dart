@@ -10,9 +10,9 @@ Future main() async {
 
   group("test camera", () {
     test("test camera creation", () async {
-      glTF.Gltf gltf = await GLTFObject.loadGLTFResource('gltf/tests/base/data/camera/empty.gltf', useWebPath:true);
+      glTF.Gltf gltf = await GLTFProject.loadGLTFResource('gltf/tests/base/data/camera/empty.gltf', useWebPath:true);
 
-      GLTFObject gltfObject = new GLTFObject.fromGltf(gltf);
+      GLTFProject gltfObject = new GLTFProject.fromGltf(gltf);
       expect(gltfObject, isNotNull);
     });
   });

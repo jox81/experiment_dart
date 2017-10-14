@@ -10,28 +10,28 @@ Future main() async {
 
   group("BufferView", () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/buffer_view/empty_object.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer_view/empty.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFBufferView> bufferViews = gltf.bufferViews;
       expect(bufferViews.length, 0);
     });
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/buffer_view/valid_full.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer_view/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       List<GLTFBufferView> bufferViews = gltf.bufferViews;
       expect(bufferViews.length, 1);
     });
     test("BufferView properties", () async {
-      glTF.Gltf gltfSource = await GLTFObject.loadGLTFResource('gltf/tests/base/data/buffer_view/valid_full.gltf', useWebPath:true);
-      GLTFObject gltf = new GLTFObject.fromGltf(gltfSource);
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer_view/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       GLTFBufferView bufferView = gltf.bufferViews[0];
       expect(bufferView.byteLength,4);
       expect(bufferView.byteOffset, 0);
       expect(bufferView.byteStride, 4);
-      expect(bufferView.bufferType, BufferType.ARRAY_BUFFER);
+      expect(bufferView.usage, BufferType.ARRAY_BUFFER);
     });
   });
 }

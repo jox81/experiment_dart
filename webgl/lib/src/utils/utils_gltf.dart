@@ -1,17 +1,23 @@
 import '../camera.dart';
 import '../webgl_objects/datas/webgl_enum.dart';
+import 'dart:collection';
 import 'dart:core';
 import 'dart:async';
 import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import '../utils/utils_assets.dart';
+import 'package:vector_math/vector_math.dart';
 
-// Todo (jpu) : extensions
-// Todo (jpu) : extras
+// Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Remplacer la copie complete des donnée par un design de Facade ? (utiliser des getter utilisant la source)?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
 // Todo (jpu) : UNPACK_COLORSPACE_CONVERSION_WEBGL flag to NONE to ignore colorSpace globaly in runtime
-class GLTFObject {
+// Todo (jpu) : Acccessor getElement test ?
+
+GLTFProject _gltfProject;
+
+class GLTFProject {
+
   static Future<glTF.Gltf> loadGLTFResource(String url,
       {bool useWebPath: true}) async {
     UtilsAssets.useWebPath = useWebPath;
@@ -40,95 +46,165 @@ class GLTFObject {
   List<GLTFTexture> textures = new List();
   List<GLTFMaterial> materials = new List();
   List<GLTFAccessor> accessors = new List();
+  List<GLTFMesh> meshes = new List();
 
-  GLTFObject._(this._gltfSource) {
-    //Buffers
-    for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
-      GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);
-      if (buffer != null) {
-        buffers.add(buffer);
+
+  //>
+  List<GLTFScene> _scenes = new List();
+  List<GLTFScene> get scenes => _scenes.toList(growable: false);
+
+  void addScene(GLTFScene scene){
+    assert(scene != null);
+    _scenes.add(scene);
+    scene.sceneId = _scenes.indexOf(scene);
+  }
+
+  List<GLTFNode> _nodes = new List();
+  List<GLTFNode> get nodes => _nodes.toList(growable: false);
+
+  void addNode(GLTFNode node){
+    assert(node != null);
+    _nodes.add(node);
+    node.nodeId = _nodes.indexOf(node);
+  }
+
+  int _sceneId;
+  GLTFScene get scene => _sceneId != null ? scenes[_sceneId] : null;
+  set scene(GLTFScene value) {
+    _sceneId = scenes.indexOf(value);
+  }
+  //<
+
+  @override
+  String toString() {
+    return 'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": $_sceneId}';
+  }
+
+  void _init([glTF.Gltf _gltfSource]) {
+
+    if(_gltfSource != null) {
+      //Buffers
+      for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
+        GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);
+        if (buffer != null) {
+          buffers.add(buffer);
+        }
       }
-    }
 
-    //BufferViews
-    for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
-      GLTFBufferView bufferView = new GLTFBufferView.fromGltf(gltfBufferView);
-      if (bufferView != null) {
-        bufferView.bufferIndex = buffers.indexOf(bufferView.buffer);
-        assert(bufferView.bufferIndex != -1);
-        bufferView.buffer = buffers[bufferView.bufferIndex];
-        bufferViews.add(bufferView);
+      //BufferViews
+      for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
+        GLTFBufferView bufferView = new GLTFBufferView.fromGltf(gltfBufferView);
+        if (bufferView != null) {
+          bufferViews.add(bufferView);
+        }
       }
-    }
 
-    //Cameras
-    for (glTF.Camera gltfCamera in _gltfSource.cameras) {
-      Camera camera = Camera.fromGltf(gltfCamera);
-      if (camera != null) {
-        cameras.add(camera);
+      //Cameras
+      for (glTF.Camera gltfCamera in _gltfSource.cameras) {
+        Camera camera = Camera.fromGltf(gltfCamera);
+        if (camera != null) {
+          cameras.add(camera);
+        }
       }
-    }
 
-    //Images
-    for (glTF.Image gltfImage in _gltfSource.images) {
-      GLTFImage image = new GLTFImage.fromGltf(gltfImage);
-      if (image != null) {
-        images.add(image);
+      //Images
+      for (glTF.Image gltfImage in _gltfSource.images) {
+        GLTFImage image = new GLTFImage.fromGltf(gltfImage);
+        if (image != null) {
+          images.add(image);
+        }
       }
-    }
 
-    //Samplers
-    for (glTF.Sampler gltfSampler in _gltfSource.samplers) {
-      GLTFSampler sampler = new GLTFSampler.fromGltf(gltfSampler);
-      if (sampler != null) {
-        samplers.add(sampler);
+      //Samplers
+      for (glTF.Sampler gltfSampler in _gltfSource.samplers) {
+        GLTFSampler sampler = new GLTFSampler.fromGltf(gltfSampler);
+        if (sampler != null) {
+          samplers.add(sampler);
+        }
       }
-    }
 
-    //Textures
-    for (glTF.Texture gltfTexture in _gltfSource.textures) {
-      GLTFTexture texture = new GLTFTexture.fromGltf(gltfTexture);
-      if (texture != null) {
-        textures.add(texture);
+      //Textures
+      for (glTF.Texture gltfTexture in _gltfSource.textures) {
+        GLTFTexture texture = new GLTFTexture.fromGltf(gltfTexture);
+        if (texture != null) {
+          textures.add(texture);
+        }
       }
-    }
 
-    //Materials
-    for (glTF.Material gltfMaterial in _gltfSource.materials) {
-      GLTFMaterial material = new GLTFMaterial.fromGltf(gltfMaterial);
-      if (material != null) {
-        materials.add(material);
+      //Materials
+      for (glTF.Material gltfMaterial in _gltfSource.materials) {
+        GLTFMaterial material = new GLTFMaterial.fromGltf(gltfMaterial);
+        if (material != null) {
+          materials.add(material);
+        }
       }
-    }
 
-    //Accessors
-    for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
-      GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
-      if (accessor != null) {
-        accessors.add(accessor);
+      //Accessors
+      for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
+        GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
+        if (accessor != null) {
+          accessors.add(accessor);
+        }
+      }
+
+      //Meshes
+      for (glTF.Mesh gltfMesh in _gltfSource.meshes) {
+        GLTFMesh mesh = new GLTFMesh.fromGltf(gltfMesh);
+        if (mesh != null) {
+          meshes.add(mesh);
+        }
+      }
+
+      //Scenes
+      for (glTF.Scene gltfScene in _gltfSource.scenes) {
+        GLTFScene scene = new GLTFScene.fromGltf(gltfScene);
+        if (scene != null) {
+          addScene(scene);
+        }
+      }
+
+      //Nodes
+      for (glTF.Node gltfNode in _gltfSource.nodes) {
+        GLTFNode node = new GLTFNode.fromGltf(gltfNode);
+        if (node != null) {
+          addNode(node);
+        }
       }
     }
   }
 
-  GLTFObject();
+  GLTFProject._();
 
-  factory GLTFObject.fromGltf(glTF.Gltf gltfSource) {
+  factory GLTFProject(){
+    _gltfProject = new GLTFProject._();
+    _gltfProject._init();
+    return _gltfProject;
+  }
+
+  factory GLTFProject.fromGltf(glTF.Gltf gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFObject._(gltfSource);
+    _gltfProject = new GLTFProject._();
+    _gltfProject._gltfSource = gltfSource;
+    _gltfProject._init(gltfSource);
+    return _gltfProject;
   }
+
 }
 
 abstract class GltfProperty /*extends Stringable*/ {
   Map<String, Object> extensions;
   Object extras;
+
+  GltfProperty();
 }
 
-// Todo (jpu) : add other child extends
-abstract class GLTFChild extends GltfProperty {
+abstract class GLTFChildOfRootProperty extends GltfProperty {
   String name;
+
+  GLTFChildOfRootProperty();
 }
 
-class GLTFBuffer extends GLTFChild {
+class GLTFBuffer extends GLTFChildOfRootProperty {
   glTF.Buffer _gltfSource;
   glTF.Buffer get gltfSource => _gltfSource;
 
@@ -142,9 +218,9 @@ class GLTFBuffer extends GLTFChild {
         this.byteLength = _gltfSource.byteLength,
         this.data = _gltfSource.data;
 
-  factory GLTFBuffer.fromGltf(glTF.Buffer gltfBufferSource) {
-    if (gltfBufferSource == null) return null;
-    return new GLTFBuffer._(gltfBufferSource);
+  factory GLTFBuffer.fromGltf(glTF.Buffer gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFBuffer._(gltfSource);
   }
 
   @override
@@ -167,39 +243,42 @@ class GLTFBuffer extends GLTFChild {
       _gltfSource.hashCode ^ uri.hashCode ^ byteLength.hashCode ^ data.hashCode;
 }
 
-class GLTFBufferView extends GLTFChild{
+class GLTFBufferView extends GLTFChildOfRootProperty {
   glTF.BufferView _gltfSource;
   glTF.BufferView get gltfSource => _gltfSource;
 
   GLTFBuffer buffer;
-  int bufferIndex;
   int byteLength;
   int byteOffset;
   int byteStride;
   int target;
-  BufferType bufferType;
+  BufferType usage;
 
   GLTFBufferView._(this._gltfSource)
       : this.byteLength = _gltfSource.byteLength,
         this.byteOffset = _gltfSource.byteOffset,
         this.byteStride = _gltfSource.byteStride,
         this.buffer = new GLTFBuffer.fromGltf(_gltfSource.buffer),
-        this.target = _gltfSource.target,
-        this.bufferType = BufferType.getByIndex(_gltfSource.target);
+        this.usage = _gltfSource.usage != null ? BufferType.getByIndex(_gltfSource.usage.target):null,
+        this.target = _gltfSource.usage != null ? _gltfSource.usage.target: null; // Todo (jpu) : bug if -1 and usage == null. What to do ?
 
-  GLTFBufferView(this.buffer, this.bufferIndex, this.byteLength,
-      this.byteOffset, this.byteStride, this.target, this.bufferType);
+  GLTFBufferView(
+      this.buffer,
+      this.byteLength,
+      this.byteOffset,
+      this.byteStride,
+      this.target,
+      this.usage,
+      String name);
 
-  factory GLTFBufferView.fromGltf(glTF.BufferView gltfBufferViewSource) {
-    if (gltfBufferViewSource == null || gltfBufferViewSource.usage == null)
-      return null;
-    GLTFBufferView bufferView = new GLTFBufferView._(gltfBufferViewSource);
-    return bufferView;
+  factory GLTFBufferView.fromGltf(glTF.BufferView gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFBufferView._(gltfSource);
   }
 
   @override
   String toString() {
-    return 'GLTFBufferView{buffer: $buffer, bufferIndex: $bufferIndex, byteLength: $byteLength, byteOffset: $byteOffset, byteStride: $byteStride, target: $target, bufferType: $bufferType}';
+    return 'GLTFBufferView{buffer: $buffer, byteLength: $byteLength, byteOffset: $byteOffset, byteStride: $byteStride, target: $target, usage: $usage}';
   }
 
   @override
@@ -209,26 +288,24 @@ class GLTFBufferView extends GLTFChild{
           runtimeType == other.runtimeType &&
           _gltfSource == other._gltfSource &&
           buffer == other.buffer &&
-          bufferIndex == other.bufferIndex &&
           byteLength == other.byteLength &&
           byteOffset == other.byteOffset &&
           byteStride == other.byteStride &&
           target == other.target &&
-          bufferType == other.bufferType;
+          usage == other.usage;
 
   @override
   int get hashCode =>
       _gltfSource.hashCode ^
       buffer.hashCode ^
-      bufferIndex.hashCode ^
       byteLength.hashCode ^
       byteOffset.hashCode ^
       byteStride.hashCode ^
       target.hashCode ^
-      bufferType.hashCode;
+      usage.hashCode;
 }
 
-class GLTFImage extends GLTFChild{
+class GLTFImage extends GLTFChildOfRootProperty {
   glTF.Image _gltfSource;
   glTF.Image get gltfSource => _gltfSource;
 
@@ -243,9 +320,9 @@ class GLTFImage extends GLTFChild{
         this.bufferView = new GLTFBufferView.fromGltf(_gltfSource.bufferView),
         this.data = _gltfSource.data;
 
-  factory GLTFImage.fromGltf(glTF.Image gltfImageSource) {
-    if (gltfImageSource == null) return null;
-    return new GLTFImage._(gltfImageSource);
+  factory GLTFImage.fromGltf(glTF.Image gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFImage._(gltfSource);
   }
 
   @override
@@ -273,7 +350,7 @@ class GLTFImage extends GLTFChild{
       data.hashCode;
 }
 
-class GLTFSampler extends GLTFChild{
+class GLTFSampler extends GLTFChildOfRootProperty {
   glTF.Sampler _gltfSource;
   glTF.Sampler get gltfSource => _gltfSource;
 
@@ -290,9 +367,10 @@ class GLTFSampler extends GLTFChild{
 
   GLTFSampler(this.magFilter, this.minFilter, this.wrapS, this.wrapT);
 
-  factory GLTFSampler.fromGltf(glTF.Sampler gltfSamplerSource) {
-    if (gltfSamplerSource == null) return null;
-    return new GLTFSampler._(gltfSamplerSource);
+  factory GLTFSampler.fromGltf(glTF.Sampler gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFSampler._(
+        gltfSource);
   }
 
   @override
@@ -320,7 +398,7 @@ class GLTFSampler extends GLTFChild{
       wrapT.hashCode;
 }
 
-class GLTFTexture extends GLTFChild{
+class GLTFTexture extends GLTFChildOfRootProperty {
   glTF.Texture _gltfSource;
   glTF.Texture get gltfSource => _gltfSource;
 
@@ -333,9 +411,9 @@ class GLTFTexture extends GLTFChild{
 
   GLTFTexture(this.sampler, this.source);
 
-  factory GLTFTexture.fromGltf(glTF.Texture gltfTextureSource) {
-    if (gltfTextureSource == null) return null;
-    return new GLTFTexture._(gltfTextureSource);
+  factory GLTFTexture.fromGltf(glTF.Texture gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFTexture._(gltfSource);
   }
 
   @override
@@ -356,7 +434,7 @@ class GLTFTexture extends GLTFChild{
   int get hashCode => _gltfSource.hashCode ^ sampler.hashCode ^ source.hashCode;
 }
 
-class GLTFMaterial extends GLTFChild{
+class GLTFMaterial extends GLTFChildOfRootProperty {
   glTF.Material _gltfSource;
   glTF.Material get gltfSource => _gltfSource;
 
@@ -373,14 +451,18 @@ class GLTFMaterial extends GLTFChild{
   final bool doubleSided;
 
   GLTFMaterial._(this._gltfSource)
-      : this.pbrMetallicRoughness =
-            new GLTFPbrMetallicRoughness.fromGltf(_gltfSource.pbrMetallicRoughness),
-        this.normalTexture =
-            new GLTFNormalTextureInfo.fromGltf(_gltfSource.normalTexture),
-        this.occlusionTexture =
-            new GLTFOcclusionTextureInfo.fromGltf(_gltfSource.occlusionTexture),
-        this.emissiveTexture =
-            new GLTFTextureInfo.fromGltf(_gltfSource.emissiveTexture),
+      : this.pbrMetallicRoughness = new GLTFPbrMetallicRoughness.fromGltf(
+            _gltfSource.pbrMetallicRoughness),
+        this.normalTexture = _gltfSource.normalTexture != null
+            ? new GLTFNormalTextureInfo.fromGltf(_gltfSource.normalTexture)
+            : null,
+        this.occlusionTexture = _gltfSource.occlusionTexture != null
+            ? new GLTFOcclusionTextureInfo.fromGltf(
+                _gltfSource.occlusionTexture)
+            : null,
+        this.emissiveTexture = _gltfSource.emissiveTexture != null
+            ? new GLTFTextureInfo.fromGltf(_gltfSource.emissiveTexture)
+            : null,
         this.emissiveFactor = _gltfSource.emissiveFactor,
         this.alphaMode = _gltfSource.alphaMode,
         this.alphaCutoff = _gltfSource.alphaCutoff,
@@ -396,9 +478,9 @@ class GLTFMaterial extends GLTFChild{
       this.alphaCutoff,
       this.doubleSided);
 
-  factory GLTFMaterial.fromGltf(glTF.Material gltfMaterialSource) {
-    if (gltfMaterialSource == null) return null;
-    return new GLTFMaterial._(gltfMaterialSource);
+  factory GLTFMaterial.fromGltf(glTF.Material gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFMaterial._(gltfSource);
   }
 
   @override
@@ -434,16 +516,17 @@ class GLTFMaterial extends GLTFChild{
       doubleSided.hashCode;
 }
 
-class GLTFPbrMetallicRoughness extends GltfProperty{
+class GLTFPbrMetallicRoughness extends GltfProperty {
   glTF.PbrMetallicRoughness _gltfSource;
   glTF.PbrMetallicRoughness get gltfSource => _gltfSource;
 
   final List<double> baseColorFactor;
-  final GLTFTextureInfo baseColorTexture;// Todo (jpu) : Convert to linear flow
+  final GLTFTextureInfo baseColorTexture; // Todo (jpu) : Convert to linear flow
 
   final double metallicFactor;
   final double roughnessFactor;
-  final GLTFTextureInfo metallicRoughnessTexture;// Todo (jpu) : Convert to linear flow
+  final GLTFTextureInfo
+      metallicRoughnessTexture; // Todo (jpu) : Convert to linear flow
 
   GLTFPbrMetallicRoughness._(this._gltfSource)
       : this.baseColorFactor = _gltfSource.baseColorFactor,
@@ -454,13 +537,17 @@ class GLTFPbrMetallicRoughness extends GltfProperty{
         this.metallicRoughnessTexture =
             new GLTFTextureInfo.fromGltf(_gltfSource.metallicRoughnessTexture);
 
-  GLTFPbrMetallicRoughness(this.baseColorFactor, this.baseColorTexture,
-      this.metallicFactor, this.roughnessFactor, this.metallicRoughnessTexture);
+  GLTFPbrMetallicRoughness(
+      this.baseColorFactor,
+      this.baseColorTexture,
+      this.metallicFactor,
+      this.roughnessFactor,
+      this.metallicRoughnessTexture);
 
   factory GLTFPbrMetallicRoughness.fromGltf(
-      glTF.PbrMetallicRoughness pbrMetallicRoughnessSource) {
-    if (pbrMetallicRoughnessSource == null) return null;
-    return new GLTFPbrMetallicRoughness._(pbrMetallicRoughnessSource);
+      glTF.PbrMetallicRoughness gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFPbrMetallicRoughness._(gltfSource);
   }
 
   @override
@@ -491,16 +578,16 @@ class GLTFPbrMetallicRoughness extends GltfProperty{
 }
 
 class GLTFNormalTextureInfo extends GLTFTextureInfo {
-  glTF.NormalTextureInfo get gltfSource => _gltfSource as glTF.NormalTextureInfo;
+  glTF.NormalTextureInfo get gltfSource =>
+      _gltfSource as glTF.NormalTextureInfo;
 
   final double scale;
 
-  GLTFNormalTextureInfo(int texCoord, GLTFTexture texture, this.scale)
-      : super(texCoord, texture);
-  GLTFNormalTextureInfo.fromGltf(glTF.NormalTextureInfo normalTextureInfoSource)
-      : this.scale = normalTextureInfoSource.scale,
-        super.fromGltf(normalTextureInfoSource);
-
+  GLTFNormalTextureInfo(int texCoord, GLTFTexture texture, this.scale):super(texCoord, texture);
+  
+  GLTFNormalTextureInfo.fromGltf(glTF.NormalTextureInfo gltfSource)
+      : this.scale = gltfSource.scale,
+        super.fromGltf(gltfSource);
 
   @override
   String toString() {
@@ -520,17 +607,16 @@ class GLTFNormalTextureInfo extends GLTFTextureInfo {
 }
 
 class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
-  glTF.OcclusionTextureInfo get gltfSource => _gltfSource as glTF.OcclusionTextureInfo;
+  glTF.OcclusionTextureInfo get gltfSource =>
+      _gltfSource as glTF.OcclusionTextureInfo;
 
   double strength;
 
-  GLTFOcclusionTextureInfo(int texCoord, GLTFTexture texture, this.strength)
-      : super(texCoord, texture);
+  GLTFOcclusionTextureInfo(int texCoord, GLTFTexture texture, this.strength):super(texCoord, texture);
 
-  GLTFOcclusionTextureInfo.fromGltf(
-      glTF.OcclusionTextureInfo occlusionTextureInfoSource)
-      : this.strength = occlusionTextureInfoSource.strength,
-        super.fromGltf(occlusionTextureInfoSource);
+  GLTFOcclusionTextureInfo.fromGltf(glTF.OcclusionTextureInfo gltfSource)
+      : this.strength = gltfSource.strength,
+        super.fromGltf(gltfSource);
 
   @override
   String toString() {
@@ -549,7 +635,7 @@ class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
   int get hashCode => super.hashCode ^ strength.hashCode;
 }
 
-class GLTFTextureInfo extends GltfProperty{
+class GLTFTextureInfo extends GltfProperty {
   glTF.TextureInfo _gltfSource;
   glTF.TextureInfo get gltfSource => _gltfSource;
 
@@ -577,10 +663,11 @@ class GLTFTextureInfo extends GltfProperty{
           texture == other.texture;
 
   @override
-  int get hashCode => _gltfSource.hashCode ^ texCoord.hashCode ^ texture.hashCode;
+  int get hashCode =>
+      _gltfSource.hashCode ^ texCoord.hashCode ^ texture.hashCode;
 }
 
-class GLTFAccessor extends GLTFChild{
+class GLTFAccessor extends GLTFChildOfRootProperty {
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;
 
@@ -594,23 +681,36 @@ class GLTFAccessor extends GLTFChild{
   final List<num> min;
   final GLTFAccessorSparse sparse;
 
-  GLTFAccessor._(this._gltfSource):
-        this.byteOffset = _gltfSource.byteOffset,
-        this.componentType = ShaderVariableType.getByIndex(_gltfSource.componentType),
+  GLTFAccessor._(this._gltfSource)
+      : this.byteOffset = _gltfSource.byteOffset,
+        this.componentType =
+            ShaderVariableType.getByIndex(_gltfSource.componentType),
         this.count = _gltfSource.count,
         this.typeString = _gltfSource.type,
-        this.type = ShaderVariableType.getByComponentAndType(ShaderVariableType.getByIndex(_gltfSource.componentType).name, _gltfSource.type),
+        this.type = ShaderVariableType.getByComponentAndType(
+            ShaderVariableType.getByIndex(_gltfSource.componentType).name,
+            _gltfSource.type),
         this.normalized = _gltfSource.normalized,
         this.max = _gltfSource.max,
         this.min = _gltfSource.min,
-        this.sparse = new GLTFAccessorSparse.fromGltf(_gltfSource.sparse);
+        this.sparse = _gltfSource.sparse != null
+            ? new GLTFAccessorSparse.fromGltf(_gltfSource.sparse)
+            : null;
 
-  GLTFAccessor(this.byteOffset, this.componentType, this.typeString, this.type, this.count,
-      this.normalized, this.max, this.min, this.sparse);
+  GLTFAccessor(
+      this.byteOffset,
+      this.componentType,
+      this.typeString,
+      this.type,
+      this.count,
+      this.normalized,
+      this.max,
+      this.min,
+      this.sparse);
 
-  factory GLTFAccessor.fromGltf(glTF.Accessor gltfAccessorSource) {
-    if (gltfAccessorSource == null) return null;
-    return new GLTFAccessor._(gltfAccessorSource);
+  factory GLTFAccessor.fromGltf(glTF.Accessor gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFAccessor._(gltfSource);
   }
 
   @override
@@ -621,18 +721,18 @@ class GLTFAccessor extends GLTFChild{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GLTFAccessor &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              byteOffset == other.byteOffset &&
-              componentType == other.componentType &&
-              typeString == other.typeString &&
-              type == other.type &&
-              count == other.count &&
-              normalized == other.normalized &&
-              max == other.max &&
-              min == other.min &&
-              sparse == other.sparse;
+      other is GLTFAccessor &&
+          runtimeType == other.runtimeType &&
+          _gltfSource == other._gltfSource &&
+          byteOffset == other.byteOffset &&
+          componentType == other.componentType &&
+          typeString == other.typeString &&
+          type == other.type &&
+          count == other.count &&
+          normalized == other.normalized &&
+          max == other.max &&
+          min == other.min &&
+          sparse == other.sparse;
 
   @override
   int get hashCode =>
@@ -648,7 +748,7 @@ class GLTFAccessor extends GLTFChild{
       sparse.hashCode;
 }
 
-class GLTFAccessorSparse extends GltfProperty{
+class GLTFAccessorSparse extends GltfProperty {
   glTF.AccessorSparse _gltfSource;
   glTF.AccessorSparse get gltfSource => _gltfSource;
 
@@ -658,10 +758,12 @@ class GLTFAccessorSparse extends GltfProperty{
 
   GLTFAccessorSparse(this.count, this.indices, this.values);
 
-  GLTFAccessorSparse.fromGltf(this._gltfSource)
+  GLTFAccessorSparse.fromGltf(
+      this._gltfSource, )
       : this.count = _gltfSource.count,
-       this.indices = new GLTFAccessorSparseIndices.fromGltf(_gltfSource.indices),
-       this.values = new GLTFAccessorSparseValues.fromGltf(_gltfSource.values);
+        this.indices = new GLTFAccessorSparseIndices.fromGltf(
+            _gltfSource.indices),
+        this.values = new GLTFAccessorSparseValues.fromGltf(_gltfSource.values);
 
   @override
   String toString() {
@@ -671,12 +773,12 @@ class GLTFAccessorSparse extends GltfProperty{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GLTFAccessorSparse &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              count == other.count &&
-              indices == other.indices &&
-              values == other.values;
+      other is GLTFAccessorSparse &&
+          runtimeType == other.runtimeType &&
+          _gltfSource == other._gltfSource &&
+          count == other.count &&
+          indices == other.indices &&
+          values == other.values;
 
   @override
   int get hashCode =>
@@ -686,7 +788,7 @@ class GLTFAccessorSparse extends GltfProperty{
       values.hashCode;
 }
 
-class GLTFAccessorSparseIndices extends GltfProperty{
+class GLTFAccessorSparseIndices extends GltfProperty {
   glTF.AccessorSparseIndices _gltfSource;
   glTF.AccessorSparseIndices get gltfSource => _gltfSource;
 
@@ -695,9 +797,11 @@ class GLTFAccessorSparseIndices extends GltfProperty{
 
   GLTFAccessorSparseIndices(this.byteOffset, this.componentType);
 
-  GLTFAccessorSparseIndices.fromGltf(this._gltfSource)
+  GLTFAccessorSparseIndices.fromGltf(
+      this._gltfSource, )
       : this.byteOffset = _gltfSource.byteOffset,
-        this.componentType = ShaderVariableType.getByIndex(_gltfSource.componentType);
+        this.componentType =
+            ShaderVariableType.getByIndex(_gltfSource.componentType);
 
   @override
   String toString() {
@@ -707,20 +811,18 @@ class GLTFAccessorSparseIndices extends GltfProperty{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GLTFAccessorSparseIndices &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              byteOffset == other.byteOffset &&
-              componentType == other.componentType;
+      other is GLTFAccessorSparseIndices &&
+          runtimeType == other.runtimeType &&
+          _gltfSource == other._gltfSource &&
+          byteOffset == other.byteOffset &&
+          componentType == other.componentType;
 
   @override
   int get hashCode =>
-      _gltfSource.hashCode ^
-      byteOffset.hashCode ^
-      componentType.hashCode;
+      _gltfSource.hashCode ^ byteOffset.hashCode ^ componentType.hashCode;
 }
 
-class GLTFAccessorSparseValues extends GltfProperty{
+class GLTFAccessorSparseValues extends GltfProperty {
   glTF.AccessorSparseValues _gltfSource;
   glTF.AccessorSparseValues get gltfSource => _gltfSource;
 
@@ -729,7 +831,8 @@ class GLTFAccessorSparseValues extends GltfProperty{
 
   GLTFAccessorSparseValues(this.byteOffset, this.bufferView);
 
-  GLTFAccessorSparseValues.fromGltf(this._gltfSource)
+  GLTFAccessorSparseValues.fromGltf(
+      this._gltfSource, )
       : this.byteOffset = _gltfSource.byteOffset,
         this.bufferView = new GLTFBufferView.fromGltf(_gltfSource.bufferView);
 
@@ -741,13 +844,228 @@ class GLTFAccessorSparseValues extends GltfProperty{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          other is GLTFAccessorSparseValues &&
-              runtimeType == other.runtimeType &&
-              byteOffset == other.byteOffset &&
-              bufferView == other.bufferView;
+      other is GLTFAccessorSparseValues &&
+          runtimeType == other.runtimeType &&
+          byteOffset == other.byteOffset &&
+          bufferView == other.bufferView;
+
+  @override
+  int get hashCode => byteOffset.hashCode ^ bufferView.hashCode;
+}
+
+class GLTFMesh extends GLTFChildOfRootProperty {
+  glTF.Mesh _gltfSource;
+  glTF.Mesh get gltfSource => _gltfSource;
+
+  final List<GLTFMeshPrimitive> primitives;
+  final List<double> weights;
+
+  GLTFMesh._(glTF.Mesh _gltfSource)
+      : this.primitives = _gltfSource.primitives
+            .map((p) => new GLTFMeshPrimitive.fromGltf(p))
+            .toList(),
+        this.weights = _gltfSource.weights != null
+            ? (<double>[]..addAll(_gltfSource.weights))
+            : <double>[];
+
+  factory GLTFMesh.fromGltf(glTF.Mesh gltfSource) {
+    if (gltfSource == null && gltfSource.primitives.length > 1) return null;
+    return new GLTFMesh._(gltfSource);
+  }
+
+  @override
+  String toString() {
+    return 'GLTFMesh{primitives: $primitives, weights: $weights}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GLTFMesh &&
+          runtimeType == other.runtimeType &&
+          _gltfSource == other._gltfSource &&
+          primitives == other.primitives &&
+          weights == other.weights;
 
   @override
   int get hashCode =>
-      byteOffset.hashCode ^
-      bufferView.hashCode;
+      _gltfSource.hashCode ^ primitives.hashCode ^ weights.hashCode;
 }
+
+class GLTFMeshPrimitive extends GltfProperty {
+  glTF.MeshPrimitive _gltfSource;
+  glTF.MeshPrimitive get gltfSource => _gltfSource;
+
+  final Map<String, GLTFAccessor> attributes;
+
+  final DrawMode mode;
+  // Todo (jpu) : add other members
+
+  GLTFMeshPrimitive._(
+      this._gltfSource, )
+      : this.attributes = new Map.fromIterables(
+            _gltfSource.attributes.keys,
+            _gltfSource.attributes.values
+                .map((v) => new GLTFAccessor.fromGltf(v))),
+        this.mode = _gltfSource.mode != null
+            ? DrawMode.getByIndex(_gltfSource.mode)
+            : DrawMode.TRIANGLES;
+
+  factory GLTFMeshPrimitive.fromGltf(glTF.MeshPrimitive gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFMeshPrimitive._(gltfSource);
+  }
+
+  @override
+  String toString() {
+    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $mode}';
+  }
+}
+
+class GLTFScene extends GLTFChildOfRootProperty {
+  glTF.Scene _gltfSource;
+  glTF.Scene get gltfSource => _gltfSource;
+
+  int sceneId;
+
+  final List<int> _nodesId = new List();
+  List<GLTFNode> get nodes => _gltfProject.nodes.where((n)=>_nodesId.contains(n.nodeId)).toList(growable: false);
+  void addNode(GLTFNode node){
+    assert(node != null);
+    _nodesId.add(node.nodeId);
+  }
+
+  GLTFScene._(this._gltfSource);
+
+  GLTFScene();
+
+  factory GLTFScene.fromGltf(glTF.Scene gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFScene._(gltfSource);
+  }
+
+  @override
+  String toString() {
+    return 'GLTFScene{nodes: $_nodesId}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFScene &&
+              runtimeType == other.runtimeType &&
+              _gltfSource == other._gltfSource &&
+              nodes == other.nodes;
+
+  @override
+  int get hashCode =>
+      _gltfSource.hashCode ^
+      nodes.hashCode;
+}
+
+class GLTFNode extends GLTFChildOfRootProperty{
+  glTF.Node _gltfSource;
+  glTF.Node get gltfSource => _gltfSource;
+  int nodeId;
+
+  Matrix4 _matrix = new Matrix4.identity();
+  Matrix4 get matrix => _matrix..setFromTranslationRotationScale(translation, rotation, scale);
+  set matrix(Matrix4 value) {
+    _matrix = value;
+    translation = _matrix.getTranslation();
+    rotation = new Quaternion.fromRotation(_matrix.getRotation());
+    scale = new Vector3(_matrix.getColumn(0).length, _matrix.getColumn(1).length, _matrix.getColumn(2).length);
+  }
+
+  Vector3 translation = new Vector3.all(0.0);
+  Quaternion rotation = new Quaternion.identity();
+  Vector3 scale = new Vector3.all(1.0);
+
+  List<double> weights;
+
+  Camera camera;
+  GLTFMesh mesh;
+  GLTFSkin skin;
+  List<GLTFNode> get children => _gltfProject.nodes.toList().where((n)=>n.parent == this).toList(growable: false);
+
+  int _parentId;
+  set parent(GLTFNode value) {
+    _parentId = _gltfProject.nodes.indexOf(value);
+  }
+  GLTFNode get parent => _parentId != null ? _gltfProject.nodes[_parentId] : null;
+
+  bool isJoint = false;
+
+  GLTFNode._(this._gltfSource) :
+        this.camera = Camera.fromGltf(_gltfSource.camera),
+        this._parentId = _getParentId(_gltfSource);
+
+  static int _getParentId(glTF.Node _gltfSource){
+
+    int parentId;
+
+    //Cherche si il existe un node
+    glTF.Node node = (_gltfProject.gltfSource.nodes.firstWhere((n)=>n == _gltfSource, orElse: ()=>null));
+    if(node != null) {
+      parentId = _gltfProject.gltfSource.nodes.indexOf(node.parent);
+      parentId = parentId != -1 ? parentId : null;
+    }
+    return parentId;
+  }
+
+  GLTFNode();
+
+  factory GLTFNode.fromGltf(glTF.Node gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFNode._(gltfSource);
+  }
+
+  @override
+  String toString() {
+    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $mesh, parent: $_parentId, skin: $skin, isJoint: $isJoint}';
+  }
+}
+
+//>
+// Todo (jpu) :
+
+class GLTFSkin extends GLTFChildOfRootProperty{
+  GLTFSkin();
+}
+
+//>
+//
+//class UniqueList<T> extends ListBase<T> {
+//  LinkedHashSet<T> _list;
+//  List<T> _listTemp;
+//
+//  int _length = 0;
+//
+//  UniqueList() {
+//      _list = new LinkedHashSet<T>.identity();
+//  }
+//
+//  @override
+//  T operator [](int index) =>
+//      (index == null || index < 0 || index >= _list.length)
+//          ? null
+//          : _list.toList()[index];
+//
+//  @override
+//  void operator []=(int index, T value) {
+//    assert(value != null);
+//    assert(index >= 0 && index < length);
+//    _list[index] = value;
+//  }
+//
+//  @override
+//  int get length => _length;
+//
+//  @override
+//  set length(int newLength) {
+//    _length = newLength;
+//  }
+//
+//  @override
+//  String toString() => _list.toString();
+//}
