@@ -1,194 +1,13 @@
 import '../camera.dart';
-import '../webgl_objects/datas/webgl_enum.dart';
-import 'dart:collection';
+import 'project.dart';
 import 'dart:core';
-import 'dart:async';
 import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
-import '../utils/utils_assets.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-// Todo (jpu) : synchronize id's list cohérent?
-// Todo (jpu) : Remplacer la copie complete des donnée par un design de Facade ? (utiliser des getter utilisant la source)?
-// Todo (jpu) : Ajouter des méthodes de Link reférénce ?
-// Todo (jpu) : UNPACK_COLORSPACE_CONVERSION_WEBGL flag to NONE to ignore colorSpace globaly in runtime
-// Todo (jpu) : Acccessor getElement test ?
-
-GLTFProject _gltfProject;
-
-class GLTFProject {
-
-  static Future<glTF.Gltf> loadGLTFResource(String url,
-      {bool useWebPath: true}) async {
-    UtilsAssets.useWebPath = useWebPath;
-
-    Completer completer = new Completer<glTF.Gltf>();
-    await UtilsAssets.loadJSONResource(url).then((Map<String, dynamic> result) {
-      try {
-        glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
-        completer.complete(gltf);
-      } catch (e) {
-        completer.completeError(e);
-      }
-    });
-
-    return completer.future as Future<glTF.Gltf>;
-  }
-
-  glTF.Gltf _gltfSource;
-  glTF.Gltf get gltfSource => _gltfSource;
-
-  List<GLTFBuffer> buffers = new List();
-  List<GLTFBufferView> bufferViews = new List();
-  List<Camera> cameras = new List();
-  List<GLTFImage> images = new List();
-  List<GLTFSampler> samplers = new List();
-  List<GLTFTexture> textures = new List();
-  List<GLTFMaterial> materials = new List();
-  List<GLTFAccessor> accessors = new List();
-  List<GLTFMesh> meshes = new List();
-
-
-  //>
-  List<GLTFScene> _scenes = new List();
-  List<GLTFScene> get scenes => _scenes.toList(growable: false);
-
-  void addScene(GLTFScene scene){
-    assert(scene != null);
-    _scenes.add(scene);
-    scene.sceneId = _scenes.indexOf(scene);
-  }
-
-  List<GLTFNode> _nodes = new List();
-  List<GLTFNode> get nodes => _nodes.toList(growable: false);
-
-  void addNode(GLTFNode node){
-    assert(node != null);
-    _nodes.add(node);
-    node.nodeId = _nodes.indexOf(node);
-  }
-
-  int _sceneId;
-  GLTFScene get scene => _sceneId != null ? scenes[_sceneId] : null;
-  set scene(GLTFScene value) {
-    _sceneId = scenes.indexOf(value);
-  }
-  //<
-
-  @override
-  String toString() {
-    return 'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": $_sceneId}';
-  }
-
-  void _init([glTF.Gltf _gltfSource]) {
-
-    if(_gltfSource != null) {
-      //Buffers
-      for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
-        GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);
-        if (buffer != null) {
-          buffers.add(buffer);
-        }
-      }
-
-      //BufferViews
-      for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
-        GLTFBufferView bufferView = new GLTFBufferView.fromGltf(gltfBufferView);
-        if (bufferView != null) {
-          bufferViews.add(bufferView);
-        }
-      }
-
-      //Cameras
-      for (glTF.Camera gltfCamera in _gltfSource.cameras) {
-        Camera camera = Camera.fromGltf(gltfCamera);
-        if (camera != null) {
-          cameras.add(camera);
-        }
-      }
-
-      //Images
-      for (glTF.Image gltfImage in _gltfSource.images) {
-        GLTFImage image = new GLTFImage.fromGltf(gltfImage);
-        if (image != null) {
-          images.add(image);
-        }
-      }
-
-      //Samplers
-      for (glTF.Sampler gltfSampler in _gltfSource.samplers) {
-        GLTFSampler sampler = new GLTFSampler.fromGltf(gltfSampler);
-        if (sampler != null) {
-          samplers.add(sampler);
-        }
-      }
-
-      //Textures
-      for (glTF.Texture gltfTexture in _gltfSource.textures) {
-        GLTFTexture texture = new GLTFTexture.fromGltf(gltfTexture);
-        if (texture != null) {
-          textures.add(texture);
-        }
-      }
-
-      //Materials
-      for (glTF.Material gltfMaterial in _gltfSource.materials) {
-        GLTFMaterial material = new GLTFMaterial.fromGltf(gltfMaterial);
-        if (material != null) {
-          materials.add(material);
-        }
-      }
-
-      //Accessors
-      for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
-        GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
-        if (accessor != null) {
-          accessors.add(accessor);
-        }
-      }
-
-      //Meshes
-      for (glTF.Mesh gltfMesh in _gltfSource.meshes) {
-        GLTFMesh mesh = new GLTFMesh.fromGltf(gltfMesh);
-        if (mesh != null) {
-          meshes.add(mesh);
-        }
-      }
-
-      //Scenes
-      for (glTF.Scene gltfScene in _gltfSource.scenes) {
-        GLTFScene scene = new GLTFScene.fromGltf(gltfScene);
-        if (scene != null) {
-          addScene(scene);
-        }
-      }
-
-      //Nodes
-      for (glTF.Node gltfNode in _gltfSource.nodes) {
-        GLTFNode node = new GLTFNode.fromGltf(gltfNode);
-        if (node != null) {
-          addNode(node);
-        }
-      }
-    }
-  }
-
-  GLTFProject._();
-
-  factory GLTFProject(){
-    _gltfProject = new GLTFProject._();
-    _gltfProject._init();
-    return _gltfProject;
-  }
-
-  factory GLTFProject.fromGltf(glTF.Gltf gltfSource) {
-    if (gltfSource == null) return null;
-    _gltfProject = new GLTFProject._();
-    _gltfProject._gltfSource = gltfSource;
-    _gltfProject._init(gltfSource);
-    return _gltfProject;
-  }
-
+class GLTFAsset{
+  double version;
 }
 
 abstract class GltfProperty /*extends Stringable*/ {
@@ -247,7 +66,9 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
   glTF.BufferView _gltfSource;
   glTF.BufferView get gltfSource => _gltfSource;
 
+  int get bufferId => null;
   GLTFBuffer buffer;
+
   int byteLength;
   int byteOffset;
   int byteStride;
@@ -671,6 +492,8 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;
 
+  int get accessorId => null;// Todo (jpu) :
+
   final int byteOffset;
   final ShaderVariableType componentType;
   final String typeString;
@@ -712,6 +535,8 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
     if (gltfSource == null) return null;
     return new GLTFAccessor._(gltfSource);
   }
+
+
 
   @override
   String toString() {
@@ -857,6 +682,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   glTF.Mesh _gltfSource;
   glTF.Mesh get gltfSource => _gltfSource;
 
+  int get meshId => null;// Todo (jpu) :
+
   final List<GLTFMeshPrimitive> primitives;
   final List<double> weights;
 
@@ -929,7 +756,7 @@ class GLTFScene extends GLTFChildOfRootProperty {
   int sceneId;
 
   final List<int> _nodesId = new List();
-  List<GLTFNode> get nodes => _gltfProject.nodes.where((n)=>_nodesId.contains(n.nodeId)).toList(growable: false);
+  List<GLTFNode> get nodes => gltfProject.nodes.where((n)=>_nodesId.contains(n.nodeId)).toList(growable: false);
   void addNode(GLTFNode node){
     assert(node != null);
     _nodesId.add(node.nodeId);
@@ -941,7 +768,19 @@ class GLTFScene extends GLTFChildOfRootProperty {
 
   factory GLTFScene.fromGltf(glTF.Scene gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFScene._(gltfSource);
+    GLTFScene scene = new GLTFScene._(gltfSource);
+    for(glTF.Node node in gltfSource.nodes){
+      GLTFNode gltfNode = new GLTFNode.fromGltf(node);
+
+      int nodeId = gltfProject.nodes.indexOf(gltfNode);
+      if(nodeId == -1){
+        gltfProject.addNode(gltfNode);
+      }else{
+        gltfNode.nodeId = nodeId;
+      }
+      scene.addNode(gltfNode);
+    }
+    return scene;
   }
 
   @override
@@ -986,13 +825,13 @@ class GLTFNode extends GLTFChildOfRootProperty{
   Camera camera;
   GLTFMesh mesh;
   GLTFSkin skin;
-  List<GLTFNode> get children => _gltfProject.nodes.toList().where((n)=>n.parent == this).toList(growable: false);
+  List<GLTFNode> get children => gltfProject.nodes.toList().where((n)=>n.parent == this).toList(growable: false);
 
   int _parentId;
   set parent(GLTFNode value) {
-    _parentId = _gltfProject.nodes.indexOf(value);
+    _parentId = gltfProject.nodes.indexOf(value);
   }
-  GLTFNode get parent => _parentId != null ? _gltfProject.nodes[_parentId] : null;
+  GLTFNode get parent => _parentId != null ? gltfProject.nodes[_parentId] : null;
 
   bool isJoint = false;
 
@@ -1005,9 +844,9 @@ class GLTFNode extends GLTFChildOfRootProperty{
     int parentId;
 
     //Cherche si il existe un node
-    glTF.Node node = (_gltfProject.gltfSource.nodes.firstWhere((n)=>n == _gltfSource, orElse: ()=>null));
+    glTF.Node node = (gltfProject.gltfSource.nodes.firstWhere((n)=>n == _gltfSource, orElse: ()=>null));
     if(node != null) {
-      parentId = _gltfProject.gltfSource.nodes.indexOf(node.parent);
+      parentId = gltfProject.gltfSource.nodes.indexOf(node.parent);
       parentId = parentId != -1 ? parentId : null;
     }
     return parentId;
@@ -1024,6 +863,41 @@ class GLTFNode extends GLTFChildOfRootProperty{
   String toString() {
     return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $mesh, parent: $_parentId, skin: $skin, isJoint: $isJoint}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFNode &&
+              runtimeType == other.runtimeType &&
+              _gltfSource == other._gltfSource &&
+              _matrix == other._matrix &&
+              translation == other.translation &&
+              rotation.toString() == other.rotation.toString() &&
+              scale == other.scale &&
+              weights == other.weights &&
+              camera == other.camera &&
+              mesh == other.mesh &&
+              skin == other.skin &&
+              _parentId == other._parentId &&
+              isJoint == other.isJoint;
+
+  @override
+  int get hashCode =>
+      _gltfSource.hashCode ^
+      nodeId.hashCode ^
+      _matrix.hashCode ^
+      translation.hashCode ^
+      rotation.hashCode ^
+      scale.hashCode ^
+      weights.hashCode ^
+      camera.hashCode ^
+      mesh.hashCode ^
+      skin.hashCode ^
+      _parentId.hashCode ^
+      isJoint.hashCode;
+
+
+
 }
 
 //>

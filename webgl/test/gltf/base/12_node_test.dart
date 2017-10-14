@@ -1,5 +1,6 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/utils/utils_gltf.dart';
+import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/utils_gltf.dart';
 import "package:test/test.dart";
 import 'package:gltf/gltf.dart' as glTF;
 
@@ -80,6 +81,14 @@ void main() {
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes.length, 2);
+    });
+
+    test("Compare", () async {
+      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/node/valid_full.gltf', useWebPath:true);
+      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+
+      List<GLTFNode> nodes = gltf.nodes;
+      expect(nodes[0] == nodes[0], true);
     });
 
     test("Node hierarchy", () async {
