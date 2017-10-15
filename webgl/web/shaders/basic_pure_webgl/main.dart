@@ -1,9 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
-import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
-GLTFProject gltf;
 
 Future main() async {
   new Renderer()..render();
