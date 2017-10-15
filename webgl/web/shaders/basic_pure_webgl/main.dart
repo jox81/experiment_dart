@@ -6,9 +6,6 @@ import 'dart:web_gl' as webgl;
 GLTFProject gltf;
 
 Future main() async {
-  String gltfUrl = '/gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf';
-  gltf = await debugGltf(gltfUrl);
-
   new Renderer()..render();
 }
 

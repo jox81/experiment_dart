@@ -5,6 +5,8 @@ import 'package:gltf/gltf.dart' as glTF;
 import '../utils/utils_assets.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
+export 'package:webgl/src/gtlf/debug_gltf.dart';
+
 // Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Remplacer la copie complete des donnée par un design de Facade ? (utiliser des getter utilisant la source)?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
@@ -36,7 +38,7 @@ class GLTFProject {
   glTF.Gltf _gltfSource;
   glTF.Gltf get gltfSource => _gltfSource;
 
-  GLTFAsset asset = new GLTFAsset();
+  GLTFAsset asset;
   List<GLTFBuffer> buffers = new List();
   List<GLTFBufferView> bufferViews = new List();
   List<Camera> cameras = new List();
@@ -81,6 +83,9 @@ class GLTFProject {
   void _init([glTF.Gltf _gltfSource]) {
 
     if(_gltfSource != null) {
+
+      asset = new GLTFAsset.fromGltf(_gltfSource.asset);
+
       //Buffers
       for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
         GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);

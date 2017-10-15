@@ -21,6 +21,10 @@ import 'dart:mirrors';
 
 class WebGLRenderingContext extends IEditElement {
 
+  WebGL.RenderingContext ctx;
+
+  CanvasElement get canvas => ctx.canvas;
+
   WebGLRenderingContext._init(this.ctx);
 
   //Todo add default parameters
@@ -54,12 +58,7 @@ class WebGLRenderingContext extends IEditElement {
     }
 
     return new WebGLRenderingContext._init(ctx);
-
   }
-
-  WebGL.RenderingContext ctx;
-
-  CanvasElement get canvas => ctx.canvas;
 
 
   // >>> Parameteres

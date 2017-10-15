@@ -5,9 +5,21 @@ import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:collection/collection.dart';
 
 class GLTFAsset{
-  double version;
+  glTF.Asset _gltfSource;
+  glTF.Asset get gltfSource => _gltfSource;
+
+  String version;
+
+  GLTFAsset();
+
+  factory GLTFAsset.fromGltf(glTF.Asset gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFAsset()
+    ..version = gltfSource.version;
+  }
 }
 
 abstract class GltfProperty /*extends Stringable*/ {
@@ -23,6 +35,10 @@ abstract class GLTFChildOfRootProperty extends GltfProperty {
   GLTFChildOfRootProperty();
 }
 
+/// Buffer defines the raw data.
+///
+/// [byteLength] defines the length of the bytes used
+///
 class GLTFBuffer extends GLTFChildOfRootProperty {
   glTF.Buffer _gltfSource;
   glTF.Buffer get gltfSource => _gltfSource;
@@ -62,16 +78,28 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
       _gltfSource.hashCode ^ uri.hashCode ^ byteLength.hashCode ^ data.hashCode;
 }
 
+/// Bufferviews define a segment of the buffer data and define broadly what kind of data lives
+/// there using some obscure shortcodes for usage/target.
+/// A bufferView can take the whole buffer and be a one part only.
+///
+/// [buffer] defines the buffer to read
+/// [byteLength] defines the length of the bytes used
+/// [byteOffset] defines the starting byte to read datas
+/// [byteStride] defines // Todo (jpu) : ?
+///
+/// [usage] define the bufferType : ARRAY_BUFFER | ELEMENT_ARRAY_BUFFER
+///
 class GLTFBufferView extends GLTFChildOfRootProperty {
   glTF.BufferView _gltfSource;
   glTF.BufferView get gltfSource => _gltfSource;
 
-  int get bufferId => null;
+  int get bufferId => null;// Todo (jpu) :
   GLTFBuffer buffer;
 
   int byteLength;
   int byteOffset;
   int byteStride;
+
   int target;
   BufferType usage;
 
@@ -99,7 +127,7 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFBufferView{buffer: $buffer, byteLength: $byteLength, byteOffset: $byteOffset, byteStride: $byteStride, target: $target, usage: $usage}';
+    return 'GLTFBufferView{buffer: $bufferId, byteLength: $byteLength, byteOffset: $byteOffset, byteStride: $byteStride, target: $target, usage: $usage}';
   }
 
   @override
@@ -488,6 +516,16 @@ class GLTFTextureInfo extends GltfProperty {
       _gltfSource.hashCode ^ texCoord.hashCode ^ texture.hashCode;
 }
 
+/// The accessors are what actually define the format of the data and
+/// use codes for "componentType"
+/// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#accessors
+///
+/// [componentType]
+/// ex:
+/// > 5123 is an unsigned short (2 bytes)
+/// > 5126 is single precision float (4 bytes)
+/// [type] defines whether they should be read singly ("SCALAR") or in vector groups (e.g. "VEC3")
+///
 class GLTFAccessor extends GLTFChildOfRootProperty {
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;
@@ -696,7 +734,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
             : <double>[];
 
   factory GLTFMesh.fromGltf(glTF.Mesh gltfSource) {
-    if (gltfSource == null && gltfSource.primitives.length > 1) return null;
+    if (gltfSource == null) return null;
     return new GLTFMesh._(gltfSource);
   }
 
@@ -711,14 +749,17 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       other is GLTFMesh &&
           runtimeType == other.runtimeType &&
           _gltfSource == other._gltfSource &&
-          primitives == other.primitives &&
-          weights == other.weights;
+          const ListEquality<GLTFMeshPrimitive>().equals(primitives, other.primitives) &&
+          const ListEquality<double>().equals(weights, other.weights);
 
   @override
   int get hashCode =>
       _gltfSource.hashCode ^ primitives.hashCode ^ weights.hashCode;
 }
 
+/// Represent a part of a mesh
+/// [attributs] associate an Accessor by vertex attribute usage : POSITION | NORMAL | TANGENT | TEXCOORD_ | COLOR_ | JOINTS_ | WEIGHTS_
+/// in gltf file the accessor is define by its Id
 class GLTFMeshPrimitive extends GltfProperty {
   glTF.MeshPrimitive _gltfSource;
   glTF.MeshPrimitive get gltfSource => _gltfSource;
@@ -726,7 +767,28 @@ class GLTFMeshPrimitive extends GltfProperty {
   final Map<String, GLTFAccessor> attributes;
 
   final DrawMode mode;
-  // Todo (jpu) : add other members
+
+  final bool hasPosition;
+  final bool hasNormal;
+  final bool hasTangent;
+
+  final int colorCount;
+  final int jointsCount;
+  final int weigthsCount;
+  final int texcoordCount;
+
+  GLTFAccessor _indices;
+  GLTFAccessor get indices => _indices;
+//  Accessor get indices => _indices;
+
+  int _materialId;
+  int get materialId => _materialId;
+  GLTFMaterial get material => gltfProject.materials[_materialId];// Todo (jpu) : ?
+
+  // Todo (jpu) : add other members ?
+//  int get count => _count;
+//  int get vertexCount => _vertexCount;
+//  List<Map<String, Accessor>> get targets => _targets;
 
   GLTFMeshPrimitive._(
       this._gltfSource, )
@@ -736,7 +798,15 @@ class GLTFMeshPrimitive extends GltfProperty {
                 .map((v) => new GLTFAccessor.fromGltf(v))),
         this.mode = _gltfSource.mode != null
             ? DrawMode.getByIndex(_gltfSource.mode)
-            : DrawMode.TRIANGLES;
+            : DrawMode.TRIANGLES,
+        this.hasPosition = _gltfSource.hasPosition,
+        this.hasNormal = _gltfSource.hasNormal,
+        this.hasTangent = _gltfSource.hasTangent,
+        this.colorCount = _gltfSource.colorCount,
+        this.jointsCount = _gltfSource.jointsCount,
+        this.weigthsCount = _gltfSource.weigthsCount,
+        this.texcoordCount = _gltfSource.texcoordCount,
+        this._indices = new GLTFAccessor.fromGltf(_gltfSource.indices);// Todo (jpu) :
 
   factory GLTFMeshPrimitive.fromGltf(glTF.MeshPrimitive gltfSource) {
     if (gltfSource == null) return null;
@@ -745,8 +815,45 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   @override
   String toString() {
-    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $mode}';
+    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $mode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: $_indices, _materialId: $_materialId}';
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+          other is GLTFMeshPrimitive &&
+              runtimeType == other.runtimeType &&
+              _gltfSource == other._gltfSource &&
+              const MapEquality<String, GLTFAccessor>().equals(attributes, other.attributes) &&
+              mode == other.mode &&
+              hasPosition == other.hasPosition &&
+              hasNormal == other.hasNormal &&
+              hasTangent == other.hasTangent &&
+              colorCount == other.colorCount &&
+              jointsCount == other.jointsCount &&
+              weigthsCount == other.weigthsCount &&
+              texcoordCount == other.texcoordCount &&
+              _indices == other._indices &&
+              _materialId == other._materialId;
+
+  @override
+  int get hashCode =>
+      _gltfSource.hashCode ^
+      attributes.hashCode ^
+      mode.hashCode ^
+      hasPosition.hashCode ^
+      hasNormal.hashCode ^
+      hasTangent.hashCode ^
+      colorCount.hashCode ^
+      jointsCount.hashCode ^
+      weigthsCount.hashCode ^
+      texcoordCount.hashCode ^
+      _indices.hashCode ^
+      _materialId.hashCode;
+
+
+
+
 }
 
 class GLTFScene extends GLTFChildOfRootProperty {
@@ -837,7 +944,8 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   GLTFNode._(this._gltfSource) :
         this.camera = Camera.fromGltf(_gltfSource.camera),
-        this._parentId = _getParentId(_gltfSource);
+        this._parentId = _getParentId(_gltfSource),
+        this.mesh = new GLTFMesh.fromGltf(_gltfSource.mesh);
 
   static int _getParentId(glTF.Node _gltfSource){
 

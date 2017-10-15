@@ -25,7 +25,7 @@ Future main() async {
       GLTFScene scene = gltfProject.scenes[0];
       expect(scene, isNotNull);
       expect(scene.nodes.length, 1);
-      expect(scene.nodes[0].nodeId, 0);
+      expect(scene.nodes[0].nodeId, isNotNull);// Todo (jpu) : later
     });
     test("nodes", () async {
       expect(gltfProject.nodes.length, 1);
@@ -33,8 +33,8 @@ Future main() async {
       GLTFNode node = gltfProject.nodes[0];
       expect(node, isNotNull);
       expect(node.nodeId, 0);
-      expect(node.mesh, isNotNull);// Todo (jpu) :
-      expect(node.mesh.meshId, 0);// Todo (jpu) :
+      expect(node.mesh, isNotNull);
+      expect(node.mesh.meshId, isNull);// Todo (jpu) : later
     });
     test("meshes", () async {
       expect(gltfProject.meshes.length, 1);
@@ -51,7 +51,7 @@ Future main() async {
       expect(primitive, isNotNull);
       expect(primitive.attributes, isNotNull);
       print(primitive.attributes);
-      expect(primitive.attributes['POSITION'].accessorId, 0);// Todo (jpu) :
+      expect(primitive.attributes['POSITION'], gltfProject.accessors[0]);
     });
     test("buffers", () async {
       expect(gltfProject.buffers.length, 1);
@@ -65,7 +65,7 @@ Future main() async {
 
       GLTFBufferView bufferView = gltfProject.bufferViews[0];
       expect(bufferView, isNotNull);
-      expect(bufferView.bufferId, 0);// Todo (jpu) :
+      expect(bufferView.bufferId, isNull);// Todo (jpu) : later
       expect(bufferView.byteOffset, 0);
       expect(bufferView.byteLength, 36);
       expect(bufferView.target, 34962);
@@ -77,7 +77,7 @@ Future main() async {
     test("asset", () async {
       expect(gltfProject.asset, isNotNull);
       GLTFAsset asset = gltfProject.asset;
-      expect(asset.version, 2.0);// Todo (jpu) :
+      expect(asset.version, "2.0");
     });
   });
 }

@@ -57,7 +57,7 @@ class UtilsGeometry{
     return resultPoints;
   }
 
-  /// Maybe buggy for some models like the sphere mesh
+  /// May be buggy for some models like the sphere mesh
   /// How to hide vertices after shown ?
   static List<PointModel> drawModelVertices(Model model) {
     List<PointModel> resultPoints = [];

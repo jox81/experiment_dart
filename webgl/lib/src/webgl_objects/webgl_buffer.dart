@@ -20,7 +20,9 @@ class WebGLBuffer extends WebGLObject{
   WebGLBuffer():this.webGLBuffer = gl.ctx.createBuffer();
   WebGLBuffer.fromWebGL(this.webGLBuffer);
 
-  WebGLBuffer.fromGltf(glTF.Buffer gltfBuffer);
+  WebGLBuffer.fromGltf(glTF.Buffer gltfBuffer){
+    throw new Exception('not implemented');
+  }
 
   @override
   void delete() => gl.ctx.deleteBuffer(webGLBuffer);

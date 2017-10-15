@@ -7,7 +7,7 @@ import 'package:gltf/gltf.dart' as glTF;
 
 GLTFProject gltf;
 
-Future debugGltf(String gltfUrl) async {
+Future<GLTFProject> debugGltf(String gltfUrl) async {
   gltf = await _loadGLTF(gltfUrl);
   _testScenes();
   _testNodes();
@@ -20,6 +20,8 @@ Future debugGltf(String gltfUrl) async {
   _testSamplers();
   _testTextures();
   _testMaterials();
+
+  return gltf;
 }
 
 Future<GLTFProject> _loadGLTF(String gltfUrl) async {
@@ -77,6 +79,8 @@ void _testBuffers() {
       print('> $i');
       GLTFBuffer buffer = gltf.buffers[i];
       print('$buffer');
+      List<String> gltfBits = buffer.data.map((int v) => v.toRadixString(16)).toList();
+      print('data hex formatted : $gltfBits');
     }
     print('');
   });
