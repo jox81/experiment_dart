@@ -68,7 +68,6 @@ class Renderer{
     gl.attachShader(prog, s);
   }
 
-
   void attributeSetFloats(webgl.RenderingContext gl, webgl.Program prog, String attr_name, int rsize, List<double> arr) {
     gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(webgl.RenderingContext.ARRAY_BUFFER, new Float32List.fromList(arr),
