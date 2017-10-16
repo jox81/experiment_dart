@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert' show BASE64;
+import 'dart:typed_data';
 import "package:test/test.dart";
+import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {
 
   group("Base64 convert", () {
-    test("base", () async {
+    test("base from inside gtlf", () async {
       /// based on sample data
       /// '/gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf'
 
@@ -23,6 +26,25 @@ Future main() async {
       print(base64Encoded);
 
       expect(baseGltfData64String == base64Encoded, true);
+    });
+
+    test("base from inside gtlf bin uri", () async {
+      /// based on sample data
+      /// '/gltf/samples/gltf_2_0/TriangleWithoutIndices/gltf/triangleWithoutIndices.bin'
+
+      String gltfBinUrl = '/gltf/samples/gltf_2_0/TriangleWithoutIndices/gltf/triangleWithoutIndices.bin';
+      String base64Result = 'AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAA';
+      UtilsAssets.useWebPath = true;
+
+      List<int> base64Decoded = await GLTFProject.loadGltfBinResource(gltfBinUrl, isRelative: false);
+      expect(base64Decoded.length, 36);
+      print(base64Decoded.length);
+      print(base64Decoded);
+
+      final String base64Encoded = BASE64.encode(base64Decoded);
+      print(base64Encoded);
+
+      expect(base64Result == base64Encoded, true);
     });
   });
 }

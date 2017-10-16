@@ -1,6 +1,9 @@
 import '../camera.dart';
 import 'dart:core';
 import 'dart:async';
+import 'dart:html';
+import 'dart:math';
+import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import '../utils/utils_assets.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
@@ -8,10 +11,13 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 export 'package:webgl/src/gtlf/debug_gltf.dart';
 
 // Todo (jpu) : synchronize id's list cohérent?
-// Todo (jpu) : Remplacer la copie complete des donnée par un design de Facade ? (utiliser des getter utilisant la source)?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
+//> remplacer les listes par des Map<HashCode, Object>
+
+// Todo (jpu) : Remplacer la copie complete des donnée par un design de Facade ? (utiliser des getter utilisant la source)?
 // Todo (jpu) : UNPACK_COLORSPACE_CONVERSION_WEBGL flag to NONE to ignore colorSpace globaly in runtime
 // Todo (jpu) : Acccessor getElement test ?
+// 16/10/2017 : reading .bin files as Uint8List
 
 GLTFProject _gltfProject;
 GLTFProject get gltfProject => _gltfProject;
@@ -33,6 +39,41 @@ class GLTFProject {
     });
 
     return completer.future as Future<glTF.Gltf>;
+  }
+
+  static Future<Uint8List> loadGltfBinResource (String url, {bool isRelative : true}) {
+    Completer completer = new Completer<Uint8List>();
+
+    if(url.startsWith('/')){
+      url = url.substring(1);
+    }
+    if(url.startsWith('./')){
+      url = url.substring(2);
+    }
+    if(url.startsWith('../')){
+      url = url.substring(3);
+    }
+
+    String _webPath = isRelative ? "" : UtilsAssets.webPath;
+
+    Random random = new Random();
+    HttpRequest request = new HttpRequest()
+      ..responseType = 'arraybuffer';
+    request.open('GET', '${_webPath}${url}?please-dont-cache=${random.nextInt(1000)}', async:true);
+    request.onLoadEnd.listen((_) {
+      if (request.status < 200 || request.status > 299) {
+        String fsErr = 'Error: HTTP Status ${request.status} on resource: ${_webPath}${url}';
+        window.alert('Fatal error getting text ressource (see console)');
+        print(fsErr);
+        return completer.completeError(fsErr);
+      } else {
+        ByteBuffer byteBuffer = request.response as ByteBuffer;
+        completer.complete( new Uint8List.view(byteBuffer));
+      }
+    });
+    request.send();
+
+    return completer.future as Future<Uint8List>;
   }
 
   glTF.Gltf _gltfSource;
@@ -191,6 +232,14 @@ class GLTFProject {
     _gltfProject._gltfSource = gltfSource;
     _gltfProject._init(gltfSource);
     return _gltfProject;
+  }
+
+  Future fillBuffersData() async {
+    for (GLTFBuffer buffer in buffers) {
+      if(buffer.data == null && buffer.uri != null){
+        buffer.data = await loadGltfBinResource(buffer.uri.toString(), isRelative : true);
+      }
+    }
   }
 
 }

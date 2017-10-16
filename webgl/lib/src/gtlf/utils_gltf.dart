@@ -55,7 +55,8 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
 
   factory GLTFBuffer.fromGltf(glTF.Buffer gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFBuffer._(gltfSource);
+    GLTFBuffer buffer = new GLTFBuffer._(gltfSource);
+    return buffer;
   }
 
   @override
@@ -543,14 +544,14 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final GLTFAccessorSparse sparse;
 
   // Todo (jpu) :
-  GLTFBufferView get bufferView => null;
-  int get components => null;
-  int get componentLength => null;
-  int get elementLength => null;
-  int get byteStride => null;
-  int get byteLength => null;
-  int get isUnit => null;
-  int get isXyzSign => null;
+  GLTFBufferView get bufferView => gltfProject.bufferViews[0];
+  int get components => _gltfSource.components;
+  int get componentLength => _gltfSource.componentLength;
+  int get elementLength => _gltfSource.elementLength;
+  int get byteStride => _gltfSource.byteStride;
+  int get byteLength => _gltfSource.byteLength;
+  bool get isUnit => _gltfSource.isUnit;
+  bool get isXyzSign => _gltfSource.isXyzSign;
 
   GLTFAccessor._(this._gltfSource)
       : this.byteOffset = _gltfSource.byteOffset,

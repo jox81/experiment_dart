@@ -28,6 +28,7 @@ Future<GLTFProject> _loadGLTF(String gltfUrl) async {
   glTF.Gltf gltfSource =
   await GLTFProject.loadGLTFResource(gltfUrl, useWebPath: true);
   GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+  await gltf.fillBuffersData();
   assert(gltf != null);
   print('');
   print('> gltf file loaded : ${gltfUrl}');
@@ -79,8 +80,11 @@ void _testBuffers() {
       print('> $i');
       GLTFBuffer buffer = gltf.buffers[i];
       print('$buffer');
-      List<String> gltfBits = buffer.data.map((int v) => v.toRadixString(16)).toList();
-      print('data hex formatted : $gltfBits');
+      if(buffer.data != null) {
+        List<String> gltfBits = buffer.data.map((int v) => v.toRadixString(16))
+            .toList();
+        print('data hex formatted : $gltfBits');
+      }
     }
     print('');
   });
