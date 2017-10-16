@@ -542,6 +542,16 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final List<num> min;
   final GLTFAccessorSparse sparse;
 
+  // Todo (jpu) :
+  GLTFBufferView get bufferView => null;
+  int get components => null;
+  int get componentLength => null;
+  int get elementLength => null;
+  int get byteStride => null;
+  int get byteLength => null;
+  int get isUnit => null;
+  int get isXyzSign => null;
+
   GLTFAccessor._(this._gltfSource)
       : this.byteOffset = _gltfSource.byteOffset,
         this.componentType =

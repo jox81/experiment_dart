@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
+import 'package:webgl/src/gtlf/utils_gltf.dart';
 GLTFProject gltf;
 
 Future main() async {
@@ -15,9 +16,15 @@ Future main() async {
 class Renderer{
   webgl.RenderingContext gl;
 
-  Renderer();
+  String vsSource = "attribute vec3 POSITION;"+
+      "void main() {"+
+      "	gl_Position = vec4(POSITION, 2.0);"+
+      "}";
+  String fsSource = "void main() {"+
+      "	gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);"+
+      "}";
 
-  void draw() {
+  Renderer(){
     try {
       CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
       gl = canvas.getContext("experimental-webgl") as webgl.RenderingContext;
@@ -25,31 +32,35 @@ class Renderer{
     } catch (err) {
       throw "Your web browser does not support WebGL!";
     }
+  }
+
+  void draw() {
     gl.clearColor(0.8, 0.8, 0.8, 1);
     gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
 
-    webgl.Program prog = shaderProgram(gl,
-        "attribute vec3 pos;"+
-            "void main() {"+
-            "	gl_Position = vec4(pos, 2.0);"+
-            "}",
-        "void main() {"+
-            "	gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);"+
-            "}"
-    );
+    webgl.Program prog = buildProgram(vsSource,fsSource);
     gl.useProgram(prog);
 
-    attributeSetFloats(gl, prog, "pos", 3, [
+
+    GLTFMesh mesh = gltf.meshes[0];
+    GLTFMeshPrimitive primitive = mesh.primitives[0];
+    String attribut = primitive.attributes.keys.toList()[0];
+    GLTFAccessor accessor = primitive.attributes[attribut];
+    // Todo (jpu) : implements the getters in the accessor
+
+    List<double> vertices = [
       -1.0, 0.0, 0.0,
       0.0, 1.0, 0.0,
       0.0, -1.0, 0.0,
       1.0, 0.0, 0.0
-    ]);
+    ];
 
-    gl.drawArrays(webgl.RenderingContext.TRIANGLE_STRIP, 0, 4);
+    attributeSetFloats( prog, attribut, accessor.count, vertices);
+
+    gl.drawArrays(primitive.mode.index, 0, 4);
   }
 
-  webgl.Program shaderProgram(webgl.RenderingContext gl, String vs, String fs) {
+  webgl.Program buildProgram(String vs, String fs) {
     webgl.Program prog = gl.createProgram();
 
     addshader(prog, 'vertex', vs);
@@ -74,7 +85,7 @@ class Renderer{
   }
 
 
-  void attributeSetFloats(webgl.RenderingContext gl, webgl.Program prog, String attr_name, int rsize, List<double> arr) {
+  void attributeSetFloats(webgl.Program prog, String attr_name, int rsize, List<double> arr) {
     gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(webgl.RenderingContext.ARRAY_BUFFER, new Float32List.fromList(arr),
         webgl.RenderingContext.STATIC_DRAW);
