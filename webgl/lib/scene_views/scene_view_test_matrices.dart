@@ -1,13 +1,9 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/models.dart';
-import 'package:webgl/src/material/material.dart';
-import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 @MirrorsUsed(
     targets: const [
       SceneViewTestMatrices,
@@ -50,7 +46,7 @@ class SceneViewTestMatrices extends Scene{
 
     /// from refelctions.vs.glsl
     Vector3 aVertexPosition;
-    Vector3 aNormal;
+//    Vector3 aNormal;
 
     Matrix4 uModelViewMatrix;
     Matrix4 uProjectionMatrix;

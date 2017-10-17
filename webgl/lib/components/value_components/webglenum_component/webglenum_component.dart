@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:angular2/core.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 

@@ -1,15 +1,9 @@
 import 'dart:async';
 @TestOn("dartium")
 
-import 'dart:html';
 import 'dart:math';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/application.dart';
-import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/context.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
-import 'package:webgl/src/utils/utils_debug.dart';
 
 Future main() async {
 

@@ -1,4 +1,13 @@
-import 'package:webgl/src/gtlf/utils_gltf.dart';
+import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/buffer.dart';
+import 'package:webgl/src/gtlf/buffer_view.dart';
+import 'package:webgl/src/gtlf/image.dart';
+import 'package:webgl/src/gtlf/material.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/sampler.dart';
+import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/gtlf/project.dart';

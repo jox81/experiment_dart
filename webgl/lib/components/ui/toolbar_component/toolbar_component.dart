@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:angular2/core.dart';
 import 'package:webgl/components/ui/toolbar_button/toolbar_button_component.dart';
 import 'package:webgl/src/ui_models/toolbar.dart';

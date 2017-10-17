@@ -1,10 +1,6 @@
-import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/utils/utils_debug.dart';
-import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'dart:async';
-import 'package:gltf/gltf.dart' as glTF;
 
 List<String> gltfTestsSamples = [
   ///Buffer tests

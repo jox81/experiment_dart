@@ -1,5 +1,8 @@
+import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/accessor_sparse.dart';
+import 'package:webgl/src/gtlf/accessor_sparse_indices.dart';
+import 'package:webgl/src/gtlf/accessor_sparse_values.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:gltf/gltf.dart' as glTF;

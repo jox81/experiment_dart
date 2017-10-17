@@ -1,8 +1,10 @@
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/buffer.dart';
+import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFRenderer{

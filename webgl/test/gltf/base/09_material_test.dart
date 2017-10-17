@@ -1,9 +1,12 @@
+import 'package:webgl/src/gtlf/material.dart';
+import 'package:webgl/src/gtlf/normal_texture_info.dart';
+import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
+import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:gltf/gltf.dart' as glTF;
+import 'package:webgl/src/gtlf/texture_info.dart';
 
 @TestOn("dartium")
 Future main() async {

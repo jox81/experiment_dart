@@ -6,7 +6,17 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import '../utils/utils_assets.dart';
-import 'package:webgl/src/gtlf/utils_gltf.dart';
+import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/asset.dart';
+import 'package:webgl/src/gtlf/buffer.dart';
+import 'package:webgl/src/gtlf/buffer_view.dart';
+import 'package:webgl/src/gtlf/image.dart';
+import 'package:webgl/src/gtlf/material.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/sampler.dart';
+import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gtlf/texture.dart';
 
 export 'package:webgl/src/gtlf/debug_gltf.dart';
 

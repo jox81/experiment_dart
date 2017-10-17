@@ -28,14 +28,14 @@ void main() {
 
   Vector3 pickWorld = new Vector3.zero(); //Screen to world found point
 
-  Matrix4 orthoMatrix =
-      makeOrthographicMatrix(left, right, bottom, top, zNear, zFar);
+//  Matrix4 orthoMatrix =
+//      makeOrthographicMatrix(left, right, bottom, top, zNear, zFar);
 
-  Matrix4 viewMatrix =
-      makeViewMatrix(cameraPosition, cameraFocusPosition, upDirection);
+//  Matrix4 viewMatrix =
+//      makeViewMatrix(cameraPosition, cameraFocusPosition, upDirection);
 
-  Matrix4 perspectiveMatrix =
-      makePerspectiveMatrix(fovYRadians, aspectRatio, zNear, zFar);
+//  Matrix4 perspectiveMatrix =
+//      makePerspectiveMatrix(fovYRadians, aspectRatio, zNear, zFar);
 
   Matrix4 frustrumMatrix =
       makeFrustumMatrix(left, right, bottom, top, zNear, zFar);
@@ -44,8 +44,8 @@ void main() {
 
   for (num i = 0.0; i < 1.0; i += 0.1) {
     pickX = i * viewportWidth;
-    bool unprojected = unproject(cameraMatrix, viewportX, viewportWidth,
-        viewportY, viewportHeight, pickX, pickY, pickZ, pickWorld);
+//    bool unprojected = unproject(cameraMatrix, viewportX, viewportWidth,
+//        viewportY, viewportHeight, pickX, pickY, pickZ, pickWorld);
     print('$i : $pickWorld');
   }
 

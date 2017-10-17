@@ -3,7 +3,6 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
-import 'package:gltf/gltf.dart' as glTF;
 
 class UtilsAssets{
 

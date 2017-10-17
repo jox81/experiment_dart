@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:webgl/src/utils/utils_assets.dart';
 import "package:test/test.dart";
-import 'dart:html';
 
 @TestOn("dartium")
 

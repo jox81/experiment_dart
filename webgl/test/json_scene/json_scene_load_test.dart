@@ -17,19 +17,16 @@ Future main() async {
 
   Map testJson;
 
-  Application application;
   CanvasElement canvas;
 
   setUp(() async {
     testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
     canvas = querySelector('#glCanvas') as CanvasElement;
-    application = await Application.create(canvas);
+    await Application.create(canvas);
   });
 
   tearDown(() async {
     canvas = null;
-    application = null;
-//    testJson = null;
   });
 
   group("json read", () {

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
 import "package:test/test.dart";
@@ -15,22 +14,15 @@ Future main() async {
   UtilsAssets.useWebPath = true;
 
   Map testJson;
-  String testJonString;
-  Application application;
-  CanvasElement canvas;
 
   setUp(() async {
     testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
-    testJonString = await UtilsAssets.loadTextResource('../objects/json_scene.json');
     CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-    application = await Application.create(canvas);
+    await Application.create(canvas);
   });
 
   tearDown(() async {
-    canvas = null;
-    application = null;
     testJson = null;
-    testJonString = null;
   });
 
   group("json read", () {

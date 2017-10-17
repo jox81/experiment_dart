@@ -3,7 +3,6 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/camera.dart';
 import 'dart:async';
 import 'package:webgl/src/geometry/models.dart';
-import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
@@ -11,8 +10,6 @@ import 'package:webgl/src/scene.dart';
     ],
     override: '*')
 import 'dart:mirrors';
-import 'package:webgl/src/utils/utils_debug.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class SceneViewPrimitives extends Scene{
 

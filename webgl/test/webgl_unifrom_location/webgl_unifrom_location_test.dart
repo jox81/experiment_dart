@@ -64,7 +64,7 @@ void main() {
       Function function = (){
         uniform.uniformMatrix4fv(null, null);
       };
-      expect(function, throws);
+      expect(function, throwsA);
     });
   });
 

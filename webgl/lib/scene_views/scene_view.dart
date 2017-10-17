@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:webgl/scene_views/scene_view_cubemap.dart';
-import 'package:webgl/scene_views/scene_view_gltf.dart';
 import 'package:webgl/scene_views/scene_view_performance.dart';
 import 'package:webgl/scene_views/scene_view_shader_learning_glsl.dart';
 import 'package:webgl/scene_views/scene_view_test_matrices.dart';
@@ -22,7 +21,6 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
 //  new Scene(),
- new SceneViewGLTF(),
 // new SceneViewPrimitives(),
 // new SceneViewTexturing(),
 // new SceneViewBase(),
