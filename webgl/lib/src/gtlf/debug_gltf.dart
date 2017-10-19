@@ -1,4 +1,5 @@
 import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
 import 'package:webgl/src/gtlf/image.dart';
@@ -29,6 +30,7 @@ Future<GLTFProject> debugGltf(String gltfUrl) async {
   _testSamplers();
   _testTextures();
   _testMaterials();
+  _testAnimations();
 
   return _gltf;
 }
@@ -179,6 +181,18 @@ void _testMaterials() {
       print('> $i');
       GLTFMaterial material = _gltf.materials[i];
       print('$material');
+    }
+    print('');
+  });
+}
+
+void _testAnimations() {
+  Debug.log('Animations', () {
+    print('animations counts : ${_gltf.animations.length}');
+    for (int i = 0; i < _gltf.animations.length; ++i) {
+      print('> $i');
+      GLTFAnimation animation = _gltf.animations[i];
+      print('$animation');
     }
     print('');
   });

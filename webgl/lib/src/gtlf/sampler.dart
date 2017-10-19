@@ -21,8 +21,8 @@ class GLTFSampler extends GLTFChildOfRootProperty {
 
   factory GLTFSampler.fromGltf(glTF.Sampler gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFSampler._(
-        gltfSource);
+    GLTFSampler sampler = new GLTFSampler._(gltfSource);
+    return sampler;
   }
 
   @override

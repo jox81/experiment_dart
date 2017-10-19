@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import '../utils/utils_assets.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
@@ -87,7 +88,6 @@ class GLTFProject {
   glTF.Gltf _gltfSource;
   glTF.Gltf get gltfSource => _gltfSource;
 
-  GLTFAsset asset;
   List<GLTFBuffer> buffers = new List();
   List<GLTFBufferView> bufferViews = new List();
   List<Camera> cameras = new List();
@@ -97,10 +97,11 @@ class GLTFProject {
   List<GLTFMaterial> materials = new List();
   List<GLTFAccessor> accessors = new List();
   List<GLTFMesh> meshes = new List();
+  List<GLTFAnimation> animations = new List();
+  GLTFAsset asset;
 
   List<GLTFScene> _scenes = new List();
   List<GLTFScene> get scenes => _scenes.toList(growable: false);
-
   void addScene(GLTFScene scene){
     assert(scene != null);
     _scenes.add(scene);
@@ -222,6 +223,15 @@ class GLTFProject {
         GLTFScene scene = new GLTFScene.fromGltf(gltfScene);
         if (scene != null) {
           addScene(scene);
+        }
+      }
+
+      //Scenes
+      for (glTF.Animation gltfAnimation  in _gltfSource.animations) {
+        GLTFAnimation animation = new GLTFAnimation.fromGltf(gltfAnimation);
+        if (animation != null) {
+          animation.animationId = animations.length > 0 ? animations.last.animationId + 1 : 0;
+          animations.add(animation);
         }
       }
 
