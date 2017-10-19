@@ -77,7 +77,8 @@ class GLTFRenderer {
     }
 
     //uniform
-    setUnifrom(program,'uModelMatrix',ShaderVariableType.FLOAT_MAT4,node.matrix.storage);
+    Vector2 offsetScreen = new Vector2(-1.0, -0.5);//temp
+    setUnifrom(program,'uModelMatrix',ShaderVariableType.FLOAT_MAT4,(node.matrix..translate(offsetScreen.x, offsetScreen.y)).storage);
 
     //draw
     if (primitive.indices == null) {
