@@ -8,6 +8,7 @@ void main() {
     test("Empty array", () async {
       glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/scene/empty.gltf', useWebPath:true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      expect(gltf, isNotNull);
 
       List<GLTFScene> scenes = gltf.scenes;
       expect(scenes.length, 0);
@@ -16,6 +17,7 @@ void main() {
     test("Array length", () async {
       glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/scene/valid_full.gltf', useWebPath:true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      expect(gltf, isNotNull);
 
       List<GLTFScene> scenes = gltf.scenes;
       expect(scenes.length, 1);
@@ -30,6 +32,5 @@ void main() {
       expect(scene, isNotNull);
       expect(scene.nodes, isNotNull);
     });
-
   });
 }

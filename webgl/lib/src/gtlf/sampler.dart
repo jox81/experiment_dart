@@ -29,23 +29,4 @@ class GLTFSampler extends GLTFChildOfRootProperty {
   String toString() {
     return 'GLTFSampler{magFilter: $magFilter, minFilter: $minFilter, wrapS: $wrapS, wrapT: $wrapT}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFSampler &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              magFilter == other.magFilter &&
-              minFilter == other.minFilter &&
-              wrapS == other.wrapS &&
-              wrapT == other.wrapT;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      magFilter.hashCode ^
-      minFilter.hashCode ^
-      wrapS.hashCode ^
-      wrapT.hashCode;
 }

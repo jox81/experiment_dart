@@ -40,25 +40,4 @@ class GLTFPbrMetallicRoughness extends GltfProperty {
   String toString() {
     return 'GLTFPbrMetallicRoughness{baseColorFactor: $baseColorFactor, baseColorTexture: $baseColorTexture, metallicFactor: $metallicFactor, roughnessFactor: $roughnessFactor, metallicRoughnessTexture: $metallicRoughnessTexture}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFPbrMetallicRoughness &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              baseColorFactor == other.baseColorFactor &&
-              baseColorTexture == other.baseColorTexture &&
-              metallicFactor == other.metallicFactor &&
-              roughnessFactor == other.roughnessFactor &&
-              metallicRoughnessTexture == other.metallicRoughnessTexture;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      baseColorFactor.hashCode ^
-      baseColorTexture.hashCode ^
-      metallicFactor.hashCode ^
-      roughnessFactor.hashCode ^
-      metallicRoughnessTexture.hashCode;
 }

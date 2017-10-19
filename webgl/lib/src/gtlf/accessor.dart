@@ -19,7 +19,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;
 
-  int get accessorId => null;// Todo (jpu) :
+  int accessorId;
 
   final int byteOffset;
   final ShaderVariableType componentType;
@@ -31,8 +31,9 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final List<num> min;
   final GLTFAccessorSparse sparse;
 
-  // Todo (jpu) :
-  GLTFBufferView get bufferView => gltfProject.bufferViews[0];
+  int _bufferViewId;
+  GLTFBufferView get bufferView => _bufferViewId != null ? gltfProject.bufferViews[_bufferViewId] : null;
+
   int get components => _gltfSource.components;
   int get componentLength => _gltfSource.componentLength;
   int get elementLength => _gltfSource.elementLength;
@@ -70,42 +71,23 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   factory GLTFAccessor.fromGltf(glTF.Accessor gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFAccessor._(gltfSource);
+    GLTFAccessor accessor = new GLTFAccessor._(gltfSource);
+
+    if(gltfSource.bufferView != null) {
+      GLTFBufferView bufferView = gltfProject.bufferViews.firstWhere((b) =>
+      b.gltfSource == gltfSource.bufferView, orElse: () =>
+      throw new Exception(
+          'Accessor can only be bound to an existing project bufferView'));
+      assert(bufferView.bufferViewId != null);
+
+      accessor._bufferViewId = bufferView.bufferViewId;
+    }
+    return accessor;
   }
-
-
 
   @override
   String toString() {
-    return 'GLTFAccessor{byteOffset: $byteOffset, componentType: $componentType, typeString: $typeString, , type: $type, count: $count, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+    return 'GLTFAccessor{accessorId : $accessorId, byteOffset: $byteOffset, componentType: $componentType, typeString: $typeString, type: $type, count: $count, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFAccessor &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              byteOffset == other.byteOffset &&
-              componentType == other.componentType &&
-              typeString == other.typeString &&
-              type == other.type &&
-              count == other.count &&
-              normalized == other.normalized &&
-              max == other.max &&
-              min == other.min &&
-              sparse == other.sparse;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      byteOffset.hashCode ^
-      componentType.hashCode ^
-      typeString.hashCode ^
-      type.hashCode ^
-      count.hashCode ^
-      normalized.hashCode ^
-      max.hashCode ^
-      min.hashCode ^
-      sparse.hashCode;
 }

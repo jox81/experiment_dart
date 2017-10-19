@@ -19,17 +19,4 @@ class GLTFTextureInfo extends GltfProperty {
   String toString() {
     return 'GLTFTextureInfo{texCoord: $texCoord, texture: $texture}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFTextureInfo &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              texCoord == other.texCoord &&
-              texture == other.texture;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^ texCoord.hashCode ^ texture.hashCode;
 }

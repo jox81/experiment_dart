@@ -18,8 +18,6 @@ import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 
-export 'package:webgl/src/gtlf/debug_gltf.dart';
-
 // Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
 //> remplacer les listes par des Map<HashCode, Object>
@@ -100,7 +98,6 @@ class GLTFProject {
   List<GLTFAccessor> accessors = new List();
   List<GLTFMesh> meshes = new List();
 
-  //>
   List<GLTFScene> _scenes = new List();
   List<GLTFScene> get scenes => _scenes.toList(growable: false);
 
@@ -110,21 +107,20 @@ class GLTFProject {
     scene.sceneId = _scenes.indexOf(scene);
   }
 
-  List<GLTFNode> _nodes = new List();
-  List<GLTFNode> get nodes => _nodes.toList(growable: false);
-
-  void addNode(GLTFNode node){
-    assert(node != null);
-    _nodes.add(node);
-    node.nodeId = _nodes.indexOf(node);
-  }
-
   int _sceneId;
   GLTFScene get scene => _sceneId != null ? scenes[_sceneId] : null;
   set scene(GLTFScene value) {
-    _sceneId = scenes.indexOf(value);
+    assert(value != null);
+    GLTFScene projectScene = gltfProject.scenes.firstWhere((s)=>s.gltfSource == value.gltfSource);
+    _sceneId = gltfProject.scenes.indexOf(projectScene);
   }
-  //<
+
+  List<GLTFNode> _nodes = new List();
+  List<GLTFNode> get nodes => _nodes.toList(growable: false);
+  void addNode(GLTFNode value){
+    assert(value != null);
+    _nodes.add(value);
+  }
 
   @override
   String toString() {
@@ -149,6 +145,7 @@ class GLTFProject {
       for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
         GLTFBufferView bufferView = new GLTFBufferView.fromGltf(gltfBufferView);
         if (bufferView != null) {
+          bufferView.bufferViewId = bufferViews.length > 0 ? bufferViews.last.bufferViewId + 1 : 0;
           bufferViews.add(bufferView);
         }
       }
@@ -197,6 +194,7 @@ class GLTFProject {
       for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
         GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
         if (accessor != null) {
+          accessor.accessorId = accessors.length > 0 ? accessors.last.accessorId + 1 : 0;
           accessors.add(accessor);
         }
       }
@@ -205,6 +203,7 @@ class GLTFProject {
       for (glTF.Mesh gltfMesh in _gltfSource.meshes) {
         GLTFMesh mesh = new GLTFMesh.fromGltf(gltfMesh);
         if (mesh != null) {
+          mesh.meshId = meshes.length > 0 ? meshes.last.meshId + 1 : 0;
           meshes.add(mesh);
         }
       }
@@ -213,6 +212,7 @@ class GLTFProject {
       for (glTF.Node gltfNode in _gltfSource.nodes) {
         GLTFNode node = new GLTFNode.fromGltf(gltfNode);
         if (node != null) {
+          node.nodeId = nodes.length > 0 ? nodes.last.nodeId + 1 : 0;
           addNode(node);
         }
       }

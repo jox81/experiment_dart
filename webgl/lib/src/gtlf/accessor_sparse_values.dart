@@ -21,14 +21,4 @@ class GLTFAccessorSparseValues extends GltfProperty {
     return 'GLTFAccessorSparseValues{byteOffset: $byteOffset, bufferView: $bufferView}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFAccessorSparseValues &&
-              runtimeType == other.runtimeType &&
-              byteOffset == other.byteOffset &&
-              bufferView == other.bufferView;
-
-  @override
-  int get hashCode => byteOffset.hashCode ^ bufferView.hashCode;
 }

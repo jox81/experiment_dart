@@ -31,17 +31,4 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
     return 'GLTFBuffer{uri: $uri, byteLength: $byteLength, data: $data}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFBuffer &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              uri == other.uri &&
-              byteLength == other.byteLength &&
-              data == other.data;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^ uri.hashCode ^ byteLength.hashCode ^ data.hashCode;
 }

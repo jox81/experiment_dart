@@ -25,20 +25,4 @@ class GLTFAccessorSparse extends GltfProperty {
     return 'GLTFAccessorSparse{count: $count, indices: $indices, values: $values}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFAccessorSparse &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              count == other.count &&
-              indices == other.indices &&
-              values == other.values;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      count.hashCode ^
-      indices.hashCode ^
-      values.hashCode;
 }

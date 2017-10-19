@@ -26,8 +26,10 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   List<double> weights;
 
+  int _meshId;
+  GLTFMesh get mesh => _meshId != null ? gltfProject.meshes[_meshId] : null;
+
   Camera camera;
-  GLTFMesh mesh;
   GLTFSkin skin;
   List<GLTFNode> get children => gltfProject.nodes.toList().where((n)=>n.parent == this).toList(growable: false);
 
@@ -41,8 +43,9 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   GLTFNode._(this._gltfSource) :
         this.camera = Camera.fromGltf(_gltfSource.camera),
-        this._parentId = _getParentId(_gltfSource),
-        this.mesh = new GLTFMesh.fromGltf(_gltfSource.mesh);
+        this._parentId = _getParentId(_gltfSource){
+      if(gltfSource.translation != null) translation = gltfSource.translation;
+  }
 
   static int _getParentId(glTF.Node _gltfSource){
 
@@ -57,50 +60,27 @@ class GLTFNode extends GLTFChildOfRootProperty{
     return parentId;
   }
 
-  GLTFNode();
+  GLTFNode({GLTFMesh mesh}){
+    if(mesh != null) {
+      this._meshId = gltfProject.meshes.indexOf(mesh);
+    }
+  }
 
   factory GLTFNode.fromGltf(glTF.Node gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFNode._(gltfSource);
+
+    GLTFNode node = new GLTFNode._(gltfSource);
+
+    if(gltfSource.mesh != null){
+      GLTFMesh mesh = gltfProject.meshes.firstWhere((m)=>m.gltfSource == gltfSource.mesh, orElse: ()=> throw new Exception('Node mesh can only be bound to an existing project mesh'));
+      node._meshId = mesh.meshId;
+    }
+
+    return node;
   }
 
   @override
   String toString() {
-    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $mesh, parent: $_parentId, skin: $skin, isJoint: $isJoint}';
+    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $_meshId, parent: $_parentId, skin: $skin, isJoint: $isJoint}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFNode &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              _matrix == other._matrix &&
-              translation == other.translation &&
-              rotation.toString() == other.rotation.toString() &&
-              scale == other.scale &&
-              weights == other.weights &&
-              camera == other.camera &&
-              mesh == other.mesh &&
-              skin == other.skin &&
-              _parentId == other._parentId &&
-              isJoint == other.isJoint;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      nodeId.hashCode ^
-      _matrix.hashCode ^
-      translation.hashCode ^
-      rotation.hashCode ^
-      scale.hashCode ^
-      weights.hashCode ^
-      camera.hashCode ^
-      mesh.hashCode ^
-      skin.hashCode ^
-      _parentId.hashCode ^
-      isJoint.hashCode;
-
-
-
 }

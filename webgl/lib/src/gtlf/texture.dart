@@ -25,16 +25,4 @@ class GLTFTexture extends GLTFChildOfRootProperty {
   String toString() {
     return 'GLTFTexture{sampler: $sampler, source: $source}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFTexture &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              sampler == other.sampler &&
-              source == other.source;
-
-  @override
-  int get hashCode => _gltfSource.hashCode ^ sampler.hashCode ^ source.hashCode;
 }

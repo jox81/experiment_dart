@@ -28,22 +28,4 @@ class GLTFImage extends GLTFChildOfRootProperty {
     return 'GLTFImage{uri: $uri, mimeType: $mimeType, bufferView: $bufferView, data: $data}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFImage &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              uri == other.uri &&
-              mimeType == other.mimeType &&
-              bufferView == other.bufferView &&
-              data == other.data;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      uri.hashCode ^
-      mimeType.hashCode ^
-      bufferView.hashCode ^
-      data.hashCode;
 }

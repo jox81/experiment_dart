@@ -1,5 +1,6 @@
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/buffer.dart';
+import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
@@ -18,8 +19,10 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
   glTF.BufferView _gltfSource;
   glTF.BufferView get gltfSource => _gltfSource;
 
-  int get bufferId => null;// Todo (jpu) :
-  GLTFBuffer buffer;
+  int bufferViewId;
+
+  int _bufferId;
+  GLTFBuffer get buffer => gltfProject.buffers[_bufferId];
 
   int byteLength;
   int byteOffset;
@@ -32,49 +35,32 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
       : this.byteLength = _gltfSource.byteLength,
         this.byteOffset = _gltfSource.byteOffset,
         this.byteStride = _gltfSource.byteStride,
-        this.buffer = new GLTFBuffer.fromGltf(_gltfSource.buffer),
         this.usage = _gltfSource.usage != null ? BufferType.getByIndex(_gltfSource.usage.target):null,
         this.target = _gltfSource.usage != null ? _gltfSource.usage.target: null; // Todo (jpu) : bug if -1 and usage == null. What to do ?
 
   GLTFBufferView(
-      this.buffer,
+      GLTFBuffer projectBuffer,
       this.byteLength,
       this.byteOffset,
       this.byteStride,
       this.target,
       this.usage,
-      String name);
+      String name){
+    this._bufferId = gltfProject.buffers.indexOf(projectBuffer);
+  }
 
   factory GLTFBufferView.fromGltf(glTF.BufferView gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFBufferView._(gltfSource);
+
+    GLTFBufferView bufferView = new GLTFBufferView._(gltfSource);
+    GLTFBuffer projectBuffer = gltfProject.buffers.firstWhere((n)=>n.gltfSource == gltfSource.buffer);
+    bufferView._bufferId = gltfProject.buffers.indexOf(projectBuffer);
+    return bufferView;
   }
 
   @override
   String toString() {
-    return 'GLTFBufferView{buffer: $bufferId, byteLength: $byteLength, byteOffset: $byteOffset, byteStride: $byteStride, target: $target, usage: $usage}';
+    return 'GLTFBufferView{buffer: $_bufferId, byteLength: $byteLength, byteOffset: $byteOffset, byteStride: $byteStride, target: $target, usage: $usage}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFBufferView &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              buffer == other.buffer &&
-              byteLength == other.byteLength &&
-              byteOffset == other.byteOffset &&
-              byteStride == other.byteStride &&
-              target == other.target &&
-              usage == other.usage;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      buffer.hashCode ^
-      byteLength.hashCode ^
-      byteOffset.hashCode ^
-      byteStride.hashCode ^
-      target.hashCode ^
-      usage.hashCode;
 }

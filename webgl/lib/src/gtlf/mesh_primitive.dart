@@ -13,7 +13,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   glTF.MeshPrimitive _gltfSource;
   glTF.MeshPrimitive get gltfSource => _gltfSource;
 
-  final Map<String, GLTFAccessor> attributes;
+  Map<String, GLTFAccessor> attributes = new Map<String, GLTFAccessor>();
 
   final DrawMode mode;
 
@@ -26,9 +26,8 @@ class GLTFMeshPrimitive extends GltfProperty {
   final int weigthsCount;
   final int texcoordCount;
 
-  GLTFAccessor _indices;
-  GLTFAccessor get indices => _indices;
-//  Accessor get indices => _indices;
+  int _indicesAccessorId;
+  GLTFAccessor get indices => _indicesAccessorId != null ? gltfProject.accessors[_indicesAccessorId] : null;
 
   int _materialId;
   int get materialId => _materialId;
@@ -41,11 +40,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   GLTFMeshPrimitive._(
       this._gltfSource, )
-      : this.attributes = new Map.fromIterables(
-      _gltfSource.attributes.keys,
-      _gltfSource.attributes.values
-          .map((v) => new GLTFAccessor.fromGltf(v))),
-        this.mode = _gltfSource.mode != null
+      : this.mode = _gltfSource.mode != null
             ? DrawMode.getByIndex(_gltfSource.mode)
             : DrawMode.TRIANGLES,
         this.hasPosition = _gltfSource.hasPosition,
@@ -54,53 +49,31 @@ class GLTFMeshPrimitive extends GltfProperty {
         this.colorCount = _gltfSource.colorCount,
         this.jointsCount = _gltfSource.jointsCount,
         this.weigthsCount = _gltfSource.weigthsCount,
-        this.texcoordCount = _gltfSource.texcoordCount,
-        this._indices = new GLTFAccessor.fromGltf(_gltfSource.indices);// Todo (jpu) :
+        this.texcoordCount = _gltfSource.texcoordCount;
 
   factory GLTFMeshPrimitive.fromGltf(glTF.MeshPrimitive gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFMeshPrimitive._(gltfSource);
+    GLTFMeshPrimitive meshPrimitive =  new GLTFMeshPrimitive._(gltfSource);
+
+    //attributs
+    for (String key in gltfSource.attributes.keys) {
+        GLTFAccessor accessor = gltfProject.accessors.firstWhere((a)=>a.gltfSource == gltfSource.attributes[key], orElse: ()=> throw new Exception('Attribut accessor can only be bound to an existing project accessor'));
+        meshPrimitive.attributes[key] = accessor;
+    }
+
+    //indices
+    if(gltfSource.indices != null) {
+      GLTFAccessor accessorIndices = gltfProject.accessors.firstWhere((a) =>
+      a.gltfSource == gltfSource.indices, orElse: () => throw new Exception(
+          'Indices accessor can only be bound to an existing project accessor'));
+      assert(accessorIndices.accessorId != null);
+      meshPrimitive._indicesAccessorId = accessorIndices.accessorId;
+    }
+    return meshPrimitive;
   }
 
   @override
   String toString() {
-    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $mode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: $_indices, _materialId: $_materialId}';
+    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $mode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: $_indicesAccessorId, _materialId: $_materialId}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFMeshPrimitive &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              const MapEquality<String, GLTFAccessor>().equals(attributes, other.attributes) &&
-              mode == other.mode &&
-              hasPosition == other.hasPosition &&
-              hasNormal == other.hasNormal &&
-              hasTangent == other.hasTangent &&
-              colorCount == other.colorCount &&
-              jointsCount == other.jointsCount &&
-              weigthsCount == other.weigthsCount &&
-              texcoordCount == other.texcoordCount &&
-              _indices == other._indices &&
-              _materialId == other._materialId;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      attributes.hashCode ^
-      mode.hashCode ^
-      hasPosition.hashCode ^
-      hasNormal.hashCode ^
-      hasTangent.hashCode ^
-      colorCount.hashCode ^
-      jointsCount.hashCode ^
-      weigthsCount.hashCode ^
-      texcoordCount.hashCode ^
-      _indices.hashCode ^
-      _materialId.hashCode;
-
-
-
-
 }

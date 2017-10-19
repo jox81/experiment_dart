@@ -18,15 +18,4 @@ class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
   String toString() {
     return 'GLTFOcclusionTextureInfo{strength: $strength} | ${super.toString()}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          super == other &&
-              other is GLTFOcclusionTextureInfo &&
-              runtimeType == other.runtimeType &&
-              strength == other.strength;
-
-  @override
-  int get hashCode => super.hashCode ^ strength.hashCode;
 }

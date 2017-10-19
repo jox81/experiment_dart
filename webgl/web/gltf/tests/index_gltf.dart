@@ -1,5 +1,4 @@
 import 'package:webgl/src/gtlf/debug_gltf.dart';
-import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 
 List<String> gltfTestsSamples = [
@@ -46,23 +45,20 @@ List<String> gltfTestsSamples = [
 
   ///Scenes
 //  'gltf/tests/base/data/scene/empty.gltf',
-//  'gltf/tests/base/data/scene/valid_full.gltf',
+  'gltf/tests/base/data/scene/valid_full.gltf',
 
   /// Nodes
 //  'gltf/tests/base/data/node/empty.gltf',
-  'gltf/tests/base/data/node/valid_full.gltf',
-
-  ///Others scenes
-//  'gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf',
-//  'gltf/samples/gltf_2_0/minimal.gltf',
+//  'gltf/tests/base/data/node/valid_full.gltf',
 ];
 
 
 List<String> gltfSamples = [
   '/gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf'
+  //  'gltf/samples/gltf_2_0/minimal.gltf',
 ];
 
 Future main() async {
-  String gltfUrl = gltfSamples.first;
+  String gltfUrl = gltfTestsSamples.first;
   await debugGltf(gltfUrl);
 }

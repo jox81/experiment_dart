@@ -59,30 +59,4 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
     return 'GLTFMaterial{pbrMetallicRoughness: $pbrMetallicRoughness, normalTexture: $normalTexture, occlusionTexture: $occlusionTexture, emissiveTexture: $emissiveTexture, emissiveFactor: $emissiveFactor, alphaMode: $alphaMode, alphaCutoff: $alphaCutoff, doubleSided: $doubleSided}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFMaterial &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              pbrMetallicRoughness == other.pbrMetallicRoughness &&
-              normalTexture == other.normalTexture &&
-              occlusionTexture == other.occlusionTexture &&
-              emissiveTexture == other.emissiveTexture &&
-              emissiveFactor == other.emissiveFactor &&
-              alphaMode == other.alphaMode &&
-              alphaCutoff == other.alphaCutoff &&
-              doubleSided == other.doubleSided;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      pbrMetallicRoughness.hashCode ^
-      normalTexture.hashCode ^
-      occlusionTexture.hashCode ^
-      emissiveTexture.hashCode ^
-      emissiveFactor.hashCode ^
-      alphaMode.hashCode ^
-      alphaCutoff.hashCode ^
-      doubleSided.hashCode;
 }

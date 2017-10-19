@@ -18,15 +18,4 @@ class GLTFNormalTextureInfo extends GLTFTextureInfo {
   String toString() {
     return 'GLTFNormalTextureInfo{scale: $scale} | ${super.toString()}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          super == other &&
-              other is GLTFNormalTextureInfo &&
-              runtimeType == other.runtimeType &&
-              scale == other.scale;
-
-  @override
-  int get hashCode => super.hashCode ^ scale.hashCode;
 }

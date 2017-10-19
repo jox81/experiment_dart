@@ -23,15 +23,12 @@ class GLTFScene extends GLTFChildOfRootProperty {
   factory GLTFScene.fromGltf(glTF.Scene gltfSource) {
     if (gltfSource == null) return null;
     GLTFScene scene = new GLTFScene._(gltfSource);
-    for(glTF.Node node in gltfSource.nodes){
-      GLTFNode gltfNode = new GLTFNode.fromGltf(node);
 
-      int nodeId = gltfProject.nodes.indexOf(gltfNode);
-      if(nodeId == -1){
-        gltfProject.addNode(gltfNode);
-      }else{
-        gltfNode.nodeId = nodeId;
-      }
+    //Scenes must be handled after nodes
+    for(glTF.Node node in gltfSource.nodes){
+
+      GLTFNode gltfNode = gltfProject.nodes.firstWhere((n)=>n.gltfSource == node, orElse: ()=> throw new Exception('Scene can only be binded to Nodes existing in project'));
+      gltfNode.nodeId = gltfNode.nodeId;
       scene.addNode(gltfNode);
     }
     return scene;
@@ -41,17 +38,4 @@ class GLTFScene extends GLTFChildOfRootProperty {
   String toString() {
     return 'GLTFScene{nodes: $_nodesId}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFScene &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              nodes == other.nodes;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^
-      nodes.hashCode;
 }

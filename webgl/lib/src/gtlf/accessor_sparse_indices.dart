@@ -21,17 +21,4 @@ class GLTFAccessorSparseIndices extends GltfProperty {
   String toString() {
     return 'GLTFAccessorSparseIndices{byteOffset: $byteOffset, componentType: $componentType}';
   }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-          other is GLTFAccessorSparseIndices &&
-              runtimeType == other.runtimeType &&
-              _gltfSource == other._gltfSource &&
-              byteOffset == other.byteOffset &&
-              componentType == other.componentType;
-
-  @override
-  int get hashCode =>
-      _gltfSource.hashCode ^ byteOffset.hashCode ^ componentType.hashCode;
 }
