@@ -138,6 +138,7 @@ class GLTFProject {
       for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
         GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);
         if (buffer != null) {
+          buffer.bufferId = buffers.length > 0 ? buffers.last.bufferId + 1 : 0;
           buffers.add(buffer);
         }
       }
@@ -226,7 +227,7 @@ class GLTFProject {
         }
       }
 
-      //Scenes
+      //Animation
       for (glTF.Animation gltfAnimation  in _gltfSource.animations) {
         GLTFAnimation animation = new GLTFAnimation.fromGltf(gltfAnimation);
         if (animation != null) {

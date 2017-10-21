@@ -298,8 +298,8 @@ void logGLCall(String functionName, dynamic args) {
 }
 
 void validateNoneOfTheArgsAreUndefined(String functionName, List<dynamic> args) {
-  for (var ii = 0; ii < args.length; ++ii) {
-    if (args[ii] == null) {
+  for (var i = 0; i < args.length; i++) {
+    if (args[i] == null) {
       print("undefined passed to gl." + functionName + "(" +
           WebGLDebugUtils.glFunctionArgsToString(functionName, args) + ")");
     }

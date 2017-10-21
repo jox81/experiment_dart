@@ -5,6 +5,25 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
+// Accessor types
+const String SCALAR = 'SCALAR';
+const String VEC2 = 'VEC2';
+const String VEC3 = 'VEC3';
+const String VEC4 = 'VEC4';
+const String MAT2 = 'MAT2';
+const String MAT3 = 'MAT3';
+const String MAT4 = 'MAT4';
+
+const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
+  SCALAR: 1,
+  VEC2: 2,
+  VEC3: 3,
+  VEC4: 4,
+  MAT2: 4,
+  MAT3: 9,
+  MAT4: 16
+};
+
 /// The accessors are what actually define the format of the data and
 /// use codes for "componentType"
 /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#accessors
@@ -24,6 +43,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final int byteOffset;
   final ShaderVariableType componentType;
   final String typeString;
+  final int typeLength;
   final ShaderVariableType type;
   final int count;
   final bool normalized;
@@ -35,19 +55,21 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   GLTFBufferView get bufferView => _bufferViewId != null ? gltfProject.bufferViews[_bufferViewId] : null;
 
   int get components => _gltfSource.components;
-  int get componentLength => _gltfSource.componentLength;
+  int get componentLength => _gltfSource.componentLength; ///byte count of the component
   int get elementLength => _gltfSource.elementLength;
   int get byteStride => _gltfSource.byteStride;
   int get byteLength => _gltfSource.byteLength;
   bool get isUnit => _gltfSource.isUnit;
   bool get isXyzSign => _gltfSource.isXyzSign;
 
+  // Todo (jpu) : do better check!!!
   GLTFAccessor._(this._gltfSource)
       : this.byteOffset = _gltfSource.byteOffset,
         this.componentType =
         ShaderVariableType.getByIndex(_gltfSource.componentType),
         this.count = _gltfSource.count,
         this.typeString = _gltfSource.type,
+        this.typeLength = ACCESSOR_TYPES_LENGTHS[_gltfSource.type],
         this.type = ShaderVariableType.getByComponentAndType(
             ShaderVariableType.getByIndex(_gltfSource.componentType).name,
             _gltfSource.type),
@@ -67,7 +89,8 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       this.normalized,
       this.max,
       this.min,
-      this.sparse);
+      this.sparse):
+      this.typeLength = ACCESSOR_TYPES_LENGTHS[typeString];
 
   factory GLTFAccessor.fromGltf(glTF.Accessor gltfSource) {
     if (gltfSource == null) return null;

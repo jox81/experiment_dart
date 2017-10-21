@@ -10,6 +10,8 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
   glTF.Buffer _gltfSource;
   glTF.Buffer get gltfSource => _gltfSource;
 
+  int bufferId;
+
   Uri uri;
   int byteLength;
 

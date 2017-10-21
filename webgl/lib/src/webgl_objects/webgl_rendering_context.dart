@@ -41,7 +41,7 @@ class WebGLRenderingContext extends IEditElement {
       'preserveDrawingBuffer': preserveDrawingBuffer,
     };
 
-    for (int i = 0; i < names.length; ++i) {
+    for (int i = 0; i < names.length; i++) {
       try {
         ctx = canvas.getContext(names[i], options) as WebGL.RenderingContext; //Normal context
         if (debug) {

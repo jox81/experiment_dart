@@ -180,7 +180,7 @@ Future main() async {
       expect(accessor2.max, [1.0]);
       expect(accessor2.min, [0.0]);
 
-      //accessorQuaternion => 5 * 4 float = 80 bytes
+      //accessorRotation as Quaternion => 5 * 4 float = 80 bytes
       //=> 80 + 20 = 100 bytes du buffer
       GLTFAccessor accessor3 = gltfProject.accessors[3];
       expect(accessor3, isNotNull);
@@ -191,7 +191,9 @@ Future main() async {
       expect(accessor3.typeString, 'VEC4');
       expect(accessor3.type.index, 35666);
       expect(accessor3.max, [0.0,0.0,1.0,1.0]);
-      expect(accessor3.min, [0.0,0.0,0.0,-0.707]);
+
+      //Because -0.707 can't be truly represented with IEEE 754 single-precision floating point type (since accessor.componentType is gl.FLOAT).
+      expect(accessor3.min, [0.0,0.0,0.0,-0.7070000171661377]);
     });
     test("asset", () async {
       expect(gltfProject.asset, isNotNull);

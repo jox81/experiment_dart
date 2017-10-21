@@ -51,10 +51,9 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
 
   factory GLTFBufferView.fromGltf(glTF.BufferView gltfSource) {
     if (gltfSource == null) return null;
-
     GLTFBufferView bufferView = new GLTFBufferView._(gltfSource);
-    GLTFBuffer projectBuffer = gltfProject.buffers.firstWhere((n)=>n.gltfSource == gltfSource.buffer);
-    bufferView._bufferId = gltfProject.buffers.indexOf(projectBuffer);
+    GLTFBuffer projectBuffer = gltfProject.buffers.firstWhere((b)=>b.gltfSource == gltfSource.buffer);
+    bufferView._bufferId = projectBuffer.bufferId;
     return bufferView;
   }
 
