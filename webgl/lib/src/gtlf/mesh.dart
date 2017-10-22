@@ -12,13 +12,13 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   final List<GLTFMeshPrimitive> primitives;
   final List<double> weights;
 
-  GLTFMesh._(this._gltfSource)
-      : this.primitives = _gltfSource.primitives
+  GLTFMesh._(this._gltfSource, [String name]):
+      this.primitives = _gltfSource.primitives
       .map((p) => new GLTFMeshPrimitive.fromGltf(p))
       .toList(),
         this.weights = _gltfSource.weights != null
             ? (<double>[]..addAll(_gltfSource.weights))
-            : <double>[];
+            : <double>[], super(_gltfSource.name);
 
   factory GLTFMesh.fromGltf(glTF.Mesh gltfSource) {
     if (gltfSource == null) return null;

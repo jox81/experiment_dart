@@ -17,10 +17,11 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
 
   Uint8List data;
 
-  GLTFBuffer._(this._gltfSource)
+  GLTFBuffer._(this._gltfSource, [String name])
       : this.uri = _gltfSource.uri,
         this.byteLength = _gltfSource.byteLength,
-        this.data = _gltfSource.data;
+        this.data = _gltfSource.data,
+        super(name);
 
   factory GLTFBuffer.fromGltf(glTF.Buffer gltfSource) {
     if (gltfSource == null) return null;

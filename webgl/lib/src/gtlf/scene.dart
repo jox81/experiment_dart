@@ -16,9 +16,9 @@ class GLTFScene extends GLTFChildOfRootProperty {
     _nodesId.add(node.nodeId);
   }
 
-  GLTFScene._(this._gltfSource);
+  GLTFScene._(this._gltfSource):super(_gltfSource.name);
 
-  GLTFScene();
+  GLTFScene([String name]):super(name);
 
   factory GLTFScene.fromGltf(glTF.Scene gltfSource) {
     if (gltfSource == null) return null;

@@ -10,5 +10,5 @@ abstract class GltfProperty {
 abstract class GLTFChildOfRootProperty extends GltfProperty {
   String name;
 
-  GLTFChildOfRootProperty();
+  GLTFChildOfRootProperty(this.name);
 }

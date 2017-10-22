@@ -63,7 +63,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   bool get isXyzSign => _gltfSource.isXyzSign;
 
   // Todo (jpu) : do better check!!!
-  GLTFAccessor._(this._gltfSource)
+  GLTFAccessor._(this._gltfSource, [String name])
       : this.byteOffset = _gltfSource.byteOffset,
         this.componentType =
         ShaderVariableType.getByIndex(_gltfSource.componentType),
@@ -78,7 +78,8 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
         this.min = _gltfSource.min,
         this.sparse = _gltfSource.sparse != null
             ? new GLTFAccessorSparse.fromGltf(_gltfSource.sparse)
-            : null;
+            : null,
+        super(_gltfSource.name);
 
   GLTFAccessor(
       this.byteOffset,
@@ -89,8 +90,9 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       this.normalized,
       this.max,
       this.min,
-      this.sparse):
-      this.typeLength = ACCESSOR_TYPES_LENGTHS[typeString];
+      this.sparse, [String name]):
+      this.typeLength = ACCESSOR_TYPES_LENGTHS[typeString],
+      super(name);
 
   factory GLTFAccessor.fromGltf(glTF.Accessor gltfSource) {
     if (gltfSource == null) return null;

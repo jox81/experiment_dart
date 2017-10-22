@@ -12,6 +12,7 @@ import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/camera.dart';
 
 // Uint8List = Byte
 // Uint16List = SCALAR : int
@@ -28,9 +29,11 @@ class GLTFRenderer {
       attribute vec3 aPosition;
 
       uniform mat4 uModelMatrix;
+      uniform mat4 uViewMatrix;
+      uniform mat4 uProjectionMatrix;
       
       void main(void) {
-          gl_Position = uModelMatrix * vec4(aPosition, 1.0);
+          gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
       }
     ''';
   String fsSource =
@@ -54,6 +57,10 @@ class GLTFRenderer {
     }
   }
 
+  Camera activeCameraNode;
+  Matrix4 viewMatrix = new Matrix4.identity();
+  Matrix4 projectionMatrix = new Matrix4.identity();
+
   void draw() {
     logCurrentFunction();
 
@@ -63,15 +70,49 @@ class GLTFRenderer {
     webgl.Program program = buildProgram(vsSource, fsSource);
     gl.useProgram(program);
 
+    if(gltf.cameras.length > 0) {
+      activeCameraNode = gltf.cameras[0];
+    }else{
+      GLTFCameraPerspective camera = new GLTFCameraPerspective(0.7, 1000.0, 0.01);
+      viewMatrix = camera.lookAtMatrix;
+      projectionMatrix = camera.perspectiveMatrix;
+      camera.position = new Vector3(0.5, 0.5, 3.0);
+      activeCameraNode = camera;
+    }
+
+    //setup
+    for (var i = 0; i < nodes.length; i++) {
+      GLTFNode node = nodes[i];
+      if(node.camera != null){
+        if(node.camera.cameraId == activeCameraNode) {
+          setupNodeCamera(program, node);
+        }
+      }
+    }
+
+    setUnifrom(program,'uViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
+    setUnifrom(program,'uProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
+
+    //draw
     for (var i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       if(node.mesh != null){
-        drawNodeMesh(program, node);
+        setupNodeMesh(program, node);
+        drawNodeMesh(program, node.mesh.primitives[0]);
       }
     }
   }
 
-  void drawNodeMesh(webgl.Program program, GLTFNode node) {
+  void setupNodeCamera(webgl.Program program, GLTFNode node) {
+    logCurrentFunction();
+
+    GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
+    viewMatrix = camera.lookAtMatrix;
+    projectionMatrix = camera.perspectiveMatrix;
+    camera.position = node.translation;
+  }
+
+  void setupNodeMesh(webgl.Program program, GLTFNode node) {
     logCurrentFunction();
 
     GLTFMeshPrimitive primitive = node.mesh.primitives[0];
@@ -85,19 +126,22 @@ class GLTFRenderer {
     }
 
     //uniform
-    Vector2 offsetScreen = new Vector2.all(0.0);
-//    Vector2 offsetScreen = new Vector2(-1.0, -0.5);//temp
-    setUnifrom(program,'uModelMatrix',ShaderVariableType.FLOAT_MAT4,(node.matrix..translate(offsetScreen.x, offsetScreen.y)).storage);
+    setUnifrom(program,'uModelMatrix',ShaderVariableType.FLOAT_MAT4,node.matrix.storage);
+  }
 
-    //draw
+  void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
+    logCurrentFunction();
+
+    String attributName = primitive.attributes.keys.toList()[0];//'POSITION'
+    GLTFAccessor accessorVertices = primitive.attributes[attributName];
+
     if (primitive.indices == null) {
-      String attributName = primitive.attributes.keys.toList()[0];//'POSITION'
-      GLTFAccessor accessor = primitive.attributes[attributName];
-      gl.drawArrays(primitive.mode.index, accessor.byteOffset, accessor.count);
+      gl.drawArrays(primitive.mode.index, accessorVertices.byteOffset, accessorVertices.count);
     } else {
-      GLTFAccessor accessor = primitive.indices;
-      gl.drawElements(primitive.mode.index, accessor.count,
-          accessor.componentType.index, accessor.byteOffset);
+      GLTFAccessor accessorIndices = primitive.indices;
+
+      gl.drawElements(primitive.mode.index, accessorIndices.count,
+          accessorIndices.componentType.index, accessorIndices.byteOffset);
     }
   }
 
@@ -117,7 +161,7 @@ class GLTFRenderer {
 
     //>
     setAttribut(
-        program, attributName, accessor.count, accessor.componentType);
+        program, attributName, accessor.typeLength, accessor.componentType);
   }
 
   void bindIndices(GLTFAccessor accessorIndices) {
@@ -160,7 +204,7 @@ class GLTFRenderer {
   /// [componentCount] => 3 (x, y, z)
   void setAttribut(webgl.Program program, String attributName, int componentCount,
       ShaderVariableType componentType) {
-    logCurrentFunction();
+    logCurrentFunction(attributName);
 
     int attributLocation = gl.getAttribLocation(program, 'a${capitalize(attributName)}');
 
@@ -177,7 +221,7 @@ class GLTFRenderer {
   }
 
   void setUnifrom(webgl.Program program,String unifromName, ShaderVariableType componentType, TypedData data){
-    logCurrentFunction();
+    logCurrentFunction(unifromName);
 
     webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, unifromName);
 
@@ -369,6 +413,8 @@ class GLTFRenderer {
         accessor.count * accessor.typeLength);
     return keyValues;
   }
+
+
 }
 
 

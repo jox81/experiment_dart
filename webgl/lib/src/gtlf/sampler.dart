@@ -15,9 +15,10 @@ class GLTFSampler extends GLTFChildOfRootProperty {
       : this.magFilter = TextureFilterType.getByIndex(_gltfSource.magFilter),
         this.minFilter = TextureFilterType.getByIndex(_gltfSource.minFilter),
         this.wrapS = TextureWrapType.getByIndex(_gltfSource.wrapS),
-        this.wrapT = TextureWrapType.getByIndex(_gltfSource.wrapT);
+        this.wrapT = TextureWrapType.getByIndex(_gltfSource.wrapT),
+        super(_gltfSource.name);
 
-  GLTFSampler(this.magFilter, this.minFilter, this.wrapS, this.wrapT);
+  GLTFSampler(this.magFilter, this.minFilter, this.wrapS, this.wrapT,[String name]):super(name);
 
   factory GLTFSampler.fromGltf(glTF.Sampler gltfSource) {
     if (gltfSource == null) return null;

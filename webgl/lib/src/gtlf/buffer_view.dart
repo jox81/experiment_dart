@@ -31,12 +31,13 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
   int target;
   BufferType usage;
 
-  GLTFBufferView._(this._gltfSource)
+  GLTFBufferView._(this._gltfSource, [String name])
       : this.byteLength = _gltfSource.byteLength,
         this.byteOffset = _gltfSource.byteOffset,
         this.byteStride = _gltfSource.byteStride,
         this.usage = _gltfSource.usage != null ? BufferType.getByIndex(_gltfSource.usage.target):null,
-        this.target = _gltfSource.usage != null ? _gltfSource.usage.target: null; // Todo (jpu) : bug if -1 and usage == null. What to do ?
+        this.target = _gltfSource.usage != null ? _gltfSource.usage.target: null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
+        super(name);
 
   GLTFBufferView(
       GLTFBuffer projectBuffer,
@@ -44,8 +45,8 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
       this.byteOffset,
       this.byteStride,
       this.target,
-      this.usage,
-      String name){
+      this.usage,[String name]):
+      super(name){
     this._bufferId = gltfProject.buffers.indexOf(projectBuffer);
   }
 

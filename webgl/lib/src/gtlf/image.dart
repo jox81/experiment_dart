@@ -12,11 +12,12 @@ class GLTFImage extends GLTFChildOfRootProperty {
   GLTFBufferView bufferView;
   Uint8List data;
 
-  GLTFImage._(this._gltfSource)
+  GLTFImage._(this._gltfSource, [String name])
       : this.uri = _gltfSource.uri,
         this.mimeType = _gltfSource.mimeType,
         this.bufferView = new GLTFBufferView.fromGltf(_gltfSource.bufferView),
-        this.data = _gltfSource.data;
+        this.data = _gltfSource.data,
+        super(name);
 
   factory GLTFImage.fromGltf(glTF.Image gltfSource) {
     if (gltfSource == null) return null;

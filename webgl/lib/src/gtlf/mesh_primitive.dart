@@ -31,7 +31,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   int _materialId;
   int get materialId => _materialId;
-  GLTFMaterial get material => gltfProject.materials[_materialId];// Todo (jpu) : ?
+  GLTFMaterial get material => _materialId != null ? gltfProject.materials[_materialId] : null;
 
   // Todo (jpu) : add other members ?
 //  int get count => _count;
@@ -68,6 +68,12 @@ class GLTFMeshPrimitive extends GltfProperty {
           'Indices accessor can only be bound to an existing project accessor'));
       assert(accessorIndices.accessorId != null);
       meshPrimitive._indicesAccessorId = accessorIndices.accessorId;
+    }
+
+    //material
+    if(gltfSource.material != null) {
+      GLTFMaterial material = gltfProject.materials.firstWhere((m)=>m.gltfSource == gltfSource.material, orElse: ()=> throw new Exception('Mesh material can only be bound to an existing project material'));
+      meshPrimitive._materialId = material.materialId;
     }
     return meshPrimitive;
   }

@@ -12,9 +12,9 @@ class GLTFTexture extends GLTFChildOfRootProperty {
 
   GLTFTexture._(this._gltfSource)
       : this.sampler = new GLTFSampler.fromGltf(_gltfSource.sampler),
-        this.source = new GLTFImage.fromGltf(_gltfSource.source);
+        this.source = new GLTFImage.fromGltf(_gltfSource.source), super(_gltfSource.name);
 
-  GLTFTexture(this.sampler, this.source);
+  GLTFTexture(this.sampler, this.source, [String name]):super(name);
 
   factory GLTFTexture.fromGltf(glTF.Texture gltfSource) {
     if (gltfSource == null) return null;

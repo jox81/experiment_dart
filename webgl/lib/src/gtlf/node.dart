@@ -9,6 +9,7 @@ import 'package:webgl/src/camera.dart';
 class GLTFNode extends GLTFChildOfRootProperty{
   glTF.Node _gltfSource;
   glTF.Node get gltfSource => _gltfSource;
+
   int nodeId;
 
   Matrix4 _matrix = new Matrix4.identity();
@@ -29,25 +30,30 @@ class GLTFNode extends GLTFChildOfRootProperty{
   int _meshId;
   GLTFMesh get mesh => _meshId != null ? gltfProject.meshes[_meshId] : null;
 
-  Camera camera;
+  int _cameraId;
+  Camera get camera => _cameraId != null ? gltfProject.cameras[_cameraId] : null;
+
   GLTFSkin skin;
-  List<GLTFNode> get children => gltfProject.nodes.toList().where((n)=>n.parent == this).toList(growable: false);
+
+  List<GLTFNode> get children => gltfProject.nodes.where((n)=>n.parent == this).toList(growable: false);
 
   int _parentId;
+  GLTFNode get parent => _parentId != null ? gltfProject.nodes[_parentId] : null;
   set parent(GLTFNode value) {
     _parentId = gltfProject.nodes.indexOf(value);
   }
-  GLTFNode get parent => _parentId != null ? gltfProject.nodes[_parentId] : null;
 
   bool isJoint = false;
 
-  GLTFNode._(this._gltfSource) :
-        this.camera = Camera.fromGltf(_gltfSource.camera),
-        this._parentId = _getParentId(_gltfSource){
+  GLTFNode._(this._gltfSource):
+  super(_gltfSource.name) {
       if(gltfSource.translation != null) translation = gltfSource.translation;
+      if(gltfSource.rotation != null) rotation = gltfSource.rotation;
+      if(gltfSource.scale != null) scale = gltfSource.scale;
+      if(gltfSource.matrix != null) matrix = gltfSource.matrix;
   }
 
-  static int _getParentId(glTF.Node _gltfSource){
+  static int getParentId(glTF.Node _gltfSource){
 
     int parentId;
 
@@ -60,7 +66,7 @@ class GLTFNode extends GLTFChildOfRootProperty{
     return parentId;
   }
 
-  GLTFNode({GLTFMesh mesh}){
+  GLTFNode({GLTFMesh mesh,String name}):super(name){
     if(mesh != null) {
       this._meshId = gltfProject.meshes.indexOf(mesh);
     }
@@ -74,6 +80,11 @@ class GLTFNode extends GLTFChildOfRootProperty{
     if(gltfSource.mesh != null){
       GLTFMesh mesh = gltfProject.meshes.firstWhere((m)=>m.gltfSource == gltfSource.mesh, orElse: ()=> throw new Exception('Node mesh can only be bound to an existing project mesh'));
       node._meshId = mesh.meshId;
+    }
+
+    if(gltfSource.camera != null){
+      Camera camera = gltfProject.cameras.firstWhere((c)=>c.gltfSource == gltfSource.camera, orElse: ()=> throw new Exception('Node camera can only be bound to an existing project camera'));
+      node._cameraId = camera.cameraId;
     }
 
     return node;

@@ -34,7 +34,7 @@ class ServiceScene {
 // new SceneViewParticleSimple(),
 // new SceneViewPerformance(),
 // new SceneViewShaderLearning01(),
-// new SceneViewExperiment(),
+ new SceneViewExperiment(),
 //  await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
  ];
 }

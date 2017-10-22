@@ -3,6 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
+import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/geometry/models.dart';
 import 'package:gltf/gltf.dart' as glTF hide Context;
@@ -24,20 +25,24 @@ abstract class Camera extends Object3d {
 
   bool _isActive = false;
 
+  int cameraId;
+
+  glTF.Camera get gltfSource;
+
   static Camera fromGltf(glTF.Camera gltfCamera){
     if(gltfCamera != null) {
       if (gltfCamera.perspective != null)
-        return new GLTFCameraPerspective.fromGltf(gltfCamera.perspective);
+        return new GLTFCameraPerspective.fromGltf(gltfCamera);
       if (gltfCamera.orthographic != null)
-        return new GLTFCameraOrthographic.fromGltf(gltfCamera.orthographic);
+        return new GLTFCameraOrthographic.fromGltf(gltfCamera);
     }
     return null;
   }
 
-  bool get isActive => _isActive;
-
   CameraType _type;
   CameraType get type => _type;
+
+  bool get isActive => _isActive;
 
   set isActive(bool value) {
     _isActive = value;
@@ -117,9 +122,6 @@ abstract class Camera extends Object3d {
       _zfar.hashCode ^
       _cameraController.hashCode ^
       _gizmo.hashCode;
-
-
-
 }
 
 class GLTFCameraPerspective extends Camera{
@@ -215,7 +217,7 @@ class GLTFCameraPerspective extends Camera{
 
   @override
   String toString() {
-    return 'GLTFCameraPerspective{_aspectRatio: $_aspectRatio, _yfov: $_yfov, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_perspectiveMatrix, _lookAtMatrix: $_lookAtMatrix}';
+    return 'GLTFCameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_perspectiveMatrix, _lookAtMatrix: $_lookAtMatrix}';
   }
 
   // >> JSON
@@ -241,16 +243,15 @@ class GLTFCameraPerspective extends Camera{
   }
 
   // >> glTF
+  glTF.Camera _gltfSource;
+  glTF.Camera get gltfSource => _gltfSource;
 
-  factory GLTFCameraPerspective.fromGltf(glTF.CameraPerspective gltfCamera){
-    GLTFCameraPerspective camera = new GLTFCameraPerspective(gltfCamera.yfov, gltfCamera.znear, gltfCamera.zfar);
+  factory GLTFCameraPerspective.fromGltf(glTF.Camera gltfCamera){
+    GLTFCameraPerspective camera = new GLTFCameraPerspective(gltfCamera.perspective.yfov, gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
+    .._gltfSource = gltfCamera;
     camera
       .._type = CameraType.perspective
-      .._aspectRatio = gltfCamera.aspectRatio;
-    // Todo (jpu) :
-//      cameraPerspective.extensions;
-//      cameraPerspective.extras;
-
+      .._aspectRatio = gltfCamera.perspective.aspectRatio;
     return camera;
   }
 
@@ -312,13 +313,17 @@ class GLTFCameraOrthographic extends Camera{
 
   // >> glTF
 
-  factory GLTFCameraOrthographic.fromGltf(glTF.CameraOrthographic gltfCamera){
+  glTF.Camera _gltfSource;
+  glTF.Camera get gltfSource => _gltfSource;
+
+  factory GLTFCameraOrthographic.fromGltf(glTF.Camera gltfCamera){
     GLTFCameraOrthographic camera = new GLTFCameraOrthographic()
+      .._gltfSource = gltfCamera
       .._type = CameraType.orthographic
-      .._znear = gltfCamera.znear
-      .._zfar = gltfCamera.zfar
-      .._xmag = gltfCamera.xmag
-      .._ymag = gltfCamera.ymag;
+      .._znear = gltfCamera.orthographic.znear
+      .._zfar = gltfCamera.orthographic.zfar
+      .._xmag = gltfCamera.orthographic.xmag
+      .._ymag = gltfCamera.orthographic.ymag;
 
       // Todo (jpu) :
 //      cameraPerspective.extensions;
@@ -329,7 +334,7 @@ class GLTFCameraOrthographic extends Camera{
 
   @override
   String toString() {
-    return 'GLTFCameraOrthographic{_ymag: $_ymag, _xmag: $_xmag}';
+    return 'GLTFCameraOrthographic{cameraId: $cameraId, _ymag: $_ymag, _xmag: $_xmag}';
   }
 
 

@@ -109,11 +109,11 @@ class _StackTraceLineInfo {
   }
 }
 
-bool logInDebug = false;
-void logCurrentFunction() {
+bool logInDebug = true;
+void logCurrentFunction([String message]) {
   if(logInDebug) {
     _stackTraceInfo.update();
-    _ng1nDebugLogger.info(_stackTraceInfo.currentFunction);
+    _ng1nDebugLogger.info('${_stackTraceInfo.currentFunction} ${message!=null? ': $message':""}');
   }
 }
 

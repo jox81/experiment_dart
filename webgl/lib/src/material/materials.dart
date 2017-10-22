@@ -187,7 +187,6 @@ class MaterialBase extends Material {
 //    logInfo("uViewMatrix*", Context.mainCamera.lookAtMatrix * new Matrix4.identity());
 
     setShaderUniform("uModelViewMatrix", Context.mainCamera.lookAtMatrix * Context.modelMatrix);
-
     setShaderUniform("uProjectionMatrix", Context.mainCamera.perspectiveMatrix);
   }
 }

@@ -11,9 +11,14 @@ class GLTFTextureInfo extends GltfProperty {
 
   GLTFTextureInfo(this.texCoord, this.texture);
 
-  GLTFTextureInfo.fromGltf(this._gltfSource)
+  GLTFTextureInfo._(this._gltfSource)
       : this.texCoord = _gltfSource.texCoord,
         this.texture = new GLTFTexture.fromGltf(_gltfSource.texture);
+
+  factory GLTFTextureInfo.fromGltf(glTF.TextureInfo gltfSource){
+    if (gltfSource == null) return null;
+    return new GLTFTextureInfo._(gltfSource);
+  }
 
   @override
   String toString() {

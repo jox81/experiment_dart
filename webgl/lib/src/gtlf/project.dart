@@ -120,6 +120,8 @@ class GLTFProject {
   List<GLTFNode> get nodes => _nodes.toList(growable: false);
   void addNode(GLTFNode value){
     assert(value != null);
+
+    value.nodeId = nodes.length > 0 ? nodes.last.nodeId + 1 : 0;
     _nodes.add(value);
   }
 
@@ -152,14 +154,6 @@ class GLTFProject {
         }
       }
 
-      //Cameras
-      for (glTF.Camera gltfCamera in _gltfSource.cameras) {
-        Camera camera = Camera.fromGltf(gltfCamera);
-        if (camera != null) {
-          cameras.add(camera);
-        }
-      }
-
       //Images
       for (glTF.Image gltfImage in _gltfSource.images) {
         GLTFImage image = new GLTFImage.fromGltf(gltfImage);
@@ -188,6 +182,7 @@ class GLTFProject {
       for (glTF.Material gltfMaterial in _gltfSource.materials) {
         GLTFMaterial material = new GLTFMaterial.fromGltf(gltfMaterial);
         if (material != null) {
+          material.materialId = materials.length > 0 ? materials.last.materialId + 1 : 0;
           materials.add(material);
         }
       }
@@ -198,6 +193,15 @@ class GLTFProject {
         if (accessor != null) {
           accessor.accessorId = accessors.length > 0 ? accessors.last.accessorId + 1 : 0;
           accessors.add(accessor);
+        }
+      }
+
+      //Cameras
+      for (glTF.Camera gltfCamera in _gltfSource.cameras) {
+        Camera camera = Camera.fromGltf(gltfCamera);
+        if (camera != null) {
+          camera.cameraId = cameras.length > 0 ? cameras.last.cameraId + 1 : 0;
+          cameras.add(camera);
         }
       }
 
@@ -214,8 +218,16 @@ class GLTFProject {
       for (glTF.Node gltfNode in _gltfSource.nodes) {
         GLTFNode node = new GLTFNode.fromGltf(gltfNode);
         if (node != null) {
-          node.nodeId = nodes.length > 0 ? nodes.last.nodeId + 1 : 0;
           addNode(node);
+        }
+      }
+      //Nodes parenting
+      for (GLTFNode node in nodes) {
+        if(node.gltfSource.children != null && node.gltfSource.children.length > 0){
+          for (int i = 0; i < node.gltfSource.children.length; i++) {
+            nodes.where((n)=>node.gltfSource.children.contains(n.gltfSource))
+            ..forEach((n)=> n.parent = node);
+          }
         }
       }
 
@@ -225,6 +237,9 @@ class GLTFProject {
         if (scene != null) {
           addScene(scene);
         }
+      }
+      if(_gltfSource.scene != null) {
+        scene = new GLTFScene.fromGltf(_gltfSource.scene);
       }
 
       //Animation

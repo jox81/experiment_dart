@@ -3,16 +3,21 @@ import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 
 class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
-  glTF.NormalTextureInfo get gltfSource =>
-      super.gltfSource as glTF.NormalTextureInfo;
+  glTF.OcclusionTextureInfo _gltfSource;
+  glTF.OcclusionTextureInfo get gltfSource => _gltfSource;
 
   double strength;
 
   GLTFOcclusionTextureInfo(int texCoord, GLTFTexture texture, this.strength):super(texCoord, texture);
 
-  GLTFOcclusionTextureInfo.fromGltf(glTF.OcclusionTextureInfo gltfSource)
-      : this.strength = gltfSource.strength,
-        super.fromGltf(gltfSource);
+  GLTFOcclusionTextureInfo._(glTF.OcclusionTextureInfo gltfSource)
+      : this.strength = gltfSource.strength, super(gltfSource.texCoord, new GLTFTexture.fromGltf(gltfSource.texture));
+
+  factory GLTFOcclusionTextureInfo.fromGltf(
+      glTF.OcclusionTextureInfo gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFOcclusionTextureInfo._(gltfSource);
+  }
 
   @override
   String toString() {

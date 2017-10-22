@@ -9,6 +9,8 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
   glTF.Material _gltfSource;
   glTF.Material get gltfSource => _gltfSource;
 
+  int materialId;
+
   // Todo (jpu) : add other material objects
   final GLTFPbrMetallicRoughness pbrMetallicRoughness;
   final GLTFNormalTextureInfo normalTexture;
@@ -21,7 +23,7 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
   final double alphaCutoff;
   final bool doubleSided;
 
-  GLTFMaterial._(this._gltfSource)
+  GLTFMaterial._(this._gltfSource, [String name])
       : this.pbrMetallicRoughness = new GLTFPbrMetallicRoughness.fromGltf(
       _gltfSource.pbrMetallicRoughness),
         this.normalTexture = _gltfSource.normalTexture != null
@@ -37,7 +39,8 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
         this.emissiveFactor = _gltfSource.emissiveFactor,
         this.alphaMode = _gltfSource.alphaMode,
         this.alphaCutoff = _gltfSource.alphaCutoff,
-        this.doubleSided = _gltfSource.doubleSided;
+        this.doubleSided = _gltfSource.doubleSided,
+        super(_gltfSource.name);
 
   GLTFMaterial(
       this.pbrMetallicRoughness,
@@ -47,7 +50,8 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
       this.emissiveFactor,
       this.alphaMode,
       this.alphaCutoff,
-      this.doubleSided);
+      this.doubleSided, [String name]):
+        super(name);
 
   factory GLTFMaterial.fromGltf(glTF.Material gltfSource) {
     if (gltfSource == null) return null;

@@ -3,6 +3,7 @@ import '000.dart' as exp000;
 import '001.dart' as exp001;
 import '002.dart' as exp002;
 import '003.dart' as exp003;
+import '004.dart' as exp004;
 import 'dart:async';
 import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/scene.dart';
@@ -22,7 +23,7 @@ class SceneViewExperiment extends Scene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    Model model = await exp003.experiment();
+    Model model = await exp004.experiment();
     materials.add(model.material);
     models.add(model);
 
