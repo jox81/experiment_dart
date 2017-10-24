@@ -5,12 +5,13 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
+import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
 
@@ -23,29 +24,8 @@ class GLTFRenderer {
 
   webgl.RenderingContext gl;
 
-  String vsSource =
-    '''
-      attribute vec3 aPosition;
-      attribute vec3 aNormal;
-
-      uniform mat4 uModelMatrix;
-      uniform mat4 uViewMatrix;
-      uniform mat4 uProjectionMatrix;
-      
-      void main(void) {
-          vec3 v = aNormal;
-          gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
-      }
-    ''';
-  String fsSource =
-    '''
-      void main() {
-        gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
-      }
-    ''';
-
   GLTFRenderer(this.gltf) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     try {
       CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
@@ -63,13 +43,10 @@ class GLTFRenderer {
   Matrix4 projectionMatrix = new Matrix4.identity();
 
   void draw() {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index);
-
-    webgl.Program program = buildProgram(vsSource, fsSource);
-    gl.useProgram(program);
 
     if(gltf.cameras.length > 0) {
       activeCameraNode = gltf.cameras[0];
@@ -80,6 +57,11 @@ class GLTFRenderer {
       projectionMatrix = camera.perspectiveMatrix;
       activeCameraNode = camera;
     }
+
+    ShaderSourceInterface shaderSource = gltf.materials.isEmpty ? new DefaultShader() : new PBRShader();
+
+    webgl.Program program = buildProgram(shaderSource);
+    gl.useProgram(program);
 
     //setup
     for (var i = 0; i < activeScene.nodes.length; i++) {
@@ -93,6 +75,11 @@ class GLTFRenderer {
 
     setUnifrom(program,'uViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
     setUnifrom(program,'uProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
+
+    if(!gltf.materials.isEmpty){
+      GLTFMaterial material = gltf.materials[0];
+      setUnifrom(program,'uColor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
+    }
 
     //draw
     List<GLTFNode> nodes = activeScene.nodes;
@@ -111,7 +98,7 @@ class GLTFRenderer {
   }
 
   void setupNodeCamera(webgl.Program program, GLTFNode node) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
     viewMatrix = camera.lookAtMatrix;
@@ -120,7 +107,7 @@ class GLTFRenderer {
   }
 
   void setupNodeMesh(webgl.Program program, GLTFNode node) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     GLTFMeshPrimitive primitive = node.mesh.primitives[0];
 
@@ -137,7 +124,7 @@ class GLTFRenderer {
   }
 
   void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     if (primitive.indices == null) {
       String attributName = 'POSITION';
@@ -145,7 +132,7 @@ class GLTFRenderer {
       gl.drawArrays(primitive.mode.index, accessorPosition.byteOffset, accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-      logCurrentFunction('gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
+      debug.logCurrentFunction('gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
       gl.drawElements(primitive.mode.index, accessorIndices.count,
           accessorIndices.componentType.index, accessorIndices.byteOffset);
     }
@@ -157,8 +144,8 @@ class GLTFRenderer {
         accessor.bufferView.byteOffset + accessor.byteOffset,
         accessor.count * accessor.components);
 
-    logCurrentFunction('$attributName');
-    logCurrentFunction(verticesInfos.toString());
+    debug.logCurrentFunction('$attributName');
+    debug.logCurrentFunction(verticesInfos.toString());
 
     //>
     initBuffer(accessor.bufferView.usage, verticesInfos);
@@ -168,7 +155,7 @@ class GLTFRenderer {
   }
 
   void initBuffer(BufferType bufferType, TypedData data) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     webgl.Buffer buffer = gl.createBuffer();// Todo (jpu) : Should re-use the created buffer
     gl.bindBuffer(bufferType.index, buffer);
@@ -190,8 +177,8 @@ class GLTFRenderer {
     int offset = 0;         // start at the beginning of the buffer that contained the sent data in the initBuffer.
                             // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
 
-    logCurrentFunction('gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
-    logCurrentFunction('$accessor');
+    debug.logCurrentFunction('gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+    debug.logCurrentFunction('$accessor');
 
     //>
     gl.vertexAttribPointer(
@@ -200,22 +187,22 @@ class GLTFRenderer {
   }
 
   void bindIndices(GLTFAccessor accessorIndices) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
         .asUint16List(accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset, accessorIndices.count);
-    logCurrentFunction(indices.toString());
+    debug.logCurrentFunction(indices.toString());
 
     initBuffer(accessorIndices.bufferView.usage, indices);
   }
 
-  webgl.Program buildProgram(String vsSource, String fsSource) {
-    logCurrentFunction();
+  webgl.Program buildProgram(ShaderSourceInterface shaderSource) {
+    debug.logCurrentFunction();
 
     webgl.Program program = gl.createProgram();
 
-    addShader(program, ShaderType.VERTEX_SHADER, vsSource);
-    addShader(program, ShaderType.FRAGMENT_SHADER, fsSource);
+    addShader(program, ShaderType.VERTEX_SHADER, shaderSource.getSource(ShaderType.VERTEX_SHADER));
+    addShader(program, ShaderType.FRAGMENT_SHADER, shaderSource.getSource(ShaderType.FRAGMENT_SHADER));
     gl.linkProgram(program);
     if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS.index) ==
         null) {
@@ -225,7 +212,7 @@ class GLTFRenderer {
   }
 
   void addShader(webgl.Program program, ShaderType type, String source) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     webgl.Shader shader = gl.createShader(type.index);
     gl.shaderSource(shader, source);
@@ -237,14 +224,17 @@ class GLTFRenderer {
     gl.attachShader(program, shader);
   }
 
-  void setUnifrom(webgl.Program program,String unifromName, ShaderVariableType componentType, TypedData data){
-    logCurrentFunction(unifromName);
+  void setUnifrom(webgl.Program program,String uniformName, ShaderVariableType componentType, TypedData data){
+    debug.logCurrentFunction(uniformName);
 
-    webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, unifromName);
+    webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, uniformName);
 
     bool transpose = false;
 
     switch(componentType){
+      case ShaderVariableType.FLOAT_VEC4:
+        gl.uniform4fv(uniformLocation, data as Float32List);
+        break;
       case ShaderVariableType.FLOAT_MAT4:
         gl.uniformMatrix4fv(uniformLocation, transpose, data);
         break;
@@ -259,7 +249,7 @@ class GLTFRenderer {
   int fps = 0;
   num speedFactor  = 1.0;
   void render({num time: 0.0}) {
-    logCurrentFunction('------------------------------------------------');
+    debug.logCurrentFunction('------------------------------------------------');
 
     deltaTime = time - currentTime;
     timeFps += deltaTime;
@@ -287,7 +277,7 @@ class GLTFRenderer {
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1).toLowerCase();
 
   void update() {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     for (int i = 0; i < gltfProject.animations.length; i++) {
       GLTFAnimation animation = gltfProject.animations[i];
@@ -301,7 +291,7 @@ class GLTFRenderer {
   }
 
   ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler){
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     Float32List keyTimes = getKeyTimes(sampler.input);
     Float32List keyValues = getKeyValues(sampler.output);
@@ -406,7 +396,7 @@ class GLTFRenderer {
   }
 
   Float32List getKeyTimes(GLTFAccessor accessor){
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     Float32List keyTimes = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset, accessor.count * accessor.components);
@@ -415,7 +405,7 @@ class GLTFRenderer {
 
   // Todo (jpu) : try to return only buffer
   Float32List getKeyValues(GLTFAccessor accessor) {
-    logCurrentFunction();
+    debug.logCurrentFunction();
 
     Float32List keyValues = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset,

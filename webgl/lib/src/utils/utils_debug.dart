@@ -110,6 +110,7 @@ class _StackTraceLineInfo {
 }
 
 bool logInDebug = true;
+
 void logCurrentFunction([String message]) {
   if(logInDebug) {
     _stackTraceInfo.update();

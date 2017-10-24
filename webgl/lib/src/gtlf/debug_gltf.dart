@@ -14,10 +14,12 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 import 'package:gltf/gltf.dart' as glTF;
+import 'package:webgl/src/utils/utils_debug.dart' as debug;
 
 GLTFProject _gltf;
 
 Future<GLTFProject> debugGltf(String gltfUrl, {bool doLog : true}) async {
+  debug.logInDebug = doLog;
   _gltf = await _loadGLTF(gltfUrl);
   if(doLog) {
     _testScenes();

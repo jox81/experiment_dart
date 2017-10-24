@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
@@ -6,7 +7,7 @@ class GLTFPbrMetallicRoughness extends GltfProperty {
   glTF.PbrMetallicRoughness _gltfSource;
   glTF.PbrMetallicRoughness get gltfSource => _gltfSource;
 
-  final List<double> baseColorFactor;
+  final Float32List baseColorFactor;
   final GLTFTextureInfo baseColorTexture; // Todo (jpu) : Convert to linear flow
 
   final double metallicFactor;
@@ -15,7 +16,7 @@ class GLTFPbrMetallicRoughness extends GltfProperty {
   metallicRoughnessTexture; // Todo (jpu) : Convert to linear flow
 
   GLTFPbrMetallicRoughness._(this._gltfSource)
-      : this.baseColorFactor = _gltfSource.baseColorFactor,
+      : this.baseColorFactor = new Float32List.fromList(_gltfSource.baseColorFactor),
         this.baseColorTexture =
         new GLTFTextureInfo.fromGltf(_gltfSource.baseColorTexture),
         this.metallicFactor = _gltfSource.metallicFactor,

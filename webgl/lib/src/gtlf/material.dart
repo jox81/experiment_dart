@@ -4,6 +4,7 @@ import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFMaterial extends GLTFChildOfRootProperty {
   glTF.Material _gltfSource;
@@ -62,5 +63,83 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
   String toString() {
     return 'GLTFMaterial{pbrMetallicRoughness: $pbrMetallicRoughness, normalTexture: $normalTexture, occlusionTexture: $occlusionTexture, emissiveTexture: $emissiveTexture, emissiveFactor: $emissiveFactor, alphaMode: $alphaMode, alphaCutoff: $alphaCutoff, doubleSided: $doubleSided}';
   }
+}
 
+abstract class ShaderSourceInterface{
+  String getSource(ShaderType shaderType);
+}
+
+class DefaultShader extends ShaderSourceInterface{
+  static DefaultShader _instance = new DefaultShader._();
+
+  Map<ShaderType, String> _shaderSources = {
+    ShaderType.VERTEX_SHADER :
+      '''
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+  
+        uniform mat4 uModelMatrix;
+        uniform mat4 uViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        
+        void main(void) {
+            vec3 v = aNormal;//not used actually;
+            gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+        }
+      ''',
+    ShaderType.FRAGMENT_SHADER :
+      '''
+        void main() {
+          gl_FragColor = vec4(0.5, 0.5, 0.5, 1.0);
+        }
+      '''
+  };
+
+  DefaultShader._();
+
+  factory DefaultShader(){
+    return _instance;
+  }
+
+  @override
+  String getSource(ShaderType shaderType) => _shaderSources[shaderType];
+}
+
+class PBRShader extends ShaderSourceInterface{
+  static PBRShader _instance = new PBRShader._();
+
+  Map<ShaderType, String> _shaderSources = {
+    ShaderType.VERTEX_SHADER :
+    '''
+        attribute vec3 aPosition;
+        attribute vec3 aNormal;
+  
+        uniform mat4 uModelMatrix;
+        uniform mat4 uViewMatrix;
+        uniform mat4 uProjectionMatrix;
+        
+        void main(void) {
+            vec3 v = aNormal;//not used actually;
+            gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
+        }
+    ''',
+    ShaderType.FRAGMENT_SHADER :
+    '''
+        precision mediump float;
+        uniform vec4 uColor;
+    
+        void main() {
+          gl_FragColor = uColor;
+        }
+    '''
+  };
+
+  PBRShader._();
+
+  factory PBRShader(){
+    return _instance;
+  }
+
+  @override
+  String getSource(ShaderType shaderType) => _shaderSources[shaderType];
 }
