@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
@@ -68,8 +69,44 @@ Future main() async {
       expect(primitive.attributes, isNotNull);
       expect(primitive.attributes['POSITION'], gltfProject.accessors[1]);
       expect(primitive.attributes['NORMAL'], gltfProject.accessors[2]);
+
       expect(primitive.indices, isNotNull);
       expect(primitive.indices, gltfProject.accessors[0]);
+    });
+    test("meshes attributs POSITION", () async {
+      GLTFMesh mesh = gltfProject.meshes[0];
+
+      GLTFAccessor accessor = mesh.primitives[0].attributes['POSITION'];
+      expect(accessor, isNotNull);
+
+      Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
+          accessor.bufferView.byteOffset + accessor.byteOffset,
+          accessor.count * accessor.components);
+
+      expect(verticesInfos.length, 9);
+      expect(verticesInfos, [0.0,0.0,0.0,1.0,0.0,0.0,0.0,1.0,0.0]);
+    });
+    test("meshes attributs NORMAL", () async {
+      GLTFMesh mesh = gltfProject.meshes[0];
+
+      GLTFAccessor accessor = mesh.primitives[0].attributes['NORMAL'];
+      expect(accessor, isNotNull);
+
+      Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
+          accessor.bufferView.byteOffset + accessor.byteOffset,
+          accessor.count * accessor.components);
+
+      expect(verticesInfos.length, 9);
+      expect(verticesInfos, [0.0,0.0,1.0,0.0,0.0,1.0,0.0,0.0,1.0]);
+    });
+    test("meshes indices", () async {
+      GLTFMesh mesh = gltfProject.meshes[0];
+
+      GLTFAccessor accessorIndices = mesh.primitives[0].indices;
+      Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
+          .asUint16List(accessorIndices.byteOffset, accessorIndices.count);
+
+      expect(indices, [0,1,2]);
     });
     test("buffers", () async {
       expect(gltfProject.buffers.length, 1);

@@ -34,42 +34,65 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
 /// > 5126 is single precision float (4 bytes)
 /// [type] defines whether they should be read singly ("SCALAR") or in vector groups (e.g. "VEC3")
 ///
+///
+/// Zxemple :
+/// accessor._bufferViewId = 1
+/// accessor.byteOffset = 0
+/// accessor.byteLength = 288
+/// --> 288 = 24 * 12
+/// accessor.count = 24
+/// accessor.type = FLOAT_VEC3 : 35665
+/// accessor.elementLength = 12
+/// --> 12 = 3 * 4
+/// accessor.typeString = "VEC3"
+/// accessor.components = 3
+/// --
+/// accessor.componentType = FLOAT : 5126
+/// accessor.componentLength = 4
+/// --
+/// accessor.byteStride = 12
+///
+/// >> 24 elements * 3 VEC3  * 4 bytes (FLOAT) = 288 byteLength avec une répétition stride tous les 12 bytes (components * componentLength)
+
 class GLTFAccessor extends GLTFChildOfRootProperty {
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;
 
   int accessorId;
 
-  final int byteOffset;
-  final ShaderVariableType componentType;
-  final String typeString;
-  final int typeLength;
-  final ShaderVariableType type;
+  //>
+  int _bufferViewId;
+  GLTFBufferView get bufferView => _bufferViewId != null ? gltfProject.bufferViews[_bufferViewId] : null;
+  final int byteOffset; //Start reading byte at
+  int get byteLength => _gltfSource.byteLength;// Total length
+  //
   final int count;
+  final ShaderVariableType type;//FLOAT_VEC3
+  int get elementLength => _gltfSource.elementLength;
+  //
+  final String typeString;//SCALAR/VEC3/...
+  int get components => _gltfSource.components;//Count of components : vec3 -> 3, vec2 -> 2
+  //
+  final ShaderVariableType componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
+  int get componentLength => _gltfSource.componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
+  //
+  int get byteStride => _gltfSource.byteStride;//size of repetition group
+  //<
+
   final bool normalized;
   final List<num> max;
   final List<num> min;
   final GLTFAccessorSparse sparse;
 
-  int _bufferViewId;
-  GLTFBufferView get bufferView => _bufferViewId != null ? gltfProject.bufferViews[_bufferViewId] : null;
-
-  int get components => _gltfSource.components;
-  int get componentLength => _gltfSource.componentLength; ///byte count of the component
-  int get elementLength => _gltfSource.elementLength;
-  int get byteStride => _gltfSource.byteStride;
-  int get byteLength => _gltfSource.byteLength;
-  bool get isUnit => _gltfSource.isUnit;
   bool get isXyzSign => _gltfSource.isXyzSign;
+  bool get isUnit => _gltfSource.isUnit;
 
-  // Todo (jpu) : do better check!!!
   GLTFAccessor._(this._gltfSource, [String name])
       : this.byteOffset = _gltfSource.byteOffset,
         this.componentType =
         ShaderVariableType.getByIndex(_gltfSource.componentType),
         this.count = _gltfSource.count,
         this.typeString = _gltfSource.type,
-        this.typeLength = ACCESSOR_TYPES_LENGTHS[_gltfSource.type],
         this.type = ShaderVariableType.getByComponentAndType(
             ShaderVariableType.getByIndex(_gltfSource.componentType).name,
             _gltfSource.type),
@@ -91,7 +114,6 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       this.max,
       this.min,
       this.sparse, [String name]):
-      this.typeLength = ACCESSOR_TYPES_LENGTHS[typeString],
       super(name);
 
   factory GLTFAccessor.fromGltf(glTF.Accessor gltfSource) {
@@ -112,7 +134,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFAccessor{accessorId : $accessorId, byteOffset: $byteOffset, componentType: $componentType, typeString: $typeString, type: $type, count: $count, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: $_bufferViewId, byteOffset: $byteOffset, byteLength: $byteLength, count: $count, type: $type, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, byteStride: $byteStride, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
   }
 
 }

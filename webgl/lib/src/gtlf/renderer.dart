@@ -20,19 +20,20 @@ import 'package:webgl/src/camera.dart';
 class GLTFRenderer {
   GLTFProject gltf;
   GLTFScene get activeScene => gltf.scenes[0];
-  List<GLTFNode> get nodes => activeScene.nodes;
 
   webgl.RenderingContext gl;
 
   String vsSource =
     '''
       attribute vec3 aPosition;
+      attribute vec3 aNormal;
 
       uniform mat4 uModelMatrix;
       uniform mat4 uViewMatrix;
       uniform mat4 uProjectionMatrix;
       
       void main(void) {
+          vec3 v = aNormal;
           gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aPosition, 1.0);
       }
     ''';
@@ -74,15 +75,15 @@ class GLTFRenderer {
       activeCameraNode = gltf.cameras[0];
     }else{
       GLTFCameraPerspective camera = new GLTFCameraPerspective(0.7, 1000.0, 0.01);
+      camera.position = new Vector3(3.0, 3.0, 5.0);
       viewMatrix = camera.lookAtMatrix;
       projectionMatrix = camera.perspectiveMatrix;
-      camera.position = new Vector3(0.5, 0.5, 3.0);
       activeCameraNode = camera;
     }
 
     //setup
-    for (var i = 0; i < nodes.length; i++) {
-      GLTFNode node = nodes[i];
+    for (var i = 0; i < activeScene.nodes.length; i++) {
+      GLTFNode node = activeScene.nodes[i];
       if(node.camera != null){
         if(node.camera.cameraId == activeCameraNode) {
           setupNodeCamera(program, node);
@@ -94,12 +95,18 @@ class GLTFRenderer {
     setUnifrom(program,'uProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
 
     //draw
+    List<GLTFNode> nodes = activeScene.nodes;
+    drawNodes(nodes, program);
+  }
+
+  void drawNodes(List<GLTFNode> nodes, webgl.Program program) {
     for (var i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       if(node.mesh != null){
         setupNodeMesh(program, node);
         drawNodeMesh(program, node.mesh.primitives[0]);
       }
+      drawNodes(node.children, program);
     }
   }
 
@@ -118,8 +125,8 @@ class GLTFRenderer {
     GLTFMeshPrimitive primitive = node.mesh.primitives[0];
 
     //bind
-    for (int i = 0; i < primitive.attributes.keys.length; i++) {
-      bindVertices(program, primitive);
+    for (String attributName in primitive.attributes.keys) {
+      bindVertexArrayData(program, attributName, primitive.attributes[attributName]);
     }
     if(primitive.indices != null){
       bindIndices(primitive.indices);
@@ -132,43 +139,72 @@ class GLTFRenderer {
   void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
     logCurrentFunction();
 
-    String attributName = primitive.attributes.keys.toList()[0];//'POSITION'
-    GLTFAccessor accessorVertices = primitive.attributes[attributName];
-
     if (primitive.indices == null) {
-      gl.drawArrays(primitive.mode.index, accessorVertices.byteOffset, accessorVertices.count);
+      String attributName = 'POSITION';
+      GLTFAccessor accessorPosition = primitive.attributes[attributName];
+      gl.drawArrays(primitive.mode.index, accessorPosition.byteOffset, accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-
+      logCurrentFunction('gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
       gl.drawElements(primitive.mode.index, accessorIndices.count,
           accessorIndices.componentType.index, accessorIndices.byteOffset);
     }
   }
 
-  void bindVertices(webgl.Program program, GLTFMeshPrimitive primitive) {
-    logCurrentFunction();
-
-    String attributName = primitive.attributes.keys.toList()[0];
-    GLTFAccessor accessor = primitive.attributes[attributName];
-
+  void bindVertexArrayData(webgl.Program program, String attributName, GLTFAccessor accessor) {
     GLTFBuffer bufferData = accessor.bufferView.buffer;
     Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
-        accessor.bufferView.byteOffset,
-        accessor.count * accessor.typeLength);
+        accessor.bufferView.byteOffset + accessor.byteOffset,
+        accessor.count * accessor.components);
+
+    logCurrentFunction('$attributName');
+    logCurrentFunction(verticesInfos.toString());
 
     //>
     initBuffer(accessor.bufferView.usage, verticesInfos);
 
     //>
-    setAttribut(
-        program, attributName, accessor.typeLength, accessor.componentType);
+    setAttribut(program, attributName, accessor);
+  }
+
+  void initBuffer(BufferType bufferType, TypedData data) {
+    logCurrentFunction();
+
+    webgl.Buffer buffer = gl.createBuffer();// Todo (jpu) : Should re-use the created buffer
+    gl.bindBuffer(bufferType.index, buffer);
+    gl.bufferData(bufferType.index, data, BufferUsageType.STATIC_DRAW.index);
+  }
+
+  /// [componentCount] => 3 (x, y, z)
+  void setAttribut(webgl.Program program, String attributName, GLTFAccessor accessor) {
+    String shaderAttributName = 'a${capitalize(attributName)}';
+
+    //>
+    int attributLocation = gl.getAttribLocation(program, shaderAttributName);
+
+    int components = accessor.components;
+    ShaderVariableType componentType = accessor.componentType;
+    bool normalized = accessor.normalized;
+    int stride = 0;         // how many bytes to move to the next vertex
+                                              // 0 = use the correct stride for type and numComponents
+    int offset = 0;         // start at the beginning of the buffer that contained the sent data in the initBuffer.
+                            // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+
+    logCurrentFunction('gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+    logCurrentFunction('$accessor');
+
+    //>
+    gl.vertexAttribPointer(
+        attributLocation, components, componentType.index, normalized, stride, offset);
+    gl.enableVertexAttribArray(attributLocation);// turn on getting data out of a buffer for this attribute
   }
 
   void bindIndices(GLTFAccessor accessorIndices) {
     logCurrentFunction();
 
     Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
-        .asUint16List(accessorIndices.bufferView.byteOffset, accessorIndices.count);
+        .asUint16List(accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset, accessorIndices.count);
+    logCurrentFunction(indices.toString());
 
     initBuffer(accessorIndices.bufferView.usage, indices);
   }
@@ -201,25 +237,6 @@ class GLTFRenderer {
     gl.attachShader(program, shader);
   }
 
-  /// [componentCount] => 3 (x, y, z)
-  void setAttribut(webgl.Program program, String attributName, int componentCount,
-      ShaderVariableType componentType) {
-    logCurrentFunction(attributName);
-
-    int attributLocation = gl.getAttribLocation(program, 'a${capitalize(attributName)}');
-
-    // turn on getting data out of a buffer for this attribute
-    gl.enableVertexAttribArray(attributLocation);
-
-    bool normalize = false;
-    int offset = 0;         // start at the beginning of the buffer
-    int stride = 0;         // how many bytes to move to the next vertex
-                            // 0 = use the correct stride for type and numComponents
-
-    gl.vertexAttribPointer(
-        attributLocation, componentCount, componentType.index, normalize, stride, offset);
-  }
-
   void setUnifrom(webgl.Program program,String unifromName, ShaderVariableType componentType, TypedData data){
     logCurrentFunction(unifromName);
 
@@ -236,21 +253,13 @@ class GLTFRenderer {
     }
   }
 
-  void initBuffer(BufferType bufferType, TypedData data) {
-    logCurrentFunction();
-
-    webgl.Buffer buffer = gl.createBuffer();
-    gl.bindBuffer(bufferType.index, buffer);
-    gl.bufferData(bufferType.index, data, BufferUsageType.STATIC_DRAW.index);
-  }
-
   num currentTime = 0;
   num deltaTime = 0;
   num timeFps = 0;
   int fps = 0;
   num speedFactor  = 1.0;
   void render({num time: 0.0}) {
-    logCurrentFunction();
+    logCurrentFunction('------------------------------------------------');
 
     deltaTime = time - currentTime;
     timeFps += deltaTime;
@@ -313,8 +322,8 @@ class GLTFRenderer {
 
 
     //> values
-    Float32List previousValues = keyValues.buffer.asFloat32List(sampler.output.byteOffset + previousIndex * sampler.output.typeLength * sampler.output.componentLength, sampler.output.typeLength);
-    Float32List nextValues = keyValues.buffer.asFloat32List(sampler.output.byteOffset + nextIndex * sampler.output.typeLength * sampler.output.componentLength, sampler.output.typeLength);
+    Float32List previousValues = keyValues.buffer.asFloat32List(sampler.output.byteOffset + previousIndex * sampler.output.components * sampler.output.componentLength, sampler.output.components);
+    Float32List nextValues = keyValues.buffer.asFloat32List(sampler.output.byteOffset + nextIndex * sampler.output.components * sampler.output.componentLength, sampler.output.components);
 
     double interpolationValue = (playTime - previousTime) / (nextTime - previousTime);
 
@@ -400,7 +409,7 @@ class GLTFRenderer {
     logCurrentFunction();
 
     Float32List keyTimes = accessor.bufferView.buffer.data.buffer.asFloat32List(
-        accessor.byteOffset, accessor.count * accessor.typeLength);
+        accessor.byteOffset, accessor.count * accessor.components);
     return keyTimes;
   }
 
@@ -410,7 +419,7 @@ class GLTFRenderer {
 
     Float32List keyValues = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset,
-        accessor.count * accessor.typeLength);
+        accessor.count * accessor.components);
     return keyValues;
   }
 
