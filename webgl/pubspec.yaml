@@ -13,6 +13,7 @@ dependencies:
   test:
   gltf:
     path: ../gltf
+  datgui: "^0.2.0+1"
 
 dev_dependencies:
   browser: '>=0.10.0 <0.11.0'

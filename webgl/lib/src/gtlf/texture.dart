@@ -5,6 +5,8 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFTexture extends GLTFChildOfRootProperty {
   glTF.Texture _gltfSource;
+
+  bool clamp;
   glTF.Texture get gltfSource => _gltfSource;
 
   final GLTFSampler sampler;

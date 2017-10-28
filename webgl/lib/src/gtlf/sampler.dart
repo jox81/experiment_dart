@@ -4,6 +4,8 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFSampler extends GLTFChildOfRootProperty {
   glTF.Sampler _gltfSource;
+
+  int samplerId;// Todo (jpu) :
   glTF.Sampler get gltfSource => _gltfSource;
 
   final TextureFilterType magFilter;

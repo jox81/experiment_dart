@@ -4,6 +4,9 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFTextureInfo extends GltfProperty {
   glTF.TextureInfo _gltfSource;
+
+  int index; // Todo (jpu) :
+
   glTF.TextureInfo get gltfSource => _gltfSource;
 
   final int texCoord;
