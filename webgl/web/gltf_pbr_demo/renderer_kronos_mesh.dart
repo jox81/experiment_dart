@@ -13,6 +13,8 @@ import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'renderer_kronos_scene.dart';
 import 'renderer_kronos_utils.dart';
 import 'package:webgl/src/gtlf/texture.dart';
@@ -74,6 +76,7 @@ class KronosMesh {
 
   KronosMesh(webgl.RenderingContext gl, this.scene, GlobalState globalState,
       this.modelPath, GLTFProject gltf, int meshIdx) {
+    logCurrentFunction();
     defines['USE_IBL'] = 1;
 
     localState = new LocalState();
@@ -130,6 +133,7 @@ class KronosMesh {
 
   webgl.Program initProgram(
       webgl.RenderingContext gl, GlobalState globalState) {
+    logCurrentFunction();
     var definesToString = (Map<String, int> defines) {
       String outStr = '';
       for (String def in defines.keys) {
@@ -169,12 +173,14 @@ class KronosMesh {
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
+    gl.validateProgram(program);
 
     return program;
   }
 
   void drawMesh(webgl.RenderingContext gl, Matrix4 transform, Matrix4 view,
       Matrix4 projection, GlobalState globalState) {
+    logCurrentFunction();
     // Update model matrix
     Matrix4 modelMatrix = new Matrix4.identity();
     modelMatrix.multiply(transform);
@@ -193,10 +199,10 @@ class KronosMesh {
     mvpMatrix = (projection * mvMatrix) as Matrix4;
 
     // these should actually be local to the mesh (not in global)
-    globalState.uniforms['u_MVPMatrix'].vals = <dynamic>[false, mvpMatrix];
+    globalState.uniforms['u_MVPMatrix'].vals = <dynamic>[false, mvpMatrix.storage];
 
     // Update normal matrix
-    globalState.uniforms['u_ModelMatrix'].vals = <dynamic>[false, modelMatrix];
+    globalState.uniforms['u_ModelMatrix'].vals = <dynamic>[false, modelMatrix.storage];
 
     applyState(gl, globalState);
 
@@ -210,8 +216,9 @@ class KronosMesh {
   }
 
   ///Créer un Buffer
-  bool initArrayBuffer(webgl.RenderingContext gl, dynamic data, int num, dynamic type,
+  bool initArrayBuffer(webgl.RenderingContext gl, TypedData data, int num, int type,
       String attributeName, int stride, int offset) {
+    logCurrentFunction();
     webgl.Buffer buffer = gl.createBuffer();
     if (buffer == null) {
       error = document.getElementById('error');
@@ -244,6 +251,7 @@ class KronosMesh {
 
   ///Crée un buffer
   bool initBuffers(webgl.RenderingContext gl, GLTFProject gltf) {
+    logCurrentFunction();
     Element error = document.getElementById('error');
 
     webgl.Buffer indexBuffer = gl.createBuffer();
@@ -290,6 +298,7 @@ class KronosMesh {
   ///int colorSpace : ie : webgl.RGBA
   ImageInfo getImageInfo(webgl.RenderingContext gl, GLTFProject gltf,
       GLTFTextureInfo textureInfo, Function function, String uniformName, int colorSpace) {
+    logCurrentFunction();
 
     String uri = '${modelPath}${textureInfo.texture.source.uri}';
     int samplerIndex = scene.getNextSamplerIndex();
@@ -304,6 +313,7 @@ class KronosMesh {
   }
 
   Map<String, ImageInfo> initTextures(webgl.RenderingContext gl, GLTFProject gltf) {
+    logCurrentFunction();
     Map<String, ImageInfo> imageInfos = new Map<String, ImageInfo>();
 
     GLTFPbrMetallicRoughness pbrMat =
@@ -313,10 +323,10 @@ class KronosMesh {
     Float32List baseColorFactor =
         pbrMat != null && pbrMat.baseColorFactor != null
             ? pbrMat.baseColorFactor
-            : [1.0, 1.0, 1.0, 1.0] as Float32List;
+            : new Float32List.fromList([1.0, 1.0, 1.0, 1.0]);
     localState.uniforms['u_BaseColorFactor'] = new GLFunctionCall()
       ..function = gl.uniform4f
-      ..vals = <dynamic>[baseColorFactor];
+      ..vals = baseColorFactor;
 
     if (pbrMat != null &&
         pbrMat.baseColorTexture != null) {
@@ -407,7 +417,7 @@ class KronosMesh {
           : [0.0, 0.0, 0.0];
       localState.uniforms['u_EmissiveFactor'] = new GLFunctionCall()
         ..function = gl.uniform3f
-        ..vals = <dynamic>[emissiveFactor];
+        ..vals = <dynamic>[emissiveFactor[0], emissiveFactor[1], emissiveFactor[2]];
     } else if (localState.uniforms['u_EmissiveSampler'] != null) {
       localState.uniforms.remove('u_EmissiveSampler');
     }
@@ -437,6 +447,7 @@ class KronosMesh {
 
   void getAccessorData(webgl.RenderingContext gl, GLTFProject gltf,
       String modelPath, GLTFAccessor accessor, String attributeName) {
+    logCurrentFunction();
     KronosMesh mesh = this;
     accessorsLoading++;
     GLTFBufferView bufferView = accessor.bufferView;
@@ -499,6 +510,7 @@ class KronosMesh {
       promise = completer.future;
 
       Future<Blob> getBlob(){
+        logCurrentFunction('getBlob');
         HttpRequest request = new HttpRequest();
         request.open("GET", assetUrl, async:true);
         request.responseType = "blob";
@@ -532,22 +544,33 @@ class KronosMesh {
   }
 
   void applyState(webgl.RenderingContext gl, GlobalState globalState) {
+    logCurrentFunction();
+
     gl.useProgram(program);
 
-    void applyUniform(GLFunctionCall u, String uniformName) {
-      if (localState.uniformLocations[uniformName] != null) {
+    void applyUniform(GLFunctionCall uniformCall, String uniformName) {
+      logCurrentFunction('applyUniform : $uniformName');
+      if (localState.uniformLocations[uniformName] == null) {
         localState.uniformLocations[uniformName] =
             gl.getUniformLocation(program, uniformName);
       }
 
-      if (u.function != null &&
+      if (uniformCall.function != null &&
           localState.uniformLocations[uniformName] != null &&
-          u.vals != null) {
-        Function.apply(u.function, <dynamic>[]
+          uniformCall.vals != null) {
+        Function.apply(uniformCall.function, <dynamic>[]
           ..add(localState.uniformLocations[uniformName])
-          ..addAll(u.vals));
+          ..addAll(uniformCall.vals));
       }
     };
+
+    void applyAttribut(AttributInfo attributInfo, String attribName){
+      logCurrentFunction('applyAttribut : $attribName');
+      for (GLFunctionCall cmd in attributInfo.cmds) {
+        Function.apply(cmd.function, <dynamic>[]
+          ..addAll(cmd.vals));
+      }
+    }
 
     for (String uniformName in globalState.uniforms.keys) {
       applyUniform(globalState.uniforms[uniformName], uniformName);
@@ -558,15 +581,14 @@ class KronosMesh {
     }
 
     for (String attribName in localState.attributes.keys) {
-      var a = localState.attributes[attribName];
-      for (GLFunctionCall cmd in a.cmds) {
-        Function.apply(cmd.function, <dynamic>[]
-          ..addAll(cmd.vals));
-      }
+      applyAttribut(localState.attributes[attribName], attribName);
     }
+
+//    WebGLProgram.logProgramFromWebGL(program);
   }
 
   void disableState(webgl.RenderingContext gl) {
+    logCurrentFunction();
     for (String attrib in localState.attributes.keys) {
       // do something.
       gl.disableVertexAttribArray(localState.attributes[attrib].a_attribute);

@@ -8,6 +8,7 @@ import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
 import 'renderer_kronos_mesh.dart';
 import 'renderer_kronos_utils.dart';
 
@@ -29,6 +30,7 @@ class KronosScene {
   dynamic frontBuffer;
 
   KronosScene(webgl.RenderingContext gl, GlobalState glState, String model, GLTFProject gltf) {
+    logCurrentFunction();
     globalState = glState;
 
     nodes = gltf.nodes;
@@ -43,6 +45,7 @@ class KronosScene {
   }
 
   int getNextSamplerIndex() {
+    logCurrentFunction();
     int result = samplerIndex++;
     if (result > 31) {
       throw new Exception('Too many texture samplers in use.');
@@ -51,6 +54,7 @@ class KronosScene {
   }
 
   void drawScene(webgl.RenderingContext gl) {
+    logCurrentFunction();
     gl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
 
     if (this.pendingTextures > 0 || this.pendingBuffers > 0) {
@@ -91,7 +95,7 @@ class KronosScene {
         -translate * Math.sin(-pitch),
         translate * Math.cos(roll) * Math.cos(-pitch)
     );
-    this.globalState.uniforms['u_Camera'].vals = <dynamic>[cameraPos];
+    this.globalState.uniforms['u_Camera'].vals = cameraPos.storage;
 
     // Update view matrix
     // roll, pitch and translate are all globals.
@@ -112,13 +116,14 @@ class KronosScene {
   }
 
   ImageElement loadImage(ImageInfo imageInfo, webgl.RenderingContext gl) {
+    logCurrentFunction();
     var scene = this;
     ImageElement image = new ImageElement();
     this.pendingTextures++;
     image.src = imageInfo.uri;
     image.onLoad.listen((_){
       webgl.Texture texture = gl.createTexture();
-      int glIndex = (webgl.TEXTURE0 + imageInfo.samplerId).toInt();  // gl.TEXTUREn enums are in numeric order.
+      int glIndex = webgl.TEXTURE0 + imageInfo.samplerId;  // gl.TEXTUREn enums are in numeric order.
       gl.activeTexture(glIndex);
       gl.bindTexture(webgl.TEXTURE_2D, texture);
 
@@ -137,6 +142,7 @@ class KronosScene {
   }
 
   void loadImages(Map<String, ImageInfo> imageInfos, webgl.RenderingContext gl) {
+    logCurrentFunction();
     this.pendingTextures = 0;
     for (String imageinfo in imageInfos.keys.toList()) {
       this.loadImage(imageInfos[imageinfo], gl);

@@ -27,6 +27,10 @@ class WebGLRenderingContext extends IEditElement {
 
   WebGLRenderingContext._init(this.ctx);
 
+  factory WebGLRenderingContext.fromBaseCtx(WebGL.RenderingContext ctx){
+    return new WebGLRenderingContext._init(ctx);
+  }
+
   //Todo add default parameters
   factory WebGLRenderingContext.create(CanvasElement canvas,{bool debug : false, bool preserveDrawingBuffer:true}){
     WebGL.RenderingContext ctx;

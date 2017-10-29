@@ -6,16 +6,22 @@ import 'dart:math' as Math;
 import 'dart:web_gl' as webgl;
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/context.dart' as bctx;
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'renderer_kronos_scene.dart';
 import 'renderer_kronos_utils.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
-int loadCubeMap(
-    webgl.RenderingContext gl, String envMap, String type, GlobalState state) {
+Future<int> loadCubeMap(
+    webgl.RenderingContext gl, String envMap, String type, GlobalState state) async {
+  logCurrentFunction();
   webgl.Texture texture = gl.createTexture();
   int textureNumber = -1;
-  var activeTextureEnum = webgl.TEXTURE0;
+  int activeTextureEnum = webgl.TEXTURE0;
   int mipLevels = 0;
   String uniformName = 'u_EnvSampler';
   if (type == "diffuse") {
@@ -45,6 +51,7 @@ int loadCubeMap(
       webgl.TEXTURE_CUBE_MAP, webgl.TEXTURE_WRAP_S, webgl.CLAMP_TO_EDGE);
   gl.texParameteri(
       webgl.TEXTURE_CUBE_MAP, webgl.TEXTURE_WRAP_T, webgl.CLAMP_TO_EDGE);
+
   if (mipLevels < 2) {
     gl.texParameteri(
         webgl.TEXTURE_CUBE_MAP, webgl.TEXTURE_MIN_FILTER, webgl.LINEAR);
@@ -59,34 +66,37 @@ int loadCubeMap(
 
   String path = "textures/" + envMap + "/" + type + "/" + type;
 
-  Function onLoadEnvironmentImage(
-      webgl.Texture texture, int face, ImageElement image, int j) {
-    return () {
-      gl.activeTexture(activeTextureEnum);
-      gl.bindTexture(webgl.TEXTURE_CUBE_MAP, texture);
-      gl.pixelStorei(webgl.UNPACK_FLIP_Y_WEBGL, 0);
-      // todo:  should this be srgb?  or rgba?  what's the HDR scale on this?
-      gl.texImage2D(face, j, state.sRGBifAvailable, state.sRGBifAvailable,
-          webgl.UNSIGNED_BYTE, image);
-    };
+  void onLoadEnvironmentImage(
+      webgl.Texture texture, int face, ImageElement image, int level) {
+    logCurrentFunction();
+    gl.activeTexture(activeTextureEnum);
+    gl.bindTexture(webgl.TEXTURE_CUBE_MAP, texture);
+    gl.pixelStorei(webgl.UNPACK_FLIP_Y_WEBGL, 0);
+    // todo:  should this be srgb?  or rgba?  what's the HDR scale on this?
+    gl.texImage2D(face, level, state.sRGBifAvailable, state.sRGBifAvailable,
+        webgl.UNSIGNED_BYTE, image);
   }
 
-  for (int j = 0; j < mipLevels; j++) {
+  for (int level = 0; level < mipLevels; level++) {
     List<Map<String, int>> faces = [
-      {'${path}_right_$j.jpg': webgl.TEXTURE_CUBE_MAP_POSITIVE_X},
-      {'${path}_left_$j.jpg': webgl.TEXTURE_CUBE_MAP_NEGATIVE_X},
-      {'${path}_top_$j.jpg': webgl.TEXTURE_CUBE_MAP_POSITIVE_Y},
-      {'${path}_bottom_$j.jpg': webgl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
-      {'${path}_front_$j.jpg': webgl.TEXTURE_CUBE_MAP_POSITIVE_Z},
-      {'${path}_back_$j.jpg': webgl.TEXTURE_CUBE_MAP_NEGATIVE_Z}
+      {'${path}_right_$level.jpg': webgl.TEXTURE_CUBE_MAP_POSITIVE_X},
+      {'${path}_left_$level.jpg': webgl.TEXTURE_CUBE_MAP_NEGATIVE_X},
+      {'${path}_top_$level.jpg': webgl.TEXTURE_CUBE_MAP_POSITIVE_Y},
+      {'${path}_bottom_$level.jpg': webgl.TEXTURE_CUBE_MAP_NEGATIVE_Y},
+      {'${path}_front_$level.jpg': webgl.TEXTURE_CUBE_MAP_POSITIVE_Z},
+      {'${path}_back_$level.jpg': webgl.TEXTURE_CUBE_MAP_NEGATIVE_Z}
     ];
     for (var i = 0; i < faces.length; i++) {
-      var face = faces[i][1];
+      int cubeFace = faces[i].values.toList()[0];
+      Completer completer = new Completer<dynamic>();
       ImageElement image = new ImageElement();
       image.onLoad.listen((_) {
-        onLoadEnvironmentImage(texture, face, image, j);
+        onLoadEnvironmentImage(texture, cubeFace, image, level);
+        completer.complete();
       });
       image.src = faces[i].keys.toList()[0];
+
+      await completer.complete;
     }
   }
 
@@ -105,6 +115,7 @@ Future updateModel(
     Matrix4 projectionMatrix,
     dynamic backBuffer,
     dynamic frontBuffer) async {
+  logCurrentFunction();
   Element error = document.getElementById('error');
   glState.scene = null;
   gl.clear(webgl.COLOR_BUFFER_BIT | webgl.DEPTH_BUFFER_BIT);
@@ -114,7 +125,8 @@ Future updateModel(
   resetCamera();
 
   String url = 'gltf_pbr_demo/models/$value/glTF/$value.gltf';
-  glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(url, useWebPath: false);
+  glTF.Gltf gltfSource =
+      await GLTFProject.loadGLTFResource(url, useWebPath: false);
   GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
   KronosScene scene =
@@ -127,6 +139,7 @@ Future updateModel(
 }
 
 Future main() async {
+  logCurrentFunction();
   Element error = document.getElementById('error');
 
   String vertSource = await UtilsAssets
@@ -138,10 +151,11 @@ Future main() async {
       .catchError((dynamic errorThrown) => error.innerHtml +=
           'Failed to load the fragment shader: $errorThrown <br>');
 
-  init(vertSource, fragSource);
+  await init(vertSource, fragSource);
 }
 
-void init(String vertSource, String fragSource) {
+Future init(String vertSource, String fragSource) async {
+  logCurrentFunction();
   CanvasElement canvas = document.getElementById('canvas') as CanvasElement;
   CanvasElement canvas2d = document.getElementById('canvas2d') as CanvasElement;
   Element error = document.getElementById('error');
@@ -157,6 +171,8 @@ void init(String vertSource, String fragSource) {
           as webgl.RenderingContext ??
       canvas.getContext("experimental-webgl", <String, dynamic>{})
           as webgl.RenderingContext;
+
+  bctx.gl = new WebGLRenderingContext.fromBaseCtx(gl);
   if (gl == null) {
     error.innerHtml += 'Failed to get the rendering context for WebGL<br>';
     return;
@@ -173,13 +189,16 @@ void init(String vertSource, String fragSource) {
     ..vertSource = vertSource
     ..fragSource = fragSource
     ..scene = null
-    ..hasLODExtension = gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
-    ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives') as webgl.OesStandardDerivatives
+    ..hasLODExtension =
+        gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
+    ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
+        as webgl.OesStandardDerivatives
     ..sRGBifAvailable =
         hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
 
   Matrix4 projectionMatrix = new Matrix4.identity();
   void resizeCanvasIfNeeded() {
+    logCurrentFunction();
     int width = Math.max(1, window.innerWidth);
     var height = Math.max(1, window.innerHeight);
     if (width != canvasWidth || height != canvasHeight) {
@@ -193,9 +212,9 @@ void init(String vertSource, String fragSource) {
 
   // Create cube maps
   var envMap = "papermill";
-  ////loadCubeMap(gl, envMap, "environment");
-  loadCubeMap(gl, envMap, "diffuse", glState);
-  loadCubeMap(gl, envMap, "specular", glState);
+//  loadCubeMap(gl, envMap, "environment", glState);
+  await loadCubeMap(gl, envMap, "diffuse", glState);
+  await loadCubeMap(gl, envMap, "specular", glState);
   // Get location of mvp matrix uniform
   glState.uniforms['u_MVPMatrix'] = new GLFunctionCall()
     ..function = gl.uniformMatrix4fv;
@@ -206,21 +225,15 @@ void init(String vertSource, String fragSource) {
   // Light
   glState.uniforms['u_LightDirection'] = new GLFunctionCall()
     ..function = gl.uniform3f
-    ..vals = <dynamic>[
-      [0.0, 0.5, 0.5]
-    ];
+    ..vals = <dynamic>[0.0, 0.5, 0.5];
   glState.uniforms['u_LightColor'] = new GLFunctionCall()
     ..function = gl.uniform3f
-    ..vals = <dynamic>[
-      [1.0, 1.0, 1.0]
-    ];
+    ..vals = <dynamic>[1.0, 1.0, 1.0];
 
   // Camera
   glState.uniforms['u_Camera'] = new GLFunctionCall()
     ..function = gl.uniform3f
-    ..vals = <dynamic>[
-      [0.0, 0.0, -4.0]
-    ];
+    ..vals = <dynamic>[0.0, 0.0, -4.0];
 
   // Model matrix
   Matrix4 modelMatrix = new Matrix4.identity();
@@ -235,19 +248,13 @@ void init(String vertSource, String fragSource) {
   // get scaling stuff
   glState.uniforms['u_ScaleDiffBaseMR'] = new GLFunctionCall()
     ..function = gl.uniform4f
-    ..vals = <dynamic>[
-      [0.0, 0.0, 0.0, 0.0]
-    ];
+    ..vals = <dynamic>[0.0, 0.0, 0.0, 0.0];
   glState.uniforms['u_ScaleFGDSpec'] = new GLFunctionCall()
     ..function = gl.uniform4f
-    ..vals = <dynamic>[
-      [0.0, 0.0, 0.0, 0.0]
-    ];
+    ..vals = <dynamic>[0.0, 0.0, 0.0, 0.0];
   glState.uniforms['u_ScaleIBLAmbient'] = new GLFunctionCall()
     ..function = gl.uniform4f
-    ..vals = <dynamic>[
-      [1.0, 1.0, 1.0, 1.0]
-    ];
+    ..vals = <dynamic>[1.0, 1.0, 1.0, 1.0];
 
   // Load scene
   String defaultModelName = 'DamagedHelmet';
@@ -262,6 +269,7 @@ void init(String vertSource, String fragSource) {
 
   var redrawQueued = false;
   void redraw() {
+    logCurrentFunction();
     if (!redrawQueued) {
       redrawQueued = true;
       window.requestAnimationFrame((num val) {
@@ -324,6 +332,7 @@ void init(String vertSource, String fragSource) {
     ..lightPitch = 40;
 
   void updateLight(dynamic value) {
+    logCurrentFunction();
     glState.uniforms['u_LightColor'].vals = <dynamic>[
       [
         lightProps.lightScale * lightProps.lightColor[0] / 255,
@@ -335,11 +344,9 @@ void init(String vertSource, String fragSource) {
     var rot = lightProps.lightRotation * Math.PI / 180;
     var pitch = lightProps.lightPitch * Math.PI / 180;
     glState.uniforms['u_LightDirection'].vals = <dynamic>[
-      [
-        Math.sin(rot) * Math.cos(pitch),
-        Math.sin(pitch),
-        Math.cos(rot) * Math.cos(pitch)
-      ]
+      Math.sin(rot) * Math.cos(pitch),
+      Math.sin(pitch),
+      Math.cos(rot) * Math.cos(pitch)
     ];
 
     redraw();
@@ -361,6 +368,7 @@ void init(String vertSource, String fragSource) {
   ScaleVal scaleVals = new ScaleVal()..IBL = 1.0;
 
   void updateMathScales(dynamic v) {
+    logCurrentFunction();
     Element el = scaleVals.pinnedElement != null
         ? scaleVals.pinnedElement
         : scaleVals.activeElement;
@@ -387,11 +395,14 @@ void init(String vertSource, String fragSource) {
     ];
 
     redraw();
-  };
+  }
+
+  ;
 
   gui.add(scaleVals, "IBL", 0, 4).onChange(updateMathScales);
 
   void setActiveComponent(Element el) {
+    logCurrentFunction();
     if (scaleVals.activeElement != null) {
       scaleVals.activeElement.classes.remove("activeComponent");
     }
@@ -403,9 +414,12 @@ void init(String vertSource, String fragSource) {
     if (scaleVals.pinnedElement == null) {
       updateMathScales(null);
     }
-  };
+  }
+
+  ;
 
   void setPinnedComponent(Element el) {
+    logCurrentFunction();
     if (scaleVals.activeElement != null) {
       if (el != null) {
         scaleVals.activeElement.classes.remove("activeComponent");
@@ -424,9 +438,12 @@ void init(String vertSource, String fragSource) {
     scaleVals.pinnedElement = el;
 
     updateMathScales(null);
-  };
+  }
+
+  ;
 
   void createMouseOverScale(String arg0, String arg1) {
+    logCurrentFunction();
     Element el = document.querySelector(arg0);
 
     el.onMouseOver.listen((MouseEvent ev) {
@@ -445,7 +462,9 @@ void init(String vertSource, String fragSource) {
       }
       ev.stopPropagation();
     });
-  };
+  }
+
+  ;
 
   createMouseOverScale('#mathDiff', 'diff');
   createMouseOverScale('#mathSpec', 'spec');
@@ -476,6 +495,7 @@ void init(String vertSource, String fragSource) {
   Position<int> pixelPickerPos = new Position<int>(x: 0, y: 0);
   bool pixelPickerScheduled = false;
   void sample2D(num val) {
+    logCurrentFunction();
     pixelPickerScheduled = false;
     var x = pixelPickerPos.x;
     var y = pixelPickerPos.y;
@@ -512,7 +532,9 @@ void init(String vertSource, String fragSource) {
     animate(roll);
     redraw();
     window.requestAnimationFrame(tick);
-  };
+  }
+
+  ;
   // Uncomment for turntable
   //tick();
 }
@@ -540,6 +562,7 @@ num lastMouseX = null;
 num lastMouseY = null;
 
 void resetCamera() {
+  logCurrentFunction();
   roll = Math.PI;
   pitch = 0.0;
   translate = 4.0;
@@ -547,16 +570,19 @@ void resetCamera() {
 }
 
 void handleMouseDown(MouseEvent ev) {
+  logCurrentFunction();
   mouseDown = true;
   lastMouseX = ev.client.x;
   lastMouseY = ev.client.y;
 }
 
 void handleMouseUp(MouseEvent ev) {
+  logCurrentFunction();
   mouseDown = false;
 }
 
 void handleMouseMove(MouseEvent ev, Function redraw) {
+  logCurrentFunction();
   if (!mouseDown) {
     return;
   }
@@ -577,6 +603,7 @@ void handleMouseMove(MouseEvent ev, Function redraw) {
 
 num wheelSpeed = 1.04;
 void handleWheel(WheelEvent ev, Function redraw) {
+  logCurrentFunction();
   ev.preventDefault();
   if (ev.deltaY > 0) {
     translate *= wheelSpeed;
@@ -589,6 +616,7 @@ void handleWheel(WheelEvent ev, Function redraw) {
 
 int prev = new DateTime.now().millisecond;
 void animate(double angle) {
+  logCurrentFunction();
   int curr = new DateTime.now().millisecond;
   int elapsed = curr - prev;
   prev = curr;

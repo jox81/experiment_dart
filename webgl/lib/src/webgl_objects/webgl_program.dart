@@ -186,4 +186,10 @@ class WebGLProgram extends WebGLObject{
 
     });
   }
+
+  static void logProgramFromWebGL(WebGL.Program webGLProgram){
+    WebGLProgram _p = new WebGLProgram.fromWebGL(webGLProgram);
+    _p.logProgramInfos();
+    _p.delete();
+  }
 }

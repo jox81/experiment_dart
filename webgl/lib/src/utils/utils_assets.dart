@@ -4,6 +4,8 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:webgl/src/utils/utils_debug.dart';
+
 class UtilsAssets{
 
   static const String WEB_PATH_WEB = 'http://localhost:8080/';
@@ -76,9 +78,11 @@ class UtilsAssets{
 
   ///Load a Glsl from a file url
   static Future<String> loadGlslShader(String url) async {
+    logCurrentFunction();
     Completer completer = new Completer<String>();
     await loadTextResource(url).then((String result){
       try {
+//        logCurrentFunction('loaded');
         completer.complete(result);
       } catch (e) {
         completer.completeError(e);

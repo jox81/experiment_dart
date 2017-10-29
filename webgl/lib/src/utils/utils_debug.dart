@@ -1,5 +1,7 @@
-import 'dart:html';
+import 'dart:collection';
 import 'package:logging/logging.dart';
+import 'dart:html' as html;
+import 'package:stack_trace/stack_trace.dart';
 
 class Debug{
   static void printTrace(){
@@ -29,83 +31,81 @@ class Debug{
   }
 }
 
-class DebugStackTrace extends StackTrace{
+//class DebugStackTrace extends StackTrace{
+//  int get count => StackTrace.current.toString().split('\n').length;
+//}
 
-  int get count => StackTrace.current.toString().split('\n').length;
-}
 
-Logger _ng1nDebugLogger = new Logger('debug');
-_StackTraceInfo _stackTraceInfo = new _StackTraceInfo(StackTrace.current);
+///>
+
+_StackTraceInfo _stackTraceInfo = new _StackTraceInfo();
+_StackTraceInfo get stackTraceInfo => _stackTraceInfo;
 
 class _StackTraceInfo {
-  List<_StackTraceLineInfo> lines = new List();
+  Logger _debugLogger = Logger.root;
 
-  _StackTraceInfo(StackTrace stackTrace) {
-    Logger.root.onRecord.listen((LogRecord rec) {
-      window.console.log('${rec.level.name}: ${rec.time}: ${rec.message}');
+  _StackTraceInfo() {
+    _debugLogger.onRecord.listen((LogRecord rec) {
+      html.window.console
+          .log('${rec.time} : ${rec.message}');/*[${rec.level.name}] :  :   */
     });
   }
 
-  String get objectCall => _stackTraceInfo.lines[2].objectCall.trim();
-  String get  methodCall => _stackTraceInfo.lines[2].methodCall.trim();
+  Queue<String> stackFunctionName = new Queue();
+  int depth = 0;
+  bool debugLogCurrentFunction = false;
 
-  String get currentFunction =>
-      '$objectCall${objectCall != "" && methodCall != ""
-          ? '.'
-          : ''}$methodCall';
+  void logCurrentFunction([String message]) {
 
-  void update() {
-    lines.clear();
-    for (String lineTrace in StackTrace.current.toString().split('\n')) {
-      lineTrace = lineTrace.replaceAll('&', '_');
+    int baseIndex = 2;
+    int currentIndex = 0;
+    Trace trace = new Trace.current(baseIndex);
 
-      RegExp exp = new RegExp(r"#([0-9]*)\s*(.*)\((.*)\)");
-      Iterable<Match> matches = exp.allMatches(lineTrace);
-      for (Match m in matches) {
-        int id = int.parse(m.group(1));
-        List<String> origin = m.group(2).split('.');
-        String objectCall = origin[0];
-        String methodCall = "";
-        if (origin.length > 1) {
-          methodCall = origin[1];
-        }
+    Frame currentFrame = trace.frames[currentIndex];
 
-        List<String> packageParts = m.group(3).split(':');
+    String currentFunctionName = '${currentFrame.member}';
+    String lastLoggedFunctionName = stackFunctionName.length > 0 ?  stackFunctionName.first : null;
+    String parentFunctionName;
 
-        int column = int.parse(packageParts.removeLast());
-        int line;
-        if (int.parse(packageParts.last, onError: (e) => null) != null) {
-          line = int.parse(packageParts.removeLast());
-        } else {
-          line = column;
-          column = null;
-        }
-        String package = packageParts.join(':');
-
-        _StackTraceLineInfo stackTraceLineInfo = new _StackTraceLineInfo()
-          ..id = id
-          ..objectCall = objectCall
-          ..methodCall = methodCall
-          ..package = package
-          ..line = line
-          ..column = column;
-        lines.add(stackTraceLineInfo);
-      }
+    if(trace.frames.length > 1){
+      Frame parentFrame;
+      parentFrame = new Trace.current(baseIndex).frames[1];
+      parentFunctionName = '${parentFrame.member}';
     }
-  }
-}
 
-class _StackTraceLineInfo {
-  int id;
-  String objectCall;
-  String methodCall;
-  String package;
-  int line;
-  int column;
+    if(debugLogCurrentFunction) {
+      print('/>');
+      print('currentFunctionName : $currentFunctionName');
+      print('parentFunctionName : $parentFunctionName');
+      print('lastLoggedFunctionName : ${stackFunctionName.length > 0 ?  stackFunctionName.first : null}');
+      print('stackFunctionName : $stackFunctionName');
+  //    print(StackTrace.current);
+      print('/<');
+    }
 
-  @override
-  String toString() {
-    return '$id | $objectCall | $methodCall | $package | ($line, $column)';
+    if(stackFunctionName.length == 0 || parentFunctionName == lastLoggedFunctionName) {
+      stackFunctionName.addFirst(currentFunctionName);
+    }else{
+      while(stackFunctionName.length > 0 && parentFunctionName != stackFunctionName.first){
+        stackFunctionName.removeFirst();
+      }
+      stackFunctionName.addFirst(currentFunctionName);
+    }
+
+    if(debugLogCurrentFunction) {
+      print('$stackFunctionName');
+    }
+
+    String paddingString = '# ';
+    for(int i = 0; i < stackFunctionName.length - 1; i++){
+      paddingString = '$paddingString\t';
+    }
+
+    _debugLogger.info('$paddingString$currentFunctionName ${message != null ? '\n$paddingString> $message' : ''} $stackFunctionName ${debugLogCurrentFunction ?'| parent : $parentFunctionName' :'' }');
+
+    if(debugLogCurrentFunction) {
+      print('-------------------------');
+    }
   }
 }
 
@@ -113,8 +113,7 @@ bool logInDebug = true;
 
 void logCurrentFunction([String message]) {
   if(logInDebug) {
-    _stackTraceInfo.update();
-    _ng1nDebugLogger.info('${_stackTraceInfo.currentFunction} ${message!=null? ': $message':""}');
+    stackTraceInfo.logCurrentFunction(message);
   }
 }
 
