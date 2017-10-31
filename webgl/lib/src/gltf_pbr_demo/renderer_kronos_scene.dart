@@ -1,7 +1,6 @@
 import 'dart:web_gl' as webgl;
 import 'dart:html';
 import 'dart:math' as Math;
-import 'main.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
@@ -9,8 +8,8 @@ import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
-import 'renderer_kronos_mesh.dart';
-import 'renderer_kronos_utils.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_mesh.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 
 class KronosScene {
   int pendingBuffers;
@@ -40,7 +39,7 @@ class KronosScene {
     pendingBuffers = 0;
     samplerIndex = 3; // skip the first three because of the cubemaps
     for (GLTFMesh gltfMesh in gltf.meshes) {
-      meshes.add(new KronosMesh(gl, this, this.globalState, model, gltf, gltfMesh.meshId));
+      meshes.add(new KronosMesh(gl, this, globalState, model, gltf, gltfMesh.meshId));
     }
   }
 
@@ -91,21 +90,21 @@ class KronosScene {
 
     // set up the camera position and view matrix
     Vector3 cameraPos = new Vector3(
-        -translate * Math.sin(roll) * Math.cos(-pitch),
-        -translate * Math.sin(-pitch),
-        translate * Math.cos(roll) * Math.cos(-pitch)
+        -MainInfos.translate * Math.sin(MainInfos.roll) * Math.cos(-MainInfos.pitch),
+        -MainInfos.translate * Math.sin(-MainInfos.pitch),
+        MainInfos.translate * Math.cos(MainInfos.roll) * Math.cos(-MainInfos.pitch)
     );
     this.globalState.uniforms['u_Camera'].vals = cameraPos.storage;
 
     // Update view matrix
     // roll, pitch and translate are all globals.
     Matrix4 xRotation = new Matrix4.identity();
-    xRotation.rotateY(roll);
+    xRotation.rotateY(MainInfos.roll);
     Matrix4 yRotation = new Matrix4.identity();
-    yRotation.rotateX(pitch);
+    yRotation.rotateX(MainInfos.pitch);
     viewMatrix = new Matrix4.identity();
     viewMatrix = yRotation.multiplied(xRotation);
-    this.viewMatrix[14] = -translate;
+    this.viewMatrix[14] = -MainInfos.translate;
 
     GLTFNode firstNode = nodes[0];
 

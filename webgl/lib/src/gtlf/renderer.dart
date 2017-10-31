@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
@@ -60,7 +61,7 @@ class GLTFRenderer {
 
     ShaderSourceInterface shaderSource = gltf.materials.isEmpty ? new DefaultShader() : new PBRShader();
 
-    webgl.Program program = buildProgram(shaderSource);
+    webgl.Program program = initProgram(shaderSource);
     gl.useProgram(program);
 
     //setup
@@ -196,32 +197,73 @@ class GLTFRenderer {
     initBuffer(accessorIndices.bufferView.usage, indices);
   }
 
-  webgl.Program buildProgram(ShaderSourceInterface shaderSource) {
+  webgl.Program initProgram(ShaderSourceInterface shaderSource) {
     debug.logCurrentFunction();
 
-    webgl.Program program = gl.createProgram();
+    //>
+    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
 
-    addShader(program, ShaderType.VERTEX_SHADER, shaderSource.getSource(ShaderType.VERTEX_SHADER));
-    addShader(program, ShaderType.FRAGMENT_SHADER, shaderSource.getSource(ShaderType.FRAGMENT_SHADER));
-    gl.linkProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS.index) ==
-        null) {
-      throw "Could not link the shader program!";
+    GlobalState globalState = new GlobalState()
+      ..uniforms = {}
+      ..attributes = {}
+      ..vertSource = shaderSource.vertexSource
+      ..fragSource = shaderSource.fragmentSource
+      ..scene = null
+      ..hasLODExtension =
+      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
+      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
+      as webgl.OesStandardDerivatives
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+    //<
+
+    Map<String, int> defines = new Map();
+    defines['USE_IBL'] = 0;
+    String definesToString (Map<String, int> defines) {
+      String outStr = '';
+      for (String def in defines.keys) {
+        outStr += '#define $def ${defines[def]}\n';
+      }
+      return outStr;
+    };
+
+    String shaderDefines = definesToString(defines);
+    if (globalState.hasLODExtension != null) {
+      shaderDefines += '#define USE_TEX_LOD 1\n';
     }
+    webgl.Shader vertexShader = createShader(ShaderType.VERTEX_SHADER, globalState.vertSource, shaderDefines);
+    webgl.Shader fragmentShader = createShader(ShaderType.FRAGMENT_SHADER, globalState.fragSource, shaderDefines);
+
+    webgl.Program program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS.index) as bool ==
+        false) {
+      throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
+    }
+    gl.validateProgram(program);
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool ==
+        false) {
+      throw "Could not compile program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
+    }
+
     return program;
   }
 
-  void addShader(webgl.Program program, ShaderType type, String source) {
+  webgl.Shader createShader(ShaderType type, String shaderSource, String shaderDefines) {
     debug.logCurrentFunction();
 
     webgl.Shader shader = gl.createShader(type.index);
-    gl.shaderSource(shader, source);
+    gl.shaderSource(shader, shaderDefines + shaderSource);
     gl.compileShader(shader);
-    if (gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS.index) ==
-        null) {
-      throw "Could not compile $type shader:\n\n ${gl.getShaderInfoLog(shader)}";
+    bool compiled = gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS.index) as bool;
+    if (!compiled) {
+      String compilationLog = gl.getShaderInfoLog(shader);
+      throw "Could not compile $type shader:\n\n $compilationLog}";
     }
-    gl.attachShader(program, shader);
+
+    return shader;
   }
 
   void setUnifrom(webgl.Program program,String uniformName, ShaderVariableType componentType, TypedData data){

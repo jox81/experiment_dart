@@ -44,3 +44,9 @@ class ImageInfo{
 
   bool clamp;
 }
+
+class MainInfos{
+  static double translate;
+  static double roll;
+  static double pitch;
+}

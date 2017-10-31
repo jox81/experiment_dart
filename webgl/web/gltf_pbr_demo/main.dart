@@ -12,8 +12,8 @@ import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'renderer_kronos_scene.dart';
-import 'renderer_kronos_utils.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_scene.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
 Future<int> loadCubeMap(
@@ -529,7 +529,7 @@ Future init(String vertSource, String fragSource) async {
   window.onResize.listen((e) => redraw());
 
   void tick(num time) {
-    animate(roll);
+    animate(MainInfos.roll);
     redraw();
     window.requestAnimationFrame(tick);
   }
@@ -555,17 +555,14 @@ class DatModelText {
 
 // ***** Mouse Controls ***** //
 bool mouseDown;
-double roll;
-double pitch;
-double translate;
 num lastMouseX = null;
 num lastMouseY = null;
 
 void resetCamera() {
   logCurrentFunction();
-  roll = Math.PI;
-  pitch = 0.0;
-  translate = 4.0;
+  MainInfos.roll = Math.PI;
+  MainInfos.pitch = 0.0;
+  MainInfos.translate = 4.0;
   mouseDown = false;
 }
 
@@ -590,10 +587,10 @@ void handleMouseMove(MouseEvent ev, Function redraw) {
   num newY = ev.client.y;
 
   var deltaX = newX - lastMouseX;
-  roll += (deltaX / 100.0);
+  MainInfos.roll += (deltaX / 100.0);
 
   var deltaY = newY - lastMouseY;
-  pitch += (deltaY / 100.0);
+  MainInfos.pitch += (deltaY / 100.0);
 
   lastMouseX = newX;
   lastMouseY = newY;
@@ -606,9 +603,9 @@ void handleWheel(WheelEvent ev, Function redraw) {
   logCurrentFunction();
   ev.preventDefault();
   if (ev.deltaY > 0) {
-    translate *= wheelSpeed;
+    MainInfos.translate *= wheelSpeed;
   } else {
-    translate /= wheelSpeed;
+    MainInfos.translate /= wheelSpeed;
   }
 
   redraw();
@@ -620,5 +617,5 @@ void animate(double angle) {
   int curr = new DateTime.now().millisecond;
   int elapsed = curr - prev;
   prev = curr;
-  roll = angle + ((Math.PI / 4.0) * elapsed) / 1000.0;
+  MainInfos.roll = angle + ((Math.PI / 4.0) * elapsed) / 1000.0;
 }

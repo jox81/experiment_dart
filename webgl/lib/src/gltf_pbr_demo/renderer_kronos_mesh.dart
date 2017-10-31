@@ -15,8 +15,8 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'renderer_kronos_scene.dart';
-import 'renderer_kronos_utils.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_scene.dart';
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
@@ -134,7 +134,8 @@ class KronosMesh {
   webgl.Program initProgram(
       webgl.RenderingContext gl, GlobalState globalState) {
     logCurrentFunction();
-    var definesToString = (Map<String, int> defines) {
+
+    String definesToString (Map<String, int> defines) {
       String outStr = '';
       for (String def in defines.keys) {
         outStr += '#define $def ${defines[def]}\n';
@@ -147,37 +148,42 @@ class KronosMesh {
       shaderDefines += '#define USE_TEX_LOD 1\n';
     }
 
-    var vertexShader = gl.createShader(webgl.VERTEX_SHADER);
-    gl.shaderSource(vertexShader, shaderDefines + vertSource);
-    gl.compileShader(vertexShader);
-    bool compiled =
-        gl.getShaderParameter(vertexShader, webgl.COMPILE_STATUS) as bool;
-    if (!compiled) {
-      error.innerHtml += 'Failed to compile the vertex shader<br>';
-      var compilationLog = gl.getShaderInfoLog(vertexShader);
-      error.innerHtml += 'Shader compiler log: ' + compilationLog + '<br>';
-    }
-
-    var fragmentShader = gl.createShader(webgl.FRAGMENT_SHADER);
-    gl.shaderSource(fragmentShader, shaderDefines + fragSource);
-    gl.compileShader(fragmentShader);
-    compiled =
-        gl.getShaderParameter(fragmentShader, webgl.COMPILE_STATUS) as bool;
-    if (!compiled) {
-      error.innerHtml += 'Failed to compile the fragment shader<br>';
-      var compilationLog = gl.getShaderInfoLog(fragmentShader);
-      error.innerHtml += 'Shader compiler log: ' + compilationLog + '<br>';
-    }
+    webgl.Shader vertexShader = createShader(gl, ShaderType.VERTEX_SHADER, vertSource, shaderDefines);
+    webgl.Shader fragmentShader = createShader(gl, ShaderType.FRAGMENT_SHADER, fragSource, shaderDefines);
 
     webgl.Program program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS.index) as bool ==
+        false) {
+      throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
+    }
     gl.validateProgram(program);
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool ==
+        false) {
+      throw "Could not compile program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
+    }
 
     return program;
   }
 
+  webgl.Shader createShader(webgl.RenderingContext gl,ShaderType type, String shaderSource, String shaderDefines) {
+    logCurrentFunction();
+
+    webgl.Shader shader = gl.createShader(type.index);
+    gl.shaderSource(shader, shaderDefines + shaderSource);
+    gl.compileShader(shader);
+    bool compiled = gl.getShaderParameter(shader, webgl.COMPILE_STATUS) as bool;
+    if (!compiled) {
+      error.innerHtml += 'Failed to compile $type shader<br>';
+      String compilationLog = gl.getShaderInfoLog(shader);
+      error.innerHtml += 'Shader compiler log: ' + compilationLog + '<br>';
+      throw "Could not compile $type shader:\n\n $compilationLog}";
+    }
+
+    return shader;
+  }
   void drawMesh(webgl.RenderingContext gl, Matrix4 transform, Matrix4 view,
       Matrix4 projection, GlobalState globalState) {
     logCurrentFunction();

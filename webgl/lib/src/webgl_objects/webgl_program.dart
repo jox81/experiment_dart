@@ -68,7 +68,7 @@ class WebGLProgram extends WebGLObject{
   void validate(){
     gl.ctx.validateProgram(webGLProgram);
 
-    if (!linkStatus) {
+    if (!validateStatus) {
       print(infoLog);
       window.alert("Could not compile program");
     }
