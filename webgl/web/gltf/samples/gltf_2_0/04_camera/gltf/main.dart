@@ -7,5 +7,5 @@ Future main() async {
   String gltfUrl = '/gltf/samples/gltf_2_0/04_camera/gltf/Cameras.gltf';
   GLTFProject gltf = await debugGltf(gltfUrl, doLog : false);
 
-  new GLTFRenderer(gltf)..render();
+  await new GLTFRenderer(gltf).render();
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
@@ -12,6 +13,7 @@ import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
@@ -24,6 +26,10 @@ class GLTFRenderer {
   GLTFScene get activeScene => gltf.scenes[0];
 
   webgl.RenderingContext gl;
+
+  Camera activeCameraNode;
+  Matrix4 viewMatrix = new Matrix4.identity();
+  Matrix4 projectionMatrix = new Matrix4.identity();
 
   GLTFRenderer(this.gltf) {
     debug.logCurrentFunction();
@@ -38,10 +44,6 @@ class GLTFRenderer {
       throw "Your web browser does not support WebGL!";
     }
   }
-
-  Camera activeCameraNode;
-  Matrix4 viewMatrix = new Matrix4.identity();
-  Matrix4 projectionMatrix = new Matrix4.identity();
 
   void draw() {
     debug.logCurrentFunction();
@@ -59,7 +61,7 @@ class GLTFRenderer {
       activeCameraNode = camera;
     }
 
-    ShaderSourceInterface shaderSource = gltf.materials.isEmpty ? new DefaultShader() : new PBRShader();
+    ShaderSource shaderSource = gltf.materials.isEmpty ? ShaderSource.sources['kronos_gltf_default'] : ShaderSource.sources['kronos_gltf_pbr_test'];
 
     webgl.Program program = initProgram(shaderSource);
     gl.useProgram(program);
@@ -74,12 +76,17 @@ class GLTFRenderer {
       }
     }
 
-    setUnifrom(program,'uViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
-    setUnifrom(program,'uProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
+    setUnifrom(program,'u_ViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
+    setUnifrom(program,'u_ProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
+
+    if(shaderSource.shaderType == 'kronos_gltf_pbr_test') {
+      setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
+          ((projectionMatrix * viewMatrix) as Matrix4).storage);
+    }
 
     if(!gltf.materials.isEmpty){
       GLTFMaterial material = gltf.materials[0];
-      setUnifrom(program,'uColor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
+      setUnifrom(program,'u_BaseColorFactor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
     }
 
     //draw
@@ -121,7 +128,7 @@ class GLTFRenderer {
     }
 
     //uniform
-    setUnifrom(program,'uModelMatrix',ShaderVariableType.FLOAT_MAT4,node.matrix.storage);
+    setUnifrom(program,'u_ModelMatrix',ShaderVariableType.FLOAT_MAT4,node.matrix.storage);
   }
 
   void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
@@ -165,7 +172,7 @@ class GLTFRenderer {
 
   /// [componentCount] => 3 (x, y, z)
   void setAttribut(webgl.Program program, String attributName, GLTFAccessor accessor) {
-    String shaderAttributName = 'a${capitalize(attributName)}';
+    String shaderAttributName = 'a_${capitalize(attributName)}';
 
     //>
     int attributLocation = gl.getAttribLocation(program, shaderAttributName);
@@ -197,7 +204,26 @@ class GLTFRenderer {
     initBuffer(accessorIndices.bufferView.usage, indices);
   }
 
-  webgl.Program initProgram(ShaderSourceInterface shaderSource) {
+  void setUnifrom(webgl.Program program,String uniformName, ShaderVariableType componentType, TypedData data){
+    debug.logCurrentFunction(uniformName);
+
+    webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, uniformName);
+
+    bool transpose = false;
+
+    switch(componentType){
+      case ShaderVariableType.FLOAT_VEC4:
+        gl.uniform4fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_MAT4:
+        gl.uniformMatrix4fv(uniformLocation, transpose, data);
+        break;
+      default:
+        break;
+    }
+  }
+
+  webgl.Program initProgram(ShaderSource shaderSource) {
     debug.logCurrentFunction();
 
     //>
@@ -206,8 +232,8 @@ class GLTFRenderer {
     GlobalState globalState = new GlobalState()
       ..uniforms = {}
       ..attributes = {}
-      ..vertSource = shaderSource.vertexSource
-      ..fragSource = shaderSource.fragmentSource
+      ..vertSource = shaderSource.vsCode
+      ..fragSource = shaderSource.fsCode
       ..scene = null
       ..hasLODExtension =
       gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
@@ -217,12 +243,22 @@ class GLTFRenderer {
       hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
     //<
 
-    Map<String, int> defines = new Map();
-    defines['USE_IBL'] = 0;
-    String definesToString (Map<String, int> defines) {
+    Map<String, bool> defines = new Map();
+    //vs
+    defines['HAS_NORMALS'] = false;
+    defines['HAS_TANGENTS'] = false;
+    defines['HAS_UV'] = false;
+
+//    defines['USE_IBL'] = false;
+
+    defines['HAS_BASECOLORMAP'] = false;
+
+    String definesToString (Map<String, bool> defines) {
       String outStr = '';
       for (String def in defines.keys) {
-        outStr += '#define $def ${defines[def]}\n';
+        if(defines[def]) {
+          outStr += '#define $def ${defines[def]}\n';
+        }
       }
       return outStr;
     };
@@ -266,23 +302,9 @@ class GLTFRenderer {
     return shader;
   }
 
-  void setUnifrom(webgl.Program program,String uniformName, ShaderVariableType componentType, TypedData data){
-    debug.logCurrentFunction(uniformName);
-
-    webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, uniformName);
-
-    bool transpose = false;
-
-    switch(componentType){
-      case ShaderVariableType.FLOAT_VEC4:
-        gl.uniform4fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_MAT4:
-        gl.uniformMatrix4fv(uniformLocation, transpose, data);
-        break;
-      default:
-        break;
-    }
+  Future render() async {
+    await ShaderSource.loadShaders();
+    _render();
   }
 
   num currentTime = 0;
@@ -290,7 +312,7 @@ class GLTFRenderer {
   num timeFps = 0;
   int fps = 0;
   num speedFactor  = 1.0;
-  void render({num time: 0.0}) {
+  void _render({num time: 0.0}) {
     debug.logCurrentFunction('------------------------------------------------');
 
     deltaTime = time - currentTime;
@@ -311,7 +333,7 @@ class GLTFRenderer {
     }
 
     window.requestAnimationFrame((num time) {
-      this.render(time: time);
+      this._render(time: time);
     });
   }
 
@@ -454,8 +476,6 @@ class GLTFRenderer {
         accessor.count * accessor.components);
     return keyValues;
   }
-
-
 }
 
 

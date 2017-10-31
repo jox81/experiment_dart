@@ -7,5 +7,5 @@ Future main() async {
   String gltfUrl = '/gltf/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
   GLTFProject gltf = await debugGltf(gltfUrl);
 
-  new GLTFRenderer(gltf)..render();
+  await new GLTFRenderer(gltf).render();
 }

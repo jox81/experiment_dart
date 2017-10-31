@@ -8,5 +8,5 @@ Future main() async {
   String gltfUrl = '/gltf/samples/gltf_2_0/03_animated_triangle/gltf/AnimatedTriangle.gltf';
   GLTFProject gltf = await debugGltf(gltfUrl, doLog : false);
 
-  new GLTFRenderer(gltf)..render();
+  await new GLTFRenderer(gltf).render();
 }

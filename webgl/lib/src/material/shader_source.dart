@@ -49,8 +49,21 @@ class ShaderSource{
     'material_reflection' :[
       'shaders/reflection/reflection.vs.glsl',
       'shaders/reflection/reflection.fs.glsl'
+    ],
+    'kronos_gltf_pbr' :[
+      'shaders/kronos_gltf/kronos_gltf_pbr.vs.glsl',
+      'shaders/kronos_gltf/kronos_gltf_pbr.fs.glsl'
+    ],
+    'kronos_gltf_pbr_test' :[
+      'shaders/kronos_gltf/kronos_gltf_pbr_test.vs.glsl',
+      'shaders/kronos_gltf/kronos_gltf_pbr_test.fs.glsl'
+    ],
+    'kronos_gltf_default' :[
+      'shaders/kronos_gltf/kronos_gltf_default.vs.glsl',
+      'shaders/kronos_gltf/kronos_gltf_default.fs.glsl'
     ]
   };
+
   static Map<String, ShaderSource> sources = new Map();
 
   static Future loadShaders() async {
