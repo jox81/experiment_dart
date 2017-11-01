@@ -183,24 +183,24 @@ class GLTFCameraPerspective extends Camera{
   }
 
   //projectionMatrix
-  Matrix4 _perspectiveMatrix = new Matrix4.identity();
-  Matrix4 get perspectiveMatrix {
-    return (_perspectiveMatrix * new Matrix4.identity()) as Matrix4;// Why is it needed to update shader uniform!!?
+  Matrix4 _projectionMatrix = new Matrix4.identity();
+  Matrix4 get projectionMatrix {
+    return (_projectionMatrix * new Matrix4.identity()) as Matrix4;// Why is it needed to update shader uniform!!?
   }
-  set perspectiveMatrix(Matrix4 value){
-    _perspectiveMatrix = value;
+  set projectionMatrix(Matrix4 value){
+    _projectionMatrix = value;
     _updateGizmo();
   }
 
   //viewMatrix
-  Matrix4 _lookAtMatrix = new Matrix4.identity();
-  Matrix4 get lookAtMatrix {
-    return (_lookAtMatrix * new Matrix4.identity()) as Matrix4; // Why is it needed to update shader shader uniform!!?
+  Matrix4 _viewMatrix = new Matrix4.identity();
+  Matrix4 get viewMatrix {
+    return (_viewMatrix * new Matrix4.identity()) as Matrix4; // Why is it needed to update shader shader uniform!!?
   }
 
   //viewProjectionMatrix
   Matrix4 get viewProjectionMatrix {
-    return (perspectiveMatrix * lookAtMatrix) as Matrix4;
+    return (projectionMatrix * viewMatrix) as Matrix4;
   }
 
   GLTFCameraPerspective(this._yfov, double znear, double _zfar){
@@ -210,14 +210,14 @@ class GLTFCameraPerspective extends Camera{
 
   update() {
     _aspectRatio = Context.viewAspectRatio;
-    setPerspectiveMatrix(_perspectiveMatrix, _yfov, _aspectRatio, _znear, _zfar);
-    setViewMatrix(_lookAtMatrix, position, _targetPosition, upDirection);
+    setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, _znear, _zfar);
+    setViewMatrix(_viewMatrix, position, _targetPosition, upDirection);
     _updateGizmo();
   }
 
   @override
   String toString() {
-    return 'GLTFCameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_perspectiveMatrix, _lookAtMatrix: $_lookAtMatrix}';
+    return 'GLTFCameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix}';
   }
 
   // >> JSON
@@ -265,8 +265,8 @@ class GLTFCameraPerspective extends Camera{
               _yfov == other._yfov &&
               _targetPosition == other._targetPosition &&
               upDirection == other.upDirection &&
-              _perspectiveMatrix == other._perspectiveMatrix &&
-              _lookAtMatrix == other._lookAtMatrix;
+              _projectionMatrix == other._projectionMatrix &&
+              _viewMatrix == other._viewMatrix;
 
   @override
   int get hashCode =>
@@ -275,8 +275,8 @@ class GLTFCameraPerspective extends Camera{
       _yfov.hashCode ^
       _targetPosition.hashCode ^
       upDirection.hashCode ^
-      _perspectiveMatrix.hashCode ^
-      _lookAtMatrix.hashCode;
+      _projectionMatrix.hashCode ^
+      _viewMatrix.hashCode;
 }
 
 class GLTFCameraOrthographic extends Camera{

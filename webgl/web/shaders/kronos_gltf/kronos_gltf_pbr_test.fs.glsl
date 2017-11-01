@@ -17,7 +17,7 @@
 
 precision highp float;
 
-uniform vec3 u_LightDirection;
+uniform vec3 u_LightDirection;// (jpu) in fact it's light position directed to origin
 uniform vec3 u_LightColor;
 
 //#ifdef USE_IBL
@@ -236,7 +236,7 @@ void main()
     vec3 v = normalize(u_Camera - v_Position);        // Vector from surface point to camera
     vec3 l = normalize(u_LightDirection);             // Vector from surface point to light
     vec3 h = normalize(l+v);                          // Half vector between both l and v
-//    vec3 reflection = -normalize(reflect(v, n));
+    vec3 reflection = -normalize(reflect(v, n));
 
     float NdotL = clamp(dot(n, l), 0.001, 1.0);
     float NdotV = abs(dot(n, v)) + 0.001;
@@ -267,7 +267,7 @@ void main()
     // Calculation of analytical lighting contribution
     vec3 diffuseContrib = (1.0 - F) * diffuse(pbrInputs);
     vec3 specContrib = F * G * D / (4.0 * NdotL * NdotV);
-//    vec3 color = vec3(0.5, 0.5, 0.5);//Todo (jpu) : should not be declared here, changed from base shader
+//    vec3 color = NdotL * u_LightColor *(diffuseContrib + specContrib);//Todo (jpu) : should not be declared here, changed from base shader
     vec3 color = NdotL * u_LightColor * (diffuseContrib + specContrib);
 
     // Calculate lighting contribution from image based lighting source (IBL)
@@ -288,15 +288,15 @@ void main()
 
     // This section uses mix to override final color for reference app visualization
     // of various parameters in the lighting equation.
-    color = mix(color, F, u_ScaleFGDSpec.x);
-    color = mix(color, vec3(G), u_ScaleFGDSpec.y);
-    color = mix(color, vec3(D), u_ScaleFGDSpec.z);
-    color = mix(color, specContrib, u_ScaleFGDSpec.w);
-
-    color = mix(color, diffuseContrib, u_ScaleDiffBaseMR.x);
-    color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);
-    color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
-    color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
+//    color = mix(color, F, u_ScaleFGDSpec.x);
+//    color = mix(color, vec3(G), u_ScaleFGDSpec.y);
+//    color = mix(color, vec3(D), u_ScaleFGDSpec.z);
+//    color = mix(color, specContrib, u_ScaleFGDSpec.w);
+//
+//    color = mix(color, diffuseContrib, u_ScaleDiffBaseMR.x);
+//    color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);
+//    color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
+//    color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
 
     gl_FragColor = vec4(color, baseColor.a);
 }

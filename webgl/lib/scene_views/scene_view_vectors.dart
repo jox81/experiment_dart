@@ -92,8 +92,8 @@ class SceneViewVectors extends Scene{
   /// camera
   void test03() {
 
-    Matrix4 uModelViewMatrix = Context.mainCamera.lookAtMatrix.multiplied(Context.modelMatrix);
-    Matrix4 uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
+    Matrix4 uModelViewMatrix = Context.mainCamera.viewMatrix.multiplied(Context.modelMatrix);
+    Matrix4 uProjectionMatrix = Context.mainCamera.projectionMatrix;
 
     VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;
@@ -139,7 +139,7 @@ class SceneViewVectors extends Scene{
 //    gridTest.transform = finalMatrix * gridTest.transform;
 //    axisTest.transform = finalMatrix * axisTest.transform;
 
-    Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.lookAtMatrix).multiplied(new Matrix4.identity());
+    Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.viewMatrix).multiplied(new Matrix4.identity());
     gridTest.transform = (finalMatrix * gridTest.transform) as Matrix4;
     axisTest.transform = (finalMatrix * axisTest.transform) as Matrix4;
 

@@ -28,12 +28,12 @@ class SceneViewTestMatrices extends Scene{
 
     print('Context.mainCamera.position : \n${Context.mainCamera.position}');
     print('Context.mainCamera.targetPosition : \n${Context.mainCamera.targetPosition}');
-    print('Context.mainCamera.lookAtMatrix : \n${Context.mainCamera.lookAtMatrix}');
-    print('Context.mainCamera.perspectiveMatrix : \n${Context.mainCamera.perspectiveMatrix}');
+    print('Context.mainCamera.lookAtMatrix : \n${Context.mainCamera.viewMatrix}');
+    print('Context.mainCamera.perspectiveMatrix : \n${Context.mainCamera.projectionMatrix}');
 
     //idems
 //    print('Context.mainCamera.viewProjectionMatrix : \n${Context.mainCamera.viewProjectionMatrix}');
-    print('Context.mainCamera.viewProjectionMatrix calc: \n${Context.mainCamera.perspectiveMatrix * Context.mainCamera.lookAtMatrix}');
+    print('Context.mainCamera.viewProjectionMatrix calc: \n${Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix}');
 
     PointModel model = new PointModel()
       ..position = new Vector3(1.0,0.0,0.0);
@@ -58,9 +58,9 @@ class SceneViewTestMatrices extends Scene{
     aVertexPosition = new Vector3(0.0,0.0,0.0);
 
     uModelMatrix = model.transform;
-    uViewMatrix = Context.mainCamera.lookAtMatrix;
-    uModelViewMatrix = (Context.mainCamera.lookAtMatrix * uModelMatrix) as Matrix4;
-    uProjectionMatrix = Context.mainCamera.perspectiveMatrix;
+    uViewMatrix = Context.mainCamera.viewMatrix;
+    uModelViewMatrix = (Context.mainCamera.viewMatrix * uModelMatrix) as Matrix4;
+    uProjectionMatrix = Context.mainCamera.projectionMatrix;
     uNormalMatrix;
 
     print("${uProjectionMatrix * uViewMatrix * uModelMatrix * aVertexPosition}");

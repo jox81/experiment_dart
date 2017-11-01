@@ -102,8 +102,12 @@ class GLTFRenderer {
   void draw() {
     debug.logCurrentFunction();
 
+    // Enable depth test
+    gl.enable(webgl.DEPTH_TEST);
+
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index);
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index | ClearBufferMask.DEPTH_BUFFER_BIT.index);
+
 
     setupCameras();
 
@@ -120,10 +124,10 @@ class GLTFRenderer {
     if(gltf.cameras.length > 0) {
       activeCameraNode = gltf.cameras[0];
     }else{
-      GLTFCameraPerspective camera = new GLTFCameraPerspective(0.7, 1000.0, 0.01);
-      camera.position = new Vector3(3.0, 3.0, 5.0);
-      viewMatrix = camera.lookAtMatrix;
-      projectionMatrix = camera.perspectiveMatrix;
+      GLTFCameraPerspective camera = new GLTFCameraPerspective(0.8, 10000.0, 0.01);
+      camera.position = new Vector3(3.0, 3.0, 0.0);
+      viewMatrix = camera.viewMatrix;
+      projectionMatrix = camera.projectionMatrix;
       activeCameraNode = camera;
     }
 
@@ -131,8 +135,8 @@ class GLTFRenderer {
       debug.logCurrentFunction();
 
       GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
-      viewMatrix = camera.lookAtMatrix;
-      projectionMatrix = camera.perspectiveMatrix;
+      viewMatrix = camera.viewMatrix;
+      projectionMatrix = camera.projectionMatrix;
       camera.position = node.translation;
     }
 
@@ -152,43 +156,45 @@ class GLTFRenderer {
     defines['HAS_TANGENTS'] = false;
     defines['HAS_UV'] = false;
     defines['HAS_BASECOLORMAP'] = false;
-
-//    defines['USE_IBL'] = false;
+    defines['USE_IBL'] = false;
 
     globalState
       ..uniforms = {}
       ..attributes = {};
 
-    webgl.Program program = initProgram(defines);
+//    ShaderSource shaderSource = gltf.materials.isEmpty ? ShaderSource.sources['kronos_gltf_default'] : ShaderSource.sources['kronos_gltf_pbr_test'];
+//    ShaderSource shaderSource = ShaderSource.sources['kronos_gltf_default'];
+    ShaderSource shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
+
+    webgl.Program program = initProgram(shaderSource, defines);
     gl.useProgram(program);
 
     setUnifrom(program,'u_ViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
     setUnifrom(program,'u_ProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
 
-    if(!gltf.materials.isEmpty){
+    if(shaderSource.shaderType == 'kronos_gltf_pbr_test'){
       setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
           ((projectionMatrix * viewMatrix) as Matrix4).storage);
 
       GLTFMaterial material = gltf.materials[0];
 
-      setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([-1.0, -1.0, -1.0]));// Todo (jpu) : define light global if needed
-      setUnifrom(program,'u_LightColor',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 1.0]));
+      setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, -1.0]));// Todo (jpu) : define light global if needed. it's the direction from where the light is comming to origin
+      setUnifrom(program,'u_LightColor',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 0.0]));
 
-      Float32List metallicRoughness = new Float32List(2);
-      metallicRoughness[0] = 0.0;
-      metallicRoughness[1] = material.pbrMetallicRoughness.metallicFactor;
-      setUnifrom(program,'u_MetallicRoughnessValues',ShaderVariableType.FLOAT_VEC2, metallicRoughness);
+      double roughness = material.pbrMetallicRoughness.roughnessFactor;
+      double metallic = material.pbrMetallicRoughness.metallicFactor;
+      setUnifrom(program,'u_MetallicRoughnessValues',ShaderVariableType.FLOAT_VEC2, new Float32List.fromList([metallic, roughness]));
 
       setUnifrom(program,'u_BaseColorFactor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
 
-      setUnifrom(program,'u_Camera',ShaderVariableType.FLOAT_VEC3, activeCameraNode.position.storage);
+      setUnifrom(program,'u_Camera',ShaderVariableType.FLOAT_VEC3, (activeCameraNode.position).storage);
 
       //> Debug values => see in pbr fragment shader
 
-      double specularReflectionMask = 1.0;
+      double specularReflectionMask = 0.0;
       double geometricOcclusionMask = 0.0;
       double microfacetDistributionMask = 0.0;
-      double specularContributionMask = .5;
+      double specularContributionMask = 0.0;
       setUnifrom(program,'u_ScaleFGDSpec',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([
         specularReflectionMask,
         geometricOcclusionMask,
@@ -196,7 +202,7 @@ class GLTFRenderer {
         specularContributionMask
       ]));
 
-      double diffuseContributionMask = .5;
+      double diffuseContributionMask = 0.0;
       double colorMask = 0.0;
       double metallicMask = 0.0;
       double roughnessMask = 0.0;
@@ -347,10 +353,8 @@ class GLTFRenderer {
     }
   }
 
-  webgl.Program initProgram(Map<String, bool> defines) {
+  webgl.Program initProgram(ShaderSource shaderSource, Map<String, bool> defines) {
     debug.logCurrentFunction();
-
-    ShaderSource shaderSource = gltf.materials.isEmpty ? ShaderSource.sources['kronos_gltf_default'] : ShaderSource.sources['kronos_gltf_pbr_test'];
 
     globalState
       ..vertSource = shaderSource.vsCode

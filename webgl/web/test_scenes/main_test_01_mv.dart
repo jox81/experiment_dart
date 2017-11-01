@@ -163,8 +163,8 @@ class Webgl01 {
 
   void _setMatrixUniforms() {
     mMatrixUniform.uniformMatrix4fv(models[0].transform, false);
-    vMatrixUniform.uniformMatrix4fv(Context.mainCamera.lookAtMatrix, false);
-    pMatrixUniform.uniformMatrix4fv(Context.mainCamera.perspectiveMatrix, false);
+    vMatrixUniform.uniformMatrix4fv(Context.mainCamera.viewMatrix, false);
+    pMatrixUniform.uniformMatrix4fv(Context.mainCamera.projectionMatrix, false);
   }
 
 }
