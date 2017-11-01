@@ -11,8 +11,8 @@ class GlobalState {
   String vertSource;
   String fragSource;
 
-  Map<String, GLFunctionCall> attributes = new Map();
-  Map<String, GLFunctionCall> uniforms = new Map();
+  Map<String, GLFunctionCall> attributes;
+  Map<String, GLFunctionCall> uniforms;
 
   int sRGBifAvailable; // else : webgl.RGBA
 

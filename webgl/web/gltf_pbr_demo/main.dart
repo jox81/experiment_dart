@@ -528,13 +528,13 @@ Future init(String vertSource, String fragSource) async {
   // Redraw the scene after window size changes.
   window.onResize.listen((e) => redraw());
 
-  void tick(num time) {
-    animate(MainInfos.roll);
-    redraw();
-    window.requestAnimationFrame(tick);
-  }
-
-  ;
+//  void tick(num time) {
+//    animate(MainInfos.roll);
+//    redraw();
+//    window.requestAnimationFrame(tick);
+//  }
+//
+//  ;
   // Uncomment for turntable
   //tick();
 }

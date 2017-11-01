@@ -26,6 +26,7 @@ class GLTFRenderer {
   GLTFScene get activeScene => gltf.scenes[0];
 
   webgl.RenderingContext gl;
+  GlobalState globalState;
 
   Camera activeCameraNode;
   Matrix4 viewMatrix = new Matrix4.identity();
@@ -45,11 +46,76 @@ class GLTFRenderer {
     }
   }
 
+  Future render() async {
+    await ShaderSource.loadShaders();
+    _init();
+    _render();
+  }
+
+  num currentTime = 0;
+  num deltaTime = 0;
+  num timeFps = 0;
+  int fps = 0;
+  num speedFactor  = 1.0;
+  void _render({num time: 0.0}) {
+    debug.logCurrentFunction('\n------------------------------------------------');
+
+    deltaTime = time - currentTime;
+    timeFps += deltaTime;
+    fps++;
+    currentTime = time * speedFactor;
+
+    if(fps >= 1000) {
+      timeFps = 0;
+      fps = 0;
+    }
+
+    try {
+      update();
+      draw();
+    } catch (ex) {
+      print("Error: $ex");
+    }
+
+    window.requestAnimationFrame((num time) {
+      this._render(time: time);
+    });
+  }
+
+  void _init() {
+    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
+
+    globalState = new GlobalState()
+//      ..uniforms = {} // in initProgram
+//      ..attributes = {}
+//      ..vertSource = ''
+//      ..fragSource = ''
+      ..scene = null
+      ..hasLODExtension =
+      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
+      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
+      as webgl.OesStandardDerivatives
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+  }
+
   void draw() {
     debug.logCurrentFunction();
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index);
+
+    setupCameras();
+
+    webgl.Program program = setupProgram();
+
+    //draw
+    List<GLTFNode> nodes = activeScene.nodes;
+    drawNodes(nodes, program);
+  }
+
+  void setupCameras() {
+    debug.logCurrentFunction();
 
     if(gltf.cameras.length > 0) {
       activeCameraNode = gltf.cameras[0];
@@ -61,37 +127,90 @@ class GLTFRenderer {
       activeCameraNode = camera;
     }
 
-    ShaderSource shaderSource = gltf.materials.isEmpty ? ShaderSource.sources['kronos_gltf_default'] : ShaderSource.sources['kronos_gltf_pbr_test'];
+    void setupNodeCamera(GLTFNode node) {
+      debug.logCurrentFunction();
 
-    webgl.Program program = initProgram(shaderSource);
-    gl.useProgram(program);
+      GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
+      viewMatrix = camera.lookAtMatrix;
+      projectionMatrix = camera.perspectiveMatrix;
+      camera.position = node.translation;
+    }
 
-    //setup
     for (var i = 0; i < activeScene.nodes.length; i++) {
       GLTFNode node = activeScene.nodes[i];
       if(node.camera != null){
         if(node.camera.cameraId == activeCameraNode) {
-          setupNodeCamera(program, node);
+          setupNodeCamera(node);
         }
       }
     }
+  }
+
+  webgl.Program setupProgram() {
+    Map<String, bool> defines = new Map();
+    defines['HAS_NORMALS'] = true;
+    defines['HAS_TANGENTS'] = false;
+    defines['HAS_UV'] = false;
+    defines['HAS_BASECOLORMAP'] = false;
+
+//    defines['USE_IBL'] = false;
+
+    globalState
+      ..uniforms = {}
+      ..attributes = {};
+
+    webgl.Program program = initProgram(defines);
+    gl.useProgram(program);
 
     setUnifrom(program,'u_ViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
     setUnifrom(program,'u_ProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
 
-    if(shaderSource.shaderType == 'kronos_gltf_pbr_test') {
+    if(!gltf.materials.isEmpty){
       setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
           ((projectionMatrix * viewMatrix) as Matrix4).storage);
-    }
 
-    if(!gltf.materials.isEmpty){
       GLTFMaterial material = gltf.materials[0];
-      setUnifrom(program,'u_BaseColorFactor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
-    }
 
-    //draw
-    List<GLTFNode> nodes = activeScene.nodes;
-    drawNodes(nodes, program);
+      setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([-1.0, -1.0, -1.0]));// Todo (jpu) : define light global if needed
+      setUnifrom(program,'u_LightColor',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 1.0]));
+
+      Float32List metallicRoughness = new Float32List(2);
+      metallicRoughness[0] = 0.0;
+      metallicRoughness[1] = material.pbrMetallicRoughness.metallicFactor;
+      setUnifrom(program,'u_MetallicRoughnessValues',ShaderVariableType.FLOAT_VEC2, metallicRoughness);
+
+      setUnifrom(program,'u_BaseColorFactor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
+
+      setUnifrom(program,'u_Camera',ShaderVariableType.FLOAT_VEC3, activeCameraNode.position.storage);
+
+      //> Debug values => see in pbr fragment shader
+
+      double specularReflectionMask = 1.0;
+      double geometricOcclusionMask = 0.0;
+      double microfacetDistributionMask = 0.0;
+      double specularContributionMask = .5;
+      setUnifrom(program,'u_ScaleFGDSpec',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([
+        specularReflectionMask,
+        geometricOcclusionMask,
+        microfacetDistributionMask,
+        specularContributionMask
+      ]));
+
+      double diffuseContributionMask = .5;
+      double colorMask = 0.0;
+      double metallicMask = 0.0;
+      double roughnessMask = 0.0;
+      setUnifrom(program,'u_ScaleDiffBaseMR',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([
+        diffuseContributionMask,
+        colorMask,
+        metallicMask,
+        roughnessMask
+      ]));
+
+//      setUnifrom(program,'u_ScaleIBLAmbient',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
+
+    }
+    return program;
   }
 
   void drawNodes(List<GLTFNode> nodes, webgl.Program program) {
@@ -103,15 +222,6 @@ class GLTFRenderer {
       }
       drawNodes(node.children, program);
     }
-  }
-
-  void setupNodeCamera(webgl.Program program, GLTFNode node) {
-    debug.logCurrentFunction();
-
-    GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
-    viewMatrix = camera.lookAtMatrix;
-    projectionMatrix = camera.perspectiveMatrix;
-    camera.position = node.translation;
   }
 
   void setupNodeMesh(webgl.Program program, GLTFNode node) {
@@ -172,26 +282,33 @@ class GLTFRenderer {
 
   /// [componentCount] => 3 (x, y, z)
   void setAttribut(webgl.Program program, String attributName, GLTFAccessor accessor) {
+    debug.logCurrentFunction('$attributName');
     String shaderAttributName = 'a_${capitalize(attributName)}';
 
     //>
     int attributLocation = gl.getAttribLocation(program, shaderAttributName);
 
-    int components = accessor.components;
-    ShaderVariableType componentType = accessor.componentType;
-    bool normalized = accessor.normalized;
-    int stride = 0;         // how many bytes to move to the next vertex
-                                              // 0 = use the correct stride for type and numComponents
-    int offset = 0;         // start at the beginning of the buffer that contained the sent data in the initBuffer.
-                            // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+    //if exist
+    if(attributLocation >= 0) {
+      int components = accessor.components;
+      ShaderVariableType componentType = accessor.componentType;
+      bool normalized = accessor.normalized;
+      int stride = 0; // how many bytes to move to the next vertex
+      // 0 = use the correct stride for type and numComponents
+      int offset = 0; // start at the beginning of the buffer that contained the sent data in the initBuffer.
+      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
 
-    debug.logCurrentFunction('gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
-    debug.logCurrentFunction('$accessor');
+      debug.logCurrentFunction(
+          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+      debug.logCurrentFunction('$accessor');
 
-    //>
-    gl.vertexAttribPointer(
-        attributLocation, components, componentType.index, normalized, stride, offset);
-    gl.enableVertexAttribArray(attributLocation);// turn on getting data out of a buffer for this attribute
+      //>
+      gl.vertexAttribPointer(
+          attributLocation, components, componentType.index, normalized, stride,
+          offset);
+      gl.enableVertexAttribArray(
+          attributLocation); // turn on getting data out of a buffer for this attribute
+    }
   }
 
   void bindIndices(GLTFAccessor accessorIndices) {
@@ -212,6 +329,12 @@ class GLTFRenderer {
     bool transpose = false;
 
     switch(componentType){
+      case ShaderVariableType.FLOAT_VEC2:
+        gl.uniform2fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_VEC3:
+        gl.uniform3fv(uniformLocation, data as Float32List);
+        break;
       case ShaderVariableType.FLOAT_VEC4:
         gl.uniform4fv(uniformLocation, data as Float32List);
         break;
@@ -219,39 +342,19 @@ class GLTFRenderer {
         gl.uniformMatrix4fv(uniformLocation, transpose, data);
         break;
       default:
+        throw new Exception('Trying to set a uniform for a not defined component type');
         break;
     }
   }
 
-  webgl.Program initProgram(ShaderSource shaderSource) {
+  webgl.Program initProgram(Map<String, bool> defines) {
     debug.logCurrentFunction();
 
-    //>
-    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
+    ShaderSource shaderSource = gltf.materials.isEmpty ? ShaderSource.sources['kronos_gltf_default'] : ShaderSource.sources['kronos_gltf_pbr_test'];
 
-    GlobalState globalState = new GlobalState()
-      ..uniforms = {}
-      ..attributes = {}
+    globalState
       ..vertSource = shaderSource.vsCode
-      ..fragSource = shaderSource.fsCode
-      ..scene = null
-      ..hasLODExtension =
-      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
-      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
-      as webgl.OesStandardDerivatives
-      ..sRGBifAvailable =
-      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
-    //<
-
-    Map<String, bool> defines = new Map();
-    //vs
-    defines['HAS_NORMALS'] = false;
-    defines['HAS_TANGENTS'] = false;
-    defines['HAS_UV'] = false;
-
-//    defines['USE_IBL'] = false;
-
-    defines['HAS_BASECOLORMAP'] = false;
+      ..fragSource = shaderSource.fsCode;
 
     String definesToString (Map<String, bool> defines) {
       String outStr = '';
@@ -302,40 +405,7 @@ class GLTFRenderer {
     return shader;
   }
 
-  Future render() async {
-    await ShaderSource.loadShaders();
-    _render();
-  }
 
-  num currentTime = 0;
-  num deltaTime = 0;
-  num timeFps = 0;
-  int fps = 0;
-  num speedFactor  = 1.0;
-  void _render({num time: 0.0}) {
-    debug.logCurrentFunction('------------------------------------------------');
-
-    deltaTime = time - currentTime;
-    timeFps += deltaTime;
-    fps++;
-    currentTime = time * speedFactor;
-
-    if(fps >= 1000) {
-      timeFps = 0;
-      fps = 0;
-    }
-
-    try {
-      update();
-      draw();
-    } catch (ex) {
-      print("Error: $ex");
-    }
-
-    window.requestAnimationFrame((num time) {
-      this._render(time: time);
-    });
-  }
 
   //text utils
   String capitalize(String s) => s[0].toUpperCase() + s.substring(1).toLowerCase();
