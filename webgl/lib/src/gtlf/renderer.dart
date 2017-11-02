@@ -10,13 +10,16 @@ import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 // Uint8List = Byte
 // Uint16List = SCALAR : int
@@ -48,6 +51,30 @@ class GLTFRenderer {
 
   Future render() async {
     await ShaderSource.loadShaders();
+
+    // Todo (jpu) :
+    GLTFTexture gltfTexture = gltf.textures[0];
+    //load image
+    String fileUrl = gltf.baseDirectory + gltfTexture.source.uri.toString();
+    ImageElement imageElement = await TextureUtils.loadImage(fileUrl);
+    //create texture
+    webgl.Texture texture = gl.createTexture();
+    //bind it to an active texture unit
+    gl.activeTexture(TextureUnit.TEXTURE0.index);
+    gl.bindTexture(TextureTarget.TEXTURE_2D.index, texture);
+    //fill texture data
+    int mipMapLevel = 0;
+    gl.texImage2D(TextureAttachmentTarget.TEXTURE_2D.index, mipMapLevel, TextureInternalFormat.RGBA.index, TextureInternalFormat.RGBA.index, TexelDataType.UNSIGNED_BYTE.index, imageElement);
+    //set unit format
+    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL.index, 1);
+    gl.pixelStorei(PixelStorgeType.UNPACK_COLORSPACE_CONVERSION_WEBGL.index, 1);
+    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_MAG_FILTER.index, gltfTexture.sampler.magFilter.index);
+    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_MIN_FILTER.index, gltfTexture.sampler.minFilter.index);// //TextureFilterType.LINEAR.index
+    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_S.index, gltfTexture.sampler.wrapS.index);
+    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_T.index, gltfTexture.sampler.wrapT.index);
+    gl.generateMipmap(TextureTarget.TEXTURE_2D.index);
+
+    //>
     _init();
     _render();
   }
@@ -136,7 +163,7 @@ class GLTFRenderer {
           ..targetPosition = new Vector3(0.0, 0.0, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
-      currentCamera.position = new Vector3(10.0, 10.0, 10.0);
+      currentCamera.position = new Vector3(1.0, 0.0, 10.0);
 //      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
     }
 
@@ -177,20 +204,29 @@ class GLTFRenderer {
   webgl.Program setupProgram() {
     debug.logCurrentFunction();
 
-    Map<String, bool> defines = new Map();
-    defines['HAS_NORMALS'] = true;
-    defines['HAS_TANGENTS'] = false;
-    defines['HAS_UV'] = false;
-    defines['HAS_BASECOLORMAP'] = false;
-    defines['USE_IBL'] = false;
+    GLTFMaterial material = gltf.materials[0];// Todo (jpu) : what if mutliple materials ?
+    GLTFPbrMetallicRoughness pbrMaterial;
+    ShaderSource shaderSource;
+    bool debugWithDefault = false;
+    if(material == null || debugWithDefault){
+      shaderSource = ShaderSource.sources['kronos_gltf_default'];
+    }else{
+      pbrMaterial = material.pbrMetallicRoughness;
+      shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
+    }
 
+    // Todo (jpu) : place this elsewhere
+    Map<String, bool> defines = new Map();
+    defines['HAS_NORMALS'] = false; // Todo (jpu) : => only if gltf primitive has NORMAL attribut
+    defines['HAS_TANGENTS'] = false; // Todo (jpu) : => only if gltf primitive has TANGENT attribut
+    defines['HAS_UV'] = true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut
+    defines['HAS_BASECOLORMAP'] = true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut and a baseColorTexture
+    defines['USE_IBL'] = false; // Todo (jpu) :
+
+    // Todo (jpu) : is this really usefull
     globalState
       ..uniforms = {}
       ..attributes = {};
-
-//    ShaderSource shaderSource = gltf.materials.isEmpty ? ShaderSource.sources['kronos_gltf_default'] : ShaderSource.sources['kronos_gltf_pbr_test'];
-//    ShaderSource shaderSource = ShaderSource.sources['kronos_gltf_default'];
-    ShaderSource shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
 
     webgl.Program program = initProgram(shaderSource, defines);
     gl.useProgram(program);
@@ -203,14 +239,18 @@ class GLTFRenderer {
     debug.logCurrentFunction('activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).targetPosition}');
     debug.logCurrentFunction('activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).viewProjectionMatrix.getTranslation()}');
 
-    if(shaderSource.shaderType == 'kronos_gltf_pbr_test'){
+    if(pbrMaterial != null){
       setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
           ((projectionMatrix * viewMatrix) as Matrix4).storage);
 
-      GLTFMaterial material = gltf.materials[0];
-
       setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 1.0]));// Todo (jpu) : define light global if needed. it's the direction from where the light is comming to origin
       setUnifrom(program,'u_LightColor',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 0.0]));
+
+      // Todo (jpu) :
+      if(pbrMaterial.baseColorTexture != null) {
+        setUnifrom(program, 'u_BaseColorSampler', ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
+      }
 
       double roughness = material.pbrMetallicRoughness.roughnessFactor;
       double metallic = material.pbrMetallicRoughness.metallicFactor;
@@ -234,7 +274,7 @@ class GLTFRenderer {
       ]));
 
       double diffuseContributionMask = 0.0;
-      double colorMask = 0.0;
+      double colorMask = 1.0;
       double metallicMask = 0.0;
       double roughnessMask = 0.0;
       setUnifrom(program,'u_ScaleDiffBaseMR',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([
@@ -319,10 +359,16 @@ class GLTFRenderer {
     gl.bufferData(bufferType.index, data, BufferUsageType.STATIC_DRAW.index);
   }
 
-  /// [componentCount] => 3 (x, y, z)
+  /// [componentCount] => ex : 3 (x, y, z)
   void setAttribut(webgl.Program program, String attributName, GLTFAccessor accessor) {
     debug.logCurrentFunction('$attributName');
-    String shaderAttributName = 'a_${capitalize(attributName)}';
+
+    String shaderAttributName;
+    if(attributName == 'TEXCOORD_0')  {
+      shaderAttributName = 'a_UV';
+    } else {
+      shaderAttributName = 'a_${capitalize(attributName)}';
+    }
 
     //>
     int attributLocation = gl.getAttribLocation(program, shaderAttributName);
@@ -348,6 +394,7 @@ class GLTFRenderer {
       gl.enableVertexAttribArray(
           attributLocation); // turn on getting data out of a buffer for this attribute
     }
+
   }
 
   void bindIndices(GLTFAccessor accessorIndices) {
@@ -368,6 +415,9 @@ class GLTFRenderer {
     bool transpose = false;
 
     switch(componentType){
+      case ShaderVariableType.SAMPLER_2D:
+        gl.uniform1i(uniformLocation, (data as Int32List)[0]);
+        break;
       case ShaderVariableType.FLOAT_VEC2:
         gl.uniform2fv(uniformLocation, data as Float32List);
         break;

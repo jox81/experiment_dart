@@ -11,7 +11,7 @@ class GLTFImage extends GLTFChildOfRootProperty {
   Uri uri;
   String mimeType;
   GLTFBufferView bufferView;
-  Uint8List data;
+  Uint8List data;// Todo (jpu) : directly fill data when gltf is loaded
   int sourceId;
 
   GLTFImage._(this._gltfSource, [String name])

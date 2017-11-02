@@ -7,9 +7,9 @@ attribute vec4 a_Position;
 //#ifdef HAS_TANGENTS
 //    attribute vec4 a_Tangent;
 //#endif
-//#ifdef HAS_UV
-//    attribute vec2 a_UV;
-//#endif
+#ifdef HAS_UV
+    attribute vec2 a_UV;
+#endif
 
 uniform mat4 u_MVPMatrix;
 uniform mat4 u_ModelMatrix;
@@ -42,11 +42,11 @@ void main()
       #endif
   #endif
 
-//  #ifdef HAS_UV
-//    v_UV = a_UV;
-//  #else
+  #ifdef HAS_UV
+    v_UV = a_UV;
+  #else
     v_UV = vec2(0.,0.);
-//  #endif
+  #endif
 
   gl_Position = u_MVPMatrix * a_Position; // needs w for proper perspective correction
 }

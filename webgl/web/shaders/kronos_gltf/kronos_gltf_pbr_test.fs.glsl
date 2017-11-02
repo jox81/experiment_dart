@@ -26,9 +26,9 @@ uniform vec3 u_LightColor;
 //    uniform sampler2D u_brdfLUT;
 //#endif
 
-//#ifdef HAS_BASECOLORMAP
-//    uniform sampler2D u_BaseColorSampler;
-//#endif
+#ifdef HAS_BASECOLORMAP
+    uniform sampler2D u_BaseColorSampler;
+#endif
 //#ifdef HAS_NORMALMAP
 //    uniform sampler2D u_NormalSampler;
 //    uniform float u_NormalScale;
@@ -213,7 +213,7 @@ void main()
 
     // The albedo may be defined from a base texture or a flat color
 #ifdef HAS_BASECOLORMAP
-//    vec4 baseColor = texture2D(u_BaseColorSampler, v_UV) * u_BaseColorFactor;
+    vec4 baseColor = texture2D(u_BaseColorSampler, v_UV) * u_BaseColorFactor;
 #else
     vec4 baseColor = u_BaseColorFactor;
 #endif
@@ -288,15 +288,15 @@ void main()
 
     // This section uses mix to override final color for reference app visualization
     // of various parameters in the lighting equation.
-//    color = mix(color, F, u_ScaleFGDSpec.x);
-//    color = mix(color, vec3(G), u_ScaleFGDSpec.y);
-//    color = mix(color, vec3(D), u_ScaleFGDSpec.z);
-//    color = mix(color, specContrib, u_ScaleFGDSpec.w);
-//
-//    color = mix(color, diffuseContrib, u_ScaleDiffBaseMR.x);
-//    color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);
-//    color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
-//    color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
+    color = mix(color, F, u_ScaleFGDSpec.x);
+    color = mix(color, vec3(G), u_ScaleFGDSpec.y);
+    color = mix(color, vec3(D), u_ScaleFGDSpec.z);
+    color = mix(color, specContrib, u_ScaleFGDSpec.w);
+
+    color = mix(color, diffuseContrib, u_ScaleDiffBaseMR.x);
+    color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);
+    color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
+    color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
 
     gl_FragColor = vec4(color, baseColor.a);
 }

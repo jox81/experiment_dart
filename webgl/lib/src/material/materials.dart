@@ -274,9 +274,6 @@ class MaterialBaseTexture extends Material {
         'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);
     setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.texture2d.bind(texture);
-
     //textureCoords
     List<double> coords =
         model.mesh.textureCoords.length > 0 ? model.mesh.textureCoords : null;
@@ -288,6 +285,10 @@ class MaterialBaseTexture extends Material {
   }
 
   setShaderUniforms(Model model) {
+
+    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
+    gl.activeTexture.texture2d.bind(texture);
+
     setShaderUniform("uModelViewMatrix", Context.mainCamera.viewMatrix * Context.modelMatrix);
     setShaderUniform(
         "uProjectionMatrix", Context.mainCamera.projectionMatrix);
