@@ -53,27 +53,37 @@ class GLTFRenderer {
     await ShaderSource.loadShaders();
 
     // Todo (jpu) :
-    GLTFTexture gltfTexture = gltf.textures[0];
-    //load image
-    String fileUrl = gltf.baseDirectory + gltfTexture.source.uri.toString();
-    ImageElement imageElement = await TextureUtils.loadImage(fileUrl);
-    //create texture
-    webgl.Texture texture = gl.createTexture();
-    //bind it to an active texture unit
-    gl.activeTexture(TextureUnit.TEXTURE0.index);
-    gl.bindTexture(TextureTarget.TEXTURE_2D.index, texture);
-    //fill texture data
-    int mipMapLevel = 0;
-    gl.texImage2D(TextureAttachmentTarget.TEXTURE_2D.index, mipMapLevel, TextureInternalFormat.RGBA.index, TextureInternalFormat.RGBA.index, TexelDataType.UNSIGNED_BYTE.index, imageElement);
-    //set unit format
-    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL.index, 1);
-    gl.pixelStorei(PixelStorgeType.UNPACK_COLORSPACE_CONVERSION_WEBGL.index, 1);
-    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_MAG_FILTER.index, gltfTexture.sampler.magFilter.index);
-    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_MIN_FILTER.index, gltfTexture.sampler.minFilter.index);// //TextureFilterType.LINEAR.index
-    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_S.index, gltfTexture.sampler.wrapS.index);
-    gl.texParameteri(TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_T.index, gltfTexture.sampler.wrapT.index);
-    gl.generateMipmap(TextureTarget.TEXTURE_2D.index);
-
+    if(gltf.textures.length > 0) {
+      GLTFTexture gltfTexture = gltf.textures[0];
+      //load image
+      String fileUrl = gltf.baseDirectory + gltfTexture.source.uri.toString();
+      ImageElement imageElement = await TextureUtils.loadImage(fileUrl);
+      //create texture
+      webgl.Texture texture = gl.createTexture();
+      //bind it to an active texture unit
+      gl.activeTexture(TextureUnit.TEXTURE0.index);
+      gl.bindTexture(TextureTarget.TEXTURE_2D.index, texture);
+      //fill texture data
+      int mipMapLevel = 0;
+      gl.texImage2D(TextureAttachmentTarget.TEXTURE_2D.index, mipMapLevel,
+          TextureInternalFormat.RGBA.index, TextureInternalFormat.RGBA.index,
+          TexelDataType.UNSIGNED_BYTE.index, imageElement);
+      //set unit format
+      gl.texParameteri(TextureTarget.TEXTURE_2D.index,
+          TextureParameter.TEXTURE_MAG_FILTER.index,
+          gltfTexture.sampler.magFilter.index);
+      gl.texParameteri(TextureTarget.TEXTURE_2D.index,
+          TextureParameter.TEXTURE_MIN_FILTER.index,
+          gltfTexture.sampler.minFilter
+              .index); // //TextureFilterType.LINEAR.index
+      gl.texParameteri(
+          TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_S.index,
+          gltfTexture.sampler.wrapS.index);
+      gl.texParameteri(
+          TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_T.index,
+          gltfTexture.sampler.wrapT.index);
+      gl.generateMipmap(TextureTarget.TEXTURE_2D.index);
+    }
     //>
     _init();
     _render();
@@ -163,7 +173,7 @@ class GLTFRenderer {
           ..targetPosition = new Vector3(0.0, 0.0, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
-      currentCamera.position = new Vector3(1.0, 0.0, 10.0);
+      currentCamera.position = new Vector3(0.0, 0.0, -1.0);
 //      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
     }
 
@@ -338,8 +348,14 @@ class GLTFRenderer {
   void bindVertexArrayData(webgl.Program program, String attributName, GLTFAccessor accessor) {
     GLTFBuffer bufferData = accessor.bufferView.buffer;
     Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
-        accessor.bufferView.byteOffset + accessor.byteOffset,
-        accessor.count * accessor.components);
+        accessor.byteOffset + accessor.bufferView.byteOffset,
+        accessor.count * (accessor.byteStride ~/ accessor.componentLength));
+
+    //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
+    assert((accessor.bufferView.byteOffset + accessor.byteOffset) % accessor.componentLength == 0);
+
+    //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
+    assert(accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + (accessor.components * accessor.componentLength) <= accessor.bufferView.byteLength);
 
     debug.logCurrentFunction('$attributName');
     debug.logCurrentFunction(verticesInfos.toString());
@@ -378,10 +394,10 @@ class GLTFRenderer {
       int components = accessor.components;
       ShaderVariableType componentType = accessor.componentType;
       bool normalized = accessor.normalized;
-      int stride = 0; // how many bytes to move to the next vertex
-      // 0 = use the correct stride for type and numComponents
+      int stride = accessor.byteStride; // how many bytes to move to the next vertex
+                                        // 0 = use the correct stride for type and numComponents
       int offset = 0; // start at the beginning of the buffer that contained the sent data in the initBuffer.
-      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+                      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
 
       debug.logCurrentFunction(
           'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');

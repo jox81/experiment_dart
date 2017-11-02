@@ -68,10 +68,10 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   //
   final int count;
   final ShaderVariableType type;//FLOAT_VEC3
-  int get elementLength => _gltfSource.elementLength;
+  int get elementLength => _gltfSource.elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
   //
   final String typeString;//SCALAR/VEC3/...
-  int get components => _gltfSource.components;//Count of components : vec3 -> 3, vec2 -> 2
+  int get components => _gltfSource.components;//Count of components in an element : vec3 -> 3, vec2 -> 2
   //
   final ShaderVariableType componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
   int get componentLength => _gltfSource.componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1

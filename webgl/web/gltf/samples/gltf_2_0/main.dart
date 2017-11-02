@@ -20,10 +20,10 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
 
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',
-    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',
+//    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',
 //    '/gltf/samples/gltf_2_0/minimal.gltf',
 
-//    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf',
+    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf',
   ];
 
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : true);
