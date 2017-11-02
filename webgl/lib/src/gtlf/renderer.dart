@@ -108,7 +108,6 @@ class GLTFRenderer {
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index | ClearBufferMask.DEPTH_BUFFER_BIT.index);
 
-
     setupCameras();
 
     webgl.Program program = setupProgram();
@@ -121,36 +120,63 @@ class GLTFRenderer {
   void setupCameras() {
     debug.logCurrentFunction();
 
-    if(gltf.cameras.length > 0) {
-      activeCameraNode = gltf.cameras[0];
-    }else{
-      GLTFCameraPerspective camera = new GLTFCameraPerspective(0.8, 10000.0, 0.01);
-      camera.position = new Vector3(3.0, 3.0, 0.0);
-      viewMatrix = camera.viewMatrix;
-      projectionMatrix = camera.projectionMatrix;
-      activeCameraNode = camera;
+    Camera currentCamera;
+
+    //find first activeScene camera
+    currentCamera = findActiveSceneCamera(activeScene.nodes);
+    //or use first in project else default
+    if(currentCamera == null){
+      currentCamera = findActiveSceneCamera(gltf.nodes);
     }
-
-    void setupNodeCamera(GLTFNode node) {
-      debug.logCurrentFunction();
-
-      GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
-      viewMatrix = camera.viewMatrix;
-      projectionMatrix = camera.projectionMatrix;
-      camera.position = node.translation;
-    }
-
-    for (var i = 0; i < activeScene.nodes.length; i++) {
-      GLTFNode node = activeScene.nodes[i];
-      if(node.camera != null){
-        if(node.camera.cameraId == activeCameraNode) {
-          setupNodeCamera(node);
-        }
+    if(currentCamera == null){
+      if(gltf.cameras.length > 0) {
+        currentCamera = gltf.cameras[0];
+      }else{
+        currentCamera = new GLTFCameraPerspective(0.2, 10000.0, 0.01)
+          ..targetPosition = new Vector3(0.0, 0.0, 0.0);
+//          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
+      currentCamera.position = new Vector3(10.0, 10.0, 10.0);
+//      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
+    }
+
+    //>
+    activeCameraNode = currentCamera;
+    if(activeCameraNode is GLTFCameraPerspective){
+      GLTFCameraPerspective camera = activeCameraNode as GLTFCameraPerspective;
+      viewMatrix = camera.viewMatrix;
+      projectionMatrix = camera.projectionMatrix;
+    }else{
+      // ortho ?
     }
   }
 
+  Camera findActiveSceneCamera(List<GLTFNode> nodes){
+    Camera result;
+
+    for (var i = 0; i < nodes.length && result == null; i++) {
+      GLTFNode node = nodes[i];
+      if(node.camera != null){
+        setupNodeCamera(node);
+        result = node.camera;
+      }else{
+        findActiveSceneCamera(node.children);
+      }
+    }
+
+    return result;
+  }
+
+  void setupNodeCamera(GLTFNode node) {
+    debug.logCurrentFunction();
+
+    GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
+    camera.position = node.translation;
+  }
+
   webgl.Program setupProgram() {
+    debug.logCurrentFunction();
+
     Map<String, bool> defines = new Map();
     defines['HAS_NORMALS'] = true;
     defines['HAS_TANGENTS'] = false;
@@ -172,13 +198,18 @@ class GLTFRenderer {
     setUnifrom(program,'u_ViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
     setUnifrom(program,'u_ProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
 
+    debug.logCurrentFunction('u_ViewMatrix pos : ${viewMatrix.getTranslation()}');
+    debug.logCurrentFunction('activeCameraNode pos : ${activeCameraNode.position}');
+    debug.logCurrentFunction('activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).targetPosition}');
+    debug.logCurrentFunction('activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).viewProjectionMatrix.getTranslation()}');
+
     if(shaderSource.shaderType == 'kronos_gltf_pbr_test'){
       setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
           ((projectionMatrix * viewMatrix) as Matrix4).storage);
 
       GLTFMaterial material = gltf.materials[0];
 
-      setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, -1.0]));// Todo (jpu) : define light global if needed. it's the direction from where the light is comming to origin
+      setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 1.0]));// Todo (jpu) : define light global if needed. it's the direction from where the light is comming to origin
       setUnifrom(program,'u_LightColor',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 0.0]));
 
       double roughness = material.pbrMetallicRoughness.roughnessFactor;
@@ -220,6 +251,7 @@ class GLTFRenderer {
   }
 
   void drawNodes(List<GLTFNode> nodes, webgl.Program program) {
+    debug.logCurrentFunction();
     for (var i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       if(node.mesh != null){
@@ -245,6 +277,7 @@ class GLTFRenderer {
 
     //uniform
     setUnifrom(program,'u_ModelMatrix',ShaderVariableType.FLOAT_MAT4,node.matrix.storage);
+    debug.logCurrentFunction('u_ModelMatrix pos : ${node.matrix.getTranslation()}');
   }
 
   void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
@@ -370,9 +403,12 @@ class GLTFRenderer {
       return outStr;
     };
 
-    String shaderDefines = definesToString(defines);
-    if (globalState.hasLODExtension != null) {
-      shaderDefines += '#define USE_TEX_LOD 1\n';
+    String shaderDefines = "";
+    if(shaderSource.shaderType == 'kronos_gltf_pbr_test') {
+      shaderDefines = definesToString(defines);
+      if (globalState.hasLODExtension != null) {
+        shaderDefines += '#define USE_TEX_LOD 1\n';
+      }
     }
     webgl.Shader vertexShader = createShader(ShaderType.VERTEX_SHADER, globalState.vertSource, shaderDefines);
     webgl.Shader fragmentShader = createShader(ShaderType.FRAGMENT_SHADER, globalState.fragSource, shaderDefines);
@@ -463,6 +499,7 @@ class GLTFRenderer {
   }
 
   Quaternion getQuaternionInterpolation(Float32List previousValues, Float32List nextValues, double interpolationValue, int previousIndex, double previousTime, num playTime, int nextIndex, double nextTime) {
+    debug.logCurrentFunction();
 
     Quaternion previous = new Quaternion.fromFloat32List(previousValues);
     Quaternion next = new Quaternion.fromFloat32List(nextValues);
@@ -475,15 +512,18 @@ class GLTFRenderer {
 
     Quaternion result = slerp(previous, next, interpolationValue);
 
-    print('interpolationValue : $interpolationValue');
-    print('previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
-    print('result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
-    print('next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
-    print('');
+    debug.logCurrentFunction('interpolationValue : $interpolationValue');
+    debug.logCurrentFunction('previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
+    debug.logCurrentFunction('result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
+    debug.logCurrentFunction('next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
+    debug.logCurrentFunction('');
+
     return result;
   }
 
   Float32List getInterpolatedValues(Float32List previousValues, Float32List nextValues, num interpolationValue){
+    debug.logCurrentFunction();
+
     Float32List result = new Float32List(previousValues.length);
 
     for (int i = 0; i < previousValues.length; i++) {
@@ -493,6 +533,8 @@ class GLTFRenderer {
   }
 
   Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
+    debug.logCurrentFunction();
+
     // quaternion to return
     Quaternion qm = new Quaternion.identity();
 

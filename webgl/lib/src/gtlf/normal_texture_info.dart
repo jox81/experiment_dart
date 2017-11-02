@@ -8,10 +8,10 @@ class GLTFNormalTextureInfo extends GLTFTextureInfo {
 
   final double scale;
 
-  GLTFNormalTextureInfo(int texCoord, GLTFTexture texture, this.scale):super(texCoord, texture);
+  GLTFNormalTextureInfo(int texCoord, GLTFTexture texture, this.scale):super(texCoord, texture : texture);
 
   GLTFNormalTextureInfo._(glTF.NormalTextureInfo gltfSource)
-      : this.scale = gltfSource.scale, super(gltfSource.texCoord, new GLTFTexture.fromGltf(gltfSource.texture));
+      : this.scale = gltfSource.scale, super(gltfSource.texCoord, texture : new GLTFTexture.fromGltf(gltfSource.texture));
 
   factory GLTFNormalTextureInfo.fromGltf(
       glTF.NormalTextureInfo gltfSource) {

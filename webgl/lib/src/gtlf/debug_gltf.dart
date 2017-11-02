@@ -39,9 +39,16 @@ Future<GLTFProject> debugGltf(String gltfUrl, {bool doLog : true}) async {
 }
 
 Future<GLTFProject> _loadGLTF(String gltfUrl) async {
+
+  // Todo (jpu) : assert path exist and get real file
+  String filePart = new Uri.file(gltfUrl).pathSegments.last;
+  String gtlfDirectory = gltfUrl.replaceFirst(filePart, '');
+
   glTF.Gltf gltfSource =
   await GLTFProject.loadGLTFResource(gltfUrl, useWebPath: true);
   GLTFProject _gltf = new GLTFProject.fromGltf(gltfSource);
+  _gltf.baseDirectory = gtlfDirectory;
+
   await _gltf.fillBuffersData();
   assert(_gltf != null);
   print('');

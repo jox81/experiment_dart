@@ -5,7 +5,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 class GLTFSampler extends GLTFChildOfRootProperty {
   glTF.Sampler _gltfSource;
 
-  int samplerId;// Todo (jpu) :
+  int samplerId;
   glTF.Sampler get gltfSource => _gltfSource;
 
   final TextureFilterType magFilter;
@@ -30,6 +30,6 @@ class GLTFSampler extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFSampler{magFilter: $magFilter, minFilter: $minFilter, wrapS: $wrapS, wrapT: $wrapT}';
+    return 'GLTFSampler{samplerId:$samplerId, magFilter: $magFilter, minFilter: $minFilter, wrapS: $wrapS, wrapT: $wrapT}';
   }
 }
