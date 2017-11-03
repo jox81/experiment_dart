@@ -267,7 +267,7 @@ void main()
     // Calculation of analytical lighting contribution
     vec3 diffuseContrib = (1.0 - F) * diffuse(pbrInputs);
     vec3 specContrib = F * G * D / (4.0 * NdotL * NdotV);
-//    vec3 color = NdotL * u_LightColor *(diffuseContrib + specContrib);//Todo (jpu) : should not be declared here, changed from base shader
+//    vec3 color = NdotL * diffuse(pbrInputs) ;//Todo (jpu) : should not be declared here, changed from base shader
     vec3 color = NdotL * u_LightColor * (diffuseContrib + specContrib);
 
     // Calculate lighting contribution from image based lighting source (IBL)

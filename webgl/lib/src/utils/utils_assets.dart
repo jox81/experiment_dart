@@ -12,6 +12,7 @@ class UtilsAssets{
   static const String WEB_PATH_RELATIVE = '/';
 
   // This webPath is used within the webFolder but it can be replaced with 'http://localhost:8080/' to use in unit test
+  //This is usefull when using unit tests from port 8081... instead of web:8080
   static String _webPath = WEB_PATH_RELATIVE;
   static String get webPath => _webPath;
   static set useWebPath(bool value){
@@ -78,7 +79,7 @@ class UtilsAssets{
 
   ///Load a Glsl from a file url
   static Future<String> loadGlslShader(String url) async {
-    logCurrentFunction();
+    logCurrentFunction(url);
     Completer completer = new Completer<String>();
     await loadTextResource(url).then((String result){
       try {

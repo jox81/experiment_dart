@@ -20,6 +20,7 @@ import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+import 'dart:convert' show BASE64;
 
 // Uint8List = Byte
 // Uint16List = SCALAR : int
@@ -50,14 +51,28 @@ class GLTFRenderer {
   }
 
   Future render() async {
+    debug.logCurrentFunction();
     await ShaderSource.loadShaders();
+    await _initTextures();
 
-    // Todo (jpu) :
-    if(gltf.textures.length > 0) {
+    _init();
+    _render();
+  }
+
+  Future _initTextures() async {
+    debug.logCurrentFunction();
+
+    if (gltf.textures.length > 0) {
       GLTFTexture gltfTexture = gltf.textures[0];
-      //load image
-      String fileUrl = gltf.baseDirectory + gltfTexture.source.uri.toString();
-      ImageElement imageElement = await TextureUtils.loadImage(fileUrl);
+      ImageElement imageElement;
+      if(gltfTexture.source.data == null) {
+        //load image
+        String fileUrl = gltf.baseDirectory + gltfTexture.source.uri.toString();
+        imageElement = await TextureUtils.loadImage(fileUrl);
+      }else{
+        String base64Encoded = BASE64.encode(gltfTexture.source.data);
+        imageElement = new ImageElement(src : "data:${gltfTexture.source.mimeType};base64,$base64Encoded");
+      }
       //create texture
       webgl.Texture texture = gl.createTexture();
       //bind it to an active texture unit
@@ -65,44 +80,49 @@ class GLTFRenderer {
       gl.bindTexture(TextureTarget.TEXTURE_2D.index, texture);
       //fill texture data
       int mipMapLevel = 0;
-      gl.texImage2D(TextureAttachmentTarget.TEXTURE_2D.index, mipMapLevel,
-          TextureInternalFormat.RGBA.index, TextureInternalFormat.RGBA.index,
-          TexelDataType.UNSIGNED_BYTE.index, imageElement);
+      gl.texImage2D(
+          TextureAttachmentTarget.TEXTURE_2D.index,
+          mipMapLevel,
+          TextureInternalFormat.RGBA.index,
+          TextureInternalFormat.RGBA.index,
+          TexelDataType.UNSIGNED_BYTE.index,
+          imageElement);
       //set unit format
-      gl.texParameteri(TextureTarget.TEXTURE_2D.index,
+      gl.texParameteri(
+          TextureTarget.TEXTURE_2D.index,
           TextureParameter.TEXTURE_MAG_FILTER.index,
           gltfTexture.sampler.magFilter.index);
-      gl.texParameteri(TextureTarget.TEXTURE_2D.index,
-          TextureParameter.TEXTURE_MIN_FILTER.index,
-          gltfTexture.sampler.minFilter
-              .index); // //TextureFilterType.LINEAR.index
       gl.texParameteri(
-          TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_S.index,
+          TextureTarget.TEXTURE_2D.index,
+          TextureParameter.TEXTURE_MIN_FILTER.index,
+          gltfTexture.sampler.minFilter.index);
+      gl.texParameteri(
+          TextureTarget.TEXTURE_2D.index,
+          TextureParameter.TEXTURE_WRAP_S.index,
           gltfTexture.sampler.wrapS.index);
       gl.texParameteri(
-          TextureTarget.TEXTURE_2D.index, TextureParameter.TEXTURE_WRAP_T.index,
+          TextureTarget.TEXTURE_2D.index,
+          TextureParameter.TEXTURE_WRAP_T.index,
           gltfTexture.sampler.wrapT.index);
       gl.generateMipmap(TextureTarget.TEXTURE_2D.index);
     }
-    //>
-    _init();
-    _render();
   }
 
   num currentTime = 0;
   num deltaTime = 0;
   num timeFps = 0;
   int fps = 0;
-  num speedFactor  = 1.0;
+  num speedFactor = 1.0;
   void _render({num time: 0.0}) {
-    debug.logCurrentFunction('\n------------------------------------------------');
+    debug.logCurrentFunction(
+        '\n------------------------------------------------');
 
     deltaTime = time - currentTime;
     timeFps += deltaTime;
     fps++;
     currentTime = time * speedFactor;
 
-    if(fps >= 1000) {
+    if (fps >= 1000) {
       timeFps = 0;
       fps = 0;
     }
@@ -129,11 +149,11 @@ class GLTFRenderer {
 //      ..fragSource = ''
       ..scene = null
       ..hasLODExtension =
-      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
+          gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
       ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
-      as webgl.OesStandardDerivatives
+          as webgl.OesStandardDerivatives
       ..sRGBifAvailable =
-      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+          hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
   }
 
   void draw() {
@@ -143,7 +163,8 @@ class GLTFRenderer {
     gl.enable(webgl.DEPTH_TEST);
 
     gl.clearColor(0.0, 0.0, 0.0, 1.0);
-    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index | ClearBufferMask.DEPTH_BUFFER_BIT.index);
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT.index |
+        ClearBufferMask.DEPTH_BUFFER_BIT.index);
 
     setupCameras();
 
@@ -162,41 +183,41 @@ class GLTFRenderer {
     //find first activeScene camera
     currentCamera = findActiveSceneCamera(activeScene.nodes);
     //or use first in project else default
-    if(currentCamera == null){
+    if (currentCamera == null) {
       currentCamera = findActiveSceneCamera(gltf.nodes);
     }
-    if(currentCamera == null){
-      if(gltf.cameras.length > 0) {
+    if (currentCamera == null) {
+      if (gltf.cameras.length > 0) {
         currentCamera = gltf.cameras[0];
-      }else{
+      } else {
         currentCamera = new GLTFCameraPerspective(0.2, 10000.0, 0.01)
           ..targetPosition = new Vector3(0.0, 0.0, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
-      currentCamera.position = new Vector3(0.0, 0.0, -1.0);
+      currentCamera.position = new Vector3(-5.0, -5.0, -10.0);
 //      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
     }
 
     //>
     activeCameraNode = currentCamera;
-    if(activeCameraNode is GLTFCameraPerspective){
+    if (activeCameraNode is GLTFCameraPerspective) {
       GLTFCameraPerspective camera = activeCameraNode as GLTFCameraPerspective;
       viewMatrix = camera.viewMatrix;
       projectionMatrix = camera.projectionMatrix;
-    }else{
+    } else {
       // ortho ?
     }
   }
 
-  Camera findActiveSceneCamera(List<GLTFNode> nodes){
+  Camera findActiveSceneCamera(List<GLTFNode> nodes) {
     Camera result;
 
     for (var i = 0; i < nodes.length && result == null; i++) {
       GLTFNode node = nodes[i];
-      if(node.camera != null){
+      if (node.camera != null) {
         setupNodeCamera(node);
         result = node.camera;
-      }else{
+      } else {
         findActiveSceneCamera(node.children);
       }
     }
@@ -214,23 +235,29 @@ class GLTFRenderer {
   webgl.Program setupProgram() {
     debug.logCurrentFunction();
 
-    GLTFMaterial material = gltf.materials[0];// Todo (jpu) : what if mutliple materials ?
+    GLTFMaterial material = gltf.materials.length > 0
+        ? gltf.materials[0]
+        : null; // Todo (jpu) : what if mutliple materials ?
     GLTFPbrMetallicRoughness pbrMaterial;
     ShaderSource shaderSource;
     bool debugWithDefault = false;
-    if(material == null || debugWithDefault){
+    if (material == null || debugWithDefault) {
       shaderSource = ShaderSource.sources['kronos_gltf_default'];
-    }else{
+    } else {
       pbrMaterial = material.pbrMetallicRoughness;
       shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
     }
 
     // Todo (jpu) : place this elsewhere
     Map<String, bool> defines = new Map();
-    defines['HAS_NORMALS'] = false; // Todo (jpu) : => only if gltf primitive has NORMAL attribut
-    defines['HAS_TANGENTS'] = false; // Todo (jpu) : => only if gltf primitive has TANGENT attribut
-    defines['HAS_UV'] = true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut
-    defines['HAS_BASECOLORMAP'] = true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut and a baseColorTexture
+    defines['HAS_NORMALS'] =
+        true; // Todo (jpu) : => only if gltf primitive has NORMAL attribut. This can change faceted to smooth render.But can break in black render
+    defines['HAS_TANGENTS'] =
+        false; // Todo (jpu) : => only if gltf primitive has TANGENT attribut
+    defines['HAS_UV'] =
+        true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut
+    defines['HAS_BASECOLORMAP'] =
+        false; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut and a baseColorTexture
     defines['USE_IBL'] = false; // Todo (jpu) :
 
     // Todo (jpu) : is this really usefull
@@ -241,34 +268,55 @@ class GLTFRenderer {
     webgl.Program program = initProgram(shaderSource, defines);
     gl.useProgram(program);
 
-    setUnifrom(program,'u_ViewMatrix',ShaderVariableType.FLOAT_MAT4,viewMatrix.storage);
-    setUnifrom(program,'u_ProjectionMatrix',ShaderVariableType.FLOAT_MAT4,projectionMatrix.storage);
+    setUnifrom(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+        viewMatrix.storage);
+    setUnifrom(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
 
-    debug.logCurrentFunction('u_ViewMatrix pos : ${viewMatrix.getTranslation()}');
-    debug.logCurrentFunction('activeCameraNode pos : ${activeCameraNode.position}');
-    debug.logCurrentFunction('activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).targetPosition}');
-    debug.logCurrentFunction('activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).viewProjectionMatrix.getTranslation()}');
+    debug.logCurrentFunction(
+        'u_ViewMatrix pos : ${viewMatrix.getTranslation()}');
+    debug.logCurrentFunction(
+        'activeCameraNode pos : ${activeCameraNode.position}');
+    debug.logCurrentFunction(
+        'activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).targetPosition}');
+    debug.logCurrentFunction(
+        'activeCameraNode target pos : ${(activeCameraNode as GLTFCameraPerspective).viewProjectionMatrix.getTranslation()}');
 
-    if(pbrMaterial != null){
+    if (pbrMaterial != null) {
       setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
           ((projectionMatrix * viewMatrix) as Matrix4).storage);
 
-      setUnifrom(program,'u_LightDirection',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 1.0]));// Todo (jpu) : define light global if needed. it's the direction from where the light is comming to origin
-      setUnifrom(program,'u_LightColor',ShaderVariableType.FLOAT_VEC3, new Float32List.fromList([1.0, 1.0, 0.0]));
+      setUnifrom(
+          program,
+          'u_LightDirection',
+          ShaderVariableType.FLOAT_VEC3,
+          new Float32List.fromList([
+            1.0,
+            1.0,
+            1.0
+          ])); // Todo (jpu) : define light global if needed. it's the direction from where the light is comming to origin
+      setUnifrom(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
+          new Float32List.fromList([1.0, 1.0, 1.0]));
 
       // Todo (jpu) :
-      if(pbrMaterial.baseColorTexture != null) {
+      if (pbrMaterial.baseColorTexture != null) {
         setUnifrom(program, 'u_BaseColorSampler', ShaderVariableType.SAMPLER_2D,
             new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
       }
 
       double roughness = material.pbrMetallicRoughness.roughnessFactor;
       double metallic = material.pbrMetallicRoughness.metallicFactor;
-      setUnifrom(program,'u_MetallicRoughnessValues',ShaderVariableType.FLOAT_VEC2, new Float32List.fromList([metallic, roughness]));
+      setUnifrom(
+          program,
+          'u_MetallicRoughnessValues',
+          ShaderVariableType.FLOAT_VEC2,
+          new Float32List.fromList([metallic, roughness]));
 
-      setUnifrom(program,'u_BaseColorFactor',ShaderVariableType.FLOAT_VEC4, material.pbrMetallicRoughness.baseColorFactor);
+      setUnifrom(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
+          material.pbrMetallicRoughness.baseColorFactor);
 
-      setUnifrom(program,'u_Camera',ShaderVariableType.FLOAT_VEC3, (activeCameraNode.position).storage);
+      setUnifrom(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
+          (activeCameraNode.position).storage);
 
       //> Debug values => see in pbr fragment shader
 
@@ -276,23 +324,31 @@ class GLTFRenderer {
       double geometricOcclusionMask = 0.0;
       double microfacetDistributionMask = 0.0;
       double specularContributionMask = 0.0;
-      setUnifrom(program,'u_ScaleFGDSpec',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([
-        specularReflectionMask,
-        geometricOcclusionMask,
-        microfacetDistributionMask,
-        specularContributionMask
-      ]));
+      setUnifrom(
+          program,
+          'u_ScaleFGDSpec',
+          ShaderVariableType.FLOAT_VEC4,
+          new Float32List.fromList([
+            specularReflectionMask,
+            geometricOcclusionMask,
+            microfacetDistributionMask,
+            specularContributionMask
+          ]));
 
       double diffuseContributionMask = 0.0;
-      double colorMask = 1.0;
+      double colorMask = 0.0;
       double metallicMask = 0.0;
       double roughnessMask = 0.0;
-      setUnifrom(program,'u_ScaleDiffBaseMR',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([
-        diffuseContributionMask,
-        colorMask,
-        metallicMask,
-        roughnessMask
-      ]));
+      setUnifrom(
+          program,
+          'u_ScaleDiffBaseMR',
+          ShaderVariableType.FLOAT_VEC4,
+          new Float32List.fromList([
+            diffuseContributionMask,
+            colorMask,
+            metallicMask,
+            roughnessMask
+          ]));
 
 //      setUnifrom(program,'u_ScaleIBLAmbient',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
 
@@ -304,7 +360,7 @@ class GLTFRenderer {
     debug.logCurrentFunction();
     for (var i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
-      if(node.mesh != null){
+      if (node.mesh != null) {
         setupNodeMesh(program, node);
         drawNodeMesh(program, node.mesh.primitives[0]);
       }
@@ -319,15 +375,18 @@ class GLTFRenderer {
 
     //bind
     for (String attributName in primitive.attributes.keys) {
-      bindVertexArrayData(program, attributName, primitive.attributes[attributName]);
+      bindVertexArrayData(
+          program, attributName, primitive.attributes[attributName]);
     }
-    if(primitive.indices != null){
+    if (primitive.indices != null) {
       bindIndices(primitive.indices);
     }
 
     //uniform
-    setUnifrom(program,'u_ModelMatrix',ShaderVariableType.FLOAT_MAT4,node.matrix.storage);
-    debug.logCurrentFunction('u_ModelMatrix pos : ${node.matrix.getTranslation()}');
+    setUnifrom(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+        node.matrix.storage);
+    debug.logCurrentFunction(
+        'u_ModelMatrix pos : ${node.matrix.getTranslation()}');
   }
 
   void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
@@ -336,26 +395,34 @@ class GLTFRenderer {
     if (primitive.indices == null) {
       String attributName = 'POSITION';
       GLTFAccessor accessorPosition = primitive.attributes[attributName];
-      gl.drawArrays(primitive.mode.index, accessorPosition.byteOffset, accessorPosition.count);
+      gl.drawArrays(primitive.mode.index, accessorPosition.byteOffset,
+          accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-      debug.logCurrentFunction('gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
+      debug.logCurrentFunction(
+          'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
       gl.drawElements(primitive.mode.index, accessorIndices.count,
           accessorIndices.componentType.index, accessorIndices.byteOffset);
     }
   }
 
-  void bindVertexArrayData(webgl.Program program, String attributName, GLTFAccessor accessor) {
+  void bindVertexArrayData(
+      webgl.Program program, String attributName, GLTFAccessor accessor) {
     GLTFBuffer bufferData = accessor.bufferView.buffer;
     Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
         accessor.byteOffset + accessor.bufferView.byteOffset,
         accessor.count * (accessor.byteStride ~/ accessor.componentLength));
 
     //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
-    assert((accessor.bufferView.byteOffset + accessor.byteOffset) % accessor.componentLength == 0);
+    assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
+            accessor.componentLength ==
+        0);
 
     //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
-    assert(accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + (accessor.components * accessor.componentLength) <= accessor.bufferView.byteLength);
+    assert(accessor.byteOffset +
+            accessor.byteStride * (accessor.count - 1) +
+            (accessor.components * accessor.componentLength) <=
+        accessor.bufferView.byteLength);
 
     debug.logCurrentFunction('$attributName');
     debug.logCurrentFunction(verticesInfos.toString());
@@ -370,17 +437,19 @@ class GLTFRenderer {
   void initBuffer(BufferType bufferType, TypedData data) {
     debug.logCurrentFunction();
 
-    webgl.Buffer buffer = gl.createBuffer();// Todo (jpu) : Should re-use the created buffer
+    webgl.Buffer buffer =
+        gl.createBuffer(); // Todo (jpu) : Should re-use the created buffer
     gl.bindBuffer(bufferType.index, buffer);
     gl.bufferData(bufferType.index, data, BufferUsageType.STATIC_DRAW.index);
   }
 
   /// [componentCount] => ex : 3 (x, y, z)
-  void setAttribut(webgl.Program program, String attributName, GLTFAccessor accessor) {
+  void setAttribut(
+      webgl.Program program, String attributName, GLTFAccessor accessor) {
     debug.logCurrentFunction('$attributName');
 
     String shaderAttributName;
-    if(attributName == 'TEXCOORD_0')  {
+    if (attributName == 'TEXCOORD_0') {
       shaderAttributName = 'a_UV';
     } else {
       shaderAttributName = 'a_${capitalize(attributName)}';
@@ -390,47 +459,51 @@ class GLTFRenderer {
     int attributLocation = gl.getAttribLocation(program, shaderAttributName);
 
     //if exist
-    if(attributLocation >= 0) {
+    if (attributLocation >= 0) {
       int components = accessor.components;
       ShaderVariableType componentType = accessor.componentType;
       bool normalized = accessor.normalized;
-      int stride = accessor.byteStride; // how many bytes to move to the next vertex
-                                        // 0 = use the correct stride for type and numComponents
-      int offset = 0; // start at the beginning of the buffer that contained the sent data in the initBuffer.
-                      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+      int stride =
+          accessor.byteStride; // how many bytes to move to the next vertex
+      // 0 = use the correct stride for type and numComponents
+      int offset =
+          0; // start at the beginning of the buffer that contained the sent data in the initBuffer.
+      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
 
       debug.logCurrentFunction(
           'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
       debug.logCurrentFunction('$accessor');
 
       //>
-      gl.vertexAttribPointer(
-          attributLocation, components, componentType.index, normalized, stride,
-          offset);
+      gl.vertexAttribPointer(attributLocation, components, componentType.index,
+          normalized, stride, offset);
       gl.enableVertexAttribArray(
           attributLocation); // turn on getting data out of a buffer for this attribute
     }
-
   }
 
   void bindIndices(GLTFAccessor accessorIndices) {
     debug.logCurrentFunction();
 
     Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
-        .asUint16List(accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset, accessorIndices.count);
+        .asUint16List(
+            accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+            accessorIndices.count);
     debug.logCurrentFunction(indices.toString());
 
     initBuffer(accessorIndices.bufferView.usage, indices);
   }
 
-  void setUnifrom(webgl.Program program,String uniformName, ShaderVariableType componentType, TypedData data){
+  void setUnifrom(webgl.Program program, String uniformName,
+      ShaderVariableType componentType, TypedData data) {
     debug.logCurrentFunction(uniformName);
 
-    webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, uniformName);
+    webgl.UniformLocation uniformLocation =
+        gl.getUniformLocation(program, uniformName);
 
     bool transpose = false;
 
-    switch(componentType){
+    switch (componentType) {
       case ShaderVariableType.SAMPLER_2D:
         gl.uniform1i(uniformLocation, (data as Int32List)[0]);
         break;
@@ -447,62 +520,72 @@ class GLTFRenderer {
         gl.uniformMatrix4fv(uniformLocation, transpose, data);
         break;
       default:
-        throw new Exception('Trying to set a uniform for a not defined component type');
+        throw new Exception(
+            'Trying to set a uniform for a not defined component type');
         break;
     }
   }
 
-  webgl.Program initProgram(ShaderSource shaderSource, Map<String, bool> defines) {
+  webgl.Program initProgram(
+      ShaderSource shaderSource, Map<String, bool> defines) {
     debug.logCurrentFunction();
 
     globalState
       ..vertSource = shaderSource.vsCode
       ..fragSource = shaderSource.fsCode;
 
-    String definesToString (Map<String, bool> defines) {
+    String definesToString(Map<String, bool> defines) {
       String outStr = '';
       for (String def in defines.keys) {
-        if(defines[def]) {
+        if (defines[def]) {
           outStr += '#define $def ${defines[def]}\n';
         }
       }
       return outStr;
-    };
+    }
+
+    ;
 
     String shaderDefines = "";
-    if(shaderSource.shaderType == 'kronos_gltf_pbr_test') {
+    if (shaderSource.shaderType == 'kronos_gltf_pbr_test') {
       shaderDefines = definesToString(defines);
       if (globalState.hasLODExtension != null) {
         shaderDefines += '#define USE_TEX_LOD 1\n';
       }
     }
-    webgl.Shader vertexShader = createShader(ShaderType.VERTEX_SHADER, globalState.vertSource, shaderDefines);
-    webgl.Shader fragmentShader = createShader(ShaderType.FRAGMENT_SHADER, globalState.fragSource, shaderDefines);
+    webgl.Shader vertexShader = createShader(
+        ShaderType.VERTEX_SHADER, globalState.vertSource, shaderDefines);
+    webgl.Shader fragmentShader = createShader(
+        ShaderType.FRAGMENT_SHADER, globalState.fragSource, shaderDefines);
 
     webgl.Program program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS.index) as bool ==
+    if (gl.getProgramParameter(
+            program, ProgramParameterGlEnum.LINK_STATUS.index) as bool ==
         false) {
       throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
     }
     gl.validateProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool ==
+    if (gl.getProgramParameter(
+            program, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool ==
         false) {
-      throw "Could not compile program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
+      throw "Could not validate program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
     }
 
     return program;
   }
 
-  webgl.Shader createShader(ShaderType type, String shaderSource, String shaderDefines) {
+  webgl.Shader createShader(
+      ShaderType type, String shaderSource, String shaderDefines) {
     debug.logCurrentFunction();
 
     webgl.Shader shader = gl.createShader(type.index);
     gl.shaderSource(shader, shaderDefines + shaderSource);
     gl.compileShader(shader);
-    bool compiled = gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS.index) as bool;
+    bool compiled = gl.getShaderParameter(
+        shader, ShaderParameters.COMPILE_STATUS.index) as bool;
     if (!compiled) {
       String compilationLog = gl.getShaderInfoLog(shader);
       throw "Could not compile $type shader:\n\n $compilationLog}";
@@ -511,10 +594,9 @@ class GLTFRenderer {
     return shader;
   }
 
-
-
   //text utils
-  String capitalize(String s) => s[0].toUpperCase() + s.substring(1).toLowerCase();
+  String capitalize(String s) =>
+      s[0].toUpperCase() + s.substring(1).toLowerCase();
 
   void update() {
     debug.logCurrentFunction();
@@ -530,18 +612,19 @@ class GLTFRenderer {
     }
   }
 
-  ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler){
+  ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler) {
     debug.logCurrentFunction();
 
     Float32List keyTimes = getKeyTimes(sampler.input);
     Float32List keyValues = getKeyValues(sampler.output);
 
-    num playTime = (currentTime / 1000) % keyTimes.last;// Todo (jpu) : find less cost ?
+    num playTime =
+        (currentTime / 1000) % keyTimes.last; // Todo (jpu) : find less cost ?
 
     //> playtime range
     int previousIndex = 0;
     double previousTime = 0.0;
-    while (keyTimes[previousIndex] < playTime){
+    while (keyTimes[previousIndex] < playTime) {
       previousTime = keyTimes[previousIndex];
       previousIndex++;
     }
@@ -550,21 +633,47 @@ class GLTFRenderer {
     int nextIndex = (previousIndex + 1) % keyTimes.length;
     double nextTime = keyTimes[nextIndex];
 
-
     //> values
-    Float32List previousValues = keyValues.buffer.asFloat32List(sampler.output.byteOffset + previousIndex * sampler.output.components * sampler.output.componentLength, sampler.output.components);
-    Float32List nextValues = keyValues.buffer.asFloat32List(sampler.output.byteOffset + nextIndex * sampler.output.components * sampler.output.componentLength, sampler.output.components);
+    Float32List previousValues = keyValues.buffer.asFloat32List(
+        sampler.output.byteOffset +
+            previousIndex *
+                sampler.output.components *
+                sampler.output.componentLength,
+        sampler.output.components);
+    Float32List nextValues = keyValues.buffer.asFloat32List(
+        sampler.output.byteOffset +
+            nextIndex *
+                sampler.output.components *
+                sampler.output.componentLength,
+        sampler.output.components);
 
-    double interpolationValue = (playTime - previousTime) / (nextTime - previousTime);
+    double interpolationValue =
+        (playTime - previousTime) / (nextTime - previousTime);
 
     // Todo (jpu) : add easer ratio interpolation
 
-    Quaternion result = getQuaternionInterpolation(previousValues, nextValues, interpolationValue, previousIndex, previousTime, playTime, nextIndex, nextTime);
+    Quaternion result = getQuaternionInterpolation(
+        previousValues,
+        nextValues,
+        interpolationValue,
+        previousIndex,
+        previousTime,
+        playTime,
+        nextIndex,
+        nextTime);
 
     return result.storage.buffer;
   }
 
-  Quaternion getQuaternionInterpolation(Float32List previousValues, Float32List nextValues, double interpolationValue, int previousIndex, double previousTime, num playTime, int nextIndex, double nextTime) {
+  Quaternion getQuaternionInterpolation(
+      Float32List previousValues,
+      Float32List nextValues,
+      double interpolationValue,
+      int previousIndex,
+      double previousTime,
+      num playTime,
+      int nextIndex,
+      double nextTime) {
     debug.logCurrentFunction();
 
     Quaternion previous = new Quaternion.fromFloat32List(previousValues);
@@ -572,28 +681,33 @@ class GLTFRenderer {
 
     //
     double angle = next.radians - previous.radians;
-    if( angle.abs() > PI){
+    if (angle.abs() > PI) {
       next[3] *= -1;
     }
 
     Quaternion result = slerp(previous, next, interpolationValue);
 
     debug.logCurrentFunction('interpolationValue : $interpolationValue');
-    debug.logCurrentFunction('previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
-    debug.logCurrentFunction('result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
-    debug.logCurrentFunction('next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
+    debug.logCurrentFunction(
+        'previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
+    debug.logCurrentFunction(
+        'result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
+    debug.logCurrentFunction(
+        'next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
     debug.logCurrentFunction('');
 
     return result;
   }
 
-  Float32List getInterpolatedValues(Float32List previousValues, Float32List nextValues, num interpolationValue){
+  Float32List getInterpolatedValues(Float32List previousValues,
+      Float32List nextValues, num interpolationValue) {
     debug.logCurrentFunction();
 
     Float32List result = new Float32List(previousValues.length);
 
     for (int i = 0; i < previousValues.length; i++) {
-      result[i] = previousValues[i] + interpolationValue * (nextValues[i] - previousValues[i]);
+      result[i] = previousValues[i] +
+          interpolationValue * (nextValues[i] - previousValues[i]);
     }
     return result;
   }
@@ -608,7 +722,7 @@ class GLTFRenderer {
     double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y + qa.z * qb.z;
 
     // if qa=qb or qa=-qb then theta = 0 and we can return qa
-    if (cosHalfTheta.abs() >= 1.0){
+    if (cosHalfTheta.abs() >= 1.0) {
       qm.w = qa.w;
       qm.x = qa.x;
       qm.y = qa.y;
@@ -618,11 +732,11 @@ class GLTFRenderer {
 
     // Calculate temporary values.
     double halfTheta = acos(cosHalfTheta);
-    double sinHalfTheta = sqrt(1.0 - cosHalfTheta*cosHalfTheta);
+    double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
 
     // if theta = 180 degrees then result is not fully defined
     // we could rotate around any axis normal to qa or qb
-    if (sinHalfTheta.abs() < 0.001){
+    if (sinHalfTheta.abs() < 0.001) {
       qm.w = (qa.w * 0.5 + qb.w * 0.5);
       qm.x = (qa.x * 0.5 + qb.x * 0.5);
       qm.y = (qa.y * 0.5 + qb.y * 0.5);
@@ -641,7 +755,7 @@ class GLTFRenderer {
     return qm;
   }
 
-  Float32List getKeyTimes(GLTFAccessor accessor){
+  Float32List getKeyTimes(GLTFAccessor accessor) {
     debug.logCurrentFunction();
 
     Float32List keyTimes = accessor.bufferView.buffer.data.buffer.asFloat32List(
@@ -653,12 +767,9 @@ class GLTFRenderer {
   Float32List getKeyValues(GLTFAccessor accessor) {
     debug.logCurrentFunction();
 
-    Float32List keyValues = accessor.bufferView.buffer.data.buffer.asFloat32List(
-        accessor.byteOffset,
-        accessor.count * accessor.components);
+    Float32List keyValues = accessor.bufferView.buffer.data.buffer
+        .asFloat32List(
+            accessor.byteOffset, accessor.count * accessor.components);
     return keyValues;
   }
 }
-
-
-
