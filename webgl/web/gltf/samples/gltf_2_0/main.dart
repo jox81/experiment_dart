@@ -16,13 +16,17 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/04_camera/gltf_embed/Cameras.gltf',
 //    '/gltf/samples/gltf_2_0/04_camera/gltf/Cameras.gltf',
 //    '/gltf/samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black with pbr ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
-//    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
-//    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
-
-    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black with pbr ?
-//    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black with pbr ? set
 //    '/gltf/samples/gltf_2_0/minimal.gltf',
 
+  //textured
+//    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black with pbr ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
+//    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
+    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black with pbr ?
+
+  //Complex model
+//    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
+
+  //PBR
 //    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf',// Todo (jpu) : bug too muwh texture for now
   ];
 

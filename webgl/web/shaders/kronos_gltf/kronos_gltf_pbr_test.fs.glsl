@@ -67,6 +67,10 @@ varying vec2 v_UV;
 //    #endif
 #endif
 
+#ifdef DEBUG_VS
+    varying vec4 v_vsDebug;
+#endif
+
 // Encapsulate the various inputs used by the various functions in the shading equation
 // We store values in this struct to simplify the integration of alternative implementations
 // of the shading terms, outlined in the Readme.MD Appendix.
@@ -298,5 +302,30 @@ void main()
     color = mix(color, vec3(metallic), u_ScaleDiffBaseMR.z);
     color = mix(color, vec3(perceptualRoughness), u_ScaleDiffBaseMR.w);
 
-    gl_FragColor = vec4(color, baseColor.a);
+    vec4 finalColor = vec4(color, baseColor.a);
+
+#ifdef DEBUG_VS //Debug color from vertex shader
+    finalColor = v_vsDebug;
+#endif
+
+#ifndef DEBUG_VS
+    #ifdef DEBUG_FS //Debug color from vertex shader
+//        finalColor = vec4(1.0, 0.0, 1.0, 1.0); // debug flat color
+//        finalColor = vec4(vec3(v_UV,0.0), 1.0); // uv color. inversed ?
+
+//        finalColor = u_BaseColorFactor; // Base Color Factor
+        finalColor = texture2D(u_BaseColorSampler, v_UV); // Base Color Texture
+
+//        finalColor = vec4(1.0, 0.0, 1.0, 1.0); // debug flat color
+
+//        vec4 debug = texture2D(u_BaseColorSampler, v_UV);
+//        float DebugR = debug.r;
+//        float DebugG = debug.g;
+//        float DebugB = debug.b;
+//        float DebugA = 1.0;
+//        finalColor = vec4(DebugR, DebugG, DebugB, DebugA);
+    #endif
+#endif
+
+    gl_FragColor = finalColor;
 }

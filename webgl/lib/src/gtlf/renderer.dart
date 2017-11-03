@@ -62,50 +62,73 @@ class GLTFRenderer {
   Future _initTextures() async {
     debug.logCurrentFunction();
 
-    if (gltf.textures.length > 0) {
+    ImageElement imageElement;
+    TextureFilterType magFilter;
+    TextureFilterType minFilter;
+    TextureWrapType wrapS;
+    TextureWrapType wrapT;
+
+    bool useDebugTexture = true;
+
+    if (gltf.textures.length > 0 && !useDebugTexture) {
       GLTFTexture gltfTexture = gltf.textures[0];
-      ImageElement imageElement;
-      if(gltfTexture.source.data == null) {
+      if (gltfTexture.source.data == null) {
         //load image
         String fileUrl = gltf.baseDirectory + gltfTexture.source.uri.toString();
         imageElement = await TextureUtils.loadImage(fileUrl);
-      }else{
+      } else {
         String base64Encoded = BASE64.encode(gltfTexture.source.data);
-        imageElement = new ImageElement(src : "data:${gltfTexture.source.mimeType};base64,$base64Encoded");
+        imageElement = new ImageElement(
+            src: "data:${gltfTexture.source.mimeType};base64,$base64Encoded");
       }
-      //create texture
-      webgl.Texture texture = gl.createTexture();
-      //bind it to an active texture unit
-      gl.activeTexture(TextureUnit.TEXTURE0.index);
-      gl.bindTexture(TextureTarget.TEXTURE_2D.index, texture);
-      //fill texture data
-      int mipMapLevel = 0;
-      gl.texImage2D(
-          TextureAttachmentTarget.TEXTURE_2D.index,
-          mipMapLevel,
-          TextureInternalFormat.RGBA.index,
-          TextureInternalFormat.RGBA.index,
-          TexelDataType.UNSIGNED_BYTE.index,
-          imageElement);
-      //set unit format
-      gl.texParameteri(
-          TextureTarget.TEXTURE_2D.index,
-          TextureParameter.TEXTURE_MAG_FILTER.index,
-          gltfTexture.sampler.magFilter.index);
-      gl.texParameteri(
-          TextureTarget.TEXTURE_2D.index,
-          TextureParameter.TEXTURE_MIN_FILTER.index,
-          gltfTexture.sampler.minFilter.index);
-      gl.texParameteri(
-          TextureTarget.TEXTURE_2D.index,
-          TextureParameter.TEXTURE_WRAP_S.index,
-          gltfTexture.sampler.wrapS.index);
-      gl.texParameteri(
-          TextureTarget.TEXTURE_2D.index,
-          TextureParameter.TEXTURE_WRAP_T.index,
-          gltfTexture.sampler.wrapT.index);
-      gl.generateMipmap(TextureTarget.TEXTURE_2D.index);
+
+      magFilter = gltfTexture.sampler.magFilter;
+      minFilter = gltfTexture.sampler.minFilter;
+      wrapS = gltfTexture.sampler.wrapS;
+      wrapT = gltfTexture.sampler.wrapT;
+
     }
+    else {
+      String imagePath = '/images/crate.gif';
+      imageElement = await TextureUtils.loadImage(imagePath);
+      magFilter = TextureFilterType.LINEAR;
+      minFilter = TextureFilterType.LINEAR;
+      wrapS = TextureWrapType.CLAMP_TO_EDGE;
+      wrapT = TextureWrapType.CLAMP_TO_EDGE;
+    }
+
+    //create texture
+    webgl.Texture texture = gl.createTexture();
+    //bind it to an active texture unit
+    gl.activeTexture(TextureUnit.TEXTURE0.index);
+    gl.bindTexture(TextureTarget.TEXTURE_2D.index, texture);
+    //fill texture data
+    int mipMapLevel = 0;
+    gl.texImage2D(
+        TextureAttachmentTarget.TEXTURE_2D.index,
+        mipMapLevel,
+        TextureInternalFormat.RGBA.index,
+        TextureInternalFormat.RGBA.index,
+        TexelDataType.UNSIGNED_BYTE.index,
+        imageElement);
+    //set unit format
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D.index,
+        TextureParameter.TEXTURE_MAG_FILTER.index,
+        magFilter.index);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D.index,
+        TextureParameter.TEXTURE_MIN_FILTER.index,
+        minFilter.index);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D.index,
+        TextureParameter.TEXTURE_WRAP_S.index,
+        wrapS.index);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D.index,
+        TextureParameter.TEXTURE_WRAP_T.index,
+        wrapT.index);
+    gl.generateMipmap(TextureTarget.TEXTURE_2D.index);
   }
 
   num currentTime = 0;
@@ -194,7 +217,7 @@ class GLTFRenderer {
           ..targetPosition = new Vector3(0.0, 0.0, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
-      currentCamera.position = new Vector3(-5.0, -5.0, -10.0);
+      currentCamera.position = new Vector3(5.0, 5.0, 10.0);
 //      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
     }
 
@@ -257,8 +280,12 @@ class GLTFRenderer {
     defines['HAS_UV'] =
         true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut
     defines['HAS_BASECOLORMAP'] =
-        false; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut and a baseColorTexture
+        true; // Todo (jpu) : => only if gltf primitive has TEXCOORD_0 attribut and a baseColorTexture
     defines['USE_IBL'] = false; // Todo (jpu) :
+
+    //jpu
+    defines['DEBUG_VS'] = false; // Todo (jpu) :
+    defines['DEBUG_FS'] = true; // Todo (jpu) :
 
     // Todo (jpu) : is this really usefull
     globalState
@@ -463,12 +490,16 @@ class GLTFRenderer {
       int components = accessor.components;
       ShaderVariableType componentType = accessor.componentType;
       bool normalized = accessor.normalized;
-      int stride =
-          accessor.byteStride; // how many bytes to move to the next vertex
+
+      // how many bytes to move to the next vertex
       // 0 = use the correct stride for type and numComponents
-      int offset =
-          0; // start at the beginning of the buffer that contained the sent data in the initBuffer.
+      int stride =
+          accessor.byteStride;
+
+      // start at the beginning of the buffer that contains the sent data in the initBuffer.
       // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+      int offset =
+          0;
 
       debug.logCurrentFunction(
           'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');

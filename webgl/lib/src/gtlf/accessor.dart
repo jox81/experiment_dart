@@ -24,6 +24,10 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
   MAT4: 16
 };
 
+/// accessor.componentType
+///   UNSIGNED_SHORT :  5123
+///   FLOAT :           5126
+
 /// The accessors are what actually define the format of the data and
 /// use codes for "componentType"
 /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#accessors
