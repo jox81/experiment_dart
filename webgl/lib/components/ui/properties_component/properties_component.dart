@@ -21,7 +21,7 @@ import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/geometry/meshes.dart';
 import 'package:webgl/src/material/material.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';

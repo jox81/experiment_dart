@@ -15,7 +15,8 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   Map<String, GLTFAccessor> attributes = new Map<String, GLTFAccessor>();
 
-  final DrawMode mode;
+  /// DrawMode mode
+  final int mode;
 
   final bool hasPosition;
   final bool hasNormal;
@@ -41,7 +42,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   GLTFMeshPrimitive._(
       this._gltfSource, )
       : this.mode = _gltfSource.mode != null
-            ? DrawMode.getByIndex(_gltfSource.mode)
+            ? _gltfSource.mode
             : DrawMode.TRIANGLES,
         this.hasPosition = _gltfSource.hasPosition,
         this.hasNormal = _gltfSource.hasNormal,

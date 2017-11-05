@@ -13,21 +13,21 @@ class RenderSetting{
 
   void showBackFace(bool visible){
     if(!visible) {
-      gl.cullFace = true;
-      gl.cullFaceMode = FacingType.BACK;
+      gl.enable(EnableCapabilityType.CULL_FACE);
+      gl.cullFace(FacingType.BACK);
     }
   }
 
   void enableDepth(bool enable) {
     if(enable) {
-      gl.clear([ClearBufferMask.DEPTH_BUFFER_BIT]);
-      gl.depthTest = true;
+      gl.clear(ClearBufferMask.DEPTH_BUFFER_BIT);
+      gl.enable(EnableCapabilityType.DEPTH_TEST);
     }
   }
 
   void logSupportedExtensions(){
     Debug.log('Supported extensions',(){
-      for(String extension in gl.supportedExtensions){
+      for(String extension in gl.getSupportedExtensions()){
         print(extension);
       }
     });

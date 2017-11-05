@@ -76,7 +76,7 @@ Future main() async {
       expect(bufferView.byteOffset, 0);
       expect(bufferView.byteLength, 36);
       expect(bufferView.target, 34962);
-      expect(bufferView.usage.index, 34962);
+      expect(bufferView.usage, 34962);
     });
     test("accessors", () async {
       expect(gltfProject.accessors.length, 1);
@@ -85,10 +85,10 @@ Future main() async {
       expect(accessor0, isNotNull);
       expect(accessor0.bufferView, gltfProject.bufferViews[0]);
       expect(accessor0.byteOffset, 0);
-      expect(accessor0.componentType.index, 5126);
+      expect(accessor0.componentType, 5126);
       expect(accessor0.count, 3);
       expect(accessor0.typeString, 'VEC3');
-      expect(accessor0.type.index, 35665);
+      expect(accessor0.type, 35665);
       expect(accessor0.max, [1.0,1.0,0.0]);
       expect(accessor0.min, [0.0,0.0,0.0]);
     });

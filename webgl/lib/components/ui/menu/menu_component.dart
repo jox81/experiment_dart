@@ -135,31 +135,31 @@ class MenuComponent{
   }
 
   bool editRenderingContext(){
-    currentScene?.currentSelection = gl;
+    currentScene?.currentSelection = glWrapper;
     closeAllMenus();
     return false;
   }
 
   bool editContextAttributs(){
-    currentScene?.currentSelection = gl.contextAttributes;
+    currentScene?.currentSelection = glWrapper.contextAttributes;
     closeAllMenus();
     return false;
   }
 
   bool editActiveFrameBuffer(){
-    currentScene?.currentSelection = gl.activeFrameBuffer;
+    currentScene?.currentSelection = glWrapper.activeFrameBuffer;
     closeAllMenus();
     return false;
   }
 
   bool editCurrentProgram(){
-    currentScene?.currentSelection = gl.currentProgram;
+    currentScene?.currentSelection = glWrapper.currentProgram;
     closeAllMenus();
     return false;
   }
 
   bool editActiveTexture(){
-    currentScene?.currentSelection = gl.activeTexture;
+    currentScene?.currentSelection = glWrapper.activeTexture;
     closeAllMenus();
     return false;
   }

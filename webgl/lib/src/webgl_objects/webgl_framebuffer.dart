@@ -29,29 +29,31 @@ class ActiveFrameBuffer extends IEditElement {
 
   // > FRAMEBUFFER_BINDING
   WebGLFrameBuffer get boundFrameBuffer{
-    WebGL.Framebuffer webGLFrameBuffer = gl.ctx.getParameter(ContextParameter.FRAMEBUFFER_BINDING.index) as WebGL.Framebuffer;
-    if(webGLFrameBuffer != null && gl.ctx.isFramebuffer(webGLFrameBuffer)){
+    WebGL.Framebuffer webGLFrameBuffer = gl.getParameter(ContextParameter.FRAMEBUFFER_BINDING) as WebGL.Framebuffer;
+    if(webGLFrameBuffer != null && gl.isFramebuffer(webGLFrameBuffer)){
       return new WebGLFrameBuffer.fromWebGL(webGLFrameBuffer);
     }
     return null;
   }
 
   void bind(WebGLFrameBuffer webGLframeBuffer) {
-    gl.ctx.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER.index, webGLframeBuffer?.webGLFrameBuffer);
+    gl.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER, webGLframeBuffer?.webGLFrameBuffer);
   }
 
   void unBind(){
-    gl.ctx.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER.index, null);
+    gl.bindFramebuffer(FrameBufferTarget.FRAMEBUFFER, null);
   }
 
-  FrameBufferStatus checkStatus(){
-    return FrameBufferStatus.getByIndex(gl.ctx.checkFramebufferStatus(FrameBufferTarget.FRAMEBUFFER.index));
+  int checkFramebufferStatus(){
+    return gl.checkFramebufferStatus(FrameBufferTarget.FRAMEBUFFER);
   }
 
   // >>> Parameteres
 
-  dynamic getAttachmentParameter(FrameBufferAttachment attachment, FrameBufferAttachmentParameters query){
-    return gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index,attachment.index, query.index);
+  ///FrameBufferAttachment attachment
+  ///FrameBufferAttachmentParameters query
+  Object getFramebufferAttachmentParameter(int attachment, int query){
+    return gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER,attachment, query);
   }
 
   // >>> single getParameter
@@ -59,53 +61,65 @@ class ActiveFrameBuffer extends IEditElement {
   // >> COLOR_ATTACHMENT0
   // > FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
   ///The type which contains the attached image.
-  FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForColor0{
-    int resultIndex = gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE.index) as int;
+  /// FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForColor0
+  int get frameBufferAttachmentObjectTypeForColor0{
+    int resultIndex = gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE) as int;
     if(resultIndex != null){
-      return FrameBufferAttachmentType.getByIndex(resultIndex);
+      return resultIndex;
     }
     return null;
   }
   // > FRAMEBUFFER_ATTACHMENT_OBJECT_NAME : Todo : return the webGlTexture or the webGLRenderBuffer attached
-  dynamic get frameBufferAttachmentObjectNameForColor0 => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.index);
+  dynamic get frameBufferAttachmentObjectNameForColor0 => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
   // > FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
-  int get frameBufferAttachmentTextureLevelForColor0 => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index) as int;
+  int get frameBufferAttachmentTextureLevelForColor0 => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL) as int;
   // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
-  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForColor0 => TextureAttachmentTarget.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.COLOR_ATTACHMENT0.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index) as int);
+  /// TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForColor0
+  int get frameBufferAttachmentTextureCubeMapFaceForColor0 => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE) as int;
 
   // >> DEPTH_ATTACHMENT
   // > FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
-  FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForDepth => FrameBufferAttachmentType.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE.index)as int);
+  /// FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForDepth
+  int get frameBufferAttachmentObjectTypeForDepth => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE)as int;
   // > FRAMEBUFFER_ATTACHMENT_OBJECT_NAME : Todo : return the webGlTexture or the webGLRenderBuffer attached
-  dynamic get frameBufferAttachmentObjectNameForDepth => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.index);
+  dynamic get frameBufferAttachmentObjectNameForDepth => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
 
 //Todo : not valid with depth, or not valid with renderBuffer ?
 //  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
-//  int get frameBufferAttachmentTextureLevelForDepth => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
+//  int get frameBufferAttachmentTextureLevelForDepth => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL);
 //  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
-//  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForDepth => TextureAttachmentTarget.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.DEPTH_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+//  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForDepth => TextureAttachmentTarget.getByIndex(gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE));
 
   // >> STENCIL_ATTACHMENT
   // > FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE
-  FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForStencil => FrameBufferAttachmentType.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE.index)as int);
+  /// FrameBufferAttachmentType get frameBufferAttachmentObjectTypeForStencil
+  int get frameBufferAttachmentObjectTypeForStencil => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.STENCIL_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE)as int;
   // > FRAMEBUFFER_ATTACHMENT_OBJECT_NAME : Todo : return the webGlTexture or the webGLRenderBuffer attached
-  dynamic get frameBufferAttachmentObjectNameForStencil => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME.index);
+  dynamic get frameBufferAttachmentObjectNameForStencil => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.STENCIL_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME);
 
 //Todo : not valid with stencil, or not valid with renderBuffer ?
 //  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL
-//  int get frameBufferAttachmentTextureLevelForStencil => gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL.index);
+//  int get frameBufferAttachmentTextureLevelForStencil => gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.STENCIL_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL);
 //  // > FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE
-//  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForStencil => TextureAttachmentTarget.getByIndex(gl.ctx.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER.index, FrameBufferAttachment.STENCIL_ATTACHMENT.index, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE.index));
+//  TextureAttachmentTarget get frameBufferAttachmentTextureCubeMapFaceForStencil => TextureAttachmentTarget.getByIndex(gl.getFramebufferAttachmentParameter(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.STENCIL_ATTACHMENT, FrameBufferAttachmentParameters.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE));
 
 
   // > Bind Attachments
 
-  void framebufferTexture2D(FrameBufferTarget target, FrameBufferAttachment attachment, TextureAttachmentTarget attachementTarget, WebGLTexture webGLTexture, int mipMapLevel){
-    gl.ctx.framebufferTexture2D(target.index, attachment.index, attachementTarget.index, webGLTexture.webGLTexture, mipMapLevel);
+  /// FrameBufferTarget target
+  /// FrameBufferAttachment attachment
+  /// TextureAttachmentTarget attachementTarget
+  /// WebGLTexture webGLTexture, int mipMapLevel
+  void framebufferTexture2D(int target, int attachment, int attachementTarget, WebGLTexture webGLTexture, int mipMapLevel){
+    gl.framebufferTexture2D(target, attachment, attachementTarget, webGLTexture.webGLTexture, mipMapLevel);
   }
 
-  void framebufferRenderbuffer(FrameBufferTarget target, FrameBufferAttachment attachment, RenderBufferTarget renderBufferTarget, WebGLRenderBuffer webGLRenderBuffer){
-    gl.ctx.framebufferRenderbuffer(target.index, attachment.index, renderBufferTarget.index, webGLRenderBuffer.webGLRenderBuffer);
+  /// FrameBufferTarget target
+  /// FrameBufferAttachment attachment
+  /// RenderBufferTarget renderBufferTarget
+  /// WebGLRenderBuffer webGLRenderBuffer){
+  void framebufferRenderbuffer(int target, int attachment, int renderBufferTarget, WebGLRenderBuffer webGLRenderBuffer){
+    gl.framebufferRenderbuffer(target, attachment, renderBufferTarget, webGLRenderBuffer.webGLRenderBuffer);
   }
 
   // > Logs
@@ -115,7 +129,7 @@ class ActiveFrameBuffer extends IEditElement {
       print('### frameBuffer bindings ############################################');
       WebGLFrameBuffer frameBuffer = boundFrameBuffer;
       print('boundFrameBuffer : ${frameBuffer}');
-      print('checkStatus() : ${checkStatus()}');
+      print('checkFramebufferStatus() : ${checkFramebufferStatus()}');
       if(frameBuffer != null) {
 
         if(frameBufferAttachmentObjectTypeForColor0 != FrameBufferAttachmentType.NONE) {
@@ -175,13 +189,13 @@ class WebGLFrameBuffer extends WebGLObject{
 
   final WebGL.Framebuffer webGLFrameBuffer;
 
-  WebGLFrameBuffer():this.webGLFrameBuffer = gl.ctx.createFramebuffer();
+  WebGLFrameBuffer():this.webGLFrameBuffer = gl.createFramebuffer();
   WebGLFrameBuffer.fromWebGL(this.webGLFrameBuffer);
 
   @override
-  void delete() => gl.ctx.deleteFramebuffer(webGLFrameBuffer);
+  void delete() => gl.deleteFramebuffer(webGLFrameBuffer);
 
-  bool get isFramebuffer => gl.ctx.isFramebuffer(webGLFrameBuffer);
+  bool get isFramebuffer => gl.isFramebuffer(webGLFrameBuffer);
 
   void logFrameBufferInfos() {
     Debug.log("FrameBuffer Infos", () {

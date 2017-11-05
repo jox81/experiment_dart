@@ -24,7 +24,7 @@ class WebglTest {
 
   void setup() {
 
-    gl.clearColor = new Vector4(1.0,0.0,0.0,1.0);
+    gl.clearColor(1.0,0.0,0.0,1.0);
 
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
       ..source = ShaderSource.sources['material_point'].vsCode
@@ -43,7 +43,7 @@ class WebglTest {
       ..validate()
       ..use();
 
-    gl.logRenderingContextInfos();
+    glWrapper.logRenderingContextInfos();
 
   }
 

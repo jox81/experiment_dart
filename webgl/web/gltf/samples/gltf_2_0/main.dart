@@ -20,8 +20,9 @@ Future main() async {
 
   //textured
 //    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black with pbr ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
-//    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
-    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black with pbr ?
+    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
+//    '/gltf/samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
+//    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black with pbr ?
 
   //Complex model
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
@@ -29,7 +30,7 @@ Future main() async {
   //PBR
 //    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf',// Todo (jpu) : bug too muwh texture for now
   ];
-
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : true);
+//
+  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);
   await new GLTFRenderer(gltf).render();
 }

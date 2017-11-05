@@ -1,5 +1,5 @@
 import 'package:angular2/core.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 
 @Component(
     selector: 'webglTexture',

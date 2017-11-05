@@ -45,8 +45,8 @@ class WebglTestParameters {
     setupCamera();
     setupMeshes();
 
-    gl.clearColor = new Vector4(0.0, 0.0, 0.0, 1.0);
-    gl.depthTest = true;
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(EnableCapabilityType.DEPTH_TEST);
   }
 
   void setupCamera() {
@@ -63,9 +63,8 @@ class WebglTestParameters {
   }
 
   void render({num time: 0.0}) {
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
-    gl.clear(
-        [ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
+    gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
     for (Model model in models) {
       model.render();

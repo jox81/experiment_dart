@@ -90,7 +90,7 @@ Future main() async {
       expect(bufferView0.byteOffset, 0);
       expect(bufferView0.byteLength, 12);
       expect(bufferView0.target, 34963);
-      expect(bufferView0.usage.index, 34963);//ELEMENT_ARRAY_BUFFER
+      expect(bufferView0.usage, 34963);//ELEMENT_ARRAY_BUFFER
       print(bufferView0.usage);
 
       GLTFBufferView bufferView1 = gltfProject.bufferViews[1];
@@ -101,7 +101,7 @@ Future main() async {
       expect(bufferView1.byteLength, 96);
       expect(bufferView1.byteStride, 12);
       expect(bufferView1.target, 34962);
-      expect(bufferView1.usage.index, 34962);//ARRAY_BUFFER
+      expect(bufferView1.usage, 34962);//ARRAY_BUFFER
       print(bufferView1.usage);
     });
     test("accessors", () async {
@@ -111,7 +111,7 @@ Future main() async {
       expect(accessor0, isNotNull);
       expect(accessor0.bufferView, gltfProject.bufferViews[0]);
       expect(accessor0.byteOffset, 0);
-      expect(accessor0.componentType.index, 5123); //UNSIGNED_SHORT
+      expect(accessor0.componentType, 5123); //UNSIGNED_SHORT
       print(accessor0.componentType);
       expect(accessor0.count, 6);
       expect(accessor0.typeString, 'SCALAR');
@@ -124,11 +124,11 @@ Future main() async {
       expect(accessor1, isNotNull);
       expect(accessor1.bufferView, gltfProject.bufferViews[1]);
       expect(accessor1.byteOffset, 0);
-      expect(accessor1.componentType.index, 5126); //Float
+      expect(accessor1.componentType, 5126); //Float
       expect(accessor1.count, 4);
       expect(accessor1.typeString, 'VEC3');
       print(accessor1.type); //FLOAT_VEC3
-      expect(accessor1.type.index, 35665);
+      expect(accessor1.type, 35665);
       expect(accessor1.max, [1.0, 1.0, 0.0]);
       expect(accessor1.min, [0.0, 0.0, 0.0]);
 
@@ -136,11 +136,11 @@ Future main() async {
       expect(accessor2, isNotNull);
       expect(accessor2.bufferView, gltfProject.bufferViews[1]);
       expect(accessor2.byteOffset, 48);
-      expect(accessor2.componentType.index, 5126); //Float
+      expect(accessor2.componentType, 5126); //Float
       expect(accessor2.count, 4);
       expect(accessor2.typeString, 'VEC2');
       print(accessor2.type); //FLOAT_VEC2
-      expect(accessor2.type.index, 35664);
+      expect(accessor2.type, 35664);
       expect(accessor2.max, [1.0,1.0]);
       expect(accessor2.min, [0.0,0.0]);
     });
@@ -176,13 +176,13 @@ Future main() async {
       expect(gltfProject.samplers.length, 1);
 
       GLTFSampler sampler0 = gltfProject.samplers[0];
-      expect(sampler0.magFilter.index, 9729);//LINEAR
+      expect(sampler0.magFilter, 9729);//LINEAR
       print(sampler0.magFilter);
-      expect(sampler0.minFilter.index, 9987);//LINEAR_MIPMAP_LINEAR
+      expect(sampler0.minFilter, 9987);//LINEAR_MIPMAP_LINEAR
       print(sampler0.minFilter);
-      expect(sampler0.wrapS.index, 33648);//MIRRORED_REPEAT
+      expect(sampler0.wrapS, 33648);//MIRRORED_REPEAT
       print(sampler0.wrapS);
-      expect(sampler0.wrapT.index, 33648);//MIRRORED_REPEAT
+      expect(sampler0.wrapT, 33648);//MIRRORED_REPEAT
       print(sampler0.wrapT);
     });
     test("asset", () async {

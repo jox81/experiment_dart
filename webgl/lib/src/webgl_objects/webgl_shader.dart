@@ -17,40 +17,42 @@ class WebGLShader extends WebGLObject{
 
   final WebGL.Shader webGLShader;
 
-  WebGLShader(ShaderType shaderType):this.webGLShader = gl.ctx.createShader(shaderType.index);
+  /// ShaderType shaderType
+  WebGLShader(int shaderType):this.webGLShader = gl.createShader(shaderType);
   WebGLShader.fromWebGL(this.webGLShader);
 
-  bool get isShader => gl.ctx.isShader(webGLShader);
+  bool get isShader => gl.isShader(webGLShader);
 
   // > SHADER_TYPE
-  ShaderType get shaderType => ShaderType.getByIndex(gl.ctx.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE.index) as int);
+  /// ShaderType shaderType
+  int get shaderType => gl.getShaderParameter(webGLShader,ShaderParameters.SHADER_TYPE) as int;
   // > COMPILE_STATUS
-  bool get compileStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS.index) as bool;
+  bool get compileStatus => gl.getShaderParameter(webGLShader,ShaderParameters.COMPILE_STATUS) as bool;
 
 
-  String get source => gl.ctx.getShaderSource(webGLShader);
-  set source(String shaderSource) => gl.ctx.shaderSource(webGLShader, shaderSource);
+  String get source => gl.getShaderSource(webGLShader);
+  set source(String shaderSource) => gl.shaderSource(webGLShader, shaderSource);
 
   String get infoLog{
-    return gl.ctx.getShaderInfoLog(webGLShader);
+    return gl.getShaderInfoLog(webGLShader);
   }
 
   // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS.index) as bool;
+  bool get deleteStatus => gl.getShaderParameter(webGLShader,ShaderParameters.DELETE_STATUS) as bool;
 
   @override
-  void delete() => gl.ctx.deleteShader(webGLShader);
+  void delete() => gl.deleteShader(webGLShader);
 
   void attach(WebGLProgram webGLProgram){
-    gl.ctx.attachShader(webGLProgram.webGLProgram, webGLShader);
+    gl.attachShader(webGLProgram.webGLProgram, webGLShader);
   }
 
   void detachShader(WebGLProgram webGLProgram){
-    gl.ctx.detachShader(webGLProgram.webGLProgram, webGLShader);
+    gl.detachShader(webGLProgram.webGLProgram, webGLShader);
   }
 
   void compile(){
-    gl.ctx.compileShader(webGLShader);
+    gl.compileShader(webGLShader);
 
     if (!compileStatus) {
       print(infoLog);
@@ -58,18 +60,21 @@ class WebGLShader extends WebGLObject{
     }
   }
 
-  WebGLShaderPrecisionFormat getShaderPrecisionFormat(ShaderType shaderType, PrecisionType precisionType){
-    return new WebGLShaderPrecisionFormat.fromWebGL(gl.ctx.getShaderPrecisionFormat(shaderType.index, precisionType.index));
+  /// ShaderType shaderType
+  /// PrecisionType precisionType
+  WebGLShaderPrecisionFormat getShaderPrecisionFormat(int shaderType, int precisionType){
+    return new WebGLShaderPrecisionFormat.fromWebGL(gl.getShaderPrecisionFormat(shaderType, precisionType));
   }
 
   //placer dans attribut_location ?
   ///returns the address of a specified vertex attribute.
   int getVertexAttribOffset(int vertexAttributeIndex){
-    return gl.ctx.getVertexAttribOffset(vertexAttributeIndex, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER.index);
+    return gl.getVertexAttribOffset(vertexAttributeIndex, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_POINTER);
   }
 
-  dynamic getParameter(ShaderParameters parameter){
-    dynamic result =  gl.ctx.getShaderParameter(webGLShader,parameter.index);
+  /// ShaderParameters parameter
+  dynamic getParameter(int parameter){
+    dynamic result =  gl.getShaderParameter(webGLShader,parameter);
     return result;
   }
 

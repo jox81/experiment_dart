@@ -1,10 +1,13 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/webgl_constants.dart';
 import 'package:webgl/src/webgl_objects/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/render_setting.dart';
+import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 @MirrorsUsed(
     targets: const [
@@ -13,9 +16,14 @@ import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
     override: '*')
 import 'dart:mirrors';
 
-WebGLRenderingContext gl;
+WebGLRenderingContext glWrapper;
+WebGL.RenderingContext get gl => glWrapper.gl;
+set gl(WebGL.RenderingContext ctx) => glWrapper = new WebGLRenderingContext.fromWebGL(ctx);
 
 class Context{
+
+  static Application get application => Application.instance;
+  static Scene get currentScene => Application.instance != null ? Application.instance.currentScene as Scene : null;
 
   static GLTFCameraPerspective _mainCamera;
   static GLTFCameraPerspective get mainCamera => _mainCamera;
@@ -59,7 +67,7 @@ class Context{
   static const bool debugging = false;
 
   static void init(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
-    gl = new WebGLRenderingContext.create(canvas);
+    glWrapper = new WebGLRenderingContext.create(canvas);
 
     if(initConstant) {
       _initWebglConstants();
@@ -75,7 +83,7 @@ class Context{
   }
 
   static void _logInfos() {
-    gl.contextAttributes.logValues();
+    glWrapper.contextAttributes.logValues();
     _renderSetting.logSupportedExtensions();
     Context.webglConstants.logConstants();
     Context.webglConstants.logParameters();

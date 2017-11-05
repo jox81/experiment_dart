@@ -31,18 +31,20 @@ class WebGLAttributLocation extends IEditElement{
     }
   }
   void _enable() {
-    gl.ctx.enableVertexAttribArray(_location);
+    gl.enableVertexAttribArray(_location);
   }
 
   void _disable() {
-    gl.ctx.disableVertexAttribArray(_location);
+    gl.disableVertexAttribArray(_location);
   }
 
   // >>>
   ///Return the information requested in vertexAttribName about the vertex attribute at
   ///the passed index. The type returned is dependent on the information requested.
-  dynamic getVertexAttrib(int vertexAttributeIndex, VertexAttribGlEnum vertexAttribName){
-    return gl.ctx.getVertexAttrib(vertexAttributeIndex,vertexAttribName.index);
+  /// int vertexAttributeIndex
+  /// VertexAttribGlEnum vertexAttribName
+  Object getVertexAttrib(int vertexAttributeIndex, int vertexAttribName){
+    return gl.getVertexAttrib(vertexAttributeIndex,vertexAttribName);
   }
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_BUFFER_BINDING
@@ -63,7 +65,7 @@ class WebGLAttributLocation extends IEditElement{
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_TYPE
   ///Returns a VertexAttribArrayType representing the array type.
-  VertexAttribArrayType get elementType => VertexAttribArrayType.getByIndex(getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE) as int);
+  int get elementType => getVertexAttrib(_location, VertexAttribGlEnum.VERTEX_ATTRIB_ARRAY_TYPE) as int;
 
   // > getVertexAttrib VERTEX_ATTRIB_ARRAY_NORMALIZED
   ///Returns a GLboolean that is true if fixed-point data types are normalized
@@ -79,45 +81,46 @@ class WebGLAttributLocation extends IEditElement{
   ///vertex attributes array.
   ///[stride] specifying the offset in bytes between the beginning of consecutive vertex attributes.
   ///[offset] specifying an offset in bytes of the first component in the vertex attribute array. Must be a multiple of type.
-  void vertexAttribPointer(int size, ShaderVariableType type, bool normalized, int stride, int offset) {
+  /// ShaderVariableType type
+  void vertexAttribPointer(int size, int type, bool normalized, int stride, int offset) {
     assert(1 <= size && size <= 4);
-    gl.ctx.vertexAttribPointer(_location, size, type.index, normalized, stride, offset);
+    gl.vertexAttribPointer(_location, size, type, normalized, stride, offset);
   }
 
   // Todo : On ne peut avoir que ces types là ?
 
   //float
   void vertexAttrib1f(num x) {
-    gl.ctx.vertexAttrib1f(_location, x);
+    gl.vertexAttrib1f(_location, x);
   }
   
   void vertexAttrib2f(num x, num y) {
-    gl.ctx.vertexAttrib2f(_location, x, y);
+    gl.vertexAttrib2f(_location, x, y);
   }
   
   void vertexAttrib3f(num x, num y, num z) {
-    gl.ctx.vertexAttrib3f(_location, x, y, z);
+    gl.vertexAttrib3f(_location, x, y, z);
   }
 
   void vertexAttrib4f(num x, num y, num z, num w) {
-    gl.ctx.vertexAttrib4f(_location, x, y, z, w);
+    gl.vertexAttrib4f(_location, x, y, z, w);
   }
   
   //List float
   void vertexAttrib1fv(Float32List data) {
-    gl.ctx.vertexAttrib1fv(_location, data);
+    gl.vertexAttrib1fv(_location, data);
   }
   
   void vertexAttrib2fv(Vector2 data) {
-    gl.ctx.vertexAttrib2fv(_location, data.storage);
+    gl.vertexAttrib2fv(_location, data.storage);
   }
   
   void vertexAttrib3fv(Vector3 data) {
-    gl.ctx.vertexAttrib3fv(_location, data.storage);
+    gl.vertexAttrib3fv(_location, data.storage);
   }
 
   void vertexAttrib4fv(Vector4 data) {
-    gl.ctx.vertexAttrib4fv(_location, data.storage);
+    gl.vertexAttrib4fv(_location, data.storage);
   }
 
   void logVertexAttributInfos() {

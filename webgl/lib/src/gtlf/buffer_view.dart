@@ -29,13 +29,14 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
   int byteStride;
 
   int target;
-  BufferType usage;
+  /// BufferType usage
+  int usage;
 
   GLTFBufferView._(this._gltfSource, [String name])
       : this.byteLength = _gltfSource.byteLength,
         this.byteOffset = _gltfSource.byteOffset,
         this.byteStride = _gltfSource.byteStride,
-        this.usage = _gltfSource.usage != null ? BufferType.getByIndex(_gltfSource.usage.target):null,
+        this.usage = _gltfSource.usage != null ? _gltfSource.usage.target : null,
         this.target = _gltfSource.usage != null ? _gltfSource.usage.target: null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
         super(name);
 

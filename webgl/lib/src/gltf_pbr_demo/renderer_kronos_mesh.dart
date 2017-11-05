@@ -155,12 +155,12 @@ class KronosMesh {
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS.index) as bool ==
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS) as bool ==
         false) {
       throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
     }
     gl.validateProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool ==
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS) as bool ==
         false) {
       throw "Could not compile program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
     }
@@ -168,10 +168,11 @@ class KronosMesh {
     return program;
   }
 
-  webgl.Shader createShader(webgl.RenderingContext gl,ShaderType type, String shaderSource, String shaderDefines) {
+  /// ShaderType type
+  webgl.Shader createShader(webgl.RenderingContext gl,int type, String shaderSource, String shaderDefines) {
     logCurrentFunction();
 
-    webgl.Shader shader = gl.createShader(type.index);
+    webgl.Shader shader = gl.createShader(type);
     gl.shaderSource(shader, shaderDefines + shaderSource);
     gl.compileShader(shader);
     bool compiled = gl.getShaderParameter(shader, webgl.COMPILE_STATUS) as bool;

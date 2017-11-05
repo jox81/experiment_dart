@@ -1,5 +1,4 @@
 import 'dart:web_gl' as WebGL;
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(
     targets: const [
       WebGLActiveInfo,
@@ -18,7 +17,8 @@ class WebGLActiveInfo{
   String get name => _webGLActiveInfo.name;
 
   ///The data type of the requested variable.
-  ShaderVariableType get type => ShaderVariableType.getByIndex(_webGLActiveInfo.type);
+  /// ShaderVariableType type
+  int get type => _webGLActiveInfo.type;
 
   ///The size of the requested variable.
   int get size => _webGLActiveInfo.size;

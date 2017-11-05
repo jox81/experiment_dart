@@ -28,84 +28,84 @@ class WebGLUniformLocation{
   WebGL.UniformLocation get webGLUniformLocation => _webGLUniformLocation;
 
   WebGLUniformLocation(this.program, this.variableName){
-    _webGLUniformLocation = gl.ctx.getUniformLocation(program?.webGLProgram, variableName);
+    _webGLUniformLocation = gl.getUniformLocation(program?.webGLProgram, variableName);
   }
 
   //Float
   void uniform1f(num x) {
-    gl.ctx.uniform1f(_webGLUniformLocation, x);
+    gl.uniform1f(_webGLUniformLocation, x);
   }
   void uniform2f(num x, num y) {
-    gl.ctx.uniform2f(_webGLUniformLocation, x, y);
+    gl.uniform2f(_webGLUniformLocation, x, y);
   }
 
   void uniform3f(num x, num y, num z) {
-    gl.ctx.uniform3f(_webGLUniformLocation, x, y, z);
+    gl.uniform3f(_webGLUniformLocation, x, y, z);
   }
 
   void uniform4f(num x, num y, num z, num w) {
-    gl.ctx.uniform4f(_webGLUniformLocation, x, y, z, w);
+    gl.uniform4f(_webGLUniformLocation, x, y, z, w);
   }
 
   //int
   void uniform1i(int x) {
-    gl.ctx.uniform1i(_webGLUniformLocation, x);
+    gl.uniform1i(_webGLUniformLocation, x);
   }
 
   void uniform2i(int x, int y) {
-    gl.ctx.uniform2i(_webGLUniformLocation, x, y);
+    gl.uniform2i(_webGLUniformLocation, x, y);
   }
 
   void uniform3i(int x, int y, int z) {
-    gl.ctx.uniform3i(_webGLUniformLocation, x, y, z);
+    gl.uniform3i(_webGLUniformLocation, x, y, z);
   }
 
   void uniform4i(int x, int y, int z, int w) {
-    gl.ctx.uniform4i(_webGLUniformLocation, x, y, z, w);
+    gl.uniform4i(_webGLUniformLocation, x, y, z, w);
   }
 
   //float vector
   void uniform1fv(Float32List data) {
-    gl.ctx.uniform1fv(_webGLUniformLocation, data);
+    gl.uniform1fv(_webGLUniformLocation, data);
   }
   void uniform2fv(Float32List data) {
-    gl.ctx.uniform2fv(_webGLUniformLocation, data);
+    gl.uniform2fv(_webGLUniformLocation, data);
   }
 
   void uniform3fv(Float32List data) {
-    gl.ctx.uniform3fv(_webGLUniformLocation, data);
+    gl.uniform3fv(_webGLUniformLocation, data);
   }
 
   void uniform4fv(Float32List data) {
-    gl.ctx.uniform4fv(_webGLUniformLocation, data);
+    gl.uniform4fv(_webGLUniformLocation, data);
   }
 
   //int vector
   void uniform1iv(Int32List data) {
-    gl.ctx.uniform1iv(_webGLUniformLocation, data);
+    gl.uniform1iv(_webGLUniformLocation, data);
   }
   void uniform2iv(Int32List data) {
-    gl.ctx.uniform2iv(_webGLUniformLocation, data);
+    gl.uniform2iv(_webGLUniformLocation, data);
   }
 
   void uniform3iv(Int32List data) {
-    gl.ctx.uniform3iv(_webGLUniformLocation, data);
+    gl.uniform3iv(_webGLUniformLocation, data);
   }
 
   void uniform4iv(Int32List data) {
-    gl.ctx.uniform4iv(_webGLUniformLocation, data);
+    gl.uniform4iv(_webGLUniformLocation, data);
   }
   
   //matrix float
   void uniformMatrix2fv(Matrix2 matrix, bool transpose) {
-    gl.ctx.uniformMatrix3fv(_webGLUniformLocation, transpose, matrix?.storage);
+    gl.uniformMatrix3fv(_webGLUniformLocation, transpose, matrix?.storage);
   }
 
   void uniformMatrix3fv(Matrix3 matrix, bool transpose) {
-    gl.ctx.uniformMatrix3fv(_webGLUniformLocation, transpose, matrix?.storage);
+    gl.uniformMatrix3fv(_webGLUniformLocation, transpose, matrix?.storage);
   }
 
   void uniformMatrix4fv(Matrix4 matrix, bool transpose) {
-    gl.ctx.uniformMatrix4fv(_webGLUniformLocation, transpose, matrix?.storage);
+    gl.uniformMatrix4fv(_webGLUniformLocation, transpose, matrix?.storage);
   }
 }

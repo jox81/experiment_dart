@@ -28,12 +28,12 @@ class WebglTest {
     print('triangleModel.mesh.indices.length : ${triangleModel.mesh.indices.length}');
 
     WebGLBuffer vertexBuffer = new WebGLBuffer();
-    vertexBuffer.bind(BufferType.ARRAY_BUFFER);
+    gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer.webGLBuffer);
     gl.bufferData(
         BufferType.ARRAY_BUFFER, new Float32List.fromList(triangleModel.mesh.vertices), BufferUsageType.DYNAMIC_DRAW);
 
     WebGLBuffer indiceBuffer = new WebGLBuffer();
-    indiceBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
+    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indiceBuffer.webGLBuffer);
     gl.bufferData(
         BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(triangleModel.mesh.indices), BufferUsageType.STATIC_DRAW);
 

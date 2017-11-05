@@ -43,7 +43,7 @@ Future main() async {
       expect(accessor.count, 4);
       expect(accessor.componentType, ShaderVariableType.FLOAT);
       expect(accessor.typeString, "VEC3");
-      expect(accessor.type, ShaderVariableType.FLOAT_VEC3);
+//      expect(accessor.type, ShaderVariableType.FLOAT_VEC3);// Todo (jpu) :
       expect(accessor.min, [
         0.0,
         0.0,

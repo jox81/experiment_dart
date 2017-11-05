@@ -38,7 +38,7 @@ void main() {
     // >> fromWebGL
 
     test("WebGLUniformLocation CTOR fromWebGL", () {
-      WebGL.Program webGLProgram = gl.ctx.createProgram();
+      WebGL.Program webGLProgram = gl.createProgram();
       WebGLProgram program = new WebGLProgram.fromWebGL(webGLProgram);
       expect(program, isNotNull);
     });

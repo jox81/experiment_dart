@@ -286,8 +286,8 @@ class MaterialBaseTexture extends Material {
 
   setShaderUniforms(Model model) {
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
 
     setShaderUniform("uModelViewMatrix", Context.mainCamera.viewMatrix * Context.modelMatrix);
     setShaderUniform(
@@ -320,8 +320,8 @@ class MaterialBaseTextureNormal extends Material {
         'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);
     setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
     setShaderAttributArrayBuffer('aTextureCoord', model.mesh.textureCoords,
         model.mesh.textureCoordsDimensions);
 
@@ -433,8 +433,8 @@ class MaterialDepthTexture extends Material {
         'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);
     setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.texture2d.bind(texture);
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
     setShaderAttributArrayBuffer('aTextureCoord', model.mesh.textureCoords,
         model.mesh.textureCoordsDimensions);
   }
@@ -483,16 +483,16 @@ class MaterialSkyBox extends Material {
 
     setShaderUniform("uProjectionMatrix", Context.mainCamera.projectionMatrix);
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.textureCubeMap.bind(skyboxTexture);
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
     setShaderUniform('uEnvMap', 0);
   }
 
   setupBeforeRender(){
-    gl.depthTest = false;
+    gl.disable(EnableCapabilityType.DEPTH_TEST);
   }
   setupAfterRender(){
-    gl.depthTest = true;
+    gl.enable(EnableCapabilityType.DEPTH_TEST);
   }
 
 }
@@ -543,8 +543,8 @@ class MaterialReflection extends Material {
     Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.textureCubeMap.bind(skyboxTexture);
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
     setShaderUniform('uEnvMap', 0);
   }
 }
@@ -596,8 +596,8 @@ class MaterialNormalMapping extends Material {
     Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
-    gl.activeTexture.activeUnit = TextureUnit.TEXTURE0;
-    gl.activeTexture.textureCubeMap.bind(skyboxTexture);
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
     setShaderUniform('uEnvMap', 0);
   }
 }

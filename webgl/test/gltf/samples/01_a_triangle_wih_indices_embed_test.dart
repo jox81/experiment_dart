@@ -78,7 +78,7 @@ Future main() async {
       expect(bufferView0.byteOffset, 0);
       expect(bufferView0.byteLength, 6);
       expect(bufferView0.target, 34963);
-      expect(bufferView0.usage.index, 34963);
+      expect(bufferView0.usage, 34963);
 
       GLTFBufferView bufferView1 = gltfProject.bufferViews[1];
       expect(bufferView1, isNotNull);
@@ -87,7 +87,7 @@ Future main() async {
       expect(bufferView1.byteOffset, 8);
       expect(bufferView1.byteLength, 36);
       expect(bufferView1.target, 34962);
-      expect(bufferView1.usage.index, 34962);
+      expect(bufferView1.usage, 34962);
     });
     test("accessors", () async {
       expect(gltfProject.accessors.length, 2);
@@ -96,7 +96,7 @@ Future main() async {
       expect(accessor0, isNotNull);
       expect(accessor0.bufferView, gltfProject.bufferViews[0]);
       expect(accessor0.byteOffset, 0);
-      expect(accessor0.componentType.index, 5123);
+      expect(accessor0.componentType, 5123);
       expect(accessor0.count, 3);
       expect(accessor0.typeString, 'SCALAR');
       expect(accessor0.type, isNull);// Todo (jpu) : componentType: UNSIGNED_SHORT : 5123, typeString: SCALAR => should be INT ?
@@ -107,10 +107,10 @@ Future main() async {
       expect(accessor1, isNotNull);
       expect(accessor1.bufferView, gltfProject.bufferViews[1]);
       expect(accessor1.byteOffset, 0);
-      expect(accessor1.componentType.index, 5126);
+      expect(accessor1.componentType, 5126);
       expect(accessor1.count, 3);
       expect(accessor1.typeString, 'VEC3');
-      expect(accessor1.type.index, 35665);
+      expect(accessor1.type, 35665);
       expect(accessor1.max, [1.0,1.0,0.0]);
       expect(accessor1.min, [0.0,0.0,0.0]);
     });

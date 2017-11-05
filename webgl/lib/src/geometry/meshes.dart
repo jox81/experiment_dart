@@ -21,7 +21,8 @@ import 'dart:mirrors';
 
 class Mesh {
 
-  DrawMode mode = DrawMode.TRIANGLE_STRIP;
+  /// DrawMode mode
+  int mode = DrawMode.TRIANGLE_STRIP;
 
   //Vertices infos_todo
   int _vertexDimensions = 3;

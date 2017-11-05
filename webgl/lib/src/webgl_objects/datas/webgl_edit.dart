@@ -58,15 +58,18 @@ class WebglEdit extends IEditElement {
   // >> Test WebGLEnum
 
   //getter + setter
-  EnableCapabilityType _enableCapabilityType = EnableCapabilityType.DEPTH_TEST;
-  EnableCapabilityType get testWebGLEnum01 => _enableCapabilityType;
-  set testWebGLEnum01(EnableCapabilityType value) {
+  /// EnableCapabilityType _enableCapabilityType
+  int _enableCapabilityType = EnableCapabilityType.DEPTH_TEST;
+  /// EnableCapabilityType get testWebGLEnum01
+  int get testWebGLEnum01 => _enableCapabilityType;
+  set testWebGLEnum01(int value) {
     _enableCapabilityType = value;
     print('### $value');
   }
 
   //getter only
-  EnableCapabilityType get testWebGLEnum02 => EnableCapabilityType.CULL_FACE;
+  /// EnableCapabilityType get testWebGLEnum02
+  int get testWebGLEnum02 => EnableCapabilityType.CULL_FACE;
 
   // >> Functions
 

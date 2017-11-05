@@ -29,35 +29,35 @@ class WebGLProgram extends WebGLObject{
 
   final WebGL.Program webGLProgram;
 
-  WebGLProgram() : this.webGLProgram = gl.ctx.createProgram();
+  WebGLProgram() : this.webGLProgram = gl.createProgram();
   WebGLProgram.fromWebGL(this.webGLProgram);
 
   @override
-  void delete() => gl.ctx.deleteProgram(webGLProgram);
+  void delete() => gl.deleteProgram(webGLProgram);
 
   List<WebGLShader> get attachedShaders{
-    return gl.ctx.getAttachedShaders(webGLProgram).map((s)=> new WebGLShader.fromWebGL(s)).toList();
+    return gl.getAttachedShaders(webGLProgram).map((s)=> new WebGLShader.fromWebGL(s)).toList();
   }
 
   void attachShader(WebGLShader shader){
-    gl.ctx.attachShader(webGLProgram, shader.webGLShader);
+    gl.attachShader(webGLProgram, shader.webGLShader);
   }
 
   void detachShader(WebGLShader shader){
-    gl.ctx.detachShader(webGLProgram, shader.webGLShader);
+    gl.detachShader(webGLProgram, shader.webGLShader);
   }
 
   void use(){
-    gl.ctx.useProgram(webGLProgram);
+    gl.useProgram(webGLProgram);
   }
 
   ////
 
-  bool get isProgram => gl.ctx.isProgram(webGLProgram);
-  String get infoLog => gl.ctx.getProgramInfoLog(webGLProgram);
+  bool get isProgram => gl.isProgram(webGLProgram);
+  String get infoLog => gl.getProgramInfoLog(webGLProgram);
 
   void link(){
-    gl.ctx.linkProgram(webGLProgram);
+    gl.linkProgram(webGLProgram);
 
     if (!linkStatus) {
       print(infoLog);
@@ -66,7 +66,7 @@ class WebGLProgram extends WebGLObject{
   }
 
   void validate(){
-    gl.ctx.validateProgram(webGLProgram);
+    gl.validateProgram(webGLProgram);
 
     if (!validateStatus) {
       print(infoLog);
@@ -79,19 +79,19 @@ class WebGLProgram extends WebGLObject{
   ///Returns a new WebGLActiveInfo object describing the size, type and name of
   ///the vertex attribute at the passed index of the passed program object.
   WebGLActiveInfo getActiveAttribInfo(int activeAttributIndex){
-    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveAttrib(webGLProgram, activeAttributIndex));
+    return new WebGLActiveInfo.fromWebGL(gl.getActiveAttrib(webGLProgram, activeAttributIndex));
   }
 
   ///Return a new WebGLUniformLocation that represents the location of a
   ///specific vertex attribut variable within a program object.
   WebGLAttributLocation getAttribLocation(String variableName){
-    return new WebGLAttributLocation(gl.ctx.getAttribLocation(webGLProgram, variableName));
+    return new WebGLAttributLocation(gl.getAttribLocation(webGLProgram, variableName));
   }
 
   ///associate a generic vertex attribute index with a named attribute variable
   //??
   void bindAttribLocation(WebGLAttributLocation attributLocation, String variableName){
-    gl.ctx.bindAttribLocation(webGLProgram, attributLocation.location, variableName);
+    gl.bindAttribLocation(webGLProgram, attributLocation.location, variableName);
   }
 
   //Uniforms
@@ -99,7 +99,7 @@ class WebGLProgram extends WebGLObject{
   ///Returns a new WebGLActiveInfo object describing the size, type and name of
   ///the uniform at the passed index of the passed program object
   WebGLActiveInfo getActiveUniform(int activeUniformIndex){
-    return new WebGLActiveInfo.fromWebGL(gl.ctx.getActiveUniform(webGLProgram, activeUniformIndex));
+    return new WebGLActiveInfo.fromWebGL(gl.getActiveUniform(webGLProgram, activeUniformIndex));
   }
 
   ///Return a new WebGLUniformLocation that represents the location of a
@@ -111,7 +111,7 @@ class WebGLProgram extends WebGLObject{
   ///Return the uniform value at the passed location in the passed program.
   ///The type returned is dependent on the uniform type
   dynamic getUniformValue(WebGLUniformLocation location){
-    return gl.ctx.getUniform(webGLProgram, location.webGLUniformLocation);
+    return gl.getUniform(webGLProgram, location.webGLUniformLocation);
   }
 
   //Custom
@@ -138,22 +138,22 @@ class WebGLProgram extends WebGLObject{
 
   // >>> Parameteres
   //dynamic getParameter(ProgramParameterGlEnum parameter){
-  //  return gl.ctx.getProgramParameter(webGLProgram, parameter.index);
+  //  return gl.getProgramParameter(webGLProgram, parameter);
   //}
   // >>> single getParameter
 
   // > DELETE_STATUS
-  bool get deleteStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS.index) as bool;
+  bool get deleteStatus => gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.DELETE_STATUS) as bool;
   // > LINK_STATUS
-  bool get linkStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS.index) as bool;
+  bool get linkStatus => gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.LINK_STATUS) as bool;
   // > VALIDATE_STATUS
-  bool get validateStatus => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS.index) as bool;
+  bool get validateStatus => gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.VALIDATE_STATUS) as bool;
   // > ATTACHED_SHADERS
-  int get attachedShadersCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS.index) as int;
+  int get attachedShadersCount => gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ATTACHED_SHADERS) as int;
   // > ACTIVE_ATTRIBUTES
-  int get activeAttributsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES.index) as int;
+  int get activeAttributsCount => gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_ATTRIBUTES) as int;
   // > ACTIVE_UNIFORMS
-  int get activeUnifromsCount => gl.ctx.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS.index) as int;
+  int get activeUnifromsCount => gl.getProgramParameter(webGLProgram, ProgramParameterGlEnum.ACTIVE_UNIFORMS) as int;
 
   void logProgramInfos() {
     Debug.log("Program Infos", () {

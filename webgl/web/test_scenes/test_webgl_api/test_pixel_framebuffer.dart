@@ -2,6 +2,8 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'dart:js' as js;
 
+
+import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -79,16 +81,16 @@ WebGLFrameBuffer createRenderbuffer(WebGLRenderingContext gl, int width, int hei
 
 void render(WebGLRenderingContext gl, WebGLFrameBuffer framebuffer, WebGLUniformLocation u_Color, WebGLAttributLocation a_Position, WebGLBuffer vertexPositionBuffer, int vertexPositionBufferItemSize, WebGLBuffer vertexIndexBuffer, int indicesLength) {
   gl.activeFrameBuffer.bind(framebuffer);
-  gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
+  gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
   
   Float32List red = new Float32List.fromList([1.0, 0.0, 0.0, 1.0]);
 
   u_Color.uniform4fv(red);
 
-  vertexPositionBuffer.bind(BufferType.ARRAY_BUFFER);
+  gl.gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexPositionBuffer.webGLBuffer);
   a_Position.vertexAttribPointer(vertexPositionBufferItemSize, ShaderVariableType.FLOAT, false, 0, 0);
 
-  vertexIndexBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
+  vertexIndexBuffer.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER);
   gl.drawElements(DrawMode.TRIANGLES, indices.length, BufferElementType.UNSIGNED_SHORT, 0);
 }
 
@@ -122,11 +124,11 @@ void main() {
   
   WebGLBuffer vertexPositionBuffer = new WebGLBuffer();
   final int vertexPositionBufferItemSize = 3; // coord x,y,z
-  vertexPositionBuffer.bind(BufferType.ARRAY_BUFFER);
+  gl.gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexPositionBuffer.webGLBuffer);
   gl.bufferData(BufferType.ARRAY_BUFFER, vertCoord, BufferUsageType.STATIC_DRAW);
 
   WebGLBuffer vertexIndexBuffer = new WebGLBuffer();
-  vertexIndexBuffer.bind(BufferType.ELEMENT_ARRAY_BUFFER);
+  vertexIndexBuffer.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER);
   gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, indices, BufferUsageType.STATIC_DRAW);
     
   WebGLShader vertShader = new WebGLShader(ShaderType.VERTEX_SHADER)
@@ -147,11 +149,11 @@ void main() {
   program.use();
   a_Position.enabled = true;
   
-  gl.clearColor = new Vector4(0.5, 0.5, 0.5, 1.0);       // clear color
+  gl.gl.clearColor(0.5, 0.5, 0.5, 1.0);       // clear color
   gl.enable(EnableCapabilityType.DEPTH_TEST);  // enable depth testing
-  gl.depthFunc = ComparisonFunction.LESS;     // gl.LESS is default depth test
-  gl.setDepthRange(0.0, 1.0);                 // default
-  gl.viewport = new Rectangle(0, 0, canvas.width, canvas.height);
+  gl.gl.depthFunc(ComparisonFunction.LESS);     // gl.LESS is default depth test
+  gl.gl.depthRange(0.0, 1.0);                 // default
+  gl.gl.viewport(0, 0, canvas.width, canvas.height);
 
   WebGLFrameBuffer offscreen = createRenderbuffer(gl, canvas.width, canvas.height);
   

@@ -17,7 +17,7 @@ class WebGLBuffer extends WebGLObject{
 
   dynamic data;
 
-  WebGLBuffer():this.webGLBuffer = gl.ctx.createBuffer();
+  WebGLBuffer():this.webGLBuffer = gl.createBuffer();
   WebGLBuffer.fromWebGL(this.webGLBuffer);
 
   WebGLBuffer.fromGltf(glTF.Buffer gltfBuffer){
@@ -25,26 +25,27 @@ class WebGLBuffer extends WebGLObject{
   }
 
   @override
-  void delete() => gl.ctx.deleteBuffer(webGLBuffer);
+  void delete() => gl.deleteBuffer(webGLBuffer);
 
-  void bind(BufferType bufferType) {
-    gl.ctx.bindBuffer(bufferType.index, webGLBuffer);
+  /// BufferType bufferType
+  void bindBuffer(int bufferType) {
+    gl.bindBuffer(bufferType, webGLBuffer);
   }
-
-  void unbind(BufferType bufferType) {
-    gl.ctx.bindBuffer(bufferType.index, null);
+  void unbindBuffer(int bufferType) {
+    gl.bindBuffer(bufferType, null);
   }
 
   ////
 
-  bool get isBuffer => gl.ctx.isBuffer(webGLBuffer);
+  bool get isBuffer => gl.isBuffer(webGLBuffer);
 
 
   // >>> Parameteres
 
 
-  dynamic getParameter(BufferType target, BufferParameters parameter){
-    dynamic result =  gl.ctx.getBufferParameter(target.index,parameter.index);
+  /// BufferType target, BufferParameters parameter
+  dynamic getParameter(int target, int parameter){
+    dynamic result =  gl.getBufferParameter(target,parameter);
     return result;
   }
 
@@ -52,15 +53,17 @@ class WebGLBuffer extends WebGLObject{
 
   // >> ARRAY_BUFFER
   // > BUFFER_SIZE
-  int get arrayBufferSize => gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_SIZE.index) as int;
+  int get arrayBufferSize => gl.getBufferParameter(BufferType.ARRAY_BUFFER,BufferParameters.BUFFER_SIZE) as int;
   // > BUFFER_USAGE
-  BufferUsageType get arrayBufferUsage => BufferUsageType.getByIndex(gl.ctx.getBufferParameter(BufferType.ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index)as int);
+  /// BufferUsageType get arrayBufferUsage
+  int get arrayBufferUsage => gl.getBufferParameter(BufferType.ARRAY_BUFFER,BufferParameters.BUFFER_USAGE)as int;
 
   // >> ELEMENT_ARRAY_BUFFER
   // > BUFFER_SIZE
-  int get elementArrayBufferSize => gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_SIZE.index)as int;
+  int get elementArrayBufferSize => gl.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER,BufferParameters.BUFFER_SIZE)as int;
   // > BUFFER_USAGE
-  BufferUsageType get elementArrayBufferUsage => BufferUsageType.getByIndex(gl.ctx.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER.index,BufferParameters.BUFFER_USAGE.index)as int);
+  /// BufferUsageType get elementArrayBufferUsage
+  int get elementArrayBufferUsage => gl.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER,BufferParameters.BUFFER_USAGE)as int;
 
 
   void logBufferInfos() {

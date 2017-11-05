@@ -53,8 +53,8 @@ void main()
 
     #ifdef DEBUG_VS
 //        vec4 debug = vec4(0.5);                  // Flat Color
-        vec4 debug = a_Position;                  // Position RBG, Black = 0.0
-//        vec4 debug = vec4(vec3(v_UV, 0.0), 1.0);  // UV
+//        vec4 debug = a_Position;                  // Position RBG, Black = 0.0
+        vec4 debug = vec4(vec3(v_UV, 0.5), 1.0);  // UV
         float R = debug.r;
         float G = debug.g;
         float B = debug.b;

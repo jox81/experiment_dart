@@ -30,47 +30,52 @@ class ActiveTexture extends IEditElement{
   }
 
    // > MAX_TEXTURE_IMAGE_UNITS
-  int get maxTextureImageUnits => gl.ctx.getParameter(ContextParameter.MAX_TEXTURE_IMAGE_UNITS.index) as int;
+  int get maxTextureImageUnits => gl.getParameter(ContextParameter.MAX_TEXTURE_IMAGE_UNITS) as int;
   // > MAX_COMBINED_TEXTURE_IMAGE_UNITS
-  int get maxCombinedTextureImageUnits => gl.ctx.getParameter(ContextParameter.MAX_COMBINED_TEXTURE_IMAGE_UNITS.index) as int ;
+  int get maxCombinedTextureImageUnits => gl.getParameter(ContextParameter.MAX_COMBINED_TEXTURE_IMAGE_UNITS) as int ;
   // > MAX_CUBE_MAP_TEXTURE_SIZE
-  int get maxCubeMapTextureSize => gl.ctx.getParameter(ContextParameter.MAX_CUBE_MAP_TEXTURE_SIZE.index) as int;
+  int get maxCubeMapTextureSize => gl.getParameter(ContextParameter.MAX_CUBE_MAP_TEXTURE_SIZE) as int;
   // > MAX_TEXTURE_SIZE
-  int get maxTextureSize => gl.ctx.getParameter(ContextParameter.MAX_TEXTURE_SIZE.index)as int;
+  int get maxTextureSize => gl.getParameter(ContextParameter.MAX_TEXTURE_SIZE)as int;
 
   // > ACTIVE_TEXTURE
-  TextureUnit get activeUnit => TextureUnit.getByIndex(gl.ctx.getParameter(ContextParameter.ACTIVE_TEXTURE.index)as int);
-  set activeUnit(TextureUnit textureUnit) {
-    gl.ctx.activeTexture(textureUnit.index);
+  /// TextureUnit get activeTexture
+  int get activeTexture => gl.getParameter(ContextParameter.ACTIVE_TEXTURE)as int;
+  /// TextureUnit textureUnit
+  set activeTexture(int textureUnit) {
+    gl.activeTexture(textureUnit);
   }
 
   // >> Binding
 
-  void bind(WebGLTexture texture, TextureTarget textureTarget) {
-    gl.ctx.bindTexture(textureTarget.index, texture.webGLTexture);
+  /// TextureTarget textureTarget
+  void bindTexture(int textureTarget, WebGL.Texture texture) {
+    gl.bindTexture(textureTarget, texture);
   }
 
   Texture2D get texture2d => Texture2D.instance;
   TextureCubeMap get textureCubeMap => TextureCubeMap.instance;
 
   // > GENERATE_MIPMAP_HINT
-  HintMode get mipMapHint => HintMode.getByIndex(gl.ctx.getParameter(ContextParameter.GENERATE_MIPMAP_HINT.index)as int);
-  set mipMapHint(HintMode mode) => gl.ctx.hint(ContextParameter.GENERATE_MIPMAP_HINT.index, mode.index);
+  ///mipMapHint HintMode mode
+  int get hint => gl.getParameter(ContextParameter.GENERATE_MIPMAP_HINT)as int;
+  set hint(int mode) => gl.hint(ContextParameter.GENERATE_MIPMAP_HINT, mode);
 
-  bool get unpackFlipYWebGL => gl.ctx.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL.index)as bool;
+  bool get unpackFlipYWebGL => gl.getParameter(ContextParameter.UNPACK_FLIP_Y_WEBGL)as bool;
   set unpackFlipYWebGL(bool flip) => gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip?1:0);
 
   // > Logging
 
-  void logTextureUnitInfo(TextureUnit textureUnit){
+  /// TextureUnit textureUnit
+  void logTextureUnitInfo(int textureUnit){
     Debug.log('ActiveTexture', (){
-      TextureUnit lastTextureUnit = _instance.activeUnit;
+      int lastTextureUnit = _instance.activeTexture;
 
-      _instance.activeUnit = textureUnit;
+      _instance.activeTexture = textureUnit;
 
       logActiveTextureInfo();
 
-      _instance.activeUnit = lastTextureUnit;
+      _instance.activeTexture = lastTextureUnit;
     });
   }
 
@@ -80,10 +85,10 @@ class ActiveTexture extends IEditElement{
       print('maxCombinedTextureImageUnits : ${maxCombinedTextureImageUnits}');
       print('maxCubeMapTextureSize : ${maxCubeMapTextureSize}');
       print('maxTextureSize : ${maxTextureSize}');
-      print('generateMipMapHint : ${mipMapHint}');
+      print('generateMipMapHint : ${hint}');
 
       print('### texture bindings #############################################');
-      print('activeUnit : ${_instance.activeUnit}');
+      print('activeUnit : ${_instance.activeTexture}');
       if(texture2d.boundTexture != null) {
         print('### texture2D binding ............................................');
         print('boundTexture2D : ${texture2d.boundTexture}');
@@ -109,7 +114,8 @@ class ActiveTexture extends IEditElement{
 }
 
 abstract class Texture{
-  TextureTarget textureTarget;
+  /// TextureTarget textureTarget;
+  int textureTarget;
   TextureAttachmentTarget textureAttachmentTarget;
 
   // > Bindings
@@ -118,87 +124,96 @@ abstract class Texture{
   WebGLTexture get boundTexture {
     assert(textureTarget == TextureTarget.TEXTURE_2D || textureTarget == TextureTarget.TEXTURE_CUBE_MAP);
 
-    ContextParameter textureBinding = textureTarget == TextureTarget.TEXTURE_2D ? ContextParameter.TEXTURE_BINDING_2D : ContextParameter.TEXTURE_BINDING_CUBE_MAP;
+    ///ContextParameter textureBinding
+    int textureBinding = textureTarget == TextureTarget.TEXTURE_2D ? ContextParameter.TEXTURE_BINDING_2D : ContextParameter.TEXTURE_BINDING_CUBE_MAP;
 
-    WebGL.Texture webGLTexture = gl.ctx.getParameter(textureBinding.index) as WebGL.Texture;
-    if(webGLTexture != null && gl.ctx.isTexture(webGLTexture)){
-      return new WebGLTexture.fromWebGL(webGLTexture, TextureTarget.getByIndex(textureBinding.index));
+    WebGL.Texture webGLTexture = gl.getParameter(textureBinding) as WebGL.Texture;
+    if(webGLTexture != null && gl.isTexture(webGLTexture)){
+      return new WebGLTexture.fromWebGL(webGLTexture, textureBinding);
     }
     return null;
   }
 
   // > MipMap
   void generateMipmap(){
-    gl.ctx.generateMipmap(textureTarget.index);
+    gl.generateMipmap(textureTarget);
   }
 
   // >> Binding
 
   void bind(WebGLTexture texture) {
-    gl.ctx.bindTexture(textureTarget.index, texture?.webGLTexture);
+    gl.bindTexture(textureTarget, texture?.webGLTexture);
   }
   void unBind() {
-    gl.ctx.bindTexture(textureTarget.index, null);
+    gl.bindTexture(textureTarget, null);
   }
 
   // >>> single getParameter
 
   // > TEXTURE_MAG_FILTER
-  TextureMagnificationFilterType get textureMagFilter{
-    return TextureMagnificationFilterType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_MAG_FILTER.index)as int)as TextureMagnificationFilterType;
+  /// TextureMagnificationFilterType get textureMagFilter{
+  int get textureMagFilter{
+    return gl.getTexParameter(textureTarget,TextureParameter.TEXTURE_MAG_FILTER)as int;
   }
-  set textureMagFilter(TextureMagnificationFilterType  textureMagnificationFilterType){
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MAG_FILTER.index, textureMagnificationFilterType.index);
+  set textureMagFilter(int  textureMagnificationFilterType){
+    gl.texParameteri(textureTarget, TextureParameter.TEXTURE_MAG_FILTER, textureMagnificationFilterType);
   }
 
   // > TEXTURE_MIN_FILTER
-  TextureMinificationFilterType get textureMinFilter {
-    return TextureMinificationFilterType.getByIndex(gl.ctx.getTexParameter(
-        textureTarget.index,
-        TextureParameter.TEXTURE_MIN_FILTER.index)as int)as TextureMinificationFilterType;
+  /// TextureMinificationFilterType get textureMinFilter
+  int get textureMinFilter {
+    return gl.getTexParameter(
+        textureTarget,
+        TextureParameter.TEXTURE_MIN_FILTER)as int;
   }
-  set textureMinFilter(TextureMinificationFilterType  textureMinificationFilterType){
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_MIN_FILTER.index, textureMinificationFilterType.index);
+  set textureMinFilter(int  textureMinificationFilterType){
+    gl.texParameteri(textureTarget, TextureParameter.TEXTURE_MIN_FILTER, textureMinificationFilterType);
   }
 
   // > TEXTURE_WRAP_S
-  TextureWrapType get textureWrapS
+  /// TextureWrapType get textureWrapS
+  int get textureWrapS
   {
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_S.index)as int);
+    return gl.getTexParameter(textureTarget,TextureParameter.TEXTURE_WRAP_S)as int;
   }
-  set textureWrapS(TextureWrapType  textureWrapType){
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_S.index, textureWrapType.index);
+  set textureWrapS(int  textureWrapType){
+    gl.texParameteri(textureTarget, TextureParameter.TEXTURE_WRAP_S, textureWrapType);
   }
 
   // > TEXTURE_WRAP_T
-  TextureWrapType get textureWrapT {
-    return TextureWrapType.getByIndex(gl.ctx.getTexParameter(textureTarget.index,TextureParameter.TEXTURE_WRAP_T.index)as int);
+  /// TextureWrapType get textureWrapT
+  int get textureWrapT {
+    return gl.getTexParameter(textureTarget,TextureParameter.TEXTURE_WRAP_T)as int;
   }
-  set textureWrapT(TextureWrapType  textureWrapType){
-    gl.ctx.texParameteri(textureTarget.index, TextureParameter.TEXTURE_WRAP_T.index, textureWrapType.index);
+  set textureWrapT(int  textureWrapType){
+    gl.texParameteri(textureTarget, TextureParameter.TEXTURE_WRAP_T, textureWrapType);
   }
 
   // >> Set values
-  void setParameterFloat(TextureParameter parameter, num value) {
-    gl.ctx.texParameterf(textureTarget.index, parameter.index, value);
+  /// TextureParameter parameter
+  void setParameterFloat(int parameter, num value) {
+    gl.texParameterf(textureTarget, parameter, value);
   }
 
-  void setParameterInt(TextureParameter parameter, TextureSetParameterType value) {
-    gl.ctx.texParameteri(textureTarget.index, parameter.index, value.index);
+  /// TextureParameter parameter
+  /// TextureSetParameterType value
+  void setParameterInt(int parameter, int value) {
+    gl.texParameteri(textureTarget, parameter, value);
   }
 
   // >>> Parameters
 
-  dynamic getParameter(TextureParameter parameter) {
+  /// TextureParameter parameter
+  dynamic getParameter(int parameter) {
     dynamic result =
-    gl.ctx.getTexParameter(textureTarget.index, parameter.index);
+    gl.getTexParameter(textureTarget, parameter);
     return result;
   }
 
   void logInfo(){
     Debug.log('ActiveTexture', (){
       print('### texture bindings #############################################');
-      print('activeUnit : ${ActiveTexture.instance.activeUnit}');
+      print('activeUnit : ${ActiveTexture.instance.activeTexture}');
       if(boundTexture != null) {
         print('### texture binding ............................................');
         print('textureTarget : ${textureTarget}');
@@ -224,7 +239,7 @@ class Texture2D extends Texture{
     return _instance;
   }
 
-  TextureTarget textureTarget = TextureTarget.TEXTURE_2D;
+  int textureTarget = TextureTarget.TEXTURE_2D;
 
   Texture2D._init(){
     _attachments[0] = new TextureAttachment(TextureAttachmentTarget.TEXTURE_2D);
@@ -251,7 +266,7 @@ class TextureCubeMap extends Texture{
     return _instance;
   }
 
-  TextureTarget textureTarget = TextureTarget.TEXTURE_CUBE_MAP;
+  int textureTarget = TextureTarget.TEXTURE_CUBE_MAP;
 
   TextureCubeMap._init(){
     _attachments[0] = new TextureAttachment(TextureAttachmentTarget.TEXTURE_CUBE_MAP_POSITIVE_X);
@@ -302,41 +317,53 @@ class TextureAttachment{
 
   TextureAttachment(this.textureAttachmentTarget);
 
-  final TextureAttachmentTarget textureAttachmentTarget;
+  /// TextureAttachmentTarget textureAttachmentTarget;
+  final int textureAttachmentTarget;
 
   // >>> Filling Texture
 
-  void texImage2DWithWidthAndHeight(int mipMapLevel, TextureInternalFormat internalFormat, int width, int height, int border, TextureInternalFormat internalFormat2, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+  /// TextureInternalFormat internalFormat
+  /// TextureInternalFormat internalFormat2
+  /// TexelDataType texelDataType
+  void texImage2DWithWidthAndHeight(int mipMapLevel, int internalFormat, int width, int height, int border, int internalFormat2, int texelDataType, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
     assert(height >= 0);
-    assert(internalFormat.index == internalFormat2.index);//in webgl1
+    assert(internalFormat == internalFormat2);//in webgl1
 
-    gl.ctx.texImage2D(textureAttachmentTarget.index, mipMapLevel, internalFormat.index, width, height, border, internalFormat2.index, texelDataType.index, pixels);
+    gl.texImage2D(textureAttachmentTarget, mipMapLevel, internalFormat, width, height, border, internalFormat2, texelDataType, pixels);
   }
 
-  void texImage2D(int mipMapLevel, TextureInternalFormat internalFormat, TextureInternalFormat internalFormat2, TexelDataType texelDataType, dynamic pixels) {
-    assert(internalFormat.index == internalFormat2.index);//in webgl1
+  /// TextureInternalFormat internalFormat
+  /// TextureInternalFormat internalFormat2
+  /// TexelDataType texelDataType
+  void texImage2D(int mipMapLevel, int internalFormat, int internalFormat2, int texelDataType, dynamic pixels) {
+    assert(internalFormat == internalFormat2);//in webgl1
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap ); //? add is null
-    gl.ctx.texImage2D(textureAttachmentTarget.index, mipMapLevel, internalFormat.index, internalFormat2.index, texelDataType.index, pixels);
+    gl.texImage2D(textureAttachmentTarget, mipMapLevel, internalFormat, internalFormat2, texelDataType, pixels);
   }
 
-  void texSubImage2DWithWidthAndHeight(int mipMapLevel, int xOffset, int yOffset, int width, int height, TextureInternalFormat internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+  /// TextureInternalFormat internalFormat
+  /// TexelDataType texelDataType
+  void texSubImage2DWithWidthAndHeight(int mipMapLevel, int xOffset, int yOffset, int width, int height, int internalFormat, int texelDataType, WebGlTypedData.TypedData pixels) {
     assert(width >= 0);
     assert(height >= 0);
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
-    gl.ctx.texSubImage2D(textureAttachmentTarget.index, mipMapLevel, xOffset, yOffset, width, height, internalFormat.index, texelDataType.index, pixels);
+    gl.texSubImage2D(textureAttachmentTarget, mipMapLevel, xOffset, yOffset, width, height, internalFormat, texelDataType, pixels);
   }
 
-  void texSubImage2D(int mipMapLevel, int xOffset, int yOffset, TextureInternalFormat internalFormat, TexelDataType texelDataType, WebGlTypedData.TypedData pixels) {
+  /// TextureInternalFormat internalFormat
+  /// TexelDataType texelDataType
+  void texSubImage2D(int mipMapLevel, int xOffset, int yOffset, int internalFormat, int texelDataType, WebGlTypedData.TypedData pixels) {
     assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap); //? add is null
-    gl.ctx.texSubImage2D(textureAttachmentTarget.index, mipMapLevel, xOffset, yOffset, internalFormat.index, texelDataType.index, pixels);
+    gl.texSubImage2D(textureAttachmentTarget, mipMapLevel, xOffset, yOffset, internalFormat, texelDataType, pixels);
   }
 
-  void copyTexImage2D(int mipMapLevel, TextureInternalFormat internalFormat,
+  /// TextureInternalFormat internalFormat
+  void copyTexImage2D(int mipMapLevel, int internalFormat,
       int x, int y, int width, int height, int border) {
     assert(width >= 0);
     assert(height >= 0);
-    gl.ctx.copyTexImage2D(textureAttachmentTarget.index, mipMapLevel, internalFormat.index, x, y, width, height, border);
+    gl.copyTexImage2D(textureAttachmentTarget, mipMapLevel, internalFormat, x, y, width, height, border);
   }
 
   ///Copies pixels from the current WebGLFramebuffer into an existing 2D texture sub-image.
@@ -344,7 +371,7 @@ class TextureAttachment{
       int x, int y, int width, int height) {
     assert(width >= 0);
     assert(height >= 0);
-    gl.ctx.copyTexSubImage2D(textureAttachmentTarget.index, mipMapLevel, xOffset, yOffset, x, y, width, height);
+    gl.copyTexSubImage2D(textureAttachmentTarget, mipMapLevel, xOffset, yOffset, x, y, width, height);
   }
 
 }

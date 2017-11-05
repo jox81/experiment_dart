@@ -59,8 +59,8 @@ class WebglConstants{
   }
 
   bool isParameter(int glEnum) {
-    gl.ctx.getParameter(glEnum);
-    bool isParameter = gl.ctx.getError() != RenderingContext.INVALID_ENUM;
+    gl.getParameter(glEnum);
+    bool isParameter = gl.getError() != RenderingContext.INVALID_ENUM;
     return isParameter;
   }
 

@@ -1,16 +1,16 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
+import 'dart:typed_data';
+
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/models.dart';
-import 'package:webgl/src/scene.dart';
-import 'dart:typed_data';
 import 'package:webgl/src/utils/utils_fps.dart';
 import 'package:webgl/src/geometry/utils_geometry.dart';
 
 class Interaction {
 
-  Scene get scene => Application.instance.currentScene as Scene;
+  bool get isInApplication => Context.application != null;
 
   //Debug div
   Element elementDebugInfoText;
@@ -38,8 +38,8 @@ class Interaction {
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
     elementDebugInfoText = querySelector("#debugInfosText");
-    elementFPSText = querySelector("#fps")
-    ..style.display = 'block';
+    elementFPSText = querySelector("#fps");
+    if(elementFPSText != null) elementFPSText.style.display = 'block';
 
     window.onResize.listen(_onWindowResize);
     window.onKeyUp.listen(_onKeyUp);
@@ -59,7 +59,9 @@ class Interaction {
   ///
 
   void _onWindowResize (Event event) {
-    Application.instance.resizeCanvas();
+    if(isInApplication) {
+      Context.application.resizeCanvas();
+    }
   }
 
   ///
@@ -130,8 +132,12 @@ class Interaction {
 
 //    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
 
-    Model modelHit = UtilsGeometry.findModelFromMouseCoords(Context.mainCamera, event.offset.x, event.offset.y, scene.models);
-    tempSelection = modelHit;
+    if(isInApplication) {
+      Model modelHit = UtilsGeometry.findModelFromMouseCoords(
+          Context.mainCamera, event.offset.x, event.offset.y,
+          Context.currentScene.models);
+      tempSelection = modelHit;
+    }
   }
 
   void _onMouseMove(MouseEvent event) {
@@ -146,46 +152,48 @@ class Interaction {
 
       dragging = true;
 
-      if(Application.instance.activeTool == ActiveToolType.move ||
-        Application.instance.activeTool == ActiveToolType.rotate ||
-        Application.instance.activeTool == ActiveToolType.scale) {
-        scene.currentSelection = tempSelection;
-      }
-
-      if(scene.currentSelection != null && scene.currentSelection is Model) {
-
-        Model currentModel = scene.currentSelection as Model;
-
-        double delta = deltaX.toDouble(); // get mouse delta
-        double deltaMoveX = (Application.instance.activeAxis[AxisType.x]
-            ? 1
-            : 0) * delta;
-        double deltaMoveY = (Application.instance.activeAxis[AxisType.y]
-            ? 1
-            : 0) * delta;
-        double deltaMoveZ = (Application.instance.activeAxis[AxisType.z]
-            ? 1
-            : 0) * delta;
-
-        if (Application.instance.activeTool == ActiveToolType.move) {
-          double moveFactor = 1.0;
-
-          currentModel.transform.translate(
-              new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
+      if(isInApplication){
+        if(Context.application.activeTool == ActiveToolType.move ||
+          Context.application.activeTool == ActiveToolType.rotate ||
+          Context.application.activeTool == ActiveToolType.scale) {
+          Context.currentScene.currentSelection = tempSelection;
         }
 
-        if (Application.instance.activeTool == ActiveToolType.rotate) {
-          num rotateFactor = 1.0;
+        if(Context.currentScene.currentSelection != null && Context.currentScene.currentSelection is Model) {
 
-          currentModel.transform.rotateX(deltaMoveX * rotateFactor);
-          currentModel.transform.rotateY(deltaMoveY * rotateFactor);
-          currentModel.transform.rotateY(deltaMoveZ * rotateFactor);
-        }
+          Model currentModel = Context.currentScene.currentSelection as Model;
 
-        if (Application.instance.activeTool == ActiveToolType.scale) {
-          num scaleFactor = 0.03;
+          double delta = deltaX.toDouble(); // get mouse delta
+          double deltaMoveX = (Context.application.activeAxis[AxisType.x]
+              ? 1
+              : 0) * delta;
+          double deltaMoveY = (Context.application.activeAxis[AxisType.y]
+              ? 1
+              : 0) * delta;
+          double deltaMoveZ = (Context.application.activeAxis[AxisType.z]
+              ? 1
+              : 0) * delta;
 
-          currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
+          if (Context.application.activeTool == ActiveToolType.move) {
+            double moveFactor = 1.0;
+
+            currentModel.transform.translate(
+                new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
+          }
+
+          if (Context.application.activeTool == ActiveToolType.rotate) {
+            num rotateFactor = 1.0;
+
+            currentModel.transform.rotateX(deltaMoveX * rotateFactor);
+            currentModel.transform.rotateY(deltaMoveY * rotateFactor);
+            currentModel.transform.rotateY(deltaMoveZ * rotateFactor);
+          }
+
+          if (Context.application.activeTool == ActiveToolType.scale) {
+            num scaleFactor = 0.03;
+
+            currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
+          }
         }
       }
     }else{
@@ -202,7 +210,9 @@ class Interaction {
 
     print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
     if(!dragging) {
-      scene.currentSelection = tempSelection;
+      if(isInApplication) {
+        Context.currentScene.currentSelection = tempSelection;
+      }
     }
 
     dragging = false;

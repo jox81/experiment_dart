@@ -47,7 +47,7 @@ class WebglParameters{
 
     if(!constant.isParameter) return null;
 
-    int result = gl.ctx.getParameter(constant.glEnum) as int;
+    int result = gl.getParameter(constant.glEnum) as int;
     String glEnumStringValue;
 
     if (result is int && result > 1) {
@@ -78,7 +78,7 @@ class WebglParameters{
       //OK > ACTIVE_TEXTURE (34016) = TEXTURE0 : glEnum
       print('##################################################################');
 
-      Object result = gl.ctx.getParameter(RenderingContext.BLEND_SRC_RGB);
+      Object result = gl.getParameter(RenderingContext.BLEND_SRC_RGB);
       print(result);
       //NO > comment différencier une valeur int d'une valeur glEnum ?
       print(Context.webglParameters.getParameter(RenderingContext.BLEND_SRC_RGB));

@@ -51,8 +51,8 @@ class Webgl01 {
     setupCamera();
     setupMeshes();
 
-    gl.clearColor = new Vector4(0.0, 0.0, 0.0, 1.0);
-    gl.depthTest = true;
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.enable(EnableCapabilityType.DEPTH_TEST);
   }
 
   void setupCamera()  {
@@ -68,23 +68,23 @@ class Webgl01 {
 
     // Create a framebuffer and attach the texture.
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
-    gl.activeFrameBuffer.bind(framebuffer);
-    gl.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, textureCrate, 0);
+    glWrapper.activeFrameBuffer.bind(framebuffer);
+    glWrapper.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, textureCrate, 0);
 
     // Now draw with the texture to the canvas
     // NOTE: We clear the canvas to red so we'll know
     // we're drawing the texture and not seeing the clear
     // from above.
-    gl.activeFrameBuffer.unBind();
-    gl.clearColor = new Vector4(1.0, 0.0, 0.0, 1.0); // red
-    gl.clear([ClearBufferMask.COLOR_BUFFER_BIT]);
+    glWrapper.activeFrameBuffer.unBind();
+    gl.clearColor(1.0, 0.0, 0.0, 1.0); // red
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT);
     gl.drawArrays(DrawMode.TRIANGLES, 0, 6);
 
   }
 
   void render({num time : 0.0}) {
-    gl.viewport = new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
-    gl.clear([ClearBufferMask.COLOR_BUFFER_BIT, ClearBufferMask.DEPTH_BUFFER_BIT]);
+    gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
     for(Model model in models){
       model.render();

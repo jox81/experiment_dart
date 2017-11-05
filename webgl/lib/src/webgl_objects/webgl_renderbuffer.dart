@@ -14,56 +14,60 @@ class WebGLRenderBuffer extends WebGLObject{
 
   final WebGL.Renderbuffer webGLRenderBuffer;
 
-  WebGLRenderBuffer():this.webGLRenderBuffer = gl.ctx.createRenderbuffer();
+  WebGLRenderBuffer():this.webGLRenderBuffer = gl.createRenderbuffer();
   WebGLRenderBuffer.fromWebGL(this.webGLRenderBuffer);
 
   @override
-  void delete() => gl.ctx.deleteRenderbuffer(webGLRenderBuffer);
+  void delete() => gl.deleteRenderbuffer(webGLRenderBuffer);
 
   void bind() {
-    gl.ctx.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER.index, webGLRenderBuffer);
+    gl.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER, webGLRenderBuffer);
   }
 
   void unBind() {
-    gl.ctx.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER.index, null);
+    gl.bindRenderbuffer(RenderBufferTarget.RENDERBUFFER, null);
   }
 
 
   ////
 
-  bool get isRenderbuffer => gl.ctx.isRenderbuffer(webGLRenderBuffer);
+  bool get isRenderbuffer => gl.isRenderbuffer(webGLRenderBuffer);
 
 
-  void renderbufferStorage(RenderBufferTarget renderbuffer, RenderBufferInternalFormatType internalFormat, int width, int heigth) {
-    gl.ctx.renderbufferStorage(renderbuffer.index, internalFormat.index, width, heigth);
+  /// RenderBufferTarget renderbuffer
+  /// RenderBufferInternalFormatType internalFormat
+  void renderbufferStorage(int renderbuffer, int internalFormat, int width, int heigth) {
+    gl.renderbufferStorage(renderbuffer, internalFormat, width, heigth);
   }
 
   // >>> Parameteres
 
-  dynamic getParameter(RenderBufferParameters parameter){
-    return gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,parameter.index);
+  /// RenderBufferParameters parameter
+  dynamic getRenderbufferParameter(int parameter){
+    return gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,parameter);
   }
 
   // >>> single getParameter
 
   // > RENDERBUFFER_WIDTH
-  int get renderBufferWidth => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_WIDTH.index) as int;
+  int get renderBufferWidth => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_WIDTH) as int;
   // > RENDERBUFFER_HEIGHT
-  int get renderBufferHeight => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_HEIGHT.index) as int;
+  int get renderBufferHeight => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_HEIGHT) as int;
   // > RENDERBUFFER_RED_SIZE
-  int get renderBufferRedSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_RED_SIZE.index) as int;
+  int get renderBufferRedSize => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_RED_SIZE) as int;
   // > RENDERBUFFER_GREEN_SIZE
-  int get renderBufferGreenSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_GREEN_SIZE.index) as int;
+  int get renderBufferGreenSize => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_GREEN_SIZE) as int;
   // > RENDERBUFFER_BLUE_SIZE
-  int get renderBufferBlueSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_BLUE_SIZE.index) as int;
+  int get renderBufferBlueSize => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_BLUE_SIZE) as int;
   // > RENDERBUFFER_ALPHA_SIZE
-  int get renderBufferAlphaSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_ALPHA_SIZE.index) as int;
+  int get renderBufferAlphaSize => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_ALPHA_SIZE) as int;
   // > RENDERBUFFER_DEPTH_SIZE
-  int get renderBufferDepthSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_DEPTH_SIZE.index) as int;
+  int get renderBufferDepthSize => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_DEPTH_SIZE) as int;
   // > RENDERBUFFER_STENCIL_SIZE
-  int get renderBufferStencilSize => gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_STENCIL_SIZE.index) as int;
+  int get renderBufferStencilSize => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_STENCIL_SIZE) as int;
   // > RENDERBUFFER_INTERNAL_FORMAT
-  RenderBufferInternalFormatType get renderBufferInterrnalFormat => RenderBufferInternalFormatType.getByIndex(gl.ctx.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER.index,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT.index) as int);
+  /// RenderBufferInternalFormatType get renderBufferInterrnalFormat
+  int get renderBufferInterrnalFormat => gl.getRenderbufferParameter(RenderBufferTarget.RENDERBUFFER,RenderBufferParameters.RENDERBUFFER_INTERNAL_FORMAT) as int;
 
   void logRenderBufferInfos() {
     Debug.log("RenderBuffer Infos", () {

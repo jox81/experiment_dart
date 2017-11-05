@@ -6,7 +6,7 @@ import 'dart:math' as Math;
 import 'dart:web_gl' as webgl;
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/context.dart' as bctx;
+import 'package:webgl/src/context.dart' as Context;
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -172,7 +172,7 @@ Future init(String vertSource, String fragSource) async {
       canvas.getContext("experimental-webgl", <String, dynamic>{})
           as webgl.RenderingContext;
 
-  bctx.gl = new WebGLRenderingContext.fromBaseCtx(gl);
+  Context.glWrapper = new WebGLRenderingContext.fromWebGL(gl);
   if (gl == null) {
     error.innerHtml += 'Failed to get the rendering context for WebGL<br>';
     return;

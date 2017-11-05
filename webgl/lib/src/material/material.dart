@@ -95,7 +95,7 @@ abstract class Material extends IEditElement {
 
   void setShaderAttributArrayBuffer(String attributName, List<double> arrayBuffer, int dimension){
     if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
-    gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName]);
+    gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName].webGLBuffer);
     attributes[attributName].enabled = true;
 
     if(buffers[attributName].data != arrayBuffer) {
@@ -110,7 +110,7 @@ abstract class Material extends IEditElement {
 
   void setShaderAttributElementArrayBuffer(String attributName, List<int> elementArrayBuffer){
     if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
-    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName]);
+    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, buffers[attributName].webGLBuffer);
 
     if(buffers[attributName].data != elementArrayBuffer) {
       buffers[attributName].data = elementArrayBuffer;

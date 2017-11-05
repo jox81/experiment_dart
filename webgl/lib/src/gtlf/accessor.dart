@@ -71,13 +71,15 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   int get byteLength => _gltfSource.byteLength;// Total length
   //
   final int count;
-  final ShaderVariableType type;//FLOAT_VEC3
+  /// ShaderVariableType type
+  final int type = -1;//FLOAT_VEC3// Todo (jpu) :
   int get elementLength => _gltfSource.elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
   //
   final String typeString;//SCALAR/VEC3/...
   int get components => _gltfSource.components;//Count of components in an element : vec3 -> 3, vec2 -> 2
   //
-  final ShaderVariableType componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
+  ///ShaderVariableType componentType
+  final int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
   int get componentLength => _gltfSource.componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
   //
   int get byteStride => _gltfSource.byteStride;//size of repetition group
@@ -93,13 +95,11 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   GLTFAccessor._(this._gltfSource, [String name])
       : this.byteOffset = _gltfSource.byteOffset,
-        this.componentType =
-        ShaderVariableType.getByIndex(_gltfSource.componentType),
+        this.componentType = _gltfSource.componentType,
         this.count = _gltfSource.count,
         this.typeString = _gltfSource.type,
-        this.type = ShaderVariableType.getByComponentAndType(
-            ShaderVariableType.getByIndex(_gltfSource.componentType).name,
-            _gltfSource.type),
+//        this.type = ShaderVariableType.getByComponentAndType(_gltfSource.componentType,
+//            _gltfSource.type),
         this.normalized = _gltfSource.normalized,
         this.max = _gltfSource.max,
         this.min = _gltfSource.min,
@@ -112,7 +112,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       this.byteOffset,
       this.componentType,
       this.typeString,
-      this.type,
+//      this.type,
       this.count,
       this.normalized,
       this.max,
@@ -138,7 +138,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: $_bufferViewId, byteOffset: $byteOffset, byteLength: $byteLength, count: $count, type: $type, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, byteStride: $byteStride, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: $_bufferViewId, byteOffset: $byteOffset, byteLength: $byteLength, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, byteStride: $byteStride, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
   }
 
 }
