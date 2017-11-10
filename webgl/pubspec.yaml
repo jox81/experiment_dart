@@ -11,7 +11,7 @@ dependencies:
   angular2: ^2.2.0
   vector_math: any
   test:
-  gltf:
+  gltf: 
     path: ../gltf
   datgui: "^0.2.0+1"
   logging: "^0.11.3+1"

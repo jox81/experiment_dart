@@ -6,7 +6,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.29.5"
+    version: "0.29.11"
   angular2:
     description:
       name: angular2
@@ -60,7 +60,7 @@ packages:
       name: cli_util
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.1.2+1"
+    version: "0.0.1+2"
   code_transformers:
     description:
       name: code_transformers
@@ -126,7 +126,7 @@ packages:
       path: "..\\gltf"
       relative: true
     source: path
-    version: "2.0.0-dev.1"
+    version: "2.0.0-dev.1.1"
   html:
     description:
       name: html
@@ -162,7 +162,7 @@ packages:
       name: isolate
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.3"
+    version: "1.1.0"
   js:
     description:
       name: js
@@ -349,6 +349,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  when:
+    description:
+      name: when
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
+  which:
+    description:
+      name: which
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.3"
   yaml:
     description:
       name: yaml
