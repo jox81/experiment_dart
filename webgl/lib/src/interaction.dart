@@ -208,7 +208,7 @@ class Interaction {
     updateMouseInfos(screenX, screenY);
     Context.mainCamera.cameraController.endOrbit(Context.mainCamera);
 
-    print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
+//    print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
     if(!dragging) {
       if(isInApplication) {
         Context.currentScene.currentSelection = tempSelection;

@@ -29,17 +29,17 @@ uniform vec3 u_LightColor;
 #ifdef HAS_BASECOLORMAP
     uniform sampler2D u_BaseColorSampler;
 #endif
-//#ifdef HAS_NORMALMAP
-//    uniform sampler2D u_NormalSampler;
-//    uniform float u_NormalScale;
-//#endif
+#ifdef HAS_NORMALMAP
+    uniform sampler2D u_NormalSampler;
+    uniform float u_NormalScale;
+#endif
 //#ifdef HAS_EMISSIVEMAP
 //    uniform sampler2D u_EmissiveSampler;
 //    uniform vec3 u_EmissiveFactor;
 //#endif
-//#ifdef HAS_METALROUGHNESSMAP
-//    uniform sampler2D u_MetallicRoughnessSampler;
-//#endif
+#ifdef HAS_METALROUGHNESSMAP
+    uniform sampler2D u_MetallicRoughnessSampler;
+#endif
 //#ifdef HAS_OCCLUSIONMAP
 //    uniform sampler2D u_OcclusionSampler;
 //    uniform float u_OcclusionStrength;
@@ -60,11 +60,11 @@ varying vec3 v_Position;
 varying vec2 v_UV;
 
 #ifdef HAS_NORMALS
-//    #ifdef HAS_TANGENTS
-//        varying mat3 v_TBN;
-//    #else
+    #ifdef HAS_TANGENTS
+        varying mat3 v_TBN;
+    #else
         varying vec3 v_Normal;
-//    #endif
+    #endif
 #endif
 
 #ifdef DEBUG_VS
@@ -115,12 +115,12 @@ vec3 getNormal()
     vec3 b = normalize(cross(ng, t));
     mat3 tbn = mat3(t, b, ng);
 #else // HAS_TANGENTS
-//    mat3 tbn = v_TBN;
+    mat3 tbn = v_TBN;
 #endif
 
 #ifdef HAS_NORMALMAP
-//    vec3 n = texture2D(u_NormalSampler, v_UV).rgb;
-//    n = normalize(tbn * ((2.0 * n - 1.0) * vec3(u_NormalScale, u_NormalScale, 1.0)));
+    vec3 n = texture2D(u_NormalSampler, v_UV).rgb;
+    n = normalize(tbn * ((2.0 * n - 1.0) * vec3(u_NormalScale, u_NormalScale, 1.0)));
 #else
     vec3 n = tbn[2].xyz;
 #endif
@@ -205,9 +205,9 @@ void main()
 #ifdef HAS_METALROUGHNESSMAP
     // Roughness is stored in the 'g' channel, metallic is stored in the 'b' channel.
     // This layout intentionally reserves the 'r' channel for (optional) occlusion map data
-//    vec4 mrSample = texture2D(u_MetallicRoughnessSampler, v_UV);
-//    perceptualRoughness = mrSample.g * perceptualRoughness;
-//    metallic = mrSample.b * metallic;
+    vec4 mrSample = texture2D(u_MetallicRoughnessSampler, v_UV);
+    perceptualRoughness = mrSample.g * perceptualRoughness;
+    metallic = mrSample.b * metallic;
 #endif
     perceptualRoughness = clamp(perceptualRoughness, c_MinRoughness, 1.0);
     metallic = clamp(metallic, 0.0, 1.0);
@@ -314,7 +314,7 @@ void main()
 //        finalColor = vec4(vec3(v_UV,0.0), 1.0); // uv color. inversed ?
 
 //        finalColor = u_BaseColorFactor; // Base Color Factor
-        finalColor = texture2D(u_BaseColorSampler, v_UV); // Base Color Texture
+//        finalColor = texture2D(u_BaseColorSampler, v_UV); // Base Color Texture
 
 //        finalColor = vec4(1.0, 0.0, 1.0, 1.0); // debug flat color
 
