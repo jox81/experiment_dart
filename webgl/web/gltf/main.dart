@@ -29,7 +29,11 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
 
   //PBR
-    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf',// Todo (jpu) : render black ? => change fov, problem transparency one center
+//    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf', //=> change fov, problem transparency one center:force 2sided
+//    '/gltf/samples/gltf_2_0/BarramundiFish/glTF/BarramundiFish.gltf',
+//    '/gltf/samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
+//    '/gltf/samples/gltf_2_0/corset/glTF/Corset.gltf',
+    '/gltf/samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
   ];
 //
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);

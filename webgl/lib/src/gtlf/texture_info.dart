@@ -16,8 +16,8 @@ class GLTFTextureInfo extends GltfProperty {
   GLTFTexture get texture => _textureId != null ? gltfProject.textures[_textureId] : null;
 
   GLTFTextureInfo(this.texCoord, {GLTFTexture texture}){
-    if(texture != null) {
-      this._textureId = texture.textureId;
+    if(texture != null){
+      _textureId = texture.textureId;
     }
   }
 

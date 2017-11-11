@@ -367,7 +367,7 @@ class GLTFRenderer {
           lightDirection.storage);
 
       setUnifrom(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
-          lightColor.storage);
+          (lightColor * 2.0).storage);
 
       // > Material base
 
@@ -394,7 +394,7 @@ class GLTFRenderer {
             ShaderVariableType.SAMPLER_2D,
             new Int32List.fromList(
                 [material.emissiveTexture.texture.textureId]));
-        setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT,
+        setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
             new Float32List.fromList(material.emissiveFactor));
       }
 
@@ -643,6 +643,9 @@ class GLTFRenderer {
       case ShaderVariableType.SAMPLER_2D:
         gl.uniform1i(uniformLocation, (data as Int32List)[0]);
         break;
+      case ShaderVariableType.FLOAT:
+        gl.uniform1f(uniformLocation, (data as Float32List)[0]);
+        break;
       case ShaderVariableType.FLOAT_VEC2:
         gl.uniform2fv(uniformLocation, data as Float32List);
         break;
@@ -657,7 +660,7 @@ class GLTFRenderer {
         break;
       default:
         throw new Exception(
-            'Trying to set a uniform for a not defined component type');
+            'renderer setUnifrom exception : Trying to set a uniform for a not defined component type');
         break;
     }
   }

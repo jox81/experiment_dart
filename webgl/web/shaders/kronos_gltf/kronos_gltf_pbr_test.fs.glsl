@@ -33,10 +33,10 @@ uniform vec3 u_LightColor;
     uniform sampler2D u_NormalSampler;
     uniform float u_NormalScale;
 #endif
-//#ifdef HAS_EMISSIVEMAP
-//    uniform sampler2D u_EmissiveSampler;
-//    uniform vec3 u_EmissiveFactor;
-//#endif
+#ifdef HAS_EMISSIVEMAP
+    uniform sampler2D u_EmissiveSampler;
+    uniform vec3 u_EmissiveFactor;
+#endif
 #ifdef HAS_METALROUGHNESSMAP
     uniform sampler2D u_MetallicRoughnessSampler;
 #endif
@@ -285,17 +285,17 @@ void main()
         color = mix(color, color * ao, u_OcclusionStrength);
     #endif
 
-//#ifdef HAS_EMISSIVEMAP
-//    vec3 emissive = texture2D(u_EmissiveSampler, v_UV).rgb * u_EmissiveFactor;
-//    color += emissive;
-//#endif
+    #ifdef HAS_EMISSIVEMAP
+        vec3 emissive = texture2D(u_EmissiveSampler, v_UV).rgb * u_EmissiveFactor;
+        color += emissive;
+    #endif
 
     // This section uses mix to override final color for reference app visualization
     // of various parameters in the lighting equation.
     color = mix(color, F, u_ScaleFGDSpec.x);            // specularReflection
     color = mix(color, vec3(G), u_ScaleFGDSpec.y);      // geometricOcclusion
     color = mix(color, vec3(D), u_ScaleFGDSpec.z);      // microfacetDistribution
-    color = mix(color, specContrib, u_ScaleFGDSpec.w);  //specularContribution
+    color = mix(color, specContrib, u_ScaleFGDSpec.w);  // specularContribution
 
     color = mix(color, diffuseContrib, u_ScaleDiffBaseMR.x);
     color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);

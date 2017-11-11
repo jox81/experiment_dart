@@ -4,7 +4,6 @@ import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFMaterial extends GLTFChildOfRootProperty {
   glTF.Material _gltfSource;

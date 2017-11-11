@@ -25,7 +25,9 @@ class GLTFTexture extends GLTFChildOfRootProperty {
   factory GLTFTexture.fromGltf(glTF.Texture gltfSource) {
     if (gltfSource == null) return null;
 
-    GLTFTexture texture = new GLTFTexture._(gltfSource);
+    //Check if exist in project first
+    GLTFTexture texture = gltfProject.textures.firstWhere((t)=>t.gltfSource == gltfSource, orElse: ()=> null);
+    if(texture == null) texture = new GLTFTexture._(gltfSource);
 
     if(gltfSource.sampler != null){
       GLTFSampler sampler = gltfProject.samplers.firstWhere((s)=>s.gltfSource == gltfSource.sampler, orElse: ()=> throw new Exception('Texture Sampler can only be bound to an existing project sampler'));
