@@ -40,6 +40,11 @@ class GLTFRenderer {
   Matrix4 get viewMatrix => mainCamera.viewMatrix;
   Matrix4 get projectionMatrix => mainCamera.projectionMatrix;
 
+  // Todo (jpu) : define light global with camera
+  // Direction from where the light is coming to origin
+  Vector3 lightDirection = new Vector3(1.0, -1.0, -1.0);
+  Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
+
   GLTFRenderer(this.gltf) {
     debug.logCurrentFunction();
     try {
@@ -86,24 +91,34 @@ class GLTFRenderer {
     bool useDebugTexture = false;
 
     for (int i = 0; i < gltf.textures.length; i++) {
+      int textureUnitId = 0;
+
       if (!useDebugTexture) {
         GLTFTexture gltfTexture = gltf.textures[i];
-
         if (gltfTexture.source.data == null) {
           //load image
           String fileUrl =
               gltf.baseDirectory + gltfTexture.source.uri.toString();
           imageElement = await TextureUtils.loadImage(fileUrl);
+          textureUnitId = gltfTexture.textureId;
         } else {
           String base64Encoded = BASE64.encode(gltfTexture.source.data);
           imageElement = new ImageElement(
               src: "data:${gltfTexture.source.mimeType};base64,$base64Encoded");
         }
 
-        magFilter = gltfTexture.sampler != null ? gltfTexture.sampler.magFilter : TextureFilterType.LINEAR;
-        minFilter = gltfTexture.sampler != null ? gltfTexture.sampler.minFilter : TextureFilterType.LINEAR;
-        wrapS = gltfTexture.sampler != null ? gltfTexture.sampler.wrapS : TextureWrapType.REPEAT;
-        wrapT = gltfTexture.sampler != null ? gltfTexture.sampler.wrapT : TextureWrapType.REPEAT;
+        magFilter = gltfTexture.sampler != null
+            ? gltfTexture.sampler.magFilter
+            : TextureFilterType.LINEAR;
+        minFilter = gltfTexture.sampler != null
+            ? gltfTexture.sampler.minFilter
+            : TextureFilterType.LINEAR;
+        wrapS = gltfTexture.sampler != null
+            ? gltfTexture.sampler.wrapS
+            : TextureWrapType.REPEAT;
+        wrapT = gltfTexture.sampler != null
+            ? gltfTexture.sampler.wrapT
+            : TextureWrapType.REPEAT;
       } else {
         String imagePath = '/images/uv.png';
 //      String imagePath = '/images/crate.gif';
@@ -119,12 +134,11 @@ class GLTFRenderer {
 
       document.body.children.add(imageElement
         ..width = 256
-        ..height = 256
-      );
+        ..height = 256);
       //create texture
       webgl.Texture texture = gl.createTexture();
       //bind it to an active texture unit
-      gl.activeTexture(TextureUnit.TEXTURE0 + i);// Todo (jpu) : set in unifrom
+      gl.activeTexture(TextureUnit.TEXTURE0 + textureUnitId);
       gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
       gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 0);
 
@@ -230,8 +244,8 @@ class GLTFRenderer {
       if (gltf.cameras.length > 0) {
         currentCamera = gltf.cameras[0];
       } else {
-        currentCamera = new GLTFCameraPerspective(0.6, 10000.0, 0.01)
-          ..targetPosition = new Vector3(0.0, 0.0, 0.0);
+        currentCamera = new GLTFCameraPerspective(0.01, 10000.0, 0.01)
+          ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
       currentCamera.position = new Vector3(5.0, 5.0, 10.0);
@@ -298,17 +312,14 @@ class GLTFRenderer {
 
       //Material base infos
       defines['HAS_NORMALMAP'] = pbrMaterial.normalTexture != null;
-      defines['HAS_EMISSIVEMAP'] =
-          pbrMaterial.emissiveTexture != null; // Todo (jpu) :
-      defines['HAS_OCCLUSIONMAP'] =
-          pbrMaterial.occlusionTexture != null; // Todo (jpu) :
+      defines['HAS_EMISSIVEMAP'] = pbrMaterial.emissiveTexture != null;
+      defines['HAS_OCCLUSIONMAP'] = pbrMaterial.occlusionTexture != null;
 
       //Material pbr infos
       defines['HAS_BASECOLORMAP'] =
           pbrMaterial.pbrMetallicRoughness.baseColorTexture != null;
       defines['HAS_METALROUGHNESSMAP'] =
-          pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture !=
-              null; // Todo (jpu) :
+          pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture != null;
 
       //debug jpu
       defines['DEBUG_VS'] = false; // Todo (jpu) :
@@ -323,8 +334,9 @@ class GLTFRenderer {
     webgl.Program program = initProgram(shaderSource, defines);
     gl.useProgram(program);
 
-    if (material != null && material.doubleSided) {
-      gl.disable(webgl.CULL_FACE);
+    bool forceTwoSided = true;
+    if (material != null && material.doubleSided || forceTwoSided) {
+      gl.disable(webgl.CULL_FACE); //Two sided
     } else {
       gl.enable(webgl.CULL_FACE);
     }
@@ -348,22 +360,14 @@ class GLTFRenderer {
 
       // > camera
       setUnifrom(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
-          (mainCamera.position).storage);
+          mainCamera.position.storage);
 
       // > Light
-      // Todo (jpu) : define light global if needed.
-      // it's the direction from where the light is coming to origin
-      setUnifrom(
-          program,
-          'u_LightDirection',
-          ShaderVariableType.FLOAT_VEC3,
-          new Float32List.fromList([
-            1.0,
-            -1.0,
-            -1.0
-          ]));
+      setUnifrom(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
+          lightDirection.storage);
+
       setUnifrom(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
-          new Float32List.fromList([1.0, 1.0, 1.0]));
+          lightColor.storage);
 
       // > Material base
 
@@ -372,38 +376,65 @@ class GLTFRenderer {
         //setUnifrom(program,'u_SpecularEnvSampler',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
         //setUnifrom(program,'u_brdfLUT',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
       }
+
       if (defines['HAS_NORMALMAP']) {
         setUnifrom(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
-//        setUnifrom(program, 'u_NormalScale', ShaderVariableType.FLOAT,
-//            material.normalSCale); // Todo (jpu) : ?
+            new Int32List.fromList([material.normalTexture.texture.textureId]));
+        double normalScale = material.normalTexture.scale != null
+            ? material.normalTexture.scale
+            : 1.0;
+        setUnifrom(program, 'u_NormalScale', ShaderVariableType.FLOAT,
+            new Float32List.fromList([normalScale]));
       }
+
       if (defines['HAS_EMISSIVEMAP']) {
-        setUnifrom(program, 'u_EmissiveSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
+        setUnifrom(
+            program,
+            'u_EmissiveSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList(
+                [material.emissiveTexture.texture.textureId]));
         setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT,
             new Float32List.fromList(material.emissiveFactor));
       }
+
       if (defines['HAS_OCCLUSIONMAP']) {
-        setUnifrom(program, 'u_OcclusionSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
-//        setUnifrom(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
-//            new Float32List.fromList(material.occlusionStrenght));// Todo (jpu) :
+        setUnifrom(
+            program,
+            'u_OcclusionSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList(
+                [material.occlusionTexture.texture.textureId]));
+        double occlusionStrength = material.occlusionTexture.strength != null
+            ? material.occlusionTexture.strength
+            : 1.0;
+        setUnifrom(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
+            new Float32List.fromList([occlusionStrength]));
       }
 
       // > Material pbr
 
       if (defines['HAS_BASECOLORMAP']) {
-        setUnifrom(program, 'u_BaseColorSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
+        setUnifrom(
+            program,
+            'u_BaseColorSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([
+              material.pbrMetallicRoughness.baseColorTexture.texture.textureId
+            ]));
       }
+
       if (defines['HAS_METALROUGHNESSMAP']) {
         setUnifrom(
             program,
             'u_MetallicRoughnessSampler',
             ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0])); // Todo (jpu) : textureunit0 ?
+            new Int32List.fromList([
+              material.pbrMetallicRoughness.metallicRoughnessTexture.texture
+                  .textureId
+            ]));
       }
+
       double roughness = material.pbrMetallicRoughness.roughnessFactor;
       double metallic = material.pbrMetallicRoughness.metallicFactor;
       setUnifrom(
@@ -447,6 +478,7 @@ class GLTFRenderer {
             roughnessMask
           ]));
 
+      // Todo (jpu) :
       //setUnifrom(program,'u_ScaleIBLAmbient',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
 
     }

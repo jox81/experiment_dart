@@ -10,8 +10,8 @@ class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
 
   GLTFOcclusionTextureInfo(int texCoord, GLTFTexture texture, this.strength):super(texCoord, texture : texture);
 
-  GLTFOcclusionTextureInfo._(glTF.OcclusionTextureInfo gltfSource)
-      : this.strength = gltfSource.strength, super(gltfSource.texCoord, texture : new GLTFTexture.fromGltf(gltfSource.texture));
+  GLTFOcclusionTextureInfo._(this._gltfSource)
+      : this.strength = _gltfSource.strength, super(_gltfSource.texCoord, texture : new GLTFTexture.fromGltf(_gltfSource.texture));
 
   factory GLTFOcclusionTextureInfo.fromGltf(
       glTF.OcclusionTextureInfo gltfSource) {

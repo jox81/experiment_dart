@@ -6,7 +6,7 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 class GLTFTextureInfo extends GltfProperty {
   glTF.TextureInfo _gltfSource;
 
-  int get index => texture.textureId; // Todo (jpu) :
+  int get index => texture.textureId;
 
   glTF.TextureInfo get gltfSource => _gltfSource;
 
@@ -17,7 +17,7 @@ class GLTFTextureInfo extends GltfProperty {
 
   GLTFTextureInfo(this.texCoord, {GLTFTexture texture}){
     if(texture != null) {
-      this._textureId = gltfProject.textures.indexOf(texture);
+      this._textureId = texture.textureId;
     }
   }
 

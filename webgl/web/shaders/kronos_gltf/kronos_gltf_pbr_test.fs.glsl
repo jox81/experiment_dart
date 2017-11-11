@@ -40,10 +40,10 @@ uniform vec3 u_LightColor;
 #ifdef HAS_METALROUGHNESSMAP
     uniform sampler2D u_MetallicRoughnessSampler;
 #endif
-//#ifdef HAS_OCCLUSIONMAP
-//    uniform sampler2D u_OcclusionSampler;
-//    uniform float u_OcclusionStrength;
-//#endif
+#ifdef HAS_OCCLUSIONMAP
+    uniform sampler2D u_OcclusionSampler;
+    uniform float u_OcclusionStrength;
+#endif
 
 uniform vec2 u_MetallicRoughnessValues;
 uniform vec4 u_BaseColorFactor;
@@ -52,7 +52,7 @@ uniform vec3 u_Camera;// Camera position (not direction)
 
 // debugging flags used for shader output of intermediate PBR variables
 uniform vec4 u_ScaleDiffBaseMR; // MR : MetallicRoughtness contribution => {diffuse, baseColor, metallic, roughness}
-uniform vec4 u_ScaleFGDSpec; // FGDSpec : = >{specularReflection, geometricOcclusion, microfacetDistribution, specContrib}
+uniform vec4 u_ScaleFGDSpec;    // FGDSpec : => {specularReflection, geometricOcclusion, microfacetDistribution, specContrib}
 //uniform vec4 u_ScaleIBLAmbient;
 
 varying vec3 v_Position;
@@ -267,7 +267,7 @@ void main()
     vec3 F = specularReflection(pbrInputs);
     float G = geometricOcclusion(pbrInputs);
     float D = microfacetDistribution(pbrInputs);
-//
+
     // Calculation of analytical lighting contribution
     vec3 diffuseContrib = (1.0 - F) * diffuse(pbrInputs);
     vec3 specContrib = F * G * D / (4.0 * NdotL * NdotV);
@@ -280,10 +280,10 @@ void main()
 //#endif
 
     // Apply optional PBR terms for additional (optional) shading
-//#ifdef HAS_OCCLUSIONMAP
-//    float ao = texture2D(u_OcclusionSampler, v_UV).r;
-//    color = mix(color, color * ao, u_OcclusionStrength);
-//#endif
+    #ifdef HAS_OCCLUSIONMAP
+        float ao = texture2D(u_OcclusionSampler, v_UV).r;
+        color = mix(color, color * ao, u_OcclusionStrength);
+    #endif
 
 //#ifdef HAS_EMISSIVEMAP
 //    vec3 emissive = texture2D(u_EmissiveSampler, v_UV).rgb * u_EmissiveFactor;
@@ -292,10 +292,10 @@ void main()
 
     // This section uses mix to override final color for reference app visualization
     // of various parameters in the lighting equation.
-    color = mix(color, F, u_ScaleFGDSpec.x);
-    color = mix(color, vec3(G), u_ScaleFGDSpec.y);
-    color = mix(color, vec3(D), u_ScaleFGDSpec.z);
-    color = mix(color, specContrib, u_ScaleFGDSpec.w);
+    color = mix(color, F, u_ScaleFGDSpec.x);            // specularReflection
+    color = mix(color, vec3(G), u_ScaleFGDSpec.y);      // geometricOcclusion
+    color = mix(color, vec3(D), u_ScaleFGDSpec.z);      // microfacetDistribution
+    color = mix(color, specContrib, u_ScaleFGDSpec.w);  //specularContribution
 
     color = mix(color, diffuseContrib, u_ScaleDiffBaseMR.x);
     color = mix(color, baseColor.rgb, u_ScaleDiffBaseMR.y);
