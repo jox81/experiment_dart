@@ -85,7 +85,7 @@ class GLTFRenderer {
     int wrapT;
 
     //brdfLUT
-    imageElement = await TextureUtils.loadImage('../images/brdfLUT.png');
+    imageElement = await TextureUtils.loadImage('../images/utils/brdfLUT.png');
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -138,7 +138,8 @@ class GLTFRenderer {
             ? gltfTexture.sampler.wrapT
             : TextureWrapType.REPEAT;
       } else {
-        String imagePath = '/images/uv.png';
+//        String imagePath = '/images/utils/uv.png';
+        String imagePath = '/images/utils/uv_grid.png';
 //      String imagePath = '/images/crate.gif';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat.png';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat_256.png';
@@ -239,13 +240,20 @@ class GLTFRenderer {
 
   void draw() {
     debug.logCurrentFunction();
-
-    // Enable depth test
     gl.enable(webgl.DEPTH_TEST);
-
     gl.clearColor(.2, 0.2, 0.2, 1.0);
     gl.clear(
         ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
+    gl.frontFace(FrontFaceDirection.CCW);
+
+//    // Enable depth test
+
+    gl.depthFunc(webgl.LESS);
+//    gl.enable(webgl.BLEND);
+    gl.disable(webgl.CULL_FACE);
+//
+    gl.cullFace(FacingType.FRONT);
+
 
     //draw
     List<GLTFNode> nodes = activeScene.nodes;
@@ -267,7 +275,7 @@ class GLTFRenderer {
       if (gltf.cameras.length > 0) {
         currentCamera = gltf.cameras[0];
       } else {
-        currentCamera = new GLTFCameraPerspective(0.01, 10000.0, 0.01)
+        currentCamera = new GLTFCameraPerspective(radians(47.0), 100.0, 0.01)
           ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
@@ -311,10 +319,10 @@ class GLTFRenderer {
 
     GLTFMaterial material = gltf.materials.length > 0
         ? primitive.material
-        : null; 
+        : null;
     GLTFMaterial pbrMaterial;
     ShaderSource shaderSource;
-    bool debugWithDefault = false;
+    bool debugWithDefault = true;
     if (material == null || debugWithDefault) {
       shaderSource = ShaderSource.sources['kronos_gltf_default'];
     } else {
@@ -352,12 +360,12 @@ class GLTFRenderer {
     webgl.Program program = initProgram(shaderSource, defines);
     gl.useProgram(program);
 
-    bool forceTwoSided = true;
-    if (material != null && material.doubleSided || forceTwoSided) {
-      gl.disable(webgl.CULL_FACE); //Two sided
-    } else {
-      gl.enable(webgl.CULL_FACE);
-    }
+//    bool forceTwoSided = true;
+//    if (material != null && material.doubleSided || forceTwoSided) {
+//      gl.disable(webgl.CULL_FACE); //Two sided
+//    } else {
+//      gl.enable(webgl.CULL_FACE);
+//    }
 
     //uniform
     modelMatrix = nodeTransform;
