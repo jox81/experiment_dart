@@ -38,7 +38,7 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',
 
   //Wip
-
+    '/gltf/wip/export_test/export_test.gltf',
   ];
 //
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);

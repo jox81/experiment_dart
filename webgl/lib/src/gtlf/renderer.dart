@@ -37,6 +37,7 @@ class GLTFRenderer {
   GLTFCameraPerspective get mainCamera => Context.Context.mainCamera;
   Matrix4 get viewMatrix => mainCamera.viewMatrix;
   Matrix4 get projectionMatrix => mainCamera.projectionMatrix;
+  Matrix4 modelMatrix;
 
   // Direction from where the light is coming to origin
   Vector3 lightDirection = new Vector3(1.0, -1.0, -1.0);
@@ -305,12 +306,12 @@ class GLTFRenderer {
     camera.position = node.translation;
   }
 
-  webgl.Program setupProgram(GLTFMeshPrimitive primitive) {
+  webgl.Program setupProgram(GLTFMeshPrimitive primitive, Matrix4 nodeTransform) {
     debug.logCurrentFunction();
 
     GLTFMaterial material = gltf.materials.length > 0
-        ? gltf.materials[0]
-        : null; // Todo (jpu) : what if mutliple materials ?
+        ? primitive.material
+        : null; 
     GLTFMaterial pbrMaterial;
     ShaderSource shaderSource;
     bool debugWithDefault = false;
@@ -328,7 +329,7 @@ class GLTFRenderer {
 
       //primitives infos
       defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] !=
-          null; // Todo (jpu) : => This can change faceted to smooth render.But can break in black render
+          null;
       defines['HAS_TANGENTS'] = primitive.attributes['TANGENT'] != null;
       defines['HAS_UV'] = primitive.attributes['TEXCOORD_0'] != null;
 
@@ -348,11 +349,6 @@ class GLTFRenderer {
       defines['DEBUG_FS'] = false;
     }
 
-    // Todo (jpu) : is this really usefull here
-    globalState
-      ..uniforms = {}
-      ..attributes = {};
-
     webgl.Program program = initProgram(shaderSource, defines);
     gl.useProgram(program);
 
@@ -363,6 +359,10 @@ class GLTFRenderer {
       gl.enable(webgl.CULL_FACE);
     }
 
+    //uniform
+    modelMatrix = nodeTransform;
+    setUnifrom(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+        nodeTransform.storage);
     setUnifrom(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
     setUnifrom(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
@@ -378,7 +378,7 @@ class GLTFRenderer {
 
     if (pbrMaterial != null) {
       setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
-          ((projectionMatrix * viewMatrix) as Matrix4).storage);
+          ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
 
       // > camera
       setUnifrom(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
@@ -522,7 +522,7 @@ class GLTFRenderer {
       GLTFNode node = nodes[i];
       if (node.mesh != null) {
         GLTFMeshPrimitive primitive = node.mesh.primitives[0];
-        webgl.Program program = setupProgram(primitive);
+        webgl.Program program = setupProgram(primitive, node.matrix);
         setupNodeMesh(program, node);
         drawNodeMesh(program, primitive);
       }
@@ -543,12 +543,6 @@ class GLTFRenderer {
     if (primitive.indices != null) {
       bindIndices(primitive.indices);
     }
-
-    //uniform
-    setUnifrom(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        node.matrix.storage);
-    debug.logCurrentFunction('u_ModelMatrix pos : ${node.translation}');
-    debug.logCurrentFunction('u_ModelMatrix rot : ${node.rotation}');
   }
 
   void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
