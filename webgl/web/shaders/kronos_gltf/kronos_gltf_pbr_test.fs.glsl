@@ -17,14 +17,14 @@
 
 precision highp float;
 
-uniform vec3 u_LightDirection;// (jpu) in fact it's light position directed to origin
+uniform vec3 u_LightDirection;// it's position vector directed to the origin
 uniform vec3 u_LightColor;
 
-//#ifdef USE_IBL
-//    uniform samplerCube u_DiffuseEnvSampler;
-//    uniform samplerCube u_SpecularEnvSampler;
-//    uniform sampler2D u_brdfLUT;
-//#endif
+#ifdef USE_IBL
+    uniform samplerCube u_DiffuseEnvSampler;
+    uniform samplerCube u_SpecularEnvSampler;
+    uniform sampler2D u_brdfLUT;
+#endif
 
 #ifdef HAS_BASECOLORMAP
     uniform sampler2D u_BaseColorSampler;
@@ -53,7 +53,7 @@ uniform vec3 u_Camera;// Camera position (not direction)
 // debugging flags used for shader output of intermediate PBR variables
 uniform vec4 u_ScaleDiffBaseMR; // MR : MetallicRoughtness contribution => {diffuse, baseColor, metallic, roughness}
 uniform vec4 u_ScaleFGDSpec;    // FGDSpec : => {specularReflection, geometricOcclusion, microfacetDistribution, specContrib}
-//uniform vec4 u_ScaleIBLAmbient;
+uniform vec4 u_ScaleIBLAmbient;
 
 varying vec3 v_Position;
 
@@ -131,29 +131,29 @@ vec3 getNormal()
 // Calculation of the lighting contribution from an optional Image Based Light source.
 // Precomputed Environment Maps are required uniform inputs and are computed as outlined in [1].
 // See our README.md on Environment Maps [3] for additional discussion.
-//vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
-//{
-//    float mipCount = 9.0; // resolution of 512x512
-//    float lod = (pbrInputs.perceptualRoughness * mipCount);
-//    // retrieve a scale and bias to F0. See [1], Figure 3
-//    vec3 brdf = texture2D(u_brdfLUT, vec2(pbrInputs.NdotV, 1.0 - pbrInputs.perceptualRoughness)).rgb;
-//    vec3 diffuseLight = textureCube(u_DiffuseEnvSampler, n).rgb;
-//
-//#ifdef USE_TEX_LOD
-//    vec3 specularLight = textureCubeLodEXT(u_SpecularEnvSampler, reflection, lod).rgb;
-//#else
-//    vec3 specularLight = textureCube(u_SpecularEnvSampler, reflection).rgb;
-//#endif
-//
-//    vec3 diffuse = diffuseLight * pbrInputs.diffuseColor;
-//    vec3 specular = specularLight * (pbrInputs.specularColor * brdf.x + brdf.y);
-//
-//    // For presentation, this allows us to disable IBL terms
-//    diffuse *= u_ScaleIBLAmbient.x;
-//    specular *= u_ScaleIBLAmbient.y;
-//
-//    return diffuse + specular;
-//}
+vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
+{
+    float mipCount = 9.0; // resolution of 512x512
+    float lod = (pbrInputs.perceptualRoughness * mipCount);
+    // retrieve a scale and bias to F0. See [1], Figure 3
+    vec3 brdf = texture2D(u_brdfLUT, vec2(pbrInputs.NdotV, 1.0 - pbrInputs.perceptualRoughness)).rgb;
+    vec3 diffuseLight = textureCube(u_DiffuseEnvSampler, n).rgb;
+
+#ifdef USE_TEX_LOD
+    vec3 specularLight = textureCubeLodEXT(u_SpecularEnvSampler, reflection, lod).rgb;
+#else
+    vec3 specularLight = textureCube(u_SpecularEnvSampler, reflection).rgb;
+#endif
+
+    vec3 diffuse = diffuseLight * pbrInputs.diffuseColor;
+    vec3 specular = specularLight * (pbrInputs.specularColor * brdf.x + brdf.y);
+
+    // For presentation, this allows us to disable IBL terms
+    diffuse *= u_ScaleIBLAmbient.x;
+    specular *= u_ScaleIBLAmbient.y;
+
+    return diffuse + specular;
+}
 
 // Basic Lambertian diffuse
 // Implementation from Lambert's Photometria https://archive.org/details/lambertsphotome00lambgoog
@@ -275,9 +275,9 @@ void main()
     vec3 color = NdotL * u_LightColor * (diffuseContrib + specContrib);
 
     // Calculate lighting contribution from image based lighting source (IBL)
-//#ifdef USE_IBL
-//    color += getIBLContribution(pbrInputs, n, reflection);
-//#endif
+    #ifdef USE_IBL
+        color += getIBLContribution(pbrInputs, n, reflection);
+    #endif
 
     // Apply optional PBR terms for additional (optional) shading
     #ifdef HAS_OCCLUSIONMAP

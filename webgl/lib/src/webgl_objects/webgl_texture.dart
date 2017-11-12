@@ -629,7 +629,7 @@ class TextureUtils {
   }
 
   static Future<List<ImageElement>> loadCubeMapImages(
-      String cubeMapName) async {
+      String cubeMapName, {String webPath:""}) async {
     Map<String, List<String>> cubeMapsPath = {
       'test': [
         "images/cubemap/test/test_px.png",
@@ -654,6 +654,22 @@ class TextureUtils {
         "images/cubemap/pisa/pisa_negy.jpg",
         "images/cubemap/pisa/pisa_posz.jpg",
         "images/cubemap/pisa/pisa_negz.jpg",
+      ],
+      'papermill_diffuse': [
+        "images/cubemap/papermill/diffuse/diffuse_right_0.jpg",
+        "images/cubemap/papermill/diffuse/diffuse_left_0.jpg",
+        "images/cubemap/papermill/diffuse/diffuse_top_0.jpg",
+        "images/cubemap/papermill/diffuse/diffuse_bottom_0.jpg",
+        "images/cubemap/papermill/diffuse/diffuse_front_0.jpg",
+        "images/cubemap/papermill/diffuse/diffuse_back_0.jpg",
+      ],
+      'papermill_specular': [
+        "images/cubemap/papermill/specular/specular_right_0.jpg",
+        "images/cubemap/papermill/specular/specular_left_0.jpg",
+        "images/cubemap/papermill/specular/specular_top_0.jpg",
+        "images/cubemap/papermill/specular/specular_bottom_0.jpg",
+        "images/cubemap/papermill/specular/specular_front_0.jpg",
+        "images/cubemap/papermill/specular/specular_back_0.jpg",
       ]
     };
 
@@ -662,7 +678,7 @@ class TextureUtils {
     List<ImageElement> imageElements = new List(6);
 
     for (int i = 0; i < 6; i++) {
-      imageElements[i] = await TextureUtils.loadImage(paths[i]);
+      imageElements[i] = await TextureUtils.loadImage(webPath + paths[i]);
     }
 
     return imageElements;

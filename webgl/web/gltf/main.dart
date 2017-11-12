@@ -33,7 +33,12 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/BarramundiFish/glTF/BarramundiFish.gltf',
 //    '/gltf/samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    '/gltf/samples/gltf_2_0/corset/glTF/Corset.gltf',
-    '/gltf/samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
+//    '/gltf/samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
+//    '/gltf/samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+//    '/gltf/samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',
+
+  //Wip
+
   ];
 //
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);

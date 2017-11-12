@@ -3,7 +3,6 @@ import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
@@ -11,7 +10,6 @@ import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
@@ -40,10 +38,12 @@ class GLTFRenderer {
   Matrix4 get viewMatrix => mainCamera.viewMatrix;
   Matrix4 get projectionMatrix => mainCamera.projectionMatrix;
 
-  // Todo (jpu) : define light global with camera
   // Direction from where the light is coming to origin
   Vector3 lightDirection = new Vector3(1.0, -1.0, -1.0);
   Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
+
+  WebGLTexture cubeMapTextureDiffuse, cubeMapTextureSpecular;
+  int skipTexture;
 
   GLTFRenderer(this.gltf) {
     debug.logCurrentFunction();
@@ -73,23 +73,40 @@ class GLTFRenderer {
 
   Future _initTextures() async {
     debug.logCurrentFunction();
-
     ImageElement imageElement;
-
     ///TextureFilterType magFilter;
     int magFilter;
-
     /// TextureFilterType minFilter;
     int minFilter;
-
     /// TextureWrapType wrapS;
     int wrapS;
-
     /// TextureWrapType wrapT;
     int wrapT;
 
-    bool useDebugTexture = false;
+    //brdfLUT
+    imageElement = await TextureUtils.loadImage('../images/brdfLUT.png');
+    magFilter = TextureFilterType.LINEAR;
+    minFilter = TextureFilterType.LINEAR;
+    wrapS = TextureWrapType.REPEAT;
+    wrapT = TextureWrapType.REPEAT;
+    createImageTexture(TextureUnit.TEXTURE0 + 0, imageElement, magFilter, minFilter, wrapS, wrapT);
 
+    //Environnement
+    gl.activeTexture(TextureUnit.TEXTURE0 + 1);
+    List<ImageElement> papermill_diffuse =
+        await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: '../');
+    cubeMapTextureDiffuse = TextureUtils.createCubeMapWithImages(papermill_diffuse, flip: false);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
+
+    gl.activeTexture(TextureUnit.TEXTURE0 + 2);
+    List<ImageElement> papermill_specular =
+        await TextureUtils.loadCubeMapImages('papermill_specular', webPath: '../');
+    cubeMapTextureSpecular = TextureUtils.createCubeMapWithImages(papermill_specular, flip: false);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
+
+    skipTexture = 3;
+
+    bool useDebugTexture = false;
     for (int i = 0; i < gltf.textures.length; i++) {
       int textureUnitId = 0;
 
@@ -132,36 +149,41 @@ class GLTFRenderer {
         wrapT = TextureWrapType.CLAMP_TO_EDGE;
       }
 
-      document.body.children.add(imageElement
-        ..width = 256
-        ..height = 256);
-      //create texture
-      webgl.Texture texture = gl.createTexture();
-      //bind it to an active texture unit
-      gl.activeTexture(TextureUnit.TEXTURE0 + textureUnitId);
-      gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
-      gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 0);
-
-      //fill texture data
-      int mipMapLevel = 0;
-      gl.texImage2D(
-          TextureAttachmentTarget.TEXTURE_2D,
-          mipMapLevel,
-          TextureInternalFormat.RGBA,
-          TextureInternalFormat.RGBA,
-          TexelDataType.UNSIGNED_BYTE,
-          imageElement);
-      gl.generateMipmap(TextureTarget.TEXTURE_2D);
-      //set unit format
-      gl.texParameteri(TextureTarget.TEXTURE_2D,
-          TextureParameter.TEXTURE_MAG_FILTER, magFilter);
-      gl.texParameteri(TextureTarget.TEXTURE_2D,
-          TextureParameter.TEXTURE_MIN_FILTER, minFilter);
-      gl.texParameteri(
-          TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_S, wrapS);
-      gl.texParameteri(
-          TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, wrapT);
+      //create model texture
+      createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + skipTexture, imageElement, magFilter, minFilter, wrapS, wrapT);
     }
+  }
+
+  void createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
+
+    //create texture
+    webgl.Texture texture = gl.createTexture();
+
+    //bind it to an active texture unit
+    gl.activeTexture(textureUnitId);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
+    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 0);
+
+    //fill texture data
+    int mipMapLevel = 0;
+    gl.texImage2D(
+        TextureAttachmentTarget.TEXTURE_2D,
+        mipMapLevel,
+        TextureInternalFormat.RGBA,
+        TextureInternalFormat.RGBA,
+        TexelDataType.UNSIGNED_BYTE,
+        imageElement);
+    gl.generateMipmap(TextureTarget.TEXTURE_2D);
+
+    //set textureUnit format
+    gl.texParameteri(TextureTarget.TEXTURE_2D,
+        TextureParameter.TEXTURE_MAG_FILTER, magFilter);
+    gl.texParameteri(TextureTarget.TEXTURE_2D,
+        TextureParameter.TEXTURE_MIN_FILTER, minFilter);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_S, wrapS);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, wrapT);
   }
 
   num currentTime = 0;
@@ -301,7 +323,7 @@ class GLTFRenderer {
 
     Map<String, bool> defines = new Map();
     if (pbrMaterial != null) {
-      defines['USE_IBL'] = false; // Todo (jpu) :
+      defines['USE_IBL'] = true; // Todo (jpu) :
       defines['USE_TEX_LOD'] = false; // Todo (jpu) :
 
       //primitives infos
@@ -322,8 +344,8 @@ class GLTFRenderer {
           pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture != null;
 
       //debug jpu
-      defines['DEBUG_VS'] = false; // Todo (jpu) :
-      defines['DEBUG_FS'] = true; // Todo (jpu) :
+      defines['DEBUG_VS'] = false;
+      defines['DEBUG_FS'] = false;
     }
 
     // Todo (jpu) : is this really usefull here
@@ -372,14 +394,17 @@ class GLTFRenderer {
       // > Material base
 
       if (defines['USE_IBL']) {
-        //setUnifrom(program,'u_DiffuseEnvSampler',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
-        //setUnifrom(program,'u_SpecularEnvSampler',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
-        //setUnifrom(program,'u_brdfLUT',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
+        setUnifrom(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([0]));
+        setUnifrom(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+            new Int32List.fromList([1]));
+        setUnifrom(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+            new Int32List.fromList([2]));
       }
 
       if (defines['HAS_NORMALMAP']) {
         setUnifrom(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([material.normalTexture.texture.textureId]));
+            new Int32List.fromList([material.normalTexture.texture.textureId + skipTexture]));
         double normalScale = material.normalTexture.scale != null
             ? material.normalTexture.scale
             : 1.0;
@@ -393,7 +418,7 @@ class GLTFRenderer {
             'u_EmissiveSampler',
             ShaderVariableType.SAMPLER_2D,
             new Int32List.fromList(
-                [material.emissiveTexture.texture.textureId]));
+                [material.emissiveTexture.texture.textureId + skipTexture]));
         setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
             new Float32List.fromList(material.emissiveFactor));
       }
@@ -404,7 +429,7 @@ class GLTFRenderer {
             'u_OcclusionSampler',
             ShaderVariableType.SAMPLER_2D,
             new Int32List.fromList(
-                [material.occlusionTexture.texture.textureId]));
+                [material.occlusionTexture.texture.textureId + skipTexture]));
         double occlusionStrength = material.occlusionTexture.strength != null
             ? material.occlusionTexture.strength
             : 1.0;
@@ -420,7 +445,7 @@ class GLTFRenderer {
             'u_BaseColorSampler',
             ShaderVariableType.SAMPLER_2D,
             new Int32List.fromList([
-              material.pbrMetallicRoughness.baseColorTexture.texture.textureId
+              material.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture
             ]));
       }
 
@@ -431,7 +456,7 @@ class GLTFRenderer {
             ShaderVariableType.SAMPLER_2D,
             new Int32List.fromList([
               material.pbrMetallicRoughness.metallicRoughnessTexture.texture
-                  .textureId
+                  .textureId + skipTexture
             ]));
       }
 
@@ -478,9 +503,15 @@ class GLTFRenderer {
             roughnessMask
           ]));
 
-      // Todo (jpu) :
-      //setUnifrom(program,'u_ScaleIBLAmbient',ShaderVariableType.FLOAT_VEC4, new Float32List.fromList([1.0, 1.0, 1.0, 1.0]));
-
+      double diffuseIBLAmbient = 1.0;
+      double specularIBLAmbient = 1.0;
+      setUnifrom(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
+          new Float32List.fromList([
+            diffuseIBLAmbient,
+            specularIBLAmbient,
+            1.0,
+            1.0
+          ]));
     }
     return program;
   }
@@ -640,6 +671,7 @@ class GLTFRenderer {
     bool transpose = false;
 
     switch (componentType) {
+      case ShaderVariableType.SAMPLER_CUBE:
       case ShaderVariableType.SAMPLER_2D:
         gl.uniform1i(uniformLocation, (data as Int32List)[0]);
         break;
@@ -688,9 +720,9 @@ class GLTFRenderer {
     String shaderDefines = "";
     if (shaderSource.shaderType == 'kronos_gltf_pbr_test') {
       shaderDefines = definesToString(defines);
-      if (globalState.hasLODExtension != null) {
-        shaderDefines += '#define USE_TEX_LOD 1\n';
-      }
+//      if (globalState.hasLODExtension != null) {
+//        shaderDefines += '#define USE_TEX_LOD 1\n';
+//      }
     }
     webgl.Shader vertexShader = createShader(
         ShaderType.VERTEX_SHADER, globalState.vertSource, shaderDefines);

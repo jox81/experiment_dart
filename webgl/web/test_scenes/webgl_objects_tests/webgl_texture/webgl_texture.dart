@@ -20,7 +20,7 @@ class WebglTest {
 
   Future setup() async {
 //    print('//////////////////////////////////////////////////////////////////');
-//    await textureCubeMap();
+    await textureCubeMap();
 //    await testModifTexture();
 //    await testModifTextureInOtherUnit();
 //    await testModifTextureInOtherUnitViaTexture();
@@ -30,10 +30,15 @@ class WebglTest {
     print('@ Test de loading d\'un cubemap');
 
     List<ImageElement> cubeMapImages =
-        await TextureUtils.loadCubeMapImages('kitchen');
+        await TextureUtils.loadCubeMapImages('kitchen', webPath: '../../../');
     WebGLTexture cubeMapTexture =
         TextureUtils.createCubeMapWithImages(cubeMapImages);
     glWrapper.activeTexture.textureCubeMap.bind(cubeMapTexture);
+
+    glWrapper.activeTexture.logActiveTextureInfo();
+
+    gl.activeTexture(TextureUnit.TEXTURE5);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTexture.webGLTexture);
 
     glWrapper.activeTexture.logActiveTextureInfo();
   }
