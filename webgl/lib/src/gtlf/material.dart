@@ -5,7 +5,11 @@ import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
-class GLTFMaterial extends GLTFChildOfRootProperty {
+class GLTFDefaultMaterial{
+
+}
+
+class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   glTF.Material _gltfSource;
   glTF.Material get gltfSource => _gltfSource;
 
@@ -23,7 +27,7 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
   final double alphaCutoff;
   final bool doubleSided;
 
-  GLTFMaterial._(this._gltfSource, [String name])
+  GLTFPBRMaterial._(this._gltfSource, [String name])
       : this.pbrMetallicRoughness = new GLTFPbrMetallicRoughness.fromGltf(
       _gltfSource.pbrMetallicRoughness),
         this.normalTexture = _gltfSource.normalTexture != null
@@ -42,7 +46,7 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
         this.doubleSided = _gltfSource.doubleSided,
         super(_gltfSource.name);
 
-  GLTFMaterial(
+  GLTFPBRMaterial(
       this.pbrMetallicRoughness,
       this.normalTexture,
       this.occlusionTexture,
@@ -53,9 +57,9 @@ class GLTFMaterial extends GLTFChildOfRootProperty {
       this.doubleSided, [String name]):
         super(name);
 
-  factory GLTFMaterial.fromGltf(glTF.Material gltfSource) {
+  factory GLTFPBRMaterial.fromGltf(glTF.Material gltfSource) {
     if (gltfSource == null) return null;
-    return new GLTFMaterial._(gltfSource);
+    return new GLTFPBRMaterial._(gltfSource);
   }
 
   @override

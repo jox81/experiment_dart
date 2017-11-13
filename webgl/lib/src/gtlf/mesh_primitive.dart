@@ -32,7 +32,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   int _materialId;
   int get materialId => _materialId;
-  GLTFMaterial get material => _materialId != null ? gltfProject.materials[_materialId] : null;
+  GLTFPBRMaterial get material => _materialId != null ? gltfProject.materials[_materialId] : null;
 
   // Todo (jpu) : add other members ?
 //  int get count => _count;
@@ -73,7 +73,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
     //material
     if(gltfSource.material != null) {
-      GLTFMaterial material = gltfProject.materials.firstWhere((m)=>m.gltfSource == gltfSource.material, orElse: ()=> throw new Exception('Mesh material can only be bound to an existing project material'));
+      GLTFPBRMaterial material = gltfProject.materials.firstWhere((m)=>m.gltfSource == gltfSource.material, orElse: ()=> throw new Exception('Mesh material can only be bound to an existing project material'));
       meshPrimitive._materialId = material.materialId;
     }
     return meshPrimitive;

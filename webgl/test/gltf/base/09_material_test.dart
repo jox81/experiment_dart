@@ -17,7 +17,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      List<GLTFMaterial> materials = gltf.materials;
+      List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 0);
     });
     test("Array length", () async {
@@ -26,7 +26,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      List<GLTFMaterial> materials = gltf.materials;
+      List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 1);
     });
     test("base properties", () async {
@@ -35,7 +35,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      GLTFMaterial material = gltf.materials[0];
+      GLTFPBRMaterial material = gltf.materials[0];
       expect(material.emissiveFactor, <double>[0.0, 1.0, 0.0]);
       expect(material.alphaMode, "MASK");
       expect(material.alphaCutoff, 0.4);
@@ -47,7 +47,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      GLTFMaterial material = gltf.materials[0];
+      GLTFPBRMaterial material = gltf.materials[0];
 
       expect(material.pbrMetallicRoughness, isNotNull);
       GLTFPbrMetallicRoughness metallicRoughness = material.pbrMetallicRoughness;
@@ -69,7 +69,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      GLTFMaterial material = gltf.materials[0];
+      GLTFPBRMaterial material = gltf.materials[0];
 
       expect(material.normalTexture, isNotNull);
       GLTFNormalTextureInfo normalTexture = material.normalTexture;
@@ -82,7 +82,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      GLTFMaterial material = gltf.materials[0];
+      GLTFPBRMaterial material = gltf.materials[0];
 
       expect(material.occlusionTexture, isNotNull);
       GLTFOcclusionTextureInfo occlusionTexture = material.occlusionTexture;
@@ -95,7 +95,7 @@ Future main() async {
           useWebPath: true);
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
-      GLTFMaterial material = gltf.materials[0];
+      GLTFPBRMaterial material = gltf.materials[0];
 
       expect(material.emissiveTexture, isNotNull);
       GLTFTextureInfo emissiveTexture = material.emissiveTexture;

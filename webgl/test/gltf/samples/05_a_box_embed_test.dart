@@ -171,7 +171,7 @@ Future main() async {
     test("materials", () async {
       expect(gltfProject.materials.length, 1);
 
-      GLTFMaterial material0 = gltfProject.materials[0];
+      GLTFPBRMaterial material0 = gltfProject.materials[0];
       expect(material0, isNotNull);
       expect(material0.materialId, 0);
       expect(material0.name, 'Red');

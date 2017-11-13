@@ -11,7 +11,6 @@ uniform mat3 uNormalMatrix;
 //user supplied light position
 uniform vec3 uLightPos;
 
-
 varying vec3 ecPosition;  //vertex position in the eye coordinates (view space)
 varying vec3 ecNormal;    //normal in the eye coordinates (view space)
 varying vec3 ecLightPos;  //light position in the eye coordinates (view space)

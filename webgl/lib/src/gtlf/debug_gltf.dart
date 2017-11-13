@@ -189,7 +189,7 @@ void _testMaterials() {
     print('material counts : ${_gltf.materials.length}');
     for (int i = 0; i < _gltf.materials.length; i++) {
       print('> $i');
-      GLTFMaterial material = _gltf.materials[i];
+      GLTFPBRMaterial material = _gltf.materials[i];
       print('$material');
     }
     print('');

@@ -26,28 +26,26 @@ import 'dart:convert' show BASE64;
 // Uint8List = Byte
 // Uint16List = SCALAR : int
 
+webgl.RenderingContext gl;
+
+// Direction from where the light is coming to origin
+Vector3 lightDirection = new Vector3(1.0, -1.0, -1.0);
+Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
+GLTFCameraPerspective get mainCamera => Context.Context.mainCamera;
+
+int skipTexture;
+
 class GLTFRenderer {
   GLTFProject gltf;
   GLTFScene get activeScene => gltf.scenes[0];
 
-  webgl.RenderingContext gl;
-  GlobalState globalState;
-
   Interaction interaction;
-  GLTFCameraPerspective get mainCamera => Context.Context.mainCamera;
-  Matrix4 get viewMatrix => mainCamera.viewMatrix;
-  Matrix4 get projectionMatrix => mainCamera.projectionMatrix;
-  Matrix4 modelMatrix;
-
-  // Direction from where the light is coming to origin
-  Vector3 lightDirection = new Vector3(1.0, -1.0, -1.0);
-  Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
 
   WebGLTexture cubeMapTextureDiffuse, cubeMapTextureSpecular;
-  int skipTexture;
 
   GLTFRenderer(this.gltf) {
     debug.logCurrentFunction();
+
     try {
       CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
       gl = canvas.getContext("experimental-webgl") as webgl.RenderingContext;
@@ -65,6 +63,7 @@ class GLTFRenderer {
 
   Future render() async {
     debug.logCurrentFunction();
+
     await ShaderSource.loadShaders();
     await _initTextures();
 
@@ -224,7 +223,7 @@ class GLTFRenderer {
 
     webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
 
-    globalState = new GlobalState()
+    GlobalState globalState = new GlobalState()
 //      ..uniforms = {} // in initProgram
 //      ..attributes = {}
 //      ..vertSource = ''
@@ -240,24 +239,40 @@ class GLTFRenderer {
 
   void draw() {
     debug.logCurrentFunction();
+
+    setupGLState();
+
+    void drawNodes(List<GLTFNode> nodes) {
+      debug.logCurrentFunction();
+      for (var i = 0; i < nodes.length; i++) {
+        GLTFNode node = nodes[i];
+        if (node.mesh != null) {
+
+          new ProgramSetup(node);
+        }
+        drawNodes(node.children);
+      }
+    }
+
+    drawNodes(activeScene.nodes);
+  }
+
+  void setupGLState() {
+    debug.logCurrentFunction();
+
     gl.enable(webgl.DEPTH_TEST);
     gl.clearColor(.2, 0.2, 0.2, 1.0);
     gl.clear(
         ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
     gl.frontFace(FrontFaceDirection.CCW);
 
-//    // Enable depth test
+    //Enable depth test
 
     gl.depthFunc(webgl.LESS);
-//    gl.enable(webgl.BLEND);
+    //gl.enable(webgl.BLEND);
     gl.disable(webgl.CULL_FACE);
-//
+    //
     gl.cullFace(FacingType.FRONT);
-
-
-    //draw
-    List<GLTFNode> nodes = activeScene.nodes;
-    drawNodes(nodes);
   }
 
   void setupCameras() {
@@ -313,464 +328,6 @@ class GLTFRenderer {
     GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
     camera.position = node.translation;
   }
-
-  webgl.Program setupProgram(GLTFMeshPrimitive primitive, Matrix4 nodeTransform) {
-    debug.logCurrentFunction();
-
-    GLTFMaterial material = gltf.materials.length > 0
-        ? primitive.material
-        : null;
-    GLTFMaterial pbrMaterial;
-    ShaderSource shaderSource;
-    bool debugWithDefault = true;
-    if (material == null || debugWithDefault) {
-      shaderSource = ShaderSource.sources['kronos_gltf_default'];
-    } else {
-      pbrMaterial = material;
-      shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
-    }
-
-    Map<String, bool> defines = new Map();
-    if (pbrMaterial != null) {
-      defines['USE_IBL'] = true; // Todo (jpu) :
-      defines['USE_TEX_LOD'] = false; // Todo (jpu) :
-
-      //primitives infos
-      defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] !=
-          null;
-      defines['HAS_TANGENTS'] = primitive.attributes['TANGENT'] != null;
-      defines['HAS_UV'] = primitive.attributes['TEXCOORD_0'] != null;
-
-      //Material base infos
-      defines['HAS_NORMALMAP'] = pbrMaterial.normalTexture != null;
-      defines['HAS_EMISSIVEMAP'] = pbrMaterial.emissiveTexture != null;
-      defines['HAS_OCCLUSIONMAP'] = pbrMaterial.occlusionTexture != null;
-
-      //Material pbr infos
-      defines['HAS_BASECOLORMAP'] =
-          pbrMaterial.pbrMetallicRoughness.baseColorTexture != null;
-      defines['HAS_METALROUGHNESSMAP'] =
-          pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture != null;
-
-      //debug jpu
-      defines['DEBUG_VS'] = false;
-      defines['DEBUG_FS'] = false;
-    }
-
-    webgl.Program program = initProgram(shaderSource, defines);
-    gl.useProgram(program);
-
-//    bool forceTwoSided = true;
-//    if (material != null && material.doubleSided || forceTwoSided) {
-//      gl.disable(webgl.CULL_FACE); //Two sided
-//    } else {
-//      gl.enable(webgl.CULL_FACE);
-//    }
-
-    //uniform
-    modelMatrix = nodeTransform;
-    setUnifrom(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        nodeTransform.storage);
-    setUnifrom(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
-        viewMatrix.storage);
-    setUnifrom(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
-        projectionMatrix.storage);
-
-    debug.logCurrentFunction(
-        'u_ViewMatrix pos : ${viewMatrix.getTranslation()}');
-    debug.logCurrentFunction('mainCamera pos : ${mainCamera.position}');
-    debug.logCurrentFunction(
-        'mainCamera target pos : ${mainCamera.targetPosition}');
-    debug.logCurrentFunction(
-        'mainCamera target pos : ${mainCamera.viewProjectionMatrix.getTranslation()}');
-
-    if (pbrMaterial != null) {
-      setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
-          ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
-
-      // > camera
-      setUnifrom(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
-          mainCamera.position.storage);
-
-      // > Light
-      setUnifrom(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
-          lightDirection.storage);
-
-      setUnifrom(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
-          (lightColor * 2.0).storage);
-
-      // > Material base
-
-      if (defines['USE_IBL']) {
-        setUnifrom(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0]));
-        setUnifrom(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-            new Int32List.fromList([1]));
-        setUnifrom(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-            new Int32List.fromList([2]));
-      }
-
-      if (defines['HAS_NORMALMAP']) {
-        setUnifrom(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([material.normalTexture.texture.textureId + skipTexture]));
-        double normalScale = material.normalTexture.scale != null
-            ? material.normalTexture.scale
-            : 1.0;
-        setUnifrom(program, 'u_NormalScale', ShaderVariableType.FLOAT,
-            new Float32List.fromList([normalScale]));
-      }
-
-      if (defines['HAS_EMISSIVEMAP']) {
-        setUnifrom(
-            program,
-            'u_EmissiveSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList(
-                [material.emissiveTexture.texture.textureId + skipTexture]));
-        setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
-            new Float32List.fromList(material.emissiveFactor));
-      }
-
-      if (defines['HAS_OCCLUSIONMAP']) {
-        setUnifrom(
-            program,
-            'u_OcclusionSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList(
-                [material.occlusionTexture.texture.textureId + skipTexture]));
-        double occlusionStrength = material.occlusionTexture.strength != null
-            ? material.occlusionTexture.strength
-            : 1.0;
-        setUnifrom(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
-            new Float32List.fromList([occlusionStrength]));
-      }
-
-      // > Material pbr
-
-      if (defines['HAS_BASECOLORMAP']) {
-        setUnifrom(
-            program,
-            'u_BaseColorSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([
-              material.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture
-            ]));
-      }
-
-      if (defines['HAS_METALROUGHNESSMAP']) {
-        setUnifrom(
-            program,
-            'u_MetallicRoughnessSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([
-              material.pbrMetallicRoughness.metallicRoughnessTexture.texture
-                  .textureId + skipTexture
-            ]));
-      }
-
-      double roughness = material.pbrMetallicRoughness.roughnessFactor;
-      double metallic = material.pbrMetallicRoughness.metallicFactor;
-      setUnifrom(
-          program,
-          'u_MetallicRoughnessValues',
-          ShaderVariableType.FLOAT_VEC2,
-          new Float32List.fromList([metallic, roughness]));
-
-      setUnifrom(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
-          material.pbrMetallicRoughness.baseColorFactor);
-
-      // > Debug values => see in pbr fragment shader
-
-      double specularReflectionMask = 0.0;
-      double geometricOcclusionMask = 0.0;
-      double microfacetDistributionMask = 0.0;
-      double specularContributionMask = 0.0;
-      setUnifrom(
-          program,
-          'u_ScaleFGDSpec',
-          ShaderVariableType.FLOAT_VEC4,
-          new Float32List.fromList([
-            specularReflectionMask,
-            geometricOcclusionMask,
-            microfacetDistributionMask,
-            specularContributionMask
-          ]));
-
-      double diffuseContributionMask = 0.0;
-      double colorMask = 0.0;
-      double metallicMask = 0.0;
-      double roughnessMask = 0.0;
-      setUnifrom(
-          program,
-          'u_ScaleDiffBaseMR',
-          ShaderVariableType.FLOAT_VEC4,
-          new Float32List.fromList([
-            diffuseContributionMask,
-            colorMask,
-            metallicMask,
-            roughnessMask
-          ]));
-
-      double diffuseIBLAmbient = 1.0;
-      double specularIBLAmbient = 1.0;
-      setUnifrom(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
-          new Float32List.fromList([
-            diffuseIBLAmbient,
-            specularIBLAmbient,
-            1.0,
-            1.0
-          ]));
-    }
-    return program;
-  }
-
-  void drawNodes(List<GLTFNode> nodes) {
-    debug.logCurrentFunction();
-    for (var i = 0; i < nodes.length; i++) {
-      GLTFNode node = nodes[i];
-      if (node.mesh != null) {
-        GLTFMeshPrimitive primitive = node.mesh.primitives[0];
-        webgl.Program program = setupProgram(primitive, node.matrix);
-        setupNodeMesh(program, node);
-        drawNodeMesh(program, primitive);
-      }
-      drawNodes(node.children);
-    }
-  }
-
-  void setupNodeMesh(webgl.Program program, GLTFNode node) {
-    debug.logCurrentFunction();
-
-    GLTFMeshPrimitive primitive = node.mesh.primitives[0];
-
-    //bind
-    for (String attributName in primitive.attributes.keys) {
-      bindVertexArrayData(
-          program, attributName, primitive.attributes[attributName]);
-    }
-    if (primitive.indices != null) {
-      bindIndices(primitive.indices);
-    }
-  }
-
-  void drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
-    debug.logCurrentFunction();
-
-    if (primitive.indices == null) {
-      String attributName = 'POSITION';
-      GLTFAccessor accessorPosition = primitive.attributes[attributName];
-      gl.drawArrays(
-          primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
-    } else {
-      GLTFAccessor accessorIndices = primitive.indices;
-      debug.logCurrentFunction(
-          'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
-      gl.drawElements(primitive.mode, accessorIndices.count,
-          accessorIndices.componentType, accessorIndices.byteOffset);
-    }
-  }
-
-  void bindVertexArrayData(
-      webgl.Program program, String attributName, GLTFAccessor accessor) {
-    GLTFBuffer bufferData = accessor.bufferView.buffer;
-    Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
-        accessor.byteOffset + accessor.bufferView.byteOffset,
-        accessor.count * (accessor.byteStride ~/ accessor.componentLength));
-
-    //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
-    assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
-            accessor.componentLength ==
-        0);
-
-    //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
-    assert(accessor.byteOffset +
-            accessor.byteStride * (accessor.count - 1) +
-            (accessor.components * accessor.componentLength) <=
-        accessor.bufferView.byteLength);
-
-    debug.logCurrentFunction('$attributName');
-    debug.logCurrentFunction(verticesInfos.toString());
-
-    //>
-    initBuffer(accessor.bufferView.usage, verticesInfos);
-    //>
-    setAttribut(program, attributName, accessor);
-  }
-
-  /// BufferType bufferType
-  void initBuffer(int bufferType, TypedData data) {
-    debug.logCurrentFunction();
-
-    webgl.Buffer buffer =
-        gl.createBuffer(); // Todo (jpu) : Should re-use the created buffer
-    gl.bindBuffer(bufferType, buffer);
-    gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
-  }
-
-  /// [componentCount] => ex : 3 (x, y, z)
-  void setAttribut(
-      webgl.Program program, String attributName, GLTFAccessor accessor) {
-    debug.logCurrentFunction('$attributName');
-
-    String shaderAttributName;
-    if (attributName == 'TEXCOORD_0') {
-      shaderAttributName = 'a_UV';
-    } else {
-      shaderAttributName = 'a_${capitalize(attributName)}';
-    }
-
-    //>
-    int attributLocation = gl.getAttribLocation(program, shaderAttributName);
-
-    //if exist
-    if (attributLocation >= 0) {
-      int components = accessor.components;
-
-      /// ShaderVariableType componentType
-      int componentType = accessor.componentType;
-      bool normalized = accessor.normalized;
-
-      // how many bytes to move to the next vertex
-      // 0 = use the correct stride for type and numComponents
-      int stride = accessor.byteStride;
-
-      // start at the beginning of the buffer that contains the sent data in the initBuffer.
-      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
-      int offset = 0;
-
-      debug.logCurrentFunction(
-          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
-      debug.logCurrentFunction('$accessor');
-
-      //>
-      gl.vertexAttribPointer(attributLocation, components, componentType,
-          normalized, stride, offset);
-      gl.enableVertexAttribArray(
-          attributLocation); // turn on getting data out of a buffer for this attribute
-    }
-  }
-
-  void bindIndices(GLTFAccessor accessorIndices) {
-    debug.logCurrentFunction();
-
-    Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
-        .asUint16List(
-            accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
-            accessorIndices.count);
-    debug.logCurrentFunction(indices.toString());
-
-    initBuffer(accessorIndices.bufferView.usage, indices);
-  }
-
-  /// ShaderVariableType componentType
-  void setUnifrom(webgl.Program program, String uniformName, int componentType,
-      TypedData data) {
-    debug.logCurrentFunction(uniformName);
-
-    webgl.UniformLocation uniformLocation =
-        gl.getUniformLocation(program, uniformName);
-
-    bool transpose = false;
-
-    switch (componentType) {
-      case ShaderVariableType.SAMPLER_CUBE:
-      case ShaderVariableType.SAMPLER_2D:
-        gl.uniform1i(uniformLocation, (data as Int32List)[0]);
-        break;
-      case ShaderVariableType.FLOAT:
-        gl.uniform1f(uniformLocation, (data as Float32List)[0]);
-        break;
-      case ShaderVariableType.FLOAT_VEC2:
-        gl.uniform2fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_VEC3:
-        gl.uniform3fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_VEC4:
-        gl.uniform4fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_MAT4:
-        gl.uniformMatrix4fv(uniformLocation, transpose, data);
-        break;
-      default:
-        throw new Exception(
-            'renderer setUnifrom exception : Trying to set a uniform for a not defined component type');
-        break;
-    }
-  }
-
-  webgl.Program initProgram(
-      ShaderSource shaderSource, Map<String, bool> defines) {
-    debug.logCurrentFunction();
-
-    globalState
-      ..vertSource = shaderSource.vsCode
-      ..fragSource = shaderSource.fsCode;
-
-    String definesToString(Map<String, bool> defines) {
-      String outStr = '';
-      for (String def in defines.keys) {
-        if (defines[def]) {
-          outStr += '#define $def ${defines[def]}\n';
-        }
-      }
-      return outStr;
-    }
-
-    ;
-
-    String shaderDefines = "";
-    if (shaderSource.shaderType == 'kronos_gltf_pbr_test') {
-      shaderDefines = definesToString(defines);
-//      if (globalState.hasLODExtension != null) {
-//        shaderDefines += '#define USE_TEX_LOD 1\n';
-//      }
-    }
-    webgl.Shader vertexShader = createShader(
-        ShaderType.VERTEX_SHADER, globalState.vertSource, shaderDefines);
-    webgl.Shader fragmentShader = createShader(
-        ShaderType.FRAGMENT_SHADER, globalState.fragSource, shaderDefines);
-
-    webgl.Program program = gl.createProgram();
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS)
-            as bool ==
-        false) {
-      throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
-    }
-    gl.validateProgram(program);
-    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS)
-            as bool ==
-        false) {
-      throw "Could not validate program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
-    }
-
-    return program;
-  }
-
-  /// ShaderType type
-  webgl.Shader createShader(
-      int type, String shaderSource, String shaderDefines) {
-    debug.logCurrentFunction();
-
-    webgl.Shader shader = gl.createShader(type);
-    gl.shaderSource(shader, shaderDefines + shaderSource);
-    gl.compileShader(shader);
-    bool compiled =
-        gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS) as bool;
-    if (!compiled) {
-      String compilationLog = gl.getShaderInfoLog(shader);
-      throw "Could not compile $type shader:\n\n $compilationLog}";
-    }
-
-    return shader;
-  }
-
-  //text utils
-  String capitalize(String s) =>
-      s[0].toUpperCase() + s.substring(1).toLowerCase();
 
   void update() {
     debug.logCurrentFunction();
@@ -948,4 +505,474 @@ class GLTFRenderer {
             accessor.byteOffset, accessor.count * accessor.components);
     return keyValues;
   }
+}
+
+class ProgramSetup{
+
+  final GLTFNode _node;
+
+  Matrix4 get _modelMatrix => _node.matrix;
+  Matrix4 get _viewMatrix => mainCamera.viewMatrix;
+  Matrix4 get _projectionMatrix => mainCamera.projectionMatrix;
+
+  ProgramSetup(this._node){
+    _setupProgram();
+  }
+
+  void _setupProgram() {
+    debug.logCurrentFunction();
+
+    GLTFMeshPrimitive primitive = _node.mesh.primitives[0];
+
+    GLTFDefaultMaterial defaultMaterial;
+    GLTFPBRMaterial pbrMaterial;
+    ShaderSource shaderSource;
+
+    bool debugWithDefault = false;
+    if (primitive.material == null || debugWithDefault) {
+      defaultMaterial = new GLTFDefaultMaterial();
+      shaderSource = ShaderSource.sources['kronos_gltf_default'];
+    } else {
+      pbrMaterial = primitive.material;
+      shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
+    }
+
+    String definesToString(Map<String, bool> defines) {
+      String outStr = '';
+      if(defines == null) return outStr;
+
+      for (String def in defines.keys) {
+        if (defines[def]) {
+          outStr += '#define $def ${defines[def]}\n';
+        }
+      }
+      return outStr;
+    };
+
+    Map<String, bool> defines;
+    if (pbrMaterial != null) {
+      defines = _getKronosPBRDefines(primitive, pbrMaterial);
+    }else{
+//      defines = getKronosDefaultDefines(primitive);
+    }
+
+    String shaderDefines = definesToString(defines);
+//      if (globalState.hasLODExtension != null) {
+//        shaderDefines += '#define USE_TEX_LOD 1\n';
+//      }
+
+    webgl.Program program = _initProgram(shaderDefines + shaderSource.vsCode, shaderDefines + shaderSource.fsCode);
+    gl.useProgram(program);
+
+//    bool forceTwoSided = true;
+//    if (material != null && material.doubleSided || forceTwoSided) {
+//      gl.disable(webgl.CULL_FACE); //Two sided
+//    } else {
+//      gl.enable(webgl.CULL_FACE);
+//    }
+
+    _setProgramUniforms(program, pbrMaterial, defines);
+    _setupNodeMesh(program);
+    _drawNodeMesh(program, primitive);
+  }
+
+  Map<String, bool> _getKronosPBRDefines(GLTFMeshPrimitive primitive, GLTFPBRMaterial pbrMaterial) {
+
+    Map<String, bool> defines = new Map();
+
+    defines['USE_IBL'] = true; // Todo (jpu) :
+    defines['USE_TEX_LOD'] = false; // Todo (jpu) :
+
+    //primitives infos
+    defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] !=
+        null;
+    defines['HAS_TANGENTS'] = primitive.attributes['TANGENT'] != null;
+    defines['HAS_UV'] = primitive.attributes['TEXCOORD_0'] != null;
+
+    //Material base infos
+    defines['HAS_NORMALMAP'] = pbrMaterial.normalTexture != null;
+    defines['HAS_EMISSIVEMAP'] = pbrMaterial.emissiveTexture != null;
+    defines['HAS_OCCLUSIONMAP'] = pbrMaterial.occlusionTexture != null;
+
+    //Material pbr infos
+    defines['HAS_BASECOLORMAP'] =
+        pbrMaterial.pbrMetallicRoughness.baseColorTexture != null;
+    defines['HAS_METALROUGHNESSMAP'] =
+        pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture != null;
+
+    //debug jpu
+    defines['DEBUG_VS'] = false;
+    defines['DEBUG_FS'] = false;
+
+    return defines;
+  }
+
+  webgl.Program _initProgram(String vsSource, String fsSource) {
+    debug.logCurrentFunction();
+
+    /// ShaderType type
+    webgl.Shader createShader(
+        int shaderType, String shaderSource) {
+      debug.logCurrentFunction();
+
+      webgl.Shader shader = gl.createShader(shaderType);
+      gl.shaderSource(shader, shaderSource);
+      gl.compileShader(shader);
+      bool compiled =
+      gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS) as bool;
+      if (!compiled) {
+        String compilationLog = gl.getShaderInfoLog(shader);
+        throw "Could not compile $shaderType shader:\n\n $compilationLog}";
+      }
+
+      return shader;
+    }
+
+    webgl.Shader vertexShader = createShader(
+        ShaderType.VERTEX_SHADER, vsSource);
+    webgl.Shader fragmentShader = createShader(
+        ShaderType.FRAGMENT_SHADER, fsSource);
+
+    webgl.Program program = gl.createProgram();
+
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+    gl.linkProgram(program);
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS)
+    as bool ==
+        false) {
+      throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
+    }
+    gl.validateProgram(program);
+    if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS)
+    as bool ==
+        false) {
+      throw "Could not validate program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
+    }
+
+    return program;
+  }
+
+  void _setProgramUniforms(webgl.Program program, GLTFPBRMaterial pbrMaterial, Map<String, bool> defines) {
+    _setUnifrom(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+        _modelMatrix.storage);
+    _setUnifrom(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+        _viewMatrix.storage);
+    _setUnifrom(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+        _projectionMatrix.storage);
+
+    debug.logCurrentFunction(
+        'u_ViewMatrix pos : ${_viewMatrix.getTranslation()}');
+    debug.logCurrentFunction('mainCamera pos : ${mainCamera.position}');
+    debug.logCurrentFunction(
+        'mainCamera target pos : ${mainCamera.targetPosition}');
+    debug.logCurrentFunction(
+        'mainCamera target pos : ${mainCamera.viewProjectionMatrix.getTranslation()}');
+
+    if (pbrMaterial != null) {
+
+
+      _setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
+          ((_projectionMatrix * _viewMatrix * _modelMatrix) as Matrix4).storage);
+
+      // > camera
+      _setUnifrom(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
+          mainCamera.position.storage);
+
+      // > Light
+      _setUnifrom(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
+          lightDirection.storage);
+
+      _setUnifrom(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
+          (lightColor * 2.0).storage);
+
+      // > Material base
+
+      if (defines['USE_IBL']) {
+        _setUnifrom(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([0]));
+        _setUnifrom(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+            new Int32List.fromList([1]));
+        _setUnifrom(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+            new Int32List.fromList([2]));
+      }
+
+      if (defines['HAS_NORMALMAP']) {
+        _setUnifrom(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([pbrMaterial.normalTexture.texture.textureId + skipTexture]));
+        double normalScale = pbrMaterial.normalTexture.scale != null
+            ? pbrMaterial.normalTexture.scale
+            : 1.0;
+        _setUnifrom(program, 'u_NormalScale', ShaderVariableType.FLOAT,
+            new Float32List.fromList([normalScale]));
+      }
+
+      if (defines['HAS_EMISSIVEMAP']) {
+        _setUnifrom(
+            program,
+            'u_EmissiveSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList(
+                [pbrMaterial.emissiveTexture.texture.textureId + skipTexture]));
+        _setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
+            new Float32List.fromList(pbrMaterial.emissiveFactor));
+      }
+
+      if (defines['HAS_OCCLUSIONMAP']) {
+        _setUnifrom(
+            program,
+            'u_OcclusionSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList(
+                [pbrMaterial.occlusionTexture.texture.textureId + skipTexture]));
+        double occlusionStrength = pbrMaterial.occlusionTexture.strength != null
+            ? pbrMaterial.occlusionTexture.strength
+            : 1.0;
+        _setUnifrom(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
+            new Float32List.fromList([occlusionStrength]));
+      }
+
+      // > Material pbr
+
+      if (defines['HAS_BASECOLORMAP']) {
+        _setUnifrom(
+            program,
+            'u_BaseColorSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([
+              pbrMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture
+            ]));
+      }
+
+      if (defines['HAS_METALROUGHNESSMAP']) {
+        _setUnifrom(
+            program,
+            'u_MetallicRoughnessSampler',
+            ShaderVariableType.SAMPLER_2D,
+            new Int32List.fromList([
+              pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
+                  .textureId + skipTexture
+            ]));
+      }
+
+      double roughness = pbrMaterial.pbrMetallicRoughness.roughnessFactor;
+      double metallic = pbrMaterial.pbrMetallicRoughness.metallicFactor;
+      _setUnifrom(
+          program,
+          'u_MetallicRoughnessValues',
+          ShaderVariableType.FLOAT_VEC2,
+          new Float32List.fromList([metallic, roughness]));
+
+      _setUnifrom(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
+          pbrMaterial.pbrMetallicRoughness.baseColorFactor);
+
+      // > Debug values => see in pbr fragment shader
+
+      double specularReflectionMask = 0.0;
+      double geometricOcclusionMask = 0.0;
+      double microfacetDistributionMask = 0.0;
+      double specularContributionMask = 0.0;
+      _setUnifrom(
+          program,
+          'u_ScaleFGDSpec',
+          ShaderVariableType.FLOAT_VEC4,
+          new Float32List.fromList([
+            specularReflectionMask,
+            geometricOcclusionMask,
+            microfacetDistributionMask,
+            specularContributionMask
+          ]));
+
+      double diffuseContributionMask = 0.0;
+      double colorMask = 0.0;
+      double metallicMask = 0.0;
+      double roughnessMask = 0.0;
+      _setUnifrom(
+          program,
+          'u_ScaleDiffBaseMR',
+          ShaderVariableType.FLOAT_VEC4,
+          new Float32List.fromList([
+            diffuseContributionMask,
+            colorMask,
+            metallicMask,
+            roughnessMask
+          ]));
+
+      double diffuseIBLAmbient = 1.0;
+      double specularIBLAmbient = 1.0;
+      _setUnifrom(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
+          new Float32List.fromList([
+            diffuseIBLAmbient,
+            specularIBLAmbient,
+            1.0,
+            1.0
+          ]));
+    }
+  }
+
+  /// ShaderVariableType componentType
+  void _setUnifrom(webgl.Program program, String uniformName, int componentType,
+      TypedData data) {
+    debug.logCurrentFunction(uniformName);
+
+    webgl.UniformLocation uniformLocation =
+    gl.getUniformLocation(program, uniformName);
+
+    bool transpose = false;
+
+    switch (componentType) {
+      case ShaderVariableType.SAMPLER_CUBE:
+      case ShaderVariableType.SAMPLER_2D:
+        gl.uniform1i(uniformLocation, (data as Int32List)[0]);
+        break;
+      case ShaderVariableType.FLOAT:
+        gl.uniform1f(uniformLocation, (data as Float32List)[0]);
+        break;
+      case ShaderVariableType.FLOAT_VEC2:
+        gl.uniform2fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_VEC3:
+        gl.uniform3fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_VEC4:
+        gl.uniform4fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_MAT4:
+        gl.uniformMatrix4fv(uniformLocation, transpose, data);
+        break;
+      default:
+        throw new Exception(
+            'renderer setUnifrom exception : Trying to set a uniform for a not defined component type');
+        break;
+    }
+  }
+
+  void _setupNodeMesh(webgl.Program program) {
+    debug.logCurrentFunction();
+
+    GLTFMeshPrimitive primitive = _node.mesh.primitives[0];
+
+    //bind
+    for (String attributName in primitive.attributes.keys) {
+      _bindVertexArrayData(
+          program, attributName, primitive.attributes[attributName]);
+    }
+    if (primitive.indices != null) {
+      _bindIndices(primitive.indices);
+    }
+  }
+
+  void _bindIndices(GLTFAccessor accessorIndices) {
+    debug.logCurrentFunction();
+
+    Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
+        .asUint16List(
+        accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+        accessorIndices.count);
+    debug.logCurrentFunction(indices.toString());
+
+    _initBuffer(accessorIndices.bufferView.usage, indices);
+  }
+
+  /// BufferType bufferType
+  void _initBuffer(int bufferType, TypedData data) {
+    debug.logCurrentFunction();
+
+    webgl.Buffer buffer =
+    gl.createBuffer(); // Todo (jpu) : Should re-use the created buffer
+    gl.bindBuffer(bufferType, buffer);
+    gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
+  }
+
+  void _bindVertexArrayData(
+      webgl.Program program, String attributName, GLTFAccessor accessor) {
+    GLTFBuffer bufferData = accessor.bufferView.buffer;
+    Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
+        accessor.byteOffset + accessor.bufferView.byteOffset,
+        accessor.count * (accessor.byteStride ~/ accessor.componentLength));
+
+    //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
+    assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
+        accessor.componentLength ==
+        0);
+
+    //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
+    assert(accessor.byteOffset +
+        accessor.byteStride * (accessor.count - 1) +
+        (accessor.components * accessor.componentLength) <=
+        accessor.bufferView.byteLength);
+
+    debug.logCurrentFunction('$attributName');
+    debug.logCurrentFunction(verticesInfos.toString());
+
+    //>
+    _initBuffer(accessor.bufferView.usage, verticesInfos);
+    //>
+    _setAttribut(program, attributName, accessor);
+  }
+
+  /// [componentCount] => ex : 3 (x, y, z)
+  void _setAttribut(
+      webgl.Program program, String attributName, GLTFAccessor accessor) {
+    debug.logCurrentFunction('$attributName');
+
+    String shaderAttributName;
+    if (attributName == 'TEXCOORD_0') {
+      shaderAttributName = 'a_UV';
+    } else {
+      shaderAttributName = 'a_${_capitalize(attributName)}';
+    }
+
+    //>
+    int attributLocation = gl.getAttribLocation(program, shaderAttributName);
+
+    //if exist
+    if (attributLocation >= 0) {
+      int components = accessor.components;
+
+      /// ShaderVariableType componentType
+      int componentType = accessor.componentType;
+      bool normalized = accessor.normalized;
+
+      // how many bytes to move to the next vertex
+      // 0 = use the correct stride for type and numComponents
+      int stride = accessor.byteStride;
+
+      // start at the beginning of the buffer that contains the sent data in the initBuffer.
+      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+      int offset = 0;
+
+      debug.logCurrentFunction(
+          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+      debug.logCurrentFunction('$accessor');
+
+      //>
+      gl.vertexAttribPointer(attributLocation, components, componentType,
+          normalized, stride, offset);
+      gl.enableVertexAttribArray(
+          attributLocation); // turn on getting data out of a buffer for this attribute
+    }
+  }
+
+  void _drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
+    debug.logCurrentFunction();
+
+    if (primitive.indices == null) {
+      String attributName = 'POSITION';
+      GLTFAccessor accessorPosition = primitive.attributes[attributName];
+      gl.drawArrays(
+          primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
+    } else {
+      GLTFAccessor accessorIndices = primitive.indices;
+      debug.logCurrentFunction(
+          'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
+      gl.drawElements(primitive.mode, accessorIndices.count,
+          accessorIndices.componentType, accessorIndices.byteOffset);
+    }
+  }
+
+  //text utils
+  String _capitalize(String s) =>
+      s[0].toUpperCase() + s.substring(1).toLowerCase();
+
 }

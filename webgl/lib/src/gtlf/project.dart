@@ -95,7 +95,7 @@ class GLTFProject {
   List<GLTFImage> images = new List();
   List<GLTFSampler> samplers = new List();
   List<GLTFTexture> textures = new List();
-  List<GLTFMaterial> materials = new List();
+  List<GLTFPBRMaterial> materials = new List();
   List<GLTFAccessor> accessors = new List();
   List<GLTFMesh> meshes = new List();
   List<GLTFAnimation> animations = new List();
@@ -184,7 +184,7 @@ class GLTFProject {
 
       //Materials
       for (glTF.Material gltfMaterial in _gltfSource.materials) {
-        GLTFMaterial material = new GLTFMaterial.fromGltf(gltfMaterial);
+        GLTFPBRMaterial material = new GLTFPBRMaterial.fromGltf(gltfMaterial);
         if (material != null) {
           material.materialId = materials.length > 0 ? materials.last.materialId + 1 : 0;
           materials.add(material);

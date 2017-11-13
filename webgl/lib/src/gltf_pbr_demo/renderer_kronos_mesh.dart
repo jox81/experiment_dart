@@ -51,7 +51,7 @@ class KronosMesh {
   String fragSource;
   int sRGBifAvailable; // Todo (jpu) : what if not available
 
-  GLTFMaterial material;
+  GLTFPBRMaterial material;
 
   int accessorsLoading;
 
