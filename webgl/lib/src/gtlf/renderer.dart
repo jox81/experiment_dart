@@ -28,6 +28,8 @@ import 'dart:convert' show BASE64;
 
 webgl.RenderingContext gl;
 
+GlobalState globalState;
+
 // Direction from where the light is coming to origin
 Vector3 lightDirection = new Vector3(1.0, -1.0, -1.0);
 Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
@@ -45,6 +47,11 @@ class GLTFRenderer {
 
   GLTFRenderer(this.gltf) {
     debug.logCurrentFunction();
+    _initContext();
+  }
+
+  void _initContext() {
+    debug.logCurrentFunction();
 
     try {
       CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
@@ -58,6 +65,9 @@ class GLTFRenderer {
 
     //>
     Context.gl = gl;
+
+
+
     interaction = new Interaction();
   }
 
@@ -66,8 +76,20 @@ class GLTFRenderer {
 
     await ShaderSource.loadShaders();
     await _initTextures();
+    setupCameras();
 
-    _init();
+    //> Init extensions
+    //This activate extensions
+    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
+    globalState = new GlobalState()
+      ..scene = null
+      ..hasLODExtension =
+      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
+      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
+      as webgl.OesStandardDerivatives
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+
     _render();
   }
 
@@ -218,25 +240,6 @@ class GLTFRenderer {
     });
   }
 
-  void _init() {
-    setupCameras();
-
-    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
-
-    GlobalState globalState = new GlobalState()
-//      ..uniforms = {} // in initProgram
-//      ..attributes = {}
-//      ..vertSource = ''
-//      ..fragSource = ''
-      ..scene = null
-      ..hasLODExtension =
-          gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
-      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
-          as webgl.OesStandardDerivatives
-      ..sRGBifAvailable =
-          hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
-  }
-
   void draw() {
     debug.logCurrentFunction();
 
@@ -248,7 +251,7 @@ class GLTFRenderer {
         GLTFNode node = nodes[i];
         if (node.mesh != null) {
 
-          new ProgramSetup(node);
+          new ProgramSetting(node);
         }
         drawNodes(node.children);
       }
@@ -507,7 +510,7 @@ class GLTFRenderer {
   }
 }
 
-class ProgramSetup{
+class ProgramSetting{
 
   final GLTFNode _node;
 
@@ -515,7 +518,8 @@ class ProgramSetup{
   Matrix4 get _viewMatrix => mainCamera.viewMatrix;
   Matrix4 get _projectionMatrix => mainCamera.projectionMatrix;
 
-  ProgramSetup(this._node){
+  ProgramSetting(this._node){
+    debug.logCurrentFunction();
     _setupProgram();
   }
 
@@ -524,44 +528,18 @@ class ProgramSetup{
 
     GLTFMeshPrimitive primitive = _node.mesh.primitives[0];
 
-    GLTFDefaultMaterial defaultMaterial;
-    GLTFPBRMaterial pbrMaterial;
-    ShaderSource shaderSource;
-
+    KronosMaterial kronosMaterial;
     bool debugWithDefault = false;
     if (primitive.material == null || debugWithDefault) {
-      defaultMaterial = new GLTFDefaultMaterial();
-      shaderSource = ShaderSource.sources['kronos_gltf_default'];
+      kronosMaterial = new KronosDefaultMaterial(new GLTFDefaultMaterial());
     } else {
-      pbrMaterial = primitive.material;
-      shaderSource = ShaderSource.sources['kronos_gltf_pbr_test'];
+      kronosMaterial = new KronosPRBMaterial(primitive.material);
     }
 
-    String definesToString(Map<String, bool> defines) {
-      String outStr = '';
-      if(defines == null) return outStr;
-
-      for (String def in defines.keys) {
-        if (defines[def]) {
-          outStr += '#define $def ${defines[def]}\n';
-        }
-      }
-      return outStr;
-    };
-
-    Map<String, bool> defines;
-    if (pbrMaterial != null) {
-      defines = _getKronosPBRDefines(primitive, pbrMaterial);
-    }else{
-//      defines = getKronosDefaultDefines(primitive);
-    }
-
+    Map<String, bool> defines = kronosMaterial.getDefines(primitive);
     String shaderDefines = definesToString(defines);
-//      if (globalState.hasLODExtension != null) {
-//        shaderDefines += '#define USE_TEX_LOD 1\n';
-//      }
 
-    webgl.Program program = _initProgram(shaderDefines + shaderSource.vsCode, shaderDefines + shaderSource.fsCode);
+    webgl.Program program = _initProgram(shaderDefines + kronosMaterial.shaderSource.vsCode, shaderDefines + kronosMaterial.shaderSource.fsCode);
     gl.useProgram(program);
 
 //    bool forceTwoSided = true;
@@ -571,40 +549,24 @@ class ProgramSetup{
 //      gl.enable(webgl.CULL_FACE);
 //    }
 
-    _setProgramUniforms(program, pbrMaterial, defines);
-    _setupNodeMesh(program);
-    _drawNodeMesh(program, primitive);
+    kronosMaterial.setMVPUniforms(program, _modelMatrix, _viewMatrix, _projectionMatrix);
+    kronosMaterial.setOtherUniforms(program, defines);
+
+    _setupPrimitiveBuffers(program, primitive);
+    _drawPrimitive(program, primitive);
   }
 
-  Map<String, bool> _getKronosPBRDefines(GLTFMeshPrimitive primitive, GLTFPBRMaterial pbrMaterial) {
+  /// This build Preprocessors for glsl shader source
+  String definesToString(Map<String, bool> defines) {
+    String outStr = '';
+    if(defines == null) return outStr;
 
-    Map<String, bool> defines = new Map();
-
-    defines['USE_IBL'] = true; // Todo (jpu) :
-    defines['USE_TEX_LOD'] = false; // Todo (jpu) :
-
-    //primitives infos
-    defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] !=
-        null;
-    defines['HAS_TANGENTS'] = primitive.attributes['TANGENT'] != null;
-    defines['HAS_UV'] = primitive.attributes['TEXCOORD_0'] != null;
-
-    //Material base infos
-    defines['HAS_NORMALMAP'] = pbrMaterial.normalTexture != null;
-    defines['HAS_EMISSIVEMAP'] = pbrMaterial.emissiveTexture != null;
-    defines['HAS_OCCLUSIONMAP'] = pbrMaterial.occlusionTexture != null;
-
-    //Material pbr infos
-    defines['HAS_BASECOLORMAP'] =
-        pbrMaterial.pbrMetallicRoughness.baseColorTexture != null;
-    defines['HAS_METALROUGHNESSMAP'] =
-        pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture != null;
-
-    //debug jpu
-    defines['DEBUG_VS'] = false;
-    defines['DEBUG_FS'] = false;
-
-    return defines;
+    for (String def in defines.keys) {
+      if (defines[def]) {
+        outStr += '#define $def ${defines[def]}\n';
+      }
+    }
+    return outStr;
   }
 
   webgl.Program _initProgram(String vsSource, String fsSource) {
@@ -653,204 +615,8 @@ class ProgramSetup{
     return program;
   }
 
-  void _setProgramUniforms(webgl.Program program, GLTFPBRMaterial pbrMaterial, Map<String, bool> defines) {
-    _setUnifrom(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        _modelMatrix.storage);
-    _setUnifrom(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
-        _viewMatrix.storage);
-    _setUnifrom(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
-        _projectionMatrix.storage);
-
-    debug.logCurrentFunction(
-        'u_ViewMatrix pos : ${_viewMatrix.getTranslation()}');
-    debug.logCurrentFunction('mainCamera pos : ${mainCamera.position}');
-    debug.logCurrentFunction(
-        'mainCamera target pos : ${mainCamera.targetPosition}');
-    debug.logCurrentFunction(
-        'mainCamera target pos : ${mainCamera.viewProjectionMatrix.getTranslation()}');
-
-    if (pbrMaterial != null) {
-
-
-      _setUnifrom(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
-          ((_projectionMatrix * _viewMatrix * _modelMatrix) as Matrix4).storage);
-
-      // > camera
-      _setUnifrom(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
-          mainCamera.position.storage);
-
-      // > Light
-      _setUnifrom(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
-          lightDirection.storage);
-
-      _setUnifrom(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
-          (lightColor * 2.0).storage);
-
-      // > Material base
-
-      if (defines['USE_IBL']) {
-        _setUnifrom(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([0]));
-        _setUnifrom(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-            new Int32List.fromList([1]));
-        _setUnifrom(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-            new Int32List.fromList([2]));
-      }
-
-      if (defines['HAS_NORMALMAP']) {
-        _setUnifrom(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([pbrMaterial.normalTexture.texture.textureId + skipTexture]));
-        double normalScale = pbrMaterial.normalTexture.scale != null
-            ? pbrMaterial.normalTexture.scale
-            : 1.0;
-        _setUnifrom(program, 'u_NormalScale', ShaderVariableType.FLOAT,
-            new Float32List.fromList([normalScale]));
-      }
-
-      if (defines['HAS_EMISSIVEMAP']) {
-        _setUnifrom(
-            program,
-            'u_EmissiveSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList(
-                [pbrMaterial.emissiveTexture.texture.textureId + skipTexture]));
-        _setUnifrom(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
-            new Float32List.fromList(pbrMaterial.emissiveFactor));
-      }
-
-      if (defines['HAS_OCCLUSIONMAP']) {
-        _setUnifrom(
-            program,
-            'u_OcclusionSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList(
-                [pbrMaterial.occlusionTexture.texture.textureId + skipTexture]));
-        double occlusionStrength = pbrMaterial.occlusionTexture.strength != null
-            ? pbrMaterial.occlusionTexture.strength
-            : 1.0;
-        _setUnifrom(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
-            new Float32List.fromList([occlusionStrength]));
-      }
-
-      // > Material pbr
-
-      if (defines['HAS_BASECOLORMAP']) {
-        _setUnifrom(
-            program,
-            'u_BaseColorSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([
-              pbrMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture
-            ]));
-      }
-
-      if (defines['HAS_METALROUGHNESSMAP']) {
-        _setUnifrom(
-            program,
-            'u_MetallicRoughnessSampler',
-            ShaderVariableType.SAMPLER_2D,
-            new Int32List.fromList([
-              pbrMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
-                  .textureId + skipTexture
-            ]));
-      }
-
-      double roughness = pbrMaterial.pbrMetallicRoughness.roughnessFactor;
-      double metallic = pbrMaterial.pbrMetallicRoughness.metallicFactor;
-      _setUnifrom(
-          program,
-          'u_MetallicRoughnessValues',
-          ShaderVariableType.FLOAT_VEC2,
-          new Float32List.fromList([metallic, roughness]));
-
-      _setUnifrom(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
-          pbrMaterial.pbrMetallicRoughness.baseColorFactor);
-
-      // > Debug values => see in pbr fragment shader
-
-      double specularReflectionMask = 0.0;
-      double geometricOcclusionMask = 0.0;
-      double microfacetDistributionMask = 0.0;
-      double specularContributionMask = 0.0;
-      _setUnifrom(
-          program,
-          'u_ScaleFGDSpec',
-          ShaderVariableType.FLOAT_VEC4,
-          new Float32List.fromList([
-            specularReflectionMask,
-            geometricOcclusionMask,
-            microfacetDistributionMask,
-            specularContributionMask
-          ]));
-
-      double diffuseContributionMask = 0.0;
-      double colorMask = 0.0;
-      double metallicMask = 0.0;
-      double roughnessMask = 0.0;
-      _setUnifrom(
-          program,
-          'u_ScaleDiffBaseMR',
-          ShaderVariableType.FLOAT_VEC4,
-          new Float32List.fromList([
-            diffuseContributionMask,
-            colorMask,
-            metallicMask,
-            roughnessMask
-          ]));
-
-      double diffuseIBLAmbient = 1.0;
-      double specularIBLAmbient = 1.0;
-      _setUnifrom(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
-          new Float32List.fromList([
-            diffuseIBLAmbient,
-            specularIBLAmbient,
-            1.0,
-            1.0
-          ]));
-    }
-  }
-
-  /// ShaderVariableType componentType
-  void _setUnifrom(webgl.Program program, String uniformName, int componentType,
-      TypedData data) {
-    debug.logCurrentFunction(uniformName);
-
-    webgl.UniformLocation uniformLocation =
-    gl.getUniformLocation(program, uniformName);
-
-    bool transpose = false;
-
-    switch (componentType) {
-      case ShaderVariableType.SAMPLER_CUBE:
-      case ShaderVariableType.SAMPLER_2D:
-        gl.uniform1i(uniformLocation, (data as Int32List)[0]);
-        break;
-      case ShaderVariableType.FLOAT:
-        gl.uniform1f(uniformLocation, (data as Float32List)[0]);
-        break;
-      case ShaderVariableType.FLOAT_VEC2:
-        gl.uniform2fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_VEC3:
-        gl.uniform3fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_VEC4:
-        gl.uniform4fv(uniformLocation, data as Float32List);
-        break;
-      case ShaderVariableType.FLOAT_MAT4:
-        gl.uniformMatrix4fv(uniformLocation, transpose, data);
-        break;
-      default:
-        throw new Exception(
-            'renderer setUnifrom exception : Trying to set a uniform for a not defined component type');
-        break;
-    }
-  }
-
-  void _setupNodeMesh(webgl.Program program) {
+  void _setupPrimitiveBuffers(webgl.Program program, GLTFMeshPrimitive primitive) {
     debug.logCurrentFunction();
-
-    GLTFMeshPrimitive primitive = _node.mesh.primitives[0];
 
     //bind
     for (String attributName in primitive.attributes.keys) {
@@ -916,6 +682,10 @@ class ProgramSetup{
       webgl.Program program, String attributName, GLTFAccessor accessor) {
     debug.logCurrentFunction('$attributName');
 
+    //text utils
+    String _capitalize(String s) =>
+        s[0].toUpperCase() + s.substring(1).toLowerCase();
+
     String shaderAttributName;
     if (attributName == 'TEXCOORD_0') {
       shaderAttributName = 'a_UV';
@@ -954,7 +724,7 @@ class ProgramSetup{
     }
   }
 
-  void _drawNodeMesh(webgl.Program program, GLTFMeshPrimitive primitive) {
+  void _drawPrimitive(webgl.Program program, GLTFMeshPrimitive primitive) {
     debug.logCurrentFunction();
 
     if (primitive.indices == null) {
@@ -970,9 +740,275 @@ class ProgramSetup{
           accessorIndices.componentType, accessorIndices.byteOffset);
     }
   }
+}
 
-  //text utils
-  String _capitalize(String s) =>
-      s[0].toUpperCase() + s.substring(1).toLowerCase();
+abstract class KronosMaterial{
+  ShaderSource get shaderSource;
+
+  Map<String, bool> getDefines(GLTFMeshPrimitive primitive);
+
+  void setMVPUniforms(webgl.Program program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix) {
+    _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+        modelMatrix.storage);
+    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+        viewMatrix.storage);
+    _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
+
+    _setUniform(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
+    ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
+  }
+
+  void setOtherUniforms(webgl.Program program, Map<String, bool> defines);
+
+  /// ShaderVariableType componentType
+  void _setUniform(webgl.Program program, String uniformName, int componentType,
+      TypedData data) {
+    debug.logCurrentFunction(uniformName);
+
+    webgl.UniformLocation uniformLocation =
+    gl.getUniformLocation(program, uniformName);
+
+    bool transpose = false;
+
+    switch (componentType) {
+      case ShaderVariableType.SAMPLER_CUBE:
+      case ShaderVariableType.SAMPLER_2D:
+        gl.uniform1i(uniformLocation, (data as Int32List)[0]);
+        break;
+      case ShaderVariableType.FLOAT:
+        gl.uniform1f(uniformLocation, (data as Float32List)[0]);
+        break;
+      case ShaderVariableType.FLOAT_VEC2:
+        gl.uniform2fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_VEC3:
+        gl.uniform3fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_VEC4:
+        gl.uniform4fv(uniformLocation, data as Float32List);
+        break;
+      case ShaderVariableType.FLOAT_MAT4:
+        gl.uniformMatrix4fv(uniformLocation, transpose, data);
+        break;
+      default:
+        throw new Exception(
+            'renderer setUnifrom exception : Trying to set a uniform for a not defined component type');
+        break;
+    }
+  }
+}
+
+class KronosPRBMaterial extends KronosMaterial{
+  final GLTFPBRMaterial baseMaterial;
+  KronosPRBMaterial(this.baseMaterial);
+
+  ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_pbr_test'];
+
+  Map<String, bool> getDefines(GLTFMeshPrimitive primitive) {
+
+    Map<String, bool> defines = new Map();
+
+    defines['USE_IBL'] = true; // Todo (jpu) :
+    defines['USE_TEX_LOD'] = false;//globalState.hasLODExtension != null; // Todo (jpu) :
+
+    //primitives infos
+    defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] !=
+        null;
+    defines['HAS_TANGENTS'] = primitive.attributes['TANGENT'] != null;
+    defines['HAS_UV'] = primitive.attributes['TEXCOORD_0'] != null;
+
+    //Material base infos
+    defines['HAS_NORMALMAP'] = baseMaterial.normalTexture != null;
+    defines['HAS_EMISSIVEMAP'] = baseMaterial.emissiveTexture != null;
+    defines['HAS_OCCLUSIONMAP'] = baseMaterial.occlusionTexture != null;
+
+    //Material pbr infos
+    defines['HAS_BASECOLORMAP'] =
+        baseMaterial.pbrMetallicRoughness.baseColorTexture != null;
+    defines['HAS_METALROUGHNESSMAP'] =
+        baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture != null;
+
+    //debug jpu
+    defines['DEBUG_VS'] = false;
+    defines['DEBUG_FS'] = false;
+
+    return defines;
+  }
+
+  void setOtherUniforms(webgl.Program program, Map<String, bool> defines) {
+
+    // > camera
+    _setUniform(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
+        mainCamera.position.storage);
+
+    // > Light
+    _setUniform(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
+        lightDirection.storage);
+
+    _setUniform(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
+        (lightColor * 2.0).storage);
+
+    // > Material base
+
+    if (defines['USE_IBL']) {
+      _setUniform(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
+          new Int32List.fromList([0]));
+      _setUniform(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+          new Int32List.fromList([1]));
+      _setUniform(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+          new Int32List.fromList([2]));
+    }
+
+    if (defines['HAS_NORMALMAP']) {
+      _setUniform(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
+          new Int32List.fromList([baseMaterial.normalTexture.texture.textureId + skipTexture]));
+      double normalScale = baseMaterial.normalTexture.scale != null
+          ? baseMaterial.normalTexture.scale
+          : 1.0;
+      _setUniform(program, 'u_NormalScale', ShaderVariableType.FLOAT,
+          new Float32List.fromList([normalScale]));
+    }
+
+    if (defines['HAS_EMISSIVEMAP']) {
+      _setUniform(
+          program,
+          'u_EmissiveSampler',
+          ShaderVariableType.SAMPLER_2D,
+          new Int32List.fromList(
+              [baseMaterial.emissiveTexture.texture.textureId + skipTexture]));
+      _setUniform(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
+          new Float32List.fromList(baseMaterial.emissiveFactor));
+    }
+
+    if (defines['HAS_OCCLUSIONMAP']) {
+      _setUniform(
+          program,
+          'u_OcclusionSampler',
+          ShaderVariableType.SAMPLER_2D,
+          new Int32List.fromList(
+              [baseMaterial.occlusionTexture.texture.textureId + skipTexture]));
+      double occlusionStrength = baseMaterial.occlusionTexture.strength != null
+          ? baseMaterial.occlusionTexture.strength
+          : 1.0;
+      _setUniform(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
+          new Float32List.fromList([occlusionStrength]));
+    }
+
+    // > Material pbr
+
+    if (defines['HAS_BASECOLORMAP']) {
+      _setUniform(
+          program,
+          'u_BaseColorSampler',
+          ShaderVariableType.SAMPLER_2D,
+          new Int32List.fromList([
+            baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture
+          ]));
+    }
+
+    if (defines['HAS_METALROUGHNESSMAP']) {
+      _setUniform(
+          program,
+          'u_MetallicRoughnessSampler',
+          ShaderVariableType.SAMPLER_2D,
+          new Int32List.fromList([
+            baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
+                .textureId + skipTexture
+          ]));
+    }
+
+    double roughness = baseMaterial.pbrMetallicRoughness.roughnessFactor;
+    double metallic = baseMaterial.pbrMetallicRoughness.metallicFactor;
+    _setUniform(
+        program,
+        'u_MetallicRoughnessValues',
+        ShaderVariableType.FLOAT_VEC2,
+        new Float32List.fromList([metallic, roughness]));
+
+    _setUniform(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
+        baseMaterial.pbrMetallicRoughness.baseColorFactor);
+
+    // > Debug values => see in pbr fragment shader
+
+    double specularReflectionMask = 0.0;
+    double geometricOcclusionMask = 0.0;
+    double microfacetDistributionMask = 0.0;
+    double specularContributionMask = 0.0;
+    _setUniform(
+        program,
+        'u_ScaleFGDSpec',
+        ShaderVariableType.FLOAT_VEC4,
+        new Float32List.fromList([
+          specularReflectionMask,
+          geometricOcclusionMask,
+          microfacetDistributionMask,
+          specularContributionMask
+        ]));
+
+    double diffuseContributionMask = 0.0;
+    double colorMask = 0.0;
+    double metallicMask = 0.0;
+    double roughnessMask = 0.0;
+    _setUniform(
+        program,
+        'u_ScaleDiffBaseMR',
+        ShaderVariableType.FLOAT_VEC4,
+        new Float32List.fromList([
+          diffuseContributionMask,
+          colorMask,
+          metallicMask,
+          roughnessMask
+        ]));
+
+    double diffuseIBLAmbient = 1.0;
+    double specularIBLAmbient = 1.0;
+    _setUniform(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
+        new Float32List.fromList([
+          diffuseIBLAmbient,
+          specularIBLAmbient,
+          1.0,
+          1.0
+        ]));
+  }
+}
+
+class KronosDefaultMaterial extends KronosMaterial{
+  final GLTFDefaultMaterial baseMaterial;
+  KronosDefaultMaterial(this.baseMaterial);
+
+  ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_default'];
+
+  Map<String, bool> getDefines(GLTFMeshPrimitive primitive) {
+    // Todo (jpu) : enable defines if needed
+
+    Map<String, bool> defines = new Map();
+
+    defines['USE_IBL'] = true;
+    defines['USE_TEX_LOD'] = false;
+
+    //primitives infos
+    defines['HAS_NORMALS'] = false;
+    defines['HAS_TANGENTS'] = false;
+    defines['HAS_UV'] = false;
+
+    //Material base infos
+    defines['HAS_NORMALMAP'] = false;
+    defines['HAS_EMISSIVEMAP'] = false;
+    defines['HAS_OCCLUSIONMAP'] = false;
+
+    //Material infos
+    defines['HAS_BASECOLORMAP'] = false;
+    defines['HAS_METALROUGHNESSMAP'] = false;
+
+    //debug jpu
+    defines['DEBUG_VS'] = false;
+    defines['DEBUG_FS'] = false;
+
+    return defines;
+  }
+
+  void setOtherUniforms(webgl.Program program, Map<String, bool> defines) {
+  }
 
 }

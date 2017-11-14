@@ -4,6 +4,7 @@ attribute vec3 a_Normal;
 uniform mat4 u_ModelMatrix;
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_ProjectionMatrix;
+uniform mat4 u_MVPMatrix;
 
 void main(void) {
     vec3 v = a_Normal;//not used actually;
