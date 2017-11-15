@@ -7,6 +7,7 @@ import 'package:webgl/src/utils/utils_assets.dart';
     override: '*')
 import 'dart:mirrors';
 
+// Todo (jpu) : do not load all shader when not needed
 class ShaderSource{
 
   static Map<String , List<String>> shadersPath = {
@@ -61,6 +62,10 @@ class ShaderSource{
     'kronos_gltf_default' :[
       'shaders/kronos_gltf/kronos_gltf_default.vs.glsl',
       'shaders/kronos_gltf/kronos_gltf_default.fs.glsl'
+    ],
+    'debug_shader' :[
+      'shaders/debug_shader/debug_shader.vs.glsl',
+      'shaders/debug_shader/debug_shader.fs.glsl'
     ]
   };
 
