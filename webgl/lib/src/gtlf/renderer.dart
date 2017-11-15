@@ -42,9 +42,6 @@ int skipTexture;
 
 class GLTFRenderer {
 
-  dynamic backBuffer;
-  dynamic frontBuffer;
-
   GLTFScene get activeScene => globalGltf.scenes[0];
 
   Interaction interaction;
@@ -221,7 +218,6 @@ class GLTFRenderer {
   num timeFps = 0;
   int fps = 0;
   num speedFactor = 1.0;
-  bool redrawQueued = false;
   void _render({num time: 0.0}) {
     debugLog.logCurrentFunction(
         '\n------------------------------------------------');
@@ -236,19 +232,16 @@ class GLTFRenderer {
       fps = 0;
     }
 
-    if (!redrawQueued) {
-      redrawQueued = true;
-      try {
-        update();
-        draw();
-      } catch (ex) {
-        print("Error: $ex");
-      }
-
-      window.requestAnimationFrame((num time) {
-        this._render(time: time);
-      });
+    try {
+      update();
+      draw();
+    } catch (ex) {
+      print("Error: $ex");
     }
+
+    window.requestAnimationFrame((num time) {
+      this._render(time: time);
+    });
   }
 
   void draw() {
@@ -536,8 +529,6 @@ class ProgramSetting{
     _setupProgram();
   }
 
-  Map<RawMaterial, webgl.Program> programs = {};
-
   void _setupProgram() {
     debugLog.logCurrentFunction();
 
@@ -555,14 +546,7 @@ class ProgramSetting{
       material = new KronosPRBMaterial(primitive.material, primitive);
     }
 
-    webgl.Program program;
-    if(programs[material] == null){
-      program = material.getProgram();
-      programs[material] = program;
-    }else{
-      program = programs[material];
-    }
-
+    webgl.Program program = material.getProgram();
     gl.useProgram(program);
 
 //    bool forceTwoSided = true;

@@ -43,6 +43,6 @@ Future main() async {
     '/gltf/wip/export_test/export_test_grey.gltf',
   ];
 //
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : true);
+  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);
   await new GLTFRenderer(gltf).render();
 }
