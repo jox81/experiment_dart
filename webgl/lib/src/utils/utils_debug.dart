@@ -101,7 +101,7 @@ class _StackTraceInfo {
       paddingString = '$paddingString\t';
     }
 
-    _debugLogger.info('$paddingString$currentFunctionName ${message != null ? ' > $message' : ''} $stackFunctionName ${debugLogCurrentFunction ?'| parent : $parentFunctionName' :'' }');
+    _debugLogger.info('$paddingString$currentFunctionName ${message != null ? ' > $message' : ''} ${debugLogCurrentFunction ?'$stackFunctionName | parent : $parentFunctionName' :'' }');
 
     if(debugLogCurrentFunction) {
       print('\n-------------------------');

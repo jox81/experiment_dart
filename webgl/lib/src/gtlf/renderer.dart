@@ -28,6 +28,7 @@ import 'dart:convert' show BASE64;
 // Uint16List = SCALAR : int
 
 webgl.RenderingContext gl;
+GLTFProject globalGltf;
 
 GlobalState globalState;
 
@@ -40,16 +41,20 @@ GLTFCameraPerspective get mainCamera => Context.Context.mainCamera;
 int skipTexture;
 
 class GLTFRenderer {
-  GLTFProject gltf;
-  GLTFScene get activeScene => gltf.scenes[0];
+
+  dynamic backBuffer;
+  dynamic frontBuffer;
+
+  GLTFScene get activeScene => globalGltf.scenes[0];
 
   Interaction interaction;
 
   WebGLTexture cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
-  GLTFRenderer(this.gltf) {
+  GLTFRenderer(GLTFProject gltf) {
     debugLog.logCurrentFunction();
     _initContext();
+    globalGltf = gltf;
   }
 
   void _initContext() {
@@ -80,21 +85,22 @@ class GLTFRenderer {
 
     //> Init extensions
     //This activate extensions
-//    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
-//    globalState = new GlobalState()
-//      ..scene = null
-//      ..hasLODExtension =
-//      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
-//      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
-//      as webgl.OesStandardDerivatives
-//      ..sRGBifAvailable =
-//      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
+    globalState = new GlobalState()
+      ..scene = null
+      ..hasLODExtension =
+      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
+      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
+      as webgl.OesStandardDerivatives
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
 
     _render();
   }
 
   Future _initTextures() async {
     debugLog.logCurrentFunction();
+
     ImageElement imageElement;
     ///TextureFilterType magFilter;
     int magFilter;
@@ -129,15 +135,15 @@ class GLTFRenderer {
     skipTexture = 3;
 
     bool useDebugTexture = false;
-    for (int i = 0; i < gltf.textures.length; i++) {
+    for (int i = 0; i < globalGltf.textures.length; i++) {
       int textureUnitId = 0;
 
       if (!useDebugTexture) {
-        GLTFTexture gltfTexture = gltf.textures[i];
+        GLTFTexture gltfTexture = globalGltf.textures[i];
         if (gltfTexture.source.data == null) {
           //load image
           String fileUrl =
-              gltf.baseDirectory + gltfTexture.source.uri.toString();
+              globalGltf.baseDirectory + gltfTexture.source.uri.toString();
           imageElement = await TextureUtils.loadImage(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {
@@ -178,6 +184,7 @@ class GLTFRenderer {
   }
 
   void createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
+    debugLog.logCurrentFunction();
 
     //create texture
     webgl.Texture texture = gl.createTexture();
@@ -214,6 +221,7 @@ class GLTFRenderer {
   num timeFps = 0;
   int fps = 0;
   num speedFactor = 1.0;
+  bool redrawQueued = false;
   void _render({num time: 0.0}) {
     debugLog.logCurrentFunction(
         '\n------------------------------------------------');
@@ -228,16 +236,19 @@ class GLTFRenderer {
       fps = 0;
     }
 
-    try {
-      update();
-      draw();
-    } catch (ex) {
-      print("Error: $ex");
-    }
+    if (!redrawQueued) {
+      redrawQueued = true;
+      try {
+        update();
+        draw();
+      } catch (ex) {
+        print("Error: $ex");
+      }
 
-    window.requestAnimationFrame((num time) {
-      this._render(time: time);
-    });
+      window.requestAnimationFrame((num time) {
+        this._render(time: time);
+      });
+    }
   }
 
   void draw() {
@@ -287,13 +298,13 @@ class GLTFRenderer {
     currentCamera = findActiveSceneCamera(activeScene.nodes);
     //or use first in project else default
     if (currentCamera == null) {
-      currentCamera = findActiveSceneCamera(gltf.nodes);
+      currentCamera = findActiveSceneCamera(globalGltf.nodes);
     }
     if (currentCamera == null) {
-      if (gltf.cameras.length > 0) {
-        currentCamera = gltf.cameras[0];
+      if (globalGltf.cameras.length > 0) {
+        currentCamera = globalGltf.cameras[0];
       } else {
-        currentCamera = new GLTFCameraPerspective(radians(47.0), 100.0, 0.01)
+        currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 100.0)
           ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
       }
@@ -310,6 +321,8 @@ class GLTFRenderer {
   }
 
   Camera findActiveSceneCamera(List<GLTFNode> nodes) {
+    debugLog.logCurrentFunction();
+
     Camera result;
 
     for (var i = 0; i < nodes.length && result == null; i++) {
@@ -523,6 +536,8 @@ class ProgramSetting{
     _setupProgram();
   }
 
+  Map<RawMaterial, webgl.Program> programs = {};
+
   void _setupProgram() {
     debugLog.logCurrentFunction();
 
@@ -530,17 +545,24 @@ class ProgramSetting{
     GLTFMeshPrimitive primitive = mesh.primitives[0];
 
     RawMaterial material;
-    bool debug = true;
-    if(debug){
-      material = new DebugMaterial()
-      ..color = <Vector3>[new Vector3(.3, .3, .3), new Vector3(.6, .6, .6)][mesh.meshId];
-    } else if (primitive.material == null) {
+    bool debug = false;
+    bool debugWithDefault = false;
+    if(debug && !debugWithDefault){
+      material = new DebugMaterial();
+    } else if (primitive.material == null || (debug && debugWithDefault)) {
       material = new KronosDefaultMaterial(new GLTFDefaultMaterial());
     } else {
       material = new KronosPRBMaterial(primitive.material, primitive);
     }
 
-    webgl.Program program = material.getProgram();
+    webgl.Program program;
+    if(programs[material] == null){
+      program = material.getProgram();
+      programs[material] = program;
+    }else{
+      program = programs[material];
+    }
+
     gl.useProgram(program);
 
 //    bool forceTwoSided = true;
@@ -692,12 +714,13 @@ abstract class RawMaterial{
 
   ShaderSource _definedShaderSource;
   ShaderSource get definedShaderSource {
+    debugLog.logCurrentFunction();
     return _definedShaderSource ??= () {
       String shaderDefines = definesToString(defines);
-
-      shaderSource.vsCode.replaceRange(0, 0, shaderDefines);
-      shaderSource.fsCode.replaceRange(0, 0, shaderDefines);
-      return shaderSource;
+      ShaderSource shaderSourceDefined = new ShaderSource()
+      ..vsCode = shaderDefines + shaderSource.vsCode
+      ..fsCode = shaderDefines + shaderSource.fsCode;
+      return shaderSourceDefined;
     }();
   }
 
@@ -719,11 +742,10 @@ abstract class RawMaterial{
   Map<String, bool> getDefines();
 
   webgl.Program getProgram() {
+    debugLog.logCurrentFunction();
 
     String vsSource = definedShaderSource.vsCode;
     String fsSource = definedShaderSource.fsCode;
-
-    debugLog.logCurrentFunction();
 
     /// ShaderType type
     webgl.Shader createShader(
@@ -1079,7 +1101,9 @@ class DebugMaterial extends RawMaterial{
 
     //debug jpu
     defines['DEBUG_VS'] = false;
-    defines['DEBUG_FS'] = false;
+    defines['DEBUG_FS_POSITION'] = false;
+    defines['DEBUG_FS_NORMALS'] = defines['HAS_NORMALS'] && false;
+    defines['DEBUG_FS_UV'] = defines['HAS_UV'] && false;
 
     return defines;
   }
@@ -1089,8 +1113,8 @@ class DebugMaterial extends RawMaterial{
 
     _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         modelMatrix .storage);
-    _setUniform(program, 'u_ModelViewMatrix', ShaderVariableType.FLOAT_MAT4,
-        (viewMatrix * modelMatrix as Matrix4).storage);
+    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+        viewMatrix.storage);
     _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
 

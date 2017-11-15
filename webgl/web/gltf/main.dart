@@ -22,6 +22,7 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
 //    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
+//    '/gltf/samples/gltf_2_0/BoxTextured/glTF/BoxTextured_multi.gltf',
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
 //    '/gltf/wip/simple_sphere/simple_sphere.gltf',
 
@@ -38,9 +39,10 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',
 
   //Wip
-    '/gltf/wip/export_test/export_test.gltf',
+//    '/gltf/wip/export_test/export_test.gltf',
+    '/gltf/wip/export_test/export_test_grey.gltf',
   ];
 //
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);
+  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : true);
   await new GLTFRenderer(gltf).render();
 }

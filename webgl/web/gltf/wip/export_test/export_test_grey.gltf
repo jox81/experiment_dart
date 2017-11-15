@@ -322,12 +322,7 @@
     "buffers" : [
         {
             "byteLength" : 40432, 
-            "uri" : "export_test.bin"
-        }
-    ], 
-    "images" : [
-        {
-            "uri" : "uv_grid.png"
+            "uri" : "export_test_grey.bin"
         }
     ], 
     "materials" : [
@@ -335,36 +330,12 @@
             "name" : "Material", 
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
-                    1.0, 
-                    1.0, 
-                    0.0, 
+                    0.49999991059303284, 
+                    0.49999991059303284, 
+                    0.49999991059303284, 
                     1.0
                 ], 
                 "metallicFactor" : 0.0
-            }
-        }, 
-        {
-            "doubleSided" : true, 
-            "name" : "MaterialBaseTexture01", 
-            "pbrMetallicRoughness" : {
-                "baseColorTexture" : {
-                    "index" : 0
-                }, 
-                "metallicFactor" : 0.5, 
-                "roughnessFactor" : 0.5
-            }
-        }, 
-        {
-            "doubleSided" : true, 
-            "name" : "MaterialBaseTexture02", 
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.009574164636433125, 
-                    0.0003812391369137913, 
-                    1.0, 
-                    1.0
-                ], 
-                "roughnessFactor" : 0.0
             }
         }
     ], 
@@ -379,7 +350,7 @@
                         "TEXCOORD_0" : 3
                     }, 
                     "indices" : 0, 
-                    "material" : 1
+                    "material" : 0
                 }
             ]
         }, 
@@ -407,7 +378,7 @@
                         "TEXCOORD_0" : 11
                     }, 
                     "indices" : 7, 
-                    "material" : 1
+                    "material" : 0
                 }
             ]
         }, 
@@ -420,7 +391,7 @@
                         "POSITION" : 13
                     }, 
                     "indices" : 12, 
-                    "material" : 2
+                    "material" : 0
                 }
             ]
         }
@@ -464,9 +435,6 @@
             ]
         }
     ], 
-    "samplers" : [
-        {}
-    ], 
     "scene" : 0, 
     "scenes" : [
         {
@@ -477,12 +445,6 @@
                 0, 
                 1
             ]
-        }
-    ], 
-    "textures" : [
-        {
-            "sampler" : 0, 
-            "source" : 0
         }
     ]
 }
