@@ -80,6 +80,9 @@ class GLTFRenderer {
     await _initTextures();
     setupCameras();
 
+
+    setupGLState();
+
     //> Init extensions
     //This activate extensions
     webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
@@ -247,7 +250,8 @@ class GLTFRenderer {
   void draw() {
     //debugLog.logCurrentFunction();
 
-    setupGLState();
+    gl.clear(
+        ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
     void drawNodes(List<GLTFNode> nodes) {
       //debugLog.logCurrentFunction();
@@ -269,8 +273,7 @@ class GLTFRenderer {
 
     gl.enable(webgl.DEPTH_TEST);
     gl.clearColor(.2, 0.2, 0.2, 1.0);
-    gl.clear(
-        ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
+
 //    gl.frontFace(FrontFaceDirection.CCW);
 //
 //    //Enable depth test
@@ -539,7 +542,7 @@ class ProgramSetting{
     GLTFMeshPrimitive primitive = mesh.primitives[0];
 
     RawMaterial material;
-    bool debug = false;
+    bool debug = true;
     bool debugWithDebugMaterial = false;
     if(debug){
       if(debugWithDebugMaterial){
@@ -554,8 +557,9 @@ class ProgramSetting{
     if(!isProgramSetup) {
       program = material.getProgram();
       gl.useProgram(program);
-//      isProgramSetup = true;
+      isProgramSetup = true;
     }
+
 //    bool forceTwoSided = true;
 //    if (material != null && material.doubleSided || forceTwoSided) {
 //      gl.disable(webgl.CULL_FACE); //Two sided
@@ -601,7 +605,7 @@ class ProgramSetting{
     webgl.Buffer buffer =
     gl.createBuffer(); // Todo (jpu) : Should re-use the created buffer
     gl.bindBuffer(bufferType, buffer);
-    gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
+    gl.bufferData(bufferType, data, BufferUsageType.STREAM_DRAW);
   }
 
   void _bindVertexArrayData(
