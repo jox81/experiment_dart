@@ -13,8 +13,8 @@ html, body {
     position: absolute;
     top: 20px;
     left: 20px;
-    color: white;
-    background-color: black;
+    color: #ffffff;
+    background-color: #181818;
     padding: 10px;
-    display: none;/* will be shown by the app if used */
+    display: none;/* will be shown by the app interaction element if used */
 }

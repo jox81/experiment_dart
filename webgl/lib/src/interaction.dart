@@ -50,7 +50,7 @@ class Interaction {
     gl.canvas.onMouseUp.listen(_onMouseUp);
     gl.canvas.onMouseWheel.listen((WheelEvent event) {
       num delatY = -event.deltaY;
-      Context.mainCamera.cameraController.updateCamerFov(Context.mainCamera, delatY);
+      Context.mainCamera?.cameraController?.updateCamerFov(Context.mainCamera, delatY);
     });
   }
 
@@ -122,7 +122,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    Context.mainCamera.cameraController.beginOrbit(Context.mainCamera, screenX, screenY);
+    Context.mainCamera?.cameraController?.beginOrbit(Context.mainCamera, screenX, screenY);
 
     dragging = false;
     mouseDown = true;
@@ -132,7 +132,7 @@ class Interaction {
 
 //    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
 
-    if(isInApplication) {
+    if(isInApplication && Context.mainCamera != null) {
       Model modelHit = UtilsGeometry.findModelFromMouseCoords(
           Context.mainCamera, event.offset.x, event.offset.y,
           Context.currentScene.models);
@@ -206,7 +206,7 @@ class Interaction {
     int screenX = event.client.x.toInt();
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
-    Context.mainCamera.cameraController.endOrbit(Context.mainCamera);
+    Context.mainCamera?.cameraController?.endOrbit(Context.mainCamera);
 
 //    print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
     if(!dragging) {

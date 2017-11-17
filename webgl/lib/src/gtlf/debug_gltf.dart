@@ -19,7 +19,7 @@ import 'package:webgl/src/utils/utils_debug.dart' as debug;
 GLTFProject _gltf;
 
 Future<GLTFProject> debugGltf(String gltfUrl, {bool doLog : true}) async {
-  debug.logInDebug = doLog;
+  debug.isDebug = doLog;
   _gltf = await _loadGLTF(gltfUrl);
   if(doLog) {
     _testScenes();

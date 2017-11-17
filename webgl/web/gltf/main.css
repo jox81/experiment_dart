@@ -16,5 +16,5 @@ html, body {
     color: #ffffff;
     background-color: #181818;
     padding: 10px;
-    display: none;/* will be shown by the app if used */
+    display: none;/* will be shown by the app interaction element if used */
 }

@@ -109,10 +109,10 @@ class _StackTraceInfo {
   }
 }
 
-bool logInDebug = true;
+bool isDebug = true;
 
 void logCurrentFunction([String message]) {
-  if(logInDebug) {
+  if(isDebug) {
     stackTraceInfo.logCurrentFunction(message);
   }
 }

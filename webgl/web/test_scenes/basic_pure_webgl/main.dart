@@ -3,22 +3,45 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 
+import 'package:webgl/src/context.dart' as Context;
+import 'package:webgl/src/interaction.dart';
+import 'package:webgl/src/utils/utils_debug.dart' as debugLog;
+
 Future main() async {
+  debugLog.isDebug = false;
   new Renderer()..render();
 }
 
 class Renderer{
   webgl.RenderingContext gl;
+  Interaction interaction;
 
-  String vsSource = "attribute vec3 pos;"+
-      "void main() {"+
-      "	gl_Position = vec4(pos, 2.0);"+
-      "}";
-  String fsSource = "void main() {"+
-      "	gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);"+
-      "}";
+  List<double> vertices;
+  int elementsByVertices;
+//
+//  String fsSource = '''
+//    void main() {
+//      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
+//    }
+//    ''';
+
+  String vsSource = '''
+    attribute vec3 pos;
+
+    void main() {
+      gl_Position = vec4(pos, 3.0);
+    }
+  ''';
+  String fsSource = '''
+    void main() {
+      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
+    }
+  ''';
+
+  webgl.Program program;
 
   Renderer(){
+    //debugLog.logCurrentFunction();
     try {
       CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
       gl = canvas.getContext("experimental-webgl") as webgl.RenderingContext;
@@ -26,28 +49,37 @@ class Renderer{
     } catch (err) {
       throw "Your web browser does not support WebGL!";
     }
-  }
 
-  void draw() {
+    //>
+//    Context.gl = gl;
+//    interaction = new Interaction();
+
+    //>
+
     gl.clearColor(0.8, 0.8, 0.8, 1);
-    gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
 
-    webgl.Program prog = buildProgram(vsSource,fsSource);
-    gl.useProgram(prog);
+    program = buildProgram(vsSource,fsSource);
+    gl.useProgram(program);
 
-    int elementsByVertices = 3;
-    List<double> vertices = [
+    elementsByVertices = 3;
+    vertices = [
       0.0, 0.0, 0.0,
       1.0, 0.0, 0.0,
       0.0, 1.0, 0.0
     ];
 
-    setupAttribut(prog, "pos", elementsByVertices , vertices);
+    setupAttribut(program, "pos", elementsByVertices , vertices);
+  }
+
+  void draw() {
+    //debugLog.logCurrentFunction();
+    gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
 
     gl.drawArrays(webgl.RenderingContext.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
   }
 
   webgl.Program buildProgram(String vs, String fs) {
+    //debugLog.logCurrentFunction();
     webgl.Program prog = gl.createProgram();
 
     addShader(prog, 'vertex', vs);
@@ -60,6 +92,7 @@ class Renderer{
   }
 
   void addShader(webgl.Program prog, String type, String source) {
+    //debugLog.logCurrentFunction();
     webgl.Shader s = gl.createShader((type == 'vertex') ?
     webgl.RenderingContext.VERTEX_SHADER : webgl.RenderingContext.FRAGMENT_SHADER);
     gl.shaderSource(s, source);
@@ -72,6 +105,7 @@ class Renderer{
   }
 
   void setupAttribut(webgl.Program prog, String attributName, int rsize, List<double> arr) {
+    //debugLog.logCurrentFunction();
     gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(webgl.RenderingContext.ARRAY_BUFFER, new Float32List.fromList(arr),
         webgl.RenderingContext.STATIC_DRAW);
@@ -81,15 +115,23 @@ class Renderer{
   }
 
   void render({num time : 0.0}) {
+//    debugLog.logCurrentFunction(
+//        '\n------------------------------------------------');
 
-    try {
       draw();
-    } catch (ex) {
-      print("Error: $ex");
-    }
+//    try {
+////      update();
+//    } catch (ex) {
+//      print("Error: $ex");
+//    }
 
     window.requestAnimationFrame((num time) {
       this.render(time: time);
     });
+  }
+
+  void update() {
+    //debugLog.logCurrentFunction();
+    interaction?.update();
   }
 }
