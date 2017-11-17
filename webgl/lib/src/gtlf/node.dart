@@ -2,6 +2,7 @@ import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/renderer/renderer.dart';
 import 'package:webgl/src/gtlf/skin.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/camera.dart';
@@ -94,4 +95,8 @@ class GLTFNode extends GLTFChildOfRootProperty{
   String toString() {
     return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $_meshId, parent: $_parentId, skin: $skin, isJoint: $isJoint}';
   }
+
+  //>
+
+  ProgramSetting programSetting;
 }

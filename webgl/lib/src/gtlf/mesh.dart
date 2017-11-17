@@ -1,10 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
+import 'package:webgl/src/gtlf/renderer/renderer.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFMesh extends GLTFChildOfRootProperty {
   glTF.Mesh _gltfSource;
+
+
   glTF.Mesh get gltfSource => _gltfSource;
 
   int meshId;

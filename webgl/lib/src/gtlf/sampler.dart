@@ -1,5 +1,6 @@
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/utils_gltf.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFSampler extends GLTFChildOfRootProperty {
   glTF.Sampler _gltfSource;
@@ -17,8 +18,8 @@ class GLTFSampler extends GLTFChildOfRootProperty {
   final int wrapT;
 
   GLTFSampler._(this._gltfSource)
-      : this.magFilter = _gltfSource.magFilter,
-        this.minFilter = _gltfSource.minFilter,
+      : this.magFilter = _gltfSource.magFilter != -1 ? _gltfSource.magFilter : TextureFilterType.LINEAR,
+        this.minFilter = _gltfSource.minFilter != -1 ? _gltfSource.magFilter : TextureFilterType.LINEAR,
         this.wrapS = _gltfSource.wrapS,
         this.wrapT = _gltfSource.wrapT,
         super(_gltfSource.name);

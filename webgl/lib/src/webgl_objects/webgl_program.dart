@@ -29,6 +29,8 @@ class WebGLProgram extends WebGLObject{
 
   final WebGL.Program webGLProgram;
 
+  Map<String, WebGL.UniformLocation> uniformLocations = new Map();
+
   WebGLProgram() : this.webGLProgram = gl.createProgram();
   WebGLProgram.fromWebGL(this.webGLProgram);
 
