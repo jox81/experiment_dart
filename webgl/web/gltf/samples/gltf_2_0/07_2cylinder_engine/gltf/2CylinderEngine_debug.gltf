@@ -1,0 +1,135 @@
+{
+    "asset": {
+        "generator": "COLLADA2GLTF",
+        "version": "2.0"
+    },
+    "scene": 0,
+    "scenes": [
+        {
+            "nodes": [
+                0
+            ]
+        }
+    ],
+    "nodes": [
+        {
+            "mesh": 0
+        },
+        {
+            "matrix": [
+                0.7071067690849304,
+                -2.1563657526257888e-7,
+                -0.7071068286895752,
+                0.0,
+                -0.3312943577766419,
+                0.883452296257019,
+                -0.33129459619522097,
+                0.0,
+                0.6246951818466187,
+                0.4685211479663849,
+                0.6246950030326843,
+                0.0,
+                1005.9874267578124,
+                766.3170776367188,
+                953.3455810546876,
+                1.0
+            ],
+            "camera": 0
+        }
+    ],
+    "cameras": [
+        {
+            "perspective": {
+                "aspectRatio": 1.0,
+                "yfov": 0.3143463730812073,
+                "zfar": 1000000.0,
+                "znear": 0.04999999701976776
+            },
+            "type": "perspective"
+        }
+    ],
+    "meshes": [
+        {
+            "primitives": [
+                {
+                    "attributes": {
+                        "NORMAL": 1,
+                        "POSITION": 2
+                    },
+                    "indices": 0,
+                    "mode": 4
+                }
+            ]
+        }
+    ],
+    "accessors": [
+        {
+            "bufferView": 0,
+            "byteOffset": 16500,
+            "componentType": 5123,
+            "count": 5034,
+            "max": [
+                1295
+            ],
+            "min": [
+                0
+            ],
+            "type": "SCALAR"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 48288,
+            "componentType": 5126,
+            "count": 1296,
+            "max": [
+                1.0,
+                1.0,
+                0.9992589950561525
+            ],
+            "min": [
+                -1.0,
+                -1.0,
+                -0.9992589950561525
+            ],
+            "type": "VEC3"
+        },
+        {
+            "bufferView": 1,
+            "byteOffset": 63840,
+            "componentType": 5126,
+            "count": 1296,
+            "max": [
+                53.35246658325195,
+                56.026153564453128,
+                46.46559143066406
+            ],
+            "min": [
+                31.869285583496095,
+                -36.97384643554688,
+                -46.46559143066406
+            ],
+            "type": "VEC3"
+        }
+    ],
+    "bufferViews": [
+        {
+            "buffer": 0,
+            "byteOffset": 1340232,
+            "byteLength": 454380,
+            "target": 34963
+        },
+        {
+            "buffer": 0,
+            "byteOffset": 0,
+            "byteLength": 1340232,
+            "byteStride": 12,
+            "target": 34962
+        }
+    ],
+    "buffers": [
+        {
+            "byteLength": 1794612,
+            "uri": "2CylinderEngine0.bin"
+        }
+    ]
+}

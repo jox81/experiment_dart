@@ -170,8 +170,6 @@ abstract class RawMaterial{
   ///Must be called after gl.useProgram
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix);
 
-
-
   /// ShaderVariableType componentType
   void _setUniform(WebGLProgram program, String uniformName, int componentType,
       TypedData data) {
@@ -484,7 +482,7 @@ class DebugMaterial extends RawMaterial{
     //debug jpu
     defines['DEBUG_VS'] = false;
     defines['DEBUG_FS_POSITION'] = false;
-    defines['DEBUG_FS_NORMALS'] = defines['HAS_NORMALS'] && true;
+    defines['DEBUG_FS_NORMALS'] = defines['HAS_NORMALS'] && false;
     defines['DEBUG_FS_UV'] = defines['HAS_UV'] && false;
 
     return defines;

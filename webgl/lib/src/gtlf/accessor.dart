@@ -58,6 +58,22 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
 ///
 /// >> 24 elements * 3 VEC3  * 4 bytes (FLOAT) = 288 byteLength avec une répétition stride tous les 12 bytes (components * componentLength)
 
+
+///>>>> Exemple for grid graph
+///
+///
+/// BufferView :
+///   Element Array > 34963
+/// Accessor :
+///   componentType SCALAR(1 item) * USHORT_5123 (2 bytes) * count(8250) = 1 * 2 * 8250 = 16.500 bytes
+///
+///
+/// Buffer View
+///  Data Array > 34962
+///  stride => 3 * 4 = 12 (VEC3(3 item) * FLOAT 5126 (4 bytes))
+/// Accessor :
+///   componentType VEC3(3 item) * FLOAT 5126 (4 bytes) * count(2012) = 3 * 4 * 2012 = 24.144 bytes
+///
 class GLTFAccessor extends GLTFChildOfRootProperty {
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;

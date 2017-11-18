@@ -79,7 +79,6 @@ class UtilsAssets{
 
   ///Load a Glsl from a file url
   static Future<String> loadGlslShader(String url) async {
-    logCurrentFunction(url);
     Completer completer = new Completer<String>();
     await loadTextResource(url).then((String result){
       try {

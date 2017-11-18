@@ -27,9 +27,6 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
 //    '/gltf/wip/simple_sphere/simple_sphere.gltf',
 
-  //Complex model
-//    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
-    // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer
 
   //PBR
 //    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf', //=> change fov, problem transparency one center:force 2sided
@@ -43,9 +40,15 @@ Future main() async {
   //Wip
 //    '/gltf/wip/export_test/export_test.gltf',
 //    '/gltf/wip/export_test/export_test_grey.gltf',
-    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
+//    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
+
+    //Complex model hierarchy
+    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine_debug.gltf',
+//    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
+    // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer
+    // on nodeId = 3
   ];
 //
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);
+  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false);
   await new GLTFRenderer(gltf).render();
 }
