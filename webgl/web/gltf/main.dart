@@ -21,7 +21,7 @@ Future main() async {
 
   //textured
 //    '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
-    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
+//    '/gltf/samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF/BoxTextured_multi.gltf',
 //    '/gltf/samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
@@ -29,6 +29,7 @@ Future main() async {
 
   //Complex model
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf',
+    // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer
 
   //PBR
 //    '/gltf/samples/gltf_2_0/avocado/Avocado.gltf', //=> change fov, problem transparency one center:force 2sided
@@ -36,12 +37,13 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    '/gltf/samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    '/gltf/samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-    '/gltf/samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+//    '/gltf/samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    '/gltf/samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',
 
   //Wip
 //    '/gltf/wip/export_test/export_test.gltf',
 //    '/gltf/wip/export_test/export_test_grey.gltf',
+    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
   ];
 //
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doLog : false);

@@ -1,4 +1,4 @@
-import 'package:webgl/src/gtlf/material.dart';
+import 'package:webgl/src/gtlf/renderer/material.dart';
 import 'package:webgl/src/gtlf/normal_texture_info.dart';
 import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
