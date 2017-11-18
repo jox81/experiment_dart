@@ -529,7 +529,7 @@ class ProgramSetting{
   WebGLProgram program;
   Map<String, webgl.Buffer> buffers = new Map();
 
-  Matrix4 get _modelMatrix => _node.matrix;
+  Matrix4 get _modelMatrix => (_node.parentMatrix * _node.matrix) as Matrix4;
   Matrix4 get _viewMatrix => mainCamera.viewMatrix;
   Matrix4 get _projectionMatrix => mainCamera.projectionMatrix;
 

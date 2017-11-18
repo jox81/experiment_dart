@@ -22,6 +22,8 @@ class GLTFNode extends GLTFChildOfRootProperty{
     scale = new Vector3(_matrix.getColumn(0).length, _matrix.getColumn(1).length, _matrix.getColumn(2).length);
   }
 
+  Matrix4 get parentMatrix =>  parent != null ?  (parent.parentMatrix * parent.matrix) as Matrix4 : new Matrix4.identity();
+
   Vector3 translation = new Vector3.all(0.0);
   Quaternion rotation = new Quaternion.identity();
   Vector3 scale = new Vector3.all(1.0);

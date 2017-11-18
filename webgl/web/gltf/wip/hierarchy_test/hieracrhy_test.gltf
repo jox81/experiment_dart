@@ -105,14 +105,14 @@
             "componentType" : 5126, 
             "count" : 24, 
             "max" : [
-                1.0000004768371582, 
                 1.0, 
-                1.0000005960464478
+                1.0, 
+                1.0
             ], 
             "min" : [
-                -1.0000003576278687, 
                 -1.0, 
-                -1.0000003576278687
+                -1.0, 
+                -1.0
             ], 
             "type" : "VEC3"
         }, 
@@ -281,14 +281,14 @@
             "componentType" : 5126, 
             "count" : 24, 
             "max" : [
+                1.0000004768371582, 
                 1.0, 
-                1.0, 
-                1.0
+                1.0000005960464478
             ], 
             "min" : [
+                -1.0000003576278687, 
                 -1.0, 
-                -1.0, 
-                -1.0
+                -1.0000003576278687
             ], 
             "type" : "VEC3"
         }, 
@@ -523,18 +523,6 @@
             }
         }, 
         {
-            "name" : "Material00.001", 
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    1.0, 
-                    0.4535876214504242, 
-                    0.14999434351921082, 
-                    1.0
-                ], 
-                "metallicFactor" : 0.0
-            }
-        }, 
-        {
             "name" : "Material01", 
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
@@ -547,36 +535,12 @@
             }
         }, 
         {
-            "name" : "Material01.001", 
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.2215157151222229, 
-                    0.01055974792689085, 
-                    1.0, 
-                    1.0
-                ], 
-                "metallicFactor" : 0.0
-            }
-        }, 
-        {
             "name" : "Material02", 
             "pbrMetallicRoughness" : {
                 "baseColorFactor" : [
                     0.0, 
                     1.0, 
                     0.0038393645081669092, 
-                    1.0
-                ], 
-                "metallicFactor" : 0.0
-            }
-        }, 
-        {
-            "name" : "Material02.001", 
-            "pbrMetallicRoughness" : {
-                "baseColorFactor" : [
-                    0.0, 
-                    0.8864085078239441, 
-                    1.0, 
                     1.0
                 ], 
                 "metallicFactor" : 0.0
@@ -605,11 +569,47 @@
                 ], 
                 "metallicFactor" : 0.0
             }
+        }, 
+        {
+            "name" : "Material05", 
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    1.0, 
+                    0.4535876214504242, 
+                    0.14999434351921082, 
+                    1.0
+                ], 
+                "metallicFactor" : 0.0
+            }
+        }, 
+        {
+            "name" : "Material06", 
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.2215157151222229, 
+                    0.01055974792689085, 
+                    1.0, 
+                    1.0
+                ], 
+                "metallicFactor" : 0.0
+            }
+        }, 
+        {
+            "name" : "Material07", 
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.0, 
+                    0.8864085078239441, 
+                    1.0, 
+                    1.0
+                ], 
+                "metallicFactor" : 0.0
+            }
         }
     ], 
     "meshes" : [
         {
-            "name" : "Cube00.001", 
+            "name" : "Cube07", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -617,12 +617,12 @@
                         "POSITION" : 1
                     }, 
                     "indices" : 0, 
-                    "material" : 1
+                    "material" : 7
                 }
             ]
         }, 
         {
-            "name" : "Cube01", 
+            "name" : "Cube06", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -630,12 +630,12 @@
                         "POSITION" : 4
                     }, 
                     "indices" : 3, 
-                    "material" : 2
+                    "material" : 6
                 }
             ]
         }, 
         {
-            "name" : "Cube00", 
+            "name" : "Cube04", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -643,12 +643,12 @@
                         "POSITION" : 7
                     }, 
                     "indices" : 6, 
-                    "material" : 0
+                    "material" : 4
                 }
             ]
         }, 
         {
-            "name" : "Cube01.001", 
+            "name" : "Cube02M", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -656,7 +656,7 @@
                         "POSITION" : 10
                     }, 
                     "indices" : 9, 
-                    "material" : 3
+                    "material" : 2
                 }
             ]
         }, 
@@ -669,12 +669,12 @@
                         "POSITION" : 13
                     }, 
                     "indices" : 12, 
-                    "material" : 6
+                    "material" : 3
                 }
             ]
         }, 
         {
-            "name" : "Cube02", 
+            "name" : "Cube01M", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -682,12 +682,12 @@
                         "POSITION" : 16
                     }, 
                     "indices" : 15, 
-                    "material" : 4
+                    "material" : 1
                 }
             ]
         }, 
         {
-            "name" : "Cube04", 
+            "name" : "Cube00M", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -695,12 +695,12 @@
                         "POSITION" : 19
                     }, 
                     "indices" : 18, 
-                    "material" : 7
+                    "material" : 0
                 }
             ]
         }, 
         {
-            "name" : "Cube02.001", 
+            "name" : "Cube05", 
             "primitives" : [
                 {
                     "attributes" : {
@@ -716,42 +716,75 @@
     "nodes" : [
         {
             "children" : [
-                2, 
-                6
+                1, 
+                3
             ], 
-            "mesh" : 2, 
+            "mesh" : 6, 
             "name" : "Cube00"
         }, 
         {
             "children" : [
-                3
+                2
             ], 
-            "mesh" : 0, 
-            "name" : "Cube00.001", 
+            "mesh" : 5, 
+            "name" : "Cube01", 
+            "translation" : [
+                3.0, 
+                0.0, 
+                -0.0
+            ]
+        }, 
+        {
+            "mesh" : 3, 
+            "name" : "Cube02", 
             "translation" : [
                 0.0, 
                 0.0, 
-                -3.0
+                3.0
             ]
         }, 
         {
             "children" : [
                 4
             ], 
-            "mesh" : 1, 
-            "name" : "Cube01", 
+            "mesh" : 4, 
+            "name" : "Cube03", 
             "translation" : [
                 0.0, 
-                -3.0, 
-                -0.0
+                0.0, 
+                -3.0
             ]
         }, 
         {
             "children" : [
                 5
             ], 
-            "mesh" : 3, 
-            "name" : "Cube01.001", 
+            "mesh" : 2, 
+            "name" : "Cube04", 
+            "translation" : [
+                0.0, 
+                3.0, 
+                -0.0
+            ]
+        }, 
+        {
+            "children" : [
+                6
+            ], 
+            "mesh" : 7, 
+            "name" : "Cube05", 
+            "translation" : [
+                0.0, 
+                0.0, 
+                -3.0
+            ]
+        }, 
+        {
+            "children" : [
+                7
+            ], 
+            "mesh" : 1, 
+            "name" : "Cube06", 
             "translation" : [
                 0.0, 
                 -3.0, 
@@ -759,63 +792,12 @@
             ]
         }, 
         {
-            "mesh" : 5, 
-            "name" : "Cube02", 
+            "mesh" : 0, 
+            "name" : "Cube07", 
             "translation" : [
                 3.0, 
                 0.0, 
                 -0.0
-            ]
-        }, 
-        {
-            "mesh" : 7, 
-            "name" : "Cube02.001", 
-            "translation" : [
-                3.0, 
-                0.0, 
-                -0.0
-            ]
-        }, 
-        {
-            "children" : [
-                7
-            ], 
-            "mesh" : 4, 
-            "name" : "Cube03", 
-            "translation" : [
-                0.0, 
-                0.0, 
-                -3.0
-            ]
-        }, 
-        {
-            "children" : [
-                1
-            ], 
-            "mesh" : 6, 
-            "name" : "Cube04", 
-            "translation" : [
-                0.0, 
-                3.0, 
-                -0.0
-            ]
-        }, 
-        {
-            "mesh" : 6, 
-            "name" : "Cube04", 
-            "translation" : [
-                0.0, 
-                3.0, 
-                -0.0
-            ]
-        }, 
-        {
-            "mesh" : 4, 
-            "name" : "Cube03", 
-            "translation" : [
-                0.0, 
-                0.0, 
-                -3.0
             ]
         }
     ], 
