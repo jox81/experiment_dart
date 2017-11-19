@@ -65,7 +65,7 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
 /// BufferView :
 ///   Element Array > 34963
 /// Accessor :
-///   componentType SCALAR(1 item) * USHORT_5123 (2 bytes) * count(8250) = 1 * 2 * 8250 = 16.500 bytes
+///   componentType SCALAR(1 item) * USHORT_5123 (2 bytes) * count(5034) = 1 * 2 * 8250 = 10.068 bytes
 ///
 ///
 /// Buffer View

@@ -43,10 +43,9 @@ Future main() async {
 //    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
 
     //Complex model hierarchy
-    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine_debug.gltf',
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
-    // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer
-    // on nodeId = 3
+    // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
+    '/gltf/samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
   ];
 //
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false);

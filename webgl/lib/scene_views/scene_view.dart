@@ -23,7 +23,7 @@ class ServiceScene {
 //  new Scene(),
 // new SceneViewPrimitives(),
 // new SceneViewTexturing(),
- new SceneViewBase(),
+// new SceneViewBase(),
 // new SceneViewPBR(),
 //new SceneViewCubeMap(),
 // new SceneViewTestMatrices(),
@@ -34,7 +34,7 @@ class ServiceScene {
 // new SceneViewParticleSimple(),
 // new SceneViewPerformance(),
 // new SceneViewShaderLearning01(),
-//  new SceneViewExperiment(),
+  new SceneViewExperiment(),
 //  await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
  ];
 }

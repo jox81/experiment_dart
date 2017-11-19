@@ -50,13 +50,13 @@ class GLTFRenderer {
   WebGLTexture cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
   GLTFRenderer(GLTFProject gltf) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
     _initContext();
     globalGltf = gltf;
   }
 
   void _initContext() {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     try {
       CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
@@ -75,7 +75,7 @@ class GLTFRenderer {
   }
 
   Future render() async {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     await ShaderSource.loadShaders();
     await _initTextures();
@@ -99,7 +99,7 @@ class GLTFRenderer {
   }
 
   Future _initTextures() async {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     ImageElement imageElement;
     ///TextureFilterType magFilter;
@@ -184,7 +184,7 @@ class GLTFRenderer {
   }
 
   void createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     //create texture
     webgl.Texture texture = gl.createTexture();
@@ -222,8 +222,8 @@ class GLTFRenderer {
   int fps = 0;
   num speedFactor = 1.0;
   void _render({num time: 0.0}) {
-    debug.logCurrentFunction(
-        '\n------------------------------------------------');
+    //debug.logCurrentFunction(
+//        '\n------------------------------------------------');
 
     deltaTime = time - currentTime;
     timeFps += deltaTime;
@@ -248,7 +248,7 @@ class GLTFRenderer {
   }
 
   void draw() {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     gl.clear(
         ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
@@ -257,7 +257,7 @@ class GLTFRenderer {
   }
 
   void drawNodes(List<GLTFNode> nodes) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
     for (var i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       if (node.mesh != null) {
@@ -270,7 +270,7 @@ class GLTFRenderer {
   }
 
   void setupGLState() {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     gl.enable(webgl.DEPTH_TEST);
     gl.clearColor(.2, 0.2, 0.2, 1.0);
@@ -287,7 +287,7 @@ class GLTFRenderer {
   }
 
   void setupCameras() {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Camera currentCamera;
 
@@ -319,7 +319,7 @@ class GLTFRenderer {
 
   Camera findActiveSceneCamera(List<GLTFNode> nodes) {
 
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Camera result;
 
@@ -335,14 +335,14 @@ class GLTFRenderer {
   }
 
   void setupNodeCamera(GLTFNode node) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
     camera.position = node.translation;
   }
 
   void update() {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     interaction.update();
 
@@ -358,7 +358,7 @@ class GLTFRenderer {
   }
 
   ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Float32List keyTimes = getKeyTimes(sampler.input);
     Float32List keyValues = getKeyValues(sampler.output);
@@ -419,7 +419,7 @@ class GLTFRenderer {
       num playTime,
       int nextIndex,
       double nextTime) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Quaternion previous = new Quaternion.fromFloat32List(previousValues);
     Quaternion next = new Quaternion.fromFloat32List(nextValues);
@@ -432,21 +432,21 @@ class GLTFRenderer {
 
     Quaternion result = slerp(previous, next, interpolationValue);
 
-    debug.logCurrentFunction('interpolationValue : $interpolationValue');
-    debug.logCurrentFunction(
-        'previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
-    debug.logCurrentFunction(
-        'result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
-    debug.logCurrentFunction(
-        'next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
-    debug.logCurrentFunction('');
+    //debug.logCurrentFunction('interpolationValue : $interpolationValue');
+    //debug.logCurrentFunction(
+//        'previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
+    //debug.logCurrentFunction(
+//        'result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
+    //debug.logCurrentFunction(
+//        'next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
+    //debug.logCurrentFunction('');
 
     return result;
   }
 
   Float32List getInterpolatedValues(Float32List previousValues,
       Float32List nextValues, num interpolationValue) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Float32List result = new Float32List(previousValues.length);
 
@@ -458,7 +458,7 @@ class GLTFRenderer {
   }
 
   Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     // quaternion to return
     Quaternion qm = new Quaternion.identity();
@@ -501,7 +501,7 @@ class GLTFRenderer {
   }
 
   Float32List getKeyTimes(GLTFAccessor accessor) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Float32List keyTimes = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset, accessor.count * accessor.components);
@@ -510,7 +510,7 @@ class GLTFRenderer {
 
   // Todo (jpu) : try to return only buffer
   Float32List getKeyValues(GLTFAccessor accessor) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Float32List keyValues = accessor.bufferView.buffer.data.buffer
         .asFloat32List(
@@ -534,12 +534,12 @@ class ProgramSetting{
   Matrix4 get _projectionMatrix => mainCamera.projectionMatrix;
 
   ProgramSetting(this._node){
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     for (int i = 0; i < mesh.primitives.length; i++) {
       GLTFMeshPrimitive primitive = mesh.primitives[i];
 
-      bool debug = true;
+      bool debug = false;
       bool debugWithDebugMaterial = true;
       if(debug){
         if(debugWithDebugMaterial){
@@ -571,7 +571,7 @@ class ProgramSetting{
   }
 
   void _setupPrimitiveBuffers(WebGLProgram program, GLTFMeshPrimitive primitive) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     //bind
     for (String attributName in primitive.attributes.keys) {
@@ -584,20 +584,20 @@ class ProgramSetting{
   }
 
   void _bindIndices(GLTFAccessor accessorIndices) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
         .asUint16List(
         accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
         accessorIndices.count);
-    debug.logCurrentFunction(indices.toString());
+    //debug.logCurrentFunction(indices.toString());
 
     _initBuffer('INDICES', accessorIndices.bufferView.usage, indices);
   }
 
   void _bindVertexArrayData(
       WebGLProgram program, String attributName, GLTFAccessor accessor) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
     GLTFBuffer bufferData = accessor.bufferView.buffer;
     Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
         accessor.byteOffset + accessor.bufferView.byteOffset,
@@ -614,18 +614,19 @@ class ProgramSetting{
         (accessor.components * accessor.componentLength) <=
         accessor.bufferView.byteLength);
 
-    debug.logCurrentFunction('$attributName');
-    debug.logCurrentFunction(verticesInfos.toString());
+    //debug.logCurrentFunction('$attributName');
+    //debug.logCurrentFunction(verticesInfos.toString());
 
     //>
     _initBuffer(attributName, accessor.bufferView.usage, verticesInfos);
+
     //>
     _setAttribut(program, attributName, accessor);
   }
 
   /// BufferType bufferType
   void _initBuffer(String bufferName, int bufferType, TypedData data) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
     if(buffers[bufferName] == null) {
       buffers[bufferName] =
@@ -640,7 +641,7 @@ class ProgramSetting{
   /// [componentCount] => ex : 3 (x, y, z)
   void _setAttribut(
       WebGLProgram program, String attributName, GLTFAccessor accessor) {
-    debug.logCurrentFunction('$attributName');
+    //debug.logCurrentFunction('$attributName');
 
     //text utils
     String _capitalize(String s) =>
@@ -673,9 +674,9 @@ class ProgramSetting{
       // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
       int offset = 0;
 
-      debug.logCurrentFunction(
-          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
-      debug.logCurrentFunction('$accessor');
+      //debug.logCurrentFunction(
+//          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+      //debug.logCurrentFunction('$accessor');
 
       //>
       gl.vertexAttribPointer(attributLocation, components, componentType,
@@ -686,9 +687,9 @@ class ProgramSetting{
   }
 
   void _drawPrimitive(webgl.Program program, GLTFMeshPrimitive primitive) {
-    debug.logCurrentFunction();
+    //debug.logCurrentFunction();
 
-    debug.logCurrentFunction('${_node.nodeId}');
+    //debug.logCurrentFunction('${_node.nodeId}');
 
     if (primitive.indices == null) {
       String attributName = 'POSITION';
@@ -700,7 +701,7 @@ class ProgramSetting{
       debug.logCurrentFunction(
           'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
       gl.drawElements(primitive.mode, accessorIndices.count,
-          accessorIndices.componentType, accessorIndices.byteOffset);
+          accessorIndices.componentType, 0);
     }
   }
 }

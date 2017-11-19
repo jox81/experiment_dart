@@ -5,8 +5,10 @@ import '002.dart' as exp002;
 import '003.dart' as exp003;
 import '004.dart' as exp004;
 import 'dart:async';
+import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/context.dart';
 @MirrorsUsed(
     targets: const [
       SceneViewExperiment,
@@ -22,6 +24,13 @@ class SceneViewExperiment extends Scene{
   Future setupScene() async {
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+
+    GLTFCameraPerspective camera = new GLTFCameraPerspective(radians(45.0), 5.0, 1000.0)
+      ..targetPosition = new Vector3.zero()
+      ..position = new Vector3(5.0, 7.5, 10.0)
+      ..showGizmo = true;
+    cameras.add(camera);
+    Context.mainCamera = camera;
 
     Model model = await exp004.experiment();
     materials.add(model.material);
