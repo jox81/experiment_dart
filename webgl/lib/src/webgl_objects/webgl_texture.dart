@@ -628,91 +628,121 @@ class TextureUtils {
     print(pixels);
   }
 
-  static Future<List<ImageElement>> loadCubeMapImages(
+  static Future<List<List<ImageElement>>> loadCubeMapImages(
       String cubeMapName, {String webPath:""}) async {
-    Map<String, List<String>> cubeMapsPath = {
-      'test': [
+
+    ///List of List because it can have multiple mips level images
+    Map<String, List<List<String>>> cubeMapsPath = {
+      'test': [[
         "images/cubemap/test/test_px.png",
         "images/cubemap/test/test_nx.png",
         "images/cubemap/test/test_py.png",
         "images/cubemap/test/test_ny.png",
         "images/cubemap/test/test_pz.png",
         "images/cubemap/test/test_nz.png",
-      ],
-      'kitchen': [
+      ]],
+      'kitchen': [[
         "images/cubemap/kitchen/c00.bmp",
         "images/cubemap/kitchen/c01.bmp",
         "images/cubemap/kitchen/c02.bmp",
         "images/cubemap/kitchen/c03.bmp",
         "images/cubemap/kitchen/c04.bmp",
         "images/cubemap/kitchen/c05.bmp"
-      ],
-      'pisa': [
+      ]],
+      'pisa': [[
         "images/cubemap/pisa/pisa_posx.jpg",
         "images/cubemap/pisa/pisa_negx.jpg",
         "images/cubemap/pisa/pisa_posy.jpg",
         "images/cubemap/pisa/pisa_negy.jpg",
         "images/cubemap/pisa/pisa_posz.jpg",
         "images/cubemap/pisa/pisa_negz.jpg",
-      ],
-      'papermill_diffuse': [
+      ]],
+      'papermill_diffuse': [[
         "images/cubemap/papermill/diffuse/diffuse_right_0.jpg",
         "images/cubemap/papermill/diffuse/diffuse_left_0.jpg",
         "images/cubemap/papermill/diffuse/diffuse_top_0.jpg",
         "images/cubemap/papermill/diffuse/diffuse_bottom_0.jpg",
         "images/cubemap/papermill/diffuse/diffuse_front_0.jpg",
         "images/cubemap/papermill/diffuse/diffuse_back_0.jpg",
-      ],
-      'papermill_specular': [
-        "images/cubemap/papermill/specular/specular_right_0.jpg",
-        "images/cubemap/papermill/specular/specular_left_0.jpg",
-        "images/cubemap/papermill/specular/specular_top_0.jpg",
-        "images/cubemap/papermill/specular/specular_bottom_0.jpg",
-        "images/cubemap/papermill/specular/specular_front_0.jpg",
-        "images/cubemap/papermill/specular/specular_back_0.jpg",
-      ]
+      ]],
+      'papermill_specular': (){
+        int mipsLevel = 10;
+        List<List<String>> images = [];
+
+        for (int i = 0; i < mipsLevel; ++i) {
+          images.add(
+          [
+            "images/cubemap/papermill/specular/specular_right_$i.jpg",
+            "images/cubemap/papermill/specular/specular_left_$i.jpg",
+            "images/cubemap/papermill/specular/specular_top_$i.jpg",
+            "images/cubemap/papermill/specular/specular_bottom_$i.jpg",
+            "images/cubemap/papermill/specular/specular_front_$i.jpg",
+            "images/cubemap/papermill/specular/specular_back_$i.jpg",
+          ]);
+        }
+
+        return images;
+      }()
     };
 
-    List<String> paths = cubeMapsPath[cubeMapName];
+    List<List<String>> paths = cubeMapsPath[cubeMapName];
 
-    List<ImageElement> imageElements = new List(6);
+    List<List<ImageElement>> imageElements = new List.generate(paths.length, (i) => new List(6));
 
-    for (int i = 0; i < 6; i++) {
-      imageElements[i] = await TextureUtils.loadImage(webPath + paths[i]);
+    for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
+      for (int i = 0; i < 6; i++) {
+        imageElements[mipsLevels][i] = await TextureUtils.loadImage(webPath + paths[mipsLevels][i]);
+      }
     }
 
     return imageElements;
   }
 
   static WebGLTexture createCubeMapWithImages(
-      List<ImageElement> cubeMapImages,
+      List<List<ImageElement>> cubeMapImages,
       {bool flip: true}) {
     assert(cubeMapImages.length == 6);
 
     WebGLTexture texture = new WebGLTexture.textureCubeMap();
 
-    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip ? 1 : 0);
-
     glWrapper.activeTexture.textureCubeMap.bind(texture);
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
-        TextureParameter.TEXTURE_MAG_FILTER,
-        TextureMagnificationFilterType.LINEAR);
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
-        TextureParameter.TEXTURE_MIN_FILTER,
-        TextureMinificationFilterType.LINEAR);
+
     glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
     glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
-    for (int i = 0; i < cubeMapImages.length; i++) {
-      glWrapper.activeTexture.textureCubeMap.attachments[i].texImage2D(
-//          TextureAttachmentTarget.TEXTURE_CUBE_MAPS[i],
-          0,
-          TextureInternalFormat.RGBA,
-          TextureInternalFormat.RGBA,
-          TexelDataType.UNSIGNED_BYTE,
-          cubeMapImages[i]);
+    int mipsLevel = cubeMapImages.length;
+
+    int textureInternalFormat = TextureInternalFormat.RGBA;
+
+    if (mipsLevel < 2) {
+      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+              TextureParameter.TEXTURE_MIN_FILTER,
+              TextureMinificationFilterType.LINEAR);
+      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+          TextureParameter.TEXTURE_MAG_FILTER,
+          TextureMagnificationFilterType.LINEAR);
+    } else {
+      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+          TextureParameter.TEXTURE_MIN_FILTER,
+          TextureMinificationFilterType.LINEAR_MIPMAP_LINEAR);
+      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+          TextureParameter.TEXTURE_MAG_FILTER,
+          TextureMagnificationFilterType.LINEAR);
+    }
+
+    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, flip ? 1 : 0);
+
+    for (int mipLevels = 0; mipLevels < cubeMapImages.length; mipLevels++) {
+      for (int i = 0; i < cubeMapImages[mipLevels].length; i++) {
+        glWrapper.activeTexture.textureCubeMap.attachments[i].texImage2D(
+            mipLevels,
+            textureInternalFormat,
+            textureInternalFormat,
+            TexelDataType.UNSIGNED_BYTE,
+            cubeMapImages[mipLevels][i]);
+      }
     }
 
     glWrapper.activeTexture.textureCubeMap.unBind();

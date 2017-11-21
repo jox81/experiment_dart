@@ -75,7 +75,6 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   }
 }
 
-
 abstract class RawMaterial{
   ShaderSource get shaderSource;
 
@@ -225,11 +224,10 @@ class KronosPRBMaterial extends RawMaterial{
     Map<String, bool> defines = new Map();
 
     defines['USE_IBL'] = true; // Todo (jpu) :
-    defines['USE_TEX_LOD'] = false;//globalState.hasLODExtension != null; // Todo (jpu) :
+    defines['USE_TEX_LOD'] = globalState.hasLODExtension != null; // Todo (jpu) :
 
     //primitives infos
-    defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] !=
-        null;
+    defines['HAS_NORMALS'] = primitive.attributes['NORMAL'] != null;
     defines['HAS_TANGENTS'] = primitive.attributes['TANGENT'] != null;
     defines['HAS_UV'] = primitive.attributes['TEXCOORD_0'] != null;
 
@@ -477,12 +475,12 @@ class DebugMaterial extends RawMaterial{
     defines['HAS_COLORS'] = false;
     defines['HAS_NORMALS'] = true;
     defines['HAS_TANGENTS'] = false;
-    defines['HAS_UV'] = false;
+    defines['HAS_UV'] = true;
 
     //debug jpu
     defines['DEBUG_VS'] = false;
     defines['DEBUG_FS_POSITION'] = false;
-    defines['DEBUG_FS_NORMALS'] = defines['HAS_NORMALS'] && false;
+    defines['DEBUG_FS_NORMALS'] = defines['HAS_NORMALS'] && true;
     defines['DEBUG_FS_UV'] = defines['HAS_UV'] && false;
 
     return defines;

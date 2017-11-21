@@ -14,12 +14,9 @@ import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
-import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_scene.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
-import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-
 
 class LocalState {
   Map<String, GLFunctionCall> uniforms = new Map();

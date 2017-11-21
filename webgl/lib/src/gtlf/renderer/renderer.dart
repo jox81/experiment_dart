@@ -78,22 +78,23 @@ class GLTFRenderer {
     //debug.logCurrentFunction();
 
     await ShaderSource.loadShaders();
+    //> Init extensions
+    //This activate extensions
+    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
+    webgl.ExtShaderTextureLod hasLODExtension = gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod;
+    webgl.OesStandardDerivatives hasDerivativesExtension = gl.getExtension('OES_standard_derivatives') as webgl.OesStandardDerivatives;
+
+    globalState = new GlobalState()
+      ..scene = null
+      ..hasLODExtension =hasLODExtension
+      ..hasDerivativesExtension = hasDerivativesExtension
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+
     await _initTextures();
     setupCameras();
 
     setupGLState();
-
-    //> Init extensions
-    //This activate extensions
-    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
-    globalState = new GlobalState()
-      ..scene = null
-      ..hasLODExtension =
-      gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod
-      ..hasDerivativesExtension = gl.getExtension('OES_standard_derivatives')
-      as webgl.OesStandardDerivatives
-      ..sRGBifAvailable =
-      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
 
     _render();
   }
@@ -121,15 +122,15 @@ class GLTFRenderer {
 
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
-    List<ImageElement> papermill_diffuse =
+    List<List<ImageElement>> papermill_diffuse =
         await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: '../');
-    cubeMapTextureDiffuse = TextureUtils.createCubeMapWithImages(papermill_diffuse, flip: false);
+    cubeMapTextureDiffuse = TextureUtils.createCubeMapWithImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
 
     gl.activeTexture(TextureUnit.TEXTURE0 + 2);
-    List<ImageElement> papermill_specular =
+    List<List<ImageElement>> papermill_specular =
         await TextureUtils.loadCubeMapImages('papermill_specular', webPath: '../');
-    cubeMapTextureSpecular = TextureUtils.createCubeMapWithImages(papermill_specular, flip: false);
+    cubeMapTextureSpecular = TextureUtils.createCubeMapWithImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 
     skipTexture = 3;
@@ -258,7 +259,7 @@ class GLTFRenderer {
 
   void drawNodes(List<GLTFNode> nodes) {
     //debug.logCurrentFunction();
-    for (var i = 0; i < nodes.length; i++) {
+    for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       if (node.mesh != null) {
 

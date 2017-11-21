@@ -30,7 +30,7 @@ class SceneViewCubeMap extends Scene{
       ..position = new Vector3(0.0, 5.0, -10.0);
     Context.mainCamera = camera;
 
-    List<ImageElement> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
+    List<List<ImageElement>> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
     WebGLTexture cubeMapTexture = TextureUtils.createCubeMapWithImages(cubeMapImages, flip:false);
 
     MaterialSkyBox materialSkyBox = new MaterialSkyBox();

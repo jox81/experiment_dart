@@ -29,7 +29,7 @@ class WebglTest {
   Future textureCubeMap() async {
     print('@ Test de loading d\'un cubemap');
 
-    List<ImageElement> cubeMapImages =
+    List<List<ImageElement>> cubeMapImages =
         await TextureUtils.loadCubeMapImages('kitchen', webPath: '../../../');
     WebGLTexture cubeMapTexture =
         TextureUtils.createCubeMapWithImages(cubeMapImages);
