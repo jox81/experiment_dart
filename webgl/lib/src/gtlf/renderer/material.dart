@@ -178,7 +178,12 @@ abstract class RawMaterial{
     program.uniformLocations[uniformName] ??= program.getUniformLocation(uniformName);
     WebGLUniformLocation wrappedUniformLocation = program.uniformLocations[uniformName];
 
-    if(wrappedUniformLocation.data == data) return;
+    //let's pass if u_Camera, else it won't drow reflection correctly
+    if(wrappedUniformLocation.data == data && uniformName != "u_Camera") {
+      //      print('same $uniformName > return : $data, ${wrappedUniformLocation.data}');
+      return;
+    };
+
     wrappedUniformLocation.data = data;
     webgl.UniformLocation uniformLocation = wrappedUniformLocation.webGLUniformLocation;
     bool transpose = false;

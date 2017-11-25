@@ -633,6 +633,7 @@ class ProgramSetting{
   }
 
   /// BufferType bufferType
+  // Todo (jpu) : is it possible to use only one of the bufferViews
   void _initBuffer(String bufferName, int bufferType, TypedData data) {
     //debug.logCurrentFunction();
 
