@@ -34,7 +34,7 @@ Future main() async {
 //    '/gltf/samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    '/gltf/samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    '/gltf/samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-//    '/gltf/samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+    '/gltf/samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    '/gltf/samples/gltf_2_0/lantern/gltf/Lantern.gltf',
 //    '/gltf/samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    '/gltf/samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',
@@ -47,7 +47,7 @@ Future main() async {
     //Complex model hierarchy
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
     // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
-    '/gltf/samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
+//    '/gltf/samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
     // Todo (jpu) : 9fps children
 //    '/gltf/wip/blender_pbr/01_textured_sphere.gltf'
 //    '/gltf/blender_pbr/polly/project_polly.gltf'

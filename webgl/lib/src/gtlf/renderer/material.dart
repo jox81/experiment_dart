@@ -227,7 +227,7 @@ class KronosPRBMaterial extends RawMaterial{
 
     Map<String, bool> defines = new Map();
 
-    defines['USE_IBL'] = true; // Todo (jpu) :
+    defines['USE_IBL'] = true;
     defines['USE_TEX_LOD'] = globalState.hasLODExtension != null; // Todo (jpu) :
 
     //primitives infos
@@ -323,7 +323,8 @@ class KronosPRBMaterial extends RawMaterial{
           ShaderVariableType.SAMPLER_2D,
           baseMaterial.emissiveTexture.texture.textureId + skipTexture);
       _setUniform(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
-          baseMaterial.emissiveFactor);
+          vecData3..setAll(0,[baseMaterial.emissiveFactor[0], baseMaterial.emissiveFactor[1], baseMaterial.emissiveFactor[2]])
+      );
     }
 
     if (defines['HAS_OCCLUSIONMAP']) {
@@ -335,7 +336,7 @@ class KronosPRBMaterial extends RawMaterial{
           ? baseMaterial.occlusionTexture.strength
           : 1.0;
       _setUniform(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
-          [occlusionStrength]);
+          occlusionStrength);
     }
 
     // > Material pbr
