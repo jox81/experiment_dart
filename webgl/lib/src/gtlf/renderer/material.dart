@@ -14,6 +14,7 @@ import 'dart:web_gl' as webgl;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
+import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 class GLTFPBRMaterial extends GLTFChildOfRootProperty {
@@ -171,30 +172,33 @@ abstract class RawMaterial{
 
   /// ShaderVariableType componentType
   void _setUniform(WebGLProgram program, String uniformName, int componentType,
-      TypedData data) {
+      dynamic data) {
     //debugLog.logCurrentFunction(uniformName);
 
-    program.uniformLocations[uniformName] ??= gl.getUniformLocation(program.webGLProgram, uniformName);
-    webgl.UniformLocation uniformLocation = program.uniformLocations[uniformName];
+    program.uniformLocations[uniformName] ??= program.getUniformLocation(uniformName);
+    WebGLUniformLocation wrappedUniformLocation = program.uniformLocations[uniformName];
 
+    if(wrappedUniformLocation.data == data) return;
+    wrappedUniformLocation.data = data;
+    webgl.UniformLocation uniformLocation = wrappedUniformLocation.webGLUniformLocation;
     bool transpose = false;
 
     switch (componentType) {
       case ShaderVariableType.SAMPLER_CUBE:
       case ShaderVariableType.SAMPLER_2D:
-        gl.uniform1i(uniformLocation, (data as Int32List)[0]);
+        gl.uniform1i(uniformLocation, data as int);
         break;
       case ShaderVariableType.FLOAT:
-        gl.uniform1f(uniformLocation, (data as Float32List)[0]);
+        gl.uniform1f(uniformLocation, data as num);
         break;
       case ShaderVariableType.FLOAT_VEC2:
-        gl.uniform2fv(uniformLocation, data as Float32List);
+        gl.uniform2fv(uniformLocation, data);
         break;
       case ShaderVariableType.FLOAT_VEC3:
-        gl.uniform3fv(uniformLocation, data as Float32List);
+        gl.uniform3fv(uniformLocation,data);
         break;
       case ShaderVariableType.FLOAT_VEC4:
-        gl.uniform4fv(uniformLocation, data as Float32List);
+        gl.uniform4fv(uniformLocation, data);
         break;
       case ShaderVariableType.FLOAT_MAT3:
         gl.uniformMatrix3fv(uniformLocation, transpose, data);
@@ -249,49 +253,67 @@ class KronosPRBMaterial extends RawMaterial{
     return defines;
   }
 
+  Float32List vecData2 = new Float32List(2);
+  Float32List vecData3 = new Float32List(3);
+  Float32List vecData4 = new Float32List(4);
+  Float32List matrixData4 = new Float32List(16);
+
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix) {
     //debugLog.logCurrentFunction();
 
+    for (int i = 0; i < matrixData4.length; ++i) {
+      matrixData4[i] = modelMatrix[i];
+    }
     _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        modelMatrix.storage);
+        matrixData4);
+
+    for (int i = 0; i < matrixData4.length; ++i) {
+      matrixData4[i] = viewMatrix[i];
+    }
     _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
-        viewMatrix.storage);
+        matrixData4
+    );
+
+    for (int i = 0; i < matrixData4.length; ++i) {
+      matrixData4[i] = projectionMatrix[i];
+    }
     _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
-        projectionMatrix.storage);
+        matrixData4);
 
     _setUniform(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
         ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
 
     // > camera
     _setUniform(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
-        mainCamera.position.storage);
+        vecData3..setAll(0,[mainCamera.position[0], mainCamera.position[1], mainCamera.position[2]])
+    );
 
     // > Light
     _setUniform(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
-        lightDirection.storage);
+        vecData3..setAll(0,[lightDirection[0], lightDirection[1], lightDirection[2]]));
 
     _setUniform(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
-        (lightColor * 2.0).storage);
+        vecData3..setAll(0,[lightColor[0], lightColor[1], lightColor[2]]));
 
     // > Material base
 
     if (defines['USE_IBL']) {
       _setUniform(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
-          new Int32List.fromList([0]));
+          0);
       _setUniform(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-          new Int32List.fromList([1]));
+          1);
       _setUniform(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-          new Int32List.fromList([2]));
+          2);
     }
 
     if (defines['HAS_NORMALMAP']) {
       _setUniform(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
-          new Int32List.fromList([baseMaterial.normalTexture.texture.textureId + skipTexture]));
+         baseMaterial.normalTexture.texture.textureId + skipTexture);
       double normalScale = baseMaterial.normalTexture.scale != null
           ? baseMaterial.normalTexture.scale
           : 1.0;
       _setUniform(program, 'u_NormalScale', ShaderVariableType.FLOAT,
-          new Float32List.fromList([normalScale]));
+          normalScale);
     }
 
     if (defines['HAS_EMISSIVEMAP']) {
@@ -299,24 +321,21 @@ class KronosPRBMaterial extends RawMaterial{
           program,
           'u_EmissiveSampler',
           ShaderVariableType.SAMPLER_2D,
-          new Int32List.fromList(
-              [baseMaterial.emissiveTexture.texture.textureId + skipTexture]));
+          baseMaterial.emissiveTexture.texture.textureId + skipTexture);
       _setUniform(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
-          new Float32List.fromList(baseMaterial.emissiveFactor));
+          baseMaterial.emissiveFactor);
     }
 
     if (defines['HAS_OCCLUSIONMAP']) {
       _setUniform(
           program,
           'u_OcclusionSampler',
-          ShaderVariableType.SAMPLER_2D,
-          new Int32List.fromList(
-              [baseMaterial.occlusionTexture.texture.textureId + skipTexture]));
+          ShaderVariableType.SAMPLER_2D,baseMaterial.occlusionTexture.texture.textureId + skipTexture);
       double occlusionStrength = baseMaterial.occlusionTexture.strength != null
           ? baseMaterial.occlusionTexture.strength
           : 1.0;
       _setUniform(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
-          new Float32List.fromList([occlusionStrength]));
+          [occlusionStrength]);
     }
 
     // > Material pbr
@@ -326,9 +345,8 @@ class KronosPRBMaterial extends RawMaterial{
           program,
           'u_BaseColorSampler',
           ShaderVariableType.SAMPLER_2D,
-          new Int32List.fromList([
             baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture
-          ]));
+          );
     }
 
     if (defines['HAS_METALROUGHNESSMAP']) {
@@ -336,10 +354,9 @@ class KronosPRBMaterial extends RawMaterial{
           program,
           'u_MetallicRoughnessSampler',
           ShaderVariableType.SAMPLER_2D,
-          new Int32List.fromList([
             baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
                 .textureId + skipTexture
-          ]));
+          );
     }
 
     double roughness = baseMaterial.pbrMetallicRoughness.roughnessFactor;
@@ -347,8 +364,7 @@ class KronosPRBMaterial extends RawMaterial{
     _setUniform(
         program,
         'u_MetallicRoughnessValues',
-        ShaderVariableType.FLOAT_VEC2,
-        new Float32List.fromList([metallic, roughness]));
+        ShaderVariableType.FLOAT_VEC2,vecData2..setAll(0,[metallic, roughness]));
 
     _setUniform(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
         baseMaterial.pbrMetallicRoughness.baseColorFactor);
@@ -362,13 +378,12 @@ class KronosPRBMaterial extends RawMaterial{
     _setUniform(
         program,
         'u_ScaleFGDSpec',
-        ShaderVariableType.FLOAT_VEC4,
-        new Float32List.fromList([
-          specularReflectionMask,
-          geometricOcclusionMask,
-          microfacetDistributionMask,
-          specularContributionMask
-        ]));
+        ShaderVariableType.FLOAT_VEC4,vecData4..setAll(0,[
+      specularReflectionMask,
+      geometricOcclusionMask,
+      microfacetDistributionMask,
+      specularContributionMask]
+    ));
 
     double diffuseContributionMask = 0.0;
     double colorMask = 0.0;
@@ -377,23 +392,24 @@ class KronosPRBMaterial extends RawMaterial{
     _setUniform(
         program,
         'u_ScaleDiffBaseMR',
-        ShaderVariableType.FLOAT_VEC4,
-        new Float32List.fromList([
+        ShaderVariableType.FLOAT_VEC4,vecData4..setAll(0,[
           diffuseContributionMask,
           colorMask,
           metallicMask,
           roughnessMask
-        ]));
+    ]));
 
     double diffuseIBLAmbient = 1.0;
     double specularIBLAmbient = 1.0;
     _setUniform(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
-        new Float32List.fromList([
+        vecData4..setAll(0, [
           diffuseIBLAmbient,
           specularIBLAmbient,
           1.0,
           1.0
-        ]));
+        ])
+
+    );
   }
 }
 

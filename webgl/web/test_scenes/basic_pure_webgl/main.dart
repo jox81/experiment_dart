@@ -18,23 +18,18 @@ class Renderer{
 
   List<double> vertices;
   int elementsByVertices;
-//
-//  String fsSource = '''
-//    void main() {
-//      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
-//    }
-//    ''';
+
+  String fsSource = '''
+    void main() {
+      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
+    }
+  ''';
 
   String vsSource = '''
     attribute vec3 pos;
 
     void main() {
       gl_Position = vec4(pos, 3.0);
-    }
-  ''';
-  String fsSource = '''
-    void main() {
-      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
     }
   ''';
 

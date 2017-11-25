@@ -292,24 +292,31 @@ class GLTFRenderer {
 
     Camera currentCamera;
 
-    //find first activeScene camera
-    currentCamera = findActiveSceneCamera(activeScene.nodes);
-    //or use first in project else default
-    if (currentCamera == null) {
-      currentCamera = findActiveSceneCamera(globalGltf.nodes);
-    }
-    if (currentCamera == null) {
-      if (globalGltf.cameras.length > 0) {
-        currentCamera = globalGltf.cameras[0];
-      } else {
-        currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 100.0)
-          ..targetPosition = new Vector3(0.0, 0.03, 0.0);
-//          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
-      }
-      currentCamera.position = new Vector3(5.0, 5.0, 10.0);
-//      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
-    }
+    bool debugCamera = true;
 
+    if(debugCamera){
+      currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 1000.0)
+        ..targetPosition = new Vector3(0.0, 0.0, 0.0)
+        ..position = new Vector3(10.0, 10.0, 10.0);
+    }else {
+      //find first activeScene camera
+      currentCamera = findActiveSceneCamera(activeScene.nodes);
+      //or use first in project else default
+      if (currentCamera == null) {
+        currentCamera = findActiveSceneCamera(globalGltf.nodes);
+      }
+      if (currentCamera == null) {
+        if (globalGltf.cameras.length > 0) {
+          currentCamera = globalGltf.cameras[0];
+        } else {
+          currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 100.0)
+            ..targetPosition = new Vector3(0.0, 0.03, 0.0);
+//          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
+        }
+        currentCamera.position = new Vector3(5.0, 5.0, 10.0);
+//      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
+      }
+    }
     //>
     if (currentCamera is GLTFCameraPerspective) {
       Context.Context.mainCamera = currentCamera;
@@ -639,14 +646,14 @@ class ProgramSetting{
     }
   }
 
+  //text utils
+  String _capitalize(String s) =>
+      s[0].toUpperCase() + s.substring(1).toLowerCase();
+
   /// [componentCount] => ex : 3 (x, y, z)
   void _setAttribut(
       WebGLProgram program, String attributName, GLTFAccessor accessor) {
     //debug.logCurrentFunction('$attributName');
-
-    //text utils
-    String _capitalize(String s) =>
-        s[0].toUpperCase() + s.substring(1).toLowerCase();
 
     String shaderAttributName;
     if (attributName == 'TEXCOORD_0') {

@@ -13,20 +13,45 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   int nodeId;
 
+  bool get hasChildren => gltfSource.children != null && gltfSource.children.length > 0;
+
+  ProgramSetting programSetting;
+
+  Vector3 _translation = new Vector3.all(0.0);
+  Vector3 get translation => _translation;
+  set translation(Vector3 value) {
+    _translation = value;
+    _updateMatrix();
+  }
+
+  Quaternion _rotation = new Quaternion.identity();
+  Quaternion get rotation => _rotation;
+  set rotation(Quaternion value) {
+    _rotation = value;
+    _updateMatrix();
+  }
+
+  Vector3 _scale = new Vector3.all(1.0);
+  Vector3 get scale => _scale;
+  set scale(Vector3 value) {
+    _scale = value;
+    _updateMatrix();
+  }
+
+  void _updateMatrix(){
+    _matrix.setFromTranslationRotationScale(_translation, _rotation, _scale);
+  }
+
   Matrix4 _matrix = new Matrix4.identity();
-  Matrix4 get matrix => _matrix..setFromTranslationRotationScale(translation, rotation, scale);
+  Matrix4 get matrix => _matrix;
   set matrix(Matrix4 value) {
     _matrix = value;
-    translation = _matrix.getTranslation();
-    rotation = new Quaternion.fromRotation(_matrix.getRotation());
-    scale = new Vector3(_matrix.getColumn(0).length, _matrix.getColumn(1).length, _matrix.getColumn(2).length);
+    _translation = _matrix.getTranslation();
+    _rotation = new Quaternion.fromRotation(_matrix.getRotation());
+    _scale = new Vector3(_matrix.getColumn(0).length, _matrix.getColumn(1).length, _matrix.getColumn(2).length);
   }
 
   Matrix4 get parentMatrix =>  parent != null ?  (parent.parentMatrix * parent.matrix) as Matrix4 : new Matrix4.identity();
-
-  Vector3 translation = new Vector3.all(0.0);
-  Quaternion rotation = new Quaternion.identity();
-  Vector3 scale = new Vector3.all(1.0);
 
   List<double> weights;
 
@@ -38,12 +63,16 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   GLTFSkin skin;
 
-  List<GLTFNode> get children => gltfProject.nodes.where((n)=>n.parent == this).toList(growable: false);
+  List<GLTFNode> _children = new List();
+  List<GLTFNode> get children => _children;
+  set children(List<GLTFNode> value) {
+    _children = value;
+  }
 
-  int _parentId;
-  GLTFNode get parent => _parentId != null ? gltfProject.nodes[_parentId] : null;
+  GLTFNode _parent;
+  GLTFNode get parent => _parent;
   set parent(GLTFNode value) {
-    _parentId = gltfProject.nodes.indexOf(value);
+    _parent = value;
   }
 
   bool isJoint = false;
@@ -95,10 +124,10 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   @override
   String toString() {
-    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $_meshId, parent: $_parentId, skin: $skin, isJoint: $isJoint}';
+    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: $_meshId, parent: ${parent.nodeId}, skin: $skin, isJoint: $isJoint}';
   }
 
   //>
 
-  ProgramSetting programSetting;
+
 }

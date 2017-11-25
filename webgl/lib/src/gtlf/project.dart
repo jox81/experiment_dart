@@ -225,13 +225,11 @@ class GLTFProject {
           addNode(node);
         }
       }
-      //Nodes parenting
+      //Nodes hierarchy parenting
       for (GLTFNode node in nodes) {
-        if(node.gltfSource.children != null && node.gltfSource.children.length > 0){
-          for (int i = 0; i < node.gltfSource.children.length; i++) {
-            nodes.where((n)=>node.gltfSource.children.contains(n.gltfSource))
-            ..forEach((n)=> n.parent = node);
-          }
+        if(node.hasChildren){
+            node.children = nodes.where((n)=>node.gltfSource.children.contains(n.gltfSource)).toList();
+            node.children.forEach((n)=> n.parent = node);
         }
       }
 
@@ -254,7 +252,6 @@ class GLTFProject {
           animations.add(animation);
         }
       }
-
     }
   }
 
