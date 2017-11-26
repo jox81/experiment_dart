@@ -8,7 +8,6 @@ abstract class IUpdatable{
 }
 
 abstract class IUpdatableScene implements IUpdatable{
-  Vector4 backgroundColor;
 
   IEditElement currentSelection;
 

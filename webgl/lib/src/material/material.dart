@@ -100,7 +100,6 @@ abstract class Material extends IEditElement {
 
     if(buffers[attributName].data != arrayBuffer) {
       buffers[attributName].data = arrayBuffer;
-      print(new Float32List.fromList(arrayBuffer));
       gl.bufferData(
           BufferType.ARRAY_BUFFER, new Float32List.fromList(arrayBuffer), BufferUsageType.STATIC_DRAW);
     }

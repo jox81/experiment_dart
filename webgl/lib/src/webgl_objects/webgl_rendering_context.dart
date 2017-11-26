@@ -420,7 +420,6 @@ class WebGLRenderingContext extends IEditElement {
   bool get dither => isEnabled(EnableCapabilityType.DITHER);
   set dither (bool enabled) => _setEnabled(EnableCapabilityType.DITHER, enabled);
 
-
   /////
 
   //EnableCapabilityType enabling

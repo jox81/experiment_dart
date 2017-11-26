@@ -21,11 +21,11 @@ import 'package:webgl/scene_views/scene_view_primitives.dart';
 class ServiceScene {
  static  Future<List<Scene>> getSceneViews() async => [
 //  new Scene(),
-// new SceneViewPrimitives(),
+ new SceneViewPrimitives(),
 // new SceneViewTexturing(),
 // new SceneViewBase(),
 // new SceneViewPBR(),
-//new SceneViewCubeMap(),
+// new SceneViewCubeMap(),
 // new SceneViewTestMatrices(),
 // new SceneViewWebGLEdit(),
 // new SceneViewVectors(),
@@ -34,7 +34,7 @@ class ServiceScene {
 // new SceneViewParticleSimple(),
 // new SceneViewPerformance(),
 // new SceneViewShaderLearning01(),
-  new SceneViewExperiment(),
+//  new SceneViewExperiment(),
 //  await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
  ];
 }

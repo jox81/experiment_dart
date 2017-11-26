@@ -42,12 +42,12 @@ Future main() async {
   //Wip
 //    '/gltf/wip/export_test/export_test.gltf',
 //    '/gltf/wip/export_test/export_test_grey.gltf',
-//    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
+    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
 
     //Complex model hierarchy
     // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
-    '/gltf/samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
+//    '/gltf/samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
 //    '/gltf/wip/blender_pbr/01_textured_sphere.gltf'
 //    '/gltf/blender_pbr/polly/project_polly.gltf'
   ];

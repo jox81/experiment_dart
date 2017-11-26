@@ -42,7 +42,6 @@ class WebGLBuffer extends WebGLObject{
 
   // >>> Parameteres
 
-
   /// BufferType target, BufferParameters parameter
   dynamic getParameter(int target, int parameter){
     dynamic result =  gl.getBufferParameter(target,parameter);
@@ -53,23 +52,25 @@ class WebGLBuffer extends WebGLObject{
 
   // >> ARRAY_BUFFER
   // > BUFFER_SIZE
-  int get arrayBufferSize => gl.getBufferParameter(BufferType.ARRAY_BUFFER,BufferParameters.BUFFER_SIZE) as int;
+  static int get arrayBufferSize => gl.getBufferParameter(BufferType.ARRAY_BUFFER,BufferParameters.BUFFER_SIZE) as int;
   // > BUFFER_USAGE
   /// BufferUsageType get arrayBufferUsage
-  int get arrayBufferUsage => gl.getBufferParameter(BufferType.ARRAY_BUFFER,BufferParameters.BUFFER_USAGE)as int;
+  static int get arrayBufferUsage => gl.getBufferParameter(BufferType.ARRAY_BUFFER,BufferParameters.BUFFER_USAGE)as int;
 
   // >> ELEMENT_ARRAY_BUFFER
   // > BUFFER_SIZE
-  int get elementArrayBufferSize => gl.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER,BufferParameters.BUFFER_SIZE)as int;
+  static int get elementArrayBufferSize => gl.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER,BufferParameters.BUFFER_SIZE)as int;
   // > BUFFER_USAGE
   /// BufferUsageType get elementArrayBufferUsage
-  int get elementArrayBufferUsage => gl.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER,BufferParameters.BUFFER_USAGE)as int;
-
+  static int get elementArrayBufferUsage => gl.getBufferParameter(BufferType.ELEMENT_ARRAY_BUFFER,BufferParameters.BUFFER_USAGE)as int;
 
   void logBufferInfos() {
     Debug.log("Buffer Infos", () {
       print('isBuffer : ${isBuffer}');
+      print('data : ${data}');
 
+      print('..................................................................');
+      print('GL Global State Buffer infos');
       print('..................................................................');
       print('###  ARRAY_BUFFER');
       print('arrayBufferSize : ${arrayBufferSize}');

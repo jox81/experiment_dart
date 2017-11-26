@@ -136,17 +136,11 @@ class Application {
   void _renderCurrentScene() {
 //    window.console.time('01_application::_renderCurrentScene');
 
-    gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
-    clear(_currentScene.backgroundColor);
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
     _currentScene.update();
     _currentScene.render();
 
 //    window.console.timeEnd('01_application::_renderCurrentScene');
-  }
-
-  void clear(Vector4 color) {
-    gl.clearColor(color.r, color.g, color.g, color.a);
-    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
   }
 }

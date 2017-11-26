@@ -25,6 +25,13 @@ class Context{
   static Application get application => Application.instance;
   static Scene get currentScene => Application.instance != null ? Application.instance.currentScene as Scene : null;
 
+  Vector4 _backgroundColor;
+  Vector4 get backgroundColor => _backgroundColor;
+  set backgroundColor(Vector4 color) {
+    _backgroundColor = color;
+    gl.clearColor(color.r, color.g, color.g, color.a);
+  }
+
   static GLTFCameraPerspective _mainCamera;
   static GLTFCameraPerspective get mainCamera => _mainCamera;
   static set mainCamera(GLTFCameraPerspective value) {
