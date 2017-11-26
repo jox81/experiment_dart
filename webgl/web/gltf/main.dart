@@ -42,8 +42,8 @@ Future main() async {
   //Wip
 //    '/gltf/wip/export_test/export_test.gltf',
 //    '/gltf/wip/export_test/export_test_grey.gltf',
-    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
-
+//    '/gltf/wip/hierarchy_test/hieracrhy_test.gltf',
+      '/gltf/wip/archi/model_01/model_01.gltf',
     //Complex model hierarchy
     // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
 //    '/gltf/samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
