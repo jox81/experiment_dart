@@ -10,6 +10,8 @@ import 'dart:mirrors';
 // Todo (jpu) : do not load all shader when not needed
 class ShaderSource{
 
+  static String _currentPackage = "packages/webgl/";
+
   static Map<String , List<String>> shadersPath = {
     'material_point' :[
       'shaders/material_point/material_point.vs.glsl',
@@ -77,8 +79,8 @@ class ShaderSource{
 
       ShaderSource shaderSource = new ShaderSource()
         ..shaderType = key
-        ..vertexShaderPath = shadersPath[key][0]
-        ..fragmentShaderPath = shadersPath[key][1];
+        ..vertexShaderPath = _currentPackage + shadersPath[key][0]
+        ..fragmentShaderPath = _currentPackage + shadersPath[key][1];
       await shaderSource._loadShader();
 
       sources[shaderSource.shaderType] = shaderSource;

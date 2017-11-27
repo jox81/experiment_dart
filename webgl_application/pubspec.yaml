@@ -1,5 +1,5 @@
-name: 'webgl'
-version: 0.0.5
+name: 'webgl_application'
+version: 0.0.1
 description: Building a webgl application
 author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
@@ -8,11 +8,11 @@ environment:
   sdk: '>=1.0.0 <2.0.0'
 
 dependencies:
+  webgl:
+    path: ../webgl
+  angular2: ^2.2.0
   vector_math: any
   test:
-  gltf: 
-    path: ../gltf
-  datgui: "^0.2.0+1"
   logging: "^0.11.3+1"
   stack_trace: "^1.8.2"
 
@@ -23,6 +23,15 @@ dev_dependencies:
 transformers:
 - test/pub_serve:
     $include: web/
+- angular2:
+    platform_directives:
+    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
+    platform_pipes:
+    - 'package:angular2/common.dart#COMMON_PIPES'
+    entry_points: web/index.dart
+    resolved_identifiers:
+      BrowserClient: 'package:http/browser_client.dart'
+      Client: 'package:http/http.dart'
 - $dart2js:
     commandLineOptions: [--enable-experimental-mirrors]
 - dart_to_js_script_rewriter

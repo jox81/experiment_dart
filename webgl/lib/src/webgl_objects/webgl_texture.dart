@@ -701,7 +701,7 @@ class TextureUtils {
   static WebGLTexture createCubeMapWithImages(
       List<List<ImageElement>> cubeMapImages,
       {bool flip: true}) {
-    assert(cubeMapImages.length == 6);
+//    assert(cubeMapImages.length == 6);
 
     WebGLTexture texture = new WebGLTexture.textureCubeMap();
 

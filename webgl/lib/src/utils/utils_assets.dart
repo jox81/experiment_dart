@@ -29,12 +29,12 @@ class UtilsAssets{
 
     if(url.startsWith('/')){
       url = url.substring(1);
-    }
-    if(url.startsWith('./')){
+    }else if(url.startsWith('./')){
       url = url.substring(2);
-    }
-    if(url.startsWith('../')){
+    }else if(url.startsWith('../')){
       url = url.substring(3);
+    }else{
+      _webPath = '';
     }
 
     Random random = new Random();

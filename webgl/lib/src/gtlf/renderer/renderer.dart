@@ -113,7 +113,7 @@ class GLTFRenderer {
     int wrapT;
 
     //brdfLUT
-    imageElement = await TextureUtils.loadImage('../images/utils/brdfLUT.png');
+    imageElement = await TextureUtils.loadImage('packages/webgl/images/utils/brdfLUT.png');
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -123,13 +123,13 @@ class GLTFRenderer {
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
     List<List<ImageElement>> papermill_diffuse =
-        await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: '../');
+        await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: 'packages/webgl/');
     cubeMapTextureDiffuse = TextureUtils.createCubeMapWithImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
 
     gl.activeTexture(TextureUnit.TEXTURE0 + 2);
     List<List<ImageElement>> papermill_specular =
-        await TextureUtils.loadCubeMapImages('papermill_specular', webPath: '../');
+        await TextureUtils.loadCubeMapImages('papermill_specular', webPath: 'packages/webgl/');
     cubeMapTextureSpecular = TextureUtils.createCubeMapWithImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 

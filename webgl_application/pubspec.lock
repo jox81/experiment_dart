@@ -7,6 +7,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.29.11"
+  angular2:
+    description:
+      name: angular2
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.0"
   args:
     description:
       name: args
@@ -37,6 +43,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.10.0+2"
+  build:
+    description:
+      name: build
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.0"
   charcode:
     description:
       name: charcode
@@ -49,6 +61,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.1+2"
+  code_transformers:
+    description:
+      name: code_transformers
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.1+3"
   collection:
     description:
       name: collection
@@ -73,6 +91,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.14.1"
+  dart_style:
+    description:
+      name: dart_style
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.16"
   dart_to_js_script_rewriter:
     description:
       name: dart_to_js_script_rewriter
@@ -85,6 +109,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0+1"
+  fixnum:
+    description:
+      name: fixnum
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.10.6"
   glob:
     description:
       name: glob
@@ -108,7 +138,7 @@ packages:
       name: http
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.3+15"
+    version: "0.11.3+16"
   http_multi_server:
     description:
       name: http_multi_server
@@ -121,6 +151,18 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.1"
+  intl:
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.0"
+  io:
+    description:
+      name: io
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0"
   isolate:
     description:
       name: isolate
@@ -156,13 +198,19 @@ packages:
       name: mime
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.3"
+    version: "0.9.4"
   node_preamble:
     description:
       name: node_preamble
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.4.0"
+  observable:
+    description:
+      name: observable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.14.0+1"
   package_config:
     description:
       name: package_config
@@ -180,7 +228,7 @@ packages:
       name: path
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.4.2"
+    version: "1.5.1"
   plugin:
     description:
       name: plugin
@@ -193,6 +241,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.3"
+  protobuf:
+    description:
+      name: protobuf
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.5.5"
   pub_semver:
     description:
       name: pub_semver
@@ -216,7 +270,7 @@ packages:
       name: shelf_static
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.5"
+    version: "0.2.6"
   shelf_web_socket:
     description:
       name: shelf_web_socket
@@ -246,7 +300,7 @@ packages:
       name: stack_trace
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.2"
+    version: "1.9.1"
   stream_channel:
     description:
       name: stream_channel
@@ -270,7 +324,7 @@ packages:
       name: test
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.24+8"
+    version: "0.12.28"
   typed_data:
     description:
       name: typed_data
@@ -301,6 +355,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.6"
+  webgl:
+    description:
+      path: "..\\webgl"
+      relative: true
+    source: path
+    version: "0.0.5"
   when:
     description:
       name: when
@@ -320,4 +380,4 @@ packages:
     source: hosted
     version: "2.1.13"
 sdks:
-  dart: ">=1.23.0 <2.0.0"
+  dart: ">=1.23.0 <2.0.0-dev.infinity"
