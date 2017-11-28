@@ -16,8 +16,8 @@ class GlobalState {
 
   int sRGBifAvailable; // else : webgl.RGBA
 
-  webgl.ExtShaderTextureLod hasLODExtension;
-  webgl.OesStandardDerivatives hasDerivativesExtension;
+  var hasLODExtension;
+  var hasDerivativesExtension;
 
   KronosScene scene;
 }

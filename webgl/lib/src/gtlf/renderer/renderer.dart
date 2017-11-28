@@ -80,9 +80,9 @@ class GLTFRenderer {
     await ShaderSource.loadShaders();
     //> Init extensions
     //This activate extensions
-    webgl.EXTsRgb hasSRGBExt = gl.getExtension('EXT_SRGB') as webgl.EXTsRgb;
-    webgl.ExtShaderTextureLod hasLODExtension = gl.getExtension('EXT_shader_texture_lod') as webgl.ExtShaderTextureLod;
-    webgl.OesStandardDerivatives hasDerivativesExtension = gl.getExtension('OES_standard_derivatives') as webgl.OesStandardDerivatives;
+    var hasSRGBExt = gl.getExtension('EXT_SRGB');
+    var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
+    var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
 
     globalState = new GlobalState()
       ..scene = null

@@ -79,6 +79,12 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  datgui:
+    description:
+      name: datgui
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0+1"
   glob:
     description:
       name: glob
@@ -90,7 +96,7 @@ packages:
       path: "..\\gltf"
       relative: true
     source: path
-    version: "2.0.0-dev.1.1"
+    version: "2.0.0-dev.1.5"
   html:
     description:
       name: html
