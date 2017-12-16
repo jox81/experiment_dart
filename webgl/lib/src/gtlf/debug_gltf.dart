@@ -3,7 +3,7 @@ import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
 import 'package:webgl/src/gtlf/image.dart';
-import 'package:webgl/src/gtlf/renderer/material.dart';
+import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/sampler.dart';

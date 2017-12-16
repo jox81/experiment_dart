@@ -12,6 +12,7 @@ import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/renderer/base_material.dart';
+import 'package:webgl/src/gtlf/material.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
@@ -596,7 +597,50 @@ class ProgramSetting{
           material = new KronosDefaultMaterial();
         }
       } else {
-        material = new KronosPRBMaterial.fromGLTFPBRMterial(primitive.material, skipTexture, globalState, primitive.attributes['NORMAL'] != null, primitive.attributes['TANGENT'] != null, primitive.attributes['TEXCOORD_0'] != null);
+        material = new KronosPRBMaterial(skipTexture, globalState, primitive.attributes['NORMAL'] != null, primitive.attributes['TANGENT'] != null, primitive.attributes['TEXCOORD_0'] != null);
+        GLTFPBRMaterial baseMaterial = primitive.material;
+
+        KronosPRBMaterial materialPBR = material as KronosPRBMaterial;
+        materialPBR.baseColorMap = baseMaterial.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture;
+        if (materialPBR.hasBaseColorMap) {
+          materialPBR.baseColorSamplerSlot = baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture;
+        }
+        materialPBR.baseColorFactor = baseMaterial.pbrMetallicRoughness.baseColorFactor;
+
+        materialPBR.normalMap = baseMaterial.normalTexture?.texture?.webglTexture;
+        if(materialPBR.hasNormalMap) {
+          materialPBR.normalSamplerSlot =
+              baseMaterial.normalTexture.texture.textureId + skipTexture;
+          materialPBR.normalScale = baseMaterial.normalTexture.scale != null
+              ? baseMaterial.normalTexture.scale
+              : 1.0;
+        }
+
+        materialPBR.emissiveMap = baseMaterial.emissiveTexture?.texture?.webglTexture;
+        if(materialPBR.hasEmissiveMap) {
+          materialPBR.emissiveSamplerSlot =
+              baseMaterial.emissiveTexture.texture.textureId + skipTexture;
+          materialPBR.emissiveFactor = baseMaterial.emissiveFactor;
+        }
+
+        materialPBR.occlusionMap = baseMaterial.occlusionTexture?.texture?.webglTexture;
+        if(materialPBR.hasOcclusionMap) {
+          materialPBR.occlusionSamplerSlot =
+              baseMaterial.occlusionTexture.texture.textureId + skipTexture;
+          materialPBR.occlusionStrength = baseMaterial.occlusionTexture.strength != null
+              ? baseMaterial.occlusionTexture.strength
+              : 1.0;
+        }
+
+        materialPBR.metallicRoughnessMap = baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture?.texture?.webglTexture;
+        if(materialPBR.hasMetallicRoughnessMap) {
+          materialPBR.metallicRoughnessSamplerSlot =
+              baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
+                  .textureId + skipTexture;
+        }
+
+        materialPBR.roughness = baseMaterial.pbrMetallicRoughness.roughnessFactor;
+        materialPBR.metallic = baseMaterial.pbrMetallicRoughness.metallicFactor;
       }
 
       programs.add(material.getProgram());

@@ -1,19 +1,14 @@
 import 'dart:typed_data';
+import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
-import 'package:webgl/src/gtlf/renderer/material.dart';
 import 'package:webgl/src/light.dart';
-
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
-
-import 'dart:web_gl' as webgl;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 abstract class RawMaterial{
   ShaderSource get shaderSource;
@@ -172,88 +167,71 @@ class KronosPRBMaterial extends RawMaterial{
   bool get useLod => true;
 
   KronosPRBMaterial(this.skipTexture, this.globalState, this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut);
-  KronosPRBMaterial.fromGLTFPBRMterial(this.baseMaterial, this.skipTexture, this.globalState, this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut){
-    baseColorMap = baseMaterial.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture;
-    if (hasBaseColorMap) {
-      _baseColorSamplerSlot = baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture;
-    }
-    _baseColorFactor = baseMaterial.pbrMetallicRoughness.baseColorFactor;
-
-    normalMap = baseMaterial.normalTexture?.texture?.webglTexture;
-    if(hasNormalMap) {
-      _normalSamplerSlot =
-          baseMaterial.normalTexture.texture.textureId + skipTexture;
-      _normalScale = baseMaterial.normalTexture.scale != null
-          ? baseMaterial.normalTexture.scale
-          : 1.0;
-    }
-
-    emissiveMap = baseMaterial.emissiveTexture?.texture?.webglTexture;
-    if(hasEmissiveMap) {
-      _emissiveSamplerSlot =
-          baseMaterial.emissiveTexture.texture.textureId + skipTexture;
-    _emissiveFactor = baseMaterial.emissiveFactor;
-    }
-
-    occlusionMap = baseMaterial.occlusionTexture?.texture?.webglTexture;
-    if(hasOcclusionMap) {
-      _occlusionSamplerSlot =
-          baseMaterial.occlusionTexture.texture.textureId + skipTexture;
-      _occlusionStrength = baseMaterial.occlusionTexture.strength != null
-          ? baseMaterial.occlusionTexture.strength
-          : 1.0;
-    }
-
-    metallicRoughnessMap = baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture?.texture?.webglTexture;
-    if(hasMetallicRoughnessMap) {
-      _metallicRoughnessSamplerSlot =
-          baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
-              .textureId + skipTexture;
-    }
-
-    _roughness = baseMaterial.pbrMetallicRoughness.roughnessFactor;
-    _metallic = baseMaterial.pbrMetallicRoughness.metallicFactor;
-  }
-
-  GLTFPBRMaterial baseMaterial;
 
   //> BaseColor
   webgl.Texture baseColorMap;
   bool get hasBaseColorMap => baseColorMap != null;
   int _baseColorSamplerSlot;
   int get baseColorSamplerSlot => _baseColorSamplerSlot;
+  set baseColorSamplerSlot(int value) {
+    _baseColorSamplerSlot = value;
+  }
   Float32List _baseColorFactor;
   Float32List get baseColorFactor => _baseColorFactor;
+  set baseColorFactor(Float32List value) {
+    _baseColorFactor = value;
+  }
 
   //> Normals Map
   webgl.Texture normalMap;
   bool get hasNormalMap => normalMap != null;
   int _normalSamplerSlot;
   int get normalSamplerSlot => _normalSamplerSlot;
+  set normalSamplerSlot(int value) {
+    _normalSamplerSlot = value;
+  }
   double _normalScale;
   double get normalScale => _normalScale;
+  set normalScale(double value) {
+    _normalScale = value;
+  }
 
   //> Emissive Map
   webgl.Texture emissiveMap;
   bool get hasEmissiveMap => emissiveMap != null;
   int _emissiveSamplerSlot;
   int get emissiveSamplerSlot => _emissiveSamplerSlot;
+  set emissiveSamplerSlot(int value) {
+    _emissiveSamplerSlot = value;
+  }
   List<double> _emissiveFactor;
   List<double> get emissiveFactor => _emissiveFactor;
+  set emissiveFactor(List<double> value) {
+    _emissiveFactor = value;
+  }
 
   //> Occlusion Map
   webgl.Texture occlusionMap;
   bool get hasOcclusionMap => occlusionMap != null;
   int _occlusionSamplerSlot;
   int get occlusionSamplerSlot => _occlusionSamplerSlot;
+  set occlusionSamplerSlot(int value) {
+    _occlusionSamplerSlot = value;
+  }
   double _occlusionStrength;
   double get occlusionStrength => _occlusionStrength;
+  set occlusionStrength(double value) {
+    _occlusionStrength = value;
+  }
 
   //> MetallRoughness Map
   webgl.Texture metallicRoughnessMap;
   bool get hasMetallicRoughnessMap => metallicRoughnessMap != null;
   int _metallicRoughnessSamplerSlot;
   int get metallicRoughnessSamplerSlot => _metallicRoughnessSamplerSlot;
+  set metallicRoughnessSamplerSlot(int value) {
+    _metallicRoughnessSamplerSlot = value;
+  }
 
   double _roughness;
   set roughness(double value) {

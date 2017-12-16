@@ -26,7 +26,6 @@ Future main() async {
 //    './samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
 //    './wip/simple_sphere/simple_sphere.gltf',
 
-
   //PBR
 //    './samples/gltf_2_0/avocado/Avocado.gltf', //=> change fov, problem transparency one center:force 2sided
 //    './samples/gltf_2_0/BarramundiFish/glTF/BarramundiFish.gltf',
@@ -35,8 +34,8 @@ Future main() async {
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
 //    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
-//    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base node matrix
-//    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',
+//    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
+//    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
 
   //Wip
 //    './wip/export_test/export_test.gltf',
