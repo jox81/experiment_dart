@@ -17,7 +17,7 @@ class SceneViewVectors extends Scene{
 
   SceneViewVectors();
 
-  GLTFCameraPerspective cameraTest;
+  CameraPerspective cameraTest;
 
   MaterialBaseColor matVectorA;
   MaterialBaseColor matVectorB;
@@ -32,7 +32,7 @@ class SceneViewVectors extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    GLTFCameraPerspective camera = new GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
+    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(3.0, 10.0, 10.0);
     Context.mainCamera = camera;
@@ -41,7 +41,7 @@ class SceneViewVectors extends Scene{
     matVectorB = new MaterialBaseColor(new Vector4(0.0,0.0,1.0,1.0));
     matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
 
-    cameraTest = new GLTFCameraPerspective(radians(45.0), 0.2, 5.0)
+    cameraTest = new CameraPerspective(radians(45.0), 0.2, 5.0)
       ..targetPosition = new Vector3(1.0, 0.0, 0.0)
       ..position = new Vector3(3.0, 3.0, 3.0)
       ..showGizmo = true;

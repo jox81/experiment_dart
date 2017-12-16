@@ -7,19 +7,20 @@ import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
-import 'package:webgl/src/gtlf/renderer/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/renderer/base_material.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
+import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/context.dart' as Context;
+import 'package:webgl/src/context.dart' as ctxWrapper;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -37,21 +38,26 @@ GlobalState globalState;
 Vector3 lightPosition = new Vector3(50.0, 50.0, -50.0);
 Vector3 get lightDirection => lightPosition.normalized();
 Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
-GLTFCameraPerspective get mainCamera => Context.Context.mainCamera;
+CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
 
 int skipTexture;
 
-class GLTFRenderer {
+class GLTFRenderer implements Interactable {
 
   GLTFScene get activeScene => globalGltf.scenes[0];
 
   Interaction interaction;
+  CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
+  CanvasElement _canvas;
+  CanvasElement get canvas => _canvas;
 
-  WebGLTexture cubeMapTextureDiffuse, cubeMapTextureSpecular;
+  WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
   GLTFRenderer(GLTFProject gltf) {
     //debug.logCurrentFunction();
     _initContext();
+    initInteraction();
+    resizeCanvas();
     globalGltf = gltf;
   }
 
@@ -59,8 +65,8 @@ class GLTFRenderer {
     //debug.logCurrentFunction();
 
     try {
-      CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-      gl = canvas.getContext("experimental-webgl") as webgl.RenderingContext;
+      _canvas = querySelector('#glCanvas') as CanvasElement;
+      gl = _canvas.getContext("experimental-webgl") as webgl.RenderingContext;
       if (gl == null) {
         throw "x";
       }
@@ -69,9 +75,35 @@ class GLTFRenderer {
     }
 
     //>
-    Context.gl = gl;
+    ctxWrapper.gl = gl;
+  }
 
-    interaction = new Interaction();
+  @override
+  void initInteraction() {
+    interaction = new Interaction(this);
+    interaction.onResize.listen((dynamic event){resizeCanvas();});
+  }
+
+  void resizeCanvas() {
+    var realToCSSPixels = window.devicePixelRatio;
+
+    // Lookup the size the browser is displaying the canvas.
+//    var displayWidth = (_canvas.parent.offsetWidth* realToCSSPixels).floor();
+//    var displayHeight = (window.innerHeight* realToCSSPixels).floor();
+
+    var displayWidth  = (gl.canvas.clientWidth  * realToCSSPixels).floor();
+    var displayHeight = (gl.canvas.clientHeight * realToCSSPixels).floor();
+
+    // Check if the canvas is not the same size.
+    if (gl.canvas.width != displayWidth || gl.canvas.height != displayHeight) {
+      // Make the canvas the same size
+      gl.canvas.width = displayWidth;
+      gl.canvas.height = displayHeight;
+
+//      gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      ctxWrapper.Context.mainCamera?.update();
+    }
   }
 
   Future render() async {
@@ -96,6 +128,7 @@ class GLTFRenderer {
 
     setupGLState();
 
+    resizeCanvas();
     _render();
   }
 
@@ -118,7 +151,7 @@ class GLTFRenderer {
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
     wrapT = TextureWrapType.REPEAT;
-    createImageTexture(TextureUnit.TEXTURE0 + 0, imageElement, magFilter, minFilter, wrapS, wrapT);
+    brdfLUTTexture = new WebGLTexture.fromWebGL(createImageTexture(TextureUnit.TEXTURE0 + 0, imageElement, magFilter, minFilter, wrapS, wrapT), TextureTarget.TEXTURE_2D);
 
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
@@ -139,8 +172,9 @@ class GLTFRenderer {
     for (int i = 0; i < globalGltf.textures.length; i++) {
       int textureUnitId = 0;
 
+      GLTFTexture gltfTexture;
       if (!useDebugTexture) {
-        GLTFTexture gltfTexture = globalGltf.textures[i];
+        gltfTexture = globalGltf.textures[i];
         if (gltfTexture.source.data == null) {
           //load image
           String fileUrl =
@@ -180,11 +214,14 @@ class GLTFRenderer {
       }
 
       //create model texture
-      createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + skipTexture, imageElement, magFilter, minFilter, wrapS, wrapT);
+      webgl.Texture texture = createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + skipTexture, imageElement, magFilter, minFilter, wrapS, wrapT);
+      if(gltfTexture != null && gltfTexture.source.data != null){
+        gltfTexture.webglTexture = texture;
+      }
     }
   }
 
-  void createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
+  webgl.Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
     //debug.logCurrentFunction();
 
     //create texture
@@ -215,6 +252,8 @@ class GLTFRenderer {
         TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_S, wrapS);
     gl.texParameteri(
         TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, wrapT);
+
+    return texture;
   }
 
   num currentTime = 0;
@@ -295,7 +334,7 @@ class GLTFRenderer {
     bool debugCamera = true;
 
     if(debugCamera){
-      currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 1000.0)
+      currentCamera = new CameraPerspective(radians(47.0), 0.1, 1000.0)
         ..targetPosition = new Vector3(0.0, 0.0, 0.0)
         ..position = new Vector3(10.0, 10.0, 10.0);
     }else {
@@ -309,7 +348,7 @@ class GLTFRenderer {
         if (globalGltf.cameras.length > 0) {
           currentCamera = globalGltf.cameras[0];
         } else {
-          currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 100.0)
+          currentCamera = new CameraPerspective(radians(47.0), 0.1, 100.0)
             ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
         }
@@ -318,8 +357,8 @@ class GLTFRenderer {
       }
     }
     //>
-    if (currentCamera is GLTFCameraPerspective) {
-      Context.Context.mainCamera = currentCamera;
+    if (currentCamera is CameraPerspective) {
+      ctxWrapper.Context.mainCamera = currentCamera;
     } else {
       // ortho ?
     }
@@ -345,7 +384,7 @@ class GLTFRenderer {
   void setupNodeCamera(GLTFNode node) {
     //debug.logCurrentFunction();
 
-    GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
+    CameraPerspective camera = node.camera as CameraPerspective;
     camera.position = node.translation;
   }
 
@@ -554,10 +593,13 @@ class ProgramSetting{
           material = new DebugMaterial()
           ..color = new Vector3.random();
         } else {
-          material = new KronosDefaultMaterial(new GLTFDefaultMaterial());
+          material = new KronosDefaultMaterial();
         }
       } else {
-        material = new KronosPRBMaterial(primitive.material, primitive);
+        material = new KronosPRBMaterial(primitive.material, skipTexture, globalState, primitive.attributes['NORMAL'] != null, primitive.attributes['TANGENT'] != null, primitive.attributes['TEXCOORD_0'] != null)
+        ..baseColorMap = primitive.material.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture
+        ..roughness = primitive.material.pbrMetallicRoughness.roughnessFactor
+        ..metallic = primitive.material.pbrMetallicRoughness.metallicFactor;
       }
 
       programs.add(material.getProgram());
@@ -570,9 +612,13 @@ class ProgramSetting{
       WebGLProgram program = programs[i];
       gl.useProgram(program.webGLProgram);
 
+      DirectionalLight directionalLight = new DirectionalLight()
+        ..direction = lightDirection
+        ..color = lightColor;
+
       _setupPrimitiveBuffers(program, primitive);
       material.setUniforms(
-          program, _modelMatrix, _viewMatrix, _projectionMatrix);
+          program, _modelMatrix, _viewMatrix, _projectionMatrix, mainCamera.position, directionalLight);
 
       _drawPrimitive(program.webGLProgram, primitive);
     }

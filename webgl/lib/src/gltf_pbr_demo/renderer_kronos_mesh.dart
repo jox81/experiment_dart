@@ -517,6 +517,7 @@ class KronosMesh {
         logCurrentFunction('getBlob');
         HttpRequest request = new HttpRequest();
         request.open("GET", assetUrl, async:true);
+        request.timeout = 2000;
         request.responseType = "blob";
         request.onLoadEnd.listen((e) {
           if (request.status < 200 || request.status > 299) {

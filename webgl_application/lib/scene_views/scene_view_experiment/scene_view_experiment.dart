@@ -25,7 +25,7 @@ class SceneViewExperiment extends Scene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    GLTFCameraPerspective camera = new GLTFCameraPerspective(radians(45.0), 5.0, 1000.0)
+    CameraPerspective camera = new CameraPerspective(radians(45.0), 5.0, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..position = new Vector3(5.0, 7.5, 10.0)
       ..showGizmo = true;

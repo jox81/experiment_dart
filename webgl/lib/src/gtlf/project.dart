@@ -35,7 +35,7 @@ class GLTFProject {
   String baseDirectory;
 
   static Future<glTF.Gltf> loadGLTFResource(String url,
-      {bool useWebPath: true}) async {
+      {bool useWebPath: false}) async {
     UtilsAssets.useWebPath = useWebPath;
 
     Completer completer = new Completer<glTF.Gltf>();
@@ -54,25 +54,17 @@ class GLTFProject {
   static Future<Uint8List> loadGltfBinResource (String url, {bool isRelative : true}) {
     Completer completer = new Completer<Uint8List>();
 
-    if(url.startsWith('/')){
-      url = url.substring(1);
-    }
-    if(url.startsWith('./')){
-      url = url.substring(2);
-    }
-    if(url.startsWith('../')){
-      url = url.substring(3);
-    }
-
-    String _webPath = isRelative ? "" : UtilsAssets.webPath;
+    String assetsPath = UtilsAssets.getWebPath(url);
+    print('url : $url | assetsPath : $assetsPath');
 
     Random random = new Random();
     HttpRequest request = new HttpRequest()
       ..responseType = 'arraybuffer';
-    request.open('GET', '${_webPath}${url}?please-dont-cache=${random.nextInt(1000)}', async:true);
+    request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}', async:true);
+    request.timeout = 2000;
     request.onLoadEnd.listen((_) {
       if (request.status < 200 || request.status > 299) {
-        String fsErr = 'Error: HTTP Status ${request.status} on resource: ${_webPath}${url}';
+        String fsErr = 'Error: HTTP Status ${request.status} on resource: $assetsPath';
         window.alert('Fatal error getting text ressource (see console)');
         print(fsErr);
         return completer.completeError(fsErr);

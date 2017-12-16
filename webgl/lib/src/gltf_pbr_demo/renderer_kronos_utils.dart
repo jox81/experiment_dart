@@ -1,6 +1,5 @@
 import 'dart:html';
 import 'renderer_kronos_scene.dart';
-import 'dart:web_gl' as webgl;
 
 class GLFunctionCall {
   Function function;
@@ -16,8 +15,8 @@ class GlobalState {
 
   int sRGBifAvailable; // else : webgl.RGBA
 
-  var hasLODExtension;
-  var hasDerivativesExtension;
+  dynamic hasLODExtension;
+  dynamic hasDerivativesExtension;
 
   KronosScene scene;
 }

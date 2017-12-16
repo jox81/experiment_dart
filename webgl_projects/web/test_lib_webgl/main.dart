@@ -7,7 +7,7 @@ Future main() async {
 
   /// plusieurs manière de récupérer le contenu de fichier se situant dans un autre package
 
-  Uri uri = new Uri.file("packages/webgl/shaders/material_point/test.txt");
+  Uri uri = new Uri.file("packages/webgl/shaders/material_point/material_point.vs.glsl");
   var resource = new Resource(uri);
   var string = await resource.readAsString(encoding: UTF8);
   print(string);

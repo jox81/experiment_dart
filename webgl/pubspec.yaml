@@ -5,7 +5,7 @@ author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: '>=2.0.0-dev.8.0 <2.0.0'
 
 dependencies:
   vector_math: any
@@ -23,6 +23,12 @@ dev_dependencies:
 transformers:
 - test/pub_serve:
     $include: web/
-- $dart2js:
-    commandLineOptions: [--enable-experimental-mirrors]
 - dart_to_js_script_rewriter
+- $dart2js:
+    minify: true
+    checked: true
+    commandLineOptions: [--trust-primitives, --trust-type-annotations, --enable-experimental-mirrors]
+
+web:
+  compiler:
+    debug: dartdevc

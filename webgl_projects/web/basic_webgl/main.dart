@@ -2,8 +2,18 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
+import 'dart:developer';
+import 'package:logging/logging.dart';
 
+  Logger devLog;
 Future main() async {
+
+  devLog = new Logger('dev');
+  Logger.root.level = Level.ALL;
+  Logger.root.onRecord.listen((LogRecord rec) {
+    log('${rec.level.name}: ${rec.time}: ${rec.message}');
+  });
+
   new Renderer()..render();
 }
 
@@ -54,15 +64,27 @@ class Renderer{
   }
 
   void draw() {
+
     gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
     gl.drawArrays(webgl.RenderingContext.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
+
+
   }
 
   webgl.Program buildProgram(String vs, String fs) {
     webgl.Program prog = gl.createProgram();
 
+    devLog.fine('test');
+    UserTag customTag = new UserTag('MyTag');
+    // Save the previous tag when installing the custom tag.
+    var previousTag = customTag.makeCurrent();
+
     addShader(prog, 'vertex', vs);
     addShader(prog, 'fragment', fs);
+
+    // Restore the previous tag.
+    previousTag.makeCurrent();
+
     gl.linkProgram(prog);
     if (gl.getProgramParameter(prog, webgl.RenderingContext.LINK_STATUS) == null) {
       throw "Could not link the shader program!";

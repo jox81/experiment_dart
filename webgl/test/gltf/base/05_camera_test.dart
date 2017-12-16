@@ -28,8 +28,8 @@ Future main() async {
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       expect(gltf.cameras[0], isNotNull);
-      expect(gltf.cameras[0] is GLTFCameraPerspective, isTrue);
-      GLTFCameraPerspective cameraPerspective = gltf.cameras[0] as GLTFCameraPerspective;
+      expect(gltf.cameras[0] is CameraPerspective, isTrue);
+      CameraPerspective cameraPerspective = gltf.cameras[0] as CameraPerspective;
       expect(cameraPerspective.type, CameraType.perspective);
       expect(cameraPerspective.znear, 1.0);
       expect(cameraPerspective.zfar, 10.0);
@@ -43,8 +43,8 @@ Future main() async {
       GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
 
       expect(gltf.cameras[1], isNotNull);
-      expect(gltf.cameras[1] is GLTFCameraOrthographic, isTrue);
-      GLTFCameraOrthographic cameraOrthographic = gltf.cameras[1] as GLTFCameraOrthographic;
+      expect(gltf.cameras[1] is CameraOrthographic, isTrue);
+      CameraOrthographic cameraOrthographic = gltf.cameras[1] as CameraOrthographic;
       expect(cameraOrthographic.type, CameraType.orthographic);
       expect(cameraOrthographic.znear, 1.0);
       expect(cameraOrthographic.zfar, 10.0);

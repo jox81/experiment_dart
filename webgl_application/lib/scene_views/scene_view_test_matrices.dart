@@ -21,7 +21,7 @@ class SceneViewTestMatrices extends Scene{
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
     //Cameras
-    GLTFCameraPerspective camera = new GLTFCameraPerspective(radians(37.0), 0.1, 100.0)
+    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
       ..position = new Vector3(0.0, 2.0, -1.0);
     Context.mainCamera = camera;

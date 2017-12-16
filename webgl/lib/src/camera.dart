@@ -32,9 +32,9 @@ abstract class Camera extends Object3d {
   static Camera fromGltf(glTF.Camera gltfCamera){
     if(gltfCamera != null) {
       if (gltfCamera.perspective != null)
-        return new GLTFCameraPerspective.fromGltf(gltfCamera);
+        return new CameraPerspective.fromGltf(gltfCamera);
       if (gltfCamera.orthographic != null)
-        return new GLTFCameraOrthographic.fromGltf(gltfCamera);
+        return new CameraOrthographic.fromGltf(gltfCamera);
     }
     return null;
   }
@@ -74,7 +74,7 @@ abstract class Camera extends Object3d {
   CameraController _cameraController;
   set cameraController(CameraController value) {
     _cameraController = value;
-    _cameraController.init(this as GLTFCameraPerspective);// Todo (jpu) : ??
+    _cameraController.init(this as CameraPerspective);// Todo (jpu) : ??
   }
   CameraController get cameraController => _cameraController;
 
@@ -92,7 +92,7 @@ abstract class Camera extends Object3d {
   bool get showGizmo => _gizmo.visible;
   set showGizmo(bool value) {
     if(_gizmo == null){
-      _gizmo = new FrustrumGizmo(this as GLTFCameraPerspective);// Todo (jpu) : ??
+      _gizmo = new FrustrumGizmo(this as CameraPerspective);// Todo (jpu) : ??
     }
     _gizmo.visible = value;
   }
@@ -124,7 +124,7 @@ abstract class Camera extends Object3d {
       _gizmo.hashCode;
 }
 
-class GLTFCameraPerspective extends Camera{
+class CameraPerspective extends Camera{
   double _aspectRatio = 0.1;
   double get aspectRatio => _aspectRatio;
 //  set aspectRatio(double value){
@@ -203,7 +203,7 @@ class GLTFCameraPerspective extends Camera{
     return (projectionMatrix * viewMatrix) as Matrix4;
   }
 
-  GLTFCameraPerspective(this._yfov, double znear, double _zfar){
+  CameraPerspective(this._yfov, double znear, double _zfar){
    super._znear = znear;
    super._zfar = _zfar;
   }
@@ -222,7 +222,7 @@ class GLTFCameraPerspective extends Camera{
 
   // >> JSON
 
-  GLTFCameraPerspective.fromJson(Map json) {
+  CameraPerspective.fromJson(Map json) {
     _yfov = json['fov'] as double;
     _znear = json['zNear'] as double;
     _zfar = json['zFar'] as double;
@@ -246,8 +246,8 @@ class GLTFCameraPerspective extends Camera{
   glTF.Camera _gltfSource;
   glTF.Camera get gltfSource => _gltfSource;
 
-  factory GLTFCameraPerspective.fromGltf(glTF.Camera gltfCamera){
-    GLTFCameraPerspective camera = new GLTFCameraPerspective(gltfCamera.perspective.yfov, gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
+  factory CameraPerspective.fromGltf(glTF.Camera gltfCamera){
+    CameraPerspective camera = new CameraPerspective(gltfCamera.perspective.yfov, gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
     .._gltfSource = gltfCamera;
     camera
       .._type = CameraType.perspective
@@ -259,7 +259,7 @@ class GLTFCameraPerspective extends Camera{
   bool operator ==(Object other) =>
       identical(this, other) ||
           super == other &&
-              other is GLTFCameraPerspective &&
+              other is CameraPerspective &&
               runtimeType == other.runtimeType &&
               _aspectRatio == other._aspectRatio &&
               _yfov == other._yfov &&
@@ -279,7 +279,7 @@ class GLTFCameraPerspective extends Camera{
       _viewMatrix.hashCode;
 }
 
-class GLTFCameraOrthographic extends Camera{
+class CameraOrthographic extends Camera{
 
   double _ymag;
   double get ymag => _ymag;
@@ -295,11 +295,11 @@ class GLTFCameraOrthographic extends Camera{
     update();
   }
 
-  GLTFCameraOrthographic();
+  CameraOrthographic();
 
   // >> JSON
 
-  GLTFCameraOrthographic.fromJson(Map json) {
+  CameraOrthographic.fromJson(Map json) {
     position = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
     showGizmo = json['showGizmo'] as bool;
   }
@@ -316,8 +316,8 @@ class GLTFCameraOrthographic extends Camera{
   glTF.Camera _gltfSource;
   glTF.Camera get gltfSource => _gltfSource;
 
-  factory GLTFCameraOrthographic.fromGltf(glTF.Camera gltfCamera){
-    GLTFCameraOrthographic camera = new GLTFCameraOrthographic()
+  factory CameraOrthographic.fromGltf(glTF.Camera gltfCamera){
+    CameraOrthographic camera = new CameraOrthographic()
       .._gltfSource = gltfCamera
       .._type = CameraType.orthographic
       .._znear = gltfCamera.orthographic.znear

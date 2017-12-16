@@ -7,6 +7,7 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture_wrapped.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -184,26 +185,31 @@ class TextureUtils {
 
     images = [];
 
-    for(String fileUrl in pathes) {
+    for(String url in pathes) {
+      String assetsPath = UtilsAssets.getWebPath(url);
       ImageElement image = new ImageElement()
-        ..src = fileUrl;
+        ..src = assetsPath;
       images.add(image);
     }
 
     return images;
   }
 
-  static Future<ImageElement> loadImage(String fileUrl) {
+  static Future<ImageElement> loadImage(String url) {
     Completer completer = new Completer<ImageElement>();
 
-    ImageElement image;
+    String assetsPath = UtilsAssets.getWebPath(url);
 
+    ImageElement image;
     image = new ImageElement()
-      ..src = fileUrl
+      ..src = assetsPath
       ..onLoad.listen((e) {
         if(!completer.isCompleted) {
           completer.complete(image);
         }
+      })
+      ..onError.listen((Event event){
+        print('Error : url : $url | assetsPath : $assetsPath');
       });
 
     return completer.future as Future<ImageElement>;
@@ -479,13 +485,13 @@ class TextureUtils {
       List<Model> models = new List();
 
       //backup camera
-      GLTFCameraPerspective baseCam = Context.mainCamera;
+      CameraPerspective baseCam = Context.mainCamera;
       Rectangle<int> previousViewport =
           new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
       glWrapper.activeFrameBuffer.bind(framebufferWithDepthTexture);
 
-      GLTFCameraPerspective cameraTexture = new GLTFCameraPerspective(radians(45.0), 0.1, 100.0)
+      CameraPerspective cameraTexture = new CameraPerspective(radians(45.0), 0.1, 100.0)
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
         ..position = new Vector3(5.0, 15.0, 15.0);
 

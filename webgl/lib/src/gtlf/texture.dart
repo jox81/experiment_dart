@@ -3,13 +3,14 @@ import 'package:webgl/src/gtlf/image.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
+import 'dart:web_gl' as webgl;
 
 class GLTFTexture extends GLTFChildOfRootProperty {
   glTF.Texture _gltfSource;
   glTF.Texture get gltfSource => _gltfSource;
 
   int textureId;
-
+  webgl.Texture webglTexture;
   int _samplerId;
   GLTFSampler get sampler => _samplerId != null ? gltfProject.samplers[_samplerId] : null;
 

@@ -45,7 +45,7 @@ Future<GLTFProject> _loadGLTF(String gltfUrl) async {
   String gtlfDirectory = gltfUrl.replaceFirst(filePart, '');
 
   glTF.Gltf gltfSource =
-  await GLTFProject.loadGLTFResource(gltfUrl, useWebPath: true);
+  await GLTFProject.loadGLTFResource(gltfUrl, useWebPath: false);
   GLTFProject _gltf = new GLTFProject.fromGltf(gltfSource);
   _gltf.baseDirectory = gtlfDirectory;
 

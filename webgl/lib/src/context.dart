@@ -32,9 +32,9 @@ class Context{
     gl.clearColor(color.r, color.g, color.g, color.a);
   }
 
-  static GLTFCameraPerspective _mainCamera;
-  static GLTFCameraPerspective get mainCamera => _mainCamera;
-  static set mainCamera(GLTFCameraPerspective value) {
+  static CameraPerspective _mainCamera;
+  static CameraPerspective get mainCamera => _mainCamera;
+  static set mainCamera(CameraPerspective value) {
     _mainCamera?.isActive = false;
 
     _mainCamera = value;

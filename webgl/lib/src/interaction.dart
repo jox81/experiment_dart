@@ -1,17 +1,25 @@
+import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 
-import 'package:webgl/src/application.dart';
-import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/utils/utils_fps.dart';
-import 'package:webgl/src/geometry/utils_geometry.dart';
+
+abstract class Interactable{
+  Interaction get interaction;
+  CameraPerspective get mainCamera;
+  CanvasElement get canvas;
+
+  /// called this in CTOR
+  void initInteraction();
+}
 
 class Interaction {
 
-  bool get isInApplication => Context.application != null;
-
+  final Interactable _interactable;
+  
   //Debug div
   Element elementDebugInfoText;
   Element elementFPSText;
@@ -29,7 +37,22 @@ class Interaction {
 
   num scaleFactor = 3.0;
 
-  Interaction() {
+  CameraPerspective get mainCamera => _interactable.mainCamera;
+  CameraController get cameraController => _interactable.mainCamera?.cameraController;
+
+  StreamController<MouseEvent> _onMouseDownController = new StreamController<MouseEvent>.broadcast();
+  Stream<MouseEvent> get onMouseDown => _onMouseDownController.stream;
+
+  StreamController<MouseEvent> _onMouseUpController = new StreamController<MouseEvent>.broadcast();
+  Stream<MouseEvent> get onMouseUp => _onMouseDownController.stream;
+
+  StreamController _onDragController = new StreamController<dynamic>.broadcast();
+  Stream<dynamic> get onDrag => _onDragController.stream;
+
+  StreamController _onResizeController = new StreamController<dynamic>.broadcast();
+  Stream<dynamic> get onResize => _onResizeController.stream;
+
+  Interaction(this._interactable) {
     _initEvents();
   }
 
@@ -37,31 +60,29 @@ class Interaction {
     _currentlyPressedKeys = new List<bool>(128);
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
+    // Todo (jpu) : externalise this
     elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
+
     if(elementFPSText != null) elementFPSText.style.display = 'block';
 
-    window.onResize.listen(_onWindowResize);
     window.onKeyUp.listen(_onKeyUp);
     window.onKeyDown.listen(_onKeyDown);
 
-    gl.canvas.onMouseDown.listen(_onMouseDown);
-    gl.canvas.onMouseMove.listen(_onMouseMove);
-    gl.canvas.onMouseUp.listen(_onMouseUp);
-    gl.canvas.onMouseWheel.listen((WheelEvent event) {
-      num delatY = -event.deltaY;
-      Context.mainCamera?.cameraController?.updateCamerFov(Context.mainCamera, delatY);
-    });
+    window.onResize.listen(_onWindowResize);
+
+    _interactable.canvas.onMouseDown.listen(_onMouseDown);
+    _interactable.canvas.onMouseMove.listen(_onMouseMove);
+    _interactable.canvas.onMouseUp.listen(_onMouseUp);
+    _interactable.canvas.onMouseWheel.listen(_onMouseWheel);
   }
 
   ///
   /// Window
   ///
 
-  void _onWindowResize (Event event) {
-    if(isInApplication) {
-      Context.application.resizeCanvas();
-    }
+  void _onWindowResize(Event event) {
+    _onResizeController.add(event);
   }
 
   ///
@@ -72,7 +93,7 @@ class Interaction {
     if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
       if ((elementDebugInfoText != null)) {
         elementDebugInfoText.text =
-            "Camera Position: ${Context.mainCamera.position}";
+            "Camera Position: ${mainCamera.position}";
       }
     } else {}
     _currentlyPressedKeys[event.keyCode] = true;
@@ -91,19 +112,19 @@ class Interaction {
   void _handleKeys() {
     if (_currentlyPressedKeys[KeyCode.UP]) {
       // Key Up
-      Context.mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
+      mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
     }
     if (_currentlyPressedKeys[KeyCode.DOWN]) {
       // Key Down
-      Context.mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
+      mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
     }
     if (_currentlyPressedKeys[KeyCode.LEFT]) {
       // Key Up
-      Context.mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
+      mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
     }
     if (_currentlyPressedKeys[KeyCode.RIGHT]) {
       // Key Down
-      Context.mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
+      mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
     }
   }
 
@@ -111,115 +132,57 @@ class Interaction {
   /// Mouse
   ///
 
-  ///Bug correctif, Mouse down trigger mouse move...
-  ///
-//  num mouseMoveX = 0;
-//  num mouseMoveY = 0;
-
-  Model tempSelection;
   void _onMouseDown(MouseEvent event) {
     int screenX = event.client.x.toInt();
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    Context.mainCamera?.cameraController?.beginOrbit(Context.mainCamera, screenX, screenY);
+    cameraController?.beginOrbit(mainCamera, screenX, screenY);
 
     dragging = false;
     mouseDown = true;
 
-//    mouseMoveX = event.client.x;
-//    mouseMoveY = event.client.y;
+    _onMouseDownController.add(event);
 
-//    print('_onMouseDown ${dragging} : ${event.client.x} / ${event.client.y}');
-
-    if(isInApplication && Context.mainCamera != null) {
-      Model modelHit = UtilsGeometry.findModelFromMouseCoords(
-          Context.mainCamera, event.offset.x, event.offset.y,
-          Context.currentScene.models);
-      tempSelection = modelHit;
-    }
   }
 
   void _onMouseMove(MouseEvent event) {
     int screenX = event.client.x.toInt();
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
-//    print('_onMouseMove ${dragging} : ${event.client.x} / ${event.client.y}');
 
-    Context.mainCamera?.cameraController?.updateCameraPosition(Context.mainCamera, deltaX, deltaY, event.button);
+    cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, event.button);
 
-    if(mouseDown /*&& (event.client.x != mouseMoveX || event.client.y != mouseMoveY)*/) {
+    if(mouseDown) {
 
       dragging = true;
 
-      if(isInApplication){
-        if(Context.application.activeTool == ActiveToolType.move ||
-          Context.application.activeTool == ActiveToolType.rotate ||
-          Context.application.activeTool == ActiveToolType.scale) {
-          Context.currentScene.currentSelection = tempSelection;
-        }
+      _onDragController.add(null);
 
-        if(Context.currentScene.currentSelection != null && Context.currentScene.currentSelection is Model) {
-
-          Model currentModel = Context.currentScene.currentSelection as Model;
-
-          double delta = deltaX.toDouble(); // get mouse delta
-          double deltaMoveX = (Context.application.activeAxis[AxisType.x]
-              ? 1
-              : 0) * delta;
-          double deltaMoveY = (Context.application.activeAxis[AxisType.y]
-              ? 1
-              : 0) * delta;
-          double deltaMoveZ = (Context.application.activeAxis[AxisType.z]
-              ? 1
-              : 0) * delta;
-
-          if (Context.application.activeTool == ActiveToolType.move) {
-            double moveFactor = 1.0;
-
-            currentModel.transform.translate(
-                new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
-          }
-
-          if (Context.application.activeTool == ActiveToolType.rotate) {
-            num rotateFactor = 1.0;
-
-            currentModel.transform.rotateX(deltaMoveX * rotateFactor);
-            currentModel.transform.rotateY(deltaMoveY * rotateFactor);
-            currentModel.transform.rotateY(deltaMoveZ * rotateFactor);
-          }
-
-          if (Context.application.activeTool == ActiveToolType.scale) {
-            num scaleFactor = 0.03;
-
-            currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
-          }
-        }
-      }
     }else{
       dragging = false;
     }
   }
 
   void _onMouseUp(MouseEvent event) {
-
     int screenX = event.client.x.toInt();
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
-    Context.mainCamera?.cameraController?.endOrbit(Context.mainCamera);
 
-//    print('_onMouseUp ${dragging} : ${event.client.x} / ${event.client.y}');
-    if(!dragging) {
-      if(isInApplication) {
-        Context.currentScene.currentSelection = tempSelection;
-      }
-    }
+    cameraController?.endOrbit(mainCamera);
 
     dragging = false;
     mouseDown = false;
+
+    _onMouseUpController.add(event);
   }
 
-  // Determine how far we have moved since the last mouse move event.
+  void _onMouseWheel(WheelEvent event){
+    num delatY = -event.deltaY;
+    cameraController?.updateCamerFov(mainCamera, delatY);
+  }
+    
+  /// Determine how far we have moved since the last mouse move event.
   void updateMouseInfos(int screenX, int screenY) {
     deltaX = (currentX - screenX) / scaleFactor;
     deltaY = (currentY - screenY) / scaleFactor;

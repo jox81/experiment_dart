@@ -38,42 +38,42 @@ Future main() async {
 
   group("test CameraPerspective", () {
     test("test camera creation", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera != null,isTrue);
     });
     test("test camera fov", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.yfov == 25.0,isTrue);
     });
     test("test camera zNear", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       print(camera.znear);
       expect(camera.znear == 0.1,isTrue);
     });
     test("test camera zFar", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.zfar == 100.0,isTrue);
     });
     test("test camera targetPosition", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
     });
     test("test camera targetPosition new", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective(25.0,1.0,10.0)
+      CameraPerspective camera = new CameraPerspective(25.0,1.0,10.0)
         ..targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['targetPosition'] as List<double>));
       expect(camera.targetPosition == new Vector3(0.0,0.0,0.0),isTrue);
     });
     test("test camera position", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera position new", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective(25.0,1.0,10.0)
+      CameraPerspective camera = new CameraPerspective(25.0,1.0,10.0)
         ..position = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['position'] as List<double>));
       expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera showGizmo", () {
-      GLTFCameraPerspective camera = new GLTFCameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
+      CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
       expect(camera.showGizmo,isTrue);
     });
   });

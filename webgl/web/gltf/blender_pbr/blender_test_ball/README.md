@@ -1,0 +1,1 @@
+http://www.blenderdiplom.com/en/downloads/584-download-cycles-material-test-scene.html

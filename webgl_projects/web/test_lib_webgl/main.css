@@ -9,6 +9,12 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 
+canvas {
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
 #fps {
     position: absolute;
     top: 20px;

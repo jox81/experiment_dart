@@ -285,15 +285,15 @@ class MaterialBaseTexture extends Material {
   }
 
   setShaderUniforms(Model model) {
-
-    gl.activeTexture(TextureUnit.TEXTURE0);
-    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
-
     setShaderUniform("uModelViewMatrix", Context.mainCamera.viewMatrix * Context.modelMatrix);
     setShaderUniform(
         "uProjectionMatrix", Context.mainCamera.projectionMatrix);
-    setShaderUniform('uSampler', 0);
+
     setShaderUniform('uTextureMatrix', texture?.textureMatrix);
+
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
+    setShaderUniform('uSampler', 0);
   }
 }
 

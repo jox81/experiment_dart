@@ -75,7 +75,7 @@ Future main() async {
       expect(camera0.type, CameraType.perspective);
       expect(camera0.cameraId, 0);
 
-      GLTFCameraPerspective camera0Perspective = camera0 as GLTFCameraPerspective;
+      CameraPerspective camera0Perspective = camera0 as CameraPerspective;
       expect(camera0Perspective.aspectRatio, 1.0);
       expect(camera0Perspective.yfov, 0.7);
       expect(camera0Perspective.zfar, 100);
@@ -86,7 +86,7 @@ Future main() async {
       expect(camera1.type, CameraType.orthographic);
       expect(camera1.cameraId, 1);
 
-      GLTFCameraOrthographic camera1Orthographic = camera1 as GLTFCameraOrthographic;
+      CameraOrthographic camera1Orthographic = camera1 as CameraOrthographic;
       expect(camera1Orthographic.xmag, 1.0);
       expect(camera1Orthographic.ymag, 1.0);
       expect(camera1Orthographic.zfar, 100);
