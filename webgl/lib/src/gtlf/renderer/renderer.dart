@@ -2,20 +2,9 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
-import 'package:webgl/src/gtlf/accessor.dart';
-import 'package:webgl/src/gtlf/animation.dart';
-import 'package:webgl/src/gtlf/buffer.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/mesh_primitive.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/base_material.dart';
-import 'package:webgl/src/gtlf/material.dart';
+import 'dart:convert' show BASE64;
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/texture.dart';
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
@@ -25,7 +14,19 @@ import 'package:webgl/src/context.dart' as ctxWrapper;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'dart:convert' show BASE64;
+
+import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
+import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
+
+import 'package:webgl/src/gtlf/material.dart';
+import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/animation.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/mesh_primitive.dart';
+import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gtlf/texture.dart';
 
 // Uint8List = Byte
 // Uint16List = SCALAR : int
@@ -573,7 +574,7 @@ class ProgramSetting{
 
   GLTFMesh get mesh => _node.mesh;
 
-  RawMaterial material;
+  KronosRawMaterial material;
   List<WebGLProgram> programs = new List();
   Map<String, webgl.Buffer> buffers = new Map();
 
@@ -591,7 +592,7 @@ class ProgramSetting{
       bool debugWithDebugMaterial = true;
       if(debug){
         if(debugWithDebugMaterial){
-          material = new DebugMaterial()
+          material = new KronosDebugMaterial()
           ..color = new Vector3.random();
         } else {
           material = new KronosDefaultMaterial();
@@ -693,8 +694,7 @@ class ProgramSetting{
   void _bindVertexArrayData(
       WebGLProgram program, String attributName, GLTFAccessor accessor) {
     //debug.logCurrentFunction();
-    GLTFBuffer bufferData = accessor.bufferView.buffer;
-    Float32List verticesInfos = bufferData.data.buffer.asFloat32List(
+    Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset + accessor.bufferView.byteOffset,
         accessor.count * (accessor.byteStride ~/ accessor.componentLength));
 

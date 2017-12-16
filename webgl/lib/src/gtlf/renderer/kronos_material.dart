@@ -10,7 +10,7 @@ import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
-abstract class RawMaterial{
+abstract class KronosRawMaterial{
   ShaderSource get shaderSource;
 
   Map<String, bool> _defines;
@@ -153,7 +153,7 @@ abstract class RawMaterial{
   }
 }
 
-class KronosPRBMaterial extends RawMaterial{
+class KronosPRBMaterial extends KronosRawMaterial{
   final int skipTexture;
   final GlobalState globalState;
 
@@ -424,7 +424,7 @@ class KronosPRBMaterial extends RawMaterial{
   }
 }
 
-class KronosDefaultMaterial extends RawMaterial{
+class KronosDefaultMaterial extends KronosRawMaterial{
   KronosDefaultMaterial();
 
   ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_default'];
@@ -482,13 +482,10 @@ class KronosDefaultMaterial extends RawMaterial{
 
 }
 
-class GLTFDefaultMaterial {
-}
-
-class DebugMaterial extends RawMaterial{
+class KronosDebugMaterial extends KronosRawMaterial{
   Vector3 color = new Vector3(0.5, 0.5, 0.5);
 
-  DebugMaterial();
+  KronosDebugMaterial();
 
   ShaderSource get shaderSource => ShaderSource.sources['debug_shader'];
 
