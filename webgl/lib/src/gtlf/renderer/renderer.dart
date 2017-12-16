@@ -215,7 +215,7 @@ class GLTFRenderer implements Interactable {
 
       //create model texture
       webgl.Texture texture = createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + skipTexture, imageElement, magFilter, minFilter, wrapS, wrapT);
-      if(gltfTexture != null && gltfTexture.source.data != null){
+      if(gltfTexture != null){
         gltfTexture.webglTexture = texture;
       }
     }
@@ -596,10 +596,7 @@ class ProgramSetting{
           material = new KronosDefaultMaterial();
         }
       } else {
-        material = new KronosPRBMaterial(primitive.material, skipTexture, globalState, primitive.attributes['NORMAL'] != null, primitive.attributes['TANGENT'] != null, primitive.attributes['TEXCOORD_0'] != null)
-        ..baseColorMap = primitive.material.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture
-        ..roughness = primitive.material.pbrMetallicRoughness.roughnessFactor
-        ..metallic = primitive.material.pbrMetallicRoughness.metallicFactor;
+        material = new KronosPRBMaterial.fromGLTFPBRMterial(primitive.material, skipTexture, globalState, primitive.attributes['NORMAL'] != null, primitive.attributes['TANGENT'] != null, primitive.attributes['TEXCOORD_0'] != null);
       }
 
       programs.add(material.getProgram());

@@ -45,7 +45,7 @@ Future main() async {
     './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
   //Blender test Sphere
-    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'
+//    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'
 
     //Complex model hierarchy
     // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
