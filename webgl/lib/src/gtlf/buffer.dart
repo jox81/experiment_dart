@@ -7,10 +7,12 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 /// [byteLength] defines the length of the bytes used
 ///
 class GLTFBuffer extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.Buffer _gltfSource;
   glTF.Buffer get gltfSource => _gltfSource;
 
-  int bufferId;
+  final int bufferId = nextId++;
 
   Uri uri;
   int byteLength;

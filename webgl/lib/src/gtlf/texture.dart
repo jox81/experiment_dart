@@ -6,40 +6,50 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'dart:web_gl' as webgl;
 
 class GLTFTexture extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.Texture _gltfSource;
   glTF.Texture get gltfSource => _gltfSource;
 
-  int textureId;
+  final int textureId = nextId++;
   webgl.Texture webglTexture;
-  int _samplerId;
-  GLTFSampler get sampler => _samplerId != null ? gltfProject.samplers[_samplerId] : null;
 
-  int _sourceId;
-  GLTFImage get source => _sourceId != null ? gltfProject.images[_sourceId] : null;
+  GLTFSampler _sampler;
+  GLTFSampler get sampler => _sampler;
+
+  GLTFImage _source;
+  GLTFImage get source => _source;
 
   bool clamp;
 
-  GLTFTexture._(this._gltfSource): super(_gltfSource.name);
-
-  GLTFTexture({GLTFSampler sampler, GLTFImage source, String name}):super(name);
+  GLTFTexture({GLTFSampler sampler, GLTFImage source, String name : ''}):this._sampler =sampler, this._source = source, super(name);
 
   factory GLTFTexture.fromGltf(glTF.Texture gltfSource) {
     if (gltfSource == null) return null;
 
+    GLTFSampler sampler;
+    if(gltfSource.sampler != null){
+      sampler = gltfProject.samplers.firstWhere((s)=>s.gltfSource == gltfSource.sampler, orElse: ()=> throw new Exception('Texture Sampler can only be bound to an existing project sampler'));
+    }
+
+    GLTFImage image;
+    if(gltfSource.source != null){
+      image = gltfProject.images.firstWhere((i)=>i.gltfSource == gltfSource.source, orElse: ()=> throw new Exception('Texture Image can only be bound to an existing project image'));
+    }
+
     //Check if exist in project first
     GLTFTexture texture = gltfProject.textures.firstWhere((t)=>t.gltfSource == gltfSource, orElse: ()=> null);
-    if(texture == null) texture = new GLTFTexture._(gltfSource);
-
-    if(gltfSource.sampler != null){
-      GLTFSampler sampler = gltfProject.samplers.firstWhere((s)=>s.gltfSource == gltfSource.sampler, orElse: ()=> throw new Exception('Texture Sampler can only be bound to an existing project sampler'));
-      texture._samplerId = sampler.samplerId;
+    if(texture == null) {
+      texture = new GLTFTexture(
+        sampler : sampler,
+        source : image,
+        name: gltfSource.name
+      );
+      texture._gltfSource = gltfSource;
+    }else {
+      texture._sampler = sampler;
+      texture._source = image;
     }
-    
-    if(gltfSource.source != null){
-      GLTFImage image = gltfProject.images.firstWhere((i)=>i.gltfSource == gltfSource.source, orElse: ()=> throw new Exception('Texture Image can only be bound to an existing project image'));
-      texture._sourceId = image.sourceId;
-    }
-
     return texture;
   }
 

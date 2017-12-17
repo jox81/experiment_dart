@@ -4,10 +4,12 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFScene extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.Scene _gltfSource;
   glTF.Scene get gltfSource => _gltfSource;
 
-  int sceneId;
+  final int sceneId = nextId++;
 
   final List<int> _nodesId = new List();
   List<GLTFNode> get nodes => gltfProject.nodes.where((n)=>_nodesId.contains(n.nodeId)).toList(growable: false);
@@ -28,7 +30,6 @@ class GLTFScene extends GLTFChildOfRootProperty {
     for(glTF.Node node in gltfSource.nodes){
 
       GLTFNode gltfNode = gltfProject.nodes.firstWhere((n)=>n.gltfSource == node, orElse: ()=> throw new Exception('Scene can only be binded to Nodes existing in project'));
-      gltfNode.nodeId = gltfNode.nodeId;
       scene.addNode(gltfNode);
     }
     return scene;

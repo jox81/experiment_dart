@@ -8,7 +8,7 @@ class GLTFSampler extends GLTFChildOfRootProperty {
   glTF.Sampler _gltfSource;
   glTF.Sampler get gltfSource => _gltfSource;
 
-  int samplerId;
+  final int samplerId = nextId++;
 
   /// TextureFilterType magFilter;
   final int magFilter;

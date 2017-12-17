@@ -4,11 +4,11 @@ import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFTextureInfo extends GltfProperty {
+
   glTF.TextureInfo _gltfSource;
+  glTF.TextureInfo get gltfSource => _gltfSource;
 
   int get index => texture.textureId;
-
-  glTF.TextureInfo get gltfSource => _gltfSource;
 
   final int texCoord;
 

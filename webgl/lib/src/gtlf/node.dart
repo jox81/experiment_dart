@@ -2,16 +2,18 @@ import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/renderer.dart';
+import 'package:webgl/src/gtlf/renderer/program_setting.dart';
 import 'package:webgl/src/gtlf/skin.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/camera.dart';
 
 class GLTFNode extends GLTFChildOfRootProperty{
+  static int nextId = 0;
+
   glTF.Node _gltfSource;
   glTF.Node get gltfSource => _gltfSource;
 
-  int nodeId;
+  final int nodeId = nextId++;
 
   bool get hasChildren => gltfSource.children != null && gltfSource.children.length > 0;
 

@@ -75,10 +75,12 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
 ///   componentType VEC3(3 item) * FLOAT 5126 (4 bytes) * count(2012) = 3 * 4 * 2012 = 24.144 bytes
 ///
 class GLTFAccessor extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.Accessor _gltfSource;
   glTF.Accessor get gltfSource => _gltfSource;
 
-  int accessorId;
+  final int accessorId = nextId++;
 
   //>
   int _bufferViewId;

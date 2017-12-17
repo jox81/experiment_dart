@@ -22,10 +22,11 @@ enum CameraType{
 }
 
 abstract class Camera extends Object3d {
+  static int nextId = 0;
 
   bool _isActive = false;
 
-  int cameraId;
+  final int cameraId = nextId++;
 
   glTF.Camera get gltfSource;
 

@@ -6,10 +6,12 @@ import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFPBRMaterial extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.Material _gltfSource;
   glTF.Material get gltfSource => _gltfSource;
 
-  int materialId;
+  final int materialId = nextId++;
 
   // Todo (jpu) : add other material objects
   final GLTFPbrMetallicRoughness pbrMetallicRoughness;

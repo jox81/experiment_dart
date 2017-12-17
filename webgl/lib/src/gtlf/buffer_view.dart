@@ -16,10 +16,12 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 /// [usage] define the bufferType : ARRAY_BUFFER | ELEMENT_ARRAY_BUFFER
 ///
 class GLTFBufferView extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.BufferView _gltfSource;
   glTF.BufferView get gltfSource => _gltfSource;
 
-  int bufferViewId;
+  final int bufferViewId = nextId++;
 
   int _bufferId;
   GLTFBuffer get buffer => gltfProject.buffers[_bufferId];

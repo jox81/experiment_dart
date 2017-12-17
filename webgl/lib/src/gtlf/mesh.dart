@@ -5,12 +5,12 @@ import 'package:webgl/src/gtlf/renderer/renderer.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFMesh extends GLTFChildOfRootProperty {
+  static int nextId = 0;
+
   glTF.Mesh _gltfSource;
-
-
   glTF.Mesh get gltfSource => _gltfSource;
 
-  int meshId;
+  final int meshId = nextId++;
 
   final List<GLTFMeshPrimitive> primitives;
   final List<double> weights;

@@ -4,10 +4,12 @@ import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 
 class GLTFAnimation {
+  static int nextId = 0;
+
   glTF.Animation _gltfSource;
   glTF.Animation get gltfSource => _gltfSource;
 
-  int animationId;
+  final int animationId = nextId++;
   List<GLTFAnimationSampler> samplers;
   List<GLTFAnimationChannel> channels;
 

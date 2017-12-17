@@ -98,7 +98,6 @@ class GLTFProject {
   void addScene(GLTFScene scene){
     assert(scene != null);
     _scenes.add(scene);
-    scene.sceneId = _scenes.indexOf(scene);
   }
 
   int _sceneId;
@@ -113,8 +112,6 @@ class GLTFProject {
   List<GLTFNode> get nodes => _nodes.toList(growable: false);
   void addNode(GLTFNode value){
     assert(value != null);
-
-    value.nodeId = nodes.length > 0 ? nodes.last.nodeId + 1 : 0;
     _nodes.add(value);
   }
 
@@ -133,7 +130,6 @@ class GLTFProject {
       for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
         GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);
         if (buffer != null) {
-          buffer.bufferId = buffers.length > 0 ? buffers.last.bufferId + 1 : 0;
           buffers.add(buffer);
         }
       }
@@ -142,7 +138,6 @@ class GLTFProject {
       for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
         GLTFBufferView bufferView = new GLTFBufferView.fromGltf(gltfBufferView);
         if (bufferView != null) {
-          bufferView.bufferViewId = bufferViews.length > 0 ? bufferViews.last.bufferViewId + 1 : 0;
           bufferViews.add(bufferView);
         }
       }
@@ -151,7 +146,6 @@ class GLTFProject {
       for (glTF.Image gltfImage in _gltfSource.images) {
         GLTFImage image = new GLTFImage.fromGltf(gltfImage);
         if (image != null) {
-          image.sourceId = images.length > 0 ? images.last.sourceId + 1 : 0;
           images.add(image);
         }
       }
@@ -160,7 +154,6 @@ class GLTFProject {
       for (glTF.Sampler gltfSampler in _gltfSource.samplers) {
         GLTFSampler sampler = new GLTFSampler.fromGltf(gltfSampler);
         if (sampler != null) {
-          sampler.samplerId = samplers.length > 0 ? samplers.last.samplerId + 1 : 0;
           samplers.add(sampler);
         }
       }
@@ -169,7 +162,6 @@ class GLTFProject {
       for (glTF.Texture gltfTexture in _gltfSource.textures) {
         GLTFTexture texture = new GLTFTexture.fromGltf(gltfTexture);
         if (texture != null) {
-          texture.textureId = textures.length > 0 ? textures.last.textureId + 1 : 0;
           textures.add(texture);
         }
       }
@@ -178,7 +170,6 @@ class GLTFProject {
       for (glTF.Material gltfMaterial in _gltfSource.materials) {
         GLTFPBRMaterial material = new GLTFPBRMaterial.fromGltf(gltfMaterial);
         if (material != null) {
-          material.materialId = materials.length > 0 ? materials.last.materialId + 1 : 0;
           materials.add(material);
         }
       }
@@ -187,7 +178,6 @@ class GLTFProject {
       for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
         GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
         if (accessor != null) {
-          accessor.accessorId = accessors.length > 0 ? accessors.last.accessorId + 1 : 0;
           accessors.add(accessor);
         }
       }
@@ -196,7 +186,6 @@ class GLTFProject {
       for (glTF.Camera gltfCamera in _gltfSource.cameras) {
         Camera camera = Camera.fromGltf(gltfCamera);
         if (camera != null) {
-          camera.cameraId = cameras.length > 0 ? cameras.last.cameraId + 1 : 0;
           cameras.add(camera);
         }
       }
@@ -205,7 +194,6 @@ class GLTFProject {
       for (glTF.Mesh gltfMesh in _gltfSource.meshes) {
         GLTFMesh mesh = new GLTFMesh.fromGltf(gltfMesh);
         if (mesh != null) {
-          mesh.meshId = meshes.length > 0 ? meshes.last.meshId + 1 : 0;
           meshes.add(mesh);
         }
       }
@@ -240,7 +228,6 @@ class GLTFProject {
       for (glTF.Animation gltfAnimation  in _gltfSource.animations) {
         GLTFAnimation animation = new GLTFAnimation.fromGltf(gltfAnimation);
         if (animation != null) {
-          animation.animationId = animations.length > 0 ? animations.last.animationId + 1 : 0;
           animations.add(animation);
         }
       }
