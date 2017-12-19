@@ -6,6 +6,7 @@ import 'dart:convert' show BASE64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/renderer/program_setting.dart';
+import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
@@ -22,18 +23,17 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 
-// Uint8List = Byte
-// Uint16List = SCALAR : int
-
 webgl.RenderingContext gl;
-GLTFProject globalGltf;
 
+GLTFProject globalGltf;
 GlobalState globalState;
 
 // Direction from where the light is coming to origin
-Vector3 lightPosition = new Vector3(50.0, 50.0, -50.0);
-Vector3 get lightDirection => lightPosition.normalized();
-Vector3 lightColor = new Vector3(1.0, 1.0, 1.0);
+DirectionalLight light = new DirectionalLight()
+  ..position = new Vector3(50.0, 50.0, -50.0)
+  ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
+  ..color =  new Vector3(1.0, 1.0, 1.0);
+
 CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
 
 int skipTexture;

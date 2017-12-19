@@ -4,10 +4,6 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFSampler extends GLTFChildOfRootProperty {
   static int nextId = 0;
-
-  glTF.Sampler _gltfSource;
-  glTF.Sampler get gltfSource => _gltfSource;
-
   final int samplerId = nextId++;
 
   /// TextureFilterType magFilter;
@@ -22,23 +18,10 @@ class GLTFSampler extends GLTFChildOfRootProperty {
   GLTFSampler({
     this.magFilter : TextureFilterType.LINEAR,
     this.minFilter : TextureFilterType.LINEAR,
-    this.wrapS,// Todo (jpu) : add default value
-    this.wrapT,// Todo (jpu) : add default value
+    this.wrapS,// Todo (jpu) : add default value ?
+    this.wrapT,// Todo (jpu) : add default value ?
     String name : ''
   }):super(name);
-
-  factory GLTFSampler.fromGltf(glTF.Sampler gltfSource) {
-    if (gltfSource == null) return null;
-    GLTFSampler sampler = new GLTFSampler(
-        magFilter : gltfSource.magFilter != -1 ? gltfSource.magFilter : TextureFilterType.LINEAR,
-        minFilter : gltfSource.minFilter != -1 ? gltfSource.magFilter : TextureFilterType.LINEAR,
-        wrapS : gltfSource.wrapS,
-        wrapT : gltfSource.wrapT,
-        name : gltfSource.name
-    );
-    sampler._gltfSource = gltfSource;
-    return sampler;
-  }
 
   @override
   String toString() {

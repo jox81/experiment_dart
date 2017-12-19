@@ -1,3 +1,5 @@
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+
 import '../camera.dart';
 import 'dart:core';
 import 'dart:async';
@@ -143,16 +145,16 @@ class GLTFProject {
       }
 
       //Images
-      for (glTF.Image gltfImage in _gltfSource.images) {
-        GLTFImage image = new GLTFImage.fromGltf(gltfImage);
+      for (glTF.Image gltfSource in _gltfSource.images) {
+        GLTFImage image = createImage(gltfSource);
         if (image != null) {
           images.add(image);
         }
       }
 
       //Samplers
-      for (glTF.Sampler gltfSampler in _gltfSource.samplers) {
-        GLTFSampler sampler = new GLTFSampler.fromGltf(gltfSampler);
+      for (glTF.Sampler gltfSource in _gltfSource.samplers) {
+        GLTFSampler sampler = createSampler(gltfSource);
         if (sampler != null) {
           samplers.add(sampler);
         }
@@ -160,7 +162,7 @@ class GLTFProject {
 
       //Textures
       for (glTF.Texture gltfTexture in _gltfSource.textures) {
-        GLTFTexture texture = new GLTFTexture.fromGltf(gltfTexture);
+        GLTFTexture texture = createTexture(gltfTexture);
         if (texture != null) {
           textures.add(texture);
         }
@@ -244,9 +246,11 @@ class GLTFProject {
 
   factory GLTFProject.fromGltf(glTF.Gltf gltfSource) {
     if (gltfSource == null) return null;
+
     _gltfProject = new GLTFProject._();
     _gltfProject._gltfSource = gltfSource;
     _gltfProject._init(gltfSource);
+
     return _gltfProject;
   }
 
@@ -259,4 +263,72 @@ class GLTFProject {
     }
   }
 
+  //>
+
+  GLTFSampler createSampler(glTF.Sampler gltfSource) {
+    if (gltfSource == null) return null;
+    GLTFSampler sampler = new GLTFSampler(
+        magFilter : gltfSource.magFilter != -1 ? gltfSource.magFilter : TextureFilterType.LINEAR,
+        minFilter : gltfSource.minFilter != -1 ? gltfSource.magFilter : TextureFilterType.LINEAR,
+        wrapS : gltfSource.wrapS,
+        wrapT : gltfSource.wrapT,
+        name : gltfSource.name
+    );
+    return sampler;
+  }
+
+  GLTFSampler getSampler(glTF.Sampler sampler) {
+    int id = gltfProject.gltfSource.samplers.indexOf(sampler);
+    return gltfProject.samplers.firstWhere((s)=>s.samplerId == id, orElse: ()=> throw new Exception('Texture Sampler can only be bound to an existing project sampler'));
+  }
+
+  GLTFImage createImage(glTF.Image gltfSource) {
+    if (gltfSource == null) return null;
+    GLTFImage image = new GLTFImage(
+        uri : gltfSource.uri,
+        mimeType : gltfSource.mimeType,
+        bufferView : new GLTFBufferView.fromGltf(gltfSource.bufferView),
+        data : gltfSource.data,
+        name : gltfSource.name
+    );
+    return image;
+  }
+
+  GLTFImage getImage(glTF.Image image) {
+    int id = gltfProject.gltfSource.images.indexOf(image);
+    return gltfProject.images.firstWhere((i)=>i.sourceId == id, orElse: ()=> throw new Exception('Texture Image can only be bound to an existing project image'));
+  }
+
+ GLTFTexture createTexture(glTF.Texture gltfSource) {
+    if (gltfSource == null) return null;
+
+    GLTFSampler sampler;
+    if(gltfSource.sampler != null){
+      sampler = gltfProject.getSampler(gltfSource.sampler);
+    }
+
+    GLTFImage image;
+    if(gltfSource.source != null){
+      image = gltfProject.getImage(gltfSource.source);
+    }
+
+    //Check if exist in project first
+    GLTFTexture texture = getTexture(gltfSource);
+    if(texture == null) {
+      texture = new GLTFTexture(
+          sampler : sampler,
+          source : image,
+          name: gltfSource.name
+      );
+    }else {
+      texture.sampler = sampler;
+      texture.source = image;
+    }
+    return texture;
+  }
+
+  GLTFTexture getTexture(glTF.Texture texture) {
+    int id = gltfProject.gltfSource.textures.indexOf(texture);
+    return gltfProject.textures.firstWhere((t)=>t.textureId == id, orElse: ()=> null);
+  }
 }

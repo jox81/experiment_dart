@@ -1,4 +1,5 @@
 import 'package:gltf/gltf.dart' as glTF;
+import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 
@@ -11,7 +12,7 @@ class GLTFNormalTextureInfo extends GLTFTextureInfo {
   GLTFNormalTextureInfo(int texCoord, GLTFTexture texture, this.scale):super(texCoord, texture : texture);
 
   GLTFNormalTextureInfo._(this._gltfSource)
-      : this.scale = _gltfSource.scale, super(_gltfSource.texCoord, texture : new GLTFTexture.fromGltf(_gltfSource.texture));
+      : this.scale = _gltfSource.scale, super(_gltfSource.texCoord, texture : gltfProject.createTexture(_gltfSource.texture));
 
   factory GLTFNormalTextureInfo.fromGltf(
       glTF.NormalTextureInfo gltfSource) {

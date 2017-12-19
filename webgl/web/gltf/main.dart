@@ -32,7 +32,7 @@ Future main() async {
 //    './samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    './samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+//    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
@@ -41,7 +41,7 @@ Future main() async {
 //    './wip/export_test/export_test.gltf',
 //    './wip/export_test/export_test_grey.gltf',
 //    './wip/hierarchy_test/hieracrhy_test.gltf',
-//    './wip/archi/model_01/model_01.gltf',
+    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
   //Blender test Sphere
 //    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'

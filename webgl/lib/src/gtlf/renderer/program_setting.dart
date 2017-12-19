@@ -101,13 +101,9 @@ class ProgramSetting{
       WebGLProgram program = programs[i];
       gl.useProgram(program.webGLProgram);
 
-      DirectionalLight directionalLight = new DirectionalLight()
-        ..direction = lightDirection
-        ..color = lightColor;
-
       _setupPrimitiveBuffers(program, primitive);
       material.setUniforms(
-          program, _modelMatrix, _viewMatrix, _projectionMatrix, mainCamera.position, directionalLight);
+          program, _modelMatrix, _viewMatrix, _projectionMatrix, mainCamera.position, light);
 
       _drawPrimitive(program.webGLProgram, primitive);
     }

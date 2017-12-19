@@ -30,7 +30,7 @@ class GLTFTextureInfo extends GltfProperty {
     GLTFTextureInfo textureInfo =  new GLTFTextureInfo._(gltfSource);
 
     if(gltfSource.texture != null){
-      GLTFTexture texture = gltfProject.textures.firstWhere((t)=>t.gltfSource == gltfSource.texture, orElse: ()=> throw new Exception('GLTFTextureInfo texture can only be bound to an existing project texture'));
+      GLTFTexture texture = gltfProject.getTexture(gltfSource.texture);
       textureInfo._textureId = texture.textureId;
     }
 

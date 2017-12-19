@@ -1,4 +1,5 @@
 import 'package:gltf/gltf.dart' as glTF;
+import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 
@@ -11,7 +12,7 @@ class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
   GLTFOcclusionTextureInfo(int texCoord, GLTFTexture texture, this.strength):super(texCoord, texture : texture);
 
   GLTFOcclusionTextureInfo._(this._gltfSource)
-      : this.strength = _gltfSource.strength, super(_gltfSource.texCoord, texture : new GLTFTexture.fromGltf(_gltfSource.texture));
+      : this.strength = _gltfSource.strength, super(_gltfSource.texCoord, texture : gltfProject.createTexture(_gltfSource.texture));
 
   factory GLTFOcclusionTextureInfo.fromGltf(
       glTF.OcclusionTextureInfo gltfSource) {
