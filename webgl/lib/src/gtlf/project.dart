@@ -138,7 +138,7 @@ class GLTFProject {
 
       //BufferViews
       for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
-        GLTFBufferView bufferView = new GLTFBufferView.fromGltf(gltfBufferView);
+        GLTFBufferView bufferView = createBufferView(gltfBufferView);
         if (bufferView != null) {
           bufferViews.add(bufferView);
         }
@@ -279,6 +279,31 @@ class GLTFProject {
     return gltfProject.buffers.firstWhere((b)=>b.bufferId == id, orElse: ()=> throw new Exception('Buffer can only be bound to an existing project buffer'));
   }
 
+  GLTFBufferView createBufferView(glTF.BufferView gltfSource) {
+    if (gltfSource == null) return null;
+
+    GLTFBufferView bufferView = new GLTFBufferView(
+        buffer : gltfProject.getBuffer(gltfSource.buffer),
+        byteLength: gltfSource.byteLength,
+        byteOffset: gltfSource.byteOffset,
+        byteStride: gltfSource.byteStride,
+        usage: gltfSource.usage != null ? gltfSource.usage.target : null,
+        target: gltfSource.usage != null
+            ? gltfSource.usage.target
+            : null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
+        name: gltfSource.name);
+
+    return bufferView;
+  }
+
+  GLTFBufferView getBufferView(glTF.BufferView bufferView) {
+    int id = gltfProject.gltfSource.bufferViews.indexOf(bufferView);
+
+    return gltfProject.bufferViews.firstWhere((b) => b.bufferViewId == id,
+        orElse: () => throw new Exception(
+            'BufferView can only be bound to an existing project bufferView'));
+  }
+
   GLTFSampler createSampler(glTF.Sampler gltfSource) {
     if (gltfSource == null) return null;
     GLTFSampler sampler = new GLTFSampler(
@@ -301,7 +326,7 @@ class GLTFProject {
     GLTFImage image = new GLTFImage(
         uri : gltfSource.uri,
         mimeType : gltfSource.mimeType,
-        bufferView : new GLTFBufferView.fromGltf(gltfSource.bufferView),
+        bufferView : createBufferView(gltfSource.bufferView),
         data : gltfSource.data,
         name : gltfSource.name
     );

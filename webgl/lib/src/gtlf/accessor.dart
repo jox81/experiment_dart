@@ -143,10 +143,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
     GLTFAccessor accessor = new GLTFAccessor._(gltfSource);
 
     if(gltfSource.bufferView != null) {
-      GLTFBufferView bufferView = gltfProject.bufferViews.firstWhere((b) =>
-      b.gltfSource == gltfSource.bufferView, orElse: () =>
-      throw new Exception(
-          'Accessor can only be bound to an existing project bufferView'));
+      GLTFBufferView bufferView = gltfProject.getBufferView(gltfSource.bufferView);
       assert(bufferView.bufferViewId != null);
 
       accessor._bufferViewId = bufferView.bufferViewId;
