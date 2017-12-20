@@ -130,7 +130,7 @@ class GLTFProject {
 
       //Buffers
       for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
-        GLTFBuffer buffer = new GLTFBuffer.fromGltf(gltfBuffer);
+        GLTFBuffer buffer = createBuffer(gltfBuffer);
         if (buffer != null) {
           buffers.add(buffer);
         }
@@ -264,6 +264,20 @@ class GLTFProject {
   }
 
   //>
+
+  GLTFBuffer createBuffer(glTF.Buffer gltfSource){
+    if (gltfSource == null) return null;
+    GLTFBuffer buffer = new GLTFBuffer(uri : gltfSource.uri,
+    byteLength: gltfSource.byteLength,
+    data : gltfSource.data,
+    name : gltfSource.name);
+    return buffer;
+  }
+
+  GLTFBuffer getBuffer(glTF.Buffer buffer) {
+    int id = gltfProject.gltfSource.buffers.indexOf(buffer);
+    return gltfProject.buffers.firstWhere((b)=>b.bufferId == id, orElse: ()=> throw new Exception('Buffer can only be bound to an existing project buffer'));
+  }
 
   GLTFSampler createSampler(glTF.Sampler gltfSource) {
     if (gltfSource == null) return null;

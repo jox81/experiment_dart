@@ -42,21 +42,21 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
         this.target = _gltfSource.usage != null ? _gltfSource.usage.target: null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
         super(name);
 
-  GLTFBufferView(
-      GLTFBuffer projectBuffer,
-      this.byteLength,
-      this.byteOffset,
-      this.byteStride,
-      this.target,
-      this.usage,[String name]):
-      super(name){
-    this._bufferId = gltfProject.buffers.indexOf(projectBuffer);
-  }
+//  GLTFBufferView(
+//      GLTFBuffer projectBuffer,
+//      this.byteLength,
+//      this.byteOffset,
+//      this.byteStride,
+//      this.target,
+//      this.usage,[String name]):
+//      super(name){
+//    this._bufferId = gltfProject.buffers.indexOf(projectBuffer);
+//  }
 
   factory GLTFBufferView.fromGltf(glTF.BufferView gltfSource) {
     if (gltfSource == null) return null;
     GLTFBufferView bufferView = new GLTFBufferView._(gltfSource);
-    GLTFBuffer projectBuffer = gltfProject.buffers.firstWhere((b)=>b.gltfSource == gltfSource.buffer);
+    GLTFBuffer projectBuffer = gltfProject.getBuffer(gltfSource.buffer);
     bufferView._bufferId = projectBuffer.bufferId;
     return bufferView;
   }
