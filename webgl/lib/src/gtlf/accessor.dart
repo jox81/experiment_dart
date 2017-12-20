@@ -76,31 +76,31 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
 ///
 class GLTFAccessor extends GLTFChildOfRootProperty {
   static int nextId = 0;
-
-  glTF.Accessor _gltfSource;
-  glTF.Accessor get gltfSource => _gltfSource;
-
   final int accessorId = nextId++;
 
   //>
-  int _bufferViewId;
-  GLTFBufferView get bufferView => _bufferViewId != null ? gltfProject.bufferViews[_bufferViewId] : null;
+  GLTFBufferView _bufferView;
+  GLTFBufferView get bufferView => _bufferView;
+  set bufferView(GLTFBufferView value) {
+    _bufferView = value;
+  }
+
   final int byteOffset; //Start reading byte at
-  int get byteLength => _gltfSource.byteLength;// Total length
+  final int byteLength;// Total length
   //
   final int count;
   /// ShaderVariableType type
   final int type = -1;//FLOAT_VEC3// Todo (jpu) :
-  int get elementLength => _gltfSource.elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
+  final int elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
   //
   final String typeString;//SCALAR/VEC3/...
-  int get components => _gltfSource.components;//Count of components in an element : vec3 -> 3, vec2 -> 2
+  final int components;//Count of components in an element : vec3 -> 3, vec2 -> 2
   //
   ///ShaderVariableType componentType
   final int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
-  int get componentLength => _gltfSource.componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
+  final int componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
   //
-  int get byteStride => _gltfSource.byteStride;//size of repetition group
+  final int byteStride;//size of repetition group
   //<
 
   final bool normalized;
@@ -108,52 +108,34 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final List<num> min;
   final GLTFAccessorSparse sparse;
 
-  bool get isXyzSign => _gltfSource.isXyzSign;
-  bool get isUnit => _gltfSource.isUnit;
+  final bool isXyzSign;
+  final bool isUnit;
 
-  GLTFAccessor._(this._gltfSource, [String name])
-      : this.byteOffset = _gltfSource.byteOffset,
-        this.componentType = _gltfSource.componentType,
-        this.count = _gltfSource.count,
-        this.typeString = _gltfSource.type,
-//        this.type = ShaderVariableType.getByComponentAndType(_gltfSource.componentType,
-//            _gltfSource.type),
-        this.normalized = _gltfSource.normalized,
-        this.max = _gltfSource.max,
-        this.min = _gltfSource.min,
-        this.sparse = _gltfSource.sparse != null
-            ? new GLTFAccessorSparse.fromGltf(_gltfSource.sparse)
-            : null,
-        super(_gltfSource.name);
-
-  GLTFAccessor(
+  GLTFAccessor({
       this.byteOffset,
+      this.byteLength,
       this.componentType,
+      this.componentLength,
       this.typeString,
 //      this.type,
+      this.elementLength,
+      this.components,
       this.count,
       this.normalized,
       this.max,
       this.min,
-      this.sparse, [String name]):
+      this.byteStride,
+      this.sparse,
+      this.isXyzSign,
+      this.isUnit,
+      String name
+      }):
       super(name);
 
-  factory GLTFAccessor.fromGltf(glTF.Accessor gltfSource) {
-    if (gltfSource == null) return null;
-    GLTFAccessor accessor = new GLTFAccessor._(gltfSource);
-
-    if(gltfSource.bufferView != null) {
-      GLTFBufferView bufferView = gltfProject.getBufferView(gltfSource.bufferView);
-      assert(bufferView.bufferViewId != null);
-
-      accessor._bufferViewId = bufferView.bufferViewId;
-    }
-    return accessor;
-  }
 
   @override
   String toString() {
-    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: $_bufferViewId, byteOffset: $byteOffset, byteLength: $byteLength, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, byteStride: $byteStride, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: ${bufferView.bufferViewId}, byteOffset: $byteOffset, byteLength: $byteLength, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, byteStride: $byteStride, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
   }
 
 }

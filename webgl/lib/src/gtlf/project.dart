@@ -1,3 +1,4 @@
+import 'package:webgl/src/gtlf/accessor_sparse.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 import '../camera.dart';
@@ -178,7 +179,7 @@ class GLTFProject {
 
       //Accessors
       for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
-        GLTFAccessor accessor = new GLTFAccessor.fromGltf(gltfAccessor);
+        GLTFAccessor accessor = createAccessor(gltfAccessor);
         if (accessor != null) {
           accessors.add(accessor);
         }
@@ -303,6 +304,46 @@ class GLTFProject {
         orElse: () => throw new Exception(
             'BufferView can only be bound to an existing project bufferView'));
   }
+
+
+  GLTFAccessor createAccessor(glTF.Accessor gltfSource) {
+    if (gltfSource == null) return null;
+
+    GLTFAccessor accessor = new GLTFAccessor(
+        byteOffset : gltfSource.byteOffset,
+        byteLength :  gltfSource.byteLength,
+        componentType : gltfSource.componentType,
+        count : gltfSource.count,
+        typeString : gltfSource.type,
+//        type : ShaderVariableType.getByComponentAndType(gltfSource.componentType,gltfSource.type),
+        elementLength : gltfSource.elementLength,
+        components : gltfSource.components,
+        normalized : gltfSource.normalized,
+        componentLength : gltfSource.componentLength,
+        max : gltfSource.max,
+        min : gltfSource.min,
+        byteStride : gltfSource.byteStride,
+        sparse : gltfSource.sparse != null
+            ? new GLTFAccessorSparse.fromGltf(gltfSource.sparse):null,
+        isXyzSign : gltfSource.isXyzSign,
+        isUnit : gltfSource.isUnit,
+      name: gltfSource.name
+    );
+
+    if(gltfSource.bufferView != null) {
+      GLTFBufferView bufferView = gltfProject.getBufferView(gltfSource.bufferView);
+      assert(bufferView.bufferViewId != null);
+
+      accessor.bufferView = bufferView;
+    }
+    return accessor;
+  }
+
+  GLTFAccessor getAccessor(glTF.Accessor accessor) {
+    int id = gltfProject.gltfSource.accessors.indexOf(accessor);
+    return gltfProject.accessors.firstWhere((a)=>a.accessorId == id, orElse: ()=> throw new Exception('Attribut accessor can only be bound to an existing project accessor'));
+  }
+
 
   GLTFSampler createSampler(glTF.Sampler gltfSource) {
     if (gltfSource == null) return null;

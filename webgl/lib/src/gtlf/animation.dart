@@ -133,12 +133,10 @@ class GLTFAnimationSampler {
     if (gltfSource == null) return null;
     GLTFAnimationSampler sampler = new GLTFAnimationSampler._(gltfSource);
 
-    GLTFAccessor projectAccessorInput = gltfProject.accessors
-        .firstWhere((a) => a.gltfSource == gltfSource.input);
+    GLTFAccessor projectAccessorInput = gltfProject.getAccessor(gltfSource.input);
     sampler._accessorInputId = projectAccessorInput.accessorId;
 
-    GLTFAccessor projectAccessorOutput = gltfProject.accessors
-        .firstWhere((a) => a.gltfSource == gltfSource.output);
+    GLTFAccessor projectAccessorOutput = gltfProject.getAccessor(gltfSource.output);
     sampler._accessorOutputId = projectAccessorOutput.accessorId;
 
     return sampler;

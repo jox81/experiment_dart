@@ -58,15 +58,13 @@ class GLTFMeshPrimitive extends GltfProperty {
 
     //attributs
     for (String key in gltfSource.attributes.keys) {
-        GLTFAccessor accessor = gltfProject.accessors.firstWhere((a)=>a.gltfSource == gltfSource.attributes[key], orElse: ()=> throw new Exception('Attribut accessor can only be bound to an existing project accessor'));
+        GLTFAccessor accessor = gltfProject.getAccessor(gltfSource.attributes[key]);
         meshPrimitive.attributes[key] = accessor;
     }
 
     //indices
     if(gltfSource.indices != null) {
-      GLTFAccessor accessorIndices = gltfProject.accessors.firstWhere((a) =>
-      a.gltfSource == gltfSource.indices, orElse: () => throw new Exception(
-          'Indices accessor can only be bound to an existing project accessor'));
+      GLTFAccessor accessorIndices = gltfProject.getAccessor(gltfSource.indices);
       assert(accessorIndices.accessorId != null);
       meshPrimitive._indicesAccessorId = accessorIndices.accessorId;
     }
