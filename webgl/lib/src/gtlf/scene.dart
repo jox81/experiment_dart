@@ -28,8 +28,7 @@ class GLTFScene extends GLTFChildOfRootProperty {
 
     //Scenes must be handled after nodes
     for(glTF.Node node in gltfSource.nodes){
-
-      GLTFNode gltfNode = gltfProject.nodes.firstWhere((n)=>n.gltfSource == node, orElse: ()=> throw new Exception('Scene can only be binded to Nodes existing in project'));
+      GLTFNode gltfNode = gltfProject.getNode(node);
       scene.addNode(gltfNode);
     }
     return scene;

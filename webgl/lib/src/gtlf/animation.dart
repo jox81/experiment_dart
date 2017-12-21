@@ -94,7 +94,7 @@ class GLTFAnimationChannelTarget {
     GLTFAnimationChannelTarget channelTarget =
         new GLTFAnimationChannelTarget._(gltfSource);
     GLTFNode projectNode =
-        gltfProject.nodes.firstWhere((n) => n.gltfSource == gltfSource.node);
+        gltfProject.getNode(gltfSource.node);
     channelTarget._nodeId = projectNode.nodeId;
     return channelTarget;
   }

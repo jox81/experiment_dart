@@ -40,8 +40,8 @@ Future main() async {
   //Wip
 //    './wip/export_test/export_test.gltf',
 //    './wip/export_test/export_test_grey.gltf',
-//    './wip/hierarchy_test/hieracrhy_test.gltf',
-    './wip/archi/model_01/model_01.gltf',
+    './wip/hierarchy_test/hieracrhy_test.gltf',
+//    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
   //Blender test Sphere
 //    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'

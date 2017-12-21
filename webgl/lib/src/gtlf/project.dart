@@ -1,3 +1,4 @@
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/accessor_sparse.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/normal_texture_info.dart';
@@ -208,16 +209,18 @@ class GLTFProject {
 
       //Nodes
       for (glTF.Node gltfNode in _gltfSource.nodes) {
-        GLTFNode node = new GLTFNode.fromGltf(gltfNode);
+        GLTFNode node = createNode(gltfNode);
         if (node != null) {
           addNode(node);
         }
       }
+
       //Nodes hierarchy parenting
-      for (GLTFNode node in nodes) {
-        if(node.hasChildren){
-            node.children = nodes.where((n)=>node.gltfSource.children.contains(n.gltfSource)).toList();
-            node.children.forEach((n)=> n.parent = node);
+      for (glTF.Node gltfNode in _gltfSource.nodes) {
+        if(gltfNode.children != null && gltfNode.children.length > 0){
+          GLTFNode node = gltfProject.getNode(gltfNode);
+          node.children = gltfNode.children.map((n) => gltfProject.getNode(n)).toList();
+          node.children.forEach((n)=> n.parent = node);
         }
       }
 
@@ -497,5 +500,36 @@ class GLTFProject {
   GLTFMesh getMesh(glTF.Mesh mesh){
     int id = gltfProject.gltfSource.meshes.indexOf(mesh);
     return gltfProject.meshes.firstWhere((m)=>m.meshId == id, orElse: ()=> throw new Exception('Mesh can only be bound to an existing project mesh'));
+  }
+
+  GLTFNode createNode(glTF.Node gltfSource) {
+    if (gltfSource == null) return null;
+
+    GLTFNode node = new GLTFNode(
+      name : gltfSource.name
+    );
+
+    node.translation = gltfSource.translation;
+    node.rotation = gltfSource.rotation;
+    node.scale = gltfSource.scale;
+    node.matrix = gltfSource.matrix;
+
+    if(gltfSource.mesh != null){
+      GLTFMesh mesh = gltfProject.getMesh(gltfSource.mesh);
+      node.mesh = mesh;
+    }
+
+    if(gltfSource.camera != null){
+      Camera camera = gltfProject.getCamera(gltfSource.camera);
+      node.camera = camera;
+    }
+
+    return node;
+  }
+
+  GLTFNode getNode(glTF.Node node)
+  {
+    int id = gltfProject.gltfSource.nodes.indexOf(node);
+    return gltfProject.nodes.firstWhere((n)=>n.nodeId == id, orElse: ()=> throw new Exception('Node can only be binded to Nodes existing in project'));
   }
 }
