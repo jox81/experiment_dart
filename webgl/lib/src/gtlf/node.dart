@@ -112,7 +112,7 @@ class GLTFNode extends GLTFChildOfRootProperty{
     GLTFNode node = new GLTFNode._(gltfSource);
 
     if(gltfSource.mesh != null){
-      GLTFMesh mesh = gltfProject.meshes.firstWhere((m)=>m.gltfSource == gltfSource.mesh, orElse: ()=> throw new Exception('Node mesh can only be bound to an existing project mesh'));
+      GLTFMesh mesh = gltfProject.getMesh(gltfSource.mesh);
       node._meshId = mesh.meshId;
     }
 

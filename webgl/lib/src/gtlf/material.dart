@@ -21,17 +21,17 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   final double alphaCutoff;
   final bool doubleSided;
 
-  GLTFPBRMaterial({
-      this.pbrMetallicRoughness,
+  GLTFPBRMaterial(
+      {this.pbrMetallicRoughness,
       this.normalTexture,
       this.occlusionTexture,
       this.emissiveTexture,
       this.emissiveFactor,
       this.alphaMode,
       this.alphaCutoff,
-      this.doubleSided, 
-      String name : ''
-      }) : super(name);
+      this.doubleSided,
+      String name: ''})
+      : super(name);
 
   @override
   String toString() {

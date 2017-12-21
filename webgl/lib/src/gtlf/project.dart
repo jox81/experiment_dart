@@ -1,4 +1,5 @@
 import 'package:webgl/src/gtlf/accessor_sparse.dart';
+import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/normal_texture_info.dart';
 import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
@@ -199,7 +200,7 @@ class GLTFProject {
 
       //Meshes
       for (glTF.Mesh gltfMesh in _gltfSource.meshes) {
-        GLTFMesh mesh = new GLTFMesh.fromGltf(gltfMesh);
+        GLTFMesh mesh = createMesh(gltfMesh);
         if (mesh != null) {
           meshes.add(mesh);
         }
@@ -475,5 +476,26 @@ class GLTFProject {
   Camera getCamera(glTF.Camera gltfCamera){
     int id = gltfProject.gltfSource.cameras.indexOf(gltfCamera);
     return gltfProject.cameras.firstWhere((c)=>c.cameraId == id, orElse: ()=> throw new Exception('Camera can only be bound to an existing project camera'));
+  }
+
+  GLTFMesh createMesh(glTF.Mesh gltfSource) {
+    if (gltfSource == null) return null;
+
+      GLTFMesh mesh = new GLTFMesh(
+          primitives : gltfSource.primitives
+          .map((p) => new GLTFMeshPrimitive.fromGltf(p))
+          .toList(),
+      weights : gltfSource.weights != null
+      ? (<double>[]..addAll(gltfSource.weights))
+          : <double>[],
+          name : gltfSource.name
+      );
+
+    return mesh;
+  }
+
+  GLTFMesh getMesh(glTF.Mesh mesh){
+    int id = gltfProject.gltfSource.meshes.indexOf(mesh);
+    return gltfProject.meshes.firstWhere((m)=>m.meshId == id, orElse: ()=> throw new Exception('Mesh can only be bound to an existing project mesh'));
   }
 }
