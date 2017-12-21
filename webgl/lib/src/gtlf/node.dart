@@ -117,7 +117,7 @@ class GLTFNode extends GLTFChildOfRootProperty{
     }
 
     if(gltfSource.camera != null){
-      Camera camera = gltfProject.cameras.firstWhere((c)=>c.gltfSource == gltfSource.camera, orElse: ()=> throw new Exception('Node camera can only be bound to an existing project camera'));
+      Camera camera = gltfProject.getCamera(gltfSource.camera);
       node._cameraId = camera.cameraId;
     }
 

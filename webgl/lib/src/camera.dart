@@ -3,10 +3,8 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/geometry/object3d.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/geometry/models.dart';
-import 'package:gltf/gltf.dart' as glTF hide Context;
 import 'context.dart';
 @MirrorsUsed(
     targets: const [
@@ -23,28 +21,16 @@ enum CameraType{
 
 abstract class Camera extends Object3d {
   static int nextId = 0;
-
-  bool _isActive = false;
-
   final int cameraId = nextId++;
-
-  glTF.Camera get gltfSource;
-
-  static Camera fromGltf(glTF.Camera gltfCamera){
-    if(gltfCamera != null) {
-      if (gltfCamera.perspective != null)
-        return new CameraPerspective.fromGltf(gltfCamera);
-      if (gltfCamera.orthographic != null)
-        return new CameraOrthographic.fromGltf(gltfCamera);
-    }
-    return null;
-  }
 
   CameraType _type;
   CameraType get type => _type;
+  set type(CameraType value) {
+    _type = value;
+  }
 
+  bool _isActive = false;
   bool get isActive => _isActive;
-
   set isActive(bool value) {
     _isActive = value;
   }
@@ -128,9 +114,9 @@ abstract class Camera extends Object3d {
 class CameraPerspective extends Camera{
   double _aspectRatio = 0.1;
   double get aspectRatio => _aspectRatio;
-//  set aspectRatio(double value){
-//    _aspectRatio = value;
-//  }
+  set aspectRatio(double value){
+    _aspectRatio = value;
+  }
 
   double _yfov;
   double get yfov => _yfov;
@@ -218,7 +204,7 @@ class CameraPerspective extends Camera{
 
   @override
   String toString() {
-    return 'GLTFCameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $position, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix}';
+    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $position, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix}';
   }
 
   // >> JSON
@@ -241,19 +227,6 @@ class CameraPerspective extends Camera{
     json['position'] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     json['showGizmo'] = showGizmo;
     return json;
-  }
-
-  // >> glTF
-  glTF.Camera _gltfSource;
-  glTF.Camera get gltfSource => _gltfSource;
-
-  factory CameraPerspective.fromGltf(glTF.Camera gltfCamera){
-    CameraPerspective camera = new CameraPerspective(gltfCamera.perspective.yfov, gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
-    .._gltfSource = gltfCamera;
-    camera
-      .._type = CameraType.perspective
-      .._aspectRatio = gltfCamera.perspective.aspectRatio;
-    return camera;
   }
 
   @override
@@ -312,31 +285,8 @@ class CameraOrthographic extends Camera{
     return json;
   }
 
-  // >> glTF
-
-  glTF.Camera _gltfSource;
-  glTF.Camera get gltfSource => _gltfSource;
-
-  factory CameraOrthographic.fromGltf(glTF.Camera gltfCamera){
-    CameraOrthographic camera = new CameraOrthographic()
-      .._gltfSource = gltfCamera
-      .._type = CameraType.orthographic
-      .._znear = gltfCamera.orthographic.znear
-      .._zfar = gltfCamera.orthographic.zfar
-      .._xmag = gltfCamera.orthographic.xmag
-      .._ymag = gltfCamera.orthographic.ymag;
-
-      // Todo (jpu) :
-//      cameraPerspective.extensions;
-//      cameraPerspective.extras;
-
-    return camera;
-  }
-
   @override
   String toString() {
-    return 'GLTFCameraOrthographic{cameraId: $cameraId, _ymag: $_ymag, _xmag: $_xmag}';
+    return 'CameraOrthographic{cameraId: $cameraId, _ymag: $_ymag, _xmag: $_xmag}';
   }
-
-
 }

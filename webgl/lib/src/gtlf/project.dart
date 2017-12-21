@@ -187,7 +187,7 @@ class GLTFProject {
 
       //Cameras
       for (glTF.Camera gltfCamera in _gltfSource.cameras) {
-        Camera camera = Camera.fromGltf(gltfCamera);
+        Camera camera = createCamera(gltfCamera);
         if (camera != null) {
           cameras.add(camera);
         }
@@ -410,5 +410,33 @@ class GLTFProject {
   GLTFTexture getTexture(glTF.Texture texture) {
     int id = gltfProject.gltfSource.textures.indexOf(texture);
     return gltfProject.textures.firstWhere((t)=>t.textureId == id, orElse: ()=> null);
+  }
+
+  Camera createCamera(glTF.Camera gltfCamera){
+    Camera camera;
+    if(gltfCamera != null) {
+      if (gltfCamera.perspective != null){
+        camera = new CameraPerspective(gltfCamera.perspective.yfov, gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
+        ..type = CameraType.perspective
+        ..aspectRatio = gltfCamera.perspective.aspectRatio;
+      } else if (gltfCamera.orthographic != null) {
+        camera = new CameraOrthographic()
+          ..type = CameraType.orthographic
+          ..znear = gltfCamera.orthographic.znear
+          ..zfar = gltfCamera.orthographic.zfar
+          ..xmag = gltfCamera.orthographic.xmag
+          ..ymag = gltfCamera.orthographic.ymag;
+
+        // Todo (jpu) :
+//      cameraPerspective.extensions;
+//      cameraPerspective.extras;
+      }
+    }
+    return camera;
+  }
+
+  Camera getCamera(glTF.Camera gltfCamera){
+    int id = gltfProject.gltfSource.cameras.indexOf(gltfCamera);
+    return gltfProject.cameras.firstWhere((c)=>c.cameraId == id, orElse: ()=> throw new Exception('Camera can only be bound to an existing project camera'));
   }
 }
