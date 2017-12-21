@@ -7,10 +7,6 @@ import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   static int nextId = 0;
-
-  glTF.Material _gltfSource;
-  glTF.Material get gltfSource => _gltfSource;
-
   final int materialId = nextId++;
 
   // Todo (jpu) : add other material objects
@@ -25,26 +21,7 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   final double alphaCutoff;
   final bool doubleSided;
 
-  GLTFPBRMaterial._(this._gltfSource, [String name])
-      : this.pbrMetallicRoughness = new GLTFPbrMetallicRoughness.fromGltf(
-      _gltfSource.pbrMetallicRoughness),
-        this.normalTexture = _gltfSource.normalTexture != null
-            ? new GLTFNormalTextureInfo.fromGltf(_gltfSource.normalTexture)
-            : null,
-        this.occlusionTexture = _gltfSource.occlusionTexture != null
-            ? new GLTFOcclusionTextureInfo.fromGltf(
-            _gltfSource.occlusionTexture)
-            : null,
-        this.emissiveTexture = _gltfSource.emissiveTexture != null
-            ? new GLTFTextureInfo.fromGltf(_gltfSource.emissiveTexture)
-            : null,
-        this.emissiveFactor = _gltfSource.emissiveFactor,
-        this.alphaMode = _gltfSource.alphaMode,
-        this.alphaCutoff = _gltfSource.alphaCutoff,
-        this.doubleSided = _gltfSource.doubleSided,
-        super(_gltfSource.name);
-
-  GLTFPBRMaterial(
+  GLTFPBRMaterial({
       this.pbrMetallicRoughness,
       this.normalTexture,
       this.occlusionTexture,
@@ -52,13 +29,9 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
       this.emissiveFactor,
       this.alphaMode,
       this.alphaCutoff,
-      this.doubleSided, [String name]):
-        super(name);
-
-  factory GLTFPBRMaterial.fromGltf(glTF.Material gltfSource) {
-    if (gltfSource == null) return null;
-    return new GLTFPBRMaterial._(gltfSource);
-  }
+      this.doubleSided, 
+      String name : ''
+      }) : super(name);
 
   @override
   String toString() {

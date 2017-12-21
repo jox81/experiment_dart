@@ -1,4 +1,8 @@
 import 'package:webgl/src/gtlf/accessor_sparse.dart';
+import 'package:webgl/src/gtlf/normal_texture_info.dart';
+import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
+import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 import '../camera.dart';
@@ -171,7 +175,7 @@ class GLTFProject {
 
       //Materials
       for (glTF.Material gltfMaterial in _gltfSource.materials) {
-        GLTFPBRMaterial material = new GLTFPBRMaterial.fromGltf(gltfMaterial);
+        GLTFPBRMaterial material = createMaterial(gltfMaterial);
         if (material != null) {
           materials.add(material);
         }
@@ -245,16 +249,6 @@ class GLTFProject {
     return _gltfProject;
   }
 
-  factory GLTFProject.fromGltf(glTF.Gltf gltfSource) {
-    if (gltfSource == null) return null;
-
-    _gltfProject = new GLTFProject._();
-    _gltfProject._gltfSource = gltfSource;
-    _gltfProject._init(gltfSource);
-
-    return _gltfProject;
-  }
-
   Future fillBuffersData() async {
     for (GLTFBuffer buffer in buffers) {
       if(buffer.data == null && buffer.uri != null){
@@ -264,7 +258,18 @@ class GLTFProject {
     }
   }
 
-  //>
+  //> GLTF Creation
+
+  // Todo (jpu) :
+  factory GLTFProject.fromGltf(glTF.Gltf gltfSource) {
+    if (gltfSource == null) return null;
+
+    _gltfProject = new GLTFProject._();
+    _gltfProject._gltfSource = gltfSource;
+    _gltfProject._init(gltfSource);
+
+    return _gltfProject;
+  }
 
   GLTFBuffer createBuffer(glTF.Buffer gltfSource){
     if (gltfSource == null) return null;
@@ -410,6 +415,38 @@ class GLTFProject {
   GLTFTexture getTexture(glTF.Texture texture) {
     int id = gltfProject.gltfSource.textures.indexOf(texture);
     return gltfProject.textures.firstWhere((t)=>t.textureId == id, orElse: ()=> null);
+  }
+
+  GLTFPBRMaterial createMaterial(glTF.Material gltfSource) {
+    if (gltfSource == null) return null;
+
+    // Todo (jpu) : remove fromGltf
+    GLTFPBRMaterial material = new GLTFPBRMaterial(
+        pbrMetallicRoughness : new GLTFPbrMetallicRoughness.fromGltf(
+            gltfSource.pbrMetallicRoughness),
+        normalTexture : gltfSource.normalTexture != null
+            ? new GLTFNormalTextureInfo.fromGltf(gltfSource.normalTexture)
+            : null,
+        occlusionTexture : gltfSource.occlusionTexture != null
+            ? new GLTFOcclusionTextureInfo.fromGltf(
+            gltfSource.occlusionTexture)
+            : null,
+        emissiveTexture : gltfSource.emissiveTexture != null
+            ? new GLTFTextureInfo.fromGltf(gltfSource.emissiveTexture)
+            : null,
+        emissiveFactor : gltfSource.emissiveFactor,
+        alphaMode : gltfSource.alphaMode,
+        alphaCutoff : gltfSource.alphaCutoff,
+        doubleSided : gltfSource.doubleSided,
+        name : gltfSource.name
+    );
+
+    return material;
+  }
+
+  GLTFPBRMaterial getMaterial(glTF.Material material){
+    int id = gltfProject.gltfSource.materials.indexOf(material);
+    return gltfProject.materials.firstWhere((m)=>m.materialId == id, orElse: ()=> throw new Exception('Mesh material can only be bound to an existing project material'));
   }
 
   Camera createCamera(glTF.Camera gltfCamera){

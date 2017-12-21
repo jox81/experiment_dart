@@ -71,7 +71,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
     //material
     if(gltfSource.material != null) {
-      GLTFPBRMaterial material = gltfProject.materials.firstWhere((m)=>m.gltfSource == gltfSource.material, orElse: ()=> throw new Exception('Mesh material can only be bound to an existing project material'));
+      GLTFPBRMaterial material = gltfProject.getMaterial(gltfSource.material);
       meshPrimitive._materialId = material.materialId;
     }
     return meshPrimitive;
