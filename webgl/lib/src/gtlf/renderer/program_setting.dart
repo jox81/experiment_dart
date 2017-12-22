@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/light.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';

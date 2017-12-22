@@ -1,12 +1,12 @@
-import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/accessor_sparse.dart';
+import 'package:webgl/src/gtlf/accessor_sparse_indices.dart';
+import 'package:webgl/src/gtlf/accessor_sparse_values.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/normal_texture_info.dart';
 import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-
 import '../camera.dart';
 import 'dart:core';
 import 'dart:async';
@@ -109,12 +109,12 @@ class GLTFProject {
     _scenes.add(scene);
   }
 
-  int _sceneId;
-  GLTFScene get scene => _sceneId != null ? scenes[_sceneId] : null;
+  GLTFScene _scene;
+  GLTFScene get scene => _scene;
   set scene(GLTFScene value) {
     assert(value != null);
-    GLTFScene projectScene = gltfProject.scenes.firstWhere((s)=>s.gltfSource == value.gltfSource);
-    _sceneId = gltfProject.scenes.indexOf(projectScene);
+    GLTFScene projectScene = gltfProject.scenes.firstWhere((s)=>s.sceneId == value.sceneId, orElse: ()=> null);
+    _scene = projectScene;
   }
 
   List<GLTFNode> _nodes = new List();
@@ -126,14 +126,14 @@ class GLTFProject {
 
   @override
   String toString() {
-    return 'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": $_sceneId}';
+    return 'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": ${_scene.sceneId}';
   }
 
   void _init([glTF.Gltf _gltfSource]) {
 
     if(_gltfSource != null) {
 
-      asset = new GLTFAsset.fromGltf(_gltfSource.asset);
+      asset = new GLTFAsset(_gltfSource.asset.version);
 
       //Buffers
       for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
@@ -226,18 +226,18 @@ class GLTFProject {
 
       //Scenes
       for (glTF.Scene gltfScene in _gltfSource.scenes) {
-        GLTFScene scene = new GLTFScene.fromGltf(gltfScene);
+        GLTFScene scene = createScene(gltfScene);
         if (scene != null) {
           addScene(scene);
         }
       }
       if(_gltfSource.scene != null) {
-        scene = new GLTFScene.fromGltf(_gltfSource.scene);
+        scene = getScene(_gltfSource.scene);
       }
 
       //Animation
       for (glTF.Animation gltfAnimation  in _gltfSource.animations) {
-        GLTFAnimation animation = new GLTFAnimation.fromGltf(gltfAnimation);
+        GLTFAnimation animation = createAnimation(gltfAnimation);
         if (animation != null) {
           animations.add(animation);
         }
@@ -264,7 +264,6 @@ class GLTFProject {
 
   //> GLTF Creation
 
-  // Todo (jpu) :
   factory GLTFProject.fromGltf(glTF.Gltf gltfSource) {
     if (gltfSource == null) return null;
 
@@ -333,7 +332,7 @@ class GLTFProject {
         min : gltfSource.min,
         byteStride : gltfSource.byteStride,
         sparse : gltfSource.sparse != null
-            ? new GLTFAccessorSparse.fromGltf(gltfSource.sparse):null,
+            ? createGLTFAccessorSparse(gltfSource.sparse):null,
         isXyzSign : gltfSource.isXyzSign,
         isUnit : gltfSource.isUnit,
       name: gltfSource.name
@@ -424,19 +423,18 @@ class GLTFProject {
   GLTFPBRMaterial createMaterial(glTF.Material gltfSource) {
     if (gltfSource == null) return null;
 
-    // Todo (jpu) : remove fromGltf
     GLTFPBRMaterial material = new GLTFPBRMaterial(
-        pbrMetallicRoughness : new GLTFPbrMetallicRoughness.fromGltf(
+        pbrMetallicRoughness : createGLTFPbrMetallicRoughness(
             gltfSource.pbrMetallicRoughness),
         normalTexture : gltfSource.normalTexture != null
-            ? new GLTFNormalTextureInfo.fromGltf(gltfSource.normalTexture)
+            ? createGLTFNormalTextureInfo(gltfSource.normalTexture)
             : null,
         occlusionTexture : gltfSource.occlusionTexture != null
-            ? new GLTFOcclusionTextureInfo.fromGltf(
+            ? createGLTFOcclusionTextureInfo(
             gltfSource.occlusionTexture)
             : null,
         emissiveTexture : gltfSource.emissiveTexture != null
-            ? new GLTFTextureInfo.fromGltf(gltfSource.emissiveTexture)
+            ? createGLTFTextureInfo(gltfSource.emissiveTexture)
             : null,
         emissiveFactor : gltfSource.emissiveFactor,
         alphaMode : gltfSource.alphaMode,
@@ -486,7 +484,7 @@ class GLTFProject {
 
       GLTFMesh mesh = new GLTFMesh(
           primitives : gltfSource.primitives
-          .map((p) => new GLTFMeshPrimitive.fromGltf(p))
+          .map((p) => createPrimitive(p))
           .toList(),
       weights : gltfSource.weights != null
       ? (<double>[]..addAll(gltfSource.weights))
@@ -532,4 +530,179 @@ class GLTFProject {
     int id = gltfProject.gltfSource.nodes.indexOf(node);
     return gltfProject.nodes.firstWhere((n)=>n.nodeId == id, orElse: ()=> throw new Exception('Node can only be binded to Nodes existing in project'));
   }
+
+  GLTFScene createScene(glTF.Scene gltfSource){
+    if (gltfSource == null) return null;
+    GLTFScene scene = new GLTFScene(name : gltfSource.name);
+
+    //Scenes must be handled after nodes
+    for(glTF.Node node in gltfSource.nodes){
+      GLTFNode gltfNode = gltfProject.getNode(node);
+      scene.addNode(gltfNode);
+    }
+    return scene;
+  }
+
+  GLTFScene getScene(glTF.Scene scene){
+    int id = gltfProject.gltfSource.scenes.indexOf(scene);
+    return gltfProject.scenes.firstWhere((s)=>s.sceneId == id, orElse: ()=> throw new Exception('SCene can only be bound to Scene existing in project'));
+  }
+
+  GLTFPbrMetallicRoughness createGLTFPbrMetallicRoughness(glTF.PbrMetallicRoughness gltfSource){
+    if (gltfSource == null) return null;
+    return new GLTFPbrMetallicRoughness(
+        baseColorFactor : new Float32List.fromList(gltfSource.baseColorFactor),
+        baseColorTexture :createGLTFTextureInfo(gltfSource.baseColorTexture),
+        metallicFactor : gltfSource.metallicFactor,
+        roughnessFactor : gltfSource.roughnessFactor,
+        metallicRoughnessTexture :
+        createGLTFTextureInfo(gltfSource.metallicRoughnessTexture)
+    );
+  }
+
+  GLTFMeshPrimitive createPrimitive(glTF.MeshPrimitive gltfSource) {
+    if (gltfSource == null) return null;
+    GLTFMeshPrimitive meshPrimitive = new GLTFMeshPrimitive(
+        mode: gltfSource.mode != null ? gltfSource.mode : DrawMode.TRIANGLES,
+        hasPosition: gltfSource.hasPosition,
+        hasNormal: gltfSource.hasNormal,
+        hasTangent: gltfSource.hasTangent,
+        colorCount: gltfSource.colorCount,
+        jointsCount: gltfSource.jointsCount,
+        weigthsCount: gltfSource.weigthsCount,
+        texcoordCount: gltfSource.texcoordCount);
+
+    //attributs
+    for (String key in gltfSource.attributes.keys) {
+      GLTFAccessor accessor =
+      gltfProject.getAccessor(gltfSource.attributes[key]);
+      meshPrimitive.attributes[key] = accessor;
+    }
+
+    //indices
+    if (gltfSource.indices != null) {
+      GLTFAccessor accessorIndices =
+      gltfProject.getAccessor(gltfSource.indices);
+      assert(accessorIndices.accessorId != null);
+      meshPrimitive.indicesAccessor = accessorIndices;
+    }
+
+    //material
+    if (gltfSource.material != null) {
+      GLTFPBRMaterial material = gltfProject.getMaterial(gltfSource.material);
+      meshPrimitive.material = material;
+    }
+    return meshPrimitive;
+  }
+
+  GLTFOcclusionTextureInfo createGLTFOcclusionTextureInfo(
+      glTF.OcclusionTextureInfo gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFOcclusionTextureInfo(
+        gltfSource.texCoord,
+        gltfProject.createTexture(gltfSource.texture),
+        gltfSource.strength
+    );
+  }
+
+  GLTFNormalTextureInfo createGLTFNormalTextureInfo(
+      glTF.NormalTextureInfo gltfSource) {
+    if (gltfSource == null) return null;
+    return new GLTFNormalTextureInfo(
+        gltfSource.texCoord,
+        gltfProject.createTexture(gltfSource.texture),
+        gltfSource.scale
+    );
+  }
+
+  GLTFTextureInfo createGLTFTextureInfo(glTF.TextureInfo gltfSource){
+    if (gltfSource == null) return null;
+
+    GLTFTextureInfo textureInfo =  new GLTFTextureInfo(
+        gltfSource.texCoord
+    );
+
+    if(gltfSource.texture != null){
+      GLTFTexture texture = gltfProject.getTexture(gltfSource.texture);
+      textureInfo.texture = texture;
+    }
+
+    return textureInfo;
+  }
+
+  GLTFAnimationSampler createGLTFAnimationSampler(glTF.AnimationSampler gltfSource) {
+    if (gltfSource == null) return null;
+    GLTFAnimationSampler sampler = new GLTFAnimationSampler(gltfSource.interpolation);
+
+    GLTFAccessor projectAccessorInput = gltfProject.getAccessor(gltfSource.input);
+    sampler.input = projectAccessorInput;
+
+    GLTFAccessor projectAccessorOutput = gltfProject.getAccessor(gltfSource.output);
+    sampler.output = projectAccessorOutput;
+
+    return sampler;
+  }
+
+  GLTFAnimationChannelTarget createGLTFAnimationChannelTarget(
+      glTF.AnimationChannelTarget gltfSource) {
+    if (gltfSource == null) return null;
+    GLTFAnimationChannelTarget channelTarget =
+    new GLTFAnimationChannelTarget(gltfSource.path);
+    GLTFNode projectNode =
+    gltfProject.getNode(gltfSource.node);
+    channelTarget.node = projectNode;
+
+    return channelTarget;
+  }
+
+  GLTFAnimationChannel createGLTFAnimationChannel(glTF.AnimationChannel gltfSource) {
+    if (gltfSource == null) return null;
+    GLTFAnimationChannel channel = new GLTFAnimationChannel(
+        gltfProject.createGLTFAnimationChannelTarget(gltfSource.target)
+    );
+    return channel;
+  }
+
+  GLTFAnimation createAnimation(glTF.Animation gltfSource) {
+    if (gltfSource == null) return null;
+
+    //>
+    List<GLTFAnimationSampler> samplers = new List();
+    for (int i = 0; i < gltfSource.samplers.length; i++) {
+      GLTFAnimationSampler sampler = gltfProject.createGLTFAnimationSampler(gltfSource.samplers[i]);
+      samplers.add(sampler);
+    }
+
+    //>
+    List<GLTFAnimationChannel> channels = new List();
+    for (int i = 0; i < gltfSource.channels.length; i++) {
+      GLTFAnimationChannel channel = gltfProject.createGLTFAnimationChannel(gltfSource.channels[i]);
+      int id = gltfSource.samplers.indexOf(gltfSource.channels[i].sampler);
+      channel
+        ..sampler = samplers.firstWhere((s)=> s.samplerId == id, orElse: () => throw new Exception("can't get a corresponding sampler"));
+      channels.add(channel);
+    }
+
+    GLTFAnimation animation = new GLTFAnimation(name:gltfSource.name)
+      ..samplers = samplers
+      ..channels = channels;
+
+    return animation;
+  }
+
+  GLTFAccessorSparse createGLTFAccessorSparse(
+      glTF.AccessorSparse gltfSource){
+    return new GLTFAccessorSparse(
+        gltfSource.count,
+        new GLTFAccessorSparseIndices(
+          gltfSource.indices.byteOffset,
+          gltfSource.indices.componentType,
+        ),
+        new GLTFAccessorSparseValues(
+            gltfSource.values.byteOffset,
+            gltfProject.getBufferView( gltfSource.values.bufferView)
+        ));
+  }
+
+
 }

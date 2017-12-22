@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 /// Buffer defines the raw data.

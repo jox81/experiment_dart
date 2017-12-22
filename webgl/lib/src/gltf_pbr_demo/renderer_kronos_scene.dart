@@ -6,7 +6,6 @@ import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_mesh.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';

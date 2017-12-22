@@ -40,8 +40,8 @@ Future main() async {
   //Wip
 //    './wip/export_test/export_test.gltf',
 //    './wip/export_test/export_test_grey.gltf',
-    './wip/hierarchy_test/hieracrhy_test.gltf',
-//    './wip/archi/model_01/model_01.gltf',
+//    './wip/hierarchy_test/hieracrhy_test.gltf',
+    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
   //Blender test Sphere
 //    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'
@@ -49,7 +49,7 @@ Future main() async {
     //Complex model hierarchy
     // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
 //    './samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
-//    './samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
+    './samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
 //    './wip/blender_pbr/01_textured_sphere.gltf'
   // Todo (jpu) :
   // Error: RangeError: Value not in range: -12

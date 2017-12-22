@@ -1,7 +1,5 @@
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/buffer.dart';

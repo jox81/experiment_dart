@@ -1,9 +1,6 @@
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/accessor_sparse.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
-import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 // Accessor types
 const String SCALAR = 'SCALAR';

@@ -4,8 +4,6 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 
-import 'package:webgl/src/utils/utils_debug.dart';
-
 class UtilsAssets{
 
   static const String WEB_PATH_LOCALHOST8080 = 'http://localhost:8080/';
@@ -30,11 +28,11 @@ class UtilsAssets{
 
   // Todo (jpu) : remove this ?
   static set useWebPath(bool value){
-//    if(value){
-//      _webPath = WEB_PATH_WEB;
-//    }else{
-//      _webPath = WEB_PATH_RELATIVE;
-//    }
+    if(value){
+      _webPath = WEB_PATH_LOCALHOST8080;
+    }else{
+      _webPath = WEB_PATH_RELATIVE;
+    }
   }
 
   ///Load a text resource from a file over the network

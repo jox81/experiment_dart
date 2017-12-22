@@ -1,4 +1,3 @@
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/normal_texture_info.dart';
 import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';

@@ -1,7 +1,5 @@
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
@@ -16,7 +14,6 @@ import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
-import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 @TestOn("dartium")

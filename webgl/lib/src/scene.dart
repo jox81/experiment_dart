@@ -26,7 +26,6 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   @override
   IEditElement currentSelection;
 
-  @override
   Vector4 backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
   Light light;

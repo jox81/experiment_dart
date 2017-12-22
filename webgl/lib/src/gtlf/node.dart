@@ -1,7 +1,5 @@
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/renderer/program_setting.dart';
 import 'package:webgl/src/gtlf/skin.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';

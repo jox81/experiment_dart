@@ -1,4 +1,3 @@
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
