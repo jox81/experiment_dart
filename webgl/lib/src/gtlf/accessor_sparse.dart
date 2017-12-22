@@ -1,8 +1,6 @@
 import 'package:webgl/src/gtlf/accessor_sparse_indices.dart';
 import 'package:webgl/src/gtlf/accessor_sparse_values.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
-import 'package:gltf/gltf.dart' as glTF;
-import 'package:webgl/src/gtlf/project.dart';
 
 class GLTFAccessorSparse extends GltfProperty {
   final int count;

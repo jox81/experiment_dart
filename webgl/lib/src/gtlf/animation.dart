@@ -1,7 +1,5 @@
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
 
 class GLTFAnimation {
   static int nextId = 0;

@@ -1,4 +1,3 @@
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 class GLTFAccessorSparseIndices extends GltfProperty {
