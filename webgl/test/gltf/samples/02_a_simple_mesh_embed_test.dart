@@ -16,6 +16,7 @@ import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/gltf_creation.dart';
 @TestOn("dartium")
 
+
 Future main() async {
 
   GLTFProject gltfProject;
@@ -23,6 +24,10 @@ Future main() async {
   setUp(() async {
     String gltfPath = 'gltf/samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+  });
+
+  tearDown((){
+    gltfProject = null;
   });
 
   group("Simple meshes Embed", () {

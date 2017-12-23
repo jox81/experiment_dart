@@ -214,6 +214,8 @@ class GLTFCreation{
 
     //Animation
     GLTFAnimation.nextId = 0;
+    GLTFAnimationChannel.nextId = 0;
+    GLTFAnimationSampler.nextId = 0;
     for (glTF.Animation gltfAnimation  in _gltfSource.animations) {
       GLTFAnimation animation = _createAnimation(gltfAnimation);
       if (animation != null) {
@@ -633,6 +635,7 @@ class GLTFCreation{
     for (int i = 0; i < gltfSource.channels.length; i++) {
       GLTFAnimationChannel channel = _createGLTFAnimationChannel(gltfSource.channels[i]);
       int id = gltfSource.samplers.indexOf(gltfSource.channels[i].sampler);
+
       channel
         ..sampler = samplers.firstWhere((s)=> s.samplerId == id, orElse: () => throw new Exception("can't get a corresponding sampler"));
       channels.add(channel);

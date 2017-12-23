@@ -30,8 +30,8 @@ Future main() async {
       expect(scene, isNotNull);
 
       expect(scene.nodes.length, 2);
-      expect(scene.nodes[0], gltfProject.nodes[0]);
-      expect(scene.nodes[1], gltfProject.nodes[81]);
+      expect(scene.nodes[0], gltfProject.nodes[81]);
+      expect(scene.nodes[1], gltfProject.nodes[0]);
     });
     test("active scene", () async {
       GLTFScene scene = gltfProject.scenes[0];
