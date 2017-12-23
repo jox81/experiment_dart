@@ -2,6 +2,7 @@ import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 import 'package:webgl/src/gtlf/image.dart';
 import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
@@ -18,9 +19,9 @@ import 'package:webgl/src/utils/utils_debug.dart' as debug;
 
 GLTFProject _gltf;
 
-Future<GLTFProject> debugGltf(String gltfUrl, {bool doGlTFProjectLog : false, bool isDebug:false}) async {
+Future<GLTFProject> debugGltf(String gltfUrl, {bool doGlTFProjectLog : false, bool isDebug:false, bool useWebPath : false}) async {
   debug.isDebug = isDebug;
-  _gltf = await _loadGLTF(gltfUrl);
+  _gltf = await _loadGLTF(gltfUrl, useWebPath);
   if(doGlTFProjectLog) {
     _testScenes();
     _testNodes();
@@ -38,18 +39,16 @@ Future<GLTFProject> debugGltf(String gltfUrl, {bool doGlTFProjectLog : false, bo
   return _gltf;
 }
 
-Future<GLTFProject> _loadGLTF(String gltfUrl) async {
+Future<GLTFProject> _loadGLTF(String gltfUrl, bool useWebPath) async {
 
   // Todo (jpu) : assert path exist and get real file
   String filePart = new Uri.file(gltfUrl).pathSegments.last;
   String gtlfDirectory = gltfUrl.replaceFirst(filePart, '');
 
   glTF.Gltf gltfSource =
-  await GLTFProject.loadGLTFResource(gltfUrl, useWebPath: false);
-  GLTFProject _gltf = new GLTFProject.fromGltf(gltfSource);
-  _gltf.baseDirectory = gtlfDirectory;
+  await GLTFCreation.loadGLTFResource(gltfUrl, useWebPath: useWebPath);
+  GLTFProject _gltf = await GLTFCreation.getGLTFProject(gltfSource, gtlfDirectory);
 
-  await _gltf.fillBuffersData();
   assert(_gltf != null);
   print('');
   print('> _gltf file loaded : ${gltfUrl}');

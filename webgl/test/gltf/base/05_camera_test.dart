@@ -3,29 +3,30 @@ import 'package:gltf/gltf.dart' as glTF;
 import 'package:test/test.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/gtlf/project.dart';
-
+import 'package:webgl/src/gtlf/gltf_creation.dart';
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 @TestOn("dartium")
 
 Future main() async {
 
-  group("Camera", () {
+  group("Camera", () async {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/camera/empty.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/camera/empty.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<Camera> cameras = gltf.cameras;
       expect(cameras.length, 0);
     });
     test("Filled Array", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/camera/valid_full.gltf', useWebPath:true);
+      String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
       expect(gltf.cameras.length, 2);
     });
     test("Camera Perspective Type", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/camera/valid_full.gltf', useWebPath:true);
+      String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       expect(gltf.cameras[0], isNotNull);
       expect(gltf.cameras[0] is CameraPerspective, isTrue);
@@ -38,9 +39,9 @@ Future main() async {
 
     });
     test("Camera Orthographic Type", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/camera/valid_full.gltf', useWebPath:true);
+      String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       expect(gltf.cameras[1], isNotNull);
       expect(gltf.cameras[1] is CameraOrthographic, isTrue);

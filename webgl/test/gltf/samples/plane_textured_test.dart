@@ -4,6 +4,7 @@ import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/image.dart';
 import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
@@ -15,16 +16,15 @@ import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 @TestOn("dartium")
 Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
-    glTF.Gltf gltf = await GLTFProject.loadGLTFResource(
-        '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',
-        useWebPath: true);
-    gltfProject = new GLTFProject.fromGltf(gltf);
+    String gltfPath =
+        '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf';
+    gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 
   group("plane textured Embed", () {

@@ -1,7 +1,8 @@
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import "package:test/test.dart";
 import 'package:gltf/gltf.dart' as glTF;
-
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 void main() {
   group('Accessor getElements', () {
     GLTFProject gltf;
@@ -20,10 +21,9 @@ void main() {
 //    });
 
     setUpAll(() async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource(
-          'gltf/tests/base/data/accessor/get_elements.gltf',
-          useWebPath: true);
-      gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath =
+          'gltf/tests/base/data/accessor/get_elements.gltf';
+      gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       // All buffers are loaded
       expect(gltf.buffers.every((buffer) => buffer.data != null), true);

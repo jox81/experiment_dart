@@ -1,31 +1,32 @@
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import "package:test/test.dart";
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 void main() {
   group('Mesh', () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/mesh/empty.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/mesh/empty.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<GLTFMesh> meshes = gltf.meshes;
       expect(meshes.length, 0);
     });
 
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/mesh/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/mesh/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<GLTFMesh> meshes = gltf.meshes;
       expect(meshes.length, 1);
     });
 
     test("Property primitive", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/mesh/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/mesh/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       GLTFMesh mesh = gltf.meshes[0];
       expect(mesh, isNotNull);
@@ -34,8 +35,8 @@ void main() {
     });
 
     test("Property weights", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/mesh/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/mesh/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       GLTFMesh mesh = gltf.meshes[0];
       expect(mesh, isNotNull);
@@ -46,8 +47,8 @@ void main() {
 
   group('MeshPrimitive', () {
     test("Property primitive", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/mesh/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/mesh/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       GLTFMesh mesh = gltf.meshes[0];
       expect(mesh, isNotNull);

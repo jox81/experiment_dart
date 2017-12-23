@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert' show BASE64;
 import "package:test/test.dart";
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
@@ -36,7 +37,7 @@ Future main() async {
       String base64Result = 'AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAA';
       UtilsAssets.useWebPath = true;
 
-      List<int> base64Decoded = await GLTFProject.loadGltfBinResource(gltfBinUrl, isRelative: false);
+      List<int> base64Decoded = await GLTFCreation.loadGltfBinResource(gltfBinUrl, isRelative: false);
       expect(base64Decoded.length, 36);
       print(base64Decoded.length);
       print(base64Decoded);

@@ -1,17 +1,14 @@
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:gltf/gltf.dart' as glTF;
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
 
 @TestOn("dartium")
 
 Future main() async {
-
   group("test camera", () {
     test("test camera creation", () async {
-      glTF.Gltf gltf = await GLTFProject.loadGLTFResource('gltf/tests/base/data/camera/empty.gltf', useWebPath:true);
-
-      GLTFProject gltfObject = new GLTFProject.fromGltf(gltf);
+      GLTFProject gltfObject = await debugGltf('gltf/tests/base/data/camera/empty.gltf', doGlTFProjectLog : false, isDebug:false, useWebPath: true);
       expect(gltfObject, isNotNull);
     });
   });

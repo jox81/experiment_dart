@@ -1,9 +1,10 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import "package:test/test.dart";
 import 'package:gltf/gltf.dart' as glTF;
-
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 void main() {
   group('Node', () {
     test("Node creation", () async {
@@ -68,32 +69,32 @@ void main() {
 
   group('Node from gltf', () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/node/empty.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/node/empty.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes.length, 0);
     });
 
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/node/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes.length, 2);
     });
 
     test("Compare", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/node/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes[0] == nodes[0], true);
     });
 
     test("Node hierarchy", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/node/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes[0].children.length, 1);
@@ -103,8 +104,8 @@ void main() {
     });
 
     test("Property", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/node/valid_full.gltf', useWebPath:true);
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
       GLTFNode node = gltf.nodes[0];
       expect(node, isNotNull);

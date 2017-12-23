@@ -7,12 +7,14 @@ import 'dart:web_gl' as webgl;
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart' as Context;
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_scene.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/gtlf/gltf_creation.dart';
 
 Future<int> loadCubeMap(
     webgl.RenderingContext gl, String envMap, String type, GlobalState state) async {
@@ -122,10 +124,9 @@ Future updateModel(
   document.getElementById('loadSpinner').style.display = 'block';
   resetCamera();
 
-  String url = 'gltf_pbr_demo/models/$value/glTF/$value.gltf';
-  glTF.Gltf gltfSource =
-      await GLTFProject.loadGLTFResource(url, useWebPath: false);
-  GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+  String gltfPath = 'gltf_pbr_demo/models/$value/glTF/$value.gltf';
+
+  GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
 
   KronosScene scene =
       new KronosScene(gl, glState, "./models/$value/glTF/", gltf);

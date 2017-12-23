@@ -1,25 +1,24 @@
 import 'package:webgl/src/gtlf/buffer.dart';
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:gltf/gltf.dart' as glTF;
-
 @TestOn("dartium")
 
 Future main() async {
 
   group("Buffer", () {
     test("Empty array", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer/empty.gltf', useWebPath:true);
+      String gltfPath = 'gltf/tests/base/data/buffer/empty.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 0);
     });
     test("Array length with empty data", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/buffer/valid_full.gltf', useWebPath:true);
+      String gltfPath = 'gltf/tests/base/data/buffer/valid_full.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 2);
 
@@ -30,9 +29,9 @@ Future main() async {
       expect(buffers[1].data, isNotNull);
     });
     test("Array length", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/samples/gltf_2_0/minimal.gltf', useWebPath:true);
+      String gltfPath = 'gltf/samples/gltf_2_0/minimal.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 1);
 
@@ -43,9 +42,9 @@ Future main() async {
 
     });
     test("uri", () async {
-      glTF.Gltf gltfSource = await GLTFProject.loadGLTFResource('gltf/tests/base/data/image/valid_full.gltf', useWebPath:true);
+      String gltfPath = 'gltf/tests/base/data/image/valid_full.gltf';
 
-      GLTFProject gltf = new GLTFProject.fromGltf(gltfSource);
+      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 1);
 

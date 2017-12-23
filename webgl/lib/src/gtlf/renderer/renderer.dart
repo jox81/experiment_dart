@@ -25,7 +25,6 @@ import 'package:webgl/src/gtlf/texture.dart';
 
 webgl.RenderingContext gl;
 
-GLTFProject globalGltf;
 GlobalState globalState;
 
 // Direction from where the light is coming to origin
@@ -40,7 +39,8 @@ int skipTexture;
 
 class GLTFRenderer implements Interactable {
 
-  GLTFScene get activeScene => globalGltf.scenes[0];
+  final GLTFProject gltfProject;
+  GLTFScene get activeScene => gltfProject.scenes[0];
 
   Interaction interaction;
   CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
@@ -49,12 +49,11 @@ class GLTFRenderer implements Interactable {
 
   WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
-  GLTFRenderer(GLTFProject gltf) {
+  GLTFRenderer(this.gltfProject) {
     //debug.logCurrentFunction();
     _initContext();
     initInteraction();
     resizeCanvas();
-    globalGltf = gltf;
   }
 
   void _initContext() {
@@ -165,16 +164,16 @@ class GLTFRenderer implements Interactable {
     skipTexture = 3;
 
     bool useDebugTexture = false;
-    for (int i = 0; i < globalGltf.textures.length; i++) {
+    for (int i = 0; i < gltfProject.textures.length; i++) {
       int textureUnitId = 0;
 
       GLTFTexture gltfTexture;
       if (!useDebugTexture) {
-        gltfTexture = globalGltf.textures[i];
+        gltfTexture = gltfProject.textures[i];
         if (gltfTexture.source.data == null) {
           //load image
           String fileUrl =
-              globalGltf.baseDirectory + gltfTexture.source.uri.toString();
+              gltfProject.baseDirectory + gltfTexture.source.uri.toString();
           imageElement = await TextureUtils.loadImage(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {
@@ -338,11 +337,11 @@ class GLTFRenderer implements Interactable {
       currentCamera = findActiveSceneCamera(activeScene.nodes);
       //or use first in project else default
       if (currentCamera == null) {
-        currentCamera = findActiveSceneCamera(globalGltf.nodes);
+        currentCamera = findActiveSceneCamera(gltfProject.nodes);
       }
       if (currentCamera == null) {
-        if (globalGltf.cameras.length > 0) {
-          currentCamera = globalGltf.cameras[0];
+        if (gltfProject.cameras.length > 0) {
+          currentCamera = gltfProject.cameras[0];
         } else {
           currentCamera = new CameraPerspective(radians(47.0), 0.1, 100.0)
             ..targetPosition = new Vector3(0.0, 0.03, 0.0);
