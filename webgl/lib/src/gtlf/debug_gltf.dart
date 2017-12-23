@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
@@ -29,9 +31,9 @@ Future<GLTFProject> debugGltf(String gltfUrl, {bool doGlTFProjectLog : false, bo
     _testScenes();
     _testNodes();
     _testMeshes();
-    _testBuffers();
-    _testBufferViews();
     _testAccessors();
+    _testBufferViews();
+    _testBuffers();
     _testCameras();
     _testImages();
     _testSamplers();
@@ -96,18 +98,13 @@ void _testMeshes() {
   });
 }
 
-void _testBuffers() {
-  Debug.log('Buffers', () {
-    print('Buffers counts : ${_gltf.buffers.length}');
-    for (int i = 0; i < _gltf.buffers.length; i++) {
+void _testAccessors() {
+  Debug.log('Accessors', () {
+    print('accessors counts : ${_gltf.accessors.length}');
+    for (int i = 0; i < _gltf.accessors.length; i++) {
       print('> $i');
-      GLTFBuffer buffer = _gltf.buffers[i];
-      print('$buffer');
-      if(buffer.data != null) {
-        List<String> gltfBits = buffer.data.map((int v) => v.toRadixString(16))
-            .toList();
-        print('data hex formatted : $gltfBits');
-      }
+      GLTFAccessor accessor = _gltf.accessors[i];
+      print('$accessor');
     }
     print('');
   });
@@ -125,13 +122,21 @@ void _testBufferViews() {
   });
 }
 
-void _testAccessors() {
-  Debug.log('Accessors', () {
-    print('accessors counts : ${_gltf.accessors.length}');
-    for (int i = 0; i < _gltf.accessors.length; i++) {
+void _testBuffers() {
+  Debug.log('Buffers', () {
+    print('Buffers counts : ${_gltf.buffers.length}');
+    for (int i = 0; i < _gltf.buffers.length; i++) {
       print('> $i');
-      GLTFAccessor accessor = _gltf.accessors[i];
-      print('$accessor');
+      GLTFBuffer buffer = _gltf.buffers[i];
+      print('$buffer');
+      if(buffer.data != null) {
+        List<String> gltfBits = buffer.data.map((int v) => v.toRadixString(16))
+            .toList();
+        print('data hex formatted : $gltfBits');
+        print('data as byte : ${buffer.data}');
+        print('data as int : ${buffer.data.buffer.asInt32List()}');
+        print('data as Float32List : ${buffer.data.buffer.asFloat32List()}');
+      }
     }
     print('');
   });

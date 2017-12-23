@@ -137,6 +137,9 @@ class ProgramSetting{
   void _bindVertexArrayData(
       WebGLProgram program, String attributName, GLTFAccessor accessor) {
     //debug.logCurrentFunction();
+    if(accessor.bufferView == null) throw 'bufferView must be defined';
+    if(accessor.bufferView.buffer == null) throw 'buffer must be defined';
+
     Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset + accessor.bufferView.byteOffset,
         accessor.count * (accessor.byteStride ~/ accessor.componentLength));
@@ -233,7 +236,7 @@ class ProgramSetting{
     if (primitive.indices == null) {
       String attributName = 'POSITION';
       GLTFAccessor accessorPosition = primitive.attributes[attributName];
-      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined.';
+      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
           primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
     } else {

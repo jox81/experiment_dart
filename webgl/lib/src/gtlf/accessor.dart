@@ -85,7 +85,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final int byteOffset; //Start reading byte at
   final int byteLength;// Total length
   //
-  final int count;
+  final int count;//number of component : 3 Vector3 for a triangle with 3 positions
   /// ShaderVariableType type
   final int type = -1;//FLOAT_VEC3// Todo (jpu) :
   final int elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
@@ -93,7 +93,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   final String typeString;//SCALAR/VEC3/...
   final int components;//Count of components in an element : vec3 -> 3, vec2 -> 2
   //
-  ///ShaderVariableType componentType
+  ///VertexAttribArrayType componentType
   final int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
   final int componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
   //

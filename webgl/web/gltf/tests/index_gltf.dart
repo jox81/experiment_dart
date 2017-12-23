@@ -49,15 +49,15 @@ List<String> gltfTestsSamples = [
 
   /// Nodes
 //  './base/data/node/empty.gltf',
-  './base/data/node/valid_full.gltf',
+//  './base/data/node/valid_full.gltf',
 ];
 
 
 List<String> gltfSamples = [
-//  '/gltf/samples/gltf_2_0/TriangleWithoutIndices/glTF-Embed/TriangleWithoutIndices.gltf'
+  '/gltf/samples/gltf_2_0/00_triangle_without_indices/gltf_embed/TriangleWithoutIndices.gltf'
   //  './gltfsamples/gltf_2_0/minimal.gltf',
 ];
 
 Future main() async {
-  await await debugGltf(gltfTestsSamples.first, doGlTFProjectLog : true, isDebug:false, useWebPath: false);
+  await await debugGltf(gltfSamples.first, doGlTFProjectLog : true, isDebug:false, useWebPath: true);
 }
