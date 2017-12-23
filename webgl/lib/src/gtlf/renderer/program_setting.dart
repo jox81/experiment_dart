@@ -36,7 +36,7 @@ class ProgramSetting{
 
       bool debug = false;
       bool debugWithDebugMaterial = true;
-      if(debug){
+      if(primitive.material == null || debug){
         if(debugWithDebugMaterial){
           material = new KronosDebugMaterial()
             ..color = new Vector3.random();
@@ -45,9 +45,10 @@ class ProgramSetting{
         }
       } else {
         material = new KronosPRBMaterial(skipTexture, globalState, primitive.attributes['NORMAL'] != null, primitive.attributes['TANGENT'] != null, primitive.attributes['TEXCOORD_0'] != null);
+        KronosPRBMaterial materialPBR = material as KronosPRBMaterial;
+
         GLTFPBRMaterial baseMaterial = primitive.material;
 
-        KronosPRBMaterial materialPBR = material as KronosPRBMaterial;
         materialPBR.baseColorMap = baseMaterial.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture;
         if (materialPBR.hasBaseColorMap) {
           materialPBR.baseColorSamplerSlot = baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + skipTexture;
@@ -232,6 +233,7 @@ class ProgramSetting{
     if (primitive.indices == null) {
       String attributName = 'POSITION';
       GLTFAccessor accessorPosition = primitive.attributes[attributName];
+      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined.';
       gl.drawArrays(
           primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
