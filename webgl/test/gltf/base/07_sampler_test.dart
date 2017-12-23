@@ -10,7 +10,7 @@ import 'package:webgl/src/gtlf/debug_gltf.dart';
 
 Future main() async {
 
-  group("Sampler", () async {
+  group("Sampler", () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/sampler/empty.gltf';
       GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);

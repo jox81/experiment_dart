@@ -23,7 +23,7 @@ Future main() async {
       expect(buffers.length, 2);
 
       expect(buffers[0].byteLength,1);
-      expect(buffers[0].data, isNull);
+      expect(buffers[0].data, isNotNull);
 
       expect(buffers[1].byteLength,1);
       expect(buffers[1].data, isNotNull);

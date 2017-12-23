@@ -1,15 +1,17 @@
-import 'dart:async';
-import 'package:gltf/gltf.dart' as glTF;
-import 'package:test/test.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/gtlf/buffer_view.dart';
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'dart:async';
+import "package:test/test.dart";
+import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/gltf_creation.dart';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 @TestOn("dartium")
 
 Future main() async {
 
-  group("Camera", () async {
+  group("Camera", () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/camera/empty.gltf';
       GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);

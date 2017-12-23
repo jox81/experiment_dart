@@ -22,7 +22,7 @@ Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
-    String gltfPath = '/gltf/samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf';
+    String gltfPath = 'gltf/samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 

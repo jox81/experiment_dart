@@ -23,7 +23,7 @@ Future main() async {
 
   setUp(() async {
     String gltfPath =
-        '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf';
+        'gltf/samples/gltf_2_0/plane_textured/test_texture.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 

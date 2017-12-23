@@ -101,6 +101,7 @@ class GLTFCreation{
     _gltfProject.asset = new GLTFAsset(_gltfSource.asset.version);
 
     //Buffers
+    GLTFBuffer.nextId = 0;
     for (glTF.Buffer gltfBuffer in _gltfSource.buffers) {
       GLTFBuffer buffer = _createBuffer(gltfBuffer);
       if (buffer != null) {
@@ -109,6 +110,7 @@ class GLTFCreation{
     }
 
     //BufferViews
+    GLTFBufferView.nextId = 0;
     for (glTF.BufferView gltfBufferView in _gltfSource.bufferViews) {
       GLTFBufferView bufferView = _createBufferView(gltfBufferView);
       if (bufferView != null) {
@@ -117,6 +119,7 @@ class GLTFCreation{
     }
 
     //Images
+    GLTFImage.nextId = 0;
     for (glTF.Image gltfSource in _gltfSource.images) {
       GLTFImage image = _createImage(gltfSource);
       if (image != null) {
@@ -125,6 +128,7 @@ class GLTFCreation{
     }
 
     //Samplers
+    GLTFSampler.nextId = 0;
     for (glTF.Sampler gltfSource in _gltfSource.samplers) {
       GLTFSampler sampler = _createSampler(gltfSource);
       if (sampler != null) {
@@ -133,6 +137,7 @@ class GLTFCreation{
     }
 
     //Textures
+    GLTFTexture.nextId = 0;
     for (glTF.Texture gltfTexture in _gltfSource.textures) {
       GLTFTexture texture = _createTexture(gltfTexture);
       if (texture != null) {
@@ -141,6 +146,7 @@ class GLTFCreation{
     }
 
     //Materials
+    GLTFPBRMaterial.nextId = 0;
     for (glTF.Material gltfMaterial in _gltfSource.materials) {
       GLTFPBRMaterial material = _createMaterial(gltfMaterial);
       if (material != null) {
@@ -149,6 +155,7 @@ class GLTFCreation{
     }
 
     //Accessors
+    GLTFAccessor.nextId = 0;
     for (glTF.Accessor gltfAccessor in _gltfSource.accessors) {
       GLTFAccessor accessor = _createAccessor(gltfAccessor);
       if (accessor != null) {
@@ -157,6 +164,7 @@ class GLTFCreation{
     }
 
     //Cameras
+    Camera.nextId = 0;
     for (glTF.Camera gltfCamera in _gltfSource.cameras) {
       Camera camera = _createCamera(gltfCamera);
       if (camera != null) {
@@ -165,6 +173,7 @@ class GLTFCreation{
     }
 
     //Meshes
+    GLTFMesh.nextId = 0;
     for (glTF.Mesh gltfMesh in _gltfSource.meshes) {
       GLTFMesh mesh = _createMesh(gltfMesh);
       if (mesh != null) {
@@ -173,6 +182,7 @@ class GLTFCreation{
     }
 
     //Nodes
+    GLTFNode.nextId = 0;
     for (glTF.Node gltfNode in _gltfSource.nodes) {
       GLTFNode node = _createNode(gltfNode);
       if (node != null) {
@@ -181,6 +191,7 @@ class GLTFCreation{
     }
 
     //Nodes hierarchy parenting
+    GLTFNode.nextId = 0;
     for (glTF.Node gltfNode in _gltfSource.nodes) {
       if(gltfNode.children != null && gltfNode.children.length > 0){
         GLTFNode node = _getNode(gltfNode);
@@ -190,6 +201,7 @@ class GLTFCreation{
     }
 
     //Scenes
+    GLTFScene.nextId = 0;
     for (glTF.Scene gltfScene in _gltfSource.scenes) {
       GLTFScene scene = _createScene(gltfScene);
       if (scene != null) {
@@ -201,6 +213,7 @@ class GLTFCreation{
     }
 
     //Animation
+    GLTFAnimation.nextId = 0;
     for (glTF.Animation gltfAnimation  in _gltfSource.animations) {
       GLTFAnimation animation = _createAnimation(gltfAnimation);
       if (animation != null) {
@@ -211,7 +224,7 @@ class GLTFCreation{
 
   Future fillBuffersData() async {
     for (GLTFBuffer buffer in _gltfProject.buffers) {
-      if(buffer.data == null && buffer.uri != null){
+      if(buffer.data == null && buffer.uri != null && buffer.uri.path.length > 0){
         String ressourcePath = '${_gltfProject.baseDirectory}${buffer.uri}';
         buffer.data = await loadGltfBinResource(ressourcePath, isRelative : false);
       }
@@ -251,7 +264,6 @@ class GLTFCreation{
 
   GLTFBufferView _getBufferView(glTF.BufferView bufferView) {
     int id = _gltfSource.bufferViews.indexOf(bufferView);
-
     return _gltfProject.bufferViews.firstWhere((b) => b.bufferViewId == id,
         orElse: () => throw new Exception(
             'BufferView can only be bound to an existing project bufferView'));
@@ -300,7 +312,7 @@ class GLTFCreation{
     if (gltfSource == null) return null;
     GLTFSampler sampler = new GLTFSampler(
         magFilter : gltfSource.magFilter != -1 ? gltfSource.magFilter : TextureFilterType.LINEAR,
-        minFilter : gltfSource.minFilter != -1 ? gltfSource.magFilter : TextureFilterType.LINEAR,
+        minFilter : gltfSource.minFilter != -1 ? gltfSource.minFilter : TextureFilterType.LINEAR,
         wrapS : gltfSource.wrapS,
         wrapT : gltfSource.wrapT,
         name : gltfSource.name

@@ -20,7 +20,7 @@ Future main() async {
 
   setUp(() async {
     String gltfPath =
-        '/gltf/samples/gltf_2_0/05_box/gltf_embed/Box.gltf';
+        'gltf/samples/gltf_2_0/05_box/gltf_embed/Box.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 

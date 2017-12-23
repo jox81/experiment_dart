@@ -67,16 +67,31 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   GLTFSkin skin;
 
-  List<GLTFNode> _children = new List();
-  List<GLTFNode> get children => _children;
-  set children(List<GLTFNode> value) {
-    _children = value;
+  Set<GLTFNode> _children = new Set();
+  List<GLTFNode> get children => _children.toList(growable: false);
+  set children(List<GLTFNode> children) {
+    print('GLTFNode.children');
+    print(children.length);
+    for (GLTFNode node in children) {
+      node._parent = this;
+    }
+    _children.clear();
+    _children.addAll(children);
+  }
+
+  void addChild(GLTFNode node){
+    print('GLTFNode.addChild');
+    if(node == null) return;
+    _children.add(node);
+    node._parent = this;
   }
 
   GLTFNode _parent;
   GLTFNode get parent => _parent;
-  set parent(GLTFNode value) {
-    _parent = value;
+  set parent(GLTFNode node) {
+    print('GLTFNode.parent');
+    if(node != null)node._children.add(this);
+    _parent = node;
   }
 
   bool isJoint = false;
@@ -87,6 +102,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
 
   @override
   String toString() {
-    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: ${_mesh.meshId}, parent: ${parent.nodeId}, skin: $skin, isJoint: $isJoint}';
+    return 'GLTFNode{nodeId: $nodeId, matrix: $matrix, translation: $translation, rotation: $rotation, scale: $scale, weights: $weights, camera: $camera, children: ${children.map((n)=>n.nodeId).toList()}, mesh: ${_mesh?.meshId}, parent: ${parent?.nodeId}, skin: $skin, isJoint: $isJoint}';
   }
 }

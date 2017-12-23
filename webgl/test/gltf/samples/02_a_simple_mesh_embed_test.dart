@@ -21,7 +21,7 @@ Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
-    String gltfPath = '/gltf/samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf';
+    String gltfPath = 'gltf/samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 

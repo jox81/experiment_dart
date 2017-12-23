@@ -32,7 +32,7 @@ Future main() async {
 //    './samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    './samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-//    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
@@ -41,22 +41,23 @@ Future main() async {
 //    './wip/export_test/export_test.gltf',
 //    './wip/export_test/export_test_grey.gltf',
 //    './wip/hierarchy_test/hieracrhy_test.gltf',
-    './wip/archi/model_01/model_01.gltf',
+//    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
+
   //Blender test Sphere
 //    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'
 
     //Complex model hierarchy
-    // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
+// Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
 //    './samples/gltf_2_0/07_2cylinder_engine/gltf/2CylinderEngine.gltf',
-    './samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
+//    './samples/gltf_2_0/08_reciprocating_saw/gltf_embed/ReciprocatingSaw.gltf',
 //    './wip/blender_pbr/01_textured_sphere.gltf'
-  // Todo (jpu) :
-  // Error: RangeError: Value not in range: -12
-  // Error: RangeError (index): Index out of range: index should be less than 3: 3
+// Todo (jpu) :
+// Error: RangeError: Value not in range: -12
+// Error: RangeError (index): Index out of range: index should be less than 3: 3
 //    './blender_pbr/polly/project_polly.gltf'
   ];
-//
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false);
+
+  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false, useWebPath: false);
   await new GLTFRenderer(gltf).render();
 }

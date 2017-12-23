@@ -19,6 +19,9 @@ import 'package:webgl/src/utils/utils_debug.dart' as debug;
 
 GLTFProject _gltf;
 
+/// [gltfUrl] the url to find the gtlf file.
+/// [doGlTFProjectLog] log gltf items infos
+/// [isDebug] log traces
 Future<GLTFProject> debugGltf(String gltfUrl, {bool doGlTFProjectLog : false, bool isDebug:false, bool useWebPath : false}) async {
   debug.isDebug = isDebug;
   _gltf = await _loadGLTF(gltfUrl, useWebPath);

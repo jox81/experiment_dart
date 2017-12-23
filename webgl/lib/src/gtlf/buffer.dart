@@ -23,6 +23,6 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFBuffer{uri: $uri, byteLength: $byteLength, data: $data}';
+    return 'GLTFBuffer{bufferId:$bufferId, uri: $uri, byteLength: $byteLength, data: $data}';
   }
 }

@@ -21,7 +21,7 @@ Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
-    String gltfPath = '/gltf/samples/gltf_2_0/04_camera/gltf_embed/Cameras.gltf';
+    String gltfPath = 'gltf/samples/gltf_2_0/04_camera/gltf_embed/Cameras.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 

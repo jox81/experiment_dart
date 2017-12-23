@@ -19,7 +19,7 @@ Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
-    String gltfPath = '/gltf/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
+    String gltfPath = 'gltf/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
     gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
   });
 
