@@ -40,7 +40,7 @@ int skipTexture;
 class GLTFRenderer implements Interactable {
 
   final GLTFProject gltfProject;
-  GLTFScene get activeScene => gltfProject.scenes[0];
+  GLTFScene get activeScene => gltfProject.scenes.length > 0 ? gltfProject.scenes[0] : null;
 
   Interaction interaction;
   CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
@@ -113,7 +113,7 @@ class GLTFRenderer implements Interactable {
 
     globalState = new GlobalState()
       ..scene = null
-      ..hasLODExtension =hasLODExtension
+      ..hasLODExtension = hasLODExtension
       ..hasDerivativesExtension = hasDerivativesExtension
       ..sRGBifAvailable =
       hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
@@ -284,9 +284,10 @@ class GLTFRenderer implements Interactable {
 
   void draw() {
     //debug.logCurrentFunction();
-
     gl.clear(
         ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
+
+    if(activeScene == null) return;
 
     drawNodes(activeScene.nodes);
   }
@@ -296,7 +297,7 @@ class GLTFRenderer implements Interactable {
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       if (node.mesh != null) {
-
+        if(node.mesh.primitives == null) continue;
         node.programSetting ??= new ProgramSetting(node);
         node.programSetting.drawPrimitives();
       }

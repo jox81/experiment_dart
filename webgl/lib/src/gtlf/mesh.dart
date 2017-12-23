@@ -5,10 +5,10 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int meshId = nextId++;
 
-  final List<GLTFMeshPrimitive> primitives;
+  List<GLTFMeshPrimitive> primitives = new List();
   final List<double> weights;
 
-  GLTFMesh({this.primitives, this.weights, String name: ''}) : super(name);
+  GLTFMesh({this.weights, String name: ''}) : super(name);
 
   @override
   String toString() {

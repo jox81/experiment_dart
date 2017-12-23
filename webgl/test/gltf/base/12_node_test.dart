@@ -19,6 +19,62 @@ void main() {
     });
   });
 
+  group('Node hierarchy', () {
+    test("Node child", () async {
+      GLTFProject gltf = new GLTFProject();
+
+      GLTFNode node01 = new GLTFNode();
+      gltf.addNode(node01);
+
+      GLTFNode node02 = new GLTFNode();
+      gltf.addNode(node02);
+
+      node01.addChild(node02);
+
+      GLTFNode node03 = new GLTFNode();
+      gltf.addNode(node03);
+
+      node01.addChild(node03);
+
+      //> Should be done in the project
+      expect(gltf.nodes.length, 3);
+      expect(gltf.nodes[0].children.length, 2);
+      expect(gltf.nodes[0].children[0], node02);
+      expect(gltf.nodes[0].children[1], node03);
+      expect(node01.parent, isNull);
+      expect(node02.parent, isNotNull);
+      expect(node02.parent, node01);
+      expect(node03.parent, isNotNull);
+      expect(node03.parent, node01);
+
+    });
+    test("Node parenting", () async {
+      GLTFProject gltf = new GLTFProject();
+
+      GLTFNode node01 = new GLTFNode();
+      gltf.addNode(node01);
+
+      GLTFNode node02 = new GLTFNode();
+      gltf.addNode(node02);
+
+      node02.parent = node01;
+
+      GLTFNode node03 = new GLTFNode();
+      gltf.addNode(node03);
+
+      node03.parent = node01;
+
+      //> Should be done in the project
+      expect(gltf.nodes.length, 3);
+      expect(gltf.nodes[0].children.length, 2);
+      expect(gltf.nodes[0].children[0], node02);
+      expect(gltf.nodes[0].children[1], node03);
+      expect(node01.parent, isNull);
+      expect(node02.parent, node01);
+      expect(node03.parent, node01);
+    });
+  });
+
   group('Node transform', () {
     test("Node base transform", () async {
       GLTFNode node = new GLTFNode();

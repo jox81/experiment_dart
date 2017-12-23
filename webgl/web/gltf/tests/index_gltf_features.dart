@@ -3,6 +3,7 @@ import 'package:webgl/src/gtlf/node.dart';
 import 'dart:async';
 
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/renderer/renderer.dart';
 
 Future main() async {
 
@@ -21,13 +22,5 @@ Future main() async {
 
   node01.children.add(node03);
 
-  assert(gltf.nodes.length == 3);
-  assert(gltf.nodes[0].children.length == 2);
-  assert(gltf.nodes[0].children[0] == node02);
-  assert(gltf.nodes[0].children[1] == node03);
-  assert(node01.parent == null);
-  assert(node02.parent != null);
-  assert(node02.parent == node01);
-  assert(node03.parent != null);
-  assert(node03.parent == node01);
+  await new GLTFRenderer(gltf).render();
 }

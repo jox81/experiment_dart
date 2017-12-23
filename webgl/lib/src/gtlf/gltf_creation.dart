@@ -440,14 +440,15 @@ class GLTFCreation{
     if (gltfSource == null) return null;
 
     GLTFMesh mesh = new GLTFMesh(
-        primitives : gltfSource.primitives
-            .map((p) => _createPrimitive(p))
-            .toList(),
         weights : gltfSource.weights != null
             ? (<double>[]..addAll(gltfSource.weights))
             : <double>[],
         name : gltfSource.name
     );
+
+    mesh.primitives = gltfSource.primitives
+        .map((p) => _createPrimitive(p))
+        .toList();
 
     return mesh;
   }
