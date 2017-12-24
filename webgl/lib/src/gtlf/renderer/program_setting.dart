@@ -241,8 +241,8 @@ class ProgramSetting{
           primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-      debug.logCurrentFunction(
-          'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
+//      debug.logCurrentFunction(
+//          'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
       gl.drawElements(primitive.mode, accessorIndices.count,
           accessorIndices.componentType, 0);
     }

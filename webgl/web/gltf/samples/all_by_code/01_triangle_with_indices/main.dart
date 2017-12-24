@@ -19,14 +19,16 @@ Future main() async {
   GLTFNode node = new GLTFNode();
   scene.addNode(node);
 
+  /// The node must have a Mesh defined
   Float32List vertexPositions = new Float32List.fromList([
     0.0, 0.0, 0.0, //
     1.0, 0.0, 0.0, //
-    0.0, 1.0, 0.0  //
+    0.0, 1.0, 0.0 //
   ]);
-
-  /// The node must have a Mesh defined
-  node.mesh = GLTFMesh.createMesh(vertexPositions, null);
+  Int16List vertexIndices = new Int16List.fromList([0,1,2]);
+  node.mesh = GLTFMesh.createMesh(vertexPositions, vertexIndices);
 
   await new GLTFRenderer(gltf).render();
 }
+
+

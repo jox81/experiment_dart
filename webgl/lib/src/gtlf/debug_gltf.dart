@@ -134,7 +134,8 @@ void _testBuffers() {
             .toList();
         print('data hex formatted : $gltfBits');
         print('data as byte : ${buffer.data}');
-        print('data as int : ${buffer.data.buffer.asInt32List()}');
+        print('data as Int16List : ${buffer.data.buffer.asInt16List()}');
+        print('data as Int32List : ${buffer.data.buffer.asInt32List()}');
         print('data as Float32List : ${buffer.data.buffer.asFloat32List()}');
       }
     }
