@@ -7,9 +7,9 @@ Future main() async {
   List<String> gltfSamplesPaths = [
 //    './samples/gltf_2_0/00_triangle_without_indices/gltf_embed/TriangleWithoutIndices.gltf',
 //    './samples/gltf_2_0/00_triangle_without_indices/gltf/TriangleWithoutIndices.gltf',
-    './samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf',
+//    './samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf',
 //    './samples/gltf_2_0/01_triangle_with_indices/gltf/Triangle.gltf',
-//    './samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf',
+    './samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf',
 //    './samples/gltf_2_0/02_simple_meshes/gltf/SimpleMeshes.gltf',
 //    './samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf',
 //    './samples/gltf_2_0/03_animated_triangle/gltf/AnimatedTriangle.gltf',

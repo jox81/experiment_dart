@@ -153,7 +153,9 @@ class ProgramSetting{
     assert(accessor.byteOffset +
         accessor.byteStride * (accessor.count - 1) +
         (accessor.components * accessor.componentLength) <=
-        accessor.bufferView.byteLength);
+        accessor.bufferView.byteLength, '${accessor.byteOffset +
+        accessor.byteStride * (accessor.count - 1) +
+        (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
 
     //debug.logCurrentFunction('$attributName');
     //debug.logCurrentFunction(verticesInfos.toString());

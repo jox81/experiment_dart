@@ -21,7 +21,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     return 'GLTFMesh{primitives: $primitives, weights: $weights}';
   }
 
-  static GLTFMesh createMesh(Float32List vertexPositions, Int16List vertexIndices) {
+  static GLTFMesh createMesh(Float32List vertexPositions, [Int16List vertexIndices, Float32List vertexNormals]) {
     /// The mesh must have primitive
     GLTFMeshPrimitive primitive =
     new GLTFMeshPrimitive(mode: DrawMode.TRIANGLES, hasPosition: vertexPositions != null);
@@ -32,6 +32,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
     /// A buffer is needed to hold vertex data
     GLTFBuffer buffer = new GLTFBuffer();
+    /// Buffer must have data defined as Uint8List
+    List<int> baseData = new List();
 
     //> Indices
 
@@ -59,7 +61,10 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
       /// And the BufferView must refer to a Buffer for the datas
       bufferView.buffer = buffer;
-      print('$bufferView');
+      print('${indicesAccessor.bufferView}');
+
+      baseData.addAll(vertexIndices.buffer.asUint8List().toList());
+      baseData.addAll([0,0]);// Todo (jpu) :?
     }
 
     //> Positions
@@ -73,7 +78,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
           byteLength: vertexPositions.buffer.lengthInBytes,
           usage: BufferType.ARRAY_BUFFER,
           target: BufferType.ARRAY_BUFFER,
-          byteStride: -1);
+          byteStride: 12);
 
       /// The primitive must have POSITION Accessor infos
       GLTFAccessor positionAccessor = new GLTFAccessor(
@@ -92,19 +97,38 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
       /// And the BufferView must refer to a Buffer for the datas
       bufferView.buffer = buffer;
-      print('$bufferView');
+      print('${positionAccessor.bufferView}');
+
+      baseData.addAll(vertexPositions.buffer.asUint8List().toList());
+    }
+
+    //> Normals can use same bufferView as Position
+
+    if(vertexNormals != null) {
+      /// Normals can use same bufferView as Position.
+      /// SO there's no need to create a new one.
+      /// But length must be adjusted
+      primitive.attributes['POSITION'].bufferView.byteLength += vertexNormals.buffer.lengthInBytes;
+
+      /// The primitive may have Indices Accessor infos
+      GLTFAccessor normalAccessor = new GLTFAccessor(
+          byteOffset: vertexPositions.length * vertexPositions.elementSizeInBytes,//byte length
+          count: 3,
+          components: 3,
+          componentType: VertexAttribArrayType.FLOAT,
+          componentLength: vertexNormals.elementSizeInBytes,
+          // bytes in FLOAT
+          byteStride: 12,
+          // stride defines repetition = components * componentLength
+          normalized: false);
+      normalAccessor.bufferView = primitive.attributes['POSITION'].bufferView; //Re-use position bufferview
+
+      primitive.attributes['NORMAL'] = normalAccessor;
+      print('${normalAccessor.bufferView}');
+      baseData.addAll(vertexNormals.buffer.asUint8List().toList());
     }
 
     //> Fill buffer with datas
-
-    /// And Buffer must have data defined as Uint8List
-
-    List<int> baseData = new List();
-    if(vertexIndices != null){
-      baseData.addAll(vertexIndices.buffer.asUint8List().toList());
-      baseData.addAll([0,0]);// Todo (jpu) :?
-    }
-    baseData.addAll(vertexPositions.buffer.asUint8List().toList());
 
     Uint8List data = new Uint8List.fromList(baseData);
 
