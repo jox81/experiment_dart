@@ -96,12 +96,16 @@ class ProgramSetting{
   }
 
   void drawPrimitives() {
+    material.pvMatrix = (_projectionMatrix * _viewMatrix) as Matrix4;
+
     for (int i = 0; i < mesh.primitives.length; i++) {
       GLTFMeshPrimitive primitive = mesh.primitives[i];
       WebGLProgram program = programs[i];
       gl.useProgram(program.webGLProgram);
 
+//      material.pvMatrix =
       _setupPrimitiveBuffers(program, primitive);
+
       material.setUniforms(
           program, _modelMatrix, _viewMatrix, _projectionMatrix, mainCamera.position, light);
 

@@ -11,6 +11,8 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 abstract class KronosRawMaterial{
+  Matrix4 pvMatrix = new Matrix4.identity();
+
   ShaderSource get shaderSource;
 
   Map<String, bool> _defines;
@@ -288,21 +290,8 @@ class KronosPRBMaterial extends KronosRawMaterial{
     _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         matrixData4);
 
-    for (int i = 0; i < matrixData4.length; ++i) {
-      matrixData4[i] = viewMatrix[i];
-    }
-    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
-        matrixData4
-    );
-
-    for (int i = 0; i < matrixData4.length; ++i) {
-      matrixData4[i] = projectionMatrix[i];
-    }
-    _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
-        matrixData4);
-
-    _setUniform(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
-        ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
+    _setUniform(program, 'u_PVMatrix', ShaderVariableType.FLOAT_MAT4,
+        pvMatrix.storage);
 
     // > camera
     _setUniform(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,

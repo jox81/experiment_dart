@@ -9,21 +9,21 @@ Future main() async {
 //    './samples/gltf_2_0/00_triangle_without_indices/gltf/TriangleWithoutIndices.gltf',
 //    './samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf',
 //    './samples/gltf_2_0/01_triangle_with_indices/gltf/Triangle.gltf',
-    './samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf',
+//    './samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf',
 //    './samples/gltf_2_0/02_simple_meshes/gltf/SimpleMeshes.gltf',
 //    './samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf',
 //    './samples/gltf_2_0/03_animated_triangle/gltf/AnimatedTriangle.gltf',
 //    './samples/gltf_2_0/04_camera/gltf_embed/Cameras.gltf',
 //    './samples/gltf_2_0/04_camera/gltf/Cameras.gltf',
-//    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
 //    './samples/gltf_2_0/minimal.gltf',
 
   //textured
 //    './samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
-//    './samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
+//    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured_multi.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
+//    './samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
 //    './wip/simple_sphere/simple_sphere.gltf',
 
   //PBR
