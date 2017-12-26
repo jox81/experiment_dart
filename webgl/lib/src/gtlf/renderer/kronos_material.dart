@@ -466,7 +466,7 @@ class KronosDefaultMaterial extends KronosRawMaterial{
         normalMatrix.storage);
 
     _setUniform(program, 'u_LightPos', ShaderVariableType.FLOAT_VEC3,
-        directionalLight.position.storage);
+        directionalLight.translation.storage);
   }
 
 }
@@ -510,8 +510,73 @@ class KronosDebugMaterial extends KronosRawMaterial{
 
     _setUniform(program, 'u_Color', ShaderVariableType.FLOAT_VEC3,
         color.storage);
-//    _setUniform(program, 'u_LightPos', ShaderVariableType.FLOAT_VEC3,
-//        lightPosition.storage);
+  }
+
+}
+
+class SAOMaterial extends KronosRawMaterial{
+
+  SAOMaterial();
+
+  ShaderSource get shaderSource => ShaderSource.sources['sao'];
+
+  int get depthTextureMap => null;
+  double get intensity => 100.0;
+  double get sampleRadiusWS => 5.0;
+  double get bias => 0.0;
+  double get zNear => 1.0;
+  double get zFar => 1000.0;
+  Vector2 get viewportResolution => new Vector2(256.0, 256.0);
+  Vector4 get projInfo => new Vector4(1.0,1.0,1.0,0.0);
+  double get projScale => 100.0;
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    //primitives infos
+    defines['HAS_COLORS'] = false;
+    defines['HAS_UV'] = true;
+    defines['HAS_NORMALS'] = false;
+    defines['HAS_TANGENTS'] = false;
+
+    //debug jpu
+    defines['DEBUG_VS'] = false;
+    defines['DEBUG_FS_POSITION'] = false;
+    defines['DEBUG_FS_NORMALS'] = defines['HAS_NORMALS'] && false;
+    defines['DEBUG_FS_UV'] = defines['HAS_UV'] && false;
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+
+    _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+        modelMatrix .storage);
+    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+        viewMatrix.storage);
+    _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
+
+
+    _setUniform(program, 'tDepth', ShaderVariableType.SAMPLER_2D,
+        depthTextureMap);
+    _setUniform(program, 'intensity', ShaderVariableType.FLOAT,
+        intensity);
+    _setUniform(program, 'sampleRadiusWS', ShaderVariableType.FLOAT,
+        sampleRadiusWS);
+    _setUniform(program, 'bias', ShaderVariableType.FLOAT,
+        bias);
+    _setUniform(program, 'zNear', ShaderVariableType.FLOAT,
+        zNear);
+    _setUniform(program, 'zFar', ShaderVariableType.FLOAT,
+        zFar);
+    _setUniform(program, 'viewportResolution', ShaderVariableType.FLOAT,
+        viewportResolution);
+    _setUniform(program, 'projInfo', ShaderVariableType.FLOAT,
+        projInfo);
+    _setUniform(program, 'projScale', ShaderVariableType.FLOAT,
+        projScale);
   }
 
 }

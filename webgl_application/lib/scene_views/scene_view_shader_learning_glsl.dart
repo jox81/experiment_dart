@@ -1,8 +1,8 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'dart:async';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
@@ -165,19 +165,19 @@ class SceneViewShaderLearning01 extends Scene{
     MaterialCustom materialCustom = new MaterialCustom(
         vShader, fShader);
     materialCustom
-      ..setShaderAttributsVariables = (Model model) {
+      ..setShaderAttributsVariables = (Mesh model) {
         materialCustom.setShaderAttributArrayBuffer(
-            'a_vertex', model.mesh.vertices, model.mesh.vertexDimensions);
-        materialCustom.setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
+            'a_vertex', model.primitive.vertices, model.primitive.vertexDimensions);
+        materialCustom.setShaderAttributElementArrayBuffer('aVertexIndice', model.primitive.indices);
       }
-      ..setShaderUniformsVariables = (Model model) {
+      ..setShaderUniformsVariables = (Mesh model) {
         materialCustom.setShaderUniform('iGlobalTime', shaderTime);
         materialCustom.setShaderUniform('iResolution', iResolution.storage);
       };
     materials.add(materialCustom);
 
     CustomObject customObject = new CustomObject()
-      ..mesh = new Mesh.Rectangle()
+      ..primitive = new MeshPrimitive.Rectangle()
       ..material = materialCustom;
 
     customObject.updateFunction = () {

@@ -5,7 +5,7 @@ import 'package:angular2/core.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/textures/texture_library.dart';

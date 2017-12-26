@@ -3,7 +3,7 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:async';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
@@ -26,12 +26,12 @@ class SceneViewPBR extends Scene{
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     CameraPerspective camera = new CameraPerspective(radians(45.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(0.0, 10.0, 5.0);
+      ..translation = new Vector3(0.0, 10.0, 5.0);
     Context.mainCamera = camera;
 
     //Lights
     PointLight pointlLight = new PointLight()
-      ..position = new Vector3(10.0, 10.0, 10.0);
+      ..translation = new Vector3(10.0, 10.0, 10.0);
     light = pointlLight;
     lights.add(pointlLight);
 
@@ -44,7 +44,7 @@ class SceneViewPBR extends Scene{
 
     //Sphere
     SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 48, segmentH: 48);
-    sphere.transform.translate(0.0, 0.0, 0.0);
+    sphere.matrix.translate(0.0, 0.0, 0.0);
     sphere.material = materialPBR;
     //sphere.mode = RenderingContext.LINES;
     models.add(sphere);

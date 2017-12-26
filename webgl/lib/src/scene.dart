@@ -7,7 +7,7 @@ import 'dart:convert';
 import 'dart:mirrors';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/geometry/object3d.dart';
+import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
@@ -15,7 +15,7 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
 import 'package:webgl/src/interaction.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
@@ -32,7 +32,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   AmbientLight ambientLight = new AmbientLight();
 
   List<Material> materials = new List();
-  List<Model> models = new List();
+  List<Mesh> models = new List();
   List<CameraPerspective> cameras = new List();
   List<Light> lights = new List();
 
@@ -45,7 +45,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       Context.mainCamera = new
       CameraPerspective(radians(25.0), 0.1, 1000.0)
         ..targetPosition = new Vector3.zero()
-        ..position = new Vector3(20.0, 20.0, 20.0);
+        ..translation = new Vector3(20.0, 20.0, 20.0);
     }
   }
 
@@ -113,7 +113,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   @override
   void updateScene() {
-    for (Model model in models) {
+    for (Mesh model in models) {
       model.update();
     }
     if(updateSceneFunction != null) {
@@ -125,38 +125,36 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   @override
   void render(){
-//    window.console.time('02_scene::render');
-    for (Model model in models) {
+    for (Mesh model in models) {
       model.render();
     }
 
     for (Camera camera in cameras) {
       camera.render();
     }
-//    window.console.timeEnd('02_scene::render');
   }
 
   // >>
 
-  void add(Object3d object3d){
-    if(object3d is Model) {
-      object3d.material ??= defaultMaterial;
-      object3d.name ??= object3d.runtimeType.toString();
+  void add(Node node){
+    if(node is Mesh) {
+      node.primitive.material ??= defaultMaterial;
+      node.name ??= node.runtimeType.toString();
 
-      models.add(object3d);
-      currentSelection = object3d;
-    }else if(object3d is Camera){
+      models.add(node);
+      currentSelection = node;
+    }else if(node is Camera){
 
     }
   }
 
   void createModelByType(ModelType modelType){
-    add(new Model.createByType(modelType));
+    add(new Mesh.createByType(modelType));
   }
 
   void assignMaterial(MaterialType materialType) {
-    if(currentSelection is Model){
-      Materials.assignMaterialTypeToModel(materialType, currentSelection as Model);
+    if(currentSelection is Mesh){
+      Materials.assignMaterialTypeToModel(materialType, currentSelection as Mesh);
     }
   }
 
@@ -176,7 +174,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
     }
 
     for(var item in jsonScene["models"] as List){
-      Model model = new Model.fromJson(item as Map);
+      Mesh model = new Mesh.fromJson(item as Map);
       models.add(model);
     }
   }
@@ -206,7 +204,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       Context.mainCamera = new
       CameraPerspective(radians(25.0), 0.1, 1000.0)
         ..targetPosition = new Vector3.zero()
-        ..position = new Vector3(20.0, 20.0, 20.0);
+        ..translation = new Vector3(20.0, 20.0, 20.0);
     }
 
     if(jsonScene["lights"] != null) {
@@ -218,7 +216,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     if(jsonScene["models"] != null) {
       for (var item in jsonScene["models"] as List) {
-        Model model = new Model.fromJson(item as Map);
+        Mesh model = new Mesh.fromJson(item as Map);
         models.add(model);
       }
     }

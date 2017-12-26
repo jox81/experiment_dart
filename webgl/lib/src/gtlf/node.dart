@@ -9,8 +9,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
   static int nextId = 0;
   final int nodeId = nextId++;
 
-  ProgramSetting programSetting;
-
   Vector3 _translation = new Vector3.all(0.0);
   Vector3 get translation => _translation;
   set translation(Vector3 value) {
@@ -35,10 +33,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
     _updateMatrix();
   }
 
-  void _updateMatrix(){
-    _matrix.setFromTranslationRotationScale(_translation, _rotation, _scale);
-  }
-
   Matrix4 _matrix = new Matrix4.identity();
   Matrix4 get matrix => _matrix;
   set matrix(Matrix4 value) {
@@ -49,23 +43,19 @@ class GLTFNode extends GLTFChildOfRootProperty{
     _scale = new Vector3(_matrix.getColumn(0).length, _matrix.getColumn(1).length, _matrix.getColumn(2).length);
   }
 
+  void _updateMatrix(){
+    _matrix.setFromTranslationRotationScale(_translation, _rotation, _scale);
+  }
+
+  void translate(Vector3 vector3) {
+    this.translation += vector3;
+  }
+
+  GLTFNode({
+    String name : ''
+  }): super(name);
+
   Matrix4 get parentMatrix =>  parent != null ?  (parent.parentMatrix * parent.matrix) as Matrix4 : new Matrix4.identity();
-
-  List<double> weights;
-
-  GLTFMesh _mesh;
-  GLTFMesh get mesh => _mesh;
-  set mesh(GLTFMesh value) {
-    _mesh = value;
-  }
-
-  Camera _camera;
-  Camera get camera => _camera;
-  set camera(Camera value) {
-    _camera = value;
-  }
-
-  GLTFSkin skin;
 
   Set<GLTFNode> _children = new Set();
   List<GLTFNode> get children => _children.toList(growable: false);
@@ -94,11 +84,32 @@ class GLTFNode extends GLTFChildOfRootProperty{
     _parent = node;
   }
 
+  ProgramSetting programSetting;
+
+  List<double> weights;
+  GLTFSkin skin;
   bool isJoint = false;
 
-  GLTFNode({
-    String name : ''
-  }): super(name);
+  GLTFMesh _mesh;
+  GLTFMesh get mesh => _mesh;
+  set mesh(GLTFMesh value) {
+    _mesh = value;
+  }
+
+  Camera _camera;
+  Camera get camera => _camera;
+  set camera(Camera value) {
+    _camera = value;
+  }
+
+  void render(){
+    if (mesh != null) {
+      if (mesh.primitives != null) {
+        mesh.modelMatrix = (parentMatrix * matrix) as Matrix4;
+        mesh.render();
+      }
+    }
+  }
 
   @override
   String toString() {

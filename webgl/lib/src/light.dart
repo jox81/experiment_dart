@@ -1,5 +1,5 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/geometry/object3d.dart';
+import 'package:webgl/src/geometry/node.dart';
 @MirrorsUsed(
     targets: const [
       Light,
@@ -17,7 +17,7 @@ enum LightType {
   directional,
 }
 
-abstract class Light extends Object3d {
+abstract class Light extends Node {
 
   LightType lightType;
 
@@ -52,11 +52,11 @@ class AmbientLight extends Light{
 class PointLight extends Light{
   LightType get lightType => LightType.point;
 
-  Vector3 position;
+  Vector3 translation;
 
   PointLight() {
     color = new Vector3(1.0, 1.0, 1.0);
-    position = new Vector3(100.0, 100.0, 100.0);
+    translation = new Vector3(100.0, 100.0, 100.0);
   }
 }
 

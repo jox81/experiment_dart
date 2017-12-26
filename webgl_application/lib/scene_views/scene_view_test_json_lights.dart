@@ -24,7 +24,7 @@ class SceneViewTestJsonLights extends Scene{
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     camera = new CameraPerspective(radians(45.0), 5.0, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(5.0, 7.5, 10.0)
+      ..translation = new Vector3(5.0, 7.5, 10.0)
       ..showGizmo = true;
     cameras.add(camera);
     Context.mainCamera = camera;

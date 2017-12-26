@@ -1,6 +1,8 @@
 import 'dart:collection';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/gtlf/accessor.dart';
+import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -8,7 +10,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 @MirrorsUsed(
@@ -152,7 +154,6 @@ abstract class Material extends IEditElement {
   // >> Uniforms
 
   void setShaderUniform(String uniformName, dynamic data, [dynamic data1, dynamic data2, dynamic data3]) {
-//    window.console.time('05_03_01_material::setShaderUniform');
     if(uniformLocations[uniformName] == null){
       print(uniformName);
     }
@@ -208,7 +209,6 @@ abstract class Material extends IEditElement {
       }
 
     }
-//    window.console.timeEnd('05_03_01_material::setShaderUniform');
   }
 
   // > Animation and Hierarchy
@@ -225,69 +225,71 @@ abstract class Material extends IEditElement {
     Context.modelMatrix = _mvMatrixStack.removeFirst();
   }
 
-  void update(Model model) {
-//    window.console.time('04_00_material::render');
+  void update(Mesh model) {
 //    _mvPushMatrix();
 //    Context.modelViewMatrix.multiply(model.transform);
 //
-//    window.console.time('04_01_material::beforeRender');
 //    beforeRender(model);
-//    window.console.timeEnd('04_01_material::beforeRender');
   }
 
   // >> Rendering
 
-  void render(Model model) {
-//    window.console.time('04_00_material::render');
+  void render(Mesh model) {
     _mvPushMatrix();
-//    Context.modelMatrix.multiply(model.transform);
 //    idem :
-    Context.modelMatrix = (Context.modelMatrix * model.transform) as Matrix4;
+    Context.modelMatrix = (Context.modelMatrix * model.matrix) as Matrix4;
 
-//    window.console.time('04_01_material::beforeRender');
     beforeRender(model);
-//    window.console.timeEnd('04_01_material::beforeRender');
 
-//    window.console.time('04_02_material::render');
-    if (model.mesh.indices.length > 0 && model.mesh.mode != DrawMode.POINTS) {
-      gl.drawElements(model.mesh.mode, model.mesh.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
-    } else {
-      gl.drawArrays(model.mesh.mode, 0, model.mesh.vertexCount);
+    GLTFMeshPrimitive primitive = new GLTFMeshPrimitive()
+      ..mode = model.primitive.mode
+      ..attributes['POSITION'] = new GLTFAccessor(
+          byteOffset : 0,
+          count : model.primitive.vertexCount
+      );
+    
+    if(model.primitive.indices.length > 0) {
+      GLTFAccessor accessorIndices = new GLTFAccessor(
+          count: model.primitive.indices.length,
+          componentType: BufferElementType.UNSIGNED_SHORT
+      );
+      primitive.indicesAccessor = accessorIndices;
     }
-//    window.console.timeEnd('04_02_material::render');
 
-//    window.console.time('04_03_material::afterRender');
+    _drawPrimitive(primitive);
+    
     afterRender(model);
-//    window.console.timeEnd('04_03_material::afterRender');
 
     _mvPopMatrix();
-//    window.console.timeEnd('04_00_material::render');
   }
 
-  void beforeRender(Model model) {
-//    window.console.time('05_01_material::beforeRender:program.use');
+  void _drawPrimitive(GLTFMeshPrimitive primitive) {
+    if (primitive.indices == null || primitive.mode == DrawMode.POINTS) {
+      GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
+      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
+      gl.drawArrays(
+          primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
+    } else {
+      GLTFAccessor accessorIndices = primitive.indices;
+      gl.drawElements(primitive.mode, accessorIndices.count,
+          accessorIndices.componentType, 0);
+    }
+  }
+
+  void beforeRender(Mesh model) {
     program.use();
-//    window.console.timeEnd('05_01_material::beforeRender:program.use');
 
-//    window.console.time('05_02_material::beforeRender:setShaderAttributs');
     setShaderAttributs(model);
-//    window.console.timeEnd('05_02_material::beforeRender:setShaderAttributs');
-
-//    window.console.time('05_03_material::beforeRender:setShaderUniforms');
     setShaderUniforms(model);
-//    window.console.timeEnd('05_03_material::beforeRender:setShaderUniforms');
-
-//    window.console.time('05_04_material::beforeRender:setupBeforeRender');
     setupBeforeRender();
-//    window.console.timeEnd('05_04_material::beforeRender:setupBeforeRender');
   }
 
-  void setShaderAttributs(Model model);
-  void setShaderUniforms(Model model);
+  void setShaderAttributs(Mesh model);
+  void setShaderUniforms(Mesh model);
   void setupBeforeRender(){}
   void setupAfterRender(){}
 
-  void afterRender(Model model){
+  void afterRender(Mesh model){
     setupAfterRender();
     disableVertexAttributs();
   }

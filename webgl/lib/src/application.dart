@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/geometry/utils_geometry.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/time/time.dart';
@@ -112,7 +112,7 @@ class Application implements Interactable{
     ctxWrapper.Context.renderSettings.enableExtensions();
   }
 
-  Model tempSelection;
+  Mesh tempSelection;
 
   void initInteraction(){
     _interaction = new Interaction(this);
@@ -124,7 +124,7 @@ class Application implements Interactable{
 
   void _onMouseDownHandler(MouseEvent event) {
     if (ctxWrapper.Context.mainCamera != null) {
-      Model modelHit = UtilsGeometry.findModelFromMouseCoords(
+      Mesh modelHit = UtilsGeometry.findModelFromMouseCoords(
           ctxWrapper.Context.mainCamera, event.offset.x, event.offset.y,
           ctxWrapper.Context.currentScene.models);
       tempSelection = modelHit;
@@ -144,9 +144,9 @@ class Application implements Interactable{
       ctxWrapper.Context.currentScene.currentSelection = tempSelection;
     }
 
-    if(ctxWrapper.Context.currentScene.currentSelection != null && ctxWrapper.Context.currentScene.currentSelection is Model) {
+    if(ctxWrapper.Context.currentScene.currentSelection != null && ctxWrapper.Context.currentScene.currentSelection is Mesh) {
 
-      Model currentModel = ctxWrapper.Context.currentScene.currentSelection as Model;
+      Mesh currentModel = ctxWrapper.Context.currentScene.currentSelection as Mesh;
 
       double delta = _interaction.deltaX.toDouble(); // get mouse delta
       double deltaMoveX = (activeAxis[AxisType.x]
@@ -162,22 +162,22 @@ class Application implements Interactable{
       if (activeTool == ActiveToolType.move) {
         double moveFactor = 1.0;
 
-        currentModel.transform.translate(
+        currentModel.matrix.translate(
             new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
       }
 
       if (activeTool == ActiveToolType.rotate) {
         num rotateFactor = 1.0;
 
-        currentModel.transform.rotateX(deltaMoveX * rotateFactor);
-        currentModel.transform.rotateY(deltaMoveY * rotateFactor);
-        currentModel.transform.rotateY(deltaMoveZ * rotateFactor);
+        currentModel.matrix.rotateX(deltaMoveX * rotateFactor);
+        currentModel.matrix.rotateY(deltaMoveY * rotateFactor);
+        currentModel.matrix.rotateY(deltaMoveZ * rotateFactor);
       }
 
       if (activeTool == ActiveToolType.scale) {
         num scaleFactor = 0.03;
 
-        currentModel.transform.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
+        currentModel.matrix.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
       }
     }
   }

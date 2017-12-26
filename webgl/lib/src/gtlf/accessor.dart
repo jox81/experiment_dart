@@ -82,31 +82,31 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
     _bufferView = value;
   }
 
-  final int byteOffset; //Start reading byte at
-  final int byteLength;// Total length
+  int byteOffset; //Start reading byte at
+  int byteLength;// Total length
   //
-  final int count;//number of component : 3 Vector3 for a triangle with 3 positions
+  int count;//number of component : 3 Vector3 for a triangle with 3 positions
   /// ShaderVariableType type
-  final int type = -1;//FLOAT_VEC3// Todo (jpu) :
-  final int elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
+  int type = -1;//FLOAT_VEC3// Todo (jpu) :
+  int elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
   //
-  final String typeString;//SCALAR/VEC3/...
-  final int components;//Count of components in an element : vec3 -> 3, vec2 -> 2
+  String typeString;//SCALAR/VEC3/...
+  int components;//Count of components in an element : vec3 -> 3, vec2 -> 2
   //
   ///VertexAttribArrayType componentType
-  final int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
-  final int componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
+  int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
+  int componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
   //
-  final int byteStride;//size of repetition group
+  int byteStride;//size of repetition group
   //<
 
-  final bool normalized;
-  final List<num> max;
-  final List<num> min;
-  final GLTFAccessorSparse sparse;
+  bool normalized;
+  List<num> max;
+  List<num> min;
+  GLTFAccessorSparse sparse;
 
-  final bool isXyzSign;
-  final bool isUnit;
+  bool isXyzSign;
+  bool isUnit;
 
   GLTFAccessor({
       this.byteOffset,

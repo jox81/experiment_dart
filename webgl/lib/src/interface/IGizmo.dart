@@ -1,6 +1,6 @@
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 
 abstract class IGizmo{
-  List<Model> gizmoModels;
+  List<Mesh> gizmoModels;
   void updateGizmo();
 }

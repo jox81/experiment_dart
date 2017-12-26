@@ -1,13 +1,13 @@
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/meshes.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'dart:async';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-Future<Model> experiment() async {
+Future<Mesh> experiment() async {
 
   String vs = '''
     precision mediump float;
@@ -42,19 +42,19 @@ Future<Model> experiment() async {
 
   //Material
   MaterialCustom materialCustom = new MaterialCustom(vs, fs);
-  materialCustom.setShaderAttributsVariables = (Model model) {
+  materialCustom.setShaderAttributsVariables = (Mesh model) {
     materialCustom.setShaderAttributArrayBuffer(
-        'aVertexPosition', model.mesh.vertices, model.mesh.vertexDimensions);
-    materialCustom.setShaderAttributElementArrayBuffer('aVertexIndice', model.mesh.indices);
+        'aVertexPosition', model.primitive.vertices, model.primitive.vertexDimensions);
+    materialCustom.setShaderAttributElementArrayBuffer('aVertexIndice', model.primitive.indices);
   };
-  materialCustom.setShaderUniformsVariables = (Model model) {
+  materialCustom.setShaderUniformsVariables = (Mesh model) {
     materialCustom.setShaderUniform("time", shaderTime);
     gl.activeTexture(TextureUnit.TEXTURE0);
     gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
     materialCustom.setShaderUniform("sTexture", 0);
   };
 
-  Mesh mesh = new Mesh()
+  MeshPrimitive primitive = new MeshPrimitive()
   ..mode = DrawMode.POINTS
   ..vertices = [
     0.0, 0.0, 0.0,
@@ -65,7 +65,7 @@ Future<Model> experiment() async {
     0,1,2
   ];
   CustomObject customObject = new CustomObject()
-    ..mesh = mesh
+    ..primitive = primitive
     ..material = materialCustom;
 
   customObject.updateFunction = (){

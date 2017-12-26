@@ -6,7 +6,7 @@ import '003.dart' as exp003;
 import '004.dart' as exp004;
 import 'dart:async';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/context.dart';
 @MirrorsUsed(
@@ -27,12 +27,12 @@ class SceneViewExperiment extends Scene{
 
     CameraPerspective camera = new CameraPerspective(radians(45.0), 5.0, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(5.0, 7.5, 10.0)
+      ..translation = new Vector3(5.0, 7.5, 10.0)
       ..showGizmo = true;
     cameras.add(camera);
     Context.mainCamera = camera;
 
-    Model model = await exp004.experiment();
+    Mesh model = await exp004.experiment();
     materials.add(model.material);
     models.add(model);
 

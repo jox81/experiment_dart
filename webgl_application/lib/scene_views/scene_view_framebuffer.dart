@@ -3,7 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -26,7 +26,7 @@ class SceneViewFrameBuffer extends Scene{
     //Cameras
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(5.0, 5.0, 5.0);
+      ..translation = new Vector3(5.0, 5.0, 5.0);
     Context.mainCamera = camera;
 
     //
@@ -36,7 +36,7 @@ class SceneViewFrameBuffer extends Scene{
     //
     List<WebGLTexture> renderedTextures = TextureUtils.buildRenderedTextures();
 
-    //Model
+    //Mesh
     MaterialBaseTexture materialBaseTextureNormal =
     new MaterialBaseTexture()
       ..texture = renderedTextures[0];
@@ -44,9 +44,9 @@ class SceneViewFrameBuffer extends Scene{
 
     QuadModel quadColor = new QuadModel()
       ..name = 'quadColor'
-      ..position = new Vector3(0.0, 1.0, 0.0)
+      ..translation = new Vector3(0.0, 1.0, 0.0)
       ..material = materialBaseTextureNormal
-      ..transform.rotateZ(radians(90.0));
+      ..matrix.rotateZ(radians(90.0));
     models.add(quadColor);
 
     //
@@ -57,9 +57,9 @@ class SceneViewFrameBuffer extends Scene{
 
     QuadModel quadDepth = new QuadModel()
       ..name = 'quadDepth'
-      ..position = new Vector3(0.0, -1.0, 0.0)
+      ..translation = new Vector3(0.0, -1.0, 0.0)
       ..material = materialDepthTextureNormal
-      ..transform.rotateZ(radians(90.0));
+      ..matrix.rotateZ(radians(90.0));
     models.add(quadDepth);
 
 

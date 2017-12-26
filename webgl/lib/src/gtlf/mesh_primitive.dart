@@ -9,7 +9,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   Map<String, GLTFAccessor> attributes = new Map<String, GLTFAccessor>();
 
   /// DrawMode mode
-  final int mode;
+  int mode;
 
   final bool hasPosition;
   final bool hasNormal;

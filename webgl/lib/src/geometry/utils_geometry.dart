@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/material/materials.dart';
 
@@ -50,8 +50,8 @@ class UtilsGeometry{
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
       resultPoints.add(new PointModel()
-        ..position = pickWorld
-        ..material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
+        ..translation = pickWorld
+        ..primitive.material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
         ..visible = true);
     }
     return resultPoints;
@@ -59,7 +59,7 @@ class UtilsGeometry{
 
   /// May be buggy for some models like the sphere mesh
   /// How to hide vertices after shown ?
-  static List<PointModel> drawModelVertices(Model model) {
+  static List<PointModel> drawModelVertices(Mesh model) {
     List<PointModel> resultPoints = [];
     MaterialPoint material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
 
@@ -77,8 +77,8 @@ class UtilsGeometry{
 
     for(Vector3 vertex in vertices){
       resultPoints.add(new PointModel()
-        ..position = vertex
-        ..material = material);
+        ..translation = vertex
+        ..primitive.material = material);
     }
     return resultPoints;
   }
@@ -88,12 +88,12 @@ class UtilsGeometry{
     Vector3 outRayNear = new Vector3.zero();
     UtilsGeometry.unProjectScreenPoint(camera, outRayNear, screenX, screenY);
 
-    Vector3 direction = outRayNear - camera.position;
+    Vector3 direction = outRayNear - camera.translation;
     return new Ray.originDirection(outRayNear, direction);
   }
 
   /// Draw a point on the model intersected with the ray
-  static List<PointModel> findModelHitPoint(Model model, Ray ray) {
+  static List<PointModel> findModelHitPoint(Mesh model, Ray ray) {
     List<PointModel> resultPoints = [];
     Material material = new MaterialPoint(pointSize:8.0 ,color: new Vector4(1.0, 0.0, 0.0, 1.0));
 
@@ -102,26 +102,26 @@ class UtilsGeometry{
 
       if(distance != null) {
         resultPoints.add(new PointModel()
-          ..position = ray.at(distance)
-          ..material = material);
+          ..translation = ray.at(distance)
+          ..primitive.material = material);
       }
     }
 
     return resultPoints;
   }
 
-  static Model findModelFromMouseCoords(CameraPerspective camera, num x, num y, List<Model> models) {
+  static Mesh findModelFromMouseCoords(CameraPerspective camera, num x, num y, List<Mesh> models) {
     Ray ray = UtilsGeometry.findRay(camera, x, y);
-    Model modelHit = UtilsGeometry.findModelHit(models, ray);
+    Mesh modelHit = UtilsGeometry.findModelHit(models, ray);
     return modelHit;
   }
 
   /// Find the first hit model in the list using the ray
-  static Model findModelHit(List<Model> models, Ray ray) {
-    Model modelHit;
+  static Mesh findModelHit(List<Mesh> models, Ray ray) {
+    Mesh modelHit;
     num distanceHit;
 
-    for(Model model in models){
+    for(Mesh model in models){
       for(Triangle triangle in model.getFaces()) {
         num distance = ray.intersectsWithTriangle(triangle);
 

@@ -4,7 +4,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/time/time.dart';
@@ -36,7 +36,7 @@ class SceneViewTexturing extends Scene{
     Context.mainCamera = new
     CameraPerspective(radians(25.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(20.0, 20.0, 20.0);
 
     //Lights
     ambientLight.color.setFrom(ambientColor);
@@ -48,7 +48,7 @@ class SceneViewTexturing extends Scene{
 
     PointLight pointLight = new PointLight()
       ..color.setFrom(directionalColor)
-      ..position = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(20.0, 20.0, 20.0);
     lights.add(pointLight);
 
     //Materials
@@ -73,38 +73,38 @@ class SceneViewTexturing extends Scene{
     // create triangle
     TriangleModel triangle = new TriangleModel()
       ..name = 'triangle'
-      ..transform.translate(-5.0, 0.0, 5.0)
+      ..matrix.translate(-5.0, 0.0, 5.0)
       ..material = materialBaseTexture;
     models.add(triangle);
 
     // create square
     QuadModel square = new QuadModel()
-      ..transform.translate(0.0, 0.0, 0.0)
-      ..transform.rotateX(radians(90.0))
+      ..matrix.translate(0.0, 0.0, 0.0)
+      ..matrix.rotateX(radians(90.0))
       ..material = materialBaseTexture;
     models.add(square);
 
     // create square
     QuadModel squareX = new QuadModel()
-      ..transform.translate(0.0, 0.0, 5.0)
+      ..matrix.translate(0.0, 0.0, 5.0)
       ..material = materialBaseTexture;
     models.add(squareX);
 
     //create Pyramide
     PyramidModel pyramid = new PyramidModel()
-      ..transform.translate(5.0, 1.0, 0.0)
+      ..matrix.translate(5.0, 1.0, 0.0)
       ..material = materialBaseTexture;
     models.add(pyramid);
 
     //Create Cube
     CubeModel cube = new CubeModel();
-    cube.transform.translate(-5.0, 1.0, 0.0);
+    cube.matrix.translate(-5.0, 1.0, 0.0);
     cube.material = materialBaseTexture;
     models.add(cube);
 
     //Sphere
     SphereModel sphere = new SphereModel(radius: 1.5, segmentV: 48, segmentH: 48)
-      ..transform.translate(0.0, 0.0, -5.0)
+      ..matrix.translate(0.0, 0.0, -5.0)
       ..material = materialBaseTexture;
     models.add(sphere);
 
@@ -114,10 +114,10 @@ class SceneViewTexturing extends Scene{
 
     //Animation
     updateSceneFunction = () {
-      triangle.transform.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
-      squareX.transform.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
-      pyramid..transform.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
-      cube.transform.rotateY((radians(45.0) * Time.deltaTime) / 1000.0);
+      triangle.matrix.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
+      squareX.matrix.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
+      pyramid..matrix.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
+      cube.matrix.rotateY((radians(45.0) * Time.deltaTime) / 1000.0);
     };
 
   }

@@ -29,7 +29,7 @@ GlobalState globalState;
 
 // Direction from where the light is coming to origin
 DirectionalLight light = new DirectionalLight()
-  ..position = new Vector3(50.0, 50.0, -50.0)
+  ..translation = new Vector3(50.0, 50.0, -50.0)
   ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
   ..color =  new Vector3(1.0, 1.0, 1.0);
 
@@ -296,11 +296,7 @@ class GLTFRenderer implements Interactable {
     //debug.logCurrentFunction();
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
-      if (node.mesh != null) {
-        if(node.mesh.primitives == null) continue;
-        node.programSetting ??= new ProgramSetting(node);
-        node.programSetting.drawPrimitives();
-      }
+      node.render();
       drawNodes(node.children);
     }
   }
@@ -332,7 +328,7 @@ class GLTFRenderer implements Interactable {
     if(debugCamera){
       currentCamera = new CameraPerspective(radians(47.0), 0.1, 1000.0)
         ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-        ..position = new Vector3(10.0, 10.0, 10.0);
+        ..translation = new Vector3(10.0, 10.0, 10.0);
     }else {
       //find first activeScene camera
       currentCamera = findActiveSceneCamera(activeScene.nodes);
@@ -348,7 +344,7 @@ class GLTFRenderer implements Interactable {
             ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
         }
-        currentCamera.position = new Vector3(5.0, 5.0, 10.0);
+        currentCamera.translation = new Vector3(5.0, 5.0, 10.0);
 //      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
       }
     }
@@ -381,7 +377,7 @@ class GLTFRenderer implements Interactable {
     //debug.logCurrentFunction();
 
     CameraPerspective camera = node.camera as CameraPerspective;
-    camera.position = node.translation;
+    camera.translation = node.translation;
   }
 
   void update() {

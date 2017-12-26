@@ -2,9 +2,11 @@ import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/material/material.dart';
+
 @MirrorsUsed(
     targets: const [
-      Mesh,
+      MeshPrimitive,
       _PointMesh,
       _LineMesh2,
       _LineMesh,
@@ -19,7 +21,11 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
     override: '*')
 import 'dart:mirrors';
 
-class Mesh {
+class MeshPrimitive {
+
+  Material _material;
+  Material get material => _material;
+  set material(Material value) => _material = value; //Animation
 
   /// DrawMode mode
   int mode = DrawMode.TRIANGLE_STRIP;
@@ -124,50 +130,50 @@ class Mesh {
     return _faces;
   }
 
-  Mesh();
+  MeshPrimitive();
 
-  factory Mesh.Point() {
+  factory MeshPrimitive.Point() {
     return new _PointMesh();
   }
 
-  factory Mesh.Line(List<Vector3> points) {
+  factory MeshPrimitive.Line(List<Vector3> points) {
     return new _LineMesh(points);
   }
 
-  factory Mesh.Line2(List<Vector3> points) {
+  factory MeshPrimitive.Line2(List<Vector3> points) {
     return new _LineMesh2(points);
   }
 
-  factory Mesh.Rectangle() {
+  factory MeshPrimitive.Rectangle() {
     return new _SquareMesh();
   }
 
-  factory Mesh.Triangle() {
+  factory MeshPrimitive.Triangle() {
     return new _TriangleMesh();
   }
 
-  factory Mesh.Pyramid() {
+  factory MeshPrimitive.Pyramid() {
     return new _PyramidMesh();
   }
 
-  factory Mesh.Cube() {
+  factory MeshPrimitive.Cube() {
     return new _CubeMesh();
   }
 
-  factory Mesh.Sphere({double radius : 1.0, int segmentV: 32, int segmentH: 32}) {
+  factory MeshPrimitive.Sphere({double radius : 1.0, int segmentV: 32, int segmentH: 32}) {
     return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
   }
 
-  factory Mesh.Axis() {
+  factory MeshPrimitive.Axis() {
     return new _AxisMesh();
   }
 
-  factory Mesh.AxisPoints() {
+  factory MeshPrimitive.AxisPoints() {
     return new _AxisPointMesh();
   }
 }
 
-class _PointMesh extends Mesh {
+class _PointMesh extends MeshPrimitive {
   _PointMesh() {
 
     mode = DrawMode.POINTS;
@@ -179,7 +185,7 @@ class _PointMesh extends Mesh {
 }
 
 //Deprecated
-class _LineMesh2 extends Mesh {
+class _LineMesh2 extends MeshPrimitive {
   _LineMesh2(List<Vector3> points) {
     assert(points.length >= 2);
 
@@ -199,7 +205,7 @@ class _LineMesh2 extends Mesh {
   }
 }
 
-class _LineMesh extends Mesh {
+class _LineMesh extends MeshPrimitive {
   _LineMesh(List<Vector3> points) {
     assert(points.length >= 2);
 
@@ -214,7 +220,7 @@ class _LineMesh extends Mesh {
   }
 }
 
-class _TriangleMesh extends Mesh {
+class _TriangleMesh extends MeshPrimitive {
   _TriangleMesh() {
     mode = DrawMode.TRIANGLES;
 
@@ -224,7 +230,6 @@ class _TriangleMesh extends Mesh {
       0.0, 2.0, 0.0
     ];
     indices = [0,1,2];
-
     textureCoords = [
       0.0, 0.0,
       1.0, 0.0,
@@ -233,7 +238,7 @@ class _TriangleMesh extends Mesh {
   }
 }
 
-class _SquareMesh extends Mesh {
+class _SquareMesh extends MeshPrimitive {
   _SquareMesh() {
     mode = DrawMode.TRIANGLES;
     /*
@@ -265,7 +270,7 @@ class _SquareMesh extends Mesh {
   }
 }
 
-class _PyramidMesh extends Mesh {
+class _PyramidMesh extends MeshPrimitive {
   _PyramidMesh() {
     vertices = [
       1.0, 0.0, 1.0,
@@ -338,7 +343,7 @@ class _PyramidMesh extends Mesh {
   }
 }
 
-class _CubeMesh extends Mesh {
+class _CubeMesh extends MeshPrimitive {
   _CubeMesh() {
     mode = DrawMode.TRIANGLES;
 
@@ -484,7 +489,7 @@ class _CubeMesh extends Mesh {
   }
 }
 
-class _SphereMesh extends Mesh {
+class _SphereMesh extends MeshPrimitive {
 
   Matrix4 _matRotY = new Matrix4.identity();
   Matrix4 _matRotZ = new Matrix4.identity();
@@ -557,7 +562,7 @@ class _SphereMesh extends Mesh {
   }
 }
 
-class _AxisMesh extends Mesh {
+class _AxisMesh extends MeshPrimitive {
   _AxisMesh() {
     mode = DrawMode.LINES;
     vertices = [
@@ -580,7 +585,7 @@ class _AxisMesh extends Mesh {
 }
 
 //Points
-class _AxisPointMesh extends Mesh {
+class _AxisPointMesh extends MeshPrimitive {
   _AxisPointMesh() {
     mode = DrawMode.POINTS;
 

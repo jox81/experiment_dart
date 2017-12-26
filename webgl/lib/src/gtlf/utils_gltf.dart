@@ -1,6 +1,6 @@
-import 'dart:core';
+import 'package:webgl/src/introspection.dart';
 
-abstract class GltfProperty {
+abstract class GltfProperty extends IEditElement {
   Map<String, Object> extensions;
   Object extras;
 

@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/geometry/utils_geometry.dart';
@@ -31,7 +31,7 @@ class Webgl01 {
   WebGLBuffer vertexBuffer;
   WebGLBuffer indicesBuffer;
 
-  List<Model> models = new List();
+  List<Mesh> models = new List();
   List<Camera> cameras = new List();
 
   WebGLProgram shaderProgram;
@@ -60,7 +60,7 @@ class Webgl01 {
   void setupCamera()  {
     Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(10.0,10.0,10.0);
+      ..translation = new Vector3(10.0,10.0,10.0);
   }
 
   void setupMeshes() {
@@ -137,7 +137,7 @@ class Webgl01 {
 
     CameraPerspective camera2 = new CameraPerspective(radians(37.0), 1.0, 5.0)
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-      ..position = new Vector3(5.0, 5.0, -5.0)
+      ..translation = new Vector3(5.0, 5.0, -5.0)
       ..showGizmo = true;
     cameras.add(camera2);
 
@@ -196,15 +196,15 @@ class Webgl01 {
 
     TriangleModel triangleModel = new TriangleModel()
       ..name = 'triangle'
-      ..position = new Vector3(1.0, 0.0, 0.0);
+      ..translation = new Vector3(1.0, 0.0, 0.0);
     models.add(triangleModel);
 
     TriangleModel triangleModel2 = new TriangleModel()
       ..name = 'triangle2'
-      ..position = new Vector3(-3.0, 0.0, 0.0);
+      ..translation = new Vector3(-3.0, 0.0, 0.0);
     models.add(triangleModel2);
 
-    List<Model> modelsHit = [triangleModel, triangleModel2];
+    List<Mesh> modelsHit = [triangleModel, triangleModel2];
 
     models.addAll(UtilsGeometry.drawModelVertices(modelsHit[0]));
 
@@ -221,7 +221,7 @@ class Webgl01 {
     gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    for(Model model in models){
+    for(Mesh model in models){
       model.render();
     }
 

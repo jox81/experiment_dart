@@ -19,7 +19,7 @@ import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
-import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
@@ -210,7 +210,7 @@ class PropertiesComponent {
 
   //Mesh
   bool isMesh(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, Mesh);
+    return compareType(animationProperty.type, MeshPrimitive);
   }
 
   //Camera

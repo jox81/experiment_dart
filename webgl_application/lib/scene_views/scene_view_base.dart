@@ -6,7 +6,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/time/time.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -39,7 +39,7 @@ class SceneViewBase extends Scene{
     Context.mainCamera = new
     CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(20.0, 20.0, 20.0);
 
     //Lights
     ambientLight.color.setFrom(ambientColor);
@@ -51,7 +51,7 @@ class SceneViewBase extends Scene{
 
     PointLight pointLight = new PointLight()
       ..color.setFrom(directionalColor)
-      ..position = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(20.0, 20.0, 20.0);
     lights.add(pointLight);
 
     //Materials
@@ -84,7 +84,7 @@ class SceneViewBase extends Scene{
     models.add(axis);
 
     PointModel point = new PointModel()
-        ..position = new Vector3(8.0, 5.0, 10.0)
+        ..translation = new Vector3(8.0, 5.0, 10.0)
     ..material = materialPoint;
     models.add(point);
 
@@ -99,30 +99,30 @@ class SceneViewBase extends Scene{
 
     // create square
     QuadModel square = new QuadModel()
-      ..transform.translate(3.0, 0.0, 0.0)
-      ..transform.rotateX(radians(90.0))
+      ..matrix.translate(3.0, 0.0, 0.0)
+      ..matrix.rotateX(radians(90.0))
       ..material = materialBaseColor;
     models.add(square);
 
     // create triangle
     TriangleModel triangle = new TriangleModel()
       ..name = 'triangle'
-      ..transform.translate(0.0, 0.0, 4.0)
+      ..matrix.translate(0.0, 0.0, 4.0)
       ..material = materialBase;
     models.add(triangle);
 
     // create cube
     CubeModel centerCube = new CubeModel()
-      ..transform.translate(0.0, 0.0, 0.0)
-      ..transform.scale(0.1, 0.1, 0.1)
+      ..matrix.translate(0.0, 0.0, 0.0)
+      ..matrix.scale(0.1, 0.1, 0.1)
       ..material = materialBaseColor;
     models.add(centerCube);
 
     // create square
     QuadModel squareX = new QuadModel()
-      ..transform.translate(0.0, 3.0, 0.0)
+      ..matrix.translate(0.0, 3.0, 0.0)
       ..material = materialBaseVertexColor;
-    squareX.mesh
+    squareX.primitive
       ..colors = new List()
       ..colors.addAll([1.0, 0.0, 0.0, 1.0])
       ..colors.addAll([1.0, 1.0, 0.0, 1.0])
@@ -132,13 +132,13 @@ class SceneViewBase extends Scene{
 
     //create Pyramide
     PyramidModel pyramid = new PyramidModel()
-      ..transform.translate(7.0, 1.0, 0.0)
+      ..matrix.translate(7.0, 1.0, 0.0)
       ..material = materialBaseVertexColor;
     models.add(pyramid);
 
     //Create Cube
     CubeModel cube = new CubeModel();
-    cube.transform.translate(-4.0, 1.0, 0.0);
+    cube.matrix.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
     await TextureUtils.createTexture2DFromFile("./images/crate.gif");
     cube
@@ -153,15 +153,15 @@ class SceneViewBase extends Scene{
       ..texture = await TextureUtils.createTexture2DFromFile(
           './objects/susan/susan_texture.png');
     JsonObject jsonModel = new JsonObject(susanJson)
-      ..transform.translate(10.0, 0.0, -5.0)
-      ..transform.rotateX(radians(-90.0))
+      ..matrix.translate(10.0, 0.0, -5.0)
+      ..matrix.rotateX(radians(-90.0))
       ..material = susanMaterialBaseTexture
       ..addComponent(new TestAnim());
     models.add(jsonModel);
 
     //Sphere
     SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
-      ..transform.translate(0.0, 0.0, -10.0)
+      ..matrix.translate(0.0, 0.0, -10.0)
       ..material = materialPBR;
     //sphere.mode = RenderingContext.LINES;
     models.add(sphere);
@@ -169,8 +169,8 @@ class SceneViewBase extends Scene{
     //Animation
     updateSceneFunction = () {
 
-      squareX.transform.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
-      pyramid..transform.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
+      squareX.matrix.rotateX((radians(180.0) * Time.deltaTime) / 1000.0);
+      pyramid.matrix.rotateY((radians(90.0) * Time.deltaTime) / 1000.0);
 
       materialBaseTextureNormal..useLighting = useLighting;
 

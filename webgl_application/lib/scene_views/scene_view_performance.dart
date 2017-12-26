@@ -2,9 +2,9 @@ import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/light.dart';
 import 'dart:math';
-import 'package:webgl/src/geometry/models.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
@@ -36,7 +36,7 @@ class SceneViewPerformance extends Scene{
     // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(20.0, 30.0, -50.0);
+      ..translation = new Vector3(20.0, 30.0, -50.0);
     Context.mainCamera = camera;
 
     //Lights
@@ -49,7 +49,7 @@ class SceneViewPerformance extends Scene{
 
     PointLight pointLight = new PointLight()
       ..color.setFrom(directionalColor)
-      ..position = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(20.0, 20.0, 20.0);
     light = pointLight;
 
     //Materials
@@ -74,7 +74,7 @@ class SceneViewPerformance extends Scene{
     for (int i = 0; i < count; i++) {
       //Create Cube
       CubeModel cube = new CubeModel()
-        ..position = new Vector3(random.nextInt(randomWidth) - randomWidth / 2,
+        ..translation = new Vector3(random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2)
         ..material = materialPBR;

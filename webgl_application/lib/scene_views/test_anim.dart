@@ -7,7 +7,7 @@ class TestAnim extends IComponent{
 
   @override
   update() {
-    object3d.transform.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
+    node.matrix.rotateZ((radians(60.0) * Time.deltaTime) / 1000.0);
   }
 }
 

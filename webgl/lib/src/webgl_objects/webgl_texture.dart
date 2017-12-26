@@ -6,7 +6,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/materials.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture_wrapped.dart';
@@ -482,7 +482,7 @@ class TextureUtils {
     // draw something in the buffer
     // ...
     {
-      List<Model> models = new List();
+      List<Mesh> models = new List();
 
       //backup camera
       CameraPerspective baseCam = Context.mainCamera;
@@ -493,7 +493,7 @@ class TextureUtils {
 
       CameraPerspective cameraTexture = new CameraPerspective(radians(45.0), 0.1, 100.0)
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
-        ..position = new Vector3(5.0, 15.0, 15.0);
+        ..translation = new Vector3(5.0, 15.0, 15.0);
 
       Context.mainCamera = cameraTexture;
 
@@ -506,20 +506,20 @@ class TextureUtils {
       //plane
       QuadModel quadColor = new QuadModel()
         ..name = 'ground'
-        ..material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0))
-        ..position = new Vector3(0.0, 0.0, -50.0)
-        ..transform.scale(10.0, 1.0, 100.0)
-        ..transform.rotateX(radians(90.0));
+        ..primitive.material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0))
+        ..translation = new Vector3(0.0, 0.0, -50.0)
+        ..matrix.scale(10.0, 1.0, 100.0)
+        ..matrix.rotateX(radians(90.0));
       models.add(quadColor);
 
       //cubes
       for (int i = 0; i < 20; i++) {
         CubeModel cube = new CubeModel()
-          ..position = new Vector3(0.0, 0.0, -4.0 * i.toDouble());
+          ..translation = new Vector3(0.0, 0.0, -4.0 * i.toDouble());
         models.add(cube);
       }
 
-      for (Model model in models) {
+      for (Mesh model in models) {
         model.render();
       }
 

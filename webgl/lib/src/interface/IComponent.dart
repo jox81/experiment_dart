@@ -1,11 +1,11 @@
 import 'dart:async';
 
-import 'package:webgl/src/geometry/object3d.dart';
+import 'package:webgl/src/geometry/node.dart';
 
 abstract class IComponent {
 
   IComponent();
 
-  Object3d object3d;
+  Node node;
   Future update();
 }

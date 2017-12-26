@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -34,7 +34,7 @@ class SceneViewVectors extends Scene{
     //Cameras
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(3.0, 10.0, 10.0);
+      ..translation = new Vector3(3.0, 10.0, 10.0);
     Context.mainCamera = camera;
 
     matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));
@@ -43,7 +43,7 @@ class SceneViewVectors extends Scene{
 
     cameraTest = new CameraPerspective(radians(45.0), 0.2, 5.0)
       ..targetPosition = new Vector3(1.0, 0.0, 0.0)
-      ..position = new Vector3(3.0, 3.0, 3.0)
+      ..translation = new Vector3(3.0, 3.0, 3.0)
       ..showGizmo = true;
     cameras.add(cameraTest);
 
@@ -113,18 +113,18 @@ class SceneViewVectors extends Scene{
     cameraTest
       ..yfov = radians(150.0)
       ..targetPosition = cameraTargetPosition
-      ..position = cameraPosition;
+      ..translation = cameraPosition;
 
     AxisModel axisTest = new AxisModel()
-    ..position = new Vector3(0.0,0.0,0.0)
-    ..transform.rotateY(radians(0.0));
+    ..translation = new Vector3(0.0,0.0,0.0)
+    ..matrix.rotateY(radians(0.0));
     models.add(axisTest);
 
     GridModel gridTest = new GridModel();
     models.add(gridTest);
 
     PointModel pointTest = new PointModel()
-    ..position = new Vector3(1.0,0.0,1.0);
+    ..translation = new Vector3(1.0,0.0,1.0);
     models.add(pointTest);
 
 //    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
@@ -140,8 +140,8 @@ class SceneViewVectors extends Scene{
 //    axisTest.transform = finalMatrix * axisTest.transform;
 
     Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.viewMatrix).multiplied(new Matrix4.identity());
-    gridTest.transform = (finalMatrix * gridTest.transform) as Matrix4;
-    axisTest.transform = (finalMatrix * axisTest.transform) as Matrix4;
+    gridTest.matrix = (finalMatrix * gridTest.matrix) as Matrix4;
+    axisTest.matrix = (finalMatrix * axisTest.matrix) as Matrix4;
 
   }
 
@@ -153,16 +153,16 @@ class SceneViewVectors extends Scene{
     cameraTest
       ..yfov = radians(45.0)
       ..targetPosition = cameraTargetPosition
-      ..position = cameraPosition;
+      ..translation = cameraPosition;
 
     AxisModel axisTest = new AxisModel()
-      ..position = new Vector3(0.0,0.0,0.0)
-      ..transform.rotateY(radians(0.0));
+      ..translation = new Vector3(0.0,0.0,0.0)
+      ..matrix.rotateY(radians(0.0));
     models.add(axisTest);
 
     // à tester :
 
-    axisTest.transform = cameraTest.transform;
+    axisTest.matrix = cameraTest.matrix;
 
   }
 
@@ -178,21 +178,21 @@ class SceneViewVectors extends Scene{
   }
 
   //Todo : optimiser en ne rendant qu'un seul MultiLineModel
-  void buildNormals(Model model) {
+  void buildNormals(Mesh model) {
     List<Vector3> normalPoints = new List();
 
-    for(int i = 0; i < model.mesh.vertexNormalsCount; i++){
+    for(int i = 0; i < model.primitive.vertexNormalsCount; i++){
 
       //the normal
-      double nX = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 0];
-      double nY = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 1];
-      double nZ = model.mesh.vertexNormals[i * model.mesh.vertexNormalsDimensions + 2];
+      double nX = model.primitive.vertexNormals[i * model.primitive.vertexNormalsDimensions + 0];
+      double nY = model.primitive.vertexNormals[i * model.primitive.vertexNormalsDimensions + 1];
+      double nZ = model.primitive.vertexNormals[i * model.primitive.vertexNormalsDimensions + 2];
       Vector3 normal = new Vector3(nX, nY, nZ);
 
       //position of the normal
-      double pX = model.mesh.vertices[i * model.mesh.vertexDimensions + 0];
-      double pY = model.mesh.vertices[i * model.mesh.vertexDimensions + 1];
-      double pZ = model.mesh.vertices[i * model.mesh.vertexDimensions + 2];
+      double pX = model.primitive.vertices[i * model.primitive.vertexDimensions + 0];
+      double pY = model.primitive.vertices[i * model.primitive.vertexDimensions + 1];
+      double pZ = model.primitive.vertices[i * model.primitive.vertexDimensions + 2];
       Vector3 vertex = new Vector3(pX, pY, pZ);
 
       normalPoints.add(vertex);
@@ -200,7 +200,7 @@ class SceneViewVectors extends Scene{
     }
 
     MultiLineModel normals = new MultiLineModel(normalPoints)
-      ..mesh.mode = DrawMode.LINES
+      ..primitive.mode = DrawMode.LINES
       ..material = matVectorA;
     models.add(normals);
   }

@@ -16,23 +16,21 @@ import 'package:webgl/src/gtlf/node.dart';
 
 class ProgramSetting{
 
-  final GLTFNode _node;
-
-  GLTFMesh get mesh => _node.mesh;
+  final GLTFMesh _mesh;
 
   KronosRawMaterial material;
   List<WebGLProgram> programs = new List();
   Map<String, webgl.Buffer> buffers = new Map();
 
-  Matrix4 get _modelMatrix => (_node.parentMatrix * _node.matrix) as Matrix4;
+  Matrix4 modelMatrix;// => (_node.parentMatrix * _node.matrix) as Matrix4;
   Matrix4 get _viewMatrix => mainCamera.viewMatrix;
   Matrix4 get _projectionMatrix => mainCamera.projectionMatrix;
 
-  ProgramSetting(this._node){
+  ProgramSetting(this._mesh){
     //debug.logCurrentFunction();
 
-    for (int i = 0; i < mesh.primitives.length; i++) {
-      GLTFMeshPrimitive primitive = mesh.primitives[i];
+    for (int i = 0; i < _mesh.primitives.length; i++) {
+      GLTFMeshPrimitive primitive = _mesh.primitives[i];
 
       bool debug = false;
       bool debugWithDebugMaterial = true;
@@ -98,8 +96,8 @@ class ProgramSetting{
   void drawPrimitives() {
     material.pvMatrix = (_projectionMatrix * _viewMatrix) as Matrix4;
 
-    for (int i = 0; i < mesh.primitives.length; i++) {
-      GLTFMeshPrimitive primitive = mesh.primitives[i];
+    for (int i = 0; i < _mesh.primitives.length; i++) {
+      GLTFMeshPrimitive primitive = _mesh.primitives[i];
       WebGLProgram program = programs[i];
       gl.useProgram(program.webGLProgram);
 
@@ -107,9 +105,9 @@ class ProgramSetting{
       _setupPrimitiveBuffers(program, primitive);
 
       material.setUniforms(
-          program, _modelMatrix, _viewMatrix, _projectionMatrix, mainCamera.position, light);
+          program, modelMatrix, _viewMatrix, _projectionMatrix, mainCamera.translation, light);
 
-      _drawPrimitive(program.webGLProgram, primitive);
+      _drawPrimitive(primitive);
     }
   }
 
@@ -234,21 +232,14 @@ class ProgramSetting{
     }
   }
 
-  void _drawPrimitive(webgl.Program program, GLTFMeshPrimitive primitive) {
-    //debug.logCurrentFunction();
-
-    //debug.logCurrentFunction('${_node.nodeId}');
-
-    if (primitive.indices == null) {
-      String attributName = 'POSITION';
-      GLTFAccessor accessorPosition = primitive.attributes[attributName];
+  void _drawPrimitive(GLTFMeshPrimitive primitive) {
+    if (primitive.indices == null || primitive.mode == DrawMode.POINTS) {
+      GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
       if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
           primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-//      debug.logCurrentFunction(
-//          'gl.drawElements(${primitive.mode}, ${accessorIndices.count}, ${accessorIndices.componentType}, ${accessorIndices.byteOffset});');
       gl.drawElements(primitive.mode, accessorIndices.count,
           accessorIndices.componentType, 0);
     }

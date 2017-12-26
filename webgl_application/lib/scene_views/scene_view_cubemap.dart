@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
@@ -27,7 +27,7 @@ class SceneViewCubeMap extends Scene{
     //Cameras
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(0.0, 5.0, -10.0);
+      ..translation = new Vector3(0.0, 5.0, -10.0);
     Context.mainCamera = camera;
 
     List<List<ImageElement>> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
@@ -38,7 +38,7 @@ class SceneViewCubeMap extends Scene{
 
     SkyBoxModel skyBoxModel = new SkyBoxModel()
       ..material = materialSkyBox
-      ..transform.scale(1.0);
+      ..matrix.scale(1.0);
     models.add(skyBoxModel);
 
 
@@ -52,21 +52,21 @@ class SceneViewCubeMap extends Scene{
     models.add(grid);
 
     SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 32, segmentH: 32)
-      ..transform.translate(0.0, 0.0, 0.0)
-      ..transform.scale(1.0)
+      ..matrix.translate(0.0, 0.0, 0.0)
+      ..matrix.scale(1.0)
       ..material = material;
     models.add(sphere);
 
     QuadModel plane = new QuadModel()
-      ..transform.translate(2.0, 0.0, 0.0)
-      ..transform.scale(1.0)
-      ..transform.rotateX(radians(-90.0))
+      ..matrix.translate(2.0, 0.0, 0.0)
+      ..matrix.scale(1.0)
+      ..matrix.rotateX(radians(-90.0))
       ..material = material;
     models.add(plane);
 
     CubeModel cube = new CubeModel()
-      ..transform.translate(0.0, 1.0, 2.0)
-      ..transform.scale(1.0)
+      ..matrix.translate(0.0, 1.0, 2.0)
+      ..matrix.scale(1.0)
       ..material = material;
     models.add(cube);
   }

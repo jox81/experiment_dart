@@ -3,7 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
@@ -29,7 +29,7 @@ class SceneViewWebGLEdit extends Scene{
     //Cameras
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(3.0, 10.0, 10.0);
+      ..translation = new Vector3(3.0, 10.0, 10.0);
     Context.mainCamera = camera;
 
     MultiLineModel line = new MultiLineModel([

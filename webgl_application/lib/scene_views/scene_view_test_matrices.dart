@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
@@ -23,10 +23,10 @@ class SceneViewTestMatrices extends Scene{
     //Cameras
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
       ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-      ..position = new Vector3(0.0, 2.0, -1.0);
+      ..translation = new Vector3(0.0, 2.0, -1.0);
     Context.mainCamera = camera;
 
-    print('Context.mainCamera.position : \n${Context.mainCamera.position}');
+    print('Context.mainCamera.position : \n${Context.mainCamera.translation}');
     print('Context.mainCamera.targetPosition : \n${Context.mainCamera.targetPosition}');
     print('Context.mainCamera.lookAtMatrix : \n${Context.mainCamera.viewMatrix}');
     print('Context.mainCamera.perspectiveMatrix : \n${Context.mainCamera.projectionMatrix}');
@@ -36,12 +36,12 @@ class SceneViewTestMatrices extends Scene{
     print('Context.mainCamera.viewProjectionMatrix calc: \n${Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix}');
 
     PointModel model = new PointModel()
-      ..position = new Vector3(1.0,0.0,0.0);
+      ..translation = new Vector3(1.0,0.0,0.0);
     models.add(model);
 
-    print('model.transform : \n${model.transform}');
+    print('model.transform : \n${model.matrix}');
     print('Context.modelMatrix : \n${Context.modelMatrix}');
-    print('Context.modelMatrix m : \n${Context.modelMatrix * model.transform}');
+    print('Context.modelMatrix m : \n${Context.modelMatrix * model.matrix}');
 
 
     /// from refelctions.vs.glsl
@@ -57,7 +57,7 @@ class SceneViewTestMatrices extends Scene{
     //
     aVertexPosition = new Vector3(0.0,0.0,0.0);
 
-    uModelMatrix = model.transform;
+    uModelMatrix = model.matrix;
     uViewMatrix = Context.mainCamera.viewMatrix;
     uModelViewMatrix = (Context.mainCamera.viewMatrix * uModelMatrix) as Matrix4;
     uProjectionMatrix = Context.mainCamera.projectionMatrix;
@@ -68,9 +68,9 @@ class SceneViewTestMatrices extends Scene{
 
     updateSceneFunction = () {
       print('##');
-      print('model.transform : \n${model.transform}');
+      print('model.transform : \n${model.matrix}');
       print('Context.modelMatrix : \n${Context.modelMatrix}');
-      print('Context.modelMatrix m : \n${Context.modelMatrix * model.transform}');
+      print('Context.modelMatrix m : \n${Context.modelMatrix * model.matrix}');
     };
   }
 }

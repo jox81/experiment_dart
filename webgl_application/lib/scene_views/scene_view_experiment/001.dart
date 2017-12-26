@@ -1,12 +1,12 @@
-import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'dart:math';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-Model experiment() {
+Mesh experiment() {
 
   String vs = '''
     attribute vec3 aVertexPosition;
@@ -37,20 +37,20 @@ Model experiment() {
 
   //Material
   MaterialCustom materialCustom = new MaterialCustom(vs, fs);
-  materialCustom.setShaderAttributsVariables = (Model model) {
+  materialCustom.setShaderAttributsVariables = (Mesh model) {
       materialCustom.setShaderAttributArrayBuffer(
-          'aVertexPosition', model.mesh.vertices,  model.mesh.vertexDimensions);
+          'aVertexPosition', model.primitive.vertices,  model.primitive.vertexDimensions);
     };
-  materialCustom.setShaderUniformsVariables = (Model model) {
+  materialCustom.setShaderUniformsVariables = (Mesh model) {
       materialCustom.setShaderUniform("pointSize", pointSize);
     };
 
-  Mesh mesh = new Mesh()
+  MeshPrimitive primitive = new MeshPrimitive()
   ..mode = DrawMode.POINTS
   ..vertices = [
   ];
   CustomObject customObject = new CustomObject()
-    ..mesh = mesh
+    ..primitive = primitive
     ..material = materialCustom;
 
   Vector4 position = new Vector4(0.0, 0.0, 0.0, 1.0);
@@ -58,7 +58,7 @@ Model experiment() {
     pointSize = 100 * cos(Time.currentTime / 500);
     position.x = cos(Time.currentTime / 1000) * .4;
     print(cos(Time.currentTime / 1000));
-    mesh.vertices = position.storage;
+    primitive.vertices = position.storage;
   };
 
   return customObject;

@@ -1,10 +1,10 @@
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
-import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'dart:typed_data';
 import 'dart:async';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
@@ -41,7 +41,7 @@ class SceneViewParticle extends Scene{
     };
   }
 
-  Model experiment(IUpdatableScene scene) {
+  Mesh experiment(IUpdatableScene scene) {
     num shaderTime = 0.0;
 
     //Material
@@ -83,7 +83,7 @@ class SceneViewParticle extends Scene{
     MaterialCustom materialCustom = new MaterialCustom(
         vShader, fShader);
     materialCustom
-      ..setShaderAttributsVariables = (Model model) {
+      ..setShaderAttributsVariables = (Mesh model) {
         materialCustom.setShaderAttributData(
             'varA', varA);
         materialCustom.setShaderAttributData(
@@ -91,9 +91,9 @@ class SceneViewParticle extends Scene{
         materialCustom.setShaderAttributData(
             'varCt', varCt);
         materialCustom.setShaderAttributArrayBuffer(
-            'a_vertex', model.mesh.vertices, model.mesh.vertexDimensions);
+            'a_vertex', model.primitive.vertices, model.primitive.vertexDimensions);
       }
-      ..setShaderUniformsVariables = (Model model) {
+      ..setShaderUniformsVariables = (Mesh model) {
         materialCustom.setShaderUniform('u_time', shaderTime);
       };
     materials.add(materialCustom);
@@ -112,10 +112,10 @@ class SceneViewParticle extends Scene{
     }
 
     CustomObject customObject = new CustomObject()
-    ..mesh = new Mesh()
-    ..mesh.mode = DrawMode.POINTS
-    ..mesh.vertexDimensions = 2
-    ..mesh.vertices = pstart
+    ..primitive = new MeshPrimitive()
+    ..primitive.mode = DrawMode.POINTS
+    ..primitive.vertexDimensions = 2
+    ..primitive.vertices = pstart
     ..material = materialCustom;
 
     customObject.updateFunction = () {

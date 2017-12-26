@@ -1,17 +1,17 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/geometry/object3d.dart';
+import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/geometry/meshes.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @MirrorsUsed(targets: const [
   ModelType,
-  Model,
+  Mesh,
   CustomObject,
   JsonObject,
   PointModel,
@@ -54,17 +54,17 @@ enum ModelType {
   axisPoints,
 }
 
-abstract class Model extends Object3d {
+abstract class Mesh extends Node {
 
   ModelType modelType;
 
-  Mesh _mesh = new Mesh();
-  Mesh get mesh => _mesh;
-  set mesh(Mesh value) => _mesh = value;
+  MeshPrimitive _primitive = new MeshPrimitive();
+  MeshPrimitive get primitive => _primitive;
+  set primitive(MeshPrimitive value) => _primitive = value;
 
-  Material _material;
-  Material get material => _material;
-  set material(Material value) => _material = value; //Animation
+  /// This Material override all primitives Materials
+  Material get material => _primitive.material;
+  set material(Material value) => _primitive.material = value; //Animation
 
   IGizmo _gizmo;
   IGizmo get gizmo => _gizmo;
@@ -77,32 +77,30 @@ abstract class Model extends Object3d {
   List<Triangle> _faces;
   List<Triangle> getFaces() {
     _faces = new List();
-    for (Triangle triangle in mesh.getFaces()) {
-      _faces.add(new Triangle.copy(triangle)..transform(transform));
+    for (Triangle triangle in primitive.getFaces()) {
+      _faces.add(new Triangle.copy(triangle)..transform(matrix));
     }
     return _faces;
   }
 
   void update(){
     super.update();
-    material.update(this);
+    primitive.material.update(this);
   }
 
   void render() {
-//    window.console.time('03_models::render');
-    if (material == null) {
+    if (primitive.material == null) {
       throw new Exception(
           "Can't render object : the material mustn't be null to render the mesh in ${this.runtimeType}");
     }
 
     if (!visible) return;
 
-    material.render(this);
-//    window.console.timeEnd('03_models::render');
+    primitive.material.render(this);
   }
 
-  factory Model.createByType(ModelType modelType, {bool doInitMaterial: true}) {
-    Model newModel;
+  factory Mesh.createByType(ModelType modelType, {bool doInitMaterial: true}) {
+    Mesh newModel;
     switch (modelType) {
       case ModelType.point:
         newModel = new PointModel(doInitMaterial: doInitMaterial);
@@ -141,26 +139,26 @@ abstract class Model extends Object3d {
     return newModel;
   }
 
-  Model() {
+  Mesh() {
 //    throw new Exception("Don't use this CTOR");
   }
 
   // >> JSON
 
-  factory Model.fromJson(Map json) {
+  factory Mesh.fromJson(Map json) {
     ModelType modelType = ModelType.values.firstWhere(
         (m) => m.toString() == json["type"],
         orElse: () => null);
 
-    Model object3d = new Model.createByType(modelType, doInitMaterial: true)
+    Mesh object3d = new Mesh.createByType(modelType, doInitMaterial: true)
       ..name = json["name"].toString();
 //      ..rotation = new Matrix3.fromList(json["rotation"])
 //      ..scale = ??;
     if(json["position"] != null) {
-      object3d.position = new Vector3.fromFloat32List(new Float32List.fromList(json["position"]as List<double>));
+      object3d.translation = new Vector3.fromFloat32List(new Float32List.fromList(json["position"]as List<double>));
     }
     if(json["transform"] != null) {
-      object3d.transform = new Matrix4.fromFloat32List(new Float32List.fromList(json["transform"] as List<double>));
+      object3d.matrix = new Matrix4.fromFloat32List(new Float32List.fromList(json["transform"] as List<double>));
     }
     return object3d;
   }
@@ -172,46 +170,46 @@ abstract class Model extends Object3d {
 //    json["position"] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
 //    json["rotation"] = rotation.storage;//.map((v)=>UtilsMath.roundPrecision(v)).toList();
 //    json["scale"] = ??;
-    json["transform"] = transform.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+    json["transform"] = matrix.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     return json;
   }
 }
 
-class CustomObject extends Model {
+class CustomObject extends Mesh {
   ModelType get modelType => ModelType.custom;
   CustomObject();
 }
 
-class JsonObject extends Model {
+class JsonObject extends Mesh {
   ModelType get modelType => ModelType.json;
   JsonObject(Map jsonFile, {bool doInitMaterial: true}) {
-    mesh
+    primitive
       ..vertices = jsonFile['meshes'][0]['vertices'] as List<double>
       ..indices = (jsonFile['meshes'][0]['faces']).expand((List<int> i) => i).toList() as List<int>
       ..textureCoords = jsonFile['meshes'][0]['texturecoords'][0] as List<double>
-      ..vertexNormals = jsonFile['meshes'][0]['normals'] as List<double>;
-    material = new MaterialBase();
+      ..vertexNormals = jsonFile['meshes'][0]['normals'] as List<double>
+      ..material = new MaterialBase();
   }
 }
 
-class PointModel extends Model {
+class PointModel extends Mesh {
   ModelType get modelType => ModelType.point;
   PointModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Point();
-    material = doInitMaterial
+    primitive = new MeshPrimitive.Point()
+    ..material = doInitMaterial
         ? new MaterialPoint(pointSize: 5.0, color: _defaultModelColor)
         : null;
   }
 }
 
-class LineModel extends Model {
+class LineModel extends Mesh {
   ModelType get modelType => ModelType.line;
 
   final Vector3 point1, point2;
 
   LineModel(this.point1, this.point2, {bool doInitMaterial: true}) {
-    mesh = new Mesh.Line([point1, point2]);
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Line([point1, point2])
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 
   @override
@@ -221,83 +219,83 @@ class LineModel extends Model {
   }
 
   void _update() {
-    mesh.vertices = [];
-    mesh.vertices..addAll(point1.storage)..addAll(point2.storage);
+    primitive.vertices = [];
+    primitive.vertices..addAll(point1.storage)..addAll(point2.storage);
   }
 }
 
-class MultiLineModel extends Model {
+class MultiLineModel extends Mesh {
   ModelType get modelType => ModelType.multiLine;
   MultiLineModel(List<Vector3> points, {bool doInitMaterial: true}) {
-    mesh = new Mesh.Line(points);
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Line(points)
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }
 
-class TriangleModel extends Model {
+class TriangleModel extends Mesh {
   ModelType get modelType => ModelType.triangle;
   TriangleModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Triangle();
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Triangle()
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }
 
-class QuadModel extends Model {
+class QuadModel extends Mesh {
   ModelType get modelType => ModelType.quad;
   QuadModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Rectangle();
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Rectangle()
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }
 
-class PyramidModel extends Model {
+class PyramidModel extends Mesh {
   ModelType get modelType => ModelType.pyramid;
   PyramidModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Pyramid();
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Pyramid()
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }
 
-class CubeModel extends Model {
+class CubeModel extends Mesh {
   ModelType get modelType => ModelType.cube;
   CubeModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Cube();
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Cube()
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }
 
-class SphereModel extends Model {
+class SphereModel extends Mesh {
   ModelType get modelType => ModelType.sphere;
   SphereModel(
       {double radius: 1.0,
       int segmentV: 16,
       int segmentH: 16,
       bool doInitMaterial: true}) {
-    mesh =
-        new Mesh.Sphere(radius: radius, segmentV: segmentV, segmentH: segmentH);
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive =
+        new MeshPrimitive.Sphere(radius: radius, segmentV: segmentV, segmentH: segmentH)
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }
 
 //Todo : create a CompoundObjectModel
 
-class AxisModel extends Model {
+class AxisModel extends Mesh {
   ModelType get modelType => ModelType.axis;
   AxisModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Axis();
-    material = doInitMaterial ? new MaterialPoint() : null;
+    primitive = new MeshPrimitive.Axis()
+    ..material = doInitMaterial ? new MaterialPoint() : null;
   }
 }
 
-class AxisPointsModel extends Model {
+class AxisPointsModel extends Mesh {
   ModelType get modelType => ModelType.axisPoints;
   AxisPointsModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.AxisPoints();
-    material = doInitMaterial ? new MaterialPoint(pointSize: 5.0) : null;
+    primitive = new MeshPrimitive.AxisPoints()
+    ..material = doInitMaterial ? new MaterialPoint(pointSize: 5.0) : null;
   }
 }
 
-class FrustrumGizmo extends Model implements IGizmo {
+class FrustrumGizmo extends Mesh implements IGizmo {
   @override
   bool visible = false;
 
@@ -327,7 +325,7 @@ class FrustrumGizmo extends Model implements IGizmo {
   final PointModel cameraTargetPositionPoint = new PointModel();
 
   @override
-  List<Model> gizmoModels = [];
+  List<Mesh> gizmoModels = [];
 
   FrustrumGizmo(CameraPerspective camera) : _camera = camera {
     _createFrustrumModel(_camera.viewProjectionMatrix);
@@ -342,41 +340,41 @@ class FrustrumGizmo extends Model implements IGizmo {
 
     //near plane
     gizmoModels
-        .add(new LineModel(c0, c1)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c0, c1)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c1, c2)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c1, c2)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c2, c3)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c2, c3)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c3, c0)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c3, c0)..primitive.material = frustrumDirectionLineMaterial);
 
     //far plane
     gizmoModels
-        .add(new LineModel(c4, c5)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c4, c5)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c5, c6)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c5, c6)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c6, c7)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c6, c7)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c7, c4)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c7, c4)..primitive.material = frustrumDirectionLineMaterial);
 
     //sides
     gizmoModels
-        .add(new LineModel(c0, c4)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c0, c4)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c1, c5)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c1, c5)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c2, c6)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c2, c6)..primitive.material = frustrumDirectionLineMaterial);
     gizmoModels
-        .add(new LineModel(c3, c7)..material = frustrumDirectionLineMaterial);
+        .add(new LineModel(c3, c7)..primitive.material = frustrumDirectionLineMaterial);
 
     gizmoModels.add(new LineModel(cameraPosition, cameraTargetPosition)
-      ..material = frustrumDirectionLineMaterial);
+      ..primitive.material = frustrumDirectionLineMaterial);
 
     gizmoModels.add(cameraPositionPoint
-      ..material = frustrumPositionPointMaterial); //position
+      ..primitive.material = frustrumPositionPointMaterial); //position
     gizmoModels.add(cameraTargetPositionPoint
-      ..material = frustrumPositionPointMaterial); //target
+      ..primitive.material = frustrumPositionPointMaterial); //target
 
     updateGizmo();
   }
@@ -387,29 +385,29 @@ class FrustrumGizmo extends Model implements IGizmo {
     new Frustum.matrix(_vpmatrix)
       ..calculateCorners(c5, c4, c0, c1, c6, c7, c3, c2);
 
-    cameraPosition.setFrom(_camera.position);
+    cameraPosition.setFrom(_camera.translation);
     cameraTargetPosition.setFrom(_camera.targetPosition);
 
-    cameraPositionPoint..position = _camera.position;
-    cameraTargetPositionPoint..position = _camera.targetPosition;
+    cameraPositionPoint..translation = _camera.translation;
+    cameraTargetPositionPoint..translation = _camera.targetPosition;
   }
 
   @override
   void render() {
     if (!visible) return;
-    for (Model model in gizmoModels) {
+    for (Mesh model in gizmoModels) {
       model.render();
     }
   }
 }
 
-class GridModel extends Model {
+class GridModel extends Mesh {
   ModelType get modelType => ModelType.grid;
   GridModel({bool doInitMaterial: true}) {
     int gridHalfWidthCount = 5;
     constructGrid(gridHalfWidthCount);
 
-    material = doInitMaterial
+    primitive.material = doInitMaterial
         ? new MaterialBaseColor(new Vector4(0.5, 0.5, 0.5, 1.0))
         : null;
   }
@@ -433,12 +431,12 @@ class GridModel extends Model {
       points.add(p2);
     }
 
-    mesh = new Mesh.Line(points)..mode = DrawMode.LINES;
+    primitive = new MeshPrimitive.Line(points)..mode = DrawMode.LINES;
   }
 }
 
 //Todo : convert from javascript
-class TorusModel extends Model {
+class TorusModel extends Mesh {
   /*
   // Creates a 3D torus in the XY plane, returns the data in a new object composed of
 //   several Float32Array objects named 'vertices' and 'colors', according to
@@ -488,12 +486,12 @@ function makeTorus(r, sr, n, sn, k)
 class SkyBoxModel extends CubeModel {
   ModelType get modelType => ModelType.skyBox;
   SkyBoxModel({bool doInitMaterial: true}) {
-    mesh = new Mesh.Cube();
-    material = doInitMaterial ? new MaterialPoint() : null;
+    primitive = new MeshPrimitive.Cube()
+    ..material = doInitMaterial ? new MaterialPoint() : null;
   }
 }
 
-class VectorModel extends Model {
+class VectorModel extends Mesh {
   ModelType get modelType => ModelType.vector;
   final Vector3 vec;
   VectorModel(this.vec, {bool doInitMaterial: true}) {
@@ -501,8 +499,8 @@ class VectorModel extends Model {
 
     points..add(new Vector3.all(0.0))..add(vec);
 
-    mesh = new Mesh.Line(points)..mode = DrawMode.LINES;
-
-    material = doInitMaterial ? new MaterialBase() : null;
+    primitive = new MeshPrimitive.Line(points)
+      ..mode = DrawMode.LINES
+    ..material = doInitMaterial ? new MaterialBase() : null;
   }
 }

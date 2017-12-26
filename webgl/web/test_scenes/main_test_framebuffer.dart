@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -30,7 +30,7 @@ class Webgl01 {
   WebGLBuffer vertexBuffer;
   WebGLBuffer indicesBuffer;
 
-  List<Model> models = new List();
+  List<Mesh> models = new List();
 
   WebGLProgram shaderProgram;
 
@@ -58,12 +58,12 @@ class Webgl01 {
   void setupCamera()  {
     Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
-      ..position = new Vector3(10.0,10.0,10.0);
+      ..translation = new Vector3(10.0,10.0,10.0);
   }
 
   void setupMeshes() {
     QuadModel quad = new QuadModel()
-      ..transform.translate(0.0, 0.0, 0.0);
+      ..matrix.translate(0.0, 0.0, 0.0);
     models.add(quad);
 
     // Create a framebuffer and attach the texture.
@@ -86,7 +86,7 @@ class Webgl01 {
     gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    for(Model model in models){
+    for(Mesh model in models){
       model.render();
     }
 

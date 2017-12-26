@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
-import 'package:webgl/src/geometry/object3d.dart';
+import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'context.dart';
 @MirrorsUsed(
     targets: const [
@@ -19,7 +19,7 @@ enum CameraType{
   orthographic
 }
 
-abstract class Camera extends Object3d {
+abstract class Camera extends Node {
   static int nextId = 0;
   final int cameraId = nextId++;
 
@@ -35,12 +35,12 @@ abstract class Camera extends Object3d {
     _isActive = value;
   }
 
-  set position(Vector3 value) {
-   super.position = value;
+  set translation(Vector3 value) {
+   super.translation = value;
     update();
   }
-  set transform(Matrix4 value) {
-   super.transform = value;
+  set matrix(Matrix4 value) {
+   super.matrix = value;
     update();
   }
 
@@ -133,7 +133,7 @@ class CameraPerspective extends Camera{
   }
 
   Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
-  Vector3 get frontDirection => targetPosition - position;
+  Vector3 get frontDirection => targetPosition - translation;
 
   Vector3 get zAxis => frontDirection.normalized();
   Vector3 get xAxis => zAxis.cross(upDirection);
@@ -163,7 +163,7 @@ class CameraPerspective extends Camera{
     Vector3 z = new Vector3(0.0, 0.0, 1.0);
     Vector3 forwardHorizontal =
         new Vector3(targetPosition.x, 0.0, targetPosition.z) -
-            new Vector3(position.x, 0.0, position.z);
+            new Vector3(translation.x, 0.0, translation.z);
     forwardHorizontal.normalize();
     double mirrorFactor = forwardHorizontal.x > 0 ? 1.0 : -1.0;
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
@@ -198,13 +198,13 @@ class CameraPerspective extends Camera{
   update() {
     _aspectRatio = Context.viewAspectRatio;
     setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, _znear, _zfar);
-    setViewMatrix(_viewMatrix, position, _targetPosition, upDirection);
+    setViewMatrix(_viewMatrix, translation, _targetPosition, upDirection);
     _updateGizmo();
   }
 
   @override
   String toString() {
-    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $position, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix}';
+    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $translation, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix}';
   }
 
   // >> JSON
@@ -214,7 +214,7 @@ class CameraPerspective extends Camera{
     _znear = json['zNear'] as double;
     _zfar = json['zFar'] as double;
     targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition'] as List<double>));
-    position = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
+    translation = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
     showGizmo = json['showGizmo'] as bool;
   }
 
@@ -224,7 +224,7 @@ class CameraPerspective extends Camera{
     json['zNear'] = UtilsMath.roundPrecision(_znear);//.toDouble();
     json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
     json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
-    json['position'] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+    json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     json['showGizmo'] = showGizmo;
     return json;
   }
@@ -274,13 +274,13 @@ class CameraOrthographic extends Camera{
   // >> JSON
 
   CameraOrthographic.fromJson(Map json) {
-    position = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
+    translation = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
     showGizmo = json['showGizmo'] as bool;
   }
 
   Map toJson(){
     Map json = new Map<String, dynamic>();
-    json['position'] = position.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+    json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
     json['showGizmo'] = showGizmo;
     return json;
   }

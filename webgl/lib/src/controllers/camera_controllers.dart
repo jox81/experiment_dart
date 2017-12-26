@@ -98,12 +98,12 @@ class CameraController {
             Math.cos((xAngleRot) * (Math.PI / 180)) *
             Math.cos((yAngleRot) * (Math.PI / 180));
 
-    _camera.position = _camera.position..setValues(camX, camY, camZ);
+    _camera.translation = _camera.translation..setValues(camX, camY, camZ);
   }
 
   void pan(double deltaX, double deltaY) {
-    _camera.position += _camera.xAxis * deltaX;
-    _camera.position += _camera.yAxis * deltaY;
+    _camera.translation += _camera.xAxis * deltaX;
+    _camera.translation += _camera.yAxis * deltaY;
     _camera.targetPosition += _camera.xAxis * deltaX;
     _camera.targetPosition += _camera.yAxis * deltaY;
   }

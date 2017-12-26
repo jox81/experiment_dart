@@ -5,7 +5,7 @@ import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/geometry/models.dart';
+import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
@@ -65,12 +65,12 @@ Future main() async {
     });
     test("test camera position", () {
       CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
-      expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
+      expect(camera.translation == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera position new", () {
       CameraPerspective camera = new CameraPerspective(25.0,1.0,10.0)
-        ..position = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['position'] as List<double>));
-      expect(camera.position == new Vector3(10.0,10.0,10.0),isTrue);
+        ..translation = new Vector3.fromFloat32List(new Float32List.fromList(testJson['scene']['cameras'][0]['position'] as List<double>));
+      expect(camera.translation == new Vector3(10.0,10.0,10.0),isTrue);
     });
     test("test camera showGizmo", () {
       CameraPerspective camera = new CameraPerspective.fromJson(testJson['scene']['cameras'][0] as Map);
@@ -80,35 +80,35 @@ Future main() async {
 
   group("test model 01", () {
     test("test model", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][0] as Map);
+      Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model is QuadModel,isTrue);
     });
     test("test model name", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][0] as Map);
+      Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model.name == 'quad',isTrue);
     });
     test("test model position", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][0] as Map);
+      Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
-      expect(model.position == new Vector3(5.0, 0.0, -5.0),isTrue);
+      expect(model.translation == new Vector3(5.0, 0.0, -5.0),isTrue);
     });
   });
 
   group("test model 02", () {
     test("test model", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][1] as Map);
+      Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
 
       expect(model is CubeModel,isTrue);
     });
     test("test model name", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][1] as Map);
+      Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
       expect(model.name == 'cube',isTrue);
     });
     test("test model position", () {
-      Model model = new Model.fromJson(testJson['scene']['models'][1] as Map);
-      expect(model.position == new Vector3(0.0, 0.0, 0.0),isTrue);
+      Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
+      expect(model.translation == new Vector3(0.0, 0.0, 0.0),isTrue);
     });
   });
 

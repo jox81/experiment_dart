@@ -93,7 +93,7 @@ class Interaction {
     if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
       if ((elementDebugInfoText != null)) {
         elementDebugInfoText.text =
-            "Camera Position: ${mainCamera.position}";
+            "Camera Position: ${mainCamera.translation}";
       }
     } else {}
     _currentlyPressedKeys[event.keyCode] = true;

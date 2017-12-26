@@ -68,6 +68,10 @@ class ShaderSource{
     'debug_shader' :[
       'shaders/debug_shader/debug_shader.vs.glsl',
       'shaders/debug_shader/debug_shader.fs.glsl'
+    ],
+    'sao' :[
+      'shaders/sao/sao.vs.glsl',
+      'shaders/sao/sao.fs.glsl'
     ]
   };
 
