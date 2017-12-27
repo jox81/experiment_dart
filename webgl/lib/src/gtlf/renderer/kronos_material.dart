@@ -156,19 +156,17 @@ abstract class KronosRawMaterial{
 }
 
 class KronosPRBMaterial extends KronosRawMaterial{
-  final int skipTexture;
-  final GlobalState globalState;
 
   ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_pbr_test'];
 
   final bool hasNormalAttribut;
   final bool hasTangentAttribut;
   final bool hasUVAttribut;
+  final bool hasLODExtension;
 
-  bool get hasLODExtension => globalState.hasLODExtension != null;// Todo (jpu) :
   bool get useLod => true;
 
-  KronosPRBMaterial(this.skipTexture, this.globalState, this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut);
+  KronosPRBMaterial(this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut, this.hasLODExtension);
 
   //> BaseColor
   webgl.Texture baseColorMap;

@@ -105,7 +105,7 @@ class KronosMesh {
       }
 
       // Material
-      material = primitive.material;
+      material = primitive.baseMaterial;
 
       Map<String, ImageInfo> imageInfos = initTextures(gl, gltf);
 

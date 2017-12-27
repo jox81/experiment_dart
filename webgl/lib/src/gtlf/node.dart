@@ -1,6 +1,5 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/renderer/program_setting.dart';
 import 'package:webgl/src/gtlf/skin.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/camera.dart';
@@ -84,8 +83,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
     _parent = node;
   }
 
-  ProgramSetting programSetting;
-
   List<double> weights;
   GLTFSkin skin;
   bool isJoint = false;
@@ -100,15 +97,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
   Camera get camera => _camera;
   set camera(Camera value) {
     _camera = value;
-  }
-
-  void render(){
-    if (mesh != null) {
-      if (mesh.primitives != null) {
-        mesh.modelMatrix = (parentMatrix * matrix) as Matrix4;
-        mesh.render();
-      }
-    }
   }
 
   @override

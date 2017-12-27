@@ -5,17 +5,17 @@ import 'dart:typed_data';
 import 'dart:convert' show BASE64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/renderer/program_setting.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart' as ctxWrapper;
 import 'package:webgl/src/interaction.dart';
+import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-
+import 'package:webgl/src/gtlf/mesh_primitive.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
-
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/node.dart';
@@ -35,7 +35,7 @@ DirectionalLight light = new DirectionalLight()
 
 CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
 
-int skipTexture;
+int _reservedTextureUnits;
 
 class GLTFRenderer implements Interactable {
 
@@ -161,7 +161,7 @@ class GLTFRenderer implements Interactable {
     cubeMapTextureSpecular = TextureUtils.createCubeMapWithImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 
-    skipTexture = 3;
+    _reservedTextureUnits = 3;
 
     bool useDebugTexture = false;
     for (int i = 0; i < gltfProject.textures.length; i++) {
@@ -209,7 +209,7 @@ class GLTFRenderer implements Interactable {
       }
 
       //create model texture
-      webgl.Texture texture = createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + skipTexture, imageElement, magFilter, minFilter, wrapS, wrapT);
+      webgl.Texture texture = createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + _reservedTextureUnits, imageElement, magFilter, minFilter, wrapS, wrapT);
       if(gltfTexture != null){
         gltfTexture.webglTexture = texture;
       }
@@ -296,8 +296,169 @@ class GLTFRenderer implements Interactable {
     //debug.logCurrentFunction();
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
-      node.render();
+      drawNode(node);
       drawNodes(node.children);
+    }
+  }
+
+  void drawNode(GLTFNode node){
+    if (node.mesh != null) {
+      GLTFMesh mesh = node.mesh;
+      if (mesh.primitives != null) {
+
+        mesh.bindMaterials(globalState.hasLODExtension != null, _reservedTextureUnits);
+
+        for (int i = 0; i < mesh.primitives.length; i++) {
+          GLTFMeshPrimitive primitive = mesh.primitives[i];
+
+          WebGLProgram program = primitive.program;
+          gl.useProgram(program.webGLProgram);
+
+          _setupPrimitiveBuffers(program, primitive);
+
+          primitive.material.pvMatrix = (mainCamera.projectionMatrix * mainCamera.viewMatrix) as Matrix4;
+          primitive.material.setUniforms(
+              program, (node.parentMatrix * node.matrix) as Matrix4, mainCamera.viewMatrix, mainCamera.projectionMatrix, mainCamera.translation, light);
+
+          _drawPrimitive(primitive);
+        }
+      }
+    }
+  }
+
+  void _setupPrimitiveBuffers(WebGLProgram program, GLTFMeshPrimitive primitive) {
+    //debug.logCurrentFunction();
+
+    _bindVertexArrayData(program, primitive);
+
+    if (primitive.indices != null) {
+      _bindIndices(primitive);
+    }
+  }
+
+  void _bindVertexArrayData(
+      WebGLProgram program, GLTFMeshPrimitive primitive) {
+    //debug.logCurrentFunction();
+
+    for (String attributName in primitive.attributes.keys) {
+      GLTFAccessor accessor = primitive.attributes[attributName];
+
+      if(accessor.bufferView == null) throw 'bufferView must be defined';
+      if(accessor.bufferView.buffer == null) throw 'buffer must be defined';
+
+      Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
+          accessor.byteOffset + accessor.bufferView.byteOffset,
+          accessor.count * (accessor.byteStride ~/ accessor.componentLength));
+
+      //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
+      assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
+          accessor.componentLength ==
+          0);
+
+      //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
+      assert(accessor.byteOffset +
+          accessor.byteStride * (accessor.count - 1) +
+          (accessor.components * accessor.componentLength) <=
+          accessor.bufferView.byteLength, '${accessor.byteOffset +
+          accessor.byteStride * (accessor.count - 1) +
+          (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
+
+      //debug.logCurrentFunction('$attributName');
+      //debug.logCurrentFunction(verticesInfos.toString());
+
+      //>
+      _initBuffer(primitive, attributName, accessor.bufferView.usage, verticesInfos);
+
+      //>
+      _setAttribut(program, attributName, accessor);
+    }
+  }
+
+  /// BufferType bufferType
+  // Todo (jpu) : is it possible to use only one of the bufferViews
+  void _initBuffer(GLTFMeshPrimitive primitive, String bufferName, int bufferType, TypedData data) {
+    //debug.logCurrentFunction();
+
+    if(primitive.buffers[bufferName] == null) {
+      primitive.buffers[bufferName] =
+          gl.createBuffer();
+      gl.bindBuffer(bufferType, primitive.buffers[bufferName]);
+      gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
+    }else{
+      gl.bindBuffer(bufferType, primitive.buffers[bufferName]);
+    }
+  }
+
+  //text utils
+  String _capitalize(String s) =>
+      s[0].toUpperCase() + s.substring(1).toLowerCase();
+
+  /// [componentCount] => ex : 3 (x, y, z)
+  void _setAttribut(
+      WebGLProgram program, String attributName, GLTFAccessor accessor) {
+    //debug.logCurrentFunction('$attributName');
+
+    String shaderAttributName;
+    if (attributName == 'TEXCOORD_0') {
+      shaderAttributName = 'a_UV';
+    } else {
+      shaderAttributName = 'a_${_capitalize(attributName)}';
+    }
+
+    //>
+    program.attributLocations[attributName] ??= gl.getAttribLocation(program.webGLProgram, shaderAttributName);
+    int attributLocation = program.attributLocations[attributName];
+
+    //if exist
+    if (attributLocation >= 0) {
+      int components = accessor.components;
+
+      /// ShaderVariableType componentType
+      int componentType = accessor.componentType;
+      bool normalized = accessor.normalized;
+
+      // how many bytes to move to the next vertex
+      // 0 = use the correct stride for type and numComponents
+      int stride = accessor.byteStride;
+
+      // start at the beginning of the buffer that contains the sent data in the initBuffer.
+      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+      int offset = 0;
+
+      //debug.logCurrentFunction(
+//          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+      //debug.logCurrentFunction('$accessor');
+
+      //>
+      gl.vertexAttribPointer(attributLocation, components, componentType,
+          normalized, stride, offset);
+      gl.enableVertexAttribArray(
+          attributLocation); // turn on getting data out of a buffer for this attribute
+    }
+  }
+
+  void _bindIndices(GLTFMeshPrimitive primitive) {
+    //debug.logCurrentFunction();
+    GLTFAccessor accessorIndices = primitive.indices;
+    Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
+        .asUint16List(
+        accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+        accessorIndices.count);
+    //debug.logCurrentFunction(indices.toString());
+
+    _initBuffer(primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
+  }
+
+  void _drawPrimitive(GLTFMeshPrimitive primitive) {
+    if (primitive.indices == null || primitive.mode == DrawMode.POINTS) {
+      GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
+      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
+      gl.drawArrays(
+          primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
+    } else {
+      GLTFAccessor accessorIndices = primitive.indices;
+      gl.drawElements(primitive.mode, accessorIndices.count,
+          accessorIndices.componentType, 0);
     }
   }
 

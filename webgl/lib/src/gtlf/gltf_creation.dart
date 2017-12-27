@@ -548,7 +548,7 @@ class GLTFCreation{
     //material
     if (gltfSource.material != null) {
       GLTFPBRMaterial material = _getMaterial(gltfSource.material);
-      meshPrimitive.material = material;
+      meshPrimitive.baseMaterial = material;
     }
     return meshPrimitive;
   }

@@ -1,11 +1,9 @@
 import 'dart:typed_data';
 
-import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
-import 'package:webgl/src/gtlf/renderer/program_setting.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
@@ -13,24 +11,19 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int meshId = nextId++;
 
-  List<GLTFMeshPrimitive> primitives = new List();
-
   final List<double> weights; // Todo (jpu) : ?
 
-  ProgramSetting programSetting;
+  List<GLTFMeshPrimitive> primitives = new List();
+  bool _isMaterialInitialized = false;
 
   GLTFMesh({this.weights, String name: ''}) : super(name);
 
-  Matrix4 _modelMatrix;
-  set modelMatrix(Matrix4 value){
-    _modelMatrix = value;
-  }
-
-  void render(){
-    if (primitives != null) {
-      programSetting ??= new ProgramSetting(this);
-      programSetting.modelMatrix = _modelMatrix;
-      programSetting.drawPrimitives();
+  void bindMaterials(bool hasLODExtension, int reservedTextureUnits) {
+    if(!_isMaterialInitialized){
+      for (GLTFMeshPrimitive primitive in primitives) {
+        primitive.bindMaterial(hasLODExtension, reservedTextureUnits);
+      }
+      _isMaterialInitialized = true;
     }
   }
 
@@ -157,4 +150,5 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
     return mesh;
   }
+
 }
