@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
@@ -28,7 +29,8 @@ Future main() async {
   Int16List vertexIndices = new Int16List.fromList([0,1,2]);
   node.mesh = GLTFMesh.createMesh(vertexPositions, vertexIndices);
 
-  await new GLTFRenderer(gltf).render();
+  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+  await new GLTFRenderer(canvas, gltf).render();
 }
 
 

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/material.dart';
@@ -48,7 +49,8 @@ Future main() async {
     scene.addNode(node);
   }
 
-  await new GLTFRenderer(gltf).render();
+  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+  await new GLTFRenderer(canvas, gltf).render();
 }
 
 

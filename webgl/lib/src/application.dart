@@ -7,10 +7,12 @@ import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/context.dart' as ctxWrapper;
+import 'package:webgl/src/context.dart' hide gl;
+import 'package:webgl/src/context.dart' as ctxWrapper show gl;
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
       AxisType,
@@ -25,13 +27,16 @@ enum ActiveToolType { select, move, rotate, scale }
 
 class Application implements Interactable{
 
+//  static Scene get currentScene => Application.instance != null ? Application.instance.currentScene as Scene : null;
+
+
   //Singleton
   static Application _instance;
   static Application get instance => _instance;
 
   Interaction _interaction;
   Interaction get interaction => _interaction;
-  CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
+  CameraPerspective get mainCamera => Context.mainCamera;
 
   CanvasElement _canvas;
   CanvasElement get canvas => _canvas;
@@ -39,9 +44,9 @@ class Application implements Interactable{
   WebGL.RenderingContext get gl => ctxWrapper.gl;
 
   Application._internal(this._canvas){
-    _initGL(_canvas);
+    Context.init(canvas);
     initInteraction();
-    resizeCanvas();
+    Context.resizeCanvas();
   }
 
   static Future<Application> create(CanvasElement canvas) async {
@@ -54,8 +59,8 @@ class Application implements Interactable{
   }
 
   IUpdatableScene _currentScene;
-  IUpdatableScene get currentScene => _currentScene;
-  set currentScene(IUpdatableScene value) {
+  Scene get currentScene => _currentScene as Scene;
+  set currentScene(Scene value) {
     _currentScene = null;
     _currentScene = value;
   }
@@ -86,54 +91,43 @@ class Application implements Interactable{
     print(_activeTool);
     switch (_activeTool){
       case ActiveToolType.select:
-        ctxWrapper.Context.mainCamera.isActive = true;
+        Context.mainCamera.isActive = true;
         break;
       case ActiveToolType.move:
-        ctxWrapper.Context.mainCamera.isActive = false;
+        Context.mainCamera.isActive = false;
         break;
       case ActiveToolType.rotate:
-        ctxWrapper.Context.mainCamera.isActive = false;
+        Context.mainCamera.isActive = false;
         break;
       case ActiveToolType.scale:
-        ctxWrapper.Context.mainCamera.isActive = false;
+        Context.mainCamera.isActive = false;
         break;
     }
-  }
-
-  void _initGL(CanvasElement canvas) {
-
-    ctxWrapper.Context.init(canvas);
-
-    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT);
-    gl.frontFace(FrontFaceDirection.CCW);
-
-    ctxWrapper.Context.renderSettings.enableDepth(true);
-    ctxWrapper.Context.renderSettings.showBackFace(true);
-    ctxWrapper.Context.renderSettings.enableExtensions();
   }
 
   Mesh tempSelection;
 
   void initInteraction(){
     _interaction = new Interaction(this);
+
     _interaction.onMouseDown.listen(_onMouseDownHandler);
     _interaction.onMouseUp.listen(_onMouseUpHandler);
     _interaction.onDrag.listen(_onDragHandler);
-    _interaction.onResize.listen((dynamic event){resizeCanvas();});
+    _interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
   }
 
   void _onMouseDownHandler(MouseEvent event) {
-    if (ctxWrapper.Context.mainCamera != null) {
+    if (Context.mainCamera != null) {
       Mesh modelHit = UtilsGeometry.findModelFromMouseCoords(
-          ctxWrapper.Context.mainCamera, event.offset.x, event.offset.y,
-          ctxWrapper.Context.currentScene.models);
+          Context.mainCamera, event.offset.x, event.offset.y,
+          currentScene.models);
       tempSelection = modelHit;
     }
   }
 
   void _onMouseUpHandler(MouseEvent event) {
     if(!_interaction.dragging) {
-      ctxWrapper.Context.currentScene.currentSelection = tempSelection;
+      currentScene.currentSelection = tempSelection;
     }
   }
 
@@ -141,12 +135,12 @@ class Application implements Interactable{
     if(activeTool == ActiveToolType.move ||
         activeTool == ActiveToolType.rotate ||
         activeTool == ActiveToolType.scale) {
-      ctxWrapper.Context.currentScene.currentSelection = tempSelection;
+      currentScene.currentSelection = tempSelection;
     }
 
-    if(ctxWrapper.Context.currentScene.currentSelection != null && ctxWrapper.Context.currentScene.currentSelection is Mesh) {
+    if(currentScene.currentSelection != null && currentScene.currentSelection is Mesh) {
 
-      Mesh currentModel = ctxWrapper.Context.currentScene.currentSelection as Mesh;
+      Mesh currentModel = currentScene.currentSelection as Mesh;
 
       double delta = _interaction.deltaX.toDouble(); // get mouse delta
       double deltaMoveX = (activeAxis[AxisType.x]
@@ -182,28 +176,6 @@ class Application implements Interactable{
     }
   }
 
-  void resizeCanvas() {
-    var realToCSSPixels = window.devicePixelRatio;
-
-    // Lookup the size the browser is displaying the canvas.
-//    var displayWidth = (_canvas.parent.offsetWidth* realToCSSPixels).floor();
-//    var displayHeight = (window.innerHeight* realToCSSPixels).floor();
-
-    var displayWidth  = (gl.canvas.clientWidth  * realToCSSPixels).floor();
-    var displayHeight = (gl.canvas.clientHeight * realToCSSPixels).floor();
-
-    // Check if the canvas is not the same size.
-    if (gl.canvas.width != displayWidth || gl.canvas.height != displayHeight) {
-      // Make the canvas the same size
-      gl.canvas.width = displayWidth;
-      gl.canvas.height = displayHeight;
-
-//      gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-      ctxWrapper.Context.mainCamera?.update();
-    }
-  }
-
   void render() {
     if(_currentScene == null) throw new Exception("Application currentScene must be set before rendering.");
     _render();
@@ -220,15 +192,11 @@ class Application implements Interactable{
   }
 
   void _renderCurrentScene() {
-//    window.console.time('01_application::_renderCurrentScene');
-
-    resizeCanvas();
+    Context.resizeCanvas();
 
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
     _currentScene.update();
     _currentScene.render();
-
-//    window.console.timeEnd('01_application::_renderCurrentScene');
   }
 }

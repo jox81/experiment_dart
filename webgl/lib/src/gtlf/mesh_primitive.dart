@@ -14,7 +14,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   Map<String, webgl.Buffer> buffers = new Map();
 
   /// DrawMode mode
-  int mode;
+  int drawMode;
 
   final bool hasPosition;
   final bool hasNormal;
@@ -41,7 +41,10 @@ class GLTFMeshPrimitive extends GltfProperty {
   KronosRawMaterial _material;
   KronosRawMaterial get material => _material;
 
-  WebGLProgram program;
+  WebGLProgram _program;
+  WebGLProgram get program => _program;
+
+  bool _isMaterialInitialized = false;
 
   // Todo (jpu) : add other members ?
 //  int get count => _count;
@@ -49,7 +52,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 //  List<Map<String, Accessor>> get targets => _targets;
 
   GLTFMeshPrimitive(
-      {this.mode,
+      {this.drawMode,
       this.hasPosition,
       this.hasNormal,
       this.hasTangent,
@@ -59,6 +62,8 @@ class GLTFMeshPrimitive extends GltfProperty {
       this.texcoordCount});
 
   void bindMaterial(bool hasLODExtension, int reservedTextureUnits) {
+    if(_isMaterialInitialized) return;
+
     bool debug = false;
     bool debugWithDebugMaterial = true;
 
@@ -117,11 +122,12 @@ class GLTFMeshPrimitive extends GltfProperty {
       materialPBR.metallic = baseMaterial.pbrMetallicRoughness.metallicFactor;
     }
 
-    program = _material.getProgram();
+    _program = _material.getProgram();
+    _isMaterialInitialized = true;
   }
 
   @override
   String toString() {
-    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $mode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: ${_indicesAccessor?.accessorId}, _materialId: ${_baseMaterial?.materialId}}';
+    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $drawMode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: ${_indicesAccessor?.accessorId}, _materialId: ${_baseMaterial?.materialId}}';
   }
 }

@@ -57,7 +57,7 @@ void main() {
       expect(primitive, isNotNull);
 
       expect(primitive.attributes.length, isNotNull);
-      expect(primitive.mode, DrawMode.TRIANGLES);
+      expect(primitive.drawMode, DrawMode.TRIANGLES);
 
     });
   });

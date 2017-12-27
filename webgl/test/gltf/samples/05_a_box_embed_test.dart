@@ -94,7 +94,7 @@ Future main() async {
       expect(primitive.attributes['POSITION'], gltfProject.accessors[2]);
       expect(primitive.indices, isNotNull);
       expect(primitive.indices, gltfProject.accessors[0]);
-      expect(primitive.mode, DrawMode.TRIANGLES);
+      expect(primitive.drawMode, DrawMode.TRIANGLES);
       expect(primitive.baseMaterial, gltfProject.materials[0]);
     });
     test("buffers", () async {

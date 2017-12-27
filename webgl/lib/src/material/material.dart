@@ -242,7 +242,7 @@ abstract class Material extends IEditElement {
     beforeRender(model);
 
     GLTFMeshPrimitive primitive = new GLTFMeshPrimitive()
-      ..mode = model.primitive.mode
+      ..drawMode = model.primitive.mode
       ..attributes['POSITION'] = new GLTFAccessor(
           byteOffset : 0,
           count : model.primitive.vertexCount
@@ -264,14 +264,14 @@ abstract class Material extends IEditElement {
   }
 
   void _drawPrimitive(GLTFMeshPrimitive primitive) {
-    if (primitive.indices == null || primitive.mode == DrawMode.POINTS) {
+    if (primitive.indices == null || primitive.drawMode == DrawMode.POINTS) {
       GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
       if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
-          primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
+          primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-      gl.drawElements(primitive.mode, accessorIndices.count,
+      gl.drawElements(primitive.drawMode, accessorIndices.count,
           accessorIndices.componentType, 0);
     }
   }

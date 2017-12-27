@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
@@ -42,7 +43,8 @@ Future main() async {
   ..translation = new Vector3(1.0,0.0,0.0);
   scene.addNode(node02);
 
-  await new GLTFRenderer(gltf).render();
+  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+  await new GLTFRenderer(canvas, gltf).render();
 }
 
 

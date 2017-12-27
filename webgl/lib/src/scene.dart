@@ -7,6 +7,7 @@ import 'dart:convert';
 import 'dart:mirrors';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/application.dart';
 import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -38,7 +39,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   Material defaultMaterial = new MaterialBase();
 
-  Interaction get interaction => Context.application.interaction;
+  Interaction get interaction => Application.instance.interaction;
 
   Scene(){
     if(Context.mainCamera == null){

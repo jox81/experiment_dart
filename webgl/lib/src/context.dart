@@ -3,6 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_constants.dart';
 import 'package:webgl/src/webgl_objects/webgl_parameters.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -22,12 +23,9 @@ set gl(WebGL.RenderingContext ctx) => glWrapper = new WebGLRenderingContext.from
 
 class Context{
 
-  static Application get application => Application.instance;
-  static Scene get currentScene => Application.instance != null ? Application.instance.currentScene as Scene : null;
-
-  Vector4 _backgroundColor;
-  Vector4 get backgroundColor => _backgroundColor;
-  set backgroundColor(Vector4 color) {
+  static Vector4 _backgroundColor;
+  static Vector4 get backgroundColor => _backgroundColor;
+  static set backgroundColor(Vector4 color) {
     _backgroundColor = color;
     gl.clearColor(color.r, color.g, color.g, color.a);
   }
@@ -87,6 +85,13 @@ class Context{
     if(logInfos) {
       _logInfos();
     }
+
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT);
+    gl.frontFace(FrontFaceDirection.CCW);
+
+    Context.renderSettings.enableDepth(true);
+    Context.renderSettings.showBackFace(true);
+    Context.renderSettings.enableExtensions();
   }
 
   static void _logInfos() {
@@ -105,6 +110,28 @@ class Context{
 
   static WebglConstants get webglConstants => WebglConstants.instance();
   static WebglParameters get webglParameters => WebglParameters.instance();
+
+  static void resizeCanvas() {
+    var realToCSSPixels = window.devicePixelRatio;
+
+    // Lookup the size the browser is displaying the canvas.
+//    var displayWidth = (_canvas.parent.offsetWidth* realToCSSPixels).floor();
+//    var displayHeight = (window.innerHeight* realToCSSPixels).floor();
+
+    var displayWidth  = (gl.canvas.clientWidth  * realToCSSPixels).floor();
+    var displayHeight = (gl.canvas.clientHeight * realToCSSPixels).floor();
+
+    // Check if the canvas is not the same size.
+    if (gl.canvas.width != displayWidth || gl.canvas.height != displayHeight) {
+      // Make the canvas the same size
+      gl.canvas.width = displayWidth;
+      gl.canvas.height = displayHeight;
+
+//      gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
+      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+      Context.mainCamera?.update();
+    }
+  }
 }
 
 

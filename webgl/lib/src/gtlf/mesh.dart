@@ -14,18 +14,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   final List<double> weights; // Todo (jpu) : ?
 
   List<GLTFMeshPrimitive> primitives = new List();
-  bool _isMaterialInitialized = false;
 
   GLTFMesh({this.weights, String name: ''}) : super(name);
-
-  void bindMaterials(bool hasLODExtension, int reservedTextureUnits) {
-    if(!_isMaterialInitialized){
-      for (GLTFMeshPrimitive primitive in primitives) {
-        primitive.bindMaterial(hasLODExtension, reservedTextureUnits);
-      }
-      _isMaterialInitialized = true;
-    }
-  }
 
   @override
   String toString() {
@@ -35,7 +25,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   static GLTFMesh createMesh(Float32List vertexPositions, [Int16List vertexIndices, Float32List vertexNormals]) {
     /// The mesh must have primitive
     GLTFMeshPrimitive primitive =
-    new GLTFMeshPrimitive(mode: DrawMode.TRIANGLES, hasPosition: vertexPositions != null);
+    new GLTFMeshPrimitive(drawMode: DrawMode.TRIANGLES, hasPosition: vertexPositions != null);
 
     /// A mesh is needed
     GLTFMesh mesh = new GLTFMesh()

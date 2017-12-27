@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/renderer/renderer.dart';
@@ -12,5 +13,7 @@ Future main() async {
 
   UtilsAssets.webPath = '../';
   GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false);
-  await new GLTFRenderer(gltf).render();
+
+  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+  await new GLTFRenderer(canvas, gltf).render();
 }

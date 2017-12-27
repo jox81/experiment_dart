@@ -1,4 +1,5 @@
-import 'package:webgl/src/gtlf/debug_gltf.dart';
+import 'dart:html';
+
 import 'package:webgl/src/gtlf/node.dart';
 import 'dart:async';
 
@@ -22,5 +23,6 @@ Future main() async {
 
   node01.children.add(node03);
 
-  await new GLTFRenderer(gltf).render();
+  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+  await new GLTFRenderer(canvas, gltf).render();
 }

@@ -9,7 +9,8 @@ import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/context.dart' as ctxWrapper;
+import 'package:webgl/src/context.dart' hide gl;
+import 'package:webgl/src/context.dart' as ctxWrapper show gl;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -23,82 +24,45 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 
-webgl.RenderingContext gl;
-
-GlobalState globalState;
-
-// Direction from where the light is coming to origin
-DirectionalLight light = new DirectionalLight()
-  ..translation = new Vector3(50.0, 50.0, -50.0)
-  ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
-  ..color =  new Vector3(1.0, 1.0, 1.0);
-
-CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
-
-int _reservedTextureUnits;
-
 class GLTFRenderer implements Interactable {
 
+  // Direction from where the light is coming to origin
+  DirectionalLight light = new DirectionalLight()
+    ..translation = new Vector3(50.0, 50.0, -50.0)
+    ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
+    ..color =  new Vector3(1.0, 1.0, 1.0);
+
+  GlobalState globalState;
+
+  int _reservedTextureUnits;
+
+  webgl.RenderingContext get gl => ctxWrapper.gl;
+
   final GLTFProject gltfProject;
-  GLTFScene get activeScene => gltfProject.scenes.length > 0 ? gltfProject.scenes[0] : null;
+
+  GLTFScene get currentScene => gltfProject.scenes.length > 0 ? gltfProject.scenes[0] : null;
 
   Interaction interaction;
-  CameraPerspective get mainCamera => ctxWrapper.Context.mainCamera;
+
+  CameraPerspective get mainCamera => Context.mainCamera;
+
   CanvasElement _canvas;
   CanvasElement get canvas => _canvas;
 
   WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
-  GLTFRenderer(this.gltfProject) {
+  GLTFRenderer(this._canvas, this.gltfProject) {
     //debug.logCurrentFunction();
-    _initContext();
+    Context.init(_canvas);
     initInteraction();
-    resizeCanvas();
-  }
-
-  void _initContext() {
-    //debug.logCurrentFunction();
-
-    try {
-      _canvas = querySelector('#glCanvas') as CanvasElement;
-      gl = _canvas.getContext("experimental-webgl") as webgl.RenderingContext;
-      if (gl == null) {
-        throw "x";
-      }
-    } catch (err) {
-      throw "Your web browser does not support WebGL!";
-    }
-
-    //>
-    ctxWrapper.gl = gl;
+    Context.resizeCanvas();
   }
 
   @override
   void initInteraction() {
     interaction = new Interaction(this);
-    interaction.onResize.listen((dynamic event){resizeCanvas();});
-  }
 
-  void resizeCanvas() {
-    var realToCSSPixels = window.devicePixelRatio;
-
-    // Lookup the size the browser is displaying the canvas.
-//    var displayWidth = (_canvas.parent.offsetWidth* realToCSSPixels).floor();
-//    var displayHeight = (window.innerHeight* realToCSSPixels).floor();
-
-    var displayWidth  = (gl.canvas.clientWidth  * realToCSSPixels).floor();
-    var displayHeight = (gl.canvas.clientHeight * realToCSSPixels).floor();
-
-    // Check if the canvas is not the same size.
-    if (gl.canvas.width != displayWidth || gl.canvas.height != displayHeight) {
-      // Make the canvas the same size
-      gl.canvas.width = displayWidth;
-      gl.canvas.height = displayHeight;
-
-//      gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
-      gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-      ctxWrapper.Context.mainCamera?.update();
-    }
+    interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
   }
 
   Future render() async {
@@ -121,9 +85,9 @@ class GLTFRenderer implements Interactable {
     await _initTextures();
     setupCameras();
 
-    setupGLState();
+    Context.backgroundColor = new Vector4(.2, 0.2, 0.2, 1.0);
+    Context.resizeCanvas();
 
-    resizeCanvas();
     _render();
   }
 
@@ -271,8 +235,8 @@ class GLTFRenderer implements Interactable {
     }
 
     try {
-      update();
-      draw();
+        update();
+        _renderCurrentScene();
     } catch (ex) {
       print("Error: $ex");
     }
@@ -282,14 +246,12 @@ class GLTFRenderer implements Interactable {
     });
   }
 
-  void draw() {
-    //debug.logCurrentFunction();
-    gl.clear(
-        ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
+  void _renderCurrentScene() {
+    Context.resizeCanvas();
 
-    if(activeScene == null) return;
+    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    drawNodes(activeScene.nodes);
+    drawNodes(currentScene.nodes);
   }
 
   void drawNodes(List<GLTFNode> nodes) {
@@ -306,10 +268,10 @@ class GLTFRenderer implements Interactable {
       GLTFMesh mesh = node.mesh;
       if (mesh.primitives != null) {
 
-        mesh.bindMaterials(globalState.hasLODExtension != null, _reservedTextureUnits);
-
         for (int i = 0; i < mesh.primitives.length; i++) {
           GLTFMeshPrimitive primitive = mesh.primitives[i];
+
+          primitive.bindMaterial(globalState.hasLODExtension != null, _reservedTextureUnits);
 
           WebGLProgram program = primitive.program;
           gl.useProgram(program.webGLProgram);
@@ -450,33 +412,16 @@ class GLTFRenderer implements Interactable {
   }
 
   void _drawPrimitive(GLTFMeshPrimitive primitive) {
-    if (primitive.indices == null || primitive.mode == DrawMode.POINTS) {
+    if (primitive.indices == null || primitive.drawMode == DrawMode.POINTS) {
       GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
       if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
-          primitive.mode, accessorPosition.byteOffset, accessorPosition.count);
+          primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
       GLTFAccessor accessorIndices = primitive.indices;
-      gl.drawElements(primitive.mode, accessorIndices.count,
+      gl.drawElements(primitive.drawMode, accessorIndices.count,
           accessorIndices.componentType, 0);
     }
-  }
-
-  void setupGLState() {
-    //debug.logCurrentFunction();
-
-    gl.enable(webgl.DEPTH_TEST);
-    gl.clearColor(.2, 0.2, 0.2, 1.0);
-
-//    gl.frontFace(FrontFaceDirection.CCW);
-//
-//    //Enable depth test
-//
-//    gl.depthFunc(webgl.LESS);
-//    //gl.enable(webgl.BLEND);
-//    gl.disable(webgl.CULL_FACE);
-//    //
-//    gl.cullFace(FacingType.FRONT);
   }
 
   void setupCameras() {
@@ -492,7 +437,7 @@ class GLTFRenderer implements Interactable {
         ..translation = new Vector3(10.0, 10.0, 10.0);
     }else {
       //find first activeScene camera
-      currentCamera = findActiveSceneCamera(activeScene.nodes);
+      currentCamera = findActiveSceneCamera(currentScene.nodes);
       //or use first in project else default
       if (currentCamera == null) {
         currentCamera = findActiveSceneCamera(gltfProject.nodes);
@@ -511,7 +456,7 @@ class GLTFRenderer implements Interactable {
     }
     //>
     if (currentCamera is CameraPerspective) {
-      ctxWrapper.Context.mainCamera = currentCamera;
+      Context.mainCamera = currentCamera;
     } else {
       // ortho ?
     }

@@ -521,7 +521,7 @@ class GLTFCreation{
   GLTFMeshPrimitive _createPrimitive(glTF.MeshPrimitive gltfSource) {
     if (gltfSource == null) return null;
     GLTFMeshPrimitive meshPrimitive = new GLTFMeshPrimitive(
-        mode: gltfSource.mode != null ? gltfSource.mode : DrawMode.TRIANGLES,
+        drawMode: gltfSource.mode != null ? gltfSource.mode : DrawMode.TRIANGLES,
         hasPosition: gltfSource.hasPosition,
         hasNormal: gltfSource.hasNormal,
         hasTangent: gltfSource.hasTangent,
