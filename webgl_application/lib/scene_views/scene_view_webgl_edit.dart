@@ -32,18 +32,18 @@ class SceneViewWebGLEdit extends Scene{
       ..translation = new Vector3(3.0, 10.0, 10.0);
     Context.mainCamera = camera;
 
-    MultiLineModel line = new MultiLineModel([
+    MultiLineMesh line = new MultiLineMesh([
       new Vector3.all(0.0),
       new Vector3(10.0, 0.0, 0.0),
       new Vector3(10.0, 0.0, 10.0),
       new Vector3(10.0, 10.0, 10.0),
     ]);
-    models.add(line);
+    meshes.add(line);
 
-    TriangleModel triangle = new TriangleModel()
+    TriangleMesh triangle = new TriangleMesh()
       ..name = 'triangle'
       ..material = new MaterialBase();
-    models.add(triangle);
+    meshes.add(triangle);
 
   }
 

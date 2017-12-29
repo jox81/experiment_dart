@@ -36,8 +36,8 @@ class UtilsGeometry{
   }
 
   /// Experiment with unProject
-  static List<PointModel> unProjectMultiScreenPoints(CameraPerspective camera) {
-    List<PointModel> resultPoints = [];
+  static List<PointMesh> unProjectMultiScreenPoints(CameraPerspective camera) {
+    List<PointMesh> resultPoints = [];
 
     num pickX = 0.0;
     num pickY = Context.height * 0.25;
@@ -49,7 +49,7 @@ class UtilsGeometry{
       pickX = i * Context.width;
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
-      resultPoints.add(new PointModel()
+      resultPoints.add(new PointMesh()
         ..translation = pickWorld
         ..primitive.material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
         ..visible = true);
@@ -59,8 +59,8 @@ class UtilsGeometry{
 
   /// May be buggy for some models like the sphere mesh
   /// How to hide vertices after shown ?
-  static List<PointModel> drawModelVertices(Mesh model) {
-    List<PointModel> resultPoints = [];
+  static List<PointMesh> drawModelVertices(Mesh model) {
+    List<PointMesh> resultPoints = [];
     MaterialPoint material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
 
     for(Triangle triangle in model.getFaces()){
@@ -70,13 +70,13 @@ class UtilsGeometry{
   }
 
   /// Draw a point for each vertex of the triangle
-  static List<PointModel> drawTriangleVertices(Triangle triangle, MaterialPoint material) {
-    List<PointModel> resultPoints = [];
+  static List<PointMesh> drawTriangleVertices(Triangle triangle, MaterialPoint material) {
+    List<PointMesh> resultPoints = [];
 
     List<Vector3> vertices = [triangle.point0, triangle.point1, triangle.point2];
 
     for(Vector3 vertex in vertices){
-      resultPoints.add(new PointModel()
+      resultPoints.add(new PointMesh()
         ..translation = vertex
         ..primitive.material = material);
     }
@@ -93,15 +93,15 @@ class UtilsGeometry{
   }
 
   /// Draw a point on the model intersected with the ray
-  static List<PointModel> findModelHitPoint(Mesh model, Ray ray) {
-    List<PointModel> resultPoints = [];
+  static List<PointMesh> findModelHitPoint(Mesh model, Ray ray) {
+    List<PointMesh> resultPoints = [];
     Material material = new MaterialPoint(pointSize:8.0 ,color: new Vector4(1.0, 0.0, 0.0, 1.0));
 
     for(Triangle triangle in model.getFaces()) {
       double distance = ray.intersectsWithTriangle(triangle);
 
       if(distance != null) {
-        resultPoints.add(new PointModel()
+        resultPoints.add(new PointMesh()
           ..translation = ray.at(distance)
           ..primitive.material = material);
       }

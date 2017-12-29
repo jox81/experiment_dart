@@ -80,46 +80,46 @@ class SceneViewBase extends Scene{
     materials.add(materialPBR);
 
     //Meshes
-    AxisModel axis = new AxisModel();
-    models.add(axis);
+    AxisMesh axis = new AxisMesh();
+    meshes.add(axis);
 
-    PointModel point = new PointModel()
+    PointMesh point = new PointMesh()
         ..translation = new Vector3(8.0, 5.0, 10.0)
     ..material = materialPoint;
-    models.add(point);
+    meshes.add(point);
 
     //Line
-    MultiLineModel line = new MultiLineModel([
+    MultiLineMesh line = new MultiLineMesh([
       new Vector3.all(0.0),
       new Vector3(10.0, 0.0, 0.0),
       new Vector3(10.0, 0.0, 10.0),
       new Vector3(10.0, 10.0, 10.0),
     ]);
-    models.add(line);
+    meshes.add(line);
 
     // create square
-    QuadModel square = new QuadModel()
+    QuadMesh square = new QuadMesh()
       ..matrix.translate(3.0, 0.0, 0.0)
       ..matrix.rotateX(radians(90.0))
       ..material = materialBaseColor;
-    models.add(square);
+    meshes.add(square);
 
     // create triangle
-    TriangleModel triangle = new TriangleModel()
+    TriangleMesh triangle = new TriangleMesh()
       ..name = 'triangle'
       ..matrix.translate(0.0, 0.0, 4.0)
       ..material = materialBase;
-    models.add(triangle);
+    meshes.add(triangle);
 
     // create cube
-    CubeModel centerCube = new CubeModel()
+    CubeMesh centerCube = new CubeMesh()
       ..matrix.translate(0.0, 0.0, 0.0)
       ..matrix.scale(0.1, 0.1, 0.1)
       ..material = materialBaseColor;
-    models.add(centerCube);
+    meshes.add(centerCube);
 
     // create square
-    QuadModel squareX = new QuadModel()
+    QuadMesh squareX = new QuadMesh()
       ..matrix.translate(0.0, 3.0, 0.0)
       ..material = materialBaseVertexColor;
     squareX.primitive
@@ -128,16 +128,16 @@ class SceneViewBase extends Scene{
       ..colors.addAll([1.0, 1.0, 0.0, 1.0])
       ..colors.addAll([1.0, 0.0, 1.0, 1.0])
       ..colors.addAll([0.0, 1.0, 1.0, 1.0]);
-    models.add(squareX);
+    meshes.add(squareX);
 
     //create Pyramide
-    PyramidModel pyramid = new PyramidModel()
+    PyramidMesh pyramid = new PyramidMesh()
       ..matrix.translate(7.0, 1.0, 0.0)
       ..material = materialBaseVertexColor;
-    models.add(pyramid);
+    meshes.add(pyramid);
 
     //Create Cube
-    CubeModel cube = new CubeModel();
+    CubeMesh cube = new CubeMesh();
     cube.matrix.translate(-4.0, 1.0, 0.0);
     materialBaseTextureNormal.texture =
     await TextureUtils.createTexture2DFromFile("./images/crate.gif");
@@ -145,26 +145,26 @@ class SceneViewBase extends Scene{
       ..material = materialBaseTextureNormal
       ..addComponent(new TestAnim());
 
-    models.add(cube);
+    meshes.add(cube);
 
-    //SusanModel
+    //SusanMesh
     var susanJson = await UtilsAssets.loadJSONResource('./objects/susan/susan.json');
     MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
       ..texture = await TextureUtils.createTexture2DFromFile(
           './objects/susan/susan_texture.png');
-    JsonObject jsonModel = new JsonObject(susanJson)
+    JsonObject jsonMesh = new JsonObject(susanJson)
       ..matrix.translate(10.0, 0.0, -5.0)
       ..matrix.rotateX(radians(-90.0))
       ..material = susanMaterialBaseTexture
       ..addComponent(new TestAnim());
-    models.add(jsonModel);
+    meshes.add(jsonMesh);
 
     //Sphere
-    SphereModel sphere = new SphereModel(radius: 2.5, segmentV: 48, segmentH: 48)
+    SphereMesh sphere = new SphereMesh(radius: 2.5, segmentV: 48, segmentH: 48)
       ..matrix.translate(0.0, 0.0, -10.0)
       ..material = materialPBR;
     //sphere.mode = RenderingContext.LINES;
-    models.add(sphere);
+    meshes.add(sphere);
 
     //Animation
     updateSceneFunction = () {

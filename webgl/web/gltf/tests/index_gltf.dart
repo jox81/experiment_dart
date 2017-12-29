@@ -1,6 +1,8 @@
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'dart:async';
 
+import 'package:webgl/src/gtlf/project.dart';
+
 List<String> gltfTestsSamples = [
   ///Buffer tests
 //  './base/data/buffer/empty.gltf',
@@ -54,15 +56,17 @@ List<String> gltfTestsSamples = [
 
 
 List<String> gltfSamples = [
-//  '/gltf/samples/gltf_2_0/00_triangle_without_indices/gltf_embed/TriangleWithoutIndices.gltf',
+  '/gltf/samples/gltf_2_0/00_triangle_without_indices/gltf_embed/TriangleWithoutIndices.gltf',
 //  '/gltf/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf',
 //  '/gltf/samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf',
-  '/gltf/samples/gltf_2_0/05_box/gltf_embed/Box.gltf',
+//  '/gltf/samples/gltf_2_0/plane_textured/test_texture.gltf',
+//  '/gltf/samples/gltf_2_0/05_box/gltf_embed/Box.gltf',
 
   ///basic exemple
   //  './gltfsamples/gltf_2_0/minimal.gltf',
 ];
 
 Future main() async {
-  await await debugGltf(gltfSamples.first, doGlTFProjectLog : true, isDebug:false, useWebPath: true);
+  GLTFProject project = await loadGLTF(gltfSamples.first, useWebPath : true);
+  debugGltf(project, doGlTFProjectLog : true, isDebug:false);
 }

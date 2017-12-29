@@ -21,30 +21,7 @@ import 'package:webgl/src/utils/utils_debug.dart' as debug;
 
 GLTFProject _gltf;
 
-/// [gltfUrl] the url to find the gtlf file.
-/// [doGlTFProjectLog] log gltf items infos
-/// [isDebug] log traces
-Future<GLTFProject> debugGltf(String gltfUrl, {bool doGlTFProjectLog : false, bool isDebug:false, bool useWebPath : false}) async {
-  debug.isDebug = isDebug;
-  _gltf = await _loadGLTF(gltfUrl, useWebPath);
-  if(doGlTFProjectLog) {
-    _testScenes();
-    _testNodes();
-    _testMeshes();
-    _testAccessors();
-    _testBufferViews();
-    _testBuffers();
-    _testCameras();
-    _testImages();
-    _testSamplers();
-    _testTextures();
-    _testMaterials();
-    _testAnimations();
-  }
-  return _gltf;
-}
-
-Future<GLTFProject> _loadGLTF(String gltfUrl, bool useWebPath) async {
+Future<GLTFProject> loadGLTF(String gltfUrl, {bool useWebPath : false}) async {
 
   // Todo (jpu) : assert path exist and get real file
   String filePart = new Uri.file(gltfUrl).pathSegments.last;
@@ -59,6 +36,29 @@ Future<GLTFProject> _loadGLTF(String gltfUrl, bool useWebPath) async {
   print('> _gltf file loaded : ${gltfUrl}');
   print('');
 
+  return _gltf;
+}
+
+/// [gltfUrl] the url to find the gtlf file.
+/// [doGlTFProjectLog] log gltf items infos
+/// [isDebug] log traces
+GLTFProject debugGltf(GLTFProject gltfProject, {bool doGlTFProjectLog : false, bool isDebug:false}) {
+  debug.isDebug = isDebug;
+  _gltf = gltfProject;
+  if(doGlTFProjectLog) {
+    _testScenes();
+    _testNodes();
+    _testMeshes();
+    _testAccessors();
+    _testBufferViews();
+    _testBuffers();
+    _testCameras();
+    _testImages();
+    _testSamplers();
+    _testTextures();
+    _testMaterials();
+    _testAnimations();
+  }
   return _gltf;
 }
 
@@ -105,6 +105,18 @@ void _testAccessors() {
       print('> $i');
       GLTFAccessor accessor = _gltf.accessors[i];
       print('$accessor');
+
+      if(accessor.componentType == 5126) {
+        Float32List verticesInfos = accessor.bufferView.buffer.data.buffer
+            .asFloat32List(
+            accessor.bufferView.byteOffset + accessor.byteOffset,
+            accessor.count * accessor.components);
+        print(verticesInfos);
+      }else if(accessor.componentType == 5123){
+        Uint16List indices = accessor.bufferView.buffer.data.buffer
+            .asUint16List(accessor.byteOffset, accessor.count);
+        print(indices);
+      }
     }
     print('');
   });

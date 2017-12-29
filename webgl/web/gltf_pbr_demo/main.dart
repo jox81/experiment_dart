@@ -126,7 +126,10 @@ Future updateModel(
 
   String gltfPath = 'gltf_pbr_demo/models/$value/glTF/$value.gltf';
 
-  GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+  GLTFProject project = await loadGLTF(gltfPath, useWebPath : false);
+  await await debugGltf(project, doGlTFProjectLog : false, isDebug:false);
+
+  GLTFProject gltf = await debugGltf(project, doGlTFProjectLog : false, isDebug:false);
 
   KronosScene scene =
       new KronosScene(gl, glState, "./models/$value/glTF/", gltf);

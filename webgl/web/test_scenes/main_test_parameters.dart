@@ -56,7 +56,7 @@ class WebglTestParameters {
   }
 
   void setupMeshes() {
-    QuadModel quad = new QuadModel()..matrix.translate(2.0, 0.0, 0.0);
+    QuadMesh quad = new QuadMesh()..matrix.translate(2.0, 0.0, 0.0);
     models.add(quad);
 
     getInfos();
@@ -75,7 +75,7 @@ class WebglTestParameters {
 //    Context.webglConstants.logConstants();
 //    Context.webglParameters.logValues();
 
-    IntrospectionManager.instance.logTypeInfos(CubeModel,
+    IntrospectionManager.instance.logTypeInfos(CubeMesh,
       showBaseInfo: true,
       showLibrary: false,
       showType: false,

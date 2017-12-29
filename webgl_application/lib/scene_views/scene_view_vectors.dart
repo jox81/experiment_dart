@@ -23,8 +23,8 @@ class SceneViewVectors extends Scene{
   MaterialBaseColor matVectorB;
   MaterialBaseColor matVectorResult;
 
-  AxisModel axis;
-  GridModel grid;
+  AxisMesh axis;
+  GridMesh grid;
 
   @override
   Future setupScene() async {
@@ -47,10 +47,10 @@ class SceneViewVectors extends Scene{
       ..showGizmo = true;
     cameras.add(cameraTest);
 
-    axis = new AxisModel();
-    models.add(axis);
-    grid = new GridModel();
-    models.add(grid);
+    axis = new AxisMesh();
+    meshes.add(axis);
+    grid = new GridMesh();
+    meshes.add(grid);
 
 //    test01();
 //    test02();
@@ -62,17 +62,17 @@ class SceneViewVectors extends Scene{
 
   /// basic add vector result
   void test01() {
-    VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,-3.0))
+    VectorMesh vectorMeshA = new VectorMesh(new Vector3(3.0,0.0,-3.0))
     ..material = matVectorA;
-    models.add(vectorModelA);
+    meshes.add(vectorMeshA);
 
-    VectorModel vectorModelB = new VectorModel(new Vector3(-2.0,0.0,-2.0))
+    VectorMesh vectorMeshB = new VectorMesh(new Vector3(-2.0,0.0,-2.0))
       ..material = matVectorB;
-    models.add(vectorModelB);
+    meshes.add(vectorMeshB);
 
-    VectorModel vectorModelR = new VectorModel(vectorModelA.vec + vectorModelB.vec)
+    VectorMesh vectorMeshR = new VectorMesh(vectorMeshA.vec + vectorMeshB.vec)
       ..material = matVectorResult;
-    models.add(vectorModelR);
+    meshes.add(vectorMeshR);
   }
 
   /// matrix transform
@@ -80,13 +80,13 @@ class SceneViewVectors extends Scene{
 
     Matrix4 matrixTest = new Matrix4.identity()..rotateZ(radians(45.0));
 
-    VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
+    VectorMesh vectorMeshA = new VectorMesh(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;
-    models.add(vectorModelA);
+    meshes.add(vectorMeshA);
 
-    VectorModel vectorModelR = new VectorModel((matrixTest * vectorModelA.vec) as Vector3)
+    VectorMesh vectorMeshR = new VectorMesh((matrixTest * vectorMeshA.vec) as Vector3)
       ..material = matVectorResult;
-    models.add(vectorModelR);
+    meshes.add(vectorMeshR);
   }
 
   /// camera
@@ -95,13 +95,13 @@ class SceneViewVectors extends Scene{
     Matrix4 uModelViewMatrix = Context.mainCamera.viewMatrix.multiplied(Context.modelMatrix);
     Matrix4 uProjectionMatrix = Context.mainCamera.projectionMatrix;
 
-    VectorModel vectorModelA = new VectorModel(new Vector3(3.0,0.0,0.0))
+    VectorMesh vectorMeshA = new VectorMesh(new Vector3(3.0,0.0,0.0))
       ..material = matVectorA;
-    models.add(vectorModelA);
+    meshes.add(vectorMeshA);
 
-    VectorModel vectorModelR = new VectorModel((uProjectionMatrix * uModelViewMatrix * vectorModelA.vec) as Vector3)
+    VectorMesh vectorMeshR = new VectorMesh((uProjectionMatrix * uModelViewMatrix * vectorMeshA.vec) as Vector3)
       ..material = matVectorResult;
-    models.add(vectorModelR);
+    meshes.add(vectorMeshR);
   }
 
   //Projection view Matrix test
@@ -115,17 +115,17 @@ class SceneViewVectors extends Scene{
       ..targetPosition = cameraTargetPosition
       ..translation = cameraPosition;
 
-    AxisModel axisTest = new AxisModel()
+    AxisMesh axisTest = new AxisMesh()
     ..translation = new Vector3(0.0,0.0,0.0)
     ..matrix.rotateY(radians(0.0));
-    models.add(axisTest);
+    meshes.add(axisTest);
 
-    GridModel gridTest = new GridModel();
-    models.add(gridTest);
+    GridMesh gridTest = new GridMesh();
+    meshes.add(gridTest);
 
-    PointModel pointTest = new PointModel()
+    PointMesh pointTest = new PointMesh()
     ..translation = new Vector3(1.0,0.0,1.0);
-    models.add(pointTest);
+    meshes.add(pointTest);
 
 //    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
 //
@@ -155,10 +155,10 @@ class SceneViewVectors extends Scene{
       ..targetPosition = cameraTargetPosition
       ..translation = cameraPosition;
 
-    AxisModel axisTest = new AxisModel()
+    AxisMesh axisTest = new AxisMesh()
       ..translation = new Vector3(0.0,0.0,0.0)
       ..matrix.rotateY(radians(0.0));
-    models.add(axisTest);
+    meshes.add(axisTest);
 
     // à tester :
 
@@ -169,15 +169,15 @@ class SceneViewVectors extends Scene{
   //Nomral tests
   void testDisplayNormals() {
 
-//    QuadModel model = new QuadModel();
-    CubeModel model = new CubeModel();
-//    SphereModel model = new SphereModel(radius: 2.0, segmentV: 12, segmentH: 12);
+//    QuadMesh model = new QuadMesh();
+    CubeMesh model = new CubeMesh();
+//    SphereMesh model = new SphereMesh(radius: 2.0, segmentV: 12, segmentH: 12);
 
-    models.add(model);
+    meshes.add(model);
     buildNormals(model);
   }
 
-  //Todo : optimiser en ne rendant qu'un seul MultiLineModel
+  //Todo : optimiser en ne rendant qu'un seul MultiLineMesh
   void buildNormals(Mesh model) {
     List<Vector3> normalPoints = new List();
 
@@ -199,10 +199,10 @@ class SceneViewVectors extends Scene{
       normalPoints.add(vertex + normal);
     }
 
-    MultiLineModel normals = new MultiLineModel(normalPoints)
+    MultiLineMesh normals = new MultiLineMesh(normalPoints)
       ..primitive.mode = DrawMode.LINES
       ..material = matVectorA;
-    models.add(normals);
+    meshes.add(normals);
   }
 
 }

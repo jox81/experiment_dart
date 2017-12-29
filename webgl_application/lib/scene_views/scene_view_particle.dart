@@ -33,7 +33,7 @@ class SceneViewParticle extends Scene{
 
     CustomObject customObject = experiment(Application.instance.currentScene) as CustomObject;
     materials.add(customObject.material);
-    models.add(customObject);
+    meshes.add(customObject);
 
     //Animation
     updateSceneFunction = () {

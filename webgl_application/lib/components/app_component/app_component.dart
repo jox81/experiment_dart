@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:angular2/core.dart';
+import 'package:webgl/src/project.dart';
 import 'package:webgl_application/components/ui/canvas_component/canvas_component.dart';
 import 'package:webgl_application/components/ui/layout_component/layout_component.dart';
 import 'package:webgl_application/components/ui/properties_component/properties_component.dart';
@@ -20,7 +21,7 @@ import 'package:webgl/src/ui_models/toolbar.dart';
 class AppComponent implements OnInit{
 
   Application application;
-  Scene get currentScene => Application.instance?.currentScene as Scene;
+  Scene get currentScene => Application.instance?.currentScene;
 
   IEditElement _currentElement;
   IEditElement get currentElement {
@@ -69,7 +70,8 @@ class AppComponent implements OnInit{
   @override
   Future ngOnInit() async {
     application = await Application.create(canvasComponent.canvas);
-    scenes = await ServiceScene.getSceneViews();
+    List<Project> projects = await ServiceProject.getProjects();
+    scenes = projects[0].scenes;
     await switchScene ();
   }
 

@@ -8,8 +8,9 @@ import 'package:webgl/src/gtlf/project.dart';
 Future main() async {
   group("test camera", () {
     test("test camera creation", () async {
-      GLTFProject gltfObject = await debugGltf('gltf/tests/base/data/camera/empty.gltf', doGlTFProjectLog : false, isDebug:false, useWebPath: false);
-      expect(gltfObject, isNotNull);
+      GLTFProject project = await loadGLTF('gltf/tests/base/data/camera/empty.gltf', useWebPath : false);
+      await debugGltf(project, doGlTFProjectLog : false, isDebug:false);
+      expect(project, isNotNull);
     });
   });
 }

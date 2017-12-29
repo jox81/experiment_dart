@@ -15,7 +15,8 @@ Future main() async {
   group("Accessor", () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/accessor/empty.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFAccessor> accessors = gltf.accessors;
       expect(accessors.length, 0);
@@ -24,7 +25,8 @@ Future main() async {
     test("Array length", () async {
       String gltfPath =
           'gltf/tests/base/data/accessor/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFAccessor> accessors = gltf.accessors;
       expect(accessors.length, 1);
@@ -33,7 +35,8 @@ Future main() async {
     test("base properties", () async {
       String gltfPath =
           'gltf/tests/base/data/accessor/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFAccessor accessor = gltf.accessors[0];
 
@@ -59,7 +62,8 @@ Future main() async {
     test("base properties GLTFAccessorSparse", () async {
       String gltfPath =
           'gltf/tests/base/data/accessor/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFAccessorSparse sparse = gltf.accessors[0].sparse;
       expect(sparse, isNotNull);
@@ -71,7 +75,8 @@ Future main() async {
     test("base properties GLTFAccessorSparseIndices", () async {
       String gltfPath =
           'gltf/tests/base/data/accessor/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFAccessorSparseIndices indices = gltf.accessors[0].sparse.indices;
       expect(indices, isNotNull);
@@ -82,7 +87,8 @@ Future main() async {
     test("base properties GLTFAccessorSparseValues", () async {
       String gltfPath =
           'gltf/tests/base/data/accessor/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFAccessorSparseValues values = gltf.accessors[0].sparse.values;
       expect(values, isNotNull);

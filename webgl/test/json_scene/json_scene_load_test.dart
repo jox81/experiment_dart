@@ -82,7 +82,7 @@ Future main() async {
     test("test model", () {
       Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
-      expect(model is QuadModel,isTrue);
+      expect(model is QuadMesh,isTrue);
     });
     test("test model name", () {
       Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
@@ -100,7 +100,7 @@ Future main() async {
     test("test model", () {
       Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
 
-      expect(model is CubeModel,isTrue);
+      expect(model is CubeMesh,isTrue);
     });
     test("test model name", () {
       Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
@@ -133,7 +133,7 @@ Future main() async {
 
     test("scene models", () {
       Scene scene = new Scene.fromJson(testJson);
-      expect(scene.models.length == 2, isTrue);
+      expect(scene.meshes.length == 2, isTrue);
     });
   });
 }

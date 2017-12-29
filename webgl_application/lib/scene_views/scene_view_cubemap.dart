@@ -36,10 +36,10 @@ class SceneViewCubeMap extends Scene{
     MaterialSkyBox materialSkyBox = new MaterialSkyBox();
     materialSkyBox.skyboxTexture = cubeMapTexture;
 
-    SkyBoxModel skyBoxModel = new SkyBoxModel()
+    SkyBoxMesh skyBoxMesh = new SkyBoxMesh()
       ..material = materialSkyBox
       ..matrix.scale(1.0);
-    models.add(skyBoxModel);
+    meshes.add(skyBoxMesh);
 
 
     Material material;
@@ -48,26 +48,26 @@ class SceneViewCubeMap extends Scene{
 //    material = new MaterialBase();
     material = new MaterialReflection()..skyboxTexture = cubeMapTexture;
 
-    GridModel grid = new GridModel();
-    models.add(grid);
+    GridMesh grid = new GridMesh();
+    meshes.add(grid);
 
-    SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 32, segmentH: 32)
+    SphereMesh sphere = new SphereMesh(radius: 1.0, segmentV: 32, segmentH: 32)
       ..matrix.translate(0.0, 0.0, 0.0)
       ..matrix.scale(1.0)
       ..material = material;
-    models.add(sphere);
+    meshes.add(sphere);
 
-    QuadModel plane = new QuadModel()
+    QuadMesh plane = new QuadMesh()
       ..matrix.translate(2.0, 0.0, 0.0)
       ..matrix.scale(1.0)
       ..matrix.rotateX(radians(-90.0))
       ..material = material;
-    models.add(plane);
+    meshes.add(plane);
 
-    CubeModel cube = new CubeModel()
+    CubeMesh cube = new CubeMesh()
       ..matrix.translate(0.0, 1.0, 2.0)
       ..matrix.scale(1.0)
       ..material = material;
-    models.add(cube);
+    meshes.add(cube);
   }
 }

@@ -25,7 +25,7 @@ class SceneViewShaderLearning01 extends Scene{
 
     CustomObject customObject = baseSurface();
     materials.add(customObject.material);
-    models.add(customObject);
+    meshes.add(customObject);
 
     //Animation
     updateSceneFunction = () {
@@ -177,7 +177,7 @@ class SceneViewShaderLearning01 extends Scene{
     materials.add(materialCustom);
 
     CustomObject customObject = new CustomObject()
-      ..primitive = new MeshPrimitive.Rectangle()
+      ..primitive = new MeshPrimitive.Quad()
       ..material = materialCustom;
 
     customObject.updateFunction = () {

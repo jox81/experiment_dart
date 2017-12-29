@@ -4,12 +4,23 @@ import 'package:webgl/src/camera.dart';
 import 'dart:async';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/project.dart';
 @MirrorsUsed(
     targets: const [
       SceneViewPrimitives,
     ],
     override: '*')
 import 'dart:mirrors';
+
+Project getPrimitivesProject(){
+  Project project = new Project();
+
+  Scene scene = new SceneViewPrimitives();
+  project.addScene(scene);
+  project.scene = scene;
+
+  return project;
+}
 
 class SceneViewPrimitives extends Scene{
 
@@ -58,38 +69,38 @@ class SceneViewPrimitives extends Scene{
 //    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
 //    MaterialBase materialBase = new MaterialBase();
 //
-//    AxisModel axis = new AxisModel();
-//    models.add(axis);
+//    AxisMesh axis = new AxisMesh();
+//    meshes.add(axis);
 
-    PointModel point = new PointModel()
+    PointMesh point = new PointMesh()
       ..name = 'point'
       ..translation = new Vector3(-5.0, 0.0, -3.0);
-    models.add(point);
+    meshes.add(point);
 
-    TriangleModel triangle = new TriangleModel()
+    TriangleMesh triangle = new TriangleMesh()
       ..name = 'triangle'
       ..translation = new Vector3(0.0, 0.0, -5.0);
-    models.add(triangle);
+    meshes.add(triangle);
 
-    QuadModel quad = new QuadModel()
+    QuadMesh quad = new QuadMesh()
       ..name = "quad"
       ..translation = new Vector3(5.0, 0.0, -5.0);
-    models.add(quad);
+    meshes.add(quad);
 
-    PyramidModel pyramid = new PyramidModel()
+    PyramidMesh pyramid = new PyramidMesh()
       ..name = "pyramid"
       ..translation = new Vector3(-5.0, 0.0, 0.0);
-    models.add(pyramid);
+    meshes.add(pyramid);
 
-    CubeModel cube = new CubeModel()
+    CubeMesh cube = new CubeMesh()
       ..name = "cube"
       ..translation = new Vector3(0.0, 0.0, 0.0);
-    models.add(cube);
+    meshes.add(cube);
 
-    SphereModel sphere = new SphereModel()
+    SphereMesh sphere = new SphereMesh()
       ..name = "sphere"
       ..translation = new Vector3(5.0, 0.0, 0.0);
-    models.add(sphere);
+    meshes.add(sphere);
 
   }
 }

@@ -73,12 +73,12 @@ class SceneViewPerformance extends Scene{
 
     for (int i = 0; i < count; i++) {
       //Create Cube
-      CubeModel cube = new CubeModel()
+      CubeMesh cube = new CubeMesh()
         ..translation = new Vector3(random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2,
           random.nextInt(randomWidth) - randomWidth / 2)
         ..material = materialPBR;
-      models.add(cube);
+      meshes.add(cube);
     }
     // Animation
     updateSceneFunction = () {

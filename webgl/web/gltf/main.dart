@@ -19,7 +19,7 @@ Future main() async {
 //    './samples/gltf_2_0/minimal.gltf',
 
   //textured
-//    './samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
+    './samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
 //    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured_multi.gltf',
@@ -42,7 +42,7 @@ Future main() async {
 //    './wip/export_test/export_test.gltf',
 //    './wip/export_test/export_test_grey.gltf',
 //    './wip/hierarchy_test/hieracrhy_test.gltf',
-    './wip/archi/model_01/model_01.gltf',
+//    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
 
   //Blender test Sphere
@@ -59,7 +59,8 @@ Future main() async {
 //    './blender_pbr/polly/project_polly.gltf'
   ];
 
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false, useWebPath: false);
+  GLTFProject project = await loadGLTF(gltfSamplesPaths.first, useWebPath : false);
+  await await debugGltf(project, doGlTFProjectLog : true, isDebug:false);
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  await new GLTFRenderer(canvas, gltf).render();
+  await new GLTFRenderer(canvas, project).render();
 }

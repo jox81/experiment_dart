@@ -56,7 +56,7 @@ Future main() async {
 
     test("scene models", () {
       Scene scene = new Scene.fromJson(testJson);
-      expect(scene.models.length == 2, isTrue);
+      expect(scene.meshes.length == 2, isTrue);
     });
 
     // Todo (jpu) : don't work anymore : check to save as gltf

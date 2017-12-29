@@ -12,6 +12,8 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/gltf_creation.dart';
+
+import '../../../web/gltf/samples/all_by_code/01_triangle_with_indices/triangle_with_indices.dart';
 @TestOn("dartium")
 
 Future main() async {
@@ -20,7 +22,8 @@ Future main() async {
 
   setUp(() async {
     String gltfPath = 'gltf/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
-    gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+    gltfProject = await loadGLTF(gltfPath, useWebPath : true);
+    await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });
 
   group("TriangleWithIndices Embed", () {

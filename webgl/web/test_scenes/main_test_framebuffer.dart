@@ -62,7 +62,7 @@ class Webgl01 {
   }
 
   void setupMeshes() {
-    QuadModel quad = new QuadModel()
+    QuadMesh quad = new QuadMesh()
       ..matrix.translate(0.0, 0.0, 0.0);
     models.add(quad);
 

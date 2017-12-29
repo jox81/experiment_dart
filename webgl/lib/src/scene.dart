@@ -23,6 +23,8 @@ import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
 class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
+  static int nextId = 0;
+  final int sceneId = nextId++;
 
   @override
   IEditElement currentSelection;
@@ -33,7 +35,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
   AmbientLight ambientLight = new AmbientLight();
 
   List<Material> materials = new List();
-  List<Mesh> models = new List();
+  List<Mesh> meshes = new List();
   List<CameraPerspective> cameras = new List();
   List<Light> lights = new List();
 
@@ -62,11 +64,11 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       setupUserInput();
       await setupScene();
 
-      GridModel grid = new GridModel();
-      models.add(grid);
+      GridMesh grid = new GridMesh();
+      meshes.add(grid);
 
-      AxisModel axis = new AxisModel();
-      models.add(axis);
+      AxisMesh axis = new AxisMesh();
+      meshes.add(axis);
     }
   }
 
@@ -75,9 +77,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     //Lazy init here if null
     if(updateUserInputFunction == null) {
-      updateUserInputFunction = () {
-        interaction.update();
-      };
+      updateUserInputFunction = () {};
     }
 
     //why here ?
@@ -114,7 +114,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   @override
   void updateScene() {
-    for (Mesh model in models) {
+    for (Mesh model in meshes) {
       model.update();
     }
     if(updateSceneFunction != null) {
@@ -126,7 +126,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   @override
   void render(){
-    for (Mesh model in models) {
+    for (Mesh model in meshes) {
       model.render();
     }
 
@@ -142,14 +142,14 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       node.primitive.material ??= defaultMaterial;
       node.name ??= node.runtimeType.toString();
 
-      models.add(node);
+      meshes.add(node);
       currentSelection = node;
     }else if(node is Camera){
 
     }
   }
 
-  void createModelByType(ModelType modelType){
+  void createMeshByType(MeshType modelType){
     add(new Mesh.createByType(modelType));
   }
 
@@ -176,7 +176,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
     for(var item in jsonScene["models"] as List){
       Mesh model = new Mesh.fromJson(item as Map);
-      models.add(model);
+      meshes.add(model);
     }
   }
 
@@ -218,7 +218,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
     if(jsonScene["models"] != null) {
       for (var item in jsonScene["models"] as List) {
         Mesh model = new Mesh.fromJson(item as Map);
-        models.add(model);
+        meshes.add(model);
       }
     }
   }
@@ -236,7 +236,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
       jsonScene["lights"] = lights;
     }
 
-    jsonScene["models"] = models;
+    jsonScene["models"] = meshes;
 
     Map json = new Map<String, Object>();
     json['scene'] = jsonScene;

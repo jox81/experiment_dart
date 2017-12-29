@@ -31,6 +31,7 @@ class Node extends GLTFChildOfRootProperty {
     _updateMatrix();
   }
 
+  //Transform : position, rotation, scale
   Matrix4 _matrix = new Matrix4.identity();
   Matrix4 get matrix => _matrix;
   set matrix(Matrix4 value) {
@@ -56,7 +57,7 @@ class Node extends GLTFChildOfRootProperty {
   bool _visible = true;
   bool get visible => _visible;
   set visible(bool value) =>
-      _visible = value; //Transform : position, rotation, scale
+      _visible = value;
 
   List<IComponent> components = new List();
 

@@ -12,21 +12,24 @@ Future main() async {
   group("Image", () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/image/empty.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFImage> images = gltf.images;
       expect(images.length, 0);
     });
     test("Array length", () async {
       String gltfPath = 'gltf/tests/base/data/image/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFImage> images = gltf.images;
       expect(images.length, 3);
     });
     test("properties", () async {
       String gltfPath = 'gltf/tests/base/data/image/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFImage image00 = gltf.images[0];
       expect(image00.uri.toString(), "pink.png");

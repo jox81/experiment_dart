@@ -71,42 +71,42 @@ class SceneViewTexturing extends Scene{
     //Meshes
 
     // create triangle
-    TriangleModel triangle = new TriangleModel()
+    TriangleMesh triangle = new TriangleMesh()
       ..name = 'triangle'
       ..matrix.translate(-5.0, 0.0, 5.0)
       ..material = materialBaseTexture;
-    models.add(triangle);
+    meshes.add(triangle);
 
     // create square
-    QuadModel square = new QuadModel()
+    QuadMesh square = new QuadMesh()
       ..matrix.translate(0.0, 0.0, 0.0)
       ..matrix.rotateX(radians(90.0))
       ..material = materialBaseTexture;
-    models.add(square);
+    meshes.add(square);
 
     // create square
-    QuadModel squareX = new QuadModel()
+    QuadMesh squareX = new QuadMesh()
       ..matrix.translate(0.0, 0.0, 5.0)
       ..material = materialBaseTexture;
-    models.add(squareX);
+    meshes.add(squareX);
 
     //create Pyramide
-    PyramidModel pyramid = new PyramidModel()
+    PyramidMesh pyramid = new PyramidMesh()
       ..matrix.translate(5.0, 1.0, 0.0)
       ..material = materialBaseTexture;
-    models.add(pyramid);
+    meshes.add(pyramid);
 
     //Create Cube
-    CubeModel cube = new CubeModel();
+    CubeMesh cube = new CubeMesh();
     cube.matrix.translate(-5.0, 1.0, 0.0);
     cube.material = materialBaseTexture;
-    models.add(cube);
+    meshes.add(cube);
 
     //Sphere
-    SphereModel sphere = new SphereModel(radius: 1.5, segmentV: 48, segmentH: 48)
+    SphereMesh sphere = new SphereMesh(radius: 1.5, segmentV: 48, segmentH: 48)
       ..matrix.translate(0.0, 0.0, -5.0)
       ..material = materialBaseTexture;
-    models.add(sphere);
+    meshes.add(sphere);
 
 //    ImageElement imageFabricBump = await TextureUtils.loadImage("./images/fabric_bump.jpg");
 //    texture.image = imageFabricBump;

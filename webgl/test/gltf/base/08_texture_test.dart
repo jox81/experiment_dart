@@ -12,21 +12,24 @@ Future main() async {
   group("Texture", () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/texture/empty.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 0);
     });
     test("Array length", () async {
       String gltfPath = 'gltf/tests/base/data/texture/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 1);
     });
     test("properties", () async {
       String gltfPath = 'gltf/tests/base/data/texture/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 1);

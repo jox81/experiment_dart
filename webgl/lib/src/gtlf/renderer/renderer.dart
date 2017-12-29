@@ -7,6 +7,7 @@ import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
+import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart' hide gl;
@@ -63,32 +64,6 @@ class GLTFRenderer implements Interactable {
     interaction = new Interaction(this);
 
     interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
-  }
-
-  Future render() async {
-    //debug.logCurrentFunction();
-
-    await ShaderSource.loadShaders();
-    //> Init extensions
-    //This activate extensions
-    var hasSRGBExt = gl.getExtension('EXT_SRGB');
-    var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
-    var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
-
-    globalState = new GlobalState()
-      ..scene = null
-      ..hasLODExtension = hasLODExtension
-      ..hasDerivativesExtension = hasDerivativesExtension
-      ..sRGBifAvailable =
-      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
-
-    await _initTextures();
-    setupCameras();
-
-    Context.backgroundColor = new Vector4(.2, 0.2, 0.2, 1.0);
-    Context.resizeCanvas();
-
-    _render();
   }
 
   Future _initTextures() async {
@@ -215,24 +190,34 @@ class GLTFRenderer implements Interactable {
     return texture;
   }
 
-  num currentTime = 0;
-  num deltaTime = 0;
-  num timeFps = 0;
-  int fps = 0;
-  num speedFactor = 1.0;
+  Future render() async {
+    //debug.logCurrentFunction();
+    if(currentScene == null) throw new Exception("currentScene must be set before rendering.");
+
+    await ShaderSource.loadShaders();
+    //> Init extensions
+    //This activate extensions
+    var hasSRGBExt = gl.getExtension('EXT_SRGB');
+    var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
+    var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
+
+    globalState = new GlobalState()
+      ..scene = null
+      ..hasLODExtension = hasLODExtension
+      ..hasDerivativesExtension = hasDerivativesExtension
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+
+    await _initTextures();
+    setupCameras();
+
+    Context.backgroundColor = new Vector4(.2, 0.2, 0.2, 1.0);
+
+    _render();
+  }
+
   void _render({num time: 0.0}) {
-    //debug.logCurrentFunction(
-//        '\n------------------------------------------------');
-
-    deltaTime = time - currentTime;
-    timeFps += deltaTime;
-    fps++;
-    currentTime = time * speedFactor;
-
-    if (fps >= 1000) {
-      timeFps = 0;
-      fps = 0;
-    }
+    Time.currentTime = time;
 
     try {
         update();
@@ -244,6 +229,22 @@ class GLTFRenderer implements Interactable {
     window.requestAnimationFrame((num time) {
       this._render(time: time);
     });
+  }
+
+  void update() {
+    //debug.logCurrentFunction();
+
+    interaction.update();
+
+    for (int i = 0; i < gltfProject.animations.length; i++) {
+      GLTFAnimation animation = gltfProject.animations[i];
+      for (int j = 0; i < animation.channels.length; i++) {
+        GLTFAnimationChannel channel = animation.channels[j];
+
+        ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler);
+        channel.target.node.rotation = new Quaternion.fromBuffer(byteBuffer, 0);
+      }
+    }
   }
 
   void _renderCurrentScene() {
@@ -486,22 +487,6 @@ class GLTFRenderer implements Interactable {
     camera.translation = node.translation;
   }
 
-  void update() {
-    //debug.logCurrentFunction();
-
-    interaction.update();
-
-    for (int i = 0; i < gltfProject.animations.length; i++) {
-      GLTFAnimation animation = gltfProject.animations[i];
-      for (int j = 0; i < animation.channels.length; i++) {
-        GLTFAnimationChannel channel = animation.channels[j];
-
-        ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler);
-        channel.target.node.rotation = new Quaternion.fromBuffer(byteBuffer, 0);
-      }
-    }
-  }
-
   ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler) {
     //debug.logCurrentFunction();
 
@@ -509,7 +494,7 @@ class GLTFRenderer implements Interactable {
     Float32List keyValues = getKeyValues(sampler.output);
 
     num playTime =
-        (currentTime / 1000) % keyTimes.last; // Todo (jpu) : find less cost ?
+        (Time.currentTime / 1000) % keyTimes.last; // Todo (jpu) : find less cost ?
 
     //> playtime range
     int previousIndex = 0;

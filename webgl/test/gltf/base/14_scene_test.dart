@@ -8,7 +8,9 @@ void main() {
   group('Scene', () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/scene/empty.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
+
       expect(gltf, isNotNull);
 
       List<GLTFScene> scenes = gltf.scenes;
@@ -17,7 +19,9 @@ void main() {
 
     test("Array length", () async {
       String gltfPath = 'gltf/tests/base/data/scene/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
+
       expect(gltf, isNotNull);
 
       List<GLTFScene> scenes = gltf.scenes;
@@ -26,7 +30,8 @@ void main() {
 
     test("Property", () async {
       String gltfPath = 'gltf/tests/base/data/scene/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFScene scene = gltf.scenes[0];
 

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
@@ -10,30 +11,14 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/renderer/renderer.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 
-Future main() async {
-  GLTFProject gltf = new GLTFProject();
+GLTFProject bMultiMesh() {
+  GLTFProject project = new GLTFProject();
 
   GLTFScene scene = new GLTFScene();
-  gltf.addScene(scene);
-  gltf.scene = scene;
+  project.addScene(scene);
+  project.scene = scene;
 
-  Float32List vertexPositions = new Float32List.fromList([
-    0.0, 0.0, 0.0, //
-    1.0, 0.0, 0.0, //
-    0.0, 1.0, 0.0
-  ]);
-
-  Int16List vertexIndices = new Int16List.fromList([
-    0,1,2
-  ]);
-
-  Float32List vertexNormals = new Float32List.fromList([
-    0.0, 0.0, 1.0, //
-    0.0, 0.0, 1.0, //
-    0.0, 0.0, 1.0
-  ]);
-
-  GLTFMesh mesh = GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals);
+  GLTFMesh mesh = GLTFMesh.triangle();
   GLTFPBRMaterial material = new GLTFPBRMaterial(pbrMetallicRoughness: new GLTFPbrMetallicRoughness(baseColorFactor: new Vector4(0.8,0.0,0.0,1.0).storage, metallicFactor: 0.0, roughnessFactor: 0.0));
   mesh.primitives[0].baseMaterial = material;
 
@@ -49,8 +34,7 @@ Future main() async {
     scene.addNode(node);
   }
 
-  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  await new GLTFRenderer(canvas, gltf).render();
+  return project;
 }
 
 

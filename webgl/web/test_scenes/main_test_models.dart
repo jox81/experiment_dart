@@ -116,7 +116,7 @@ class Webgl01 {
 //    SphereModel sphere = new SphereModel();
 //    models.add(sphere);
 
-    AxisModel axisModel = new AxisModel();
+    AxisMesh axisModel = new AxisMesh();
     models.add(axisModel);
 
 //    AxisPointsModel axisPointsModel = new AxisPointsModel();
@@ -194,12 +194,12 @@ class Webgl01 {
 //      }
 //    });
 
-    TriangleModel triangleModel = new TriangleModel()
+    TriangleMesh triangleModel = new TriangleMesh()
       ..name = 'triangle'
       ..translation = new Vector3(1.0, 0.0, 0.0);
     models.add(triangleModel);
 
-    TriangleModel triangleModel2 = new TriangleModel()
+    TriangleMesh triangleModel2 = new TriangleMesh()
       ..name = 'triangle2'
       ..translation = new Vector3(-3.0, 0.0, 0.0);
     models.add(triangleModel2);

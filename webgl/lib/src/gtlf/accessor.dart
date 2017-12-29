@@ -11,7 +11,20 @@ const String MAT2 = 'MAT2';
 const String MAT3 = 'MAT3';
 const String MAT4 = 'MAT4';
 
-const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
+const String UNSIGNED_SHORT = 'UNSIGNED_SHORT';
+const String FLOAT = 'FLOAT';
+
+const Map<String, int> ACCESSOR_ELEMENT_LENGTH_IN_BYTE = const <String, int>{
+  SCALAR: 1 * 2,
+  VEC2: 2 * 4,
+  VEC3: 3 * 4,
+  VEC4: 4 * 4,
+  MAT2: 4 * 4,
+  MAT3: 9 * 4,
+  MAT4: 16 * 4
+};
+
+const Map<String, int> ACCESSOR_COMPONENTS_COUNT = const <String, int>{
   SCALAR: 1,
   VEC2: 2,
   VEC3: 3,
@@ -19,6 +32,11 @@ const Map<String, int> ACCESSOR_TYPES_LENGTHS = const <String, int>{
   MAT2: 4,
   MAT3: 9,
   MAT4: 16
+};
+
+const Map<String, int> ACCESSOR_COMPONENT_LENGTHS = const <String, int>{
+  UNSIGNED_SHORT: 2,
+  FLOAT: 4,
 };
 
 /// accessor.componentType
@@ -84,20 +102,18 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   int byteOffset; //Start reading byte at
   int byteLength;// Total length
+  int byteStride;//size of repetition group
   //
-  int count;//number of component : 3 Vector3 for a triangle with 3 positions
+  int count;//number of component : 3 x Vector3 for a triangle with 3 positions
   /// ShaderVariableType type
   int type = -1;//FLOAT_VEC3// Todo (jpu) :
   int elementLength;//Size in byte of the type : vec3 -> 3 float * 4 bytes = 12 bytes
   //
   String typeString;//SCALAR/VEC3/...
   int components;//Count of components in an element : vec3 -> 3, vec2 -> 2
-  //
   ///VertexAttribArrayType componentType
   int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
   int componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
-  //
-  int byteStride;//size of repetition group
   //<
 
   bool normalized;
@@ -114,7 +130,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       this.componentType,
       this.componentLength,
       this.typeString,
-//      this.type,
+      this.type : -1,
       this.elementLength,
       this.components,
       this.count,
@@ -132,7 +148,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: ${bufferView?.bufferViewId}, byteOffset: $byteOffset, byteLength: $byteLength, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, byteStride: $byteStride, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: ${bufferView?.bufferViewId}, byteOffset: $byteOffset, byteLength: $byteLength, byteStride: $byteStride, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
   }
 
 }

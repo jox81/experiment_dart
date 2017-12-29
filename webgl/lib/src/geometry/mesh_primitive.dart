@@ -7,16 +7,16 @@ import 'package:webgl/src/material/material.dart';
 @MirrorsUsed(
     targets: const [
       MeshPrimitive,
-      _PointMesh,
-      _LineMesh2,
-      _LineMesh,
-      _TriangleMesh,
-      _SquareMesh,
-      _PyramidMesh,
-      _CubeMesh,
-      _SphereMesh,
-      _AxisMesh,
-      _AxisPointMesh,
+      _PointMeshPrimitive,
+      _LineMeshPrimitive2,
+      _LineMeshPrimitive,
+      _TriangleMeshPrimitive,
+      _QuadMeshPrimitive,
+      _PyramidMeshPrimitive,
+      _CubeMeshPrimitive,
+      _SphereMeshPrimitive,
+      _AxisMeshPrimitive,
+      _AxisPointMeshPrimitive,
     ],
     override: '*')
 import 'dart:mirrors';
@@ -133,48 +133,52 @@ class MeshPrimitive {
   MeshPrimitive();
 
   factory MeshPrimitive.Point() {
-    return new _PointMesh();
+    return new _PointMeshPrimitive();
   }
 
   factory MeshPrimitive.Line(List<Vector3> points) {
-    return new _LineMesh(points);
+    return new _LineMeshPrimitive(points);
   }
 
   factory MeshPrimitive.Line2(List<Vector3> points) {
-    return new _LineMesh2(points);
+    return new _LineMeshPrimitive2(points);
   }
 
-  factory MeshPrimitive.Rectangle() {
-    return new _SquareMesh();
+  factory MeshPrimitive.TriangleGLTF() {
+    return new _TriangleGLTFMeshPrimitive();
   }
 
   factory MeshPrimitive.Triangle() {
-    return new _TriangleMesh();
+    return new _TriangleMeshPrimitive();
+  }
+
+  factory MeshPrimitive.Quad() {
+    return new _QuadMeshPrimitive();
   }
 
   factory MeshPrimitive.Pyramid() {
-    return new _PyramidMesh();
+    return new _PyramidMeshPrimitive();
   }
 
   factory MeshPrimitive.Cube() {
-    return new _CubeMesh();
+    return new _CubeMeshPrimitive();
   }
 
   factory MeshPrimitive.Sphere({double radius : 1.0, int segmentV: 32, int segmentH: 32}) {
-    return new _SphereMesh(radius : radius, segmentV:segmentV, segmentH:segmentH);
+    return new _SphereMeshPrimitive(radius : radius, segmentV:segmentV, segmentH:segmentH);
   }
 
   factory MeshPrimitive.Axis() {
-    return new _AxisMesh();
+    return new _AxisMeshPrimitive();
   }
 
   factory MeshPrimitive.AxisPoints() {
-    return new _AxisPointMesh();
+    return new _AxisPointMeshPrimitive();
   }
 }
 
-class _PointMesh extends MeshPrimitive {
-  _PointMesh() {
+class _PointMeshPrimitive extends MeshPrimitive {
+  _PointMeshPrimitive() {
 
     mode = DrawMode.POINTS;
     vertices = [
@@ -185,8 +189,8 @@ class _PointMesh extends MeshPrimitive {
 }
 
 //Deprecated
-class _LineMesh2 extends MeshPrimitive {
-  _LineMesh2(List<Vector3> points) {
+class _LineMeshPrimitive2 extends MeshPrimitive {
+  _LineMeshPrimitive2(List<Vector3> points) {
     assert(points.length >= 2);
 
     mode = DrawMode.LINES;
@@ -205,8 +209,8 @@ class _LineMesh2 extends MeshPrimitive {
   }
 }
 
-class _LineMesh extends MeshPrimitive {
-  _LineMesh(List<Vector3> points) {
+class _LineMeshPrimitive extends MeshPrimitive {
+  _LineMeshPrimitive(List<Vector3> points) {
     assert(points.length >= 2);
 
     mode = DrawMode.LINE_STRIP;
@@ -220,8 +224,8 @@ class _LineMesh extends MeshPrimitive {
   }
 }
 
-class _TriangleMesh extends MeshPrimitive {
-  _TriangleMesh() {
+class _TriangleGLTFMeshPrimitive extends MeshPrimitive {
+  _TriangleGLTFMeshPrimitive() {
     mode = DrawMode.TRIANGLES;
 
     vertices = [
@@ -238,8 +242,26 @@ class _TriangleMesh extends MeshPrimitive {
   }
 }
 
-class _SquareMesh extends MeshPrimitive {
-  _SquareMesh() {
+class _TriangleMeshPrimitive extends MeshPrimitive {
+  _TriangleMeshPrimitive() {
+    mode = DrawMode.TRIANGLES;
+
+    vertices = [
+      0.0, 0.0, 0.0,
+      2.0, 0.0, 0.0,
+      0.0, 2.0, 0.0
+    ];
+    indices = [0,1,2];
+    textureCoords = [
+      0.0, 0.0,
+      1.0, 0.0,
+      0.0, 1.0,
+    ];
+  }
+}
+
+class _QuadMeshPrimitive extends MeshPrimitive {
+  _QuadMeshPrimitive() {
     mode = DrawMode.TRIANGLES;
     /*
     0 - 3
@@ -270,8 +292,8 @@ class _SquareMesh extends MeshPrimitive {
   }
 }
 
-class _PyramidMesh extends MeshPrimitive {
-  _PyramidMesh() {
+class _PyramidMeshPrimitive extends MeshPrimitive {
+  _PyramidMeshPrimitive() {
     vertices = [
       1.0, 0.0, 1.0,
       1.0, 0.0, -1.0,
@@ -343,8 +365,8 @@ class _PyramidMesh extends MeshPrimitive {
   }
 }
 
-class _CubeMesh extends MeshPrimitive {
-  _CubeMesh() {
+class _CubeMeshPrimitive extends MeshPrimitive {
+  _CubeMeshPrimitive() {
     mode = DrawMode.TRIANGLES;
 
     vertices = [
@@ -489,7 +511,7 @@ class _CubeMesh extends MeshPrimitive {
   }
 }
 
-class _SphereMesh extends MeshPrimitive {
+class _SphereMeshPrimitive extends MeshPrimitive {
 
   Matrix4 _matRotY = new Matrix4.identity();
   Matrix4 _matRotZ = new Matrix4.identity();
@@ -500,7 +522,7 @@ class _SphereMesh extends MeshPrimitive {
   List<Vector3> sphereVerticesVector = [];
   List<double> uvs = [];
 
-  _SphereMesh({double radius : 1.0, int segmentV: 32, int segmentH : 32}) {
+  _SphereMeshPrimitive({double radius : 1.0, int segmentV: 32, int segmentH : 32}) {
 
     mode = DrawMode.TRIANGLES;
 
@@ -562,8 +584,8 @@ class _SphereMesh extends MeshPrimitive {
   }
 }
 
-class _AxisMesh extends MeshPrimitive {
-  _AxisMesh() {
+class _AxisMeshPrimitive extends MeshPrimitive {
+  _AxisMeshPrimitive() {
     mode = DrawMode.LINES;
     vertices = [
       0.0,0.0,0.0,
@@ -585,8 +607,8 @@ class _AxisMesh extends MeshPrimitive {
 }
 
 //Points
-class _AxisPointMesh extends MeshPrimitive {
-  _AxisPointMesh() {
+class _AxisPointMeshPrimitive extends MeshPrimitive {
+  _AxisPointMeshPrimitive() {
     mode = DrawMode.POINTS;
 
     vertices = [

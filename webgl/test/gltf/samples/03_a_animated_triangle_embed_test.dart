@@ -23,7 +23,8 @@ Future main() async {
 
   setUp(() async {
     String gltfPath = 'gltf/samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf';
-    gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+    gltfProject = await loadGLTF(gltfPath, useWebPath : true);
+    await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });
 
   group("Animated triangle Embed", () {

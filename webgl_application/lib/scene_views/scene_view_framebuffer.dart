@@ -42,12 +42,12 @@ class SceneViewFrameBuffer extends Scene{
       ..texture = renderedTextures[0];
     materials.add(materialBaseTextureNormal);
 
-    QuadModel quadColor = new QuadModel()
+    QuadMesh quadColor = new QuadMesh()
       ..name = 'quadColor'
       ..translation = new Vector3(0.0, 1.0, 0.0)
       ..material = materialBaseTextureNormal
       ..matrix.rotateZ(radians(90.0));
-    models.add(quadColor);
+    meshes.add(quadColor);
 
     //
     MaterialDepthTexture materialDepthTextureNormal =
@@ -55,12 +55,12 @@ class SceneViewFrameBuffer extends Scene{
       ..texture = renderedTextures[1];
     materials.add(materialDepthTextureNormal);
 
-    QuadModel quadDepth = new QuadModel()
+    QuadMesh quadDepth = new QuadMesh()
       ..name = 'quadDepth'
       ..translation = new Vector3(0.0, -1.0, 0.0)
       ..material = materialDepthTextureNormal
       ..matrix.rotateZ(radians(90.0));
-    models.add(quadDepth);
+    meshes.add(quadDepth);
 
 
 

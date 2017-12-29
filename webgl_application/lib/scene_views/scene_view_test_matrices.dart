@@ -35,9 +35,9 @@ class SceneViewTestMatrices extends Scene{
 //    print('Context.mainCamera.viewProjectionMatrix : \n${Context.mainCamera.viewProjectionMatrix}');
     print('Context.mainCamera.viewProjectionMatrix calc: \n${Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix}');
 
-    PointModel model = new PointModel()
+    PointMesh model = new PointMesh()
       ..translation = new Vector3(1.0,0.0,0.0);
-    models.add(model);
+    meshes.add(model);
 
     print('model.transform : \n${model.matrix}');
     print('Context.modelMatrix : \n${Context.modelMatrix}');

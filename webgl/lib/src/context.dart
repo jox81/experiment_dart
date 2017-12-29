@@ -112,7 +112,7 @@ class Context{
   static WebglParameters get webglParameters => WebglParameters.instance();
 
   static void resizeCanvas() {
-    var realToCSSPixels = window.devicePixelRatio;
+    var realToCSSPixels = 1.0;//window.devicePixelRatio;
 
     // Lookup the size the browser is displaying the canvas.
 //    var displayWidth = (_canvas.parent.offsetWidth* realToCSSPixels).floor();

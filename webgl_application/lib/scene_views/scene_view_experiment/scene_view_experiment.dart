@@ -34,7 +34,7 @@ class SceneViewExperiment extends Scene{
 
     Mesh model = await exp004.experiment();
     materials.add(model.material);
-    models.add(model);
+    meshes.add(model);
 
     //Animation
     updateSceneFunction = () {

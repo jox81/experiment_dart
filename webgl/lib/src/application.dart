@@ -27,9 +27,6 @@ enum ActiveToolType { select, move, rotate, scale }
 
 class Application implements Interactable{
 
-//  static Scene get currentScene => Application.instance != null ? Application.instance.currentScene as Scene : null;
-
-
   //Singleton
   static Application _instance;
   static Application get instance => _instance;
@@ -42,6 +39,8 @@ class Application implements Interactable{
   CanvasElement get canvas => _canvas;
 
   WebGL.RenderingContext get gl => ctxWrapper.gl;
+
+  Mesh tempSelection;
 
   Application._internal(this._canvas){
     Context.init(canvas);
@@ -64,7 +63,6 @@ class Application implements Interactable{
     _currentScene = null;
     _currentScene = value;
   }
-
 
   /// Active Axis
   Map<AxisType, bool> _activeAxis = {
@@ -105,8 +103,6 @@ class Application implements Interactable{
     }
   }
 
-  Mesh tempSelection;
-
   void initInteraction(){
     _interaction = new Interaction(this);
 
@@ -120,7 +116,7 @@ class Application implements Interactable{
     if (Context.mainCamera != null) {
       Mesh modelHit = UtilsGeometry.findModelFromMouseCoords(
           Context.mainCamera, event.offset.x, event.offset.y,
-          currentScene.models);
+          currentScene.meshes);
       tempSelection = modelHit;
     }
   }
@@ -177,18 +173,28 @@ class Application implements Interactable{
   }
 
   void render() {
-    if(_currentScene == null) throw new Exception("Application currentScene must be set before rendering.");
+    if(_currentScene == null) throw new Exception("currentScene must be set before rendering.");
     _render();
   }
 
   void _render({num time: 0.0}) {
     Time.currentTime = time;
 
-    _renderCurrentScene();
+    try {
+      update();
+      _renderCurrentScene();
+    } catch (ex) {
+      print("Error: $ex");
+    }
 
     window.requestAnimationFrame((num time) {
       this._render(time: time);
     });
+  }
+
+  void update() {
+    interaction.update();
+    _currentScene.update();
   }
 
   void _renderCurrentScene() {
@@ -196,7 +202,6 @@ class Application implements Interactable{
 
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    _currentScene.update();
     _currentScene.render();
   }
 }

@@ -23,7 +23,9 @@ void main() {
     setUpAll(() async {
       String gltfPath =
           'gltf/tests/base/data/accessor/get_elements.gltf';
-      gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
+
 
       // All buffers are loaded
       expect(gltf.buffers.every((buffer) => buffer.data != null), true);

@@ -5,7 +5,7 @@ import 'dart:typed_data';
 
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/utils/utils_fps.dart';
+import 'package:webgl/src/time/time.dart';
 
 abstract class Interactable{
   Interaction get interaction;
@@ -106,7 +106,7 @@ class Interaction {
 
   void update() {
     _handleKeys();
-    UtilsFps.showFps(elementFPSText);
+    Time.showFps(elementFPSText);
   }
 
   void _handleKeys() {

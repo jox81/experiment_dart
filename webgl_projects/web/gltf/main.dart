@@ -12,8 +12,10 @@ Future main() async {
   ];
 
   UtilsAssets.webPath = '../';
-  GLTFProject gltf = await debugGltf(gltfSamplesPaths.first, doGlTFProjectLog : false, isDebug:false);
+
+  GLTFProject gltfProject = await loadGLTF(gltfSamplesPaths.first, useWebPath : true);
+  await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
 
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  await new GLTFRenderer(canvas, gltf).render();
+  await new GLTFRenderer(canvas, gltfProject).render();
 }

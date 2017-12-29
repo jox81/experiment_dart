@@ -20,7 +20,8 @@ Future main() async {
 
   setUp(() async {
     String gltfPath = 'gltf/samples/gltf_2_0/00_triangle_without_indices/gltf_embed/TriangleWithoutIndices.gltf';
-    gltfProject = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+    gltfProject = await loadGLTF(gltfPath, useWebPath : true);
+    await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });
 
   group("TriangleWithoutIndices Embed", () {

@@ -504,7 +504,7 @@ class TextureUtils {
           ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
       //plane
-      QuadModel quadColor = new QuadModel()
+      QuadMesh quadColor = new QuadMesh()
         ..name = 'ground'
         ..primitive.material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0))
         ..translation = new Vector3(0.0, 0.0, -50.0)
@@ -514,7 +514,7 @@ class TextureUtils {
 
       //cubes
       for (int i = 0; i < 20; i++) {
-        CubeModel cube = new CubeModel()
+        CubeMesh cube = new CubeMesh()
           ..translation = new Vector3(0.0, 0.0, -4.0 * i.toDouble());
         models.add(cube);
       }

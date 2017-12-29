@@ -28,7 +28,7 @@ class WebglTest {
   }
 
   void test01() {
-    TriangleModel triangleModel = new TriangleModel();
+    TriangleMesh triangleModel = new TriangleMesh();
     print('triangleModel.mesh.vertices.length : ${triangleModel.primitive.vertices.length}');
     print('triangleModel.mesh.indices.length : ${triangleModel.primitive.indices.length}');
 
@@ -47,7 +47,7 @@ class WebglTest {
 
   // Todo (jpu) : test multiple buffer bind. Ther's not much info about bound buffers
   void test02() {
-    TriangleModel triangleModel = new TriangleModel();
+    TriangleMesh triangleModel = new TriangleMesh();
 
     WebGLBuffer vertexBufferTriangle = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBufferTriangle.webGLBuffer);

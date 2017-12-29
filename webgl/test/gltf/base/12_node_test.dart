@@ -126,7 +126,8 @@ void main() {
   group('Node from gltf', () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/node/empty.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes.length, 0);
@@ -134,7 +135,8 @@ void main() {
 
     test("Array length", () async {
       String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes.length, 2);
@@ -142,7 +144,8 @@ void main() {
 
     test("Compare", () async {
       String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes[0] == nodes[0], true);
@@ -150,7 +153,8 @@ void main() {
 
     test("Node hierarchy", () async {
       String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes[0].children.length, 1);
@@ -161,7 +165,8 @@ void main() {
 
     test("Property", () async {
       String gltfPath = 'gltf/tests/base/data/node/valid_full.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFNode node = gltf.nodes[0];
       expect(node, isNotNull);

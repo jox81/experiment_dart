@@ -21,7 +21,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
     directives: const <dynamic>[ClickOutsideDirective])
 class MenuComponent{
 
-  Scene get currentScene => Application.instance.currentScene as Scene;
+  Scene get currentScene => Application.instance.currentScene;
 
   Map<String, bool> openedMenus = {
     'headerId0' : false,
@@ -82,16 +82,16 @@ class MenuComponent{
     closeAllMenus();
   }
 
-  // >> Models
+  // >> Meshs
 
   // use enums instead
-  // bool createModelByType(ModelType modelType){
-  bool createModelByType(String modelTypeString){
+  // bool createMeshByType(MeshType modelType){
+  bool createMeshByType(String modelTypeString){
 
-    ModelType modelType = ModelType.values.firstWhere((ModelType e)=> e.toString() == modelTypeString, orElse: ()=> null);
+    MeshType modelType = MeshType.values.firstWhere((MeshType e)=> e.toString() == modelTypeString, orElse: ()=> null);
 
     if(currentScene != null && modelType != null){
-      currentScene.createModelByType(modelType);
+      currentScene.createMeshByType(modelType);
     }else{
       print('$modelTypeString not created');
     }

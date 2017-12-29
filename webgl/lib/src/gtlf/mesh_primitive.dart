@@ -18,6 +18,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   final bool hasPosition;
   final bool hasNormal;
+  final bool hasTextureCoord;
   final bool hasTangent;
 
   final int colorCount;
@@ -55,6 +56,7 @@ class GLTFMeshPrimitive extends GltfProperty {
       {this.drawMode,
       this.hasPosition,
       this.hasNormal,
+      this.hasTextureCoord,
       this.hasTangent,
       this.colorCount,
       this.jointsCount,
@@ -128,6 +130,6 @@ class GLTFMeshPrimitive extends GltfProperty {
 
   @override
   String toString() {
-    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $drawMode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: ${_indicesAccessor?.accessorId}, _materialId: ${_baseMaterial?.materialId}}';
+    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $drawMode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTextureCoord: $hasTextureCoord, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: ${_indicesAccessor?.accessorId}, _materialId: ${_baseMaterial?.materialId}}';
   }
 }

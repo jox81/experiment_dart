@@ -43,11 +43,11 @@ class SceneViewPBR extends Scene{
     materials.add(materialPBR);
 
     //Sphere
-    SphereModel sphere = new SphereModel(radius: 1.0, segmentV: 48, segmentH: 48);
+    SphereMesh sphere = new SphereMesh(radius: 1.0, segmentV: 48, segmentH: 48);
     sphere.matrix.translate(0.0, 0.0, 0.0);
     sphere.material = materialPBR;
     //sphere.mode = RenderingContext.LINES;
-    models.add(sphere);
+    meshes.add(sphere);
 
   }
 }

@@ -14,7 +14,8 @@ Future main() async {
   group("Camera", () {
     test("Empty array", () async {
       String gltfPath = 'gltf/tests/base/data/camera/empty.gltf';
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<Camera> cameras = gltf.cameras;
       expect(cameras.length, 0);
@@ -22,13 +23,16 @@ Future main() async {
     test("Filled Array", () async {
       String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
+
       expect(gltf.cameras.length, 2);
     });
     test("Camera Perspective Type", () async {
       String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[0], isNotNull);
       expect(gltf.cameras[0] is CameraPerspective, isTrue);
@@ -43,7 +47,8 @@ Future main() async {
     test("Camera Orthographic Type", () async {
       String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await debugGltf(gltfPath, doGlTFProjectLog : false, isDebug:false, useWebPath: true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[1], isNotNull);
       expect(gltf.cameras[1] is CameraOrthographic, isTrue);

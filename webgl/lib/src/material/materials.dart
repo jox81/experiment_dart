@@ -241,7 +241,7 @@ class MaterialBaseVertexColor extends Material {
     setShaderAttributElementArrayBuffer('aVertexIndice', model.primitive.indices);
 
     if(model.primitive.colors.length == 0){
-      print('No colors data defined for : ${model.name}:${model.modelType}');
+      print('No colors data defined for : ${model.name}:${model.meshType}');
       model.primitive.colors = new List<double>.generate((model.primitive.vertexCount * model.primitive.colorDimensions).toInt(), (i)=> 1.0 );
     }
     setShaderAttributArrayBuffer(
@@ -390,7 +390,7 @@ class MaterialPBR extends Material {
     setShaderAttributElementArrayBuffer('aVertexIndice', model.primitive.indices);
 
     if(model.primitive.vertexNormals.length == 0){
-      print('No vertexNormals data defined for : ${model.name}:${model.modelType}');
+      print('No vertexNormals data defined for : ${model.name}:${model.meshType}');
       model.primitive.colors = new List<double>.generate((model.primitive.vertexCount * model.primitive.vertexNormalsDimensions).toInt(), (i)=> 1.0 );
     }
     setShaderAttributArrayBuffer('aNormal', model.primitive.vertexNormals,

@@ -14,14 +14,15 @@ import 'package:webgl_application/scene_views/scene_view_particle_simple.dart';
 import 'package:webgl_application/scene_views/scene_view_pbr.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/project.dart';
 
 //Todo :
 // - créer un vrai service angular ?
 // - charger  /décharger une scene proprement
-class ServiceScene {
- static  Future<List<Scene>> getSceneViews() async => [
+class ServiceProject {
+ static  Future<List<Project>> getProjects() async => [
 //  new Scene(),
- new SceneViewPrimitives(),
+ getPrimitivesProject(),
 // new SceneViewTexturing(),
 // new SceneViewBase(),
 // new SceneViewPBR(),
