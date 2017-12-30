@@ -16,7 +16,7 @@ GLTFProject aSimpleMesh() {
   project.addScene(scene);
   project.scene = scene;
 
-  GLTFMesh mesh = GLTFMesh.triangle(withIndices : true, withNormals: true);
+  GLTFMesh mesh = new GLTFMesh.triangle(withIndices : true, withNormals: true);
 
   //> double object using same mesh data
   GLTFNode node = new GLTFNode()

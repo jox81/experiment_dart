@@ -33,14 +33,19 @@ class GLTFMeshPrimitive extends GltfProperty {
     _indicesAccessor = value;
   }
 
+  ///Default material element define in a gltf File or use of the same structure
   GLTFPBRMaterial _baseMaterial;
   GLTFPBRMaterial get baseMaterial => _baseMaterial;
   set baseMaterial(GLTFPBRMaterial value) {
     _baseMaterial = value;
   }
 
+  ///Use this to define a custom material if needed
   KronosRawMaterial _material;
   KronosRawMaterial get material => _material;
+  set material(KronosRawMaterial value) {
+    _material = value;
+  }
 
   WebGLProgram _program;
   WebGLProgram get program => _program;
@@ -67,16 +72,16 @@ class GLTFMeshPrimitive extends GltfProperty {
     if(_isMaterialInitialized) return;
 
     bool debug = false;
-    bool debugWithDebugMaterial = true;
-
-    _material;
+    bool debugWithDebugMaterial = false;
 
     if(baseMaterial == null || debug){
       if(debugWithDebugMaterial){
         _material = new KronosDebugMaterial()
           ..color = new Vector3.random();
-      } else {
+      } else if(_material == null){
         _material = new KronosDefaultMaterial();
+      }else{
+        // use _material manually defined
       }
     } else {
       _material = new KronosPRBMaterial(attributes['NORMAL'] != null, attributes['TANGENT'] != null, attributes['TEXCOORD_0'] != null, hasLODExtension);

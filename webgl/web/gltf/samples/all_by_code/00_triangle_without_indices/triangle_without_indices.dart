@@ -22,7 +22,7 @@ GLTFProject triangleWithoutIndices() {
   scene.addNode(node);
 
   /// The node must have a Mesh defined
-  GLTFMesh mesh = GLTFMesh.triangle(withIndices: false, withNormals: false);
+  GLTFMesh mesh = new GLTFMesh.triangle(withIndices: false, withNormals: false);
   node.mesh = node.mesh = mesh;
 
   project.meshes.add(mesh);

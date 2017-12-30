@@ -223,7 +223,7 @@ class GLTFRenderer implements Interactable {
         update();
         _renderCurrentScene();
     } catch (ex) {
-      print("Error: $ex");
+      print("Error From renderer _render method: $ex");
     }
 
     window.requestAnimationFrame((num time) {

@@ -6,6 +6,7 @@ import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture_info.dart';
 
@@ -27,27 +28,60 @@ GLTFProject primitives() {
   );
   project.materials.add(material);
 
-  GLTFMesh triangleMesh = GLTFMesh.triangle(withIndices:true, withNormals: false, withUVs: false)
+  KronosMaterialPoint materialPoint = new KronosMaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+//  project.materials.add(material); // Todo (jpu) : don't add ?
+
+  // Todo (jpu) :This doesn't show, use another material
+  GLTFMesh meshPoint = new GLTFMesh.point()
+    ..primitives[0].material = materialPoint;
+  project.meshes.add(meshPoint);
+  GLTFNode nodePoint = new GLTFNode()
+  ..mesh = meshPoint
+  ..name = 'point'
+  ..translation = new Vector3(-5.0, 0.0, -5.0);
+  scene.addNode(nodePoint);
+  project.addNode(nodePoint);
+
+  // Todo (jpu) :This doesn't show, use another material
+  GLTFMesh meshLine = new GLTFMesh.line([
+    new Vector3.all(0.0),
+    new Vector3(10.0, 0.0, 0.0),
+    new Vector3(10.0, 0.0, 10.0),
+    new Vector3(10.0, 10.0, 10.0),
+  ])
     ..primitives[0].baseMaterial = material;
-  project.meshes.add(triangleMesh);
+  project.meshes.add(meshLine);
+  GLTFNode nodeLine = new GLTFNode()
+  ..mesh = meshLine
+  ..name = 'multiline'
+  ..translation = new Vector3(-5.0, 0.0, -5.0);
+  scene.addNode(nodeLine);
+  project.addNode(nodeLine);
+
+  // Todo (jpu) : should use normals
+  GLTFMesh meshTriangle = new GLTFMesh.triangle(withNormals: false)
+    ..primitives[0].baseMaterial = material;
+  project.meshes.add(meshTriangle);
   GLTFNode nodeTriangle = new GLTFNode()
-  ..mesh = triangleMesh
+  ..mesh = meshTriangle
   ..name = 'triangle'
   ..translation = new Vector3(0.0, 0.0, -5.0);
   scene.addNode(nodeTriangle);
   project.addNode(nodeTriangle);
 
-  GLTFMesh quadMesh = GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
+  // Todo (jpu) : should use normals
+  GLTFMesh meshQuad = new GLTFMesh.quad(withNormals: false)
     ..primitives[0].baseMaterial = material;
-  project.meshes.add(quadMesh);
+  project.meshes.add(meshQuad);
   GLTFNode nodeQuad = new GLTFNode()
-    ..mesh = quadMesh
+    ..mesh = meshQuad
     ..name = 'quad'
     ..translation = new Vector3(5.0, 0.0, -5.0);
   scene.addNode(nodeQuad);
   project.addNode(nodeQuad);
 
-  GLTFMesh meshPyramid = GLTFMesh.pyramid(withNormals: false)
+  // Todo (jpu) : should use normals
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid(withNormals: false)
     ..primitives[0].baseMaterial = material;
   project.meshes.add(meshPyramid);
   GLTFNode nodePyramid = new GLTFNode()
@@ -57,98 +91,31 @@ GLTFProject primitives() {
   scene.addNode(nodePyramid);
   project.addNode(nodePyramid);
 
-  GLTFMesh meshCube = GLTFMesh.cube(withNormals: false)
+  // Todo (jpu) : should use normals
+  GLTFMesh meshCube = new GLTFMesh.cube(withNormals: false)
     ..primitives[0].baseMaterial = material;
   project.meshes.add(meshPyramid);
-  GLTFNode nodeMesh = new GLTFNode()
+  GLTFNode nodeCube = new GLTFNode()
     ..mesh = meshCube
     ..name = 'cube'
     ..translation = new Vector3(0.0, 0.0, 0.0);
-  scene.addNode(nodeMesh);
-  project.addNode(nodeMesh);
+  scene.addNode(nodeCube);
+  project.addNode(nodeCube);
+
+  // Todo (jpu) : should use normals
+  GLTFMesh meshSphere = new GLTFMesh.sphere(withNormals: false)
+    ..primitives[0].baseMaterial = material;
+  project.meshes.add(meshSphere);
+  GLTFNode nodeSphere = new GLTFNode()
+    ..mesh = meshSphere
+    ..name = 'sphere'
+    ..translation = new Vector3(5.0, 0.0, 0.0);
+  scene.addNode(nodeSphere);
+  project.addNode(nodeSphere);
 
   return project;
 }
 
 // Todo (jpu) : remarques sur comment convertir une scene application en gltf renderer
-//class SceneViewPrimitives extends Scene{
-//
-//  CameraPerspective camera;
-//  CameraPerspective camera2;
-//  CameraPerspective camera3;
-//
-//  int cameraIndex = 0;
-//
-//  SceneViewPrimitives();
-//
-//  void switchCamera(){
-//    cameraIndex += 1;
-//    cameraIndex %= cameras.length;
-//    Context.mainCamera = cameras[cameraIndex];
-//  }
-//
-//  @override
-//  Future setupScene() async {
-//
-//    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);// Todo (jpu) : c'est la scene qui devrait avoir un tel parametre
-//
-//    //Cameras
-//    // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-//    camera = new CameraPerspective(radians(45.0), 5.0, 1000.0)
-//      ..targetPosition = new Vector3.zero()
-//      ..translation = new Vector3(5.0, 7.5, 10.0)
-//      ..showGizmo = true;
-//    cameras.add(camera);
-//    Context.mainCamera = camera;
-//
-//    camera2 = new CameraPerspective(radians(37.0), 0.5, 10.0)
-//      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-//      ..translation = new Vector3(2.0, 2.0, 2.0)
-//      ..showGizmo = true;
-//    cameras.add(camera2);
-//
-//    camera3 = new CameraPerspective(radians(37.0), 1.0, 100.0)
-//      ..targetPosition = new Vector3(-5.0, 0.0, 0.0)
-//      ..translation = new Vector3(10.0, 10.0, 10.0)
-//      ..showGizmo = false;
-//    cameras.add(camera3);
-//
-//    //Material
-////    MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0);
-////    MaterialBase materialBase = new MaterialBase();
-////
 ////    AxisMesh axis = new AxisMesh();
 ////    meshes.add(axis);
-//
-//    PointMesh point = new PointMesh()
-//      ..name = 'point'
-//      ..translation = new Vector3(-5.0, 0.0, -3.0);
-//    meshes.add(point);
-//
-//    TriangleMesh triangle = new TriangleMesh()
-//      ..name = 'triangle'
-//      ..translation = new Vector3(0.0, 0.0, -5.0);
-//    meshes.add(triangle);
-//
-//    QuadMesh quad = new QuadMesh()
-//      ..name = "quad"
-//      ..translation = new Vector3(5.0, 0.0, -5.0);
-//    meshes.add(quad);
-//
-//    PyramidMesh pyramid = new PyramidMesh()
-//      ..name = "pyramid"
-//      ..translation = new Vector3(-5.0, 0.0, 0.0);
-//    meshes.add(pyramid);
-//
-//    CubeMesh cube = new CubeMesh()
-//      ..name = "cube"
-//      ..translation = new Vector3(0.0, 0.0, 0.0);
-//    meshes.add(cube);
-//
-//    SphereMesh sphere = new SphereMesh()
-//      ..name = "sphere"
-//      ..translation = new Vector3(5.0, 0.0, 0.0);
-//    meshes.add(sphere);
-//
-//  }
-//}

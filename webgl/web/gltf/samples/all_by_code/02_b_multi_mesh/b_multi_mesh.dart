@@ -18,7 +18,7 @@ GLTFProject bMultiMesh() {
   project.addScene(scene);
   project.scene = scene;
 
-  GLTFMesh mesh = GLTFMesh.triangle();
+  GLTFMesh mesh = new GLTFMesh.triangle();
   GLTFPBRMaterial material = new GLTFPBRMaterial(pbrMetallicRoughness: new GLTFPbrMetallicRoughness(baseColorFactor: new Vector4(0.8,0.0,0.0,1.0).storage, metallicFactor: 0.0, roughnessFactor: 0.0));
   mesh.primitives[0].baseMaterial = material;
 

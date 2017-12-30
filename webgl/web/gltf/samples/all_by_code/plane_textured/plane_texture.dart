@@ -30,7 +30,7 @@ GLTFProject planeTexture() {
   );
   project.materials.add(material);
 
-  GLTFMesh mesh = GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
+  GLTFMesh mesh = new GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
     ..primitives[0].baseMaterial = material;
   GLTFNode node = new GLTFNode()
     ..mesh = mesh

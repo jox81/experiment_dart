@@ -8,6 +8,7 @@ import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/geometry/mesh_primitive.dart';
 
 class GLTFMesh extends GLTFChildOfRootProperty {
   static int nextId = 0;
@@ -221,307 +222,66 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     return lastBaseDataLength;
   }
 
-  static GLTFMesh triangle({bool withIndices : true, bool withNormals : true, bool withUVs : true}){
-    Float32List vertexPositions = new Float32List.fromList([
-      0.0, 0.0, 0.0,
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0
-    ]);
-
-    Int16List vertexIndices;
-    if(withIndices) {
-      vertexIndices = new Int16List.fromList([0, 1, 2]);
-    }
-
-    Float32List vertexNormals;
-    if (withNormals) {
-      vertexNormals = new Float32List.fromList([
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0
-      ]);
-    }
-
-    Float32List vertexUVs;
-    if (withUVs) {
-      vertexNormals = new Float32List.fromList([
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-      ]);
-    }
-
-    return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUVs);
-  }
-
-  static GLTFMesh quad({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
-
-    /*
-    2 - 3
-    | \ |
-    0 - 1
-    */
-
+  static GLTFMesh createMeshWithPrimitive(MeshPrimitive meshPrimitive, bool withIndices, bool withNormals, bool withUVs) {
     Float32List vertexPositions;
-    vertexPositions = new Float32List.fromList([
-      0.0, 0.0, 0.0,
-      1.0, 0.0, 0.0,
-      0.0, 1.0, 0.0,
-      1.0, 1.0, 0.0
-    ]);
+    vertexPositions = new Float32List.fromList(meshPrimitive.vertices);
 
     Int16List vertexIndices;
     if (withIndices) {
-      vertexIndices = new Int16List.fromList([
-        0, 1, 2,
-        1, 3, 2,
-      ]);
+      vertexIndices = new Int16List.fromList(meshPrimitive.indices);
     }
 
-    // Todo (jpu) : break texture
     Float32List vertexNormals;
     if (withNormals) {
-      vertexNormals = new Float32List.fromList([
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-      ]);
+      vertexNormals = new Float32List.fromList(meshPrimitive.vertexNormals);
     }
 
     Float32List vertexUvs;
     if (withUVs) {
-      vertexUvs = new Float32List.fromList([
-        0.0, 1.0,
-        1.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-      ]);
+      vertexUvs = new Float32List.fromList(meshPrimitive.textureCoords);
     }
 
     return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
   }
 
-  static GLTFMesh cube({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
-    Float32List vertexPositions;
-    vertexPositions = new Float32List.fromList([
-      // Front face
-      -1.0, -1.0, 1.0,
-      1.0, -1.0, 1.0,
-      1.0, 1.0, 1.0,
-      -1.0, 1.0, 1.0,
-
-      // Back face
-      -1.0, -1.0, -1.0,
-      -1.0, 1.0, -1.0,
-      1.0, 1.0, -1.0,
-      1.0, -1.0, -1.0,
-
-      // Top face
-      -1.0, 1.0, -1.0,
-      -1.0, 1.0, 1.0,
-      1.0, 1.0, 1.0,
-      1.0, 1.0, -1.0,
-
-      // Bottom face
-      -1.0, -1.0, -1.0,
-      1.0, -1.0, -1.0,
-      1.0, -1.0, 1.0,
-      -1.0, -1.0, 1.0,
-
-      // Right face
-      1.0, -1.0, -1.0,
-      1.0, 1.0, -1.0,
-      1.0, 1.0, 1.0,
-      1.0, -1.0, 1.0,
-
-      // Left face
-      -1.0, -1.0, -1.0,
-      -1.0, -1.0, 1.0,
-      -1.0, 1.0, 1.0,
-      -1.0, 1.0, -1.0,
-    ]);
-
-    Int16List vertexIndices;
-    if (withIndices) {
-      vertexIndices = new Int16List.fromList([
-        0, 1, 2, 0, 2, 3, // Front face
-        4, 5, 6, 4, 6, 7, // Back face
-        8, 9, 10, 8, 10, 11, // Top face
-        12, 13, 14, 12, 14, 15, // Bottom face
-        16, 17, 18, 16, 18, 19, // Right face
-        20, 21, 22, 20, 22, 23 // Left face
-      ]);
-    }
-
-    Float32List vertexNormals;
-    if (withNormals) {
-      vertexNormals = new Float32List.fromList([
-        // Front face
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-        0.0, 0.0, 1.0,
-
-        // Back face
-        0.0, 0.0, -1.0,
-        0.0, 0.0, -1.0,
-        0.0, 0.0, -1.0,
-        0.0, 0.0, -1.0,
-
-        // Top face
-        0.0, 1.0, 0.0,
-        0.0, 1.0, 0.0,
-        0.0, 1.0, 0.0,
-        0.0, 1.0, 0.0,
-
-        // Bottom face
-        0.0, -1.0, 0.0,
-        0.0, -1.0, 0.0,
-        0.0, -1.0, 0.0,
-        0.0, -1.0, 0.0,
-
-        // Right face
-        1.0, 0.0, 0.0,
-        1.0, 0.0, 0.0,
-        1.0, 0.0, 0.0,
-        1.0, 0.0, 0.0,
-
-        // Left face
-        -1.0, 0.0, 0.0,
-        -1.0, 0.0, 0.0,
-        -1.0, 0.0, 0.0,
-        -1.0, 0.0, 0.0,
-      ]);
-    }
-
-    Float32List vertexUvs;
-    if (withUVs) {
-      vertexUvs = new Float32List.fromList([
-        // Front
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-
-        // Back
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-
-        // Top
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-
-        // Bottom
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-
-        // Right
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-
-        // Left
-        0.0, 1.0,
-        0.0, 0.0,
-        1.0, 0.0,
-        1.0, 1.0,
-      ]);
-    }
-
-    return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
+  factory GLTFMesh.point(){
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Point();
+    GLTFMesh mesh =  createMeshWithPrimitive(meshPrimitive, false, false, false)
+      ..primitives[0].drawMode = meshPrimitive.mode;
+    return mesh;
   }
 
-  static GLTFMesh pyramid({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
-    Float32List vertexPositions;
-    vertexPositions = new Float32List.fromList([
-      1.0, 0.0, 1.0,
-      1.0, 0.0, -1.0,
-      0.0, 2.0, 0.0,
-
-      1.0, 0.0, -1.0,
-      -1.0, 0.0, -1.0,
-      0.0, 2.0, 0.0,
-
-      -1.0, 0.0, -1.0,
-      -1.0, 0.0, 1.0,
-      0.0, 2.0, 0.0,
-
-      -1.0, 0.0, 1.0,
-      1.0, 0.0, 1.0,
-      0.0, 2.0, 0.0,
-
-      1.0, 0.0, 1.0,
-      1.0, 0.0, -1.0,
-      -1.0, 0.0, -1.0,
-
-      1.0, 0.0, 1.0,
-      -1.0, 0.0, -1.0,
-      1.0, 0.0, -1.0,
-    ]);
-
-    Int16List vertexIndices;
-    if (withIndices) {
-      vertexIndices = new Int16List.fromList([
-        0, 1, 2, // right face
-        3, 4, 5, // front face
-        6, 7, 8, // left face
-        9, 10, 11, // back face
-        12, 13, 14, // bottom face
-        15, 16, 17, // bottom face
-      ]);
-    }
-
-    // Todo (jpu) : this breaks
-    Float32List vertexNormals;
-    if (withNormals) {
-      List<double> vertexNormalsTemp = []
-        ..addAll(new Plane.components(vertexPositions[0], vertexPositions[1], vertexPositions[2], 1.0).normal.storage)
-        ..addAll(new Plane.components(vertexPositions[3], vertexPositions[4], vertexPositions[5], 1.0).normal.storage)
-        ..addAll(new Plane.components(vertexPositions[6], vertexPositions[7], vertexPositions[8], 1.0).normal.storage)
-        ..addAll(new Plane.components(vertexPositions[9], vertexPositions[10], vertexPositions[11], 1.0).normal.storage)
-        ..addAll(new Vector3(0.0,-1.0,0.0).storage)
-        ..addAll(new Vector3(0.0,-1.0,0.0).storage);
-
-      vertexNormals = new Float32List.fromList(vertexNormalsTemp);
-    }
-
-    Float32List vertexUvs;
-    if (withUVs) {
-      vertexUvs = new Float32List.fromList([
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-
-        0.0, 0.0,
-        1.0, 0.0,
-        0.0, 1.0,
-      ]);
-    }
-
-    return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
+  factory GLTFMesh.line(List<Vector3> points){
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Line(points);
+    GLTFMesh mesh =  createMeshWithPrimitive(meshPrimitive, false, false, false)
+      ..primitives[0].drawMode = meshPrimitive.mode;
+    return mesh;
   }
+
+  factory GLTFMesh.triangle({bool withIndices : true, bool withNormals : true, bool withUVs : true}){
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Triangle();
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+
+  factory GLTFMesh.quad({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Quad();
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+  factory GLTFMesh.pyramid({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Pyramid();
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+
+  factory GLTFMesh.cube({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Cube();
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+
+  factory GLTFMesh.sphere({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Sphere();
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+
+
+
 }

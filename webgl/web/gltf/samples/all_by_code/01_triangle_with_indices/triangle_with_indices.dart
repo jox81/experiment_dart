@@ -20,7 +20,7 @@ GLTFProject triangleWithIndices() {
   GLTFNode node = new GLTFNode();
   scene.addNode(node);
 
-  GLTFMesh mesh = GLTFMesh.triangle(withIndices: true, withNormals: false, withUVs: false);
+  GLTFMesh mesh = new GLTFMesh.triangle(withIndices: true, withNormals: false, withUVs: false);
   node.mesh = mesh;
 
   project.meshes.add(mesh);

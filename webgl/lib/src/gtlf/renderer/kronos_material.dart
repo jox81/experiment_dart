@@ -497,19 +497,40 @@ class KronosDebugMaterial extends KronosRawMaterial{
   }
 
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    //debugLog.logCurrentFunction();
-
     _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         modelMatrix .storage);
     _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
     _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
-
     _setUniform(program, 'u_Color', ShaderVariableType.FLOAT_VEC3,
         color.storage);
   }
+}
 
+class KronosMaterialPoint extends KronosRawMaterial {
+  num pointSize;
+  Vector4 color;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_point'];
+
+  KronosMaterialPoint({this.pointSize : 1.0, this.color});
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    defines['USE_COLOR_UNIFORM'] = true;
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    _setUniform(program, "uModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    _setUniform(program, "uProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    _setUniform(program, "pointSize", ShaderVariableType.FLOAT, pointSize);
+    _setUniform(program, "uColor", ShaderVariableType.FLOAT_VEC4, color.storage);
+  }
 }
 
 class SAOMaterial extends KronosRawMaterial{

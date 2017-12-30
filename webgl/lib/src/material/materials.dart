@@ -145,7 +145,7 @@ class MaterialPoint extends Material {
 
   setShaderAttributs(Mesh model) {
     setShaderAttributArrayBuffer(
-        'aVertexPosition', model.primitive.vertices, model.primitive.vertexDimensions);
+        'a_Position', model.primitive.vertices, model.primitive.vertexDimensions);
 
     if (color == null) {
       setShaderAttributArrayBuffer(
