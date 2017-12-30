@@ -8,27 +8,28 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int materialId = nextId++;
 
-  // Todo (jpu) : add other material objects
-  final GLTFPbrMetallicRoughness pbrMetallicRoughness;
-  final GLTFNormalTextureInfo normalTexture;
-  final GLTFOcclusionTextureInfo occlusionTexture;
-  final GLTFTextureInfo emissiveTexture;
+  // Todo (jpu) : add other material objects, see spec.
+  GLTFPbrMetallicRoughness pbrMetallicRoughness;
+  GLTFNormalTextureInfo normalTexture;
+  GLTFOcclusionTextureInfo occlusionTexture;
+
+  GLTFTextureInfo emissiveTexture;
+  List<double> emissiveFactor;
 
   //>
-  final List<double> emissiveFactor;
-  final String alphaMode;
-  final double alphaCutoff;
-  final bool doubleSided;
+  String alphaMode;
+  double alphaCutoff;
+  bool doubleSided;
 
   GLTFPBRMaterial(
       {this.pbrMetallicRoughness,
       this.normalTexture,
       this.occlusionTexture,
       this.emissiveTexture,
-      this.emissiveFactor,
-      this.alphaMode,
-      this.alphaCutoff,
-      this.doubleSided,
+      this.emissiveFactor : const[0.0, 0.0, 0.0],
+      this.alphaMode = "OPAQUE",
+      this.alphaCutoff : 0.5,
+      this.doubleSided : false,
       String name: ''})
       : super(name);
 

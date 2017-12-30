@@ -6,16 +6,15 @@ class GLTFPbrMetallicRoughness extends GltfProperty {
   static int nextId = 0;
   final int materialPbrId = nextId++;
 
-  final Float32List baseColorFactor;
-  final GLTFTextureInfo baseColorTexture; // Todo (jpu) : Convert to linear flow
+  List<double> baseColorFactor;
+  GLTFTextureInfo baseColorTexture;
 
-  final double metallicFactor;
-  final double roughnessFactor;
-  final GLTFTextureInfo
-  metallicRoughnessTexture; // Todo (jpu) : Convert to linear flow
+  double metallicFactor;
+  double roughnessFactor;
+  GLTFTextureInfo  metallicRoughnessTexture;
 
   GLTFPbrMetallicRoughness({
-    this.baseColorFactor,
+    this.baseColorFactor : const [1.0,1.0,1.0,1.0],
     this.baseColorTexture,
     this.metallicFactor,
     this.roughnessFactor,

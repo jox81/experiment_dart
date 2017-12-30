@@ -5,6 +5,7 @@ import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
+import 'package:webgl/src/utils/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class GLTFMesh extends GLTFChildOfRootProperty {
@@ -85,9 +86,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       int x = vertexIndices.lengthInBytes;
       int n = vertexPositions.elementSizeInBytes;
       nextMultipleVertexDataOffset = findNextIntMultiple(x, n);
-      print('vertexIndices.lengthInBytes : ${vertexIndices.lengthInBytes}');
-      print('vertexPositions.elementSizeInBytes : ${vertexPositions.elementSizeInBytes}');
-      print('nextMultipleVertexDataOffset : $nextMultipleVertexDataOffset');
+//      print('vertexIndices.lengthInBytes : ${vertexIndices.lengthInBytes}');
+//      print('vertexPositions.elementSizeInBytes : ${vertexPositions.elementSizeInBytes}');
+//      print('nextMultipleVertexDataOffset : $nextMultipleVertexDataOffset');
       ///adjust space end
       int dataOffset = nextMultipleVertexDataOffset - baseData.length;
       for(int i = 0; i < dataOffset; i++) {
@@ -174,15 +175,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     if(vertexUvs != null) {
 
       /// as uv is Vec2, it must be reorganised to match stride split
-      List<int> data = vertexUvs.buffer.asUint8List().toList();
-
-      int vec2LengthInByte = ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC2];
       int count = vertexUvs.length ~/ vec2ComponentsCount;
-      for(int i = 0; i < count; i++) {
-        data.insertAll(vec2LengthInByte * i, [0, 0, 0, 0]);
-      }
-
-      vertexUvs = new Uint8List.fromList(data).buffer.asFloat32List();
+      vertexUvs = UtilsMath.convertVec2FloatListToVec3FloatList(vertexUvs,0.0);
 
       /// UV can use same bufferView as Position.
       /// So there's no need to create a new one.
@@ -221,7 +215,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   }
 
   static int checkAddedBytes(List<int> baseData, int lastBaseDataLength) {
-    print('added ${baseData.length - lastBaseDataLength} bytes');
+//    print('added ${baseData.length - lastBaseDataLength} bytes');
     lastBaseDataLength = baseData.length;
     return lastBaseDataLength;
   }
@@ -263,9 +257,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   static GLTFMesh quad({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
 
     /*
-    1 - 3
+    2 - 3
     | \ |
-    0 - 2
+    0 - 1
     */
 
     Float32List vertexPositions;
@@ -298,9 +292,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     if (withUVs) {
       vertexUvs = new Float32List.fromList([
         0.0, 1.0,
-        0.0, 1.0,
+        1.0, 1.0,
+        0.0, 0.0,
         1.0, 0.0,
-        0.0, 0.0
       ]);
     }
 

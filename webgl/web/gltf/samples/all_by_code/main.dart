@@ -8,6 +8,7 @@ import '00_triangle_without_indices/triangle_without_indices.dart';
 import '01_triangle_with_indices/triangle_with_indices.dart';
 import '02_a_simple_mesh/a_simple_mesh.dart';
 import '02_b_multi_mesh/b_multi_mesh.dart';
+import '05_box/box.dart';
 import 'plane_textured/plane_texture.dart';
 
 List<Function> projects = [
@@ -15,7 +16,8 @@ List<Function> projects = [
 //  triangleWithIndices,
 //  aSimpleMesh,
 //  bMultiMesh,
-  planeTexture
+  planeTexture,
+//  box,
 ];
 
 Future main() async {

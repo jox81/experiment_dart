@@ -176,9 +176,9 @@ class KronosPRBMaterial extends KronosRawMaterial{
   set baseColorSamplerSlot(int value) {
     _baseColorSamplerSlot = value;
   }
-  Float32List _baseColorFactor;
-  Float32List get baseColorFactor => _baseColorFactor;
-  set baseColorFactor(Float32List value) {
+  List<double> _baseColorFactor;
+  List<double> get baseColorFactor => _baseColorFactor;
+  set baseColorFactor(List<double> value) {
     _baseColorFactor = value;
   }
 
