@@ -10,14 +10,16 @@ import '02_a_simple_mesh/a_simple_mesh.dart';
 import '02_b_multi_mesh/b_multi_mesh.dart';
 import '05_box/box.dart';
 import 'plane_textured/plane_texture.dart';
+import 'primitives/primitives.dart';
 
 List<Function> projects = [
 //  triangleWithoutIndices,
 //  triangleWithIndices,
 //  aSimpleMesh,
 //  bMultiMesh,
-  planeTexture,
+//  planeTexture,
 //  box,
+primitives
 ];
 
 Future main() async {

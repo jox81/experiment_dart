@@ -1,19 +1,34 @@
+import 'dart:typed_data';
+
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gtlf/texture_info.dart';
 
-GLTFProject getProjectTriangleWithIndices() {
-  GLTFProject project = new GLTFProject();
+GLTFProject primitives() {
+  GLTFProject project = new GLTFProject()..baseDirectory = 'primitives/';
 
   GLTFScene scene = new GLTFScene();
   scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);// Todo (jpu) : ?
   project.addScene(scene);
   project.scene = scene;
 
-  //Triangle
-  GLTFMesh triangleMesh = GLTFMesh.triangle();
+  GLTFPBRMaterial material = new GLTFPBRMaterial(
+      pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
+          baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
+          baseColorTexture: GLTFTextureInfo.createTexture(project, 'testTexture.png'),
+          metallicFactor: 0.0,
+          roughnessFactor: 1.0
+      )
+  );
+  project.materials.add(material);
+
+  GLTFMesh triangleMesh = GLTFMesh.triangle(withIndices:true, withNormals: false, withUVs: false)
+    ..primitives[0].baseMaterial = material;
   project.meshes.add(triangleMesh);
   GLTFNode nodeTriangle = new GLTFNode()
   ..mesh = triangleMesh
@@ -22,13 +37,8 @@ GLTFProject getProjectTriangleWithIndices() {
   scene.addNode(nodeTriangle);
   project.addNode(nodeTriangle);
 
-
-//    QuadMesh quad = new QuadMesh()
-//      ..name = "quad"
-//      ..translation = new Vector3(5.0, 0.0, -5.0);
-//    meshes.add(quad);
-
-  GLTFMesh quadMesh = GLTFMesh.quad();
+  GLTFMesh quadMesh = GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
+    ..primitives[0].baseMaterial = material;
   project.meshes.add(quadMesh);
   GLTFNode nodeQuad = new GLTFNode()
     ..mesh = quadMesh
@@ -36,6 +46,26 @@ GLTFProject getProjectTriangleWithIndices() {
     ..translation = new Vector3(5.0, 0.0, -5.0);
   scene.addNode(nodeQuad);
   project.addNode(nodeQuad);
+
+  GLTFMesh meshPyramid = GLTFMesh.pyramid(withNormals: false)
+    ..primitives[0].baseMaterial = material;
+  project.meshes.add(meshPyramid);
+  GLTFNode nodePyramid = new GLTFNode()
+    ..mesh = meshPyramid
+    ..name = 'pyramid'
+    ..translation = new Vector3(-5.0, 0.0, 0.0);
+  scene.addNode(nodePyramid);
+  project.addNode(nodePyramid);
+
+  GLTFMesh meshCube = GLTFMesh.cube(withNormals: false)
+    ..primitives[0].baseMaterial = material;
+  project.meshes.add(meshPyramid);
+  GLTFNode nodeMesh = new GLTFNode()
+    ..mesh = meshCube
+    ..name = 'cube'
+    ..translation = new Vector3(0.0, 0.0, 0.0);
+  scene.addNode(nodeMesh);
+  project.addNode(nodeMesh);
 
   return project;
 }

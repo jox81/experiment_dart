@@ -24,7 +24,7 @@ import 'package:webgl/src/gtlf/texture.dart';
 
 class GLTFProject {
   ///path of the directory of the gltf file
-  String baseDirectory;
+  String baseDirectory = '';
 
   List<Camera> cameras = new List();
   List<GLTFPBRMaterial> materials = new List();

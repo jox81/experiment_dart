@@ -232,13 +232,6 @@ class MultiLineMesh extends Mesh {
   }
 }
 
-class TriangleGLTFMesh extends Mesh {
-  MeshType get meshType => MeshType.triangle;
-  TriangleGLTFMesh() {
-    primitive = new MeshPrimitive.TriangleGLTF();
-  }
-}
-
 class TriangleMesh extends Mesh {
   MeshType get meshType => MeshType.triangle;
   TriangleMesh({bool doInitMaterial: true}) {

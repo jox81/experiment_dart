@@ -144,10 +144,6 @@ class MeshPrimitive {
     return new _LineMeshPrimitive2(points);
   }
 
-  factory MeshPrimitive.TriangleGLTF() {
-    return new _TriangleGLTFMeshPrimitive();
-  }
-
   factory MeshPrimitive.Triangle() {
     return new _TriangleMeshPrimitive();
   }
@@ -221,24 +217,6 @@ class _LineMeshPrimitive extends MeshPrimitive {
       vertices.addAll(points[i].storage);
 //      colors.addAll([1.0, 0.0, 0.0, 1.0]);
     }
-  }
-}
-
-class _TriangleGLTFMeshPrimitive extends MeshPrimitive {
-  _TriangleGLTFMeshPrimitive() {
-    mode = DrawMode.TRIANGLES;
-
-    vertices = [
-      0.0, 0.0, 0.0,
-      2.0, 0.0, 0.0,
-      0.0, 2.0, 0.0
-    ];
-    indices = [0,1,2];
-    textureCoords = [
-      0.0, 0.0,
-      1.0, 0.0,
-      0.0, 1.0,
-    ];
   }
 }
 

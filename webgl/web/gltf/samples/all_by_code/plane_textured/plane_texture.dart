@@ -20,48 +20,22 @@ GLTFProject planeTexture() {
   project.addScene(scene);
   project.scene = scene;
 
-  GLTFMesh mesh = GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true);
+  GLTFPBRMaterial material = new GLTFPBRMaterial(
+      pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
+          baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
+          baseColorTexture: GLTFTextureInfo.createTexture(project, 'testTexture.png'),
+          metallicFactor: 0.0,
+          roughnessFactor: 1.0
+      )
+  );
+  project.materials.add(material);
+
+  GLTFMesh mesh = GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
+    ..primitives[0].baseMaterial = material;
   GLTFNode node = new GLTFNode()
     ..mesh = mesh
     ..name = 'quad';
   scene.addNode(node);
-
-  // Create Texture infos
-
-  GLTFSampler sampler = new GLTFSampler(
-    magFilter: TextureFilterType.LINEAR,
-    minFilter: TextureFilterType.LINEAR_MIPMAP_LINEAR,
-    wrapS: TextureWrapType.MIRRORED_REPEAT,
-    wrapT: TextureWrapType.MIRRORED_REPEAT,
-  );
-  project.samplers.add(sampler);
-
-  GLTFImage image = new GLTFImage(
-    uri: new Uri.file("testTexture.png")
-  );
-  project.images.add(image);
-
-  GLTFTexture texture = new GLTFTexture(
-    sampler: sampler,
-    source: image
-  );
-  project.textures.add(texture);
-
-  GLTFTextureInfo textureInfo = new GLTFTextureInfo(0, texture: texture);
-
-  // Materiel
-
-  GLTFPBRMaterial material = new GLTFPBRMaterial(
-    pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
-      baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
-      baseColorTexture: textureInfo,
-      metallicFactor: 0.0,
-      roughnessFactor: 1.0
-    )
-  );
-  project.materials.add(material);
-
-  mesh.primitives[0].baseMaterial = material;
 
   ///
   project.meshes.add(mesh);
@@ -87,5 +61,7 @@ GLTFProject planeTexture() {
 
   return project;
 }
+
+
 
 

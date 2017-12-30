@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
@@ -243,12 +244,11 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
     Float32List vertexUVs;
     if (withUVs) {
-      // Todo (jpu) : replace this
-//      vertexNormals = new Float32List.fromList([
-//        0.0, 0.0, 1.0,
-//        0.0, 0.0, 1.0,
-//        0.0, 0.0, 1.0
-//      ]);
+      vertexNormals = new Float32List.fromList([
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+      ]);
     }
 
     return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUVs);
@@ -278,6 +278,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       ]);
     }
 
+    // Todo (jpu) : break texture
     Float32List vertexNormals;
     if (withNormals) {
       vertexNormals = new Float32List.fromList([
@@ -295,6 +296,229 @@ class GLTFMesh extends GLTFChildOfRootProperty {
         1.0, 1.0,
         0.0, 0.0,
         1.0, 0.0,
+      ]);
+    }
+
+    return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
+  }
+
+  static GLTFMesh cube({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    Float32List vertexPositions;
+    vertexPositions = new Float32List.fromList([
+      // Front face
+      -1.0, -1.0, 1.0,
+      1.0, -1.0, 1.0,
+      1.0, 1.0, 1.0,
+      -1.0, 1.0, 1.0,
+
+      // Back face
+      -1.0, -1.0, -1.0,
+      -1.0, 1.0, -1.0,
+      1.0, 1.0, -1.0,
+      1.0, -1.0, -1.0,
+
+      // Top face
+      -1.0, 1.0, -1.0,
+      -1.0, 1.0, 1.0,
+      1.0, 1.0, 1.0,
+      1.0, 1.0, -1.0,
+
+      // Bottom face
+      -1.0, -1.0, -1.0,
+      1.0, -1.0, -1.0,
+      1.0, -1.0, 1.0,
+      -1.0, -1.0, 1.0,
+
+      // Right face
+      1.0, -1.0, -1.0,
+      1.0, 1.0, -1.0,
+      1.0, 1.0, 1.0,
+      1.0, -1.0, 1.0,
+
+      // Left face
+      -1.0, -1.0, -1.0,
+      -1.0, -1.0, 1.0,
+      -1.0, 1.0, 1.0,
+      -1.0, 1.0, -1.0,
+    ]);
+
+    Int16List vertexIndices;
+    if (withIndices) {
+      vertexIndices = new Int16List.fromList([
+        0, 1, 2, 0, 2, 3, // Front face
+        4, 5, 6, 4, 6, 7, // Back face
+        8, 9, 10, 8, 10, 11, // Top face
+        12, 13, 14, 12, 14, 15, // Bottom face
+        16, 17, 18, 16, 18, 19, // Right face
+        20, 21, 22, 20, 22, 23 // Left face
+      ]);
+    }
+
+    Float32List vertexNormals;
+    if (withNormals) {
+      vertexNormals = new Float32List.fromList([
+        // Front face
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+        0.0, 0.0, 1.0,
+
+        // Back face
+        0.0, 0.0, -1.0,
+        0.0, 0.0, -1.0,
+        0.0, 0.0, -1.0,
+        0.0, 0.0, -1.0,
+
+        // Top face
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.0,
+
+        // Bottom face
+        0.0, -1.0, 0.0,
+        0.0, -1.0, 0.0,
+        0.0, -1.0, 0.0,
+        0.0, -1.0, 0.0,
+
+        // Right face
+        1.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+
+        // Left face
+        -1.0, 0.0, 0.0,
+        -1.0, 0.0, 0.0,
+        -1.0, 0.0, 0.0,
+        -1.0, 0.0, 0.0,
+      ]);
+    }
+
+    Float32List vertexUvs;
+    if (withUVs) {
+      vertexUvs = new Float32List.fromList([
+        // Front
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+
+        // Back
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+
+        // Top
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+
+        // Bottom
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+
+        // Right
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+
+        // Left
+        0.0, 1.0,
+        0.0, 0.0,
+        1.0, 0.0,
+        1.0, 1.0,
+      ]);
+    }
+
+    return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
+  }
+
+  static GLTFMesh pyramid({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    Float32List vertexPositions;
+    vertexPositions = new Float32List.fromList([
+      1.0, 0.0, 1.0,
+      1.0, 0.0, -1.0,
+      0.0, 2.0, 0.0,
+
+      1.0, 0.0, -1.0,
+      -1.0, 0.0, -1.0,
+      0.0, 2.0, 0.0,
+
+      -1.0, 0.0, -1.0,
+      -1.0, 0.0, 1.0,
+      0.0, 2.0, 0.0,
+
+      -1.0, 0.0, 1.0,
+      1.0, 0.0, 1.0,
+      0.0, 2.0, 0.0,
+
+      1.0, 0.0, 1.0,
+      1.0, 0.0, -1.0,
+      -1.0, 0.0, -1.0,
+
+      1.0, 0.0, 1.0,
+      -1.0, 0.0, -1.0,
+      1.0, 0.0, -1.0,
+    ]);
+
+    Int16List vertexIndices;
+    if (withIndices) {
+      vertexIndices = new Int16List.fromList([
+        0, 1, 2, // right face
+        3, 4, 5, // front face
+        6, 7, 8, // left face
+        9, 10, 11, // back face
+        12, 13, 14, // bottom face
+        15, 16, 17, // bottom face
+      ]);
+    }
+
+    // Todo (jpu) : this breaks
+    Float32List vertexNormals;
+    if (withNormals) {
+      List<double> vertexNormalsTemp = []
+        ..addAll(new Plane.components(vertexPositions[0], vertexPositions[1], vertexPositions[2], 1.0).normal.storage)
+        ..addAll(new Plane.components(vertexPositions[3], vertexPositions[4], vertexPositions[5], 1.0).normal.storage)
+        ..addAll(new Plane.components(vertexPositions[6], vertexPositions[7], vertexPositions[8], 1.0).normal.storage)
+        ..addAll(new Plane.components(vertexPositions[9], vertexPositions[10], vertexPositions[11], 1.0).normal.storage)
+        ..addAll(new Vector3(0.0,-1.0,0.0).storage)
+        ..addAll(new Vector3(0.0,-1.0,0.0).storage);
+
+      vertexNormals = new Float32List.fromList(vertexNormalsTemp);
+    }
+
+    Float32List vertexUvs;
+    if (withUVs) {
+      vertexUvs = new Float32List.fromList([
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
+
+        0.0, 0.0,
+        1.0, 0.0,
+        0.0, 1.0,
       ]);
     }
 

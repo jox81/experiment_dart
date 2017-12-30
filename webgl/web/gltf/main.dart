@@ -19,8 +19,8 @@ Future main() async {
 //    './samples/gltf_2_0/minimal.gltf',
 
   //textured
-    './samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
-//    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
+//    './samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
+    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured_multi.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
