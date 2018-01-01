@@ -24,6 +24,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 ], override: '*')
 import 'dart:mirrors';
 
+// Todo (jpu) : replace with GLTF
 enum MaterialType {
   MaterialCustom,
   MaterialPoint,

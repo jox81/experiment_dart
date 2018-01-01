@@ -3,8 +3,8 @@ import 'dart:async';
 
 import 'dart:html';
 import "package:test/test.dart";
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl_application/src/application.dart';
 
 Future main() async {
 
@@ -22,7 +22,7 @@ Future main() async {
 
   group("Application Init", () {
     test("application create test", () async {
-      Application application = await Application.create(canvas);
+      Application application = await Application.build(canvas);
       expect(application, isNotNull);
     });
   });

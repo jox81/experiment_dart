@@ -1,10 +1,8 @@
-import 'package:webgl/src/application.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'dart:typed_data';
 import 'dart:async';
 import 'package:webgl/src/geometry/mesh_primitive.dart';
-import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/time/time.dart';
@@ -16,7 +14,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewParticleSimple extends Scene{
+class SceneViewParticleSimple extends SceneJox{
 
   SceneViewParticleSimple();
 
@@ -25,7 +23,7 @@ class SceneViewParticleSimple extends Scene{
 
     backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    CustomObject customObject = experiment(Application.instance.currentScene) as CustomObject;
+    CustomObject customObject = experiment() as CustomObject;
     materials.add(customObject.material);
     meshes.add(customObject);
 
@@ -35,7 +33,7 @@ class SceneViewParticleSimple extends Scene{
     };
   }
 
-  Mesh experiment(IUpdatableScene scene) {
+  Mesh experiment() {
     num shaderTime = 0.0;
 
     String vShader = '''

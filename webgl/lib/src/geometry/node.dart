@@ -1,6 +1,5 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/interface/IComponent.dart';
 
 class Node extends GLTFChildOfRootProperty {

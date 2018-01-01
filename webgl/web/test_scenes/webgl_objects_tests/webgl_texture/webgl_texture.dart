@@ -33,14 +33,14 @@ class WebglTest {
         await TextureUtils.loadCubeMapImages('kitchen', webPath: '../../../');
     WebGLTexture cubeMapTexture =
         TextureUtils.createCubeMapWithImages(cubeMapImages);
-    glWrapper.activeTexture.textureCubeMap.bind(cubeMapTexture);
+    Context.glWrapper.activeTexture.textureCubeMap.bind(cubeMapTexture);
 
-    glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
 
     gl.activeTexture(TextureUnit.TEXTURE5);
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTexture.webGLTexture);
 
-    glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
   }
 
   Future testModifTexture() async {
@@ -51,20 +51,20 @@ class WebglTest {
     WebGLTexture texture2 = new WebGLTexture.texture2d();
 
     void setupTexture1(WebGLTexture texture, int size) {
-      glWrapper.activeTexture.texture2d.bind(texture);
+      Context.glWrapper.activeTexture.texture2d.bind(texture);
 
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_MIN_FILTER,
           TextureMinificationFilterType.NEAREST);
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_MAG_FILTER,
           TextureMagnificationFilterType.NEAREST);
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
-      glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+      Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
@@ -75,27 +75,27 @@ class WebglTest {
           TexelDataType.UNSIGNED_BYTE,
           null);
 
-      glWrapper.activeTexture.logActiveTextureInfo();
-      glWrapper.activeTexture.texture2d.unBind();
+      Context.glWrapper.activeTexture.logActiveTextureInfo();
+      Context.glWrapper.activeTexture.texture2d.unBind();
     }
 
     setupTexture1(texture1, size);
 
     void setupTexture2(WebGLTexture texture, int size) {
-      glWrapper.activeTexture.texture2d.bind(texture);
+      Context.glWrapper.activeTexture.texture2d.bind(texture);
 
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_MIN_FILTER,
           TextureMinificationFilterType.LINEAR);
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_MAG_FILTER,
           TextureMagnificationFilterType.LINEAR);
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_S, TextureWrapType.REPEAT);
-      glWrapper.activeTexture.texture2d.setParameterInt(
+      Context.glWrapper.activeTexture.texture2d.setParameterInt(
           TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
 
-      glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+      Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
@@ -106,15 +106,15 @@ class WebglTest {
           TexelDataType.UNSIGNED_BYTE,
           null);
 
-      glWrapper.activeTexture.logActiveTextureInfo();
-      glWrapper.activeTexture.texture2d.unBind();
+      Context.glWrapper.activeTexture.logActiveTextureInfo();
+      Context.glWrapper.activeTexture.texture2d.unBind();
     }
 
     setupTexture2(texture2, size);
 
-    glWrapper.activeTexture.texture2d.bind(texture1);
-    glWrapper.activeTexture.logActiveTextureInfo();
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.texture2d.bind(texture1);
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.texture2d.unBind();
   }
 
   Future testModifTextureInOtherUnit() async {
@@ -122,20 +122,20 @@ class WebglTest {
     WebGLTexture texture = new WebGLTexture.texture2d();
 
     //on initialize la texture et on set ses paramertes
-    glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
-    glWrapper.activeTexture.texture2d.bind(texture);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_MIN_FILTER,
     TextureMinificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_MAG_FILTER,
     TextureMagnificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
     int size = 64;
-    glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
@@ -145,29 +145,29 @@ class WebglTest {
         TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE,
         null);
-    glWrapper.activeTexture.logActiveTextureInfo();
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     //on change de textureUnit pour la texture et on change quelques parametres
-    glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE5;
-    glWrapper.activeTexture.texture2d.bind(texture);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE5;
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MIN_FILTER,
         TextureMinificationFilterType.LINEAR);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.LINEAR);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.REPEAT);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
-    glWrapper.activeTexture.logActiveTextureInfo();
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     //on rechange de textureUnit et on vérifier les parametres
-    glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
-    glWrapper.activeTexture.texture2d.bind(texture);
-    glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
   }
 
   Future testModifTextureInOtherUnitViaTexture() async {
@@ -175,20 +175,20 @@ class WebglTest {
     WebGLTexture texture = new WebGLTexture.texture2d();
 
     //on initialize la texture et on set ses paramertes
-    glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
-    glWrapper.activeTexture.texture2d.bind(texture);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_MIN_FILTER,
     TextureMinificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_MAG_FILTER,
     TextureMagnificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
     TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
     int size = 64;
-    glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
@@ -198,18 +198,18 @@ class WebglTest {
         TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE,
         null);
-    glWrapper.activeTexture.logActiveTextureInfo();
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     //on change de methode pour la texture et on change quelques parametres
-//    glWrapper.activeTexture.activeUnit = texture.editTextureUnit;
+//    Context.glWrapper.activeTexture.activeUnit = texture.editTextureUnit;
 //    texture.bind();
     texture.textureWrapS = TextureWrapType.REPEAT;
     texture.textureWrapT = TextureWrapType.REPEAT;
 
     //on rechange de textureUnit et on vérifier les parametres
-    glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
-    glWrapper.activeTexture.texture2d.bind(texture);
-    glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE3;
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
   }
 }

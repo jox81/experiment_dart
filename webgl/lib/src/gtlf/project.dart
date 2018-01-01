@@ -1,3 +1,5 @@
+import 'package:webgl/src/introspection.dart';
+
 import '../camera.dart';
 import 'dart:core';
 import 'package:webgl/src/gtlf/accessor.dart';
@@ -22,7 +24,7 @@ import 'package:webgl/src/gtlf/texture.dart';
 // Todo (jpu) : Acccessor getElement test ?
 // 16/10/2017 : reading .bin files as Uint8List
 
-class GLTFProject {
+class GLTFProject extends IEditElement{
   ///path of the directory of the gltf file
   String baseDirectory = '';
 
@@ -61,7 +63,9 @@ class GLTFProject {
     _nodes.add(value);
   }
 
-  GLTFProject();
+  GLTFProject(){
+    GLTFProject.reset();
+  }
 
   @override
   String toString() {

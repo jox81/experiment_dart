@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:convert' show BASE64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/time/time.dart';
@@ -25,7 +26,7 @@ import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 
-class GLTFRenderer implements Interactable {
+class GLTFRenderer extends IEditElement implements Interactable {
 
   // Direction from where the light is coming to origin
   DirectionalLight light = new DirectionalLight()
@@ -39,7 +40,7 @@ class GLTFRenderer implements Interactable {
 
   webgl.RenderingContext get gl => ctxWrapper.gl;
 
-  final GLTFProject gltfProject;
+  GLTFProject gltfProject;
 
   GLTFScene get currentScene => gltfProject.scenes.length > 0 ? gltfProject.scenes[0] : null;
 
@@ -52,7 +53,7 @@ class GLTFRenderer implements Interactable {
 
   WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
-  GLTFRenderer(this._canvas, this.gltfProject) {
+  GLTFRenderer(this._canvas) {
     //debug.logCurrentFunction();
     Context.init(_canvas);
     initInteraction();
@@ -190,7 +191,9 @@ class GLTFRenderer implements Interactable {
     return texture;
   }
 
-  Future render() async {
+  Future render(GLTFProject gltfProject) async {
+    this.gltfProject = gltfProject;
+
     //debug.logCurrentFunction();
     if(currentScene == null) throw new Exception("currentScene must be set before rendering.");
 
@@ -294,7 +297,7 @@ class GLTFRenderer implements Interactable {
 
     _bindVertexArrayData(program, primitive);
 
-    if (primitive.indices != null) {
+    if (primitive.indicesAccessor != null) {
       _bindIndices(primitive);
     }
   }
@@ -402,7 +405,7 @@ class GLTFRenderer implements Interactable {
 
   void _bindIndices(GLTFMeshPrimitive primitive) {
     //debug.logCurrentFunction();
-    GLTFAccessor accessorIndices = primitive.indices;
+    GLTFAccessor accessorIndices = primitive.indicesAccessor;
     Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
         .asUint16List(
         accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
@@ -413,13 +416,13 @@ class GLTFRenderer implements Interactable {
   }
 
   void _drawPrimitive(GLTFMeshPrimitive primitive) {
-    if (primitive.indices == null || primitive.drawMode == DrawMode.POINTS) {
+    if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
       GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
       if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
           primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
-      GLTFAccessor accessorIndices = primitive.indices;
+      GLTFAccessor accessorIndices = primitive.indicesAccessor;
       gl.drawElements(primitive.drawMode, accessorIndices.count,
           accessorIndices.componentType, 0);
     }

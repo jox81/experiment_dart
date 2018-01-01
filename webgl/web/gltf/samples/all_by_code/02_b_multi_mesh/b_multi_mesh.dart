@@ -1,14 +1,9 @@
-import 'dart:async';
-import 'dart:html';
-import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/renderer.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 
 GLTFProject bMultiMesh() {

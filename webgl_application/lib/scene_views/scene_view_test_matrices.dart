@@ -11,7 +11,7 @@ import 'package:webgl/src/scene.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewTestMatrices extends Scene{
+class SceneViewTestMatrices extends SceneJox{
 
   SceneViewTestMatrices();
 

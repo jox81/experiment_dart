@@ -14,7 +14,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewFrameBuffer extends Scene{
+class SceneViewFrameBuffer extends SceneJox{
 
   SceneViewFrameBuffer();
 

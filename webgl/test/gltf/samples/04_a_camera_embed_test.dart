@@ -11,9 +11,7 @@ import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 @TestOn("dartium")
 
 Future main() async {

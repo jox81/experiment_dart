@@ -14,7 +14,7 @@ import 'package:webgl/src/scene.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewPerformance extends Scene{
+class SceneViewPerformance extends SceneJox{
 
   /// implements ISceneViewBase
   String message = 'test';

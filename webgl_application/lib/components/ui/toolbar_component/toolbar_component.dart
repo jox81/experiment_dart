@@ -1,6 +1,6 @@
 import 'package:angular2/core.dart';
 import 'package:webgl_application/components/ui/toolbar_button/toolbar_button_component.dart';
-import 'package:webgl/src/ui_models/toolbar.dart';
+import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 @Component(
     selector: 'toolBar',

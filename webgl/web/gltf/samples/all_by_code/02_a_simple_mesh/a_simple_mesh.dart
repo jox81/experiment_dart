@@ -1,12 +1,7 @@
-import 'dart:async';
-import 'dart:html';
-import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/renderer.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 
 GLTFProject aSimpleMesh() {
@@ -32,9 +27,9 @@ GLTFProject aSimpleMesh() {
   project.addNode(node);
   project.addNode(node02);
 
-  if(mesh.primitives[0].indices != null) {
-    project.accessors.add(mesh.primitives[0].indices);
-    project.bufferViews.add(mesh.primitives[0].indices.bufferView);
+  if(mesh.primitives[0].indicesAccessor != null) {
+    project.accessors.add(mesh.primitives[0].indicesAccessor);
+    project.bufferViews.add(mesh.primitives[0].indicesAccessor.bufferView);
   }
 
   project.accessors.add(mesh.primitives[0].attributes['POSITION']);

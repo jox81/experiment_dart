@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -27,8 +28,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   final int texcoordCount;
 
   GLTFAccessor _indicesAccessor;
-  GLTFAccessor get indices => _indicesAccessor;
-
+  GLTFAccessor get indicesAccessor => _indicesAccessor;
   set indicesAccessor(GLTFAccessor value) {
     _indicesAccessor = value;
   }
@@ -67,6 +67,27 @@ class GLTFMeshPrimitive extends GltfProperty {
       this.jointsCount,
       this.weigthsCount,
       this.texcoordCount});
+
+
+  @override
+  String toString() {
+    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $drawMode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTextureCoord: $hasTextureCoord, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: ${_indicesAccessor?.accessorId}, _materialId: ${_baseMaterial?.materialId}}';
+  }
+
+  //>
+
+  Float32List get vertices {
+    GLTFAccessor positionAccessor = attributes['POSITION'];
+    return positionAccessor.bufferView.buffer.data.buffer
+        .asFloat32List(
+        positionAccessor.bufferView.byteOffset + positionAccessor.byteOffset,
+        positionAccessor.count * positionAccessor.components);
+  }  //>
+
+  Uint16List get indices {
+    return _indicesAccessor.bufferView.buffer.data.buffer
+      .asUint16List(_indicesAccessor.byteOffset, _indicesAccessor.count);
+  }
 
   void bindMaterial(bool hasLODExtension, int reservedTextureUnits) {
     if(_isMaterialInitialized) return;
@@ -133,8 +154,45 @@ class GLTFMeshPrimitive extends GltfProperty {
     _isMaterialInitialized = true;
   }
 
-  @override
-  String toString() {
-    return 'GLTFMeshPrimitive{attributes: $attributes, mode: $drawMode, hasPosition: $hasPosition, hasNormal: $hasNormal, hasTextureCoord: $hasTextureCoord, hasTangent: $hasTangent, colorCount: $colorCount, jointsCount: $jointsCount, weigthsCount: $weigthsCount, texcoordCount: $texcoordCount, _indices: ${_indicesAccessor?.accessorId}, _materialId: ${_baseMaterial?.materialId}}';
+  List<Triangle> _faces;
+  List<Triangle> getFaces() {
+
+    /*
+    //Référence de construction
+    0 - 3
+    | \ |
+    1 - 2
+
+    vertices = [
+      -1.0, 1.0, 0.0,
+      -1.0, -1.0, 0.0,
+      1.0, -1.0, 0.0,
+      1.0, 1.0, 0.0
+    ];
+    indices = [
+      0, 1, 2, 0, 2, 3,
+    ];
+    */
+
+    if(_faces == null){
+      _faces = [];
+
+      if(indicesAccessor != null) {
+        List<Float32List> fullVertices = [];
+        int stepVertices = 3;
+        for(int vertex = 0; vertex < vertices.length &&  vertices.length > stepVertices; vertex += stepVertices) {
+          fullVertices.add(new Float32List.fromList([vertices[vertex + 0], vertices[vertex + 1], vertices[vertex + 2]]));
+        }
+
+        int stepIndices = 3;
+        for(int i = 0; i < indices.length; i += stepIndices) {
+          Vector3 p1 = new Vector3.fromFloat32List(fullVertices[indices[i]]);
+          Vector3 p2 = new Vector3.fromFloat32List(fullVertices[indices[i + 1]]);
+          Vector3 p3 = new Vector3.fromFloat32List(fullVertices[indices[i + 2]]);
+          _faces.add(new Triangle.points(p1, p2, p3));
+        }
+      }
+    }
+    return _faces;
   }
 }

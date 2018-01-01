@@ -7,7 +7,6 @@ import 'dart:convert';
 import 'dart:mirrors';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -15,16 +14,27 @@ import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'dart:async';
-import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/material/materials.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
-class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
+abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
   static int nextId = 0;
   final int sceneId = nextId++;
+
+  List<Mesh> get meshes;
+
+  List<Camera> get cameras;
+
+  Vector4 get backgroundColor;
+
+  void createMeshByType(MeshType modelType);
+  void assignMaterial(MaterialType materialType);
+}
+
+class SceneJox extends Scene{
 
   @override
   IEditElement currentSelection;
@@ -41,9 +51,7 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   Material defaultMaterial = new MaterialBase();
 
-  Interaction get interaction => Application.instance.interaction;
-
-  Scene(){
+  SceneJox(){
     if(Context.mainCamera == null){
       Context.mainCamera = new
       CameraPerspective(radians(25.0), 0.1, 1000.0)
@@ -182,10 +190,10 @@ class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdat
 
   static Future<Scene> fromJsonFilePath(String jsonFilePath) async {
     Map json = await UtilsAssets.loadJSONResource(jsonFilePath);
-    return new Scene.fromJson(json);
+    return new SceneJox.fromJson(json);
   }
 
-  Scene.fromJson(Map json){
+  SceneJox.fromJson(Map json){
     Map jsonScene = json['scene'] as Map;
 
     backgroundColor = new Vector4.fromFloat32List(new Float32List.fromList(jsonScene["backgroundColor"] as List<double>));

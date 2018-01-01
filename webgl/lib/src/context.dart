@@ -1,8 +1,6 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_constants.dart';
 import 'package:webgl/src/webgl_objects/webgl_parameters.dart';
@@ -17,11 +15,14 @@ import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
     override: '*')
 import 'dart:mirrors';
 
-WebGLRenderingContext glWrapper;
-WebGL.RenderingContext get gl => glWrapper.gl;
-set gl(WebGL.RenderingContext ctx) => glWrapper = new WebGLRenderingContext.fromWebGL(ctx);
+WebGL.RenderingContext get gl => Context._glWrapper.gl;
+set gl(WebGL.RenderingContext ctx) => Context._glWrapper = new WebGLRenderingContext.fromWebGL(ctx);
 
 class Context{
+
+  static WebGLRenderingContext _glWrapper;
+  static WebGLRenderingContext get glWrapper => _glWrapper;
+  static set glWrapper(WebGLRenderingContext value) => _glWrapper = value;
 
   static Vector4 _backgroundColor;
   static Vector4 get backgroundColor => _backgroundColor;
@@ -72,7 +73,7 @@ class Context{
   static const bool debugging = false;
 
   static void init(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
-    glWrapper = new WebGLRenderingContext.create(canvas);
+    Context.glWrapper = new WebGLRenderingContext.create(canvas);
 
     if(initConstant) {
       _initWebglConstants();

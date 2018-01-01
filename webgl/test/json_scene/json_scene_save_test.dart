@@ -1,9 +1,7 @@
 import 'dart:async';
-import 'dart:html';
 import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
@@ -17,8 +15,8 @@ Future main() async {
 
   setUp(() async {
     testJson = await UtilsAssets.loadJSONResource('../objects/json_scene.json');
-    CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-    await Application.create(canvas);
+//    CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+//    await Application.build(canvas);
   });
 
   tearDown(() async {
@@ -34,12 +32,12 @@ Future main() async {
 
   group("test scene", () {
     test("scene creation", () {
-      Scene scene = new Scene.fromJson(testJson);
+      Scene scene = new SceneJox.fromJson(testJson);
       expect(scene,isNotNull);
     });
 
     test("scene background color", () {
-      Scene scene = new Scene.fromJson(testJson);
+      Scene scene = new SceneJox.fromJson(testJson);
       var result = scene.backgroundColor;
       var value = new Vector4.fromFloat32List(new Float32List.fromList([0.5,
       1.0,
@@ -49,13 +47,13 @@ Future main() async {
     });
 
     test("scene camera", () {
-      Scene scene = new Scene.fromJson(testJson);
+      Scene scene = new SceneJox.fromJson(testJson);
       var result = scene.cameras.length;
       expect(result == 1, isTrue);
     });
 
     test("scene models", () {
-      Scene scene = new Scene.fromJson(testJson);
+      Scene scene = new SceneJox.fromJson(testJson);
       expect(scene.meshes.length == 2, isTrue);
     });
 

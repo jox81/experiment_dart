@@ -17,7 +17,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewBase extends Scene{
+class SceneViewBase extends SceneJox{
 
 //  @override
 //  bool isEditing = true;

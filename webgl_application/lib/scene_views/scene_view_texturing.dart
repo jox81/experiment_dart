@@ -17,7 +17,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewTexturing extends Scene{
+class SceneViewTexturing extends SceneJox{
 
   SceneViewTexturing();
 

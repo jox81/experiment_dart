@@ -16,7 +16,7 @@ import 'package:webgl/src/context.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewExperiment extends Scene{
+class SceneViewExperiment extends SceneJox{
 
   SceneViewExperiment();
 

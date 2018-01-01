@@ -14,7 +14,7 @@ import 'dart:mirrors';
 import 'package:webgl/src/time/time.dart';
 
 //Scene used for learning https://www.shadertoy.com/view/Md23DV
-class SceneViewShaderLearning01 extends Scene{
+class SceneViewShaderLearning01 extends SceneJox{
 
   SceneViewShaderLearning01();
 

@@ -3,8 +3,6 @@ import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import "package:test/test.dart";
-import 'package:gltf/gltf.dart' as glTF;
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 void main() {
   group('Node', () {
     test("Node creation", () async {

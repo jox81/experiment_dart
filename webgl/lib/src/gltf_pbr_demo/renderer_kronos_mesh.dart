@@ -122,7 +122,7 @@ class KronosMesh {
       }
 
       // Indices
-      getAccessorData(gl, gltf, modelPath, primitive.indices, 'INDEX');
+      getAccessorData(gl, gltf, modelPath, primitive.indicesAccessor, 'INDEX');
 
       scene.loadImages(imageInfos, gl);
     }

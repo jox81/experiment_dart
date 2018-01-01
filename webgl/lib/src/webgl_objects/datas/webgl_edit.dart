@@ -1,6 +1,6 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/scene.dart';
 @MirrorsUsed(
     targets: const [
       WebglEdit,
@@ -10,12 +10,12 @@ import 'dart:mirrors';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class WebglEdit extends IEditElement {
-  final Scene scene;
+  final GLTFScene scene;
 
   static WebglEdit _instance;
   WebglEdit._init(this.scene);
 
-  static WebglEdit instance(Scene scene){
+  static WebglEdit instance(GLTFScene scene){
     if(_instance == null){
       _instance = new WebglEdit._init(scene);
     }

@@ -11,9 +11,7 @@ import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 
 import '../../../web/gltf/samples/all_by_code/02_a_simple_mesh/a_simple_mesh.dart';
 @TestOn("dartium")
@@ -112,7 +110,7 @@ Future main() async {
     test("meshes indices", () async {
       GLTFMesh mesh = gltfProject.meshes[0];
 
-      GLTFAccessor accessorIndices = mesh.primitives[0].indices;
+      GLTFAccessor accessorIndices = mesh.primitives[0].indicesAccessor;
       Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
           .asUint16List(accessorIndices.byteOffset, accessorIndices.count);
 

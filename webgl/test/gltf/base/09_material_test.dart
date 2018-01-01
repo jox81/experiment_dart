@@ -5,9 +5,7 @@ import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/texture_info.dart';
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 @TestOn("dartium")
 Future main() async {

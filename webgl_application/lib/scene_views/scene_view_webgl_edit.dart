@@ -13,7 +13,7 @@ import 'package:webgl/src/scene.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewWebGLEdit extends Scene{
+class SceneViewWebGLEdit extends SceneJox{
 
   SceneViewWebGLEdit();
 

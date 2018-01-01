@@ -15,7 +15,6 @@ import 'package:webgl_application/components/value_components/vector3_component/
 import 'package:webgl_application/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl_application/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation/animation_property.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
@@ -25,6 +24,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+import 'package:webgl_application/src/application.dart';
 
 @Component(
     selector: 'properties',
@@ -47,6 +47,8 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
       DynamicLoaderHtmlComponent
     ])
 class PropertiesComponent {
+  Application get application => Application.instance;
+
   IEditElement _iEditElement;
   @Input()
   set iEditElement(IEditElement value) => _iEditElement = value;
@@ -241,7 +243,7 @@ class PropertiesComponent {
     reader
       ..onLoadEnd.listen((_)async {
         ImageElement image = new ImageElement(src : reader.result.toString());
-        WebGLTexture currentTexture = Application.instance.currentScene.currentSelection as WebGLTexture;
+        WebGLTexture currentTexture = application.currentSelection as WebGLTexture;
         currentTexture.image.src = reader.result.toString(); // need this to update current property editor
         currentTexture.image = image;
       });
@@ -255,9 +257,6 @@ class PropertiesComponent {
 
   /// Return true if type is the same or if it's a subType
   bool compareType(Type elementType, Type compareType) {
-
-
-
     ClassMirror elementTypeMirror = reflectClass(elementType);
     ClassMirror compareTypeMirror = reflectClass(compareType);
     bool result = (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);

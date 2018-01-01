@@ -13,7 +13,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewVectors extends Scene{
+class SceneViewVectors extends SceneJox{
 
   SceneViewVectors();
 

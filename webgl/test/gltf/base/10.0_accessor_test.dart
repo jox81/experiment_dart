@@ -5,9 +5,7 @@ import 'package:webgl/src/gtlf/accessor_sparse_values.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 
 @TestOn("dartium")

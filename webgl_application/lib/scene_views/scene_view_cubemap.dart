@@ -15,7 +15,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewCubeMap extends Scene{
+class SceneViewCubeMap extends SceneJox{
 
   SceneViewCubeMap();
 

@@ -90,16 +90,16 @@ class WebGLTexture extends EditTexture {
 
     ActiveTexture.instance.activeTexture = editTextureUnit;
 
-    glWrapper.activeTexture.texture2d.bind(this);
+    Context.glWrapper.activeTexture.texture2d.bind(this);
 
-    glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2D(
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2D(
         0,
         TextureInternalFormat.RGBA,
         TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE,
         image);
 
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     ActiveTexture.instance.activeTexture = lastTextureUnit;
   }
@@ -119,9 +119,9 @@ abstract class EditTexture extends WebGLObject{
   /// TextureUnit textureUnit
   void bind({int textureUnit}) {
     if(textureUnit != null){
-      glWrapper.activeTexture.activeTexture = textureUnit;
+      Context.glWrapper.activeTexture.activeTexture = textureUnit;
     }
-    glWrapper.activeTexture.bindTexture(textureTarget, (this as WebGLTexture).webGLTexture);
+    Context.glWrapper.activeTexture.bindTexture(textureTarget, (this as WebGLTexture).webGLTexture);
   }
 
   // > TEXTURE_MAG_FILTER
@@ -243,7 +243,7 @@ class TextureUtils {
       bool mirrorV: false}) {
     WebGLTexture texture = new WebGLTexture.texture2d();
 
-    glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
 
     gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 1);
 
@@ -255,19 +255,19 @@ class TextureUtils {
         ? (mirrorV ? TextureWrapType.MIRRORED_REPEAT : TextureWrapType.REPEAT)
         : TextureWrapType.CLAMP_TO_EDGE;
 
-    glWrapper.activeTexture.texture2d
+    Context.glWrapper.activeTexture.texture2d
         .setParameterInt(TextureParameter.TEXTURE_WRAP_S, WRAP_S);
-    glWrapper.activeTexture.texture2d
+    Context.glWrapper.activeTexture.texture2d
         .setParameterInt(TextureParameter.TEXTURE_WRAP_T, WRAP_T);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MIN_FILTER,
         TextureMinificationFilterType.LINEAR);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.LINEAR);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     texture.image = image;
 
@@ -276,21 +276,21 @@ class TextureUtils {
 
   static WebGLTexture createEmptyTexture2D(int size) {
     WebGLTexture texture = new WebGLTexture.texture2d();
-    glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
 
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MIN_FILTER,
         TextureMinificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.REPEAT);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.REPEAT);
 //    gl.activeTexture.texture2d.generateMipmap();
 
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     texture.image = null;
 
@@ -299,21 +299,21 @@ class TextureUtils {
 
   static WebGLTexture createEmptyTextureCubeMap(int size) {
     WebGLTexture texture = new WebGLTexture.textureCubeMap();
-    glWrapper.activeTexture.textureCubeMap.bind(texture);
+    Context.glWrapper.activeTexture.textureCubeMap.bind(texture);
 
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
+    Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_MIN_FILTER,
         TextureMinificationFilterType.LINEAR);
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
+    Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.LINEAR);
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
+    Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.MIRRORED_REPEAT);
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
+    Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.MIRRORED_REPEAT);
 //    gl.activeTexture.textureCubeMap.generateMipmap();
 
-    glWrapper.activeTexture.textureCubeMap.attachmentPositiveX.texImage2DWithWidthAndHeight(
+    Context.glWrapper.activeTexture.textureCubeMap.attachmentPositiveX.texImage2DWithWidthAndHeight(
         0,
         TextureInternalFormat.RGBA,
         size,
@@ -323,7 +323,7 @@ class TextureUtils {
         TexelDataType.UNSIGNED_BYTE,
         null);
 
-    glWrapper.activeTexture.textureCubeMap.unBind();
+    Context.glWrapper.activeTexture.textureCubeMap.unBind();
 
     return texture;
   }
@@ -338,18 +338,18 @@ class TextureUtils {
 
     WebGLTexture depthTexture = new WebGLTexture.texture2d();
 
-    glWrapper.activeTexture.texture2d.bind(depthTexture);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.bind(depthTexture);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MIN_FILTER,
         TextureMinificationFilterType.NEAREST);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-    glWrapper.activeTexture.texture2d.setParameterInt(
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-    glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
         0,
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT.index,
         size,
@@ -358,7 +358,7 @@ class TextureUtils {
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT.index,
         WEBGL_depth_texture_TexelDataType.UNSIGNED_SHORT.index,
         null);
-    glWrapper.activeTexture.texture2d.unBind();
+    Context.glWrapper.activeTexture.texture2d.unBind();
 
     return depthTexture;
   }
@@ -378,8 +378,8 @@ class TextureUtils {
       WebGLTexture colorTexture, WebGLRenderBuffer depthRenderbuffer) {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
-    glWrapper.activeFrameBuffer.bind(framebuffer);
-    glWrapper.activeFrameBuffer.framebufferTexture2D(
+    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
+    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
@@ -387,15 +387,15 @@ class TextureUtils {
         0);
 
     if(depthRenderbuffer != null) {
-      glWrapper.activeFrameBuffer.framebufferRenderbuffer(
+      Context.glWrapper.activeFrameBuffer.framebufferRenderbuffer(
           FrameBufferTarget.FRAMEBUFFER,
           FrameBufferAttachment.DEPTH_ATTACHMENT,
           RenderBufferTarget.RENDERBUFFER,
           depthRenderbuffer);
     }
-    glWrapper.activeFrameBuffer.unBind();
+    Context.glWrapper.activeFrameBuffer.unBind();
 
-    if (glWrapper.activeFrameBuffer.checkFramebufferStatus() !=
+    if (Context.glWrapper.activeFrameBuffer.checkFramebufferStatus() !=
         FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
       print(
           "createRenderBuffer : this combination of attachments does not work");
@@ -409,22 +409,22 @@ class TextureUtils {
       WebGLTexture colorTexture, WebGLTexture depthTexture) {
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
-    glWrapper.activeFrameBuffer.bind(framebuffer);
-    glWrapper.activeFrameBuffer.framebufferTexture2D(
+    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
+    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
         colorTexture,
         0);
-    glWrapper.activeFrameBuffer.framebufferTexture2D(
+    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.DEPTH_ATTACHMENT,
         TextureAttachmentTarget.TEXTURE_2D,
         depthTexture,
         0);
-    glWrapper.activeFrameBuffer.unBind();
+    Context.glWrapper.activeFrameBuffer.unBind();
 
-    if (glWrapper.activeFrameBuffer.checkFramebufferStatus() !=
+    if (Context.glWrapper.activeFrameBuffer.checkFramebufferStatus() !=
         FrameBufferStatus.FRAMEBUFFER_COMPLETE) {
       print(
           "createRenderBuffer : this combination of attachments does not work");
@@ -440,8 +440,8 @@ class TextureUtils {
 
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
-    glWrapper.activeFrameBuffer.bind(framebuffer);
-    glWrapper.activeFrameBuffer.framebufferTexture2D(
+    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
+    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
@@ -461,8 +461,8 @@ class TextureUtils {
     // End draw
 
     // Unbind the framebuffer
-    glWrapper.activeFrameBuffer.unBind();
-    glWrapper.viewport = previousViewport;
+    Context.glWrapper.activeFrameBuffer.unBind();
+    Context.glWrapper.viewport = previousViewport;
 
     return _defaultColoredTexture;
   }
@@ -489,7 +489,7 @@ class TextureUtils {
       Rectangle<int> previousViewport =
           new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
-      glWrapper.activeFrameBuffer.bind(framebufferWithDepthTexture);
+      Context.glWrapper.activeFrameBuffer.bind(framebufferWithDepthTexture);
 
       CameraPerspective cameraTexture = new CameraPerspective(radians(45.0), 0.1, 100.0)
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
@@ -499,7 +499,7 @@ class TextureUtils {
 
       //Each frameBuffer component will be filled up
       gl.clearColor(.5, .5, .5, 0.0); // green;
-      glWrapper.viewport = new Rectangle(0, 0, size, size);
+      Context.glWrapper.viewport = new Rectangle(0, 0, size, size);
       gl.clear(
           ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
@@ -524,10 +524,10 @@ class TextureUtils {
       }
 
       // Unbind the framebuffer
-      glWrapper.activeFrameBuffer.unBind();
+      Context.glWrapper.activeFrameBuffer.unBind();
 
       if (baseCam != null) {
-        glWrapper.viewport = previousViewport;
+        Context.glWrapper.viewport = previousViewport;
         Context.mainCamera = baseCam;
       }
     }
@@ -543,10 +543,10 @@ class TextureUtils {
   static ImageElement createImageFromTexture(WebGLTexture texture, int width, int height) {
     // Create a framebuffer backed by the texture
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
-    glWrapper.activeFrameBuffer.bind(framebuffer);
-    glWrapper.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
+    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
+    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
 
-    glWrapper.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, 512, 512, 0);
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, 512, 512, 0);
 
     // Read the contents of the framebuffer
     Uint8List data = new Uint8List(width * height * 4);
@@ -580,8 +580,8 @@ class TextureUtils {
 
     // Read the contents of the framebuffer
     Uint8List data = new Uint8List(width * height * 4);
-    glWrapper.activeTexture.texture2d.bind(texture);
-    glWrapper.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, width, height, 0);
+    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.copyTexImage2D(0, TextureInternalFormat.RGBA, 0, 0, width, height, 0);
 
 //    gl.readPixels(0, 0, width, height, ReadPixelDataFormat.RGBA, ReadPixelDataType.UNSIGNED_BYTE, data);
 //    Uint8ClampedList dataClamped = new Uint8ClampedList.fromList(data.toList());
@@ -711,11 +711,11 @@ class TextureUtils {
 
     WebGLTexture texture = new WebGLTexture.textureCubeMap();
 
-    glWrapper.activeTexture.textureCubeMap.bind(texture);
+    Context.glWrapper.activeTexture.textureCubeMap.bind(texture);
 
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
+    Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-    glWrapper.activeTexture.textureCubeMap.setParameterInt(
+    Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
 
     int mipsLevel = cubeMapImages.length;
@@ -723,17 +723,17 @@ class TextureUtils {
     int textureInternalFormat = TextureInternalFormat.RGBA;
 
     if (mipsLevel < 2) {
-      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+      Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
               TextureParameter.TEXTURE_MIN_FILTER,
               TextureMinificationFilterType.LINEAR);
-      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+      Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
           TextureParameter.TEXTURE_MAG_FILTER,
           TextureMagnificationFilterType.LINEAR);
     } else {
-      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+      Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
           TextureParameter.TEXTURE_MIN_FILTER,
           TextureMinificationFilterType.LINEAR_MIPMAP_LINEAR);
-      glWrapper.activeTexture.textureCubeMap.setParameterInt(
+      Context.glWrapper.activeTexture.textureCubeMap.setParameterInt(
           TextureParameter.TEXTURE_MAG_FILTER,
           TextureMagnificationFilterType.LINEAR);
     }
@@ -742,7 +742,7 @@ class TextureUtils {
 
     for (int mipLevels = 0; mipLevels < cubeMapImages.length; mipLevels++) {
       for (int i = 0; i < cubeMapImages[mipLevels].length; i++) {
-        glWrapper.activeTexture.textureCubeMap.attachments[i].texImage2D(
+        Context.glWrapper.activeTexture.textureCubeMap.attachments[i].texImage2D(
             mipLevels,
             textureInternalFormat,
             textureInternalFormat,
@@ -751,7 +751,7 @@ class TextureUtils {
       }
     }
 
-    glWrapper.activeTexture.textureCubeMap.unBind();
+    Context.glWrapper.activeTexture.textureCubeMap.unBind();
     return texture;
   }
 }

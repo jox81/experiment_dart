@@ -2,6 +2,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/material/materials.dart';
 
@@ -110,30 +111,32 @@ class UtilsGeometry{
     return resultPoints;
   }
 
-  static Mesh findModelFromMouseCoords(CameraPerspective camera, num x, num y, List<Mesh> models) {
+  static GLTFNode findModelFromMouseCoords(CameraPerspective camera, num x, num y, List<GLTFNode> nodes) {
     Ray ray = UtilsGeometry.findRay(camera, x, y);
-    Mesh modelHit = UtilsGeometry.findModelHit(models, ray);
-    return modelHit;
+    GLTFNode itemHit = UtilsGeometry.findModelHit(nodes, ray);
+    return itemHit;
   }
 
   /// Find the first hit model in the list using the ray
-  static Mesh findModelHit(List<Mesh> models, Ray ray) {
-    Mesh modelHit;
+  static GLTFNode findModelHit(List<GLTFNode> nodes, Ray ray) {
+    GLTFNode itemHit;
     num distanceHit;
 
-    for(Mesh model in models){
-      for(Triangle triangle in model.getFaces()) {
-        num distance = ray.intersectsWithTriangle(triangle);
+    for(GLTFNode node in nodes){
+      if (node.mesh != null) {
+        for(Triangle triangle in node.mesh.getFaces()) {
+          num distance = ray.intersectsWithTriangle(triangle..transform(node.matrix));
 
-        if(distance != null) {
-          if(modelHit == null || distance < distanceHit) {
-            modelHit = model;
-            distanceHit = distance;
+          if(distance != null) {
+            if(itemHit == null || distance < distanceHit) {
+              itemHit = node;
+              distanceHit = distance;
+            }
           }
         }
       }
     }
 
-    return modelHit;
+    return itemHit;
   }
 }

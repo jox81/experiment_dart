@@ -3,16 +3,16 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/geometry/utils_geometry.dart';
-import 'package:webgl/src/material/shader_source.dart';
-import 'package:webgl/src/time/time.dart';
+import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/renderer/renderer.dart';
+import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/context.dart' hide gl;
-import 'package:webgl/src/context.dart' as ctxWrapper show gl;
-import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/scene.dart';
+import 'package:webgl_application/src/ui_models/toolbar.dart';
 @MirrorsUsed(
     targets: const [
       AxisType,
@@ -25,43 +25,40 @@ import 'dart:mirrors';
 enum AxisType { view, x, y, z, any }
 enum ActiveToolType { select, move, rotate, scale }
 
-class Application implements Interactable{
-
+class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableScene{
   //Singleton
   static Application _instance;
   static Application get instance => _instance;
+  static Future<Application> build(CanvasElement canvas) async {
 
-  Interaction _interaction;
-  Interaction get interaction => _interaction;
-  CameraPerspective get mainCamera => Context.mainCamera;
+    if (instance == null) {
+      _instance = new Application._(canvas);
+    }
+    return instance;
+  }
 
   CanvasElement _canvas;
   CanvasElement get canvas => _canvas;
 
-  WebGL.RenderingContext get gl => ctxWrapper.gl;
+  GLTFScene get currentScene => project?.scene;
+  @override
+  IEditElement currentSelection;
+  GLTFRenderer renderer;
+  GLTFProject project;
+  CameraPerspective get mainCamera => Context.mainCamera;
 
-  Mesh tempSelection;
+  GLTFNode tempSelection;
+  // TODO: implement interaction
+  @override
+  Interaction get interaction => renderer.interaction;
 
-  Application._internal(this._canvas){
-    Context.init(canvas);
+  Application._(CanvasElement canvas){
+    renderer = new GLTFRenderer(canvas);
     initInteraction();
-    Context.resizeCanvas();
   }
 
-  static Future<Application> create(CanvasElement canvas) async {
-    if (_instance == null) {
-      _instance = new Application._internal(canvas);
-      await ShaderSource.loadShaders();
-    }
-
-    return _instance;
-  }
-
-  IUpdatableScene _currentScene;
-  Scene get currentScene => _currentScene as Scene;
-  set currentScene(Scene value) {
-    _currentScene = null;
-    _currentScene = value;
+  void render() {
+    renderer.render(project);
   }
 
   /// Active Axis
@@ -75,6 +72,7 @@ class Application implements Interactable{
     _activeAxis = value;
   }
 
+  @override
   void setActiveAxis(AxisType axisType, bool isActive) {
     _activeAxis[axisType] = isActive;
     print(_activeAxis);
@@ -84,6 +82,7 @@ class Application implements Interactable{
   ActiveToolType _activeTool = ActiveToolType.select;
   ActiveToolType get activeTool => _activeTool;
 
+  @override
   void setActiveTool(ActiveToolType value) {
     _activeTool = value;
     print(_activeTool);
@@ -103,27 +102,26 @@ class Application implements Interactable{
     }
   }
 
+  @override
   void initInteraction(){
-    _interaction = new Interaction(this);
-
-    _interaction.onMouseDown.listen(_onMouseDownHandler);
-    _interaction.onMouseUp.listen(_onMouseUpHandler);
-    _interaction.onDrag.listen(_onDragHandler);
-    _interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
+    interaction.onMouseDown.listen(_onMouseDownHandler);
+    interaction.onMouseUp.listen(_onMouseUpHandler);
+    interaction.onDrag.listen(_onDragHandler);
+    interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
   }
 
   void _onMouseDownHandler(MouseEvent event) {
     if (Context.mainCamera != null) {
-      Mesh modelHit = UtilsGeometry.findModelFromMouseCoords(
+      GLTFNode modelHit = UtilsGeometry.findModelFromMouseCoords(
           Context.mainCamera, event.offset.x, event.offset.y,
-          currentScene.meshes);
+          currentScene.nodes);
       tempSelection = modelHit;
     }
   }
 
   void _onMouseUpHandler(MouseEvent event) {
-    if(!_interaction.dragging) {
-      currentScene.currentSelection = tempSelection;
+    if(!interaction.dragging) {
+      currentSelection = tempSelection;
     }
   }
 
@@ -131,14 +129,14 @@ class Application implements Interactable{
     if(activeTool == ActiveToolType.move ||
         activeTool == ActiveToolType.rotate ||
         activeTool == ActiveToolType.scale) {
-      currentScene.currentSelection = tempSelection;
+      currentSelection = tempSelection;
     }
 
-    if(currentScene.currentSelection != null && currentScene.currentSelection is Mesh) {
+    if(currentSelection != null && currentSelection is Mesh) {
 
-      Mesh currentModel = currentScene.currentSelection as Mesh;
+      Mesh currentModel = currentSelection as Mesh;
 
-      double delta = _interaction.deltaX.toDouble(); // get mouse delta
+      double delta = interaction.deltaX.toDouble(); // get mouse delta
       double deltaMoveX = (activeAxis[AxisType.x]
           ? 1
           : 0) * delta;
@@ -170,38 +168,5 @@ class Application implements Interactable{
         currentModel.matrix.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
       }
     }
-  }
-
-  void render() {
-    if(_currentScene == null) throw new Exception("currentScene must be set before rendering.");
-    _render();
-  }
-
-  void _render({num time: 0.0}) {
-    Time.currentTime = time;
-
-    try {
-      update();
-      _renderCurrentScene();
-    } catch (ex) {
-      print("Error: $ex");
-    }
-
-    window.requestAnimationFrame((num time) {
-      this._render(time: time);
-    });
-  }
-
-  void update() {
-    interaction.update();
-    _currentScene.update();
-  }
-
-  void _renderCurrentScene() {
-    Context.resizeCanvas();
-
-    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
-
-    _currentScene.render();
   }
 }

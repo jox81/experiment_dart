@@ -27,5 +27,5 @@ Future main() async {
 
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
   debugGltf(gltf, doGlTFProjectLog : true, isDebug:false);
-  await new GLTFRenderer(canvas, gltf).render();
+  await new GLTFRenderer(canvas).render(gltf);
 }

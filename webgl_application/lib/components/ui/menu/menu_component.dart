@@ -2,14 +2,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:angular2/core.dart';
+import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/materials.dart';
-import 'package:webgl/src/scene.dart';
 import 'package:webgl/src/textures/texture_library.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
+import 'package:webgl_application/src/application.dart';
 
 // Suivant l'exemple :
 // http://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_dropdown_navbar_click
@@ -21,7 +23,10 @@ import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
     directives: const <dynamic>[ClickOutsideDirective])
 class MenuComponent{
 
-  Scene get currentScene => Application.instance.currentScene;
+  Application get application => Application.instance;
+
+  GLTFScene get currentScene => application.currentScene;
+  set currentSelection(IEditElement value) => application?.currentSelection = value;
 
   Map<String, bool> openedMenus = {
     'headerId0' : false,
@@ -51,9 +56,8 @@ class MenuComponent{
   // >> Files
 
   Future<bool> reset(Event event)async {
-    Scene newScene = new Scene();
-    await newScene.setup();
-    Application.instance.currentScene = newScene;
+    GLTFProject newProject = new GLTFProject();
+    application.project = newProject;
     closeAllMenus();
     return false;
   }
@@ -75,9 +79,11 @@ class MenuComponent{
     FileReader reader = new FileReader()..readAsText(file);
     reader.onLoadEnd.listen((_)async {
       String jsonContent = reader.result as String;
-      Scene newScene = new Scene.fromJson(JSON.decode(jsonContent) as Map);
-      await newScene.setup();
-      Application.instance.currentScene = newScene;
+      // Todo (jpu) : replace with GLTF
+
+      throw 'MenuComponent.open not implemented';
+//      GLTFProject newProject = new SceneJox.fromJson(JSON.decode(jsonContent) as Map);
+//      Context.application.project = newProject;
     });
     closeAllMenus();
   }
@@ -88,10 +94,12 @@ class MenuComponent{
   // bool createMeshByType(MeshType modelType){
   bool createMeshByType(String modelTypeString){
 
+    // Todo (jpu) : replace with GLTF
     MeshType modelType = MeshType.values.firstWhere((MeshType e)=> e.toString() == modelTypeString, orElse: ()=> null);
 
     if(currentScene != null && modelType != null){
-      currentScene.createMeshByType(modelType);
+      throw 'MenuComponent.createMeshByType not implemented';
+//      currentScene.createMeshByType(modelType);
     }else{
       print('$modelTypeString not created');
     }
@@ -103,7 +111,7 @@ class MenuComponent{
   // >> Textures
 
   bool editTextures(){
-    currentScene?.currentSelection = TextureLibrary.instance;
+    currentSelection = TextureLibrary.instance;
     closeAllMenus();
     return false;
   }
@@ -117,7 +125,8 @@ class MenuComponent{
     MaterialType materialType = MaterialType.values.firstWhere((MaterialType e)=> e.toString() == materialTypeString, orElse: ()=> null);
 
     if(currentScene != null && materialType != null){
-      currentScene.assignMaterial(materialType);
+      throw 'MenuComponent.assignMaterial not implemented';
+//      currentScene.assignMaterial(materialType);
     }else{
       print('$materialTypeString not created');
     }
@@ -129,37 +138,37 @@ class MenuComponent{
   // >> GL Edit
 
   bool editCustomSettings(){
-    currentScene?.currentSelection = WebglEdit.instance(currentScene);
+    currentSelection = WebglEdit.instance(currentScene);
     closeAllMenus();
     return false;
   }
 
   bool editRenderingContext(){
-    currentScene?.currentSelection = glWrapper;
+    currentSelection = Context.glWrapper;
     closeAllMenus();
     return false;
   }
 
   bool editContextAttributs(){
-    currentScene?.currentSelection = glWrapper.contextAttributes;
+    currentSelection = Context.glWrapper.contextAttributes;
     closeAllMenus();
     return false;
   }
 
   bool editActiveFrameBuffer(){
-    currentScene?.currentSelection = glWrapper.activeFrameBuffer;
+    currentSelection = Context.glWrapper.activeFrameBuffer;
     closeAllMenus();
     return false;
   }
 
   bool editCurrentProgram(){
-    currentScene?.currentSelection = glWrapper.currentProgram;
+    currentSelection = Context.glWrapper.currentProgram;
     closeAllMenus();
     return false;
   }
 
   bool editActiveTexture(){
-    currentScene?.currentSelection = glWrapper.activeTexture;
+    currentSelection = Context.glWrapper.activeTexture;
     closeAllMenus();
     return false;
   }

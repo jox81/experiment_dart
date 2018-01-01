@@ -10,7 +10,7 @@ import 'package:webgl/src/scene.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewTestJsonLights extends Scene{
+class SceneViewTestJsonLights extends SceneJox{
 
   CameraPerspective camera;
 

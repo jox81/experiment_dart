@@ -25,6 +25,18 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     return 'GLTFMesh{primitives: $primitives, weights: $weights}';
   }
 
+  //
+  List<Triangle> _faces;
+  List<Triangle> getFaces() {
+    _faces = new List();
+    for (GLTFMeshPrimitive primitive in primitives) {
+      for (Triangle triangle in primitive.getFaces()) {
+        _faces.add(new Triangle.copy(triangle));
+      }
+    }
+    return _faces;
+  }
+
   static GLTFMesh createMesh(Float32List vertexPositions, Int16List vertexIndices, Float32List vertexNormals, Float32List vertexUvs) {
     /// The mesh must have primitive
     GLTFMeshPrimitive primitive =

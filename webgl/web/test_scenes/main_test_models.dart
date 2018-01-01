@@ -212,7 +212,7 @@ class Webgl01 {
       Ray ray = UtilsGeometry.findRay(Context.mainCamera, e.offset.x, e.offset.y);
 
       models.addAll(UtilsGeometry.findModelHitPoint(modelsHit[1],ray));
-      print(UtilsGeometry.findModelHit(modelsHit, ray)?.name);
+//      print(UtilsGeometry.findModelHit(modelsHit, ray)?.name);// Todo (jpu) :
     });
 
   }

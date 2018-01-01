@@ -1,4 +1,4 @@
-import 'package:webgl/src/application.dart';
+import 'package:webgl_application/src/application.dart';
 
 typedef void UpdateToolBarItem(bool isActive);
 
@@ -17,6 +17,8 @@ class ToolBars{
     return _instance;
   }
 
+  Application get application => Application.instance;
+
   ToolBars._init(){
     _initToolbars();
   }
@@ -28,18 +30,18 @@ class ToolBars{
 
     ToolBar toolBarAxis = new ToolBar(ToolBarItemsType.multi)
       ..toolBarItems = {
-        "x": (bool isActive) => Application.instance.setActiveAxis(AxisType.x, isActive),
-        "y": (bool isActive) => Application.instance.setActiveAxis(AxisType.y, isActive),
-        "z": (bool isActive) => Application.instance.setActiveAxis(AxisType.z, isActive),
+        "x": (bool isActive) => application.setActiveAxis(AxisType.x, isActive),
+        "y": (bool isActive) => application.setActiveAxis(AxisType.y, isActive),
+        "z": (bool isActive) => application.setActiveAxis(AxisType.z, isActive),
       };
     toolBars['axis'] = toolBarAxis;
 
     ToolBar toolBarTransformTools = new ToolBar(ToolBarItemsType.single)
       ..toolBarItems = {
-        "s": (bool isActive) => Application.instance.setActiveTool(ActiveToolType.select),
-        "M": (bool isActive) => Application.instance.setActiveTool(ActiveToolType.move),
-        "R": (bool isActive) => Application.instance.setActiveTool(ActiveToolType.rotate),
-        "S": (bool isActive) => Application.instance.setActiveTool(ActiveToolType.scale),
+        "s": (bool isActive) => application.setActiveTool(ActiveToolType.select),
+        "M": (bool isActive) => application.setActiveTool(ActiveToolType.move),
+        "R": (bool isActive) => application.setActiveTool(ActiveToolType.rotate),
+        "S": (bool isActive) => application.setActiveTool(ActiveToolType.scale),
       };
     toolBars['transformTool'] = toolBarTransformTools;
   }
@@ -50,4 +52,12 @@ class ToolBar {
   Map<String, UpdateToolBarItem> toolBarItems = {};
 
   ToolBar(this.toolBarItemsType);
+}
+
+abstract class ToolBarAxis{
+  void setActiveAxis(AxisType axisType, bool isActive);
+}
+
+abstract class ToolBarTool{
+  void setActiveTool(ActiveToolType value);
 }

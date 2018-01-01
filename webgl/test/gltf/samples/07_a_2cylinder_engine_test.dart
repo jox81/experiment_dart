@@ -5,9 +5,7 @@ import 'package:webgl/src/gtlf/buffer.dart';
 import 'package:webgl/src/gtlf/buffer_view.dart';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 @TestOn("dartium")
 Future main() async {
   GLTFProject gltfProject;

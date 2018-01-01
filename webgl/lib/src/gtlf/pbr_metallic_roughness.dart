@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:webgl/src/gtlf/texture_info.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 

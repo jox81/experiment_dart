@@ -13,7 +13,7 @@ import 'package:webgl/src/scene.dart';
     override: '*')
 import 'dart:mirrors';
 
-class SceneViewPBR extends Scene{
+class SceneViewPBR extends SceneJox{
 
   SceneViewPBR();
 

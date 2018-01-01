@@ -42,7 +42,7 @@ class WebglTest {
       ..validate()
       ..use();
 
-    glWrapper.logRenderingContextInfos();
+    Context.glWrapper.logRenderingContextInfos();
 
   }
 

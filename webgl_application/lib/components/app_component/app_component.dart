@@ -1,16 +1,16 @@
 import 'dart:async';
 import 'package:angular2/core.dart';
-import 'package:webgl/src/project.dart';
+import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl_application/components/ui/canvas_component/canvas_component.dart';
 import 'package:webgl_application/components/ui/layout_component/layout_component.dart';
 import 'package:webgl_application/components/ui/properties_component/properties_component.dart';
 import 'package:webgl_application/components/ui/menu/menu_component.dart';
 import 'package:webgl_application/components/ui/toolbar_component/toolbar_component.dart';
 import 'package:webgl_application/scene_views/scene_view.dart';
-import 'package:webgl/src/application.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/scene.dart';
-import 'package:webgl/src/ui_models/toolbar.dart';
+import 'package:webgl_application/src/application.dart';
+import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 @Component(
     selector: 'my-app',
@@ -20,16 +20,18 @@ import 'package:webgl/src/ui_models/toolbar.dart';
 )
 class AppComponent implements OnInit{
 
-  Application application;
-  Scene get currentScene => Application.instance?.currentScene;
+  Application get application => Application.instance;
+
+  GLTFScene get currentScene => application?.currentScene;
+  GLTFProject get currentProject => application?.project;
 
   IEditElement _currentElement;
   IEditElement get currentElement {
-    if(currentScene != null) {
-      if (currentScene.currentSelection != null) {
-        _currentElement = currentScene.currentSelection;
+    if(application != null) {
+      if (application.currentSelection != null) {
+        _currentElement = application.currentSelection;
       }else{
-        _currentElement = currentScene;
+        _currentElement = currentProject;
       }
     }
 
@@ -39,20 +41,20 @@ class AppComponent implements OnInit{
   @ViewChild(CanvasComponent)
   CanvasComponent canvasComponent;
 
-  List<Scene> scenes;
-  int sceneId = -1;
+  List<GLTFProject> projects;
+//  int sceneId = -1;
 
   Future switchScene () async {
-    sceneId++;
-    sceneId %= scenes.length;
+//    sceneId++;
+//    sceneId %= scenes.length;
 
-    await scenes[sceneId].setup();
-    Application.instance.currentScene = scenes[sceneId];
+//    await scenes[sceneId].setup();
+    application.project = projects[0];
     application.render();
   }
 
   void selectElement(IEditElement element){
-    currentScene.currentSelection = element;
+    application.currentSelection = element;
   }
 
   void onAxisXChange(bool checked){
@@ -69,9 +71,8 @@ class AppComponent implements OnInit{
   }
   @override
   Future ngOnInit() async {
-    application = await Application.create(canvasComponent.canvas);
-    List<Project> projects = await ServiceProject.getProjects();
-    scenes = projects[0].scenes;
+    await Application.build(canvasComponent.canvas);
+    projects = await ServiceProject.getProjects();
     await switchScene ();
   }
 

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
 import "package:test/test.dart";
-import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
 Future main() async {

@@ -72,8 +72,8 @@ class Webgl01 {
   }
 
   void initShaders() {
-    WebGLShader fragmentShader = _getShader(glWrapper, "shader-fs");
-    WebGLShader vertexShader = _getShader(glWrapper, "shader-vs");
+    WebGLShader fragmentShader = _getShader(Context.glWrapper, "shader-fs");
+    WebGLShader vertexShader = _getShader(Context.glWrapper, "shader-vs");
 
     shaderProgram = new WebGLProgram();
     shaderProgram.attachShader(vertexShader);
@@ -128,13 +128,13 @@ class Webgl01 {
     List<int> indices = models[0].primitive.indices;
 
     vertexBuffer = new WebGLBuffer();
-    glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
+    Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     gl.bufferData(
         BufferType.ARRAY_BUFFER, new Float32List.fromList(vertices), BufferUsageType.STATIC_DRAW);
     gl.bindBuffer(BufferType.ARRAY_BUFFER, null);
 
     indicesBuffer = new WebGLBuffer();
-    glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    Context.glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
     gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
         BufferUsageType.STATIC_DRAW);
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, null);
@@ -146,8 +146,8 @@ class Webgl01 {
     gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
-    glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
+    Context.glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
     vertexPositionAttribute.vertexAttribPointer(models[0].primitive.vertexDimensions, ShaderVariableType.FLOAT, false, 0, 0);
 

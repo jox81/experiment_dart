@@ -9,11 +9,8 @@ import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/gltf_creation.dart';
 
-import '../../../web/gltf/samples/all_by_code/01_triangle_with_indices/triangle_with_indices.dart';
 @TestOn("dartium")
 
 Future main() async {

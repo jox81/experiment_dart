@@ -98,6 +98,7 @@ abstract class Material extends IEditElement {
   void setShaderAttributArrayBuffer(String attributName, List<double> arrayBuffer, int dimension){
     if(buffers[attributName] == null) buffers[attributName] = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, buffers[attributName].webGLBuffer);
+    if(attributes[attributName] == null) throw "setShaderAttributArrayBuffer null";
     attributes[attributName].enabled = true;
 
     if(buffers[attributName].data != arrayBuffer) {
@@ -264,13 +265,13 @@ abstract class Material extends IEditElement {
   }
 
   void _drawPrimitive(GLTFMeshPrimitive primitive) {
-    if (primitive.indices == null || primitive.drawMode == DrawMode.POINTS) {
+    if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
       GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
       if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
           primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);
     } else {
-      GLTFAccessor accessorIndices = primitive.indices;
+      GLTFAccessor accessorIndices = primitive.indicesAccessor;
       gl.drawElements(primitive.drawMode, accessorIndices.count,
           accessorIndices.componentType, 0);
     }
@@ -295,8 +296,8 @@ abstract class Material extends IEditElement {
   }
 
   void disableVertexAttributs() {
-    for (String name in _attributsNames) {
-      attributes[name].enabled = false;
+    for (String attributName in _attributsNames) {
+      attributes[attributName].enabled = false;
     }
   }
 
