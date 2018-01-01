@@ -1,6 +1,8 @@
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
@@ -8,6 +10,92 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+
+enum MaterialType {
+  MaterialCustom,
+  MaterialPoint,
+  MaterialBase,
+  MaterialBaseColor,
+  MaterialBaseVertexColor,
+  MaterialBaseTexture,
+  MaterialBaseTextureNormal,
+  MaterialPBR,
+  MaterialDepthTexture,
+  MaterialSkyBox,
+  MaterialReflection
+}
+
+class Materials{
+  static void assignMaterialTypeToModel(MaterialType materialType, GLTFMesh mesh) {
+    switch(materialType){
+//      case MaterialType.MaterialCustom:
+//        newMaterial = new MaterialCustom();
+//        break;
+      case MaterialType.MaterialPoint:
+        mesh
+          ..primitives[0].drawMode = DrawMode.POINTS
+          ..primitives[0].material = new KronosMaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
+        break;
+      case MaterialType.MaterialBase:
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= new KronosMaterialBase();
+        break;
+      case MaterialType.MaterialBaseColor:
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= new KronosMaterialBaseColor(new Vector4.all(1.0));
+        break;
+      case MaterialType.MaterialBaseVertexColor:
+        KronosMaterialBaseVertexColor material = new KronosMaterialBaseVertexColor();
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= material;
+        break;
+      case MaterialType.MaterialBaseTexture:
+        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
+        KronosMaterialBaseTexture material = new KronosMaterialBaseTexture()
+          ..texture = texture;
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= material;
+        break;
+      case MaterialType.MaterialBaseTextureNormal:
+        WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
+        KronosMaterialBaseTextureNormal material = new KronosMaterialBaseTextureNormal()
+          ..texture = texture;
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= material;
+        break;
+      case MaterialType.MaterialPBR:
+        PointLight light = new PointLight();
+        KronosMaterialPBR material = new KronosMaterialPBR(light);
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= material;
+        break;
+      case MaterialType.MaterialDepthTexture:
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= new KronosMaterialDepthTexture();
+        break;
+      case MaterialType.MaterialSkyBox:
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= new KronosMaterialSkyBox();
+        break;
+      case MaterialType.MaterialReflection:
+        mesh
+            ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material= new KronosMaterialReflection();
+        break;
+      default:
+        break;
+    }
+  }
+}
 
 abstract class KronosRawMaterial{
   Matrix4 pvMatrix = new Matrix4.identity();
@@ -106,7 +194,7 @@ abstract class KronosRawMaterial{
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight);
 
   /// ShaderVariableType componentType
-  void _setUniform(WebGLProgram program, String uniformName, int componentType,
+  void setUniform(WebGLProgram program, String uniformName, int componentType,
       dynamic data) {
     //debugLog.logCurrentFunction(uniformName);
 
@@ -124,6 +212,7 @@ abstract class KronosRawMaterial{
     bool transpose = false;
 
     switch (componentType) {
+      case ShaderVariableType.BOOL:
       case ShaderVariableType.SAMPLER_CUBE:
       case ShaderVariableType.SAMPLER_2D:
         gl.uniform1i(uniformLocation, data as int);
@@ -284,39 +373,39 @@ class KronosPRBMaterial extends KronosRawMaterial{
     for (int i = 0; i < matrixData4.length; ++i) {
       matrixData4[i] = modelMatrix[i];
     }
-    _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         matrixData4);
 
-    _setUniform(program, 'u_PVMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_PVMatrix', ShaderVariableType.FLOAT_MAT4,
         pvMatrix.storage);
 
     // > camera
-    _setUniform(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
+    setUniform(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
         vecData3..setAll(0,[cameraPosition[0], cameraPosition[1], cameraPosition[2]])
     );
 
     // > Light
-    _setUniform(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
+    setUniform(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
         vecData3..setAll(0,[directionalLight.direction[0], directionalLight.direction[1], directionalLight.direction[2]]));
 
-    _setUniform(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
+    setUniform(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
         vecData3..setAll(0,[directionalLight.color[0], directionalLight.color[1], directionalLight.color[2]]));
 
     // > Material base
 
     if (useLod) {
-      _setUniform(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
+      setUniform(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
           0);
-      _setUniform(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+      setUniform(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
           1);
-      _setUniform(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
+      setUniform(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
           2);
     }
 
     if (hasBaseColorMap) {
 //      gl.activeTexture(baseColorSamplerSlot);
 //      gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, baseColorMap);
-      _setUniform(
+      setUniform(
           program,
           'u_BaseColorSampler',
           ShaderVariableType.SAMPLER_2D,
@@ -325,33 +414,33 @@ class KronosPRBMaterial extends KronosRawMaterial{
     }
 
     if (hasNormalMap) {
-      _setUniform(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D, normalSamplerSlot);
-      _setUniform(program, 'u_NormalScale', ShaderVariableType.FLOAT,
+      setUniform(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D, normalSamplerSlot);
+      setUniform(program, 'u_NormalScale', ShaderVariableType.FLOAT,
           normalScale);
     }
 
     if (hasEmissiveMap) {
-      _setUniform(
+      setUniform(
           program,
           'u_EmissiveSampler',
           ShaderVariableType.SAMPLER_2D, emissiveSamplerSlot);
-      _setUniform(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
+      setUniform(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
           vecData3..setAll(0,[emissiveFactor[0], emissiveFactor[1], emissiveFactor[2]])
       );
     }
 
     if (hasOcclusionMap) {
-      _setUniform(
+      setUniform(
           program,
           'u_OcclusionSampler',
           ShaderVariableType.SAMPLER_2D,occlusionSamplerSlot);
 
-      _setUniform(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
+      setUniform(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
           occlusionStrength);
     }
 
     if (hasMetallicRoughnessMap) {
-      _setUniform(
+      setUniform(
           program,
           'u_MetallicRoughnessSampler',
           ShaderVariableType.SAMPLER_2D,
@@ -359,12 +448,12 @@ class KronosPRBMaterial extends KronosRawMaterial{
       );
     }
 
-    _setUniform(
+    setUniform(
         program,
         'u_MetallicRoughnessValues',
         ShaderVariableType.FLOAT_VEC2,vecData2..setAll(0,[metallic, roughness]));
 
-    _setUniform(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4, baseColorFactor);
+    setUniform(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4, baseColorFactor);
 
     // > Debug values => see in pbr fragment shader
 
@@ -372,7 +461,7 @@ class KronosPRBMaterial extends KronosRawMaterial{
     double geometricOcclusionMask = 0.0;
     double microfacetDistributionMask = 0.0;
     double specularContributionMask = 0.0;
-    _setUniform(
+    setUniform(
         program,
         'u_ScaleFGDSpec',
         ShaderVariableType.FLOAT_VEC4,vecData4..setAll(0,[
@@ -386,7 +475,7 @@ class KronosPRBMaterial extends KronosRawMaterial{
     double colorMask = 0.0;
     double metallicMask = 0.0;
     double roughnessMask = 0.0;
-    _setUniform(
+    setUniform(
         program,
         'u_ScaleDiffBaseMR',
         ShaderVariableType.FLOAT_VEC4,vecData4..setAll(0,[
@@ -398,14 +487,13 @@ class KronosPRBMaterial extends KronosRawMaterial{
 
     double diffuseIBLAmbient = 1.0;
     double specularIBLAmbient = 1.0;
-    _setUniform(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
+    setUniform(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
         vecData4..setAll(0, [
           diffuseIBLAmbient,
           specularIBLAmbient,
           1.0,
           1.0
         ])
-
     );
   }
 }
@@ -449,23 +537,22 @@ class KronosDefaultMaterial extends KronosRawMaterial{
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
     //debugLog.logCurrentFunction();
 
-    _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         modelMatrix.storage);
-    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
-    _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
-    _setUniform(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
         ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
 
     Matrix3 normalMatrix = (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
-    _setUniform(program, 'u_NormalMatrix', ShaderVariableType.FLOAT_MAT3,
+    setUniform(program, 'u_NormalMatrix', ShaderVariableType.FLOAT_MAT3,
         normalMatrix.storage);
 
-    _setUniform(program, 'u_LightPos', ShaderVariableType.FLOAT_VEC3,
+    setUniform(program, 'u_LightPos', ShaderVariableType.FLOAT_VEC3,
         directionalLight.translation.storage);
   }
-
 }
 
 class KronosDebugMaterial extends KronosRawMaterial{
@@ -496,14 +583,34 @@ class KronosDebugMaterial extends KronosRawMaterial{
   }
 
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         modelMatrix .storage);
-    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
-    _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
-    _setUniform(program, 'u_Color', ShaderVariableType.FLOAT_VEC3,
+    setUniform(program, 'u_Color', ShaderVariableType.FLOAT_VEC3,
         color.storage);
+  }
+}
+
+//>
+typedef void SetShaderVariables(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight);
+
+class KronosMaterialCustom extends KronosRawMaterial {
+  SetShaderVariables setShaderUniformsVariables;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_point'];
+
+  KronosMaterialCustom();
+
+  Map<String, bool> getDefines() {
+    Map<String, bool> defines = new Map();
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setShaderUniformsVariables(program, modelMatrix, viewMatrix, projectionMatrix, cameraPosition, directionalLight);
   }
 }
 
@@ -525,10 +632,277 @@ class KronosMaterialPoint extends KronosRawMaterial {
   }
 
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    _setUniform(program, "uModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    _setUniform(program, "uProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
-    _setUniform(program, "pointSize", ShaderVariableType.FLOAT, pointSize);
-    _setUniform(program, "uColor", ShaderVariableType.FLOAT_VEC4, color.storage);
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    setUniform(program, "u_PointSize", ShaderVariableType.FLOAT, pointSize);
+    setUniform(program, "u_Color", ShaderVariableType.FLOAT_VEC4, color.storage);
+  }
+}
+
+class KronosMaterialBase extends KronosRawMaterial {
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_base'];
+
+  KronosMaterialBase();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelMatrix", ShaderVariableType.FLOAT_MAT4, modelMatrix.storage);
+    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, viewMatrix.storage);
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  }
+}
+
+class KronosMaterialBaseColor extends KronosRawMaterial {
+
+  Vector4 color;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_base_color'];
+
+  KronosMaterialBaseColor(this.color);
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    setUniform(program, "u_Color", ShaderVariableType.FLOAT_VEC4, color.storage);
+  }
+}
+
+class KronosMaterialBaseVertexColor extends KronosRawMaterial {
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_base_vertex_color'];
+
+  KronosMaterialBaseVertexColor();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  }
+}
+
+class KronosMaterialBaseTexture extends KronosRawMaterial {
+
+  WebGLTexture texture;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_base_texture'];
+
+  KronosMaterialBaseTexture();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    setUniform(program, "u_TextureMatrix", ShaderVariableType.FLOAT_MAT4, texture?.textureMatrix?.storage);
+
+    gl.activeTexture(TextureUnit.TEXTURE7);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
+    setUniform(program, "u_Sampler", ShaderVariableType.SAMPLER_2D, 7);
+  }
+}
+
+class KronosMaterialBaseTextureNormal extends KronosRawMaterial {
+
+  WebGLTexture texture;
+  Vector3 ambientColor = new Vector3.all(1.0);
+  DirectionalLight directionalLight;
+  bool useLighting = false;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_base_texture_normal'];
+
+  KronosMaterialBaseTextureNormal();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
+    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3, normalMatrix.storage);
+
+    setUniform(program, "u_UseLighting", ShaderVariableType.BOOL, useLighting ? 1 : 0); // must be int, not bool
+
+    if (useLighting) {
+      setUniform(program, "u_AmbientColor", ShaderVariableType.FLOAT_VEC3, ambientColor.storage);
+      Vector3 adjustedLD = new Vector3.zero();
+      directionalLight.direction.normalizeInto(adjustedLD);
+      adjustedLD.scale(-1.0);
+
+      setUniform(program, "u_LightingDirection", ShaderVariableType.FLOAT_VEC3, adjustedLD.storage);
+      setUniform(program, "u_DirectionalColor", ShaderVariableType.FLOAT_VEC3, directionalLight.color.storage);
+    }
+  }
+}
+
+class KronosMaterialReflection extends KronosRawMaterial {
+
+  WebGLTexture skyboxTexture;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_reflection'];
+
+  KronosMaterialReflection();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    setUniform(program, "u_InverseViewMatrix", ShaderVariableType.FLOAT_MAT4, new Matrix4.inverted(viewMatrix).storage);
+
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
+    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3, normalMatrix.storage);
+
+    gl.activeTexture(TextureUnit.TEXTURE7);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
+    setUniform(program, "u_EnvMap", ShaderVariableType.SAMPLER_CUBE, 7);
+  }
+}
+
+class KronosMaterialSkyBox extends KronosRawMaterial {
+
+  WebGLTexture skyboxTexture;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_skybox'];
+
+  KronosMaterialSkyBox();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  // Todo (jpu) :
+//  setupBeforeRender(){
+//    gl.disable(EnableCapabilityType.DEPTH_TEST);
+//  }
+//  setupAfterRender(){
+//    gl.enable(EnableCapabilityType.DEPTH_TEST);
+//  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    //removing skybox transform
+    setUniform(program, "u_ModelMatrix", ShaderVariableType.FLOAT_MAT4, new Matrix4.identity().storage);
+
+    //removing camera translation
+    Matrix3 m3 = viewMatrix.getRotation();
+    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
+    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, m4.storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+
+    gl.activeTexture(TextureUnit.TEXTURE7);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
+    setUniform(program, "u_EnvMap", ShaderVariableType.SAMPLER_CUBE, 7);
+  }
+}
+
+class KronosMaterialDepthTexture extends KronosRawMaterial {
+
+  WebGLTexture texture;
+
+  num near = 1.0;
+  num far = 1000.0;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_depth_texture'];
+
+  KronosMaterialDepthTexture();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+
+    //removing camera translation
+    Matrix3 m3 = viewMatrix.getRotation();
+    Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
+    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, m4.storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+
+    gl.activeTexture(TextureUnit.TEXTURE7);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
+    setUniform(program, "u_EnvMap", ShaderVariableType.SAMPLER_2D, 7);
+
+    setUniform(program, "u_near", ShaderVariableType.FLOAT, near);
+    setUniform(program, "u_far", ShaderVariableType.FLOAT, far);
+  }
+}
+
+///PBR's
+///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
+///module explained can be found here : https://github.com/vorg/pragmatic-pbr/tree/master/local_modules
+///base
+class KronosMaterialPBR extends KronosRawMaterial {
+
+  PointLight pointLight;
+
+  ShaderSource get shaderSource => ShaderSource.sources['material_pbr'];
+
+  KronosMaterialPBR(this.pointLight);
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
+    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3, normalMatrix.storage);
+    setUniform(program, "u_LightPos", ShaderVariableType.FLOAT_VEC3, pointLight.translation.storage);
   }
 }
 
@@ -569,32 +943,88 @@ class SAOMaterial extends KronosRawMaterial{
 
   void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
 
-    _setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
         modelMatrix .storage);
-    _setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
-    _setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
+    setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
 
 
-    _setUniform(program, 'tDepth', ShaderVariableType.SAMPLER_2D,
+    setUniform(program, 'tDepth', ShaderVariableType.SAMPLER_2D,
         depthTextureMap);
-    _setUniform(program, 'intensity', ShaderVariableType.FLOAT,
+    setUniform(program, 'intensity', ShaderVariableType.FLOAT,
         intensity);
-    _setUniform(program, 'sampleRadiusWS', ShaderVariableType.FLOAT,
+    setUniform(program, 'sampleRadiusWS', ShaderVariableType.FLOAT,
         sampleRadiusWS);
-    _setUniform(program, 'bias', ShaderVariableType.FLOAT,
+    setUniform(program, 'bias', ShaderVariableType.FLOAT,
         bias);
-    _setUniform(program, 'zNear', ShaderVariableType.FLOAT,
+    setUniform(program, 'zNear', ShaderVariableType.FLOAT,
         zNear);
-    _setUniform(program, 'zFar', ShaderVariableType.FLOAT,
+    setUniform(program, 'zFar', ShaderVariableType.FLOAT,
         zFar);
-    _setUniform(program, 'viewportResolution', ShaderVariableType.FLOAT,
+    setUniform(program, 'viewportResolution', ShaderVariableType.FLOAT,
         viewportResolution);
-    _setUniform(program, 'projInfo', ShaderVariableType.FLOAT,
+    setUniform(program, 'projInfo', ShaderVariableType.FLOAT,
         projInfo);
-    _setUniform(program, 'projScale', ShaderVariableType.FLOAT,
+    setUniform(program, 'projScale', ShaderVariableType.FLOAT,
         projScale);
   }
 
 }
+
+/*
+
+//Todo
+class MaterialNormalMapping extends Material {
+
+  //External parameters
+  WebGLTexture skyboxTexture;
+
+  MaterialNormalMapping._internal(String vsSource, String fsSource)
+      : super(vsSource, fsSource);
+
+  factory MaterialNormalMapping() {
+    ShaderSource shaderSource = ShaderSource.sources['material_reflection'];
+    return new MaterialNormalMapping._internal(
+        shaderSource.vsCode, shaderSource.fsCode);
+  }
+
+  setShaderAttributs(Mesh model) {
+    setShaderAttributArrayBuffer(
+        'aVertexPosition', model.primitive.vertices, model.primitive.vertexDimensions);
+    setShaderAttributElementArrayBuffer('aVertexIndice', model.primitive.indices);
+    setShaderAttributArrayBuffer('aNormal', model.primitive.vertexNormals,
+        model.primitive.vertexNormalsDimensions);
+  }
+
+  setShaderUniforms(Mesh model) {
+
+//    print("###############");
+
+//    print("uModelMatrix: \n${Context.modelMatrix}");
+//    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
+//    setShaderUniform("uModelMatrix", Context.modelMatrix);
+//    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
+//use in common with vertex shader ?
+
+//    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
+    setShaderUniform("uModelViewMatrix", Context.mainCamera.viewMatrix * Context.modelMatrix);
+
+
+    setShaderUniform("uProjectionMatrix", Context.mainCamera.projectionMatrix);
+
+    setShaderUniform("uInverseViewMatrix",
+        new Matrix4.inverted(Context.mainCamera.viewMatrix));
+
+    /// The normal matrix is the transpose inverse of the modelview matrix.
+    /// mat4 normalMatrix = transpose(inverse(modelView));
+    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
+    setShaderUniform("uNormalMatrix", normalMatrix);
+
+    gl.activeTexture(TextureUnit.TEXTURE0);
+    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
+    setShaderUniform('uEnvMap', 0);
+  }
+}
+ */

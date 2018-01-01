@@ -4,13 +4,14 @@ import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'package:webgl/src/gtlf/renderer/renderer.dart';
 
-import '00_triangle_without_indices/triangle_without_indices.dart';
-import '01_triangle_with_indices/triangle_with_indices.dart';
-import '02_a_simple_mesh/a_simple_mesh.dart';
-import '02_b_multi_mesh/b_multi_mesh.dart';
-import '05_box/box.dart';
-import 'plane_textured/plane_texture.dart';
-import 'primitives/primitives.dart';
+//import '00_triangle_without_indices/triangle_without_indices.dart';
+//import '01_triangle_with_indices/triangle_with_indices.dart';
+//import '02_a_simple_mesh/a_simple_mesh.dart';
+//import '02_b_multi_mesh/b_multi_mesh.dart';
+//import '05_box/box.dart';
+//import 'plane_textured/plane_texture.dart';
+//import 'primitives/primitives.dart';
+import 'materials/materials.dart';
 
 List<Function> projects = [
 //  triangleWithoutIndices,
@@ -19,13 +20,16 @@ List<Function> projects = [
 //  bMultiMesh,
 //  planeTexture,
 //  box,
-primitives
+//primitives,
+projectTestMaterials
 ];
 
 Future main() async {
-  GLTFProject gltf = projects.first();
-
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+  GLTFRenderer renderer = await new GLTFRenderer(canvas);
+
+  GLTFProject gltf = await projects.first();
   debugGltf(gltf, doGlTFProjectLog : true, isDebug:false);
-  await new GLTFRenderer(canvas).render(gltf);
+
+  renderer.render(gltf);
 }

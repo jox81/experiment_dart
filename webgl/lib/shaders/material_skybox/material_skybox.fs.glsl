@@ -19,11 +19,11 @@ vec3 envMapCube(vec3 wcNormal) {
 }
 ///>
 
-uniform samplerCube uEnvMap;
+uniform samplerCube u_EnvironmentSampler;
 
-varying vec3 vWorldCoordNormal;
+varying vec3 v_WorldCoordNormal;
 
 void main()
 {
-    gl_FragColor = textureCube(uEnvMap, envMapCube(normalize(vWorldCoordNormal)));
+    gl_FragColor = textureCube(u_EnvironmentSampler, envMapCube(normalize(v_WorldCoordNormal)));
 }

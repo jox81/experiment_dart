@@ -4,7 +4,6 @@ import 'dart:math' as Math;
 import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
-import 'package:webgl/src/geometry/mesh.dart';
 import 'context.dart';
 @MirrorsUsed(
     targets: const [
@@ -19,6 +18,7 @@ enum CameraType{
   orthographic
 }
 
+// Todo (jpu) : add Gizmo
 abstract class Camera extends Node {
   static int nextId = 0;
   final int cameraId = nextId++;
@@ -65,29 +65,28 @@ abstract class Camera extends Node {
   }
   CameraController get cameraController => _cameraController;
 
-  @override
-  void render() {
-    if (_gizmo.visible && !_isActive) {
-      _gizmo.render();
-    }
-  }
-
-  //FrustrumGizmo
-  FrustrumGizmo _gizmo;
-  IGizmo get gizmo => _gizmo;
-
-  bool get showGizmo => _gizmo.visible;
-  set showGizmo(bool value) {
-    if(_gizmo == null){
-      _gizmo = new FrustrumGizmo(this as CameraPerspective);// Todo (jpu) : ??
-    }
-    _gizmo.visible = value;
-  }
-
-
-  void _updateGizmo() {
-    if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
-  }
+//  @override
+//  void render() {
+//    if (_gizmo.visible && !_isActive) {
+//      _gizmo.render();
+//    }
+//  }
+//
+//  //FrustrumGizmo
+//  FrustrumGizmo _gizmo;
+//  IGizmo get gizmo => _gizmo;
+//
+//  bool get showGizmo => _gizmo.visible;
+//  set showGizmo(bool value) {
+//    if(_gizmo == null){
+//      _gizmo = new FrustrumGizmo(this as CameraPerspective);// Todo (jpu) : ??
+//    }
+//    _gizmo.visible = value;
+//  }
+//
+//  void _updateGizmo() {
+//    if(_gizmo != null && _gizmo.visible)gizmo.updateGizmo();
+//  }
 
   @override
   bool operator ==(Object other) =>
@@ -98,8 +97,8 @@ abstract class Camera extends Node {
               _type == other._type &&
               _znear == other._znear &&
               _zfar == other._zfar &&
-              _cameraController == other._cameraController &&
-              _gizmo == other._gizmo;
+              _cameraController == other._cameraController /*&&
+              _gizmo == other._gizmo*/;
 
   @override
   int get hashCode =>
@@ -107,8 +106,8 @@ abstract class Camera extends Node {
       _type.hashCode ^
       _znear.hashCode ^
       _zfar.hashCode ^
-      _cameraController.hashCode ^
-      _gizmo.hashCode;
+      _cameraController.hashCode/* ^
+      _gizmo.hashCode*/;
 }
 
 class CameraPerspective extends Camera{
@@ -176,7 +175,7 @@ class CameraPerspective extends Camera{
   }
   set projectionMatrix(Matrix4 value){
     _projectionMatrix = value;
-    _updateGizmo();
+//    _updateGizmo();
   }
 
   //viewMatrix
@@ -199,7 +198,7 @@ class CameraPerspective extends Camera{
     _aspectRatio = Context.viewAspectRatio;
     setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, _znear, _zfar);
     setViewMatrix(_viewMatrix, translation, _targetPosition, upDirection);
-    _updateGizmo();
+//    _updateGizmo();
   }
 
   @override
@@ -215,7 +214,7 @@ class CameraPerspective extends Camera{
     _zfar = json['zFar'] as double;
     targetPosition = new Vector3.fromFloat32List(new Float32List.fromList(json['targetPosition'] as List<double>));
     translation = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
-    showGizmo = json['showGizmo'] as bool;
+//    showGizmo = json['showGizmo'] as bool;
   }
 
   Map toJson(){
@@ -225,7 +224,7 @@ class CameraPerspective extends Camera{
     json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
     json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
     json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
-    json['showGizmo'] = showGizmo;
+//    json['showGizmo'] = showGizmo;
     return json;
   }
 
@@ -275,13 +274,13 @@ class CameraOrthographic extends Camera{
 
   CameraOrthographic.fromJson(Map json) {
     translation = new Vector3.fromFloat32List(new Float32List.fromList(json['position'] as List<double>));
-    showGizmo = json['showGizmo'] as bool;
+//    showGizmo = json['showGizmo'] as bool;
   }
 
   Map toJson(){
     Map json = new Map<String, dynamic>();
     json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
-    json['showGizmo'] = showGizmo;
+//    json['showGizmo'] = showGizmo;
     return json;
   }
 

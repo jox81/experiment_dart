@@ -2,6 +2,7 @@ import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
 import 'package:webgl_application/components/ui/properties_component/dynamic_load_html_component.dart';
 import 'package:webgl_application/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';
@@ -19,7 +20,6 @@ import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light.dart';
 import 'package:webgl/src/geometry/mesh_primitive.dart';
-import 'package:webgl/src/material/material.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -187,7 +187,7 @@ class PropertiesComponent {
 
   //Material
   bool isMaterial(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, Material);
+    return compareType(animationProperty.type, KronosRawMaterial);
   }
 
   //Texture

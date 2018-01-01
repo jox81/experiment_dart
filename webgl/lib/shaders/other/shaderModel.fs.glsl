@@ -6,21 +6,23 @@ struct DirectionalLight
 	vec3 color;
 };
 
-varying vec2 fragTexCoord;
-varying vec3 fragNormal;
-
-uniform vec3 ambientLightIntensity;
+uniform vec3 u_ambientLightIntensity;
 uniform DirectionalLight sun;
-uniform sampler2D sampler;
+uniform u_Sampler2D u_Sampler;
+
+varying vec2 v_fragTexCoord;
+varying vec3 v_fragNormal;
+
+
 
 void main()
 {
-	vec3 surfaceNormal = normalize(fragNormal);
+	vec3 surfaceNormal = normalize(v_fragNormal);
 	vec3 normSunDir = normalize(sun.direction);
-	vec4 texel = texture2D(sampler, fragTexCoord);
+	vec4 texel = texture2D(u_Sampler, v_fragTexCoord);
 
-	vec3 lightIntensity = ambientLightIntensity +
-		sun.color * max(dot(fragNormal, normSunDir), 0.0);
+	vec3 lightIntensity = u_ambientLightIntensity +
+		sun.color * max(dot(v_fragNormal, normSunDir), 0.0);
 
 	gl_FragColor = vec4(texel.rgb * lightIntensity, texel.a);
 }

@@ -1,20 +1,20 @@
 precision mediump float;
 
-attribute vec3 vertPosition;
-attribute vec2 vertTexCoord;
-attribute vec3 vertNormal;
+attribute vec3 a_Position;
+attribute vec2 a_UV;
+attribute vec3 a_Normal;
 
-varying vec2 fragTexCoord;
-varying vec3 fragNormal;
+uniform mat4 u_WorldMatrix;
+uniform mat4 u_ViewMatrix;
+uniform mat4 u_ProjectionMatrix;
 
-uniform mat4 mWorld;
-uniform mat4 mView;
-uniform mat4 mProj;
+varying vec2 v_FragTexCoord;
+varying vec3 v_FragNormal;
 
 void main()
 {
-  fragTexCoord = vertTexCoord;
-  fragNormal = (mWorld * vec4(vertNormal, 0.0)).xyz;
+  v_FragTexCoord = a_UV;
+  v_FragNormal = (u_WorldMatrix * vec4(a_Normal, 0.0)).xyz;
 
-  gl_Position = mProj * mView * mWorld * vec4(vertPosition, 1.0);
+  gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_WorldMatrix * vec4(a_Position, 1.0);
 }

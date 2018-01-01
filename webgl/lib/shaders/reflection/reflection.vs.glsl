@@ -1,32 +1,25 @@
 precision mediump float;
 
-attribute vec4 aVertexPosition;
-attribute vec3 aNormal;
+attribute vec4 a_Position;
+attribute vec3 a_Normal;
 
-//uniform mat4 uModelMatrix;
-//uniform mat4 uViewMatrix;
+uniform mat4 u_ModelViewMatrix;
+uniform mat4 u_ProjectionMatrix;
+uniform mat3 u_NormalMatrix;
 
-uniform mat4 uModelViewMatrix;
-
-uniform mat4 uProjectionMatrix;
-uniform mat3 uNormalMatrix;
-
-varying vec3 ecPosition;
-varying vec3 ecNormal;
+varying vec3 v_ecPosition;
+varying vec3 v_ecNormal;
 
 void main() {
-
     vec4 mp;
-    mp = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
-//    mp = uProjectionMatrix * uViewMatrix * uModelMatrix * aVertexPosition;
+    mp = u_ProjectionMatrix * u_ModelViewMatrix * a_Position;
     gl_Position = mp;
 
     //position du vertex en coordonée de vue
     vec3 ec;
-    ec = vec3(uModelViewMatrix * aVertexPosition);
-//    ec = vec3(uViewMatrix * uModelMatrix * aVertexPosition);
-    ecPosition = ec;
+    ec = vec3(u_ModelViewMatrix * a_Position);
+    v_ecPosition = ec;
 
     //norm en coordonée de vue
-    ecNormal = uNormalMatrix * aNormal;
+    v_ecNormal = u_NormalMatrix * a_Normal;
 }

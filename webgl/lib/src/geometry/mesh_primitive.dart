@@ -1,8 +1,6 @@
-import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/material/material.dart';
 
 @MirrorsUsed(
     targets: const [
@@ -23,39 +21,16 @@ import 'dart:mirrors';
 
 class MeshPrimitive {
 
-  Material _material;
-  Material get material => _material;
-  set material(Material value) => _material = value; //Animation
-
   /// DrawMode mode
   int mode = DrawMode.TRIANGLE_STRIP;
 
-  //Vertices infos_todo
-  int _vertexDimensions = 3;
-  int get vertexDimensions => _vertexDimensions;
-  set vertexDimensions(int d) {
-    _vertexDimensions = d;
-  }
-  //List<double> _vertices = new List();
-  //List<double> get vertices => _vertices;
-  //set vertices(List<double> value) {
-  //  _vertices = value;
-  //}
-
   List<double> vertices = [];
 
-  int get vertexCount => vertices.length ~/ _vertexDimensions;
-
-  //Color infos_todo
-  int _colorDimensions = 4;
-  int get colorDimensions => _colorDimensions;
   List<double> _colors = new List();
   List<double> get colors => _colors;
   set colors(List<double> value) {
     _colors = value;
   }
-
-  int get colorCount => _colors.length ~/ _colorDimensions;
 
   //Indices Infos
   List<int> _indices = new List();
@@ -64,70 +39,16 @@ class MeshPrimitive {
     _indices = value;
   }
 
-  int get indiceCount => _indices.length;
-
-  //TextureCoords infos_todo
-  int _textureCoordsDimensions = 2;
-  int get textureCoordsDimensions => _textureCoordsDimensions;
   List<double> _textureCoords = new List();
   List<double> get textureCoords => _textureCoords;
   set textureCoords(List<double> value) {
     _textureCoords = value;
   }
 
-  int get textureCoordsCount =>
-      _textureCoords.length ~/ _textureCoordsDimensions;
-
-  //vertexNormals infos_todo
-  int _vertexNormalsDimensions = 3;
-  int get vertexNormalsDimensions => _vertexNormalsDimensions;
-
   List<double> _vertexNormals = new List();
   List<double> get vertexNormals => _vertexNormals;
   set vertexNormals(List<double> value) {
     _vertexNormals = value;
-  }
-
-  int get vertexNormalsCount =>
-      _vertexNormals.length ~/ _vertexNormalsDimensions;
-
-  List<Triangle> _faces;
-  List<Triangle> getFaces() {
-
-    /*
-    //Référence de construction
-    0 - 3
-    | \ |
-    1 - 2
-
-    vertices = [
-      -1.0, 1.0, 0.0,
-      -1.0, -1.0, 0.0,
-      1.0, -1.0, 0.0,
-      1.0, 1.0, 0.0
-    ];
-    indices = [
-      0, 1, 2, 0, 2, 3,
-    ];
-    */
-
-    if(_faces == null){
-      List<Float32List> fullVertices = [];
-      _faces = [];
-      int stepVertices = 3;
-      for(int vertex = 0; vertex < vertices.length &&  vertices.length > stepVertices; vertex += stepVertices) {
-        fullVertices.add(new Float32List.fromList([vertices[vertex + 0], vertices[vertex + 1], vertices[vertex + 2]]));
-      }
-
-      int stepIndices = 3;
-      for(int i = 0; i < indices.length; i += stepIndices) {
-        Vector3 p1 = new Vector3.fromFloat32List(fullVertices[indices[i]]);
-        Vector3 p2 = new Vector3.fromFloat32List(fullVertices[indices[i + 1]]);
-        Vector3 p3 = new Vector3.fromFloat32List(fullVertices[indices[i + 2]]);
-        _faces.add(new Triangle.points(p1, p2, p3));
-      }
-    }
-    return _faces;
   }
 
   MeshPrimitive();

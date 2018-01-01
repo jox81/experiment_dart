@@ -5,8 +5,10 @@ import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/material/materials.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture_wrapped.dart';
@@ -482,7 +484,7 @@ class TextureUtils {
     // draw something in the buffer
     // ...
     {
-      List<Mesh> models = new List();
+      List<GLTFNode> models = new List();
 
       //backup camera
       CameraPerspective baseCam = Context.mainCamera;
@@ -503,25 +505,30 @@ class TextureUtils {
       gl.clear(
           ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-      //plane
-      QuadMesh quadColor = new QuadMesh()
+      GLTFMesh meshQuad = new GLTFMesh.quad()
         ..name = 'ground'
-        ..primitive.material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0))
+        ..primitives[0].material = new KronosMaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0));
+      GLTFNode nodeQuad = new GLTFNode()
+        ..mesh = meshQuad
         ..translation = new Vector3(0.0, 0.0, -50.0)
         ..matrix.scale(10.0, 1.0, 100.0)
         ..matrix.rotateX(radians(90.0));
-      models.add(quadColor);
+      models.add(nodeQuad);
 
       //cubes
       for (int i = 0; i < 20; i++) {
-        CubeMesh cube = new CubeMesh()
+
+        GLTFMesh meshCube = new GLTFMesh.cube();
+        GLTFNode nodeCube = new GLTFNode()
+          ..mesh = meshCube
           ..translation = new Vector3(0.0, 0.0, -4.0 * i.toDouble());
-        models.add(cube);
+        models.add(nodeCube);
       }
 
-      for (Mesh model in models) {
-        model.render();
-      }
+      // Todo (jpu) : gltf remove this
+//      for (Mesh model in models) {
+//        model.render();
+//      }
 
       // Unbind the framebuffer
       Context.glWrapper.activeFrameBuffer.unBind();

@@ -289,8 +289,18 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
   }
 
-  factory GLTFMesh.sphere({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
-    MeshPrimitive meshPrimitive = new MeshPrimitive.Sphere();
+  factory GLTFMesh.sphere({double radius : 1.0, int segmentV: 32, int segmentH: 32, bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Sphere(radius:radius, segmentV:segmentV, segmentH:segmentH);
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+
+  factory GLTFMesh.axis({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Axis();
+    return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
+  }
+
+  factory GLTFMesh.axisPoint({bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.AxisPoints();
     return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
   }
 

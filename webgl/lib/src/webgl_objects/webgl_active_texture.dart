@@ -338,7 +338,7 @@ class TextureAttachment{
   /// TexelDataType texelDataType
   void texImage2D(int mipMapLevel, int internalFormat, int internalFormat2, int texelDataType, dynamic pixels) {
     assert(internalFormat == internalFormat2);//in webgl1
-    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap ); //? add is null
+    assert(pixels is ImageData || pixels is ImageElement || pixels is CanvasElement || pixels is VideoElement || pixels is ImageBitmap || pixels == null); //? add is null
     gl.texImage2D(textureAttachmentTarget, mipMapLevel, internalFormat, internalFormat2, texelDataType, pixels);
   }
 

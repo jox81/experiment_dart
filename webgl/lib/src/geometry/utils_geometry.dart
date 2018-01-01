@@ -2,9 +2,10 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
 import 'package:webgl/src/material/material.dart';
-import 'package:webgl/src/material/materials.dart';
 
 class UtilsGeometry{
 
@@ -37,8 +38,8 @@ class UtilsGeometry{
   }
 
   /// Experiment with unProject
-  static List<PointMesh> unProjectMultiScreenPoints(CameraPerspective camera) {
-    List<PointMesh> resultPoints = [];
+  static List<GLTFNode> unProjectMultiScreenPoints(CameraPerspective camera) {
+    List<GLTFNode> resultPoints = [];
 
     num pickX = 0.0;
     num pickY = Context.height * 0.25;
@@ -50,36 +51,45 @@ class UtilsGeometry{
       pickX = i * Context.width;
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
-      resultPoints.add(new PointMesh()
-        ..translation = pickWorld
-        ..primitive.material = new MaterialPoint(pointSize:5.0 ,color: new Vector4(1.0, 0.0, 0.0,1.0))
-        ..visible = true);
+      GLTFMesh meshPoint = new GLTFMesh.point()
+        ..primitives[0].material = new KronosMaterialPoint(pointSize:5.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
+      GLTFNode nodePoint = new GLTFNode()
+        ..mesh = meshPoint
+        ..translation = pickWorld;
+
+      resultPoints.add(nodePoint);
     }
     return resultPoints;
   }
 
   /// May be buggy for some models like the sphere mesh
   /// How to hide vertices after shown ?
-  static List<PointMesh> drawModelVertices(Mesh model) {
-    List<PointMesh> resultPoints = [];
-    MaterialPoint material = new MaterialPoint(pointSize:4.0 ,color: new Vector4(1.0, 1.0, 0.0, 1.0));
+  static List<GLTFNode> drawModelVertices(GLTFMesh mesh) {
+    List<GLTFNode> resultPoints = [];
 
-    for(Triangle triangle in model.getFaces()){
+    KronosMaterialPoint material = new KronosMaterialPoint(pointSize:4.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
+
+    for(Triangle triangle in mesh.getFaces()){
       resultPoints.addAll(drawTriangleVertices(triangle, material));
     }
     return resultPoints;
   }
 
   /// Draw a point for each vertex of the triangle
-  static List<PointMesh> drawTriangleVertices(Triangle triangle, MaterialPoint material) {
-    List<PointMesh> resultPoints = [];
+  static List<GLTFNode> drawTriangleVertices(Triangle triangle, KronosMaterialPoint material) {
+    List<GLTFNode> resultPoints = [];
 
     List<Vector3> vertices = [triangle.point0, triangle.point1, triangle.point2];
 
     for(Vector3 vertex in vertices){
-      resultPoints.add(new PointMesh()
-        ..translation = vertex
-        ..primitive.material = material);
+
+      GLTFMesh meshPoint = new GLTFMesh.point()
+        ..primitives[0].material = material;
+      GLTFNode nodePoint = new GLTFNode()
+        ..mesh = meshPoint
+        ..translation = vertex;
+
+      resultPoints.add(nodePoint);
     }
     return resultPoints;
   }
@@ -94,17 +104,21 @@ class UtilsGeometry{
   }
 
   /// Draw a point on the model intersected with the ray
-  static List<PointMesh> findModelHitPoint(Mesh model, Ray ray) {
-    List<PointMesh> resultPoints = [];
-    Material material = new MaterialPoint(pointSize:8.0 ,color: new Vector4(1.0, 0.0, 0.0, 1.0));
+  static List<GLTFNode> findModelHitPoint(GLTFNode node, Ray ray) {
+    List<GLTFNode> resultPoints = [];
+    KronosMaterialPoint material = new KronosMaterialPoint(pointSize:8.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
 
-    for(Triangle triangle in model.getFaces()) {
+    for(Triangle triangle in node.mesh.getFaces()) {
       double distance = ray.intersectsWithTriangle(triangle);
 
       if(distance != null) {
-        resultPoints.add(new PointMesh()
-          ..translation = ray.at(distance)
-          ..primitive.material = material);
+        GLTFMesh meshPoint = new GLTFMesh.point()
+          ..primitives[0].material = material;
+        GLTFNode nodePoint = new GLTFNode()
+          ..mesh = meshPoint
+          ..translation = ray.at(distance);
+
+        resultPoints.add(nodePoint);
       }
     }
 

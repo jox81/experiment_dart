@@ -7,6 +7,25 @@ import 'package:webgl/src/gtlf/material.dart';
 import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
+enum MeshType {
+  point,
+  line,
+  triangle,
+  quad,
+  pyramid,
+  cube,
+  sphere,
+  torus,
+  axis,
+  grid,
+  custom,
+  json,
+  multiLine,
+  vector,
+  skyBox,
+  axisPoints,
+}
+
 /// Represent a part of a mesh
 /// [attributs] associate an Accessor by vertex attribute usage : POSITION | NORMAL | TANGENT | TEXCOORD_ | COLOR_ | JOINTS_ | WEIGHTS_
 /// in gltf file the accessor is define by its Id

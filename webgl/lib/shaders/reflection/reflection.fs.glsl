@@ -22,11 +22,11 @@ vec3 envMapCube(vec3 wcNormal) {
 }
 ///>
 
-uniform mat4 uInverseViewMatrix;
-uniform samplerCube uEnvMap;
+uniform mat4 u_InverseViewMatrix;
+uniform samplerCube u_EnvMap;
 
-varying vec3 ecPosition;
-varying vec3 ecNormal;
+varying vec3 v_ecPosition;
+varying vec3 v_ecNormal;
 
 //http://marcinignac.com/blog/pragmatic-pbr-hdr/
 //
@@ -37,14 +37,14 @@ varying vec3 ecNormal;
 //
 //But the cubemap textures are addressed by a vector in the world space so we need to move our computation there.
 void main() {
-    //direction from they eye (camera) in the view (eye) space is = ecPosition
+    //direction from they eye (camera) in the view (eye) space is = v_ecPosition
     //direction from the camera in the world space
-    vec3 wcEyeDir = vec3(uInverseViewMatrix * vec4(ecPosition, 0.0));
+    vec3 wcEyeDir = vec3(u_InverseViewMatrix * vec4(v_ecPosition, 0.0));
     //surface normal in the world space
-    vec3 wcNormal = vec3(uInverseViewMatrix * vec4(ecNormal, 0.0));
+    vec3 wcNormal = vec3(u_InverseViewMatrix * vec4(v_ecNormal, 0.0));
 
     //reflection vector in the world space.
     vec3 wcReflection = reflect(normalize(wcEyeDir), normalize(wcNormal));
 
-    gl_FragColor = textureCube(uEnvMap, envMapCube(wcReflection));
+    gl_FragColor = textureCube(u_EnvMap, envMapCube(wcReflection));
 }
