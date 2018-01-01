@@ -132,9 +132,9 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
       currentSelection = tempSelection;
     }
 
-    if(currentSelection != null && currentSelection is Mesh) {
+    if(currentSelection != null && currentSelection is GLTFNode) {
 
-      Mesh currentModel = currentSelection as Mesh;
+      GLTFNode currentItem = currentSelection as GLTFNode;
 
       double delta = interaction.deltaX.toDouble(); // get mouse delta
       double deltaMoveX = (activeAxis[AxisType.x]
@@ -150,22 +150,22 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
       if (activeTool == ActiveToolType.move) {
         double moveFactor = 1.0;
 
-        currentModel.matrix.translate(
+        currentItem.matrix.translate(
             new Vector3(deltaMoveX * moveFactor, deltaMoveY * moveFactor, deltaMoveZ * moveFactor));
       }
 
       if (activeTool == ActiveToolType.rotate) {
         num rotateFactor = 1.0;
 
-        currentModel.matrix.rotateX(deltaMoveX * rotateFactor);
-        currentModel.matrix.rotateY(deltaMoveY * rotateFactor);
-        currentModel.matrix.rotateY(deltaMoveZ * rotateFactor);
+        currentItem.matrix.rotateX(deltaMoveX * rotateFactor);
+        currentItem.matrix.rotateY(deltaMoveY * rotateFactor);
+        currentItem.matrix.rotateY(deltaMoveZ * rotateFactor);
       }
 
       if (activeTool == ActiveToolType.scale) {
         num scaleFactor = 0.03;
 
-        currentModel.matrix.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
+        currentItem.matrix.scale( 1.0 + deltaMoveX * scaleFactor, 1.0 + deltaMoveY * scaleFactor, 1.0 + deltaMoveZ * scaleFactor,);
       }
     }
   }

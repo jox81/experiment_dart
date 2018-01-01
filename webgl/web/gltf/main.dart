@@ -20,7 +20,7 @@ Future main() async {
 
   //textured
 //    './samples/gltf_2_0/plane_textured/test_texture.gltf',// Todo (jpu) : render black ? => currentCamera.position = new Vector3(5.0, 5.0, 10.0);
-    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
+//    './samples/gltf_2_0/05_box/gltf_embed/Box.gltf', // Todo (jpu) : render black ? => currentCamera.position = new Vector3(-5.0, -5.0, -10.0); with HAS_NORMALS = true
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF/BoxTextured_multi.gltf',
 //    './samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
@@ -42,7 +42,7 @@ Future main() async {
 //    './wip/export_test/export_test.gltf',
 //    './wip/export_test/export_test_grey.gltf',
 //    './wip/hierarchy_test/hieracrhy_test.gltf',
-//    './wip/archi/model_01/model_01.gltf',
+    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
 
   //Blender test Sphere
