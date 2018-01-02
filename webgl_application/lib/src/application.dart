@@ -11,7 +11,7 @@ import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/interaction.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
 @MirrorsUsed(
     targets: const [

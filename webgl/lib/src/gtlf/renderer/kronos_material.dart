@@ -3,7 +3,7 @@ import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
-import 'package:webgl/src/light.dart';
+import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -35,27 +35,27 @@ class Materials{
       case MaterialType.MaterialPoint:
         mesh
           ..primitives[0].drawMode = DrawMode.POINTS
-          ..primitives[0].material = new KronosMaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
+          ..primitives[0].material = new MaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
         break;
       case MaterialType.MaterialBase:
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new KronosMaterialBase();
+          ..primitives[0].material= new MaterialBase();
         break;
       case MaterialType.MaterialBaseColor:
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new KronosMaterialBaseColor(new Vector4.all(1.0));
+          ..primitives[0].material= new MaterialBaseColor(new Vector4.all(1.0));
         break;
       case MaterialType.MaterialBaseVertexColor:
-        KronosMaterialBaseVertexColor material = new KronosMaterialBaseVertexColor();
+        MaterialBaseVertexColor material = new MaterialBaseVertexColor();
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
           ..primitives[0].material= material;
         break;
       case MaterialType.MaterialBaseTexture:
         WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
-        KronosMaterialBaseTexture material = new KronosMaterialBaseTexture()
+        MaterialBaseTexture material = new MaterialBaseTexture()
           ..texture = texture;
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
@@ -63,7 +63,7 @@ class Materials{
         break;
       case MaterialType.MaterialBaseTextureNormal:
         WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
-        KronosMaterialBaseTextureNormal material = new KronosMaterialBaseTextureNormal()
+        MaterialBaseTextureNormal material = new MaterialBaseTextureNormal()
           ..texture = texture;
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
@@ -71,7 +71,7 @@ class Materials{
         break;
       case MaterialType.MaterialPBR:
         PointLight light = new PointLight();
-        KronosMaterialPBR material = new KronosMaterialPBR(light);
+        MaterialPragmaticPBR material = new MaterialPragmaticPBR(light);
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
           ..primitives[0].material= material;
@@ -79,17 +79,17 @@ class Materials{
       case MaterialType.MaterialDepthTexture:
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new KronosMaterialDepthTexture();
+          ..primitives[0].material= new MaterialDepthTexture();
         break;
       case MaterialType.MaterialSkyBox:
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new KronosMaterialSkyBox();
+          ..primitives[0].material= new MaterialSkyBox();
         break;
       case MaterialType.MaterialReflection:
         mesh
             ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new KronosMaterialReflection();
+          ..primitives[0].material= new MaterialReflection();
         break;
       default:
         break;
@@ -97,7 +97,9 @@ class Materials{
   }
 }
 
-abstract class KronosRawMaterial{
+abstract class RawMaterial{
+  String name;
+
   Matrix4 pvMatrix = new Matrix4.identity();
 
   ShaderSource get shaderSource;
@@ -243,7 +245,7 @@ abstract class KronosRawMaterial{
   }
 }
 
-class KronosPRBMaterial extends KronosRawMaterial{
+class KronosPRBMaterial extends RawMaterial{
 
   ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_pbr_test'];
 
@@ -498,7 +500,7 @@ class KronosPRBMaterial extends KronosRawMaterial{
   }
 }
 
-class KronosDefaultMaterial extends KronosRawMaterial{
+class KronosDefaultMaterial extends RawMaterial{
   KronosDefaultMaterial();
 
   ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_default'];
@@ -555,10 +557,10 @@ class KronosDefaultMaterial extends KronosRawMaterial{
   }
 }
 
-class KronosDebugMaterial extends KronosRawMaterial{
+class MaterialDebug extends RawMaterial{
   Vector3 color = new Vector3(0.5, 0.5, 0.5);
 
-  KronosDebugMaterial();
+  MaterialDebug();
 
   ShaderSource get shaderSource => ShaderSource.sources['debug_shader'];
 
@@ -597,12 +599,12 @@ class KronosDebugMaterial extends KronosRawMaterial{
 //>
 typedef void SetShaderVariables(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight);
 
-class KronosMaterialCustom extends KronosRawMaterial {
+class MaterialCustom extends RawMaterial {
   SetShaderVariables setShaderUniformsVariables;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_point'];
 
-  KronosMaterialCustom();
+  MaterialCustom();
 
   Map<String, bool> getDefines() {
     Map<String, bool> defines = new Map();
@@ -614,13 +616,13 @@ class KronosMaterialCustom extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialPoint extends KronosRawMaterial {
+class MaterialPoint extends RawMaterial {
   num pointSize;
   Vector4 color;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_point'];
 
-  KronosMaterialPoint({this.pointSize : 1.0, this.color});
+  MaterialPoint({this.pointSize : 1.0, this.color});
 
   Map<String, bool> getDefines() {
 
@@ -639,11 +641,11 @@ class KronosMaterialPoint extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialBase extends KronosRawMaterial {
+class MaterialBase extends RawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.sources['material_base'];
 
-  KronosMaterialBase();
+  MaterialBase();
 
   Map<String, bool> getDefines() {
 
@@ -660,13 +662,13 @@ class KronosMaterialBase extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialBaseColor extends KronosRawMaterial {
+class MaterialBaseColor extends RawMaterial {
 
   Vector4 color;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_base_color'];
 
-  KronosMaterialBaseColor(this.color);
+  MaterialBaseColor(this.color);
 
   Map<String, bool> getDefines() {
 
@@ -682,11 +684,11 @@ class KronosMaterialBaseColor extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialBaseVertexColor extends KronosRawMaterial {
+class MaterialBaseVertexColor extends RawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.sources['material_base_vertex_color'];
 
-  KronosMaterialBaseVertexColor();
+  MaterialBaseVertexColor();
 
   Map<String, bool> getDefines() {
 
@@ -701,13 +703,13 @@ class KronosMaterialBaseVertexColor extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialBaseTexture extends KronosRawMaterial {
+class MaterialBaseTexture extends RawMaterial {
 
   WebGLTexture texture;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_base_texture'];
 
-  KronosMaterialBaseTexture();
+  MaterialBaseTexture();
 
   Map<String, bool> getDefines() {
 
@@ -727,7 +729,7 @@ class KronosMaterialBaseTexture extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialBaseTextureNormal extends KronosRawMaterial {
+class MaterialBaseTextureNormal extends RawMaterial {
 
   WebGLTexture texture;
   Vector3 ambientColor = new Vector3.all(1.0);
@@ -736,7 +738,7 @@ class KronosMaterialBaseTextureNormal extends KronosRawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.sources['material_base_texture_normal'];
 
-  KronosMaterialBaseTextureNormal();
+  MaterialBaseTextureNormal();
 
   Map<String, bool> getDefines() {
 
@@ -768,13 +770,13 @@ class KronosMaterialBaseTextureNormal extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialReflection extends KronosRawMaterial {
+class MaterialReflection extends RawMaterial {
 
   WebGLTexture skyboxTexture;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_reflection'];
 
-  KronosMaterialReflection();
+  MaterialReflection();
 
   Map<String, bool> getDefines() {
 
@@ -799,13 +801,13 @@ class KronosMaterialReflection extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialSkyBox extends KronosRawMaterial {
+class MaterialSkyBox extends RawMaterial {
 
   WebGLTexture skyboxTexture;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_skybox'];
 
-  KronosMaterialSkyBox();
+  MaterialSkyBox();
 
   Map<String, bool> getDefines() {
 
@@ -838,7 +840,7 @@ class KronosMaterialSkyBox extends KronosRawMaterial {
   }
 }
 
-class KronosMaterialDepthTexture extends KronosRawMaterial {
+class MaterialDepthTexture extends RawMaterial {
 
   WebGLTexture texture;
 
@@ -847,7 +849,7 @@ class KronosMaterialDepthTexture extends KronosRawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.sources['material_depth_texture'];
 
-  KronosMaterialDepthTexture();
+  MaterialDepthTexture();
 
   Map<String, bool> getDefines() {
 
@@ -879,13 +881,13 @@ class KronosMaterialDepthTexture extends KronosRawMaterial {
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 ///module explained can be found here : https://github.com/vorg/pragmatic-pbr/tree/master/local_modules
 ///base
-class KronosMaterialPBR extends KronosRawMaterial {
+class MaterialPragmaticPBR extends RawMaterial {
 
   PointLight pointLight;
 
   ShaderSource get shaderSource => ShaderSource.sources['material_pbr'];
 
-  KronosMaterialPBR(this.pointLight);
+  MaterialPragmaticPBR(this.pointLight);
 
   Map<String, bool> getDefines() {
 
@@ -906,9 +908,9 @@ class KronosMaterialPBR extends KronosRawMaterial {
   }
 }
 
-class SAOMaterial extends KronosRawMaterial{
+class MaterialSAO extends RawMaterial{
 
-  SAOMaterial();
+  MaterialSAO();
 
   ShaderSource get shaderSource => ShaderSource.sources['sao'];
 

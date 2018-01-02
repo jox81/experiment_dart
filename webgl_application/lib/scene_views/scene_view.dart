@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl_application/scene_views/scene_view_base.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 //import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
 //import 'package:webgl_application/scene_views/scene_view_performance.dart';
@@ -21,7 +22,8 @@ import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 // - charger  /décharger une scene proprement
 class ServiceProject {
  static  Future<List<GLTFProject>> getProjects() async => [
-   projectPrimitives()
+//    projectPrimitives(),
+    projectSceneViewBase(),
  ];
 }
 
@@ -31,7 +33,6 @@ class ServiceProject {
 // new Scene(),
 // getPrimitivesProject(),
 // new SceneViewTexturing(),
-// new SceneViewBase(),
 // new SceneViewPBR(),
 // new SceneViewCubeMap(),
 // new SceneViewTestMatrices(),

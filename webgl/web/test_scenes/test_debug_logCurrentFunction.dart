@@ -6,7 +6,7 @@ import 'package:webgl/src/utils/utils_debug.dart';
 Future main() async {
   logCurrentFunction();
 
-//  stream.listen(_streamUpdated);
+  stream.listen(_streamUpdated);
 
 //  funcSimple();
 //  funcSimple();
@@ -31,7 +31,7 @@ void funcWithClosure() {
     logCurrentFunction();
   }
 
-  stream.listen((String result){
+  stream.listen((dynamic v){
     logCurrentFunction();
     closureFunction();
   });
@@ -93,6 +93,6 @@ Future funcAsync(String id) async {
   HttpRequest.getString(path).then((String path){streamController.add(path);});
 }
 
-void _streamUpdated(String event) {
+void _streamUpdated(dynamic event) {
   logCurrentFunction();
 }

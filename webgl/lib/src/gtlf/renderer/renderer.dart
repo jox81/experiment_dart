@@ -6,11 +6,11 @@ import 'dart:convert' show BASE64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/light.dart';
+import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/context.dart' as ctxWrapper show gl;
 import 'package:webgl/src/interaction.dart';
@@ -417,7 +417,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   void _drawPrimitive(GLTFMeshPrimitive primitive) {
     if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
-      GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
+      GLTFAccessor accessorPosition = primitive.positionAccessor;
       if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
       gl.drawArrays(
           primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);

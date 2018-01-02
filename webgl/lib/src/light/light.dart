@@ -1,5 +1,4 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/geometry/node.dart';
 @MirrorsUsed(
     targets: const [
       Light,
@@ -11,23 +10,20 @@ import 'package:webgl/src/geometry/node.dart';
     override: '*')
 import 'dart:mirrors';
 
+import 'package:webgl/src/gtlf/node.dart';
+
 enum LightType {
   ambient,
   point,
   directional,
 }
 
-abstract class Light extends Node {
+abstract class Light extends GLTFNode {
 
   LightType lightType;
 
   Vector3 color;
   Light();
-
-  @override
-  void render() {
-    // TODO: implement render
-  }
 
   // >> JSON
 

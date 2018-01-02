@@ -21,7 +21,7 @@ import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 
-import '../camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'dart:core';
 import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;

@@ -3,7 +3,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
@@ -507,7 +507,7 @@ class TextureUtils {
 
       GLTFMesh meshQuad = new GLTFMesh.quad()
         ..name = 'ground'
-        ..primitives[0].material = new KronosMaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0));
+        ..primitives[0].material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0));
       GLTFNode nodeQuad = new GLTFNode()
         ..mesh = meshQuad
         ..translation = new Vector3(0.0, 0.0, -50.0)

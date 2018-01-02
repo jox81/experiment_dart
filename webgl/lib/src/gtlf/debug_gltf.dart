@@ -13,7 +13,7 @@ import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 import 'package:gltf/gltf.dart' as glTF;

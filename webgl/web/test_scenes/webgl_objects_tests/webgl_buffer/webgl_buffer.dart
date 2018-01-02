@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -28,39 +28,39 @@ class WebglTest {
   }
 
   void test01() {
-    TriangleMesh triangleModel = new TriangleMesh();
-    print('triangleModel.mesh.vertices.length : ${triangleModel.primitive.vertices.length}');
-    print('triangleModel.mesh.indices.length : ${triangleModel.primitive.indices.length}');
+    GLTFMesh triangleMesh = new GLTFMesh.triangle();
+    print('triangleModel.mesh.vertices.length : ${triangleMesh.primitives[0].vertices.length}');
+    print('triangleModel.mesh.indices.length : ${triangleMesh.primitives[0].indices.length}');
 
     WebGLBuffer vertexBuffer = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer.webGLBuffer);
     gl.bufferData(
-        BufferType.ARRAY_BUFFER, new Float32List.fromList(triangleModel.primitive.vertices), BufferUsageType.DYNAMIC_DRAW);
+        BufferType.ARRAY_BUFFER, new Float32List.fromList(triangleMesh.primitives[0].vertices), BufferUsageType.DYNAMIC_DRAW);
 
     WebGLBuffer indiceBuffer = new WebGLBuffer();
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indiceBuffer.webGLBuffer);
     gl.bufferData(
-        BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(triangleModel.primitive.indices), BufferUsageType.STATIC_DRAW);
+        BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(triangleMesh.primitives[0].indices), BufferUsageType.STATIC_DRAW);
 
     vertexBuffer.logBufferInfos();
   }
 
   // Todo (jpu) : test multiple buffer bind. Ther's not much info about bound buffers
   void test02() {
-    TriangleMesh triangleModel = new TriangleMesh();
+    GLTFMesh triangleMesh = new GLTFMesh.triangle();
 
     WebGLBuffer vertexBufferTriangle = new WebGLBuffer();
     gl.bindBuffer(BufferType.ARRAY_BUFFER, vertexBufferTriangle.webGLBuffer);
     gl.bufferData(
-        BufferType.ARRAY_BUFFER, new Float32List.fromList(triangleModel.primitive.vertices), BufferUsageType.DYNAMIC_DRAW);
+        BufferType.ARRAY_BUFFER, new Float32List.fromList(triangleMesh.primitives[0].vertices), BufferUsageType.DYNAMIC_DRAW);
 
     WebGLBuffer indiceBufferTriangle = new WebGLBuffer();
     gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indiceBufferTriangle.webGLBuffer);
     gl.bufferData(
-        BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(triangleModel.primitive.indices), BufferUsageType.STATIC_DRAW);
+        BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(triangleMesh.primitives[0].indices), BufferUsageType.STATIC_DRAW);
 
-//    print('triangleModel.mesh.vertices.length : ${triangleModel.mesh.vertices.length}');
-//    print('triangleModel.mesh.indices.length : ${triangleModel.mesh.indices.length}');
+    print('triangleModel.mesh.vertices.length : ${triangleMesh.primitives[0].vertices.length}');
+    print('triangleModel.mesh.indices.length : ${triangleMesh.primitives[0].indices.length}');
     vertexBufferTriangle.logBufferInfos();
 
     //>

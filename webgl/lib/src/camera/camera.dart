@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
-import 'package:webgl/src/geometry/node.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
+import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
-import 'context.dart';
+import 'package:webgl/src/context.dart';
 @MirrorsUsed(
     targets: const [
       Camera,
@@ -19,7 +19,7 @@ enum CameraType{
 }
 
 // Todo (jpu) : add Gizmo
-abstract class Camera extends Node {
+abstract class Camera extends GLTFNode {
   static int nextId = 0;
   final int cameraId = nextId++;
 

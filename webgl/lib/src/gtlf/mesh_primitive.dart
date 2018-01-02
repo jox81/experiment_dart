@@ -46,6 +46,21 @@ class GLTFMeshPrimitive extends GltfProperty {
   final int weigthsCount;
   final int texcoordCount;
 
+  GLTFAccessor get positionAccessor => attributes['POSITION'];
+  set positionAccessor(GLTFAccessor value) {
+    attributes['POSITION'] = value;
+  }
+
+  GLTFAccessor get normalAccessor => attributes['NORMAL'];
+  set normalAccessor(GLTFAccessor value) {
+    attributes['NORMAL'] = value;
+  }
+
+  GLTFAccessor get uvAccessor => attributes['TEXCOORD_0'];
+  set uvAccessor(GLTFAccessor value) {
+    attributes['TEXCOORD_0'] = value;
+  }
+
   GLTFAccessor _indicesAccessor;
   GLTFAccessor get indicesAccessor => _indicesAccessor;
   set indicesAccessor(GLTFAccessor value) {
@@ -60,9 +75,9 @@ class GLTFMeshPrimitive extends GltfProperty {
   }
 
   ///Use this to define a custom material if needed
-  KronosRawMaterial _material;
-  KronosRawMaterial get material => _material;
-  set material(KronosRawMaterial value) {
+  RawMaterial _material;
+  RawMaterial get material => _material;
+  set material(RawMaterial value) {
     _material = value;
   }
 
@@ -116,7 +131,7 @@ class GLTFMeshPrimitive extends GltfProperty {
 
     if(baseMaterial == null || debug){
       if(debugWithDebugMaterial){
-        _material = new KronosDebugMaterial()
+        _material = new MaterialDebug()
           ..color = new Vector3.random();
       } else if(_material == null){
         _material = new KronosDefaultMaterial();
@@ -124,7 +139,7 @@ class GLTFMeshPrimitive extends GltfProperty {
         // use _material manually defined
       }
     } else {
-      _material = new KronosPRBMaterial(attributes['NORMAL'] != null, attributes['TANGENT'] != null, attributes['TEXCOORD_0'] != null, hasLODExtension);
+      _material = new KronosPRBMaterial(normalAccessor != null, attributes['TANGENT'] != null, uvAccessor != null, hasLODExtension);
       KronosPRBMaterial materialPBR = _material as KronosPRBMaterial;
 
       materialPBR.baseColorMap = baseMaterial.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture;

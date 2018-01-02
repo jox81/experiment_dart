@@ -1,7 +1,7 @@
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/asset.dart';
 import 'package:webgl/src/gtlf/buffer.dart';
@@ -106,7 +106,7 @@ Future main() async {
       GLTFMeshPrimitive primitive = mesh.primitives[0];
       expect(primitive, isNotNull);
       expect(primitive.attributes, isNotNull);
-      expect(primitive.attributes['POSITION'], gltfProject.accessors[1]);
+      expect(primitive.positionAccessor, gltfProject.accessors[1]);
       expect(primitive.indices, isNotNull);
       expect(primitive.indices, gltfProject.accessors[0]);
     });

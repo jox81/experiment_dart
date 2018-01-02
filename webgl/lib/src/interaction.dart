@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/time/time.dart';
 

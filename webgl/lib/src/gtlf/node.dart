@@ -2,7 +2,8 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/skin.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/interface/IComponent.dart';
 
 class GLTFNode extends GLTFChildOfRootProperty{
   static int nextId = 0;
@@ -97,6 +98,22 @@ class GLTFNode extends GLTFChildOfRootProperty{
   Camera get camera => _camera;
   set camera(Camera value) {
     _camera = value;
+  }
+
+  bool _visible = true;
+  bool get visible => _visible;
+  set visible(bool value) =>
+      _visible = value;
+
+  List<IComponent> components = new List();
+
+  void addComponent(IComponent component) {
+    components.add(component
+      ..node = this);
+  }
+
+  void update(){
+    components.forEach((c)=> c.update());
   }
 
   @override

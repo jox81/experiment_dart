@@ -38,6 +38,14 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   }
 
   static GLTFMesh createMesh(Float32List vertexPositions, Int16List vertexIndices, Float32List vertexNormals, Float32List vertexUvs) {
+
+    //Closure to check new added byte length to the list
+    int checkAddedBytes(List<int> baseData, int lastBaseDataLength) {
+//    print('added ${baseData.length - lastBaseDataLength} bytes');
+      lastBaseDataLength = baseData.length;
+      return lastBaseDataLength;
+    }
+
     /// The mesh must have primitive
     GLTFMeshPrimitive primitive =
     new GLTFMeshPrimitive(drawMode: DrawMode.TRIANGLES, hasPosition: vertexPositions != null, hasNormal: vertexNormals != null, hasTextureCoord: vertexUvs != null);
@@ -143,7 +151,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       );
       positionAccessor.bufferView = bufferView;
 
-      primitive.attributes['POSITION'] = positionAccessor;
+      primitive.positionAccessor = positionAccessor;
 
       /// And the BufferView must refer to a Buffer for the datas
       bufferView.buffer = buffer;
@@ -159,7 +167,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       /// Normals can use same bufferView as Position.
       /// So there's no need to create a new one.
       /// But length must be adjusted
-      primitive.attributes['POSITION'].bufferView.byteLength += vertexNormals.buffer.lengthInBytes;
+      primitive.positionAccessor.bufferView.byteLength += vertexNormals.buffer.lengthInBytes;
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor normalAccessor = new GLTFAccessor(
@@ -175,9 +183,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
           componentLength: ACCESSOR_COMPONENT_LENGTHS[FLOAT],
           normalized: false,
       );
-      normalAccessor.bufferView = primitive.attributes['POSITION'].bufferView; //Re-use position bufferview
+      normalAccessor.bufferView = primitive.positionAccessor.bufferView; //Re-use position bufferview
 
-      primitive.attributes['NORMAL'] = normalAccessor;
+      primitive.normalAccessor = normalAccessor;
 
       baseData.addAll(vertexNormals.buffer.asUint8List().toList());
 
@@ -195,7 +203,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       /// UV can use same bufferView as Position.
       /// So there's no need to create a new one.
       /// But length must be adjusted in proportion af position even if it's uv
-      primitive.attributes['POSITION'].bufferView.byteLength += vertexUvs.buffer.lengthInBytes;
+      primitive.positionAccessor.bufferView.byteLength += vertexUvs.buffer.lengthInBytes;
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor uvAccessor = new GLTFAccessor(
@@ -211,9 +219,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
           componentLength: ACCESSOR_COMPONENT_LENGTHS[FLOAT],
           normalized: false,
       );
-      uvAccessor.bufferView = primitive.attributes['POSITION'].bufferView; //Re-use position bufferview
+      uvAccessor.bufferView = primitive.positionAccessor.bufferView; //Re-use position bufferview
 
-      primitive.attributes['TEXCOORD_0'] = uvAccessor;
+      primitive.uvAccessor = uvAccessor;
 
       baseData.addAll(vertexUvs.buffer.asUint8List().toList());
 
@@ -226,12 +234,6 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     buffer.byteLength = buffer.data.length;
 
     return mesh;
-  }
-
-  static int checkAddedBytes(List<int> baseData, int lastBaseDataLength) {
-//    print('added ${baseData.length - lastBaseDataLength} bytes');
-    lastBaseDataLength = baseData.length;
-    return lastBaseDataLength;
   }
 
   static GLTFMesh createMeshWithPrimitive(MeshPrimitive meshPrimitive, bool withIndices, bool withNormals, bool withUVs) {
@@ -254,6 +256,11 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     }
 
     return GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
+  }
+
+  factory GLTFMesh.custom(Float32List vertexPositions, Int16List vertexIndices, Float32List vertexNormals, Float32List vertexUvs){
+    GLTFMesh mesh =  GLTFMesh.createMesh(vertexPositions, vertexIndices, vertexNormals, vertexUvs);
+    return mesh;
   }
 
   factory GLTFMesh.point(){

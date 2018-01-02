@@ -5,7 +5,7 @@ import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {
 
-  /// plusieurs manière de récupérer le contenu de fichier se situant dans un autre package
+  /// Page de test montrant plusieurs manière de récupérer le contenu de fichier se situant dans un autre package dans le dossier /lib
 
   Uri uri = new Uri.file("packages/webgl/shaders/material_point/material_point.vs.glsl");
   var resource = new Resource(uri);

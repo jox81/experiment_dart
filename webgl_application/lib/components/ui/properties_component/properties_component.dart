@@ -16,9 +16,9 @@ import 'package:webgl_application/components/value_components/vector3_component/
 import 'package:webgl_application/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl_application/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation/animation_property.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/light.dart';
+import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
@@ -187,7 +187,7 @@ class PropertiesComponent {
 
   //Material
   bool isMaterial(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, KronosRawMaterial);
+    return compareType(animationProperty.type, RawMaterial);
   }
 
   //Texture

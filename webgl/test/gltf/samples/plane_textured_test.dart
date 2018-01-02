@@ -62,8 +62,8 @@ Future main() async {
       GLTFMeshPrimitive primitive = mesh.primitives[0];
       expect(primitive, isNotNull);
       expect(primitive.attributes, isNotNull);
-      expect(primitive.attributes['POSITION'], gltfProject.accessors[1]);
-      expect(primitive.attributes['TEXCOORD_0'], gltfProject.accessors[2]);
+      expect(primitive.positionAccessor, gltfProject.accessors[1]);
+      expect(primitive.uvAccessor, gltfProject.accessors[2]);
       expect(primitive.indices, isNotNull);
       expect(primitive.indices, gltfProject.accessors[0]);
       expect(primitive.drawMode, DrawMode.TRIANGLES);

@@ -1,4 +1,4 @@
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gtlf/project.dart';
 import 'dart:async';
 import "package:test/test.dart";

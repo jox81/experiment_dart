@@ -3,10 +3,10 @@ import 'dart:html';
 import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
-import 'package:webgl/src/geometry/mesh.dart';
-import 'package:webgl/src/scene.dart';
+import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
 
 @TestOn("dartium")
 
@@ -79,17 +79,17 @@ Future main() async {
 
   group("test model 01", () {
     test("test model", () {
-      Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
+      GLTFMesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model is QuadMesh,isTrue);
     });
     test("test model name", () {
-      Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
+      GLTFMesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model.name == 'quad',isTrue);
     });
     test("test model position", () {
-      Mesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
+      GLTFMesh model = new Mesh.fromJson(testJson['scene']['models'][0] as Map);
 
       expect(model.translation == new Vector3(5.0, 0.0, -5.0),isTrue);
     });
@@ -97,28 +97,28 @@ Future main() async {
 
   group("test model 02", () {
     test("test model", () {
-      Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
+      GLTFMesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
 
       expect(model is CubeMesh,isTrue);
     });
     test("test model name", () {
-      Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
+      GLTFMesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
       expect(model.name == 'cube',isTrue);
     });
     test("test model position", () {
-      Mesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
+      GLTFMesh model = new Mesh.fromJson(testJson['scene']['models'][1] as Map);
       expect(model.translation == new Vector3(0.0, 0.0, 0.0),isTrue);
     });
   });
 
   group("test scene", () {
     test("scene creation", () {
-      Scene scene = new SceneJox.fromJson(testJson);
+      GLTFScene scene = new SceneJox.fromJson(testJson);
       expect(scene,isNotNull);
     });
 
     test("scene background color", () {
-      Scene scene = new SceneJox.fromJson(testJson);
+      GLTFScene scene = new SceneJox.fromJson(testJson);
       expect(scene.backgroundColor,equals(new Vector4.fromFloat32List(new Float32List.fromList([0.5,
       1.0,
       0.2,
@@ -126,12 +126,12 @@ Future main() async {
     });
 
     test("scene camera", () {
-      Scene scene = new SceneJox.fromJson(testJson);
+      GLTFScene scene = new SceneJox.fromJson(testJson);
       expect(scene.cameras.length == 1, isTrue);
     });
 
     test("scene models", () {
-      Scene scene = new SceneJox.fromJson(testJson);
+      GLTFScene scene = new SceneJox.fromJson(testJson);
       expect(scene.meshes.length == 2, isTrue);
     });
   });

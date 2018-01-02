@@ -1,6 +1,6 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_constants.dart';
 import 'package:webgl/src/webgl_objects/webgl_parameters.dart';

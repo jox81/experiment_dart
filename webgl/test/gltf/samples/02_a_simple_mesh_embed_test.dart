@@ -72,8 +72,8 @@ Future main() async {
       GLTFMeshPrimitive primitive = mesh.primitives[0];
       expect(primitive, isNotNull);
       expect(primitive.attributes, isNotNull);
-      expect(primitive.attributes['POSITION'], gltfProject.accessors[1]);
-      expect(primitive.attributes['NORMAL'], gltfProject.accessors[2]);
+      expect(primitive.positionAccessor, gltfProject.accessors[1]);
+      expect(primitive.normalAccessor, gltfProject.accessors[2]);
 
       expect(primitive.indices, isNotNull);
       expect(primitive.indices, gltfProject.accessors[0]);
@@ -81,7 +81,7 @@ Future main() async {
     test("meshes attributs POSITION", () async {
       GLTFMesh mesh = gltfProject.meshes[0];
 
-      GLTFAccessor accessor = mesh.primitives[0].attributes['POSITION'];
+      GLTFAccessor accessor = mesh.primitives[0].positionAccessor;
       expect(accessor, isNotNull);
 
       Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
@@ -94,7 +94,7 @@ Future main() async {
     test("meshes attributs NORMAL", () async {
       GLTFMesh mesh = gltfProject.meshes[0];
 
-      GLTFAccessor accessor = mesh.primitives[0].attributes['NORMAL'];
+      GLTFAccessor accessor = mesh.primitives[0].normalAccessor;
       expect(accessor, isNotNull);
 
       Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(

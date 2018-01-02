@@ -1,6 +1,6 @@
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 
 class CameraController {
   num xRot = 0.0;

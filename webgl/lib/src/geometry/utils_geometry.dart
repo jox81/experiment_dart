@@ -1,5 +1,5 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
@@ -52,7 +52,7 @@ class UtilsGeometry{
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
       GLTFMesh meshPoint = new GLTFMesh.point()
-        ..primitives[0].material = new KronosMaterialPoint(pointSize:5.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
+        ..primitives[0].material = new MaterialPoint(pointSize:5.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
       GLTFNode nodePoint = new GLTFNode()
         ..mesh = meshPoint
         ..translation = pickWorld;
@@ -67,7 +67,7 @@ class UtilsGeometry{
   static List<GLTFNode> drawModelVertices(GLTFMesh mesh) {
     List<GLTFNode> resultPoints = [];
 
-    KronosMaterialPoint material = new KronosMaterialPoint(pointSize:4.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
+    MaterialPoint material = new MaterialPoint(pointSize:4.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
 
     for(Triangle triangle in mesh.getFaces()){
       resultPoints.addAll(drawTriangleVertices(triangle, material));
@@ -76,7 +76,7 @@ class UtilsGeometry{
   }
 
   /// Draw a point for each vertex of the triangle
-  static List<GLTFNode> drawTriangleVertices(Triangle triangle, KronosMaterialPoint material) {
+  static List<GLTFNode> drawTriangleVertices(Triangle triangle, MaterialPoint material) {
     List<GLTFNode> resultPoints = [];
 
     List<Vector3> vertices = [triangle.point0, triangle.point1, triangle.point2];
@@ -106,7 +106,7 @@ class UtilsGeometry{
   /// Draw a point on the model intersected with the ray
   static List<GLTFNode> findModelHitPoint(GLTFNode node, Ray ray) {
     List<GLTFNode> resultPoints = [];
-    KronosMaterialPoint material = new KronosMaterialPoint(pointSize:8.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
+    MaterialPoint material = new MaterialPoint(pointSize:8.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
 
     for(Triangle triangle in node.mesh.getFaces()) {
       double distance = ray.intersectsWithTriangle(triangle);

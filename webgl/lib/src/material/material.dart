@@ -266,7 +266,7 @@
 //
 //  void _drawPrimitive(GLTFMeshPrimitive primitive) {
 //    if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
-//      GLTFAccessor accessorPosition = primitive.attributes['POSITION'];
+//      GLTFAccessor accessorPosition = primitive.positionAccessor;
 //      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
 //      gl.drawArrays(
 //          primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);

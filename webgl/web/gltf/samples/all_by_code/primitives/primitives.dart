@@ -28,7 +28,7 @@ GLTFProject primitives() {
   );
   project.materials.add(material);
 
-  KronosMaterialPoint materialPoint = new KronosMaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+  MaterialPoint materialPoint = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
 //  project.materials.add(material); // Todo (jpu) : don't add ?
 
   // Todo (jpu) :This doesn't show, use another material

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/shader_source.dart';

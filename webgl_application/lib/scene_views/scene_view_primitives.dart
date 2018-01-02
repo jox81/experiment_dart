@@ -27,10 +27,10 @@ GLTFProject projectPrimitives() {
   );
   project.materials.add(material);
 
-  KronosMaterialPoint materialPoint = new KronosMaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+  MaterialPoint materialPoint = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
 //  project.materials.add(material); // Todo (jpu) : don't add ?
 
-  // Todo (jpu) :This doesn't show, use another material
+  // Todo (jpu) :This doesn't show, use another material ?
   GLTFMesh meshPoint = new GLTFMesh.point()
     ..primitives[0].material = materialPoint;
   project.meshes.add(meshPoint);
@@ -93,7 +93,7 @@ GLTFProject projectPrimitives() {
   // Todo (jpu) : should use normals
   GLTFMesh meshCube = new GLTFMesh.cube(withNormals: false)
     ..primitives[0].baseMaterial = material;
-  project.meshes.add(meshPyramid);
+  project.meshes.add(meshCube);
   GLTFNode nodeCube = new GLTFNode()
     ..mesh = meshCube
     ..name = 'cube'

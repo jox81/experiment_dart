@@ -1,6 +1,6 @@
 import 'package:webgl/src/introspection.dart';
 
-import '../camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'dart:core';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
@@ -14,6 +14,7 @@ import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/sampler.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl/src/gtlf/texture.dart';
+import 'package:webgl/src/light/light.dart';
 
 // Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
@@ -33,6 +34,7 @@ class GLTFProject extends IEditElement{
   List<GLTFTexture> textures = new List();
   List<GLTFImage> images = new List();
   List<GLTFMesh> meshes = new List();
+  List<Light> lights = new List();// Todo (jpu) : check how to use gltf extensions
 
   List<GLTFBuffer> buffers = new List();
   List<GLTFBufferView> bufferViews = new List();

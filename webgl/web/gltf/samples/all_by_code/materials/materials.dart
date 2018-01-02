@@ -31,17 +31,17 @@ Future<GLTFProject> projectTestMaterials() async {
   );
   project.materials.add(baseMmaterial);
 
-  List<KronosRawMaterial> materials = [
-    new KronosMaterialPoint(pointSize:5.0, color:new Vector4(0.0, 0.66, 1.0, 1.0)),
-    new KronosMaterialBase(),
-    new KronosMaterialBaseColor(new Vector4(1.0, 1.0, 0.0, 1.0)),
-    new KronosMaterialBaseTexture()..texture = await TextureUtils.createTexture2DFromFile('materials/testTexture.png'),
+  List<RawMaterial> materials = [
+    new MaterialPoint(pointSize:5.0, color:new Vector4(0.0, 0.66, 1.0, 1.0)),
+    new MaterialBase(),
+    new MaterialBaseColor(new Vector4(1.0, 1.0, 0.0, 1.0)),
+    new MaterialBaseTexture()..texture = await TextureUtils.createTexture2DFromFile('materials/testTexture.png'),
   ];
 
   int materialsIndex = 0;
   int drawMode = DrawMode.TRIANGLES;
 
-  KronosRawMaterial material = materials.last;
+  RawMaterial material = materials.last;
   
   // Todo (jpu) :This doesn't show, use another material
   GLTFMesh meshPoint = new GLTFMesh.point()

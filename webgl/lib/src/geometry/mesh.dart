@@ -121,10 +121,7 @@
 //  }
 //}
 //
-//class CustomMesh extends Mesh {
-//  MeshType get meshType => MeshType.custom;
-//  CustomMesh();
-//}
+
 //
 //class JsonMesh extends Mesh {
 //  MeshType get meshType => MeshType.json;

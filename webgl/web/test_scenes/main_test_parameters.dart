@@ -1,10 +1,11 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -24,7 +25,7 @@ class WebglTestParameters {
   WebGLBuffer vertexBuffer;
   WebGLBuffer indicesBuffer;
 
-  List<Mesh> models = new List();
+  List<GLTFNode> nodes = new List();
 
   WebGLProgram shaderProgram;
 
@@ -56,8 +57,11 @@ class WebglTestParameters {
   }
 
   void setupMeshes() {
-    QuadMesh quad = new QuadMesh()..matrix.translate(2.0, 0.0, 0.0);
-    models.add(quad);
+    GLTFMesh quad = new GLTFMesh.quad();
+    GLTFNode node = new GLTFNode()
+    ..mesh = quad
+    ..matrix.translate(2.0, 0.0, 0.0);
+    nodes.add(node);
 
     getInfos();
   }
@@ -66,8 +70,8 @@ class WebglTestParameters {
     gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    for (Mesh model in models) {
-      model.render();
+    for (GLTFNode node in nodes) {
+      node.render();
     }
   }
 
@@ -75,7 +79,7 @@ class WebglTestParameters {
 //    Context.webglConstants.logConstants();
 //    Context.webglParameters.logValues();
 
-    IntrospectionManager.instance.logTypeInfos(CubeMesh,
+    IntrospectionManager.instance.logTypeInfos(GLTFMesh,
       showBaseInfo: true,
       showLibrary: false,
       showType: false,
@@ -87,7 +91,7 @@ class WebglTestParameters {
       showMethod: true
     );
 
-    models[0].getPropertiesInfos();
+    nodes[0].getPropertiesInfos();
   }
 }
 

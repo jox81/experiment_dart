@@ -1,10 +1,11 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
-import 'package:webgl/src/camera.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh_primitive.dart';
-import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/gtlf/mesh.dart';
+import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -23,7 +24,7 @@ class Webgl01 {
   WebGLBuffer vertexBuffer;
   WebGLBuffer indicesBuffer;
 
-  List<Mesh> models = new List();
+  List<GLTFNode> nodes = new List();
 
   WebGLProgram shaderProgram;
 
@@ -58,17 +59,15 @@ class Webgl01 {
   }
 
   void buildMeshData() {
-    CustomObject customObject = new CustomObject()
-      ..primitive = new MeshPrimitive()
-      ..primitive.vertices = [
-        0.0, 0.0, 0.0,
-        0.0, 0.0, 3.0,
-        2.0, 0.0, 0.0,
-      ]
-      ..primitive.vertexDimensions = 3
-      ..primitive.indices = [0, 1, 2]
+    GLTFMesh customObject = new GLTFMesh.custom(new Float32List.fromList([
+      0.0, 0.0, 0.0,
+      0.0, 0.0, 3.0,
+      2.0, 0.0, 0.0,
+    ]), new Int16List.fromList([0, 1, 2]), null, null);
+    GLTFNode nodeCustom = new GLTFNode()
+      ..mesh = customObject
       ..matrix = (new Matrix4.identity()..setTranslation(new Vector3(2.0,0.0,0.0)));
-    models.add(customObject);
+    nodes.add(nodeCustom);
   }
 
   void initShaders() {
@@ -124,8 +123,8 @@ class Webgl01 {
   }
 
   void initBuffers() {
-    List<double> vertices = models[0].primitive.vertices;
-    List<int> indices = models[0].primitive.indices;
+    List<double> vertices = nodes[0].mesh.primitives[0].vertices;
+    List<int> indices = nodes[0].mesh.primitives[0].indices;
 
     vertexBuffer = new WebGLBuffer();
     Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
@@ -149,12 +148,12 @@ class Webgl01 {
     Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     Context.glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
-    vertexPositionAttribute.vertexAttribPointer(models[0].primitive.vertexDimensions, ShaderVariableType.FLOAT, false, 0, 0);
+    vertexPositionAttribute.vertexAttribPointer(nodes[0].mesh.primitives[0].positionAccessor.components, ShaderVariableType.FLOAT, false, 0, 0);
 
     _setMatrixUniforms();
 
     gl.drawElements(
-        DrawMode.TRIANGLES, models[0].primitive.indices.length, BufferElementType.UNSIGNED_SHORT, 0);
+        DrawMode.TRIANGLES, nodes[0].mesh.primitives[0].positionAccessor.components, BufferElementType.UNSIGNED_SHORT, 0);
 
     window.requestAnimationFrame((num time) {
       this.render(time: time);
@@ -162,7 +161,7 @@ class Webgl01 {
   }
 
   void _setMatrixUniforms() {
-    mMatrixUniform.uniformMatrix4fv(models[0].matrix, false);
+    mMatrixUniform.uniformMatrix4fv(nodes[0].matrix, false);
     vMatrixUniform.uniformMatrix4fv(Context.mainCamera.viewMatrix, false);
     pMatrixUniform.uniformMatrix4fv(Context.mainCamera.projectionMatrix, false);
   }

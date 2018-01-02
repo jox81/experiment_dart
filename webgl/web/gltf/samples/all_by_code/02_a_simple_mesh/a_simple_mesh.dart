@@ -32,18 +32,18 @@ GLTFProject aSimpleMesh() {
     project.bufferViews.add(mesh.primitives[0].indicesAccessor.bufferView);
   }
 
-  project.accessors.add(mesh.primitives[0].attributes['POSITION']);
-  project.bufferViews.add(mesh.primitives[0].attributes['POSITION'].bufferView);
+  project.accessors.add(mesh.primitives[0].positionAccessor);
+  project.bufferViews.add(mesh.primitives[0].positionAccessor.bufferView);
 
-  if(mesh.primitives[0].attributes['NORMAL'] != null) {
-    project.accessors.add(mesh.primitives[0].attributes['NORMAL']);
+  if(mesh.primitives[0].normalAccessor != null) {
+    project.accessors.add(mesh.primitives[0].normalAccessor);
   }
 
-  if(mesh.primitives[0].attributes['TEXCOORD_0'] != null) {
-    project.accessors.add(mesh.primitives[0].attributes['TEXCOORD_0']);
+  if(mesh.primitives[0].uvAccessor != null) {
+    project.accessors.add(mesh.primitives[0].uvAccessor);
   }
 
-  project.buffers.add(mesh.primitives[0].attributes['POSITION'].bufferView.buffer);
+  project.buffers.add(mesh.primitives[0].positionAccessor.bufferView.buffer);
 
 
   return project;
