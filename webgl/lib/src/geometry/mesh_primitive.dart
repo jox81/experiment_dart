@@ -22,15 +22,9 @@ import 'dart:mirrors';
 class MeshPrimitive {
 
   /// DrawMode mode
-  int mode = DrawMode.TRIANGLE_STRIP;
+  int mode = DrawMode.TRIANGLES;
 
   List<double> vertices = [];
-
-  List<double> _colors = new List();
-  List<double> get colors => _colors;
-  set colors(List<double> value) {
-    _colors = value;
-  }
 
   //Indices Infos
   List<int> _indices = new List();
@@ -49,6 +43,12 @@ class MeshPrimitive {
   List<double> get vertexNormals => _vertexNormals;
   set vertexNormals(List<double> value) {
     _vertexNormals = value;
+  }
+
+  List<double> _colors = new List();
+  List<double> get colors => _colors;
+  set colors(List<double> value) {
+    _colors = value;
   }
 
   MeshPrimitive();

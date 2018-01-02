@@ -18,7 +18,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/gtlf/mesh_primitive.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
+import 'package:webgl/src/gtlf/renderer/renderer_utils.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/animation.dart';
 import 'package:webgl/src/gtlf/node.dart';
@@ -205,7 +205,6 @@ class GLTFRenderer extends IEditElement implements Interactable {
     var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
 
     globalState = new GlobalState()
-      ..scene = null
       ..hasLODExtension = hasLODExtension
       ..hasDerivativesExtension = hasDerivativesExtension
       ..sRGBifAvailable =

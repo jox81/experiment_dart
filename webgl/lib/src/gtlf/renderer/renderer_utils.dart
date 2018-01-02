@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'renderer_kronos_scene.dart';
 
 class GLFunctionCall {
   Function function;
@@ -18,7 +17,6 @@ class GlobalState {
   dynamic hasLODExtension;
   dynamic hasDerivativesExtension;
 
-  KronosScene scene;
 }
 
 class ScaleVal{

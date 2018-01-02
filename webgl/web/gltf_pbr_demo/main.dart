@@ -8,10 +8,10 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/gtlf/debug_gltf.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_scene.dart';
-import 'package:webgl/src/gltf_pbr_demo/renderer_kronos_utils.dart';
+import 'package:webgl/src/gtlf/renderer/renderer_utils.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
 Future<int> loadCubeMap(

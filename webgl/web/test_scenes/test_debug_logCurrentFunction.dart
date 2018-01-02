@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/debug/utils_debug.dart';
 
 /// Page de test pour la fonction logCurrentFunction();
 Future main() async {

@@ -2,7 +2,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
+import 'package:webgl/src/gtlf/renderer/materials.dart';
 import 'package:webgl/src/gtlf/scene.dart';
 import 'package:webgl_application/scene_views/test_anim.dart';
 import 'package:webgl/src/camera/camera.dart';
@@ -133,7 +133,6 @@ GLTFProject projectSceneViewBase() {
     ..scale = new Vector3(0.1, 0.1, 0.1);
   scene.addNode(nodeCenterCube);
   project.addNode(nodeCenterCube);
-
 
   // create square
   GLTFMesh meshSquareX = new GLTFMesh.quad(withNormals: false)

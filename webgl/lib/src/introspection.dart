@@ -1,7 +1,7 @@
 @MirrorsUsed(targets:const[IntrospectionManager, IEditElement, CustomEditElement], override:'*')
 import 'dart:mirrors';
 import 'package:webgl/src/animation/animation_property.dart';
-import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/debug/utils_debug.dart';
 
 class IntrospectionManager {
   static IntrospectionManager _instance;

@@ -56,25 +56,9 @@
 //    getShaderSettings();
 //  }
 //
-//  WebGLProgram initShaderProgram(String vsSource, String fsSource) {
-//    WebGLShader vs = new WebGLShader(ShaderType.VERTEX_SHADER);
-//      vs
-//      ..source = vsSource
-//      ..compile();
-//
-//    WebGLShader fs = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-//      ..source = fsSource
-//      ..compile();
-//
-//    shaders = [vs, fs];
-//    WebGLProgram _program = new WebGLProgram()
-//    ..attachShader(vs)
-//    ..attachShader(fs)
-//    ..link()
-//    ..validate();
-//
-//    return _program;
-//  }
+
+
+
 //
 //  void getShaderSettings() {
 //    _getShaderAttributSettings();
@@ -211,8 +195,10 @@
 //
 //    }
 //  }
-//
-//  // > Animation and Hierarchy
+
+
+
+  // > Animation and Hierarchy
 //  Queue<Matrix4> _mvMatrixStack = new Queue();
 //
 //  void _mvPushMatrix() {
@@ -227,56 +213,46 @@
 //  }
 //
 //  void update(Mesh model) {
-////    _mvPushMatrix();
-////    Context.modelViewMatrix.multiply(model.transform);
-////
-////    beforeRender(model);
-//  }
+//    _mvPushMatrix();
+//    Context.modelViewMatrix.multiply(model.transform);
 //
-//  // >> Rendering
+//    beforeRender(model);
+//  }
+
+
+
+  // >> Rendering
 //
 //  void render(Mesh model) {
-////    _mvPushMatrix();
-//////    idem :
-////    Context.modelMatrix = (Context.modelMatrix * model.matrix) as Matrix4;
-////
-////    beforeRender(model);
-////
-////    GLTFMeshPrimitive primitive = new GLTFMeshPrimitive()
-////      ..drawMode = model.primitive.mode
-////      ..attributes['POSITION'] = new GLTFAccessor(
-////          byteOffset : 0,
-////          count : model.primitive.vertexCount
-////      );
-////
-////    if(model.primitive.indices.length > 0) {
-////      GLTFAccessor accessorIndices = new GLTFAccessor(
-////          count: model.primitive.indices.length,
-////          componentType: BufferElementType.UNSIGNED_SHORT
-////      );
-////      primitive.indicesAccessor = accessorIndices;
-////    }
-////
-////    _drawPrimitive(primitive);
-////
-////    afterRender(model);
-////
-////    _mvPopMatrix();
-//  }
+//    _mvPushMatrix();
+//    idem :
+//    Context.modelMatrix = (Context.modelMatrix * model.matrix) as Matrix4;
 //
-//  void _drawPrimitive(GLTFMeshPrimitive primitive) {
-//    if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
-//      GLTFAccessor accessorPosition = primitive.positionAccessor;
-//      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
-//      gl.drawArrays(
-//          primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);
-//    } else {
-//      GLTFAccessor accessorIndices = primitive.indicesAccessor;
-//      gl.drawElements(primitive.drawMode, accessorIndices.count,
-//          accessorIndices.componentType, 0);
+//    beforeRender(model);
+//
+//    GLTFMeshPrimitive primitive = new GLTFMeshPrimitive()
+//      ..drawMode = model.primitive.mode
+//      ..attributes['POSITION'] = new GLTFAccessor(
+//          byteOffset : 0,
+//          count : model.primitive.vertexCount
+//      );
+//
+//    if(model.primitive.indices.length > 0) {
+//      GLTFAccessor accessorIndices = new GLTFAccessor(
+//          count: model.primitive.indices.length,
+//          componentType: BufferElementType.UNSIGNED_SHORT
+//      );
+//      primitive.indicesAccessor = accessorIndices;
 //    }
-//  }
 //
+//    _drawPrimitive(primitive);
+//
+//    afterRender(model);
+//
+//    _mvPopMatrix();
+//  }
+
+
 //  void beforeRender(Mesh model) {
 //    program.use();
 //
@@ -302,4 +278,3 @@
 //  }
 //
 //}
-//

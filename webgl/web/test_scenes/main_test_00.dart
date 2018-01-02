@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/geometry/mesh_primitive.dart';
-import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/TempToRemove/mesh.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';

@@ -1,11 +1,9 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/mesh.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
-import 'package:webgl/src/material/material.dart';
+import 'package:webgl/src/gtlf/renderer/materials.dart';
 
 class UtilsGeometry{
 

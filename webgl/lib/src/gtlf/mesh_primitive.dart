@@ -4,7 +4,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gtlf/accessor.dart';
 import 'package:webgl/src/gtlf/material.dart';
-import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
+import 'package:webgl/src/gtlf/renderer/materials.dart';
 import 'package:webgl/src/gtlf/utils_gltf.dart';
 
 enum MeshType {

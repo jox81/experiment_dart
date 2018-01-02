@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
+import 'package:webgl/src/gtlf/renderer/materials.dart';
 import 'package:webgl_application/components/ui/properties_component/dynamic_load_html_component.dart';
 import 'package:webgl_application/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';

@@ -7,10 +7,9 @@ import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/gtlf/mesh.dart';
 import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/geometry/mesh.dart';
-import 'package:webgl/src/gtlf/renderer/kronos_material.dart';
+import 'package:webgl/src/gtlf/renderer/materials.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
-import 'package:webgl/src/utils/utils_debug.dart';
+import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture_wrapped.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
@@ -23,7 +22,6 @@ import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 ], override: '*')
 import 'dart:mirrors';
 
-///
 class WebGLTexture extends EditTexture {
   final WebGL.Texture webGLTexture;
   final int textureTarget;
