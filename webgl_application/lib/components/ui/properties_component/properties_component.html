@@ -14,17 +14,10 @@
                     !isVector4(iEditElement.properties[key]) &&
                     !isMatrix3(iEditElement.properties[key]) &&
                     !isMatrix4(iEditElement.properties[key]) &&
-                    !isMaterial(iEditElement.properties[key]) &&
                     !isList(iEditElement.properties[key]) &&
                     !isMap(iEditElement.properties[key]) &&
                     !isWebGLEnum(iEditElement.properties[key]) &&
-                    !isMaterial(iEditElement.properties[key]) &&
-                    !isTexture(iEditElement.properties[key]) &&
-                    !isWebGLTexture(iEditElement.properties[key]) &&
-                    !isWebGLBuffer(iEditElement.properties[key]) &&
-                    !isMesh(iEditElement.properties[key]) &&
-                    !isCamera(iEditElement.properties[key]) &&
-                    !isLight(iEditElement.properties[key]) &&
+                    !isEditable(iEditElement.properties[key]) &&
                     !isFunction(iEditElement.properties[key])">
                         <p>{{key}} - Type : {{iEditElement.properties[key].type}}</p>
                         <p style='text-align: right; margin: 18px 0px;'>{{iEditElement.properties[key].getter()}}</p>
@@ -253,82 +246,16 @@
                         </section>
                     </div>
 
-                    <div *ngIf="isMaterial(iEditElement.properties[key])">
+                    <div *ngIf="isEditable(iEditElement.properties[key])">
                         <legend>
                             {{key}}
                         </legend>
                         <section>
                             <input type="button"
-                                   (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Material">
+                                   (click)="setSelection(iEditElement.properties[key].getter())" value="-- Edit --">
                         </section>
                     </div>
 
-                    <div *ngIf="isTexture(iEditElement.properties[key])">
-                        <legend>
-                            {{key}}
-                        </legend>
-                        <section>
-                            <input type="button"
-                                   (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Texture">
-                        </section>
-                    </div>
-
-                    <div *ngIf="isWebGLTexture(iEditElement.properties[key])">
-                        <legend>
-                            {{key}}
-                        </legend>
-                        <section>
-                            <input type="button"
-                                   (click)="setSelectionWebGLTexture(iEditElement.properties[key].getter())" value="Edit WebGLTexture">
-                        </section>
-                    </div>
-
-                    <div *ngIf="isWebGLBuffer(iEditElement.properties[key])">
-                        <legend>
-                            {{key}}
-                        </legend>
-                        <section>
-                            <input type="button"
-                                   (click)="setSelection(iEditElement.properties[key].getter())" value="Edit WebGLBuffer">
-                        </section>
-                    </div>
-
-                    <div *ngIf="isMesh(iEditElement.properties[key])">
-                        <legend>
-                            {{key}}
-                        </legend>
-                        <section>
-                            <input type="button"
-                                   (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Mesh">
-                        </section>
-                    </div>
-
-                    <div *ngIf="isCamera(iEditElement.properties[key])">
-                        <legend>
-                            {{key}}
-                        </legend>
-                        <section>
-                            <input type="button"
-                                   (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Camera">
-                        </section>
-                    </div>
-
-                    <div *ngIf="isLight(iEditElement.properties[key])">
-                        <legend>
-                            {{key}}
-                        </legend>
-                        <section>
-                            <input type="button"
-                                   (click)="setSelection(iEditElement.properties[key].getter())" value="Edit Light">
-                        </section>
-                    </div>
-
-                    <div *ngIf="isFunction(iEditElement.properties[key])">
-                        <legend></legend>
-                        <section>
-                            <function [functionModel] = 'iEditElement.properties[key].getter()'></function>
-                        </section>
-                    </div>
 
                     <div *ngIf="isImageElement(iEditElement.properties[key])">
                         <legend></legend>
@@ -336,6 +263,13 @@
                             <htmlComponentLoader [element]='iEditElement.properties[key].getter()'></htmlComponentLoader>
                             <br/>
                             <input type='file' (change)="selectTexture($event)"/>
+                        </section>
+                    </div>
+
+                    <div *ngIf="isFunction(iEditElement.properties[key])">
+                        <legend></legend>
+                        <section>
+                            <function [functionModel] = 'iEditElement.properties[key].getter()'></function>
                         </section>
                     </div>
 

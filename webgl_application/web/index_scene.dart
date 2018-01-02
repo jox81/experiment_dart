@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl_application/scene_views/scene_view.dart';
 import 'package:webgl_application/src/application.dart';
 

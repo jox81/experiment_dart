@@ -1,9 +1,9 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/renderer/materials.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
 
 class UtilsGeometry{
 
@@ -60,9 +60,9 @@ class UtilsGeometry{
     return resultPoints;
   }
 
-  /// May be buggy for some models like the sphere mesh
+  /// May be buggy for some nodes like the sphere mesh
   /// How to hide vertices after shown ?
-  static List<GLTFNode> drawModelVertices(GLTFMesh mesh) {
+  static List<GLTFNode> drawNodeVertices(GLTFMesh mesh) {
     List<GLTFNode> resultPoints = [];
 
     MaterialPoint material = new MaterialPoint(pointSize:4.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
@@ -101,8 +101,8 @@ class UtilsGeometry{
     return new Ray.originDirection(outRayNear, direction);
   }
 
-  /// Draw a point on the model intersected with the ray
-  static List<GLTFNode> findModelHitPoint(GLTFNode node, Ray ray) {
+  /// Draw a point on the node intersected with the ray
+  static List<GLTFNode> findNodeHitPoint(GLTFNode node, Ray ray) {
     List<GLTFNode> resultPoints = [];
     MaterialPoint material = new MaterialPoint(pointSize:8.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
 
@@ -123,14 +123,14 @@ class UtilsGeometry{
     return resultPoints;
   }
 
-  static GLTFNode findModelFromMouseCoords(CameraPerspective camera, num x, num y, List<GLTFNode> nodes) {
+  static GLTFNode findNodeFromMouseCoords(CameraPerspective camera, num x, num y, List<GLTFNode> nodes) {
     Ray ray = UtilsGeometry.findRay(camera, x, y);
-    GLTFNode itemHit = UtilsGeometry.findModelHit(nodes, ray);
+    GLTFNode itemHit = UtilsGeometry.findNodeHit(nodes, ray);
     return itemHit;
   }
 
-  /// Find the first hit model in the list using the ray
-  static GLTFNode findModelHit(List<GLTFNode> nodes, Ray ray) {
+  /// Find the first hit node in the list using the ray
+  static GLTFNode findNodeHit(List<GLTFNode> nodes, Ray ray) {
     GLTFNode itemHit;
     num distanceHit;
 

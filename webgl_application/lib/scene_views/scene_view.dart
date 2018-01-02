@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl_application/scene_views/scene_view_base.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 //import 'package:webgl_application/scene_views/scene_view_cubemap.dart';

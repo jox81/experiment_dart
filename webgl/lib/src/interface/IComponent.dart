@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gltf/node.dart';
 
 abstract class IComponent {
 

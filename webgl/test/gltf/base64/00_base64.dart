@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert' show BASE64;
 import "package:test/test.dart";
-import 'package:webgl/src/gtlf/gltf_creation.dart';
+import 'package:webgl/src/gltf/gltf_creation.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {

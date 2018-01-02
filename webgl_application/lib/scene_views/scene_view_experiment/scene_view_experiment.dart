@@ -6,8 +6,8 @@ import '003.dart' as exp003;
 import '004.dart' as exp004;
 import 'dart:async';
 import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/geometry/mesh.dart';
-import 'package:webgl/src/scene.dart';
+
+
 import 'package:webgl/src/context.dart';
 @MirrorsUsed(
     targets: const [

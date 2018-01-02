@@ -1,4 +1,4 @@
-import 'package:webgl/src/scene.dart';
+
 import 'dart:async';
 @MirrorsUsed(
     targets: const [

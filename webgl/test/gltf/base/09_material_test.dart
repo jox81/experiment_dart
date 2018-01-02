@@ -1,12 +1,12 @@
-import 'package:webgl/src/gtlf/material.dart';
-import 'package:webgl/src/gtlf/normal_texture_info.dart';
-import 'package:webgl/src/gtlf/occlusion_texture_info.dart';
-import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/material.dart';
+import 'package:webgl/src/gltf/normal_texture_info.dart';
+import 'package:webgl/src/gltf/occlusion_texture_info.dart';
+import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:webgl/src/gtlf/texture_info.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
+import 'package:webgl/src/gltf/texture_info.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
 @TestOn("dartium")
 Future main() async {
   group("Material", () {

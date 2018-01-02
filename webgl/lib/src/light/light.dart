@@ -10,7 +10,7 @@ import 'package:vector_math/vector_math.dart';
     override: '*')
 import 'dart:mirrors';
 
-import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gltf/node.dart';
 
 enum LightType {
   ambient,

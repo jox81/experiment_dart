@@ -1,19 +1,19 @@
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:webgl/src/gtlf/accessor.dart';
-import 'package:webgl/src/gtlf/asset.dart';
-import 'package:webgl/src/gtlf/buffer.dart';
-import 'package:webgl/src/gtlf/buffer_view.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
-import 'package:webgl/src/gtlf/image.dart';
-import 'package:webgl/src/gtlf/material.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/mesh_primitive.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/sampler.dart';
-import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/texture.dart';
+import 'package:webgl/src/gltf/accessor.dart';
+import 'package:webgl/src/gltf/asset.dart';
+import 'package:webgl/src/gltf/buffer.dart';
+import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/image.dart';
+import 'package:webgl/src/gltf/material.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/mesh_primitive.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/sampler.dart';
+import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @TestOn("dartium")
 Future main() async {

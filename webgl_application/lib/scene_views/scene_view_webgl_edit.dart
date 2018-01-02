@@ -3,9 +3,9 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/geometry/mesh.dart';
-import 'package:webgl/src/material/materials.dart';
-import 'package:webgl/src/scene.dart';
+
+
+
 @MirrorsUsed(
     targets: const [
       SceneViewWebGLEdit,

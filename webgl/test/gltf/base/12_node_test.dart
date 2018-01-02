@@ -1,7 +1,7 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
 import "package:test/test.dart";
 void main() {
   group('Node', () {

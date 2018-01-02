@@ -321,6 +321,8 @@ abstract class IEditElement {
     return IntrospectionManager.instance.getPropertiesInfos(elementToCheck);
   }
 
+  void edit(){}
+
   ///From : http://stackoverflow.com/questions/20024298/add-json-serializer-to-every-model-class
   ///The toJson method is necessary to use JSON.encode(..)
   Map toJson() {

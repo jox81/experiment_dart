@@ -1,7 +1,7 @@
-import 'package:webgl/src/gtlf/debug_gltf.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'dart:async';
 
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/project.dart';
 
 List<String> gltfTestsSamples = [
   ///Buffer tests

@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/controllers/camera_controllers.dart';
-import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/context.dart';
 @MirrorsUsed(

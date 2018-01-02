@@ -2,8 +2,8 @@
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/geometry/node.dart';
 //import 'package:webgl/src/camera.dart';
-//import 'package:webgl/src/gtlf/mesh.dart';
-//import 'package:webgl/src/gtlf/mesh_primitive.dart';
+//import 'package:webgl/src/gltf/mesh.dart';
+//import 'package:webgl/src/gltf/mesh_primitive.dart';
 //import 'package:webgl/src/interface/IGizmo.dart';
 //import 'package:webgl/src/interface/IScene.dart';
 //import 'package:webgl/src/geometry/mesh_primitive.dart';

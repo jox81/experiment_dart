@@ -1,5 +1,5 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/introspection.dart';
 @MirrorsUsed(
     targets: const [

@@ -1,7 +1,7 @@
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'dart:async';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/scene.dart';
 
 GLTFProject gltf;
 
@@ -11,7 +11,7 @@ Future main() async {
 }
 
 void buildSimpleProject() {
-  gltf = new GLTFProject();
+  gltf = new GLTFProject.create();
 
   GLTFNode node = new GLTFNode()
     ..name = 'singleNode';

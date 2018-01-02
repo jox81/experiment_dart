@@ -1,9 +1,9 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/materials.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl_application/scene_views/test_anim.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
@@ -15,7 +15,7 @@ GLTFProject projectSceneViewBase() {
 
   bool useLighting = true;
 
-  GLTFProject project = new GLTFProject();
+  GLTFProject project = new GLTFProject.create();
   GLTFScene scene = new GLTFScene()
       ..backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
   project.addScene(scene);

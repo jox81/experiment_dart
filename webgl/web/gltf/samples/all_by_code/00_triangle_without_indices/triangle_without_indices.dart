@@ -1,11 +1,11 @@
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/scene.dart';
 
 GLTFProject triangleWithoutIndices() {
   ///First, a Project must be defined
-  GLTFProject project = new GLTFProject();
+  GLTFProject project = new GLTFProject.create();
 
   /// The Project must have a scene
   GLTFScene scene = new GLTFScene();

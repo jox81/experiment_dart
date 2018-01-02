@@ -2,7 +2,12 @@ import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/renderer/materials.dart';
+import 'package:webgl/src/gltf/accessor.dart';
+import 'package:webgl/src/gltf/buffer.dart';
+import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/mesh_primitive.dart';
 import 'package:webgl_application/components/ui/properties_component/dynamic_load_html_component.dart';
 import 'package:webgl_application/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';
@@ -19,7 +24,6 @@ import 'package:webgl/src/animation/animation_property.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
-import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -164,6 +168,9 @@ class PropertiesComponent {
     } else {
       selection = new CustomEditElement(event);
     }
+
+    selection.edit();
+
     innerSelectionChange.emit(selection);
   }
 
@@ -185,44 +192,23 @@ class PropertiesComponent {
     return WebGLEnum.getItems(type);
   }
 
-  //Material
-  bool isMaterial(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, RawMaterial);
+  bool _isEditable(EditableProperty animationProperty,Type type) {
+    return compareType(animationProperty.type, type);
   }
 
-  //Texture
-  bool isTexture(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, Texture);
-  }
-
-  //WebGLTexture
-  bool isWebGLTexture(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, WebGLTexture);
-  }
-
-  void setSelectionWebGLTexture(dynamic event) {
-    (event as WebGLTexture).edit();
-    setSelection(event);
-  }
-
-  //WebGLBuffer
-  bool isWebGLBuffer(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, WebGLBuffer);
-  }
-
-  //Mesh
-  bool isMesh(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, MeshPrimitive);
-  }
-
-  //Camera
-  bool isCamera(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, Camera);
-  }
-
-  //Light
-  bool isLight(EditableProperty animationProperty) {
-    return compareType(animationProperty.type, Light);
+  bool isEditable(EditableProperty animationProperty) {
+    return
+      _isEditable(animationProperty, RawMaterial) ||
+      _isEditable(animationProperty, Texture) ||
+      _isEditable(animationProperty, WebGLTexture) ||
+      _isEditable(animationProperty, WebGLBuffer) ||
+      _isEditable(animationProperty, MeshPrimitive) ||
+      _isEditable(animationProperty, Camera) ||
+      _isEditable(animationProperty, Light) ||
+      _isEditable(animationProperty, GLTFAccessor) ||
+      _isEditable(animationProperty, GLTFBufferView) ||
+      _isEditable(animationProperty, GLTFBuffer) ||
+      _isEditable(animationProperty, GLTFMesh);
   }
 
   // >> Html

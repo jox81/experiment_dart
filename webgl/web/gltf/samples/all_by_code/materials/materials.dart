@@ -2,19 +2,19 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/material.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/materials.dart';
-import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/texture_info.dart';
+import 'package:webgl/src/gltf/material.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/gltf/texture_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future<GLTFProject> projectTestMaterials() async {
-  GLTFProject project = new GLTFProject()..baseDirectory = 'materials/';
+  GLTFProject project = new GLTFProject.create()..baseDirectory = 'materials/';
 
   GLTFScene scene = new GLTFScene();
   scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);// Todo (jpu) : ?

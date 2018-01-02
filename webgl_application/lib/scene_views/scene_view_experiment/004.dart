@@ -1,7 +1,7 @@
-import 'package:webgl/src/geometry/mesh_primitive.dart';
-import 'package:webgl/src/geometry/mesh.dart';
+import 'package:webgl/src/gltf/mesh_primitive.dart';
+
 import 'dart:async';
-import 'package:webgl/src/material/materials.dart';
+
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 Future<Mesh> experiment() async {

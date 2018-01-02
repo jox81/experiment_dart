@@ -2,7 +2,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'dart:async';
-import 'package:webgl/src/scene.dart';
+
 @MirrorsUsed(
     targets: const [
       SceneViewTestJsonLights,

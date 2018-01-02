@@ -1,11 +1,11 @@
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:webgl/src/gtlf/asset.dart';
-import 'package:webgl/src/gtlf/buffer.dart';
-import 'package:webgl/src/gtlf/buffer_view.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/asset.dart';
+import 'package:webgl/src/gltf/buffer.dart';
+import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/scene.dart';
 @TestOn("dartium")
 Future main() async {
   GLTFProject gltfProject;

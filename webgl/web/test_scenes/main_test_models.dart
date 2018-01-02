@@ -3,7 +3,6 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/TempToRemove/mesh.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/geometry/utils_geometry.dart';
@@ -211,7 +210,7 @@ class Webgl01 {
     gl.canvas.onMouseUp.listen((MouseEvent e) {
       Ray ray = UtilsGeometry.findRay(Context.mainCamera, e.offset.x, e.offset.y);
 
-      models.addAll(UtilsGeometry.findModelHitPoint(modelsHit[1],ray));
+      models.addAll(UtilsGeometry.findNodeHitPoint(modelsHit[1],ray));
 //      print(UtilsGeometry.findModelHit(modelsHit, ray)?.name);// Todo (jpu) :
     });
 

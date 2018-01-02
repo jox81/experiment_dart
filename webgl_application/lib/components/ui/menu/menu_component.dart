@@ -2,10 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
 import 'package:angular2/core.dart';
-import 'package:webgl/src/gtlf/mesh_primitive.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/materials.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/mesh_primitive.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
 import 'package:webgl/src/context.dart';
@@ -56,7 +57,7 @@ class MenuComponent{
   // >> Files
 
   Future<bool> reset(Event event)async {
-    GLTFProject newProject = new GLTFProject();
+    GLTFProject newProject = new GLTFProject.create(reset: true);
     application.project = newProject;
     closeAllMenus();
     return false;
@@ -94,7 +95,6 @@ class MenuComponent{
   // bool createMeshByType(MeshType modelType){
   bool createMeshByType(String modelTypeString){
 
-    // Todo (jpu) : replace with GLTF
     MeshType modelType = MeshType.values.firstWhere((MeshType e)=> e.toString() == modelTypeString, orElse: ()=> null);
 
     if(currentScene != null && modelType != null){

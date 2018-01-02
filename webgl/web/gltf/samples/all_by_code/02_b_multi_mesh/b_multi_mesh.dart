@@ -1,13 +1,13 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gtlf/material.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/material.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/scene.dart';
 
 GLTFProject bMultiMesh() {
-  GLTFProject project = new GLTFProject();
+  GLTFProject project = new GLTFProject.create();
 
   GLTFScene scene = new GLTFScene();
   project.addScene(scene);

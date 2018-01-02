@@ -1,6 +1,6 @@
-import 'package:webgl/src/gtlf/debug_gltf.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/scene.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/scene.dart';
 import "package:test/test.dart";
 void main() {
   group('Scene', () {

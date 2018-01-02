@@ -1,8 +1,8 @@
 //import 'dart:collection';
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/context.dart';
-//import 'package:webgl/src/gtlf/accessor.dart';
-//import 'package:webgl/src/gtlf/mesh_primitive.dart';
+//import 'package:webgl/src/gltf/accessor.dart';
+//import 'package:webgl/src/gltf/mesh_primitive.dart';
 //import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 //import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
 //import 'package:webgl/src/webgl_objects/webgl_buffer.dart';

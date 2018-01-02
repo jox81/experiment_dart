@@ -1,12 +1,12 @@
-import 'package:webgl/src/gtlf/accessor.dart';
-import 'package:webgl/src/gtlf/accessor_sparse.dart';
-import 'package:webgl/src/gtlf/accessor_sparse_indices.dart';
-import 'package:webgl/src/gtlf/accessor_sparse_values.dart';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/accessor.dart';
+import 'package:webgl/src/gltf/accessor_sparse.dart';
+import 'package:webgl/src/gltf/accessor_sparse_indices.dart';
+import 'package:webgl/src/gltf/accessor_sparse_values.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/gtlf/debug_gltf.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
 
 @TestOn("dartium")
 Future main() async {

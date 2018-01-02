@@ -5,9 +5,9 @@ import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/renderer/materials.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture_wrapped.dart';
@@ -67,6 +67,7 @@ class WebGLTexture extends EditTexture {
     });
   }
 
+  @override
   void edit() {
     int lastTextureUnit = ActiveTexture.instance.activeTexture;
 

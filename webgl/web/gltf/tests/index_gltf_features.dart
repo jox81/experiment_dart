@@ -1,14 +1,14 @@
 import 'dart:html';
 
-import 'package:webgl/src/gtlf/node.dart';
+import 'package:webgl/src/gltf/node.dart';
 import 'dart:async';
 
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/renderer/renderer.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/renderer.dart';
 
 Future main() async {
 
-  GLTFProject gltf = new GLTFProject();
+  GLTFProject gltf = new GLTFProject.create();
 
   GLTFNode node01 = new GLTFNode();
   gltf.addNode(node01);

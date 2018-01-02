@@ -1,7 +1,7 @@
-import 'package:webgl/src/gtlf/debug_gltf.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/mesh_primitive.dart';
-import 'package:webgl/src/gtlf/project.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/mesh_primitive.dart';
+import 'package:webgl/src/gltf/project.dart';
 import "package:test/test.dart";
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 void main() {

@@ -1,8 +1,8 @@
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/texture.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/texture.dart';
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:webgl/src/gtlf/debug_gltf.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
 @TestOn("dartium")
 
 Future main() async {

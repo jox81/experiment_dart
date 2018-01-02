@@ -1,15 +1,15 @@
 import 'dart:typed_data';
 
-import 'package:webgl/src/gtlf/material.dart';
-import 'package:webgl/src/gtlf/mesh.dart';
-import 'package:webgl/src/gtlf/node.dart';
-import 'package:webgl/src/gtlf/pbr_metallic_roughness.dart';
-import 'package:webgl/src/gtlf/project.dart';
-import 'package:webgl/src/gtlf/scene.dart';
-import 'package:webgl/src/gtlf/texture_info.dart';
+import 'package:webgl/src/gltf/material.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/gltf/texture_info.dart';
 
 GLTFProject planeTexture() {
-  GLTFProject project = new GLTFProject()..baseDirectory = 'plane_textured/';
+  GLTFProject project = new GLTFProject.create()..baseDirectory = 'plane_textured/';
   print(project.baseDirectory);
 
   GLTFScene scene = new GLTFScene();
