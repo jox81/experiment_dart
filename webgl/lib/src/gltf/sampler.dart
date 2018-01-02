@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
@@ -20,7 +21,9 @@ class GLTFSampler extends GLTFChildOfRootProperty {
     this.wrapS,// Todo (jpu) : add default value ?
     this.wrapT,// Todo (jpu) : add default value ?
     String name : ''
-  }):super(name);
+  }):super(name){
+      GLTFProject.instance.samplers.add(this);
+  }
 
   @override
   String toString() {

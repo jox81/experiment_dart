@@ -10,7 +10,6 @@ GLTFProject bMultiMesh() {
   GLTFProject project = new GLTFProject.create();
 
   GLTFScene scene = new GLTFScene();
-  project.addScene(scene);
   project.scene = scene;
 
   GLTFMesh mesh = new GLTFMesh.triangle();

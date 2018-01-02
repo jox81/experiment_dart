@@ -1,5 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 
 class GLTFScene extends GLTFChildOfRootProperty{
@@ -15,7 +16,9 @@ class GLTFScene extends GLTFChildOfRootProperty{
     _nodes.add(node);
   }
 
-  GLTFScene({String name:''}):super(name);
+  GLTFScene({String name:''}):super(name){
+    GLTFProject.instance.addScene(this);
+  }
 
   @override
   String toString() {

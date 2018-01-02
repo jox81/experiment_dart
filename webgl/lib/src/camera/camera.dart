@@ -3,6 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:math' as Math;
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/interface/IGizmo.dart';
 import 'package:webgl/src/context.dart';
 @MirrorsUsed(
@@ -192,6 +193,7 @@ class CameraPerspective extends Camera{
   CameraPerspective(this._yfov, double znear, double _zfar){
    super._znear = znear;
    super._zfar = _zfar;
+   GLTFProject.instance.cameras.add(this);
   }
 
   update() {
@@ -268,7 +270,9 @@ class CameraOrthographic extends Camera{
     update();
   }
 
-  CameraOrthographic();
+  CameraOrthographic(){
+    GLTFProject.instance.cameras.add(this);
+  }
 
   // >> JSON
 

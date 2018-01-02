@@ -1,6 +1,7 @@
 import 'package:webgl/src/gltf/normal_texture_info.dart';
 import 'package:webgl/src/gltf/occlusion_texture_info.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/texture_info.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 
@@ -31,7 +32,9 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
       this.alphaCutoff : 0.5,
       this.doubleSided : false,
       String name: ''})
-      : super(name);
+      : super(name){
+      GLTFProject.instance.materials.add(this);
+  }
 
   @override
   String toString() {

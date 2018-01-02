@@ -1,5 +1,6 @@
 import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
 
 class GLTFAnimation {
   static int nextId = 0;
@@ -8,7 +9,9 @@ class GLTFAnimation {
   List<GLTFAnimationSampler> samplers;
   List<GLTFAnimationChannel> channels;
 
-  GLTFAnimation({String name : ''});
+  GLTFAnimation({String name : ''}){
+    GLTFProject.instance.animations.add(this);
+  }
 
   @override
   String toString() {

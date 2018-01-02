@@ -1,4 +1,5 @@
 import 'package:webgl/src/gltf/buffer.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 
 /// Bufferviews define a segment of the buffer data and define broadly what kind of data lives
@@ -39,7 +40,9 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
     this.target,
     String name : ''}):
       this._buffer = buffer,
-      super(name);
+      super(name){
+    GLTFProject.instance.bufferViews.add(this);
+  }
 
   @override
   String toString() {

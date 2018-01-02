@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 
 class GLTFImage extends GLTFChildOfRootProperty {
@@ -12,7 +13,9 @@ class GLTFImage extends GLTFChildOfRootProperty {
   Uint8List data;// Todo (jpu) : data is automatticaly filled if image is embed in base64. but not if uri is set as a path
 
   GLTFImage({this.uri, this.mimeType, this.bufferView, this.data, String name})
-      : super(name);
+      : super(name){
+      GLTFProject.instance.images.add(this);
+  }
 
   @override
   String toString() {

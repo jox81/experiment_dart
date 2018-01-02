@@ -29,10 +29,7 @@ import 'package:webgl/src/gltf/texture.dart';
 class GLTFRenderer extends IEditElement implements Interactable {
 
   // Direction from where the light is coming to origin
-  DirectionalLight light = new DirectionalLight()
-    ..translation = new Vector3(50.0, 50.0, -50.0)
-    ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
-    ..color =  new Vector3(1.0, 1.0, 1.0);
+  DirectionalLight light;
 
   GlobalState globalState;
 
@@ -193,6 +190,11 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   Future render(GLTFProject gltfProject) async {
     this.gltfProject = gltfProject;
+
+    light = new DirectionalLight()
+      ..translation = new Vector3(50.0, 50.0, -50.0)
+      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
+      ..color =  new Vector3(1.0, 1.0, 1.0);
 
     //debug.logCurrentFunction();
     if(currentScene == null) throw new Exception("currentScene must be set before rendering.");

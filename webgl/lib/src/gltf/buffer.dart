@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 
 /// Buffer defines the raw data.
@@ -19,7 +20,9 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
     this.byteLength,
     this.data,
     String name : ''
-  }):super(name);
+  }):super(name){
+    GLTFProject.instance.buffers.add(this);
+  }
 
   @override
   String toString() {

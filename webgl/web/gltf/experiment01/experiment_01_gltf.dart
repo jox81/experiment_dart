@@ -15,13 +15,11 @@ void buildSimpleProject() {
 
   GLTFNode node = new GLTFNode()
     ..name = 'singleNode';
-  gltf.addNode(node);
 
   GLTFScene scene = new GLTFScene()
     ..name = 'singleScene';
   scene.addNode(node);
 
-  gltf.addScene(scene);
   gltf.scene = scene;
 
 //  List<GLTFNode> nodes = scene.nodes;

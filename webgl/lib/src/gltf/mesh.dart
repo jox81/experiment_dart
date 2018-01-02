@@ -5,6 +5,7 @@ import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/mesh_primitive.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -36,7 +37,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
   List<GLTFMeshPrimitive> primitives = new List();
 
-  GLTFMesh({this.weights, String name: ''}) : super(name);
+  GLTFMesh({this.weights, String name: ''}) : super(name){
+    GLTFProject.instance.meshes.add(this);
+  }
 
   @override
   String toString() {

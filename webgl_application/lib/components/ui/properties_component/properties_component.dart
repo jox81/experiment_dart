@@ -6,8 +6,10 @@ import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/mesh_primitive.dart';
+import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl_application/components/ui/properties_component/dynamic_load_html_component.dart';
 import 'package:webgl_application/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';
@@ -208,6 +210,8 @@ class PropertiesComponent {
       _isEditable(animationProperty, GLTFAccessor) ||
       _isEditable(animationProperty, GLTFBufferView) ||
       _isEditable(animationProperty, GLTFBuffer) ||
+      _isEditable(animationProperty, GLTFScene) ||
+      _isEditable(animationProperty, GLTFNode) ||
       _isEditable(animationProperty, GLTFMesh);
   }
 

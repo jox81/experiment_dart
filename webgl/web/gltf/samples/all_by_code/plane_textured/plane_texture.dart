@@ -13,7 +13,6 @@ GLTFProject planeTexture() {
   print(project.baseDirectory);
 
   GLTFScene scene = new GLTFScene();
-  project.addScene(scene);
   project.scene = scene;
 
   GLTFPBRMaterial material = new GLTFPBRMaterial(
@@ -24,7 +23,6 @@ GLTFProject planeTexture() {
           roughnessFactor: 1.0
       )
   );
-  project.materials.add(material);
 
   GLTFMesh mesh = new GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
     ..primitives[0].baseMaterial = material;
@@ -32,28 +30,6 @@ GLTFProject planeTexture() {
     ..mesh = mesh
     ..name = 'quad';
   scene.addNode(node);
-
-  ///
-  project.meshes.add(mesh);
-  project.addNode(node);
-
-  if(mesh.primitives[0].indicesAccessor != null) {
-    project.accessors.add(mesh.primitives[0].indicesAccessor);
-    project.bufferViews.add(mesh.primitives[0].indicesAccessor.bufferView);
-  }
-
-  project.accessors.add(mesh.primitives[0].positionAccessor);
-  project.bufferViews.add(mesh.primitives[0].positionAccessor.bufferView);
-
-  if(mesh.primitives[0].normalAccessor != null) {
-    project.accessors.add(mesh.primitives[0].normalAccessor);
-  }
-
-  if(mesh.primitives[0].uvAccessor != null) {
-    project.accessors.add(mesh.primitives[0].uvAccessor);
-  }
-
-  project.buffers.add(mesh.primitives[0].positionAccessor.bufferView.buffer);
 
   return project;
 }

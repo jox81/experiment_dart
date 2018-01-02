@@ -18,7 +18,6 @@ GLTFProject projectSceneViewBase() {
   GLTFProject project = new GLTFProject.create();
   GLTFScene scene = new GLTFScene()
       ..backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
-  project.addScene(scene);
   project.scene = scene;
 
 
@@ -37,12 +36,10 @@ GLTFProject projectSceneViewBase() {
   DirectionalLight directionalLight = new DirectionalLight()
     ..direction = new Vector3(-0.25,-0.125,-0.25)
     ..color = new Vector3(0.8, 0.8, 0.8);
-  project.lights.add(directionalLight);
 
   PointLight pointLight = new PointLight()
     ..color.setFrom(directionalLight.color)
     ..translation = new Vector3(20.0, 20.0, 20.0);
-  project.lights.add(pointLight);
 
   //Materials
   MaterialPoint materialPoint = new MaterialPoint(pointSize:5.0, color:new Vector4(1.0,1.0,0.0,1.0))
@@ -77,12 +74,10 @@ GLTFProject projectSceneViewBase() {
   //
   GLTFMesh point = new GLTFMesh.point()
   ..primitives[0].material = materialPoint;
-  project.meshes.add(point);
   GLTFNode nodePoint = new GLTFNode()
     ..mesh = point
     ..translation = new Vector3(8.0, 5.0, 10.0);;
   scene.addNode(nodePoint);
-  project.addNode(nodePoint);
 
   //
   GLTFMesh meshLine = new GLTFMesh.line([
@@ -91,60 +86,50 @@ GLTFProject projectSceneViewBase() {
     new Vector3(10.0, 0.0, 10.0),
     new Vector3(10.0, 10.0, 10.0),
   ]);
-  project.meshes.add(meshLine);
   GLTFNode nodeLine = new GLTFNode()
     ..mesh = meshLine
     ..name = 'multiline'
     ..translation = new Vector3(-5.0, 0.0, -5.0);
   scene.addNode(nodeLine);
-  project.addNode(nodeLine);
 
   //
   GLTFMesh meshTriangle = new GLTFMesh.triangle(withNormals: false)
     ..primitives[0].material = materialBase;
-  project.meshes.add(meshTriangle);
   GLTFNode nodeTriangle = new GLTFNode()
     ..mesh = meshTriangle
     ..name = 'triangle'
     ..translation = new Vector3(0.0, 0.0, 4.0);
   scene.addNode(nodeTriangle);
-  project.addNode(nodeTriangle);
 
   //
   GLTFMesh meshQuad = new GLTFMesh.quad(withNormals: false)
     ..primitives[0].material = materialBaseColor;
-  project.meshes.add(meshQuad);
   GLTFNode nodeQuad = new GLTFNode()
     ..mesh = meshQuad
     ..name = 'quad'
     ..matrix.translate(3.0, 0.0, 0.0)
     ..matrix.rotateX(radians(90.0));
   scene.addNode(nodeQuad);
-  project.addNode(nodeQuad);
 
   //
   GLTFMesh meshCenterCube = new GLTFMesh.cube(withNormals: false)
     ..primitives[0].material = materialBaseColor;
-  project.meshes.add(meshCenterCube);
   GLTFNode nodeCenterCube = new GLTFNode()
     ..mesh = meshCenterCube
     ..name = 'cube'
     ..translation = new Vector3(0.0, 0.0, 0.0)
     ..scale = new Vector3(0.1, 0.1, 0.1);
   scene.addNode(nodeCenterCube);
-  project.addNode(nodeCenterCube);
 
   // create square
   GLTFMesh meshSquareX = new GLTFMesh.quad(withNormals: false)
     ..primitives[0].material = materialBaseVertexColor;
-  project.meshes.add(meshSquareX);
   GLTFNode nodeSquareX = new GLTFNode()
     ..mesh = meshSquareX
     ..name = 'squareX'
     ..matrix.translate(0.0, 3.0, 0.0)
     ..matrix.rotateX(radians(90.0));
   scene.addNode(nodeSquareX);
-  project.addNode(nodeSquareX);
 
 //  QuadMesh squareX = new QuadMesh()
 //    ..matrix.translate(0.0, 3.0, 0.0)

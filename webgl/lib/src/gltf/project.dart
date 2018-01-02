@@ -27,7 +27,7 @@ import 'package:webgl/src/light/light.dart';
 
 class GLTFProject extends IEditElement{
   static GLTFProject _instance;
-  static GLTFProject get instance => _instance;
+  static GLTFProject get instance => _instance != null ? _instance : throw "No project instance is created... Make sure a project is created before using this way.";
 
   ///path of the directory of the gltf file
   String baseDirectory = '';

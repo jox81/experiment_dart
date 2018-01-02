@@ -1,4 +1,5 @@
 import 'package:webgl/src/gltf/image.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 import 'dart:web_gl' as webgl;
@@ -23,7 +24,9 @@ class GLTFTexture extends GLTFChildOfRootProperty {
 
   bool clamp;
 
-  GLTFTexture({GLTFSampler sampler, GLTFImage source, String name : ''}):this._sampler =sampler, this._source = source, super(name);
+  GLTFTexture({GLTFSampler sampler, GLTFImage source, String name : ''}):this._sampler =sampler, this._source = source, super(name){
+    GLTFProject.instance.textures.add(this);
+  }
 
   @override
   String toString() {

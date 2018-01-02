@@ -1,5 +1,6 @@
 import 'package:webgl/src/gltf/accessor_sparse.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 
 // Accessor types
@@ -143,7 +144,9 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       this.isUnit,
       String name
       }):
-      super(name);
+      super(name){
+    GLTFProject.instance.accessors.add(this);
+  }
 
 
   @override

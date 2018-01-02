@@ -191,10 +191,6 @@ class GLTFCreation{
         data : gltfSource.data,
         name : gltfSource.name);
 
-    if (buffer != null) {
-      GLTFProject.instance.buffers.add(buffer);
-    }
-
     return buffer;
   }
 
@@ -216,10 +212,6 @@ class GLTFCreation{
             ? gltfSource.usage.target
             : null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
         name: gltfSource.name);
-
-    if (bufferView != null) {
-      GLTFProject.instance.bufferViews.add(bufferView);
-    }
 
     return bufferView;
   }
@@ -262,10 +254,6 @@ class GLTFCreation{
       accessor.bufferView = bufferView;
     }
 
-    if (accessor != null) {
-      GLTFProject.instance.accessors.add(accessor);
-    }
-
     return accessor;
   }
 
@@ -284,10 +272,6 @@ class GLTFCreation{
         name : gltfSource.name
     );
 
-    if (sampler != null) {
-      GLTFProject.instance.samplers.add(sampler);
-    }
-
     return sampler;
   }
 
@@ -305,10 +289,6 @@ class GLTFCreation{
         data : gltfSource.data,
         name : gltfSource.name
     );
-
-    if (image != null) {
-      GLTFProject.instance.images.add(image);
-    }
 
     return image;
   }
@@ -344,10 +324,6 @@ class GLTFCreation{
       texture.source = image;
     }
 
-    if (texture != null) {
-      GLTFProject.instance.textures.add(texture);
-    }
-
     return texture;
   }
 
@@ -379,10 +355,6 @@ class GLTFCreation{
         name : gltfSource.name
     );
 
-    if (material != null) {
-      GLTFProject.instance.materials.add(material);
-    }
-
     return material;
   }
 
@@ -412,10 +384,6 @@ class GLTFCreation{
       }
     }
 
-    if (camera != null) {
-      GLTFProject.instance.cameras.add(camera);
-    }
-
     return camera;
   }
 
@@ -437,10 +405,6 @@ class GLTFCreation{
     mesh.primitives = gltfSource.primitives
         .map((p) => _createPrimitive(p))
         .toList();
-
-    if (mesh != null) {
-      GLTFProject.instance.meshes.add(mesh);
-    }
 
     return mesh;
   }
@@ -472,10 +436,6 @@ class GLTFCreation{
       node.camera = camera;
     }
 
-    if (node != null) {
-      GLTFProject.instance.addNode(node);
-    }
-
     return node;
   }
 
@@ -493,10 +453,6 @@ class GLTFCreation{
     for(glTF.Node node in gltfSource.nodes){
       GLTFNode gltfNode = _getNode(node);
       scene.addNode(gltfNode);
-    }
-
-    if (scene != null) {
-      GLTFProject.instance.addScene(scene);
     }
 
     return scene;
@@ -646,10 +602,6 @@ class GLTFCreation{
     GLTFAnimation animation = new GLTFAnimation(name:gltfSource.name)
       ..samplers = samplers
       ..channels = channels;
-
-    if (animation != null) {
-      GLTFProject.instance.animations.add(animation);
-    }
 
     return animation;
   }

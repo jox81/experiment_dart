@@ -8,7 +8,6 @@ GLTFProject aSimpleMesh() {
   GLTFProject project = new GLTFProject.create();
 
   GLTFScene scene = new GLTFScene();
-  project.addScene(scene);
   project.scene = scene;
 
   GLTFMesh mesh = new GLTFMesh.triangle(withIndices : true, withNormals: true);
@@ -22,29 +21,6 @@ GLTFProject aSimpleMesh() {
   ..mesh = mesh
   ..translation = new Vector3(1.0,0.0,0.0);
   scene.addNode(node02);
-
-  project.meshes.add(mesh);
-  project.addNode(node);
-  project.addNode(node02);
-
-  if(mesh.primitives[0].indicesAccessor != null) {
-    project.accessors.add(mesh.primitives[0].indicesAccessor);
-    project.bufferViews.add(mesh.primitives[0].indicesAccessor.bufferView);
-  }
-
-  project.accessors.add(mesh.primitives[0].positionAccessor);
-  project.bufferViews.add(mesh.primitives[0].positionAccessor.bufferView);
-
-  if(mesh.primitives[0].normalAccessor != null) {
-    project.accessors.add(mesh.primitives[0].normalAccessor);
-  }
-
-  if(mesh.primitives[0].uvAccessor != null) {
-    project.accessors.add(mesh.primitives[0].uvAccessor);
-  }
-
-  project.buffers.add(mesh.primitives[0].positionAccessor.bufferView.buffer);
-
 
   return project;
 }
