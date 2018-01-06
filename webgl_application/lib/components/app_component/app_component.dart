@@ -7,9 +7,9 @@ import 'package:webgl_application/components/ui/layout_component/layout_componen
 import 'package:webgl_application/components/ui/properties_component/properties_component.dart';
 import 'package:webgl_application/components/ui/menu/menu_component.dart';
 import 'package:webgl_application/components/ui/toolbar_component/toolbar_component.dart';
-import 'package:webgl_application/scene_views/scene_view.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl_application/src/application.dart';
+import 'package:webgl_application/src/services/projects.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 @Component(
@@ -19,6 +19,11 @@ import 'package:webgl_application/src/ui_models/toolbar.dart';
     directives: const <dynamic>[ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
 )
 class AppComponent implements OnInit{
+
+  final ProjectService projectService;
+  List<GLTFProject> projects;
+
+  AppComponent(this.projectService);
 
   Application get application => Application.instance;
 
@@ -41,7 +46,7 @@ class AppComponent implements OnInit{
   @ViewChild(CanvasComponent)
   CanvasComponent canvasComponent;
 
-  List<GLTFProject> projects;
+
 //  int sceneId = -1;
 
   Future switchScene () async {
@@ -71,10 +76,12 @@ class AppComponent implements OnInit{
   }
   @override
   Future ngOnInit() async {
+    projects = await projectService.getProjects();
     await Application.build(canvasComponent.canvas);
-    projects = await ServiceProject.getProjects();
     await switchScene ();
   }
 
   bool isEditing = true;
+
+
 }

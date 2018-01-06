@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl_application/scene_views/scene_view_base.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
+import 'package:angular2/core.dart';
 //import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
 //import 'package:webgl_application/scene_views/scene_view_performance.dart';
 //import 'package:webgl_application/scene_views/scene_view_shader_learning_glsl.dart';
@@ -18,15 +19,22 @@ import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 //import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 
 //Todo :
-// - créer un vrai service angular ?
-// - charger  /décharger une scene proprement
-class ServiceProject {
- static  Future<List<GLTFProject>> getProjects() async => [
-//    projectPrimitives(),
-    projectSceneViewBase(),
- ];
+// - charger / décharger une scene proprement
+
+typedef List<GLTFProject> ProjectLoader();
+
+@Injectable()
+class ProjectService {
+  static List<GLTFProject> projects;
+  List<GLTFProject> getProjects()  {
+   return projects;
+  }
 }
 
+Future<List<GLTFProject>> loadBaseProjects() async => [
+//    projectPrimitives(),
+  projectSceneViewBase(),
+];
 
 /*
 [

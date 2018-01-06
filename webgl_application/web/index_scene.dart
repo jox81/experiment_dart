@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/gltf/project.dart';
-import 'package:webgl_application/scene_views/scene_view.dart';
 import 'package:webgl_application/src/application.dart';
+import 'package:webgl_application/src/services/projects.dart';
 
 Future main() async {
-  GLTFProject project = await ServiceProject.getProjects().then((p) => p[0]);
+  ProjectService.projects = await loadBaseProjects();
+  ProjectService service = new ProjectService();
+  GLTFProject project = await service.getProjects()[0];
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
   await Application.build(canvas)
