@@ -22,12 +22,12 @@ class WebglTest {
 
   void setup() {
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.sources['material_point'].vsCode
+      ..source = ShaderSource.materialPoint.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.sources['material_point'].fsCode
+      ..source = ShaderSource.materialPoint.fsCode
       ..compile();
     fragmentShader.logShaderInfos();
   }

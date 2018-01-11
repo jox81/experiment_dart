@@ -22,6 +22,17 @@ class WebglEdit extends IEditElement {
     return _instance;
   }
 
+  // >> Test getter setter link
+  Vector3 _testVec3 = new Vector3(1.0, 2.0, 3.0);
+  Vector3 get testVec3 => _testVec3;
+  set testVec3(Vector3 value) {
+    _testVec3 = value;
+  }
+
+  void printVec3(Vector3 vec){
+    print('Vector3 : ${vec}');
+  }
+
   // >> Test String
 
   //getter + setter

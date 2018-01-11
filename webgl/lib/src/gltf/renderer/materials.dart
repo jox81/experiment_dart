@@ -2,11 +2,12 @@ import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/mesh.dart';
-import 'package:webgl/src/gltf/mesh_primitive.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as glEnum;
 import 'package:webgl/src/debug/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -156,7 +157,8 @@ abstract class RawMaterial{
         gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS) as bool;
         if (!compiled) {
           String compilationLog = gl.getShaderInfoLog(shader);
-          throw "Could not compile $shaderType shader:\n\n $compilationLog}";
+
+          throw "Could not compile ${glEnum.ShaderType.getByIndex(shaderType)} shader :\n\n $compilationLog}";
         }
       }
 
@@ -247,7 +249,7 @@ abstract class RawMaterial{
 
 class KronosPRBMaterial extends RawMaterial{
 
-  ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_pbr_test'];
+  ShaderSource get shaderSource => ShaderSource.kronosGltfPBRTest;
 
   final bool hasNormalAttribut;
   final bool hasTangentAttribut;
@@ -503,7 +505,7 @@ class KronosPRBMaterial extends RawMaterial{
 class KronosDefaultMaterial extends RawMaterial{
   KronosDefaultMaterial();
 
-  ShaderSource get shaderSource => ShaderSource.sources['kronos_gltf_default'];
+  ShaderSource get shaderSource => ShaderSource.kronosGltfDefault;
 
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();
@@ -562,7 +564,7 @@ class MaterialDebug extends RawMaterial{
 
   MaterialDebug();
 
-  ShaderSource get shaderSource => ShaderSource.sources['debug_shader'];
+  ShaderSource get shaderSource => ShaderSource.debugShader;
 
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();
@@ -602,7 +604,7 @@ typedef void SetShaderVariables(WebGLProgram program, Matrix4 modelMatrix, Matri
 class MaterialCustom extends RawMaterial {
   SetShaderVariables setShaderUniformsVariables;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_point'];
+  ShaderSource get shaderSource => ShaderSource.materialPoint;// Todo (jpu) : ?
 
   MaterialCustom();
 
@@ -620,7 +622,7 @@ class MaterialPoint extends RawMaterial {
   num pointSize;
   Vector4 color;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_point'];
+  ShaderSource get shaderSource => ShaderSource.materialPoint;
 
   MaterialPoint({this.pointSize : 1.0, this.color});
 
@@ -643,7 +645,7 @@ class MaterialPoint extends RawMaterial {
 
 class MaterialBase extends RawMaterial {
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_base'];
+  ShaderSource get shaderSource => ShaderSource.materialBase;
 
   MaterialBase();
 
@@ -666,7 +668,7 @@ class MaterialBaseColor extends RawMaterial {
 
   Vector4 color;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_base_color'];
+  ShaderSource get shaderSource => ShaderSource.materialBaseColor;
 
   MaterialBaseColor(this.color);
 
@@ -686,7 +688,7 @@ class MaterialBaseColor extends RawMaterial {
 
 class MaterialBaseVertexColor extends RawMaterial {
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_base_vertex_color'];
+  ShaderSource get shaderSource => ShaderSource.materialBaseVertexColor;
 
   MaterialBaseVertexColor();
 
@@ -707,7 +709,7 @@ class MaterialBaseTexture extends RawMaterial {
 
   WebGLTexture texture;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_base_texture'];
+  ShaderSource get shaderSource => ShaderSource.materialBaseTexture;
 
   MaterialBaseTexture();
 
@@ -736,7 +738,7 @@ class MaterialBaseTextureNormal extends RawMaterial {
   DirectionalLight directionalLight;
   bool useLighting = false;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_base_texture_normal'];
+  ShaderSource get shaderSource => ShaderSource.materialBaseTextureNormal;
 
   MaterialBaseTextureNormal();
 
@@ -774,7 +776,7 @@ class MaterialReflection extends RawMaterial {
 
   WebGLTexture skyboxTexture;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_reflection'];
+  ShaderSource get shaderSource => ShaderSource.materialReflection;
 
   MaterialReflection();
 
@@ -805,7 +807,7 @@ class MaterialSkyBox extends RawMaterial {
 
   WebGLTexture skyboxTexture;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_skybox'];
+  ShaderSource get shaderSource => ShaderSource.materialSkybox;
 
   MaterialSkyBox();
 
@@ -847,7 +849,7 @@ class MaterialDepthTexture extends RawMaterial {
   num near = 1.0;
   num far = 1000.0;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_depth_texture'];
+  ShaderSource get shaderSource => ShaderSource.materialDepthTexture;
 
   MaterialDepthTexture();
 
@@ -885,7 +887,7 @@ class MaterialPragmaticPBR extends RawMaterial {
 
   PointLight pointLight;
 
-  ShaderSource get shaderSource => ShaderSource.sources['material_pbr'];
+  ShaderSource get shaderSource => ShaderSource.materialPBR;
 
   MaterialPragmaticPBR(this.pointLight);
 
@@ -908,11 +910,43 @@ class MaterialPragmaticPBR extends RawMaterial {
   }
 }
 
+class MaterialDotScreen extends RawMaterial {
+
+  WebGLTexture texture;
+  double angle = 0.0;
+  double scale = 1.0;
+  Vector2 center = new Vector2(0.0, 0.0);
+  Vector2 texSize = new Vector2(200.0, 200.0);
+
+  ShaderSource get shaderSource => ShaderSource.dotScreen;
+
+  MaterialDotScreen();
+
+  Map<String, bool> getDefines() {
+
+    Map<String, bool> defines = new Map();
+
+    return defines;
+  }
+
+  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+    if(texture != null) {
+      gl.activeTexture(TextureUnit.TEXTURE0);
+      gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
+      setUniform(program, "texture", ShaderVariableType.SAMPLER_2D, 0);
+    }
+    setUniform(program, "center", ShaderVariableType.FLOAT_VEC2, center.storage);
+    setUniform(program, "angle", ShaderVariableType.FLOAT, angle);
+    setUniform(program, "scale", ShaderVariableType.FLOAT, scale);
+    setUniform(program, "texSize", ShaderVariableType.FLOAT_VEC2, texSize.storage);
+  }
+}
+
 class MaterialSAO extends RawMaterial{
 
   MaterialSAO();
 
-  ShaderSource get shaderSource => ShaderSource.sources['sao'];
+  ShaderSource get shaderSource => ShaderSource.sao;
 
   int get depthTextureMap => null;
   double get intensity => 100.0;
@@ -933,6 +967,12 @@ class MaterialSAO extends RawMaterial{
     defines['HAS_UV'] = true;
     defines['HAS_NORMALS'] = false;
     defines['HAS_TANGENTS'] = false;
+
+    //Fragment shader
+    defines['DIFFUSE_TEXTURE'] = false;
+    defines['NORMAL_TEXTURE'] = false;
+    defines['DEPTH_PACKING'] = false;
+    defines['PERSPECTIVE_CAMERA'] = false;
 
     //debug jpu
     defines['DEBUG_VS'] = false;

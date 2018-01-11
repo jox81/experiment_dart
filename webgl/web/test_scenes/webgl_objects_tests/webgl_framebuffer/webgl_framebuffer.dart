@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -26,8 +27,8 @@ class WebglTest {
 //    simpleBindTest();
 //    bindUnbindTestNull();
 //    createFrameBufferNoAttachment();
-//    createFrameBufferColorAttachment();
-    createFrameBufferDepthTextureAttachment();
+    createFrameBufferColorAttachment();
+//    createFrameBufferDepthTextureAttachment();
 //    createFrameBufferDepthBufferAttachment();
 //    createFrameBufferStencilAttachment();
 //    createFrameBuffer02();

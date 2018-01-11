@@ -3,7 +3,6 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/geometry/mesh_primitive.dart';
 import 'package:webgl/src/gltf/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
@@ -145,6 +144,14 @@ class Webgl01 {
     gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
+    _render();
+
+    window.requestAnimationFrame((num time) {
+      this.render(time: time);
+    });
+  }
+
+  void _render() {
     Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
     Context.glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 
@@ -154,10 +161,6 @@ class Webgl01 {
 
     gl.drawElements(
         DrawMode.TRIANGLES, nodes[0].mesh.primitives[0].positionAccessor.components, BufferElementType.UNSIGNED_SHORT, 0);
-
-    window.requestAnimationFrame((num time) {
-      this.render(time: time);
-    });
   }
 
   void _setMatrixUniforms() {

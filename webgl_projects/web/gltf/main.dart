@@ -14,6 +14,7 @@ Future main() async {
   UtilsAssets.webPath = '../';
   GLTFProject gltfProject = await loadGLTF(gltfSamplesPaths.first, useWebPath : false);
 
+
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
   GLTFRenderer rendered = new GLTFRenderer(canvas);
 

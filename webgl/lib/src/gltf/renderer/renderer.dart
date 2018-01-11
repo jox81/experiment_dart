@@ -8,6 +8,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/camera/camera.dart';
@@ -51,7 +52,12 @@ class GLTFRenderer extends IEditElement implements Interactable {
   WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
   GLTFRenderer(this._canvas) {
-    //debug.logCurrentFunction();
+
+    light = new DirectionalLight()
+      ..translation = new Vector3(50.0, 50.0, -50.0)
+      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
+      ..color =  new Vector3(1.0, 1.0, 1.0);
+
     Context.init(_canvas);
     initInteraction();
     Context.resizeCanvas();
@@ -65,7 +71,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   Future _initTextures() async {
-    //debug.logCurrentFunction();
+    
 
     ImageElement imageElement;
     ///TextureFilterType magFilter;
@@ -89,13 +95,13 @@ class GLTFRenderer extends IEditElement implements Interactable {
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
     List<List<ImageElement>> papermill_diffuse =
         await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: 'packages/webgl/');
-    cubeMapTextureDiffuse = TextureUtils.createCubeMapWithImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
+    cubeMapTextureDiffuse = TextureUtils.createCubeMapFromImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
 
     gl.activeTexture(TextureUnit.TEXTURE0 + 2);
     List<List<ImageElement>> papermill_specular =
         await TextureUtils.loadCubeMapImages('papermill_specular', webPath: 'packages/webgl/');
-    cubeMapTextureSpecular = TextureUtils.createCubeMapWithImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
+    cubeMapTextureSpecular = TextureUtils.createCubeMapFromImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 
     _reservedTextureUnits = 3;
@@ -154,7 +160,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   webgl.Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
-    //debug.logCurrentFunction();
+    
 
     //create texture
     webgl.Texture texture = gl.createTexture();
@@ -190,13 +196,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   Future render(GLTFProject gltfProject) async {
     this.gltfProject = gltfProject;
-
-    light = new DirectionalLight()
-      ..translation = new Vector3(50.0, 50.0, -50.0)
-      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
-      ..color =  new Vector3(1.0, 1.0, 1.0);
-
-    //debug.logCurrentFunction();
+    
     if(currentScene == null) throw new Exception("currentScene must be set before rendering.");
 
     await ShaderSource.loadShaders();
@@ -236,7 +236,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   void update() {
-    //debug.logCurrentFunction();
+    
 
     interaction.update();
 
@@ -260,7 +260,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   void drawNodes(List<GLTFNode> nodes) {
-    //debug.logCurrentFunction();
+    
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       drawNode(node);
@@ -276,7 +276,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
         for (int i = 0; i < mesh.primitives.length; i++) {
           GLTFMeshPrimitive primitive = mesh.primitives[i];
 
-          primitive.bindMaterial(globalState.hasLODExtension != null, _reservedTextureUnits);
+          primitive.bindMaterial(globalState?.hasLODExtension != null, _reservedTextureUnits);
 
           WebGLProgram program = primitive.program;
           gl.useProgram(program.webGLProgram);
@@ -294,7 +294,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   void _setupPrimitiveBuffers(WebGLProgram program, GLTFMeshPrimitive primitive) {
-    //debug.logCurrentFunction();
+    
 
     _bindVertexArrayData(program, primitive);
 
@@ -305,7 +305,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   void _bindVertexArrayData(
       WebGLProgram program, GLTFMeshPrimitive primitive) {
-    //debug.logCurrentFunction();
+    
 
     for (String attributName in primitive.attributes.keys) {
       GLTFAccessor accessor = primitive.attributes[attributName];
@@ -344,7 +344,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   /// BufferType bufferType
   // Todo (jpu) : is it possible to use only one of the bufferViews
   void _initBuffer(GLTFMeshPrimitive primitive, String bufferName, int bufferType, TypedData data) {
-    //debug.logCurrentFunction();
+    
 
     if(primitive.buffers[bufferName] == null) {
       primitive.buffers[bufferName] =
@@ -405,7 +405,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   void _bindIndices(GLTFMeshPrimitive primitive) {
-    //debug.logCurrentFunction();
+    
     GLTFAccessor accessorIndices = primitive.indicesAccessor;
     Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
         .asUint16List(
@@ -416,6 +416,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
     _initBuffer(primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
   }
 
+  int countImage = 0;
   void _drawPrimitive(GLTFMeshPrimitive primitive) {
     if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
       GLTFAccessor accessorPosition = primitive.positionAccessor;
@@ -426,11 +427,19 @@ class GLTFRenderer extends IEditElement implements Interactable {
       GLTFAccessor accessorIndices = primitive.indicesAccessor;
       gl.drawElements(primitive.drawMode, accessorIndices.count,
           accessorIndices.componentType, 0);
+
+//      if(countImage < 10) {
+//        String dataUrl = canvas.toDataUrl();
+//        ImageElement image = new ImageElement(src: dataUrl);
+//        DivElement div = querySelector('#debug') as DivElement;
+//        div.children.add(image);
+//        countImage++;
+//      }
     }
   }
 
   void setupCameras() {
-    //debug.logCurrentFunction();
+    
 
     Camera currentCamera;
 
@@ -469,7 +478,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   Camera findActiveSceneCamera(List<GLTFNode> nodes) {
 
-    //debug.logCurrentFunction();
+    
 
     Camera result;
 
@@ -485,14 +494,14 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   void setupNodeCamera(GLTFNode node) {
-    //debug.logCurrentFunction();
+    
 
     CameraPerspective camera = node.camera as CameraPerspective;
     camera.translation = node.translation;
   }
 
   ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler) {
-    //debug.logCurrentFunction();
+    
 
     Float32List keyTimes = getKeyTimes(sampler.input);
     Float32List keyValues = getKeyValues(sampler.output);
@@ -553,7 +562,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
       num playTime,
       int nextIndex,
       double nextTime) {
-    //debug.logCurrentFunction();
+    
 
     Quaternion previous = new Quaternion.fromFloat32List(previousValues);
     Quaternion next = new Quaternion.fromFloat32List(nextValues);
@@ -580,7 +589,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   Float32List getInterpolatedValues(Float32List previousValues,
       Float32List nextValues, num interpolationValue) {
-    //debug.logCurrentFunction();
+    
 
     Float32List result = new Float32List(previousValues.length);
 
@@ -592,7 +601,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
-    //debug.logCurrentFunction();
+    
 
     // quaternion to return
     Quaternion qm = new Quaternion.identity();
@@ -635,7 +644,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   Float32List getKeyTimes(GLTFAccessor accessor) {
-    //debug.logCurrentFunction();
+    
 
     Float32List keyTimes = accessor.bufferView.buffer.data.buffer.asFloat32List(
         accessor.byteOffset, accessor.count * accessor.components);
@@ -644,7 +653,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   // Todo (jpu) : try to return only buffer
   Float32List getKeyValues(GLTFAccessor accessor) {
-    //debug.logCurrentFunction();
+    
 
     Float32List keyValues = accessor.bufferView.buffer.data.buffer
         .asFloat32List(

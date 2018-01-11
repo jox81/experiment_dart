@@ -54,7 +54,11 @@ class AppComponent implements OnInit{
 //    sceneId %= scenes.length;
 
 //    await scenes[sceneId].setup();
-    application.project = projects[0];
+    if(projects[0] is Future) {
+      application.project = await projects[0];
+    }else {
+      application.project = projects[0];
+    }
     application.render();
   }
 
@@ -76,8 +80,8 @@ class AppComponent implements OnInit{
   }
   @override
   Future ngOnInit() async {
-    projects = await projectService.getProjects();
     await Application.build(canvasComponent.canvas);
+    projects = await projectService.getProjects();
     await switchScene ();
   }
 

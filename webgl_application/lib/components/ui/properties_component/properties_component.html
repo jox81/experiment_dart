@@ -3,7 +3,8 @@
         <h1>Properties - {{iEditElement.runtimeType}}</h1>
 
         <div id="content">
-            <div *ngFor="let key of iEditElement.properties.keys">{{key}}
+            <div *ngFor="let key of iEditElement.properties.keys">
+                <!--{{key}}-->
                 <fieldset>
                     <legend *ngIf="!isString(iEditElement.properties[key])&&
                     !isBool(iEditElement.properties[key]) &&
@@ -119,6 +120,8 @@
                     <div *ngIf="isVector3(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                                <input *ngIf="iEditElement.properties[key].setter != null" class="getterSetter setter" type="button" value="S">
+                                <input class="getterSetter getter" type="button" value="G">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">

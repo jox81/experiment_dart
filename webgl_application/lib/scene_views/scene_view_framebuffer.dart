@@ -1,68 +1,62 @@
-import 'dart:async';
+import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/context.dart';
-import 'package:webgl/src/light/light.dart';
-
-
-
+import 'package:webgl/src/gltf/material.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-@MirrorsUsed(
-    targets: const [
-      SceneViewFrameBuffer,
-    ],
-    override: '*')
-import 'dart:mirrors';
 
-class SceneViewFrameBuffer extends SceneJox{
+GLTFProject projectFrameBuffer() {
+  GLTFProject project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
-  SceneViewFrameBuffer();
+  GLTFScene scene = new GLTFScene();
+  scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);// Todo (jpu) : ?
+  project.scene = scene;
 
-  @override
-  Future setupScene() async {
+  GLTFPBRMaterial material = new GLTFPBRMaterial(
+      pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
+          baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
+          baseColorTexture: null,//GLTFTextureInfo.createTexture(project, 'testTexture.png'),
+          metallicFactor: 0.0,
+          roughnessFactor: 1.0
+      )
+  );
+  project.materials.add(material);
 
-    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+  List<WebGLTexture> renderedTextures = TextureUtils.buildRenderedTextures();
 
-    //Cameras
-    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
-      ..targetPosition = new Vector3.zero()
-      ..translation = new Vector3(5.0, 5.0, 5.0);
-    Context.mainCamera = camera;
+  //
 
-    //
-    DirectionalLight directionalLight = new DirectionalLight();
-    light = directionalLight;
+  MaterialBaseTexture materialBaseTextureNormal =
+  new MaterialBaseTexture()
+    ..texture = renderedTextures[0];
 
-    //
-    List<WebGLTexture> renderedTextures = TextureUtils.buildRenderedTextures();
+  GLTFMesh colorMeshQuad = new GLTFMesh.quad(withNormals: false)
+    ..primitives[0].material = materialBaseTextureNormal;
+  GLTFNode colorNodeQuad = new GLTFNode()
+    ..mesh = colorMeshQuad
+    ..name = 'quadColor'
+    ..translation = new Vector3(0.0, 1.0, 0.0)
+    ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(90.0));;
+  scene.addNode(colorNodeQuad);
+  //
 
-    //Mesh
-    MaterialBaseTexture materialBaseTextureNormal =
-    new MaterialBaseTexture()
-      ..texture = renderedTextures[0];
-    materials.add(materialBaseTextureNormal);
+  MaterialDepthTexture materialDepthTextureNormal =
+  new MaterialDepthTexture()
+    ..texture = renderedTextures[1];
 
-    QuadMesh quadColor = new QuadMesh()
-      ..name = 'quadColor'
-      ..translation = new Vector3(0.0, 1.0, 0.0)
-      ..material = materialBaseTextureNormal
-      ..matrix.rotateZ(radians(90.0));
-    meshes.add(quadColor);
+  GLTFMesh depthMeshQuad = new GLTFMesh.quad(withNormals: false)
+    ..primitives[0].material = materialDepthTextureNormal;
+  GLTFNode depthNodeQuad = new GLTFNode()
+    ..mesh = depthMeshQuad
+    ..name = 'quadDepth'
+    ..translation = new Vector3(0.0, -1.0, 0.0)
+    ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(90.0));
+  scene.addNode(depthNodeQuad);
 
-    //
-    MaterialDepthTexture materialDepthTextureNormal =
-    new MaterialDepthTexture()
-      ..texture = renderedTextures[1];
-    materials.add(materialDepthTextureNormal);
-
-    QuadMesh quadDepth = new QuadMesh()
-      ..name = 'quadDepth'
-      ..translation = new Vector3(0.0, -1.0, 0.0)
-      ..material = materialDepthTextureNormal
-      ..matrix.rotateZ(radians(90.0));
-    meshes.add(quadDepth);
-
-
-
-  }
+  return project;
 }

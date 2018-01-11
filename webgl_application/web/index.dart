@@ -14,6 +14,6 @@ WebGLRenderingContext get gl => Context.glWrapper;
 Type get context => Context;
 
 Future main() async {
-  ProjectService.projects = await loadBaseProjects();
+  ProjectService.loader = loadBaseProjects;
   bootstrap(AppComponent,[ProjectService]);
 }

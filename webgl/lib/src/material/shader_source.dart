@@ -72,10 +72,32 @@ class ShaderSource{
     'sao' :[
       'shaders/sao/sao.vs.glsl',
       'shaders/sao/sao.fs.glsl'
+    ],
+
+    //> Filters
+    'dot_screen' :[
+      'shaders/filters/dot_screen/dot_screen.vs.glsl',
+      'shaders/filters/dot_screen/dot_screen.fs.glsl'
     ]
   };
 
-  static Map<String, ShaderSource> sources = new Map();
+  static Map<String, ShaderSource> _sources = new Map();
+  static ShaderSource get materialPoint => _sources['material_point'];
+  static ShaderSource get materialBase => _sources['material_base'];
+  static ShaderSource get materialBaseColor => _sources['material_base_color'];
+  static ShaderSource get materialBaseVertexColor => _sources['material_base_vertex_color'];
+  static ShaderSource get materialBaseTexture => _sources['material_base_texture'];
+  static ShaderSource get materialDepthTexture => _sources['material_depth_texture'];
+  static ShaderSource get materialBaseTextureNormal => _sources['material_base_texture_normal'];
+  static ShaderSource get materialPBR => _sources['material_pbr'];
+  static ShaderSource get materialSkybox => _sources['material_skybox'];
+  static ShaderSource get materialReflection => _sources['material_reflection'];
+  static ShaderSource get kronosGltfPBR => _sources['kronos_gltf_pbr'];
+  static ShaderSource get kronosGltfPBRTest => _sources['kronos_gltf_pbr_test'];
+  static ShaderSource get kronosGltfDefault => _sources['kronos_gltf_default'];
+  static ShaderSource get debugShader => _sources['debug_shader'];
+  static ShaderSource get sao => _sources['sao'];
+  static ShaderSource get dotScreen => _sources['dot_screen'];
 
   static Future loadShaders() async {
 
@@ -87,7 +109,7 @@ class ShaderSource{
         ..fragmentShaderPath = _currentPackage + shadersPath[key][1];
       await shaderSource._loadShader();
 
-      sources[shaderSource.shaderType] = shaderSource;
+      _sources[shaderSource.shaderType] = shaderSource;
     }
   }
 

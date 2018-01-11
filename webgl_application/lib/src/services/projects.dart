@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl_application/scene_views/scene_view_base.dart';
+import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
+import 'package:webgl_application/scene_views/scene_view_framebuffer.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 import 'package:angular2/core.dart';
+import 'package:webgl_application/scene_views/scene_view_texturing.dart';
 //import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
 //import 'package:webgl_application/scene_views/scene_view_performance.dart';
 //import 'package:webgl_application/scene_views/scene_view_shader_learning_glsl.dart';
@@ -25,22 +28,24 @@ typedef List<GLTFProject> ProjectLoader();
 
 @Injectable()
 class ProjectService {
+  static Function loader;
   static List<GLTFProject> projects;
-  List<GLTFProject> getProjects()  {
-   return projects;
+  Future<List<GLTFProject>> getProjects()  async {
+   return await loader();
   }
 }
 
 Future<List<GLTFProject>> loadBaseProjects() async => [
+//  projectSceneViewBase(),
 //    projectPrimitives(),
-  projectSceneViewBase(),
+//  projectPrimitivesTextured(),
+  projectFrameBuffer(),
+//  projectCubeMap(),
 ];
 
 /*
 [
 // new Scene(),
-// getPrimitivesProject(),
-// new SceneViewTexturing(),
 // new SceneViewPBR(),
 // new SceneViewCubeMap(),
 // new SceneViewTestMatrices(),

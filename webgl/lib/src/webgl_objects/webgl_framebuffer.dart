@@ -3,6 +3,7 @@ import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -106,6 +107,8 @@ class ActiveFrameBuffer extends IEditElement {
 
   // > Bind Attachments
 
+  /// Attaches a texture to a WebGLFramebuffer.
+  ///
   /// FrameBufferTarget target
   /// FrameBufferAttachment attachment
   /// TextureAttachmentTarget attachementTarget
@@ -129,9 +132,10 @@ class ActiveFrameBuffer extends IEditElement {
       print('### frameBuffer bindings ############################################');
       WebGLFrameBuffer frameBuffer = boundFrameBuffer;
       print('boundFrameBuffer : ${frameBuffer}');
-      print('checkFramebufferStatus() : ${checkFramebufferStatus()}');
-      if(frameBuffer != null) {
+      int status = checkFramebufferStatus();
+      print('checkFramebufferStatus() : ${GLEnum.FrameBufferStatus.getByIndex(status)}');
 
+      if(frameBuffer != null) {
         if(frameBufferAttachmentObjectTypeForColor0 != FrameBufferAttachmentType.NONE) {
           print(
               '###  Color0 Attachment  ############################################');

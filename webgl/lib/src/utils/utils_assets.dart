@@ -17,7 +17,6 @@ class UtilsAssets{
     _webPath = value;
   }
 
-
   static String getWebPath(String url) {
     String baseWebPath = UtilsAssets.webPath;
     if(url.startsWith('/') || url.startsWith('./') || url.startsWith('../')){

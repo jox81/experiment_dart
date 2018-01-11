@@ -5,12 +5,12 @@ import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 
 Future main() async {
-  ProjectService.projects = await loadBaseProjects();
+  ProjectService.loader = loadBaseProjects;
   ProjectService service = new ProjectService();
-  GLTFProject project = await service.getProjects()[0];
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
+
   await Application.build(canvas)
-    ..project = project
+  ..project = (await service.getProjects())[0]
     ..render();
 }

@@ -58,6 +58,7 @@ fieldset > section{
 legend{
     padding-left: 5px;
     padding-right: 2px;
+    padding-bottom: 6px;
     font-size: 14px;
     display: block;
     border: none;
@@ -116,3 +117,19 @@ input[type=button]{
     width:100%;
     border:none;
 }
+
+input[type=button].getterSetter{
+    width: 10%;
+    border: none;
+    float: right;
+    color: white;
+    margin-left: 6px;
+}
+input[type=button].getterSetter.getter{
+    background-color:#D0971E;
+}
+input[type=button].getterSetter.setter{
+    background-color:#1E6FD0;
+}
+
+

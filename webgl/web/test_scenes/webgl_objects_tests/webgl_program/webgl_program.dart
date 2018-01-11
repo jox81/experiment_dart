@@ -34,12 +34,12 @@ class WebglTest {
 
   void test01() {
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.sources['material_point'].vsCode
+      ..source = ShaderSource.materialPoint.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.sources['material_point'].fsCode
+      ..source = ShaderSource.materialPoint.fsCode
       ..compile();
 
     fragmentShader.logShaderInfos();
@@ -76,12 +76,12 @@ class WebglTest {
 //    materialSkyBox.skyboxTexture = cubeMapTexture;
 
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.sources['material_skybox'].vsCode
+      ..source = ShaderSource.materialSkybox.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.sources['material_skybox'].fsCode
+      ..source = ShaderSource.materialSkybox.fsCode
       ..compile();
 
     fragmentShader.logShaderInfos();
@@ -114,12 +114,12 @@ class WebglTest {
   // c'est donc inutile de les setter à nouveau si ils n'ont pas changé
   void shouldProgramAlwaysSetUniform() {
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.sources['material_base_color'].vsCode
+      ..source = ShaderSource.materialBaseColor.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.sources['material_base_color'].fsCode
+      ..source = ShaderSource.materialBaseColor.fsCode
       ..compile();
     fragmentShader.logShaderInfos();
 
@@ -148,11 +148,11 @@ class WebglTest {
     //>
     void useNewTempProgram(){
       WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-        ..source = ShaderSource.sources['material_skybox'].vsCode
+        ..source = ShaderSource.materialSkybox.vsCode
         ..compile();
 
       WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-        ..source = ShaderSource.sources['material_skybox'].fsCode
+        ..source = ShaderSource.materialSkybox.fsCode
         ..compile();
 
       WebGLProgram program = new WebGLProgram()

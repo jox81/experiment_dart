@@ -3,68 +3,82 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
-
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-@MirrorsUsed(
-    targets: const [
-      SceneViewCubeMap,
-    ],
-    override: '*')
-import 'dart:mirrors';
 
-class SceneViewCubeMap extends SceneJox{
+Future<GLTFProject> projectCubeMap() async {
+  GLTFProject project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
-  SceneViewCubeMap();
+  GLTFScene scene = new GLTFScene();
+  scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0); // Todo (jpu) : ?
+  project.scene = scene;
 
-  @override
-  Future setupScene() async {
+//    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+  //Cameras
+  CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
+    ..targetPosition = new Vector3.zero()
+    ..translation = new Vector3(0.0, 5.0, -10.0);
+  Context.mainCamera = camera;
 
-    //Cameras
-    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
-      ..targetPosition = new Vector3.zero()
-      ..translation = new Vector3(0.0, 5.0, -10.0);
-    Context.mainCamera = camera;
+  List<List<ImageElement>> cubeMapImages =
+      await TextureUtils.loadCubeMapImages('pisa');
+  WebGLTexture cubeMapTexture =
+      TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
 
-    List<List<ImageElement>> cubeMapImages = await TextureUtils.loadCubeMapImages('pisa');
-    WebGLTexture cubeMapTexture = TextureUtils.createCubeMapWithImages(cubeMapImages, flip:false);
+  MaterialSkyBox materialSkyBox = new MaterialSkyBox();
+  materialSkyBox.skyboxTexture = cubeMapTexture;
 
-    MaterialSkyBox materialSkyBox = new MaterialSkyBox();
-    materialSkyBox.skyboxTexture = cubeMapTexture;
+  GLTFMesh skyBoxMesh = new GLTFMesh.cube(withNormals: false)
+    ..primitives[0].material = materialSkyBox;
+  GLTFNode skyBoxNode = new GLTFNode()
+    ..mesh = skyBoxMesh
+    ..name = 'quadDepth'
+    ..matrix.scale(1.0);
+  scene.addNode(skyBoxNode);
 
-    SkyBoxMesh skyBoxMesh = new SkyBoxMesh()
-      ..material = materialSkyBox
-      ..matrix.scale(1.0);
-    meshes.add(skyBoxMesh);
-
-
-    Material material;
+  RawMaterial material;
 
 //    material = new MaterialPoint();
 //    material = new MaterialBase();
-    material = new MaterialReflection()..skyboxTexture = cubeMapTexture;
+  material = new MaterialReflection()..skyboxTexture = cubeMapTexture;
 
-    GridMesh grid = new GridMesh();
-    meshes.add(grid);
+//    GridMesh grid = new GridMesh();
+//    meshes.add(grid);
 
-    SphereMesh sphere = new SphereMesh(radius: 1.0, segmentV: 32, segmentH: 32)
-      ..matrix.translate(0.0, 0.0, 0.0)
-      ..matrix.scale(1.0)
-      ..material = material;
-    meshes.add(sphere);
+  GLTFMesh sphereMesh = new GLTFMesh.sphere(
+      radius: 1.0, segmentV: 32, segmentH: 32, withNormals: false)
+    ..primitives[0].material = material;
+  GLTFNode sphereNode = new GLTFNode()
+    ..mesh = sphereMesh
+    ..name = 'sphere'
+    ..matrix.translate(0.0, 0.0, 0.0)
+    ..matrix.scale(1.0);
+  scene.addNode(sphereNode);
 
-    QuadMesh plane = new QuadMesh()
-      ..matrix.translate(2.0, 0.0, 0.0)
-      ..matrix.scale(1.0)
-      ..matrix.rotateX(radians(-90.0))
-      ..material = material;
-    meshes.add(plane);
+  GLTFMesh planeMesh = new GLTFMesh.quad(withNormals: false)
+    ..primitives[0].material = material;
+  GLTFNode planeNode = new GLTFNode()
+    ..mesh = planeMesh
+    ..name = 'plane'
+    ..matrix.translate(2.0, 0.0, 0.0)
+    ..matrix.scale(1.0)
+    ..matrix.rotateX(radians(-90.0));
+  scene.addNode(planeNode);
 
-    CubeMesh cube = new CubeMesh()
-      ..matrix.translate(0.0, 1.0, 2.0)
-      ..matrix.scale(1.0)
-      ..material = material;
-    meshes.add(cube);
-  }
+  GLTFMesh cubeMesh = new GLTFMesh.quad(withNormals: false)
+    ..primitives[0].material = material;
+  GLTFNode cubeNode = new GLTFNode()
+    ..mesh = cubeMesh
+    ..name = 'cube'
+    ..matrix.translate(0.0, 1.0, 2.0)
+    ..matrix.scale(1.0);
+  scene.addNode(cubeNode);
+
+  return project;
 }

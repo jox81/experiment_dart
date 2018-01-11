@@ -66,6 +66,8 @@ GLTFProject projectSceneViewBase() {
   MaterialPragmaticPBR materialPBR = new MaterialPragmaticPBR(pointLight);
 //  project.materials.add(materialBaseVertexColor); // Todo (jpu) : don't add ?
 
+  MaterialSAO materialSAO = new MaterialSAO();
+
   //Meshes
   // Todo (jpu) :
 //  AxisMesh axis = new AxisMesh();

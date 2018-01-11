@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/material/shader_source.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
@@ -20,19 +21,50 @@ class WebglTest {
 
   Future setup() async {
 //    print('//////////////////////////////////////////////////////////////////');
-    await textureCubeMap();
+    await testEmptyTexture();
+//    await textureCubeMap();
 //    await testModifTexture();
 //    await testModifTextureInOtherUnit();
 //    await testModifTextureInOtherUnitViaTexture();
+  }
+
+  Future testEmptyTexture() async {
+    int size = 64;
+    gl.activeTexture(TextureUnit.TEXTURE7);
+
+    WebGLTexture texture1 = new WebGLTexture.texture2d();
+
+    Context.glWrapper.activeTexture.texture2d.bind(texture1);
+
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_MIN_FILTER,
+        TextureMinificationFilterType.NEAREST);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_MAG_FILTER,
+        TextureMagnificationFilterType.NEAREST);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
+    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+        TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
+
+    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2D(
+        0,
+        TextureInternalFormat.RGBA,
+        TextureInternalFormat.RGBA,
+        TexelDataType.UNSIGNED_BYTE,
+        null);//This should not log an error !
+
+    Context.glWrapper.activeTexture.logActiveTextureInfo();
+    Context.glWrapper.activeTexture.texture2d.unBind();
   }
 
   Future textureCubeMap() async {
     print('@ Test de loading d\'un cubemap');
 
     List<List<ImageElement>> cubeMapImages =
-        await TextureUtils.loadCubeMapImages('kitchen', webPath: '../../../');
+    await TextureUtils.loadCubeMapImages('kitchen', webPath: '../../../');
     WebGLTexture cubeMapTexture =
-        TextureUtils.createCubeMapWithImages(cubeMapImages);
+    TextureUtils.createCubeMapFromImages(cubeMapImages);
     Context.glWrapper.activeTexture.textureCubeMap.bind(cubeMapTexture);
 
     Context.glWrapper.activeTexture.logActiveTextureInfo();

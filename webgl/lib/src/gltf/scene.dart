@@ -24,4 +24,8 @@ class GLTFScene extends GLTFChildOfRootProperty{
   String toString() {
     return 'GLTFScene{nodes: ${_nodes.map((n)=>n.nodeId).toList()}}';
   }
+
+  void makeCurrent() {
+    GLTFProject.instance.scene = this;
+  }
 }

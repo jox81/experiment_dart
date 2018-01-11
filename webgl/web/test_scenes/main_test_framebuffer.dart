@@ -5,7 +5,9 @@ import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/gltf/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/renderer/renderer.dart';
 import 'package:webgl/src/material/shader_source.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -20,14 +22,15 @@ Future main() async {
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas') as CanvasElement);
 
   await ShaderSource.loadShaders();
-  textureCrate = await TextureUtils.createTexture2DFromFile("../images/crate.gif");
+  textureCrate = await TextureUtils.createTexture2DFromImageUrl("../images/crate.gif");
 
   webgl01.setup();
   webgl01.render();
 }
 
 class Webgl01 {
-
+  CanvasElement canvas;
+  GLTFRenderer renderer;
   WebGLBuffer vertexBuffer;
   WebGLBuffer indicesBuffer;
 
@@ -40,7 +43,7 @@ class Webgl01 {
   WebGLUniformLocation pMatrixUniform;
   WebGLUniformLocation mvMatrixUniform;
 
-  Webgl01(CanvasElement canvas){
+  Webgl01(this.canvas){
     initGL(canvas);
   }
 
@@ -49,6 +52,7 @@ class Webgl01 {
   }
 
   void setup(){
+    renderer = new GLTFRenderer(canvas);
     setupCamera();
     setupMeshes();
 
@@ -89,8 +93,8 @@ class Webgl01 {
     gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-    for(Mesh model in nodes){
-      model.render();
+    for(GLTFNode node in nodes){
+      renderer.drawNode(node);
     }
 
     window.requestAnimationFrame((num time) {

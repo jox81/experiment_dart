@@ -26,11 +26,11 @@ class WebglTest {
     gl.clearColor(1.0,0.0,0.0,1.0);
 
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.sources['material_point'].vsCode
+      ..source = ShaderSource.materialPoint.vsCode
       ..compile();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.sources['material_point'].fsCode
+      ..source = ShaderSource.materialPoint.fsCode
       ..compile();
 
     WebGLProgram program = new WebGLProgram();

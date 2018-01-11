@@ -2,18 +2,8 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
-import 'dart:developer';
-import 'package:logging/logging.dart';
 
-  Logger devLog;
 Future main() async {
-
-  devLog = new Logger('dev');
-  Logger.root.level = Level.ALL;
-  Logger.root.onRecord.listen((LogRecord rec) {
-    log('${rec.level.name}: ${rec.time}: ${rec.message}');
-  });
-
   new Renderer()..render();
 }
 
@@ -23,17 +13,17 @@ class Renderer{
   List<double> vertices;
   int elementsByVertices;
 
-  String fsSource = '''
-    void main() {
-      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
-    }
-  ''';
-
   String vsSource = '''
     attribute vec3 pos;
 
     void main() {
       gl_Position = vec4(pos, 3.0);
+    }
+  ''';
+
+  String fsSource = '''
+    void main() {
+      gl_FragColor = vec4(0.5, 0.5, 1.0, 1.0);
     }
   ''';
 
@@ -63,27 +53,11 @@ class Renderer{
     setupAttribut(program, "pos", elementsByVertices , vertices);
   }
 
-  void draw() {
-
-    gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
-    gl.drawArrays(webgl.RenderingContext.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
-
-
-  }
-
   webgl.Program buildProgram(String vs, String fs) {
     webgl.Program prog = gl.createProgram();
 
-    devLog.fine('test');
-    UserTag customTag = new UserTag('MyTag');
-    // Save the previous tag when installing the custom tag.
-    var previousTag = customTag.makeCurrent();
-
     addShader(prog, 'vertex', vs);
     addShader(prog, 'fragment', fs);
-
-    // Restore the previous tag.
-    previousTag.makeCurrent();
 
     gl.linkProgram(prog);
     if (gl.getProgramParameter(prog, webgl.RenderingContext.LINK_STATUS) == null) {
@@ -118,5 +92,10 @@ class Renderer{
     window.requestAnimationFrame((num time) {
       this.render(time: time);
     });
+  }
+
+  void draw() {
+    gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
+    gl.drawArrays(webgl.RenderingContext.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
   }
 }

@@ -10,8 +10,8 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/texture_info.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future<GLTFProject> projectTestMaterials() async {
   GLTFProject project = new GLTFProject.create()..baseDirectory = 'materials/';
@@ -33,7 +33,7 @@ Future<GLTFProject> projectTestMaterials() async {
     new MaterialPoint(pointSize:5.0, color:new Vector4(0.0, 0.66, 1.0, 1.0)),
     new MaterialBase(),
     new MaterialBaseColor(new Vector4(1.0, 1.0, 0.0, 1.0)),
-    new MaterialBaseTexture()..texture = await TextureUtils.createTexture2DFromFile('materials/testTexture.png'),
+    new MaterialBaseTexture()..texture = await TextureUtils.createTexture2DFromImageUrl('materials/testTexture.png'),
   ];
 
   int materialsIndex = 0;
