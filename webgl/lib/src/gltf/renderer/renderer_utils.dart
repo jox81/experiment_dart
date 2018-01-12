@@ -16,7 +16,7 @@ class GlobalState {
 
   dynamic hasLODExtension;
   dynamic hasDerivativesExtension;
-
+  dynamic hasIndexUIntExtension;
 }
 
 class ScaleVal{

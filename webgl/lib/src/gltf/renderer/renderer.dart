@@ -11,6 +11,7 @@ import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/time/time.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/context.dart' as ctxWrapper show gl;
@@ -205,10 +206,12 @@ class GLTFRenderer extends IEditElement implements Interactable {
     var hasSRGBExt = gl.getExtension('EXT_SRGB');
     var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
     var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
+    var hasIndexUIntExtension = gl.getExtension('OES_element_index_uint');
 
     globalState = new GlobalState()
       ..hasLODExtension = hasLODExtension
       ..hasDerivativesExtension = hasDerivativesExtension
+      ..hasIndexUIntExtension = hasIndexUIntExtension
       ..sRGBifAvailable =
       hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
 
@@ -407,12 +410,20 @@ class GLTFRenderer extends IEditElement implements Interactable {
   void _bindIndices(GLTFMeshPrimitive primitive) {
     
     GLTFAccessor accessorIndices = primitive.indicesAccessor;
-    Uint16List indices = accessorIndices.bufferView.buffer.data.buffer
-        .asUint16List(
-        accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
-        accessorIndices.count);
-    //debug.logCurrentFunction(indices.toString());
-
+    TypedData indices;
+    if(accessorIndices.componentType == 5123) {
+      indices = accessorIndices.bufferView.buffer.data.buffer
+          .asUint16List(
+          accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+          accessorIndices.count);
+      //debug.logCurrentFunction(indices.toString());
+    }else if(accessorIndices.componentType == 5125){
+      if(globalState.hasIndexUIntExtension == null) throw "hasIndexUIntExtension : extension not supported";
+      indices = accessorIndices.bufferView.buffer.data.buffer
+          .asUint32List(
+          accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+          accessorIndices.count);
+    }
     _initBuffer(primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
   }
 
