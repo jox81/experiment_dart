@@ -205,8 +205,9 @@ abstract class RawMaterial{
     program.uniformLocations[uniformName] ??= program.getUniformLocation(uniformName);
     WebGLUniformLocation wrappedUniformLocation = program.uniformLocations[uniformName];
 
-    //let's pass if u_Camera, else it won't drow reflection correctly
-    if(wrappedUniformLocation.data == data && uniformName != "u_Camera") {
+//    if(uniformName == ())
+    //let's pass if u_Camera, else it won't drow reflection correctly wrappedUniformLocation.data == data && uniformName != "u_Camera"
+    if(wrappedUniformLocation.data == data && uniformName != "u_Camera" && uniformName != "u_ModelMatrix") {
       //      print('same $uniformName > return : $data, ${wrappedUniformLocation.data}');
       return;
     };

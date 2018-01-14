@@ -238,21 +238,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
     });
   }
 
-  void update() {
-    
 
-    interaction.update();
-
-    for (int i = 0; i < gltfProject.animations.length; i++) {
-      GLTFAnimation animation = gltfProject.animations[i];
-      for (int j = 0; i < animation.channels.length; i++) {
-        GLTFAnimationChannel channel = animation.channels[j];
-
-        ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler);
-        channel.target.node.rotation = new Quaternion.fromBuffer(byteBuffer, 0);
-      }
-    }
-  }
 
   void _renderCurrentScene() {
     Context.resizeCanvas();
@@ -411,7 +397,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
     
     GLTFAccessor accessorIndices = primitive.indicesAccessor;
     TypedData indices;
-    if(accessorIndices.componentType == 5123) {
+    if(accessorIndices.componentType == 5123 || accessorIndices.componentType == 5121) {
       indices = accessorIndices.bufferView.buffer.data.buffer
           .asUint16List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
@@ -423,6 +409,8 @@ class GLTFRenderer extends IEditElement implements Interactable {
           .asUint32List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
           accessorIndices.count);
+    }else{
+      throw "_bindIndices : componentType not implemented ${GLEnum.VertexAttribArrayType.getByIndex(accessorIndices.componentType)}";
     }
     _initBuffer(primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
   }
@@ -489,8 +477,6 @@ class GLTFRenderer extends IEditElement implements Interactable {
 
   Camera findActiveSceneCamera(List<GLTFNode> nodes) {
 
-    
-
     Camera result;
 
     for (var i = 0; i < nodes.length && result == null; i++) {
@@ -511,8 +497,51 @@ class GLTFRenderer extends IEditElement implements Interactable {
     camera.translation = node.translation;
   }
 
-  ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler) {
-    
+  // > updates
+
+  void update() {
+
+    interaction.update();
+
+    for (int i = 0; i < gltfProject.animations.length; i++) {
+      GLTFAnimation animation = gltfProject.animations[i];
+      for (int j = 0; j < animation.channels.length; j++) {
+        GLTFAnimationChannel channel = animation.channels[j];
+
+        // Todo (jpu) : is it possible to refacto ByteBuffer outside switch ? see when doing weights
+        switch(channel.target.path){
+          case ChannelTargetPathType.translation:
+            ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler, channel.target.path);
+            Vector3 result = new Vector3.fromBuffer(byteBuffer, 0);
+            channel.target.node.translation = result;
+//            channel.target.node.translation += new Vector3(0.0, 0.0, 0.1);
+//            print(channel.target.node.translation);
+            break;
+          case ChannelTargetPathType.rotation:
+            if(channel.target.node == null) break;
+            ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler, channel.target.path);
+            Quaternion result = new Quaternion.fromBuffer(byteBuffer, 0);
+//            print(result);
+            channel.target.node.rotation = result;
+            break;
+          case ChannelTargetPathType.scale:
+            ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler, channel.target.path);
+            Vector3 result = new Vector3.fromBuffer(byteBuffer, 0);
+//            print(result);
+            channel.target.node.scale = result;
+            break;
+          case ChannelTargetPathType.weights:
+            int weightsCount = channel.target.node.mesh.weights.length;
+            throw 'Renderer:update() : switch not implemented yet : ${channel.target.path}';
+            // Todo (jpu) :
+            break;
+        }
+      }
+    }
+  }
+
+  ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler, ChannelTargetPathType targetType) {
+    ByteBuffer result;
 
     Float32List keyTimes = getKeyTimes(sampler.input);
     Float32List keyValues = getKeyValues(sampler.output);
@@ -533,25 +562,26 @@ class GLTFRenderer extends IEditElement implements Interactable {
     double nextTime = keyTimes[nextIndex];
 
     //> values
-    Float32List previousValues = keyValues.buffer.asFloat32List(
-        sampler.output.byteOffset +
-            previousIndex *
-                sampler.output.components *
-                sampler.output.componentLength,
-        sampler.output.components);
-    Float32List nextValues = keyValues.buffer.asFloat32List(
-        sampler.output.byteOffset +
-            nextIndex *
-                sampler.output.components *
-                sampler.output.componentLength,
-        sampler.output.components);
+    int nextStartIndex =
+        nextIndex *
+            sampler.output.components;//sampler.output.byteOffset +
+    Float32List nextValues = keyValues.sublist(nextStartIndex,nextStartIndex + sampler.output.components);
 
-    double interpolationValue =
-        (playTime - previousTime) / (nextTime - previousTime);
+    Float32List previousValues;
+    if(previousIndex == -1){
+      previousValues = nextValues;
+    }else {
+      int previousStartIndex =
+          previousIndex *
+              sampler.output.components;//sampler.output.byteOffset +
+      previousValues =  keyValues.sublist(previousStartIndex,previousStartIndex + sampler.output.components) as Float32List;
+    }
+
+    double interpolationValue = nextTime - previousTime != 0.0 ?
+        (playTime - previousTime) / (nextTime - previousTime) : 0.0;
 
     // Todo (jpu) : add easer ratio interpolation
-
-    Quaternion result = getQuaternionInterpolation(
+    result = getInterpolationValue(
         previousValues,
         nextValues,
         interpolationValue,
@@ -559,12 +589,12 @@ class GLTFRenderer extends IEditElement implements Interactable {
         previousTime,
         playTime,
         nextIndex,
-        nextTime);
+        nextTime, targetType);
 
-    return result.storage.buffer;
+    return result;
   }
 
-  Quaternion getQuaternionInterpolation(
+  ByteBuffer getInterpolationValue(
       Float32List previousValues,
       Float32List nextValues,
       double interpolationValue,
@@ -572,19 +602,38 @@ class GLTFRenderer extends IEditElement implements Interactable {
       double previousTime,
       num playTime,
       int nextIndex,
-      double nextTime) {
-    
+      double nextTime,
+      ChannelTargetPathType targetType) {
 
-    Quaternion previous = new Quaternion.fromFloat32List(previousValues);
-    Quaternion next = new Quaternion.fromFloat32List(nextValues);
+    ByteBuffer result;
 
-    //
-    double angle = next.radians - previous.radians;
-    if (angle.abs() > PI) {
-      next[3] *= -1;
+    switch(targetType){
+      case ChannelTargetPathType.translation:
+      case ChannelTargetPathType.scale:
+        Vector3 previous = new Vector3.fromFloat32List(previousValues);
+        Vector3 next = new Vector3.fromFloat32List(nextValues);
+
+        Vector3 resultVector3 = vector3Lerp(previous, next, interpolationValue);
+        result = resultVector3.storage.buffer;
+        break;
+      case ChannelTargetPathType.rotation:
+        Quaternion previous = new Quaternion.fromFloat32List(previousValues);
+        Quaternion next = new Quaternion.fromFloat32List(nextValues);
+
+        //
+        double angle = next.radians - previous.radians;
+        if (angle.abs() > PI) {
+          next[3] *= -1;
+        }
+
+        Quaternion resultQuaternion = slerp(previous, next, interpolationValue);
+        result = resultQuaternion.storage.buffer;
+        break;
+      case ChannelTargetPathType.weights:
+        throw 'Renderer:getInterpolationValue() : switch not implemented yet : ${targetType}';
+        // Todo (jpu) :
+        break;
     }
-
-    Quaternion result = slerp(previous, next, interpolationValue);
 
     //debug.logCurrentFunction('interpolationValue : $interpolationValue');
     //debug.logCurrentFunction(
@@ -612,63 +661,72 @@ class GLTFRenderer extends IEditElement implements Interactable {
   }
 
   Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
-    
+    bool useSimple = true;
 
     // quaternion to return
-    Quaternion qm = new Quaternion.identity();
+    Quaternion qm;
 
-    // Calculate angle between them.
-    double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y + qa.z * qb.z;
+    if(useSimple){
+      qm = qa + (qb - qa).scaled(t);
+    }else {
+      qm = new Quaternion.identity();
 
-    // if qa=qb or qa=-qb then theta = 0 and we can return qa
-    if (cosHalfTheta.abs() >= 1.0) {
-      qm.w = qa.w;
-      qm.x = qa.x;
-      qm.y = qa.y;
-      qm.z = qa.z;
-      return qm;
+      // Calculate angle between them.
+      double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y +
+          qa.z * qb.z;
+
+      // if qa=qb or qa=-qb then theta = 0 and we can return qa
+      if (cosHalfTheta.abs() >= 1.0) {
+        qm.w = qa.w;
+        qm.x = qa.x;
+        qm.y = qa.y;
+        qm.z = qa.z;
+        return qm;
+      }
+
+      // Calculate temporary values.
+      double halfTheta = acos(cosHalfTheta);
+      double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
+
+      // if theta = 180 degrees then result is not fully defined
+      // we could rotate around any axis normal to qa or qb
+      if (sinHalfTheta.abs() < 0.001) {
+        qm.w = (qa.w * 0.5 + qb.w * 0.5);
+        qm.x = (qa.x * 0.5 + qb.x * 0.5);
+        qm.y = (qa.y * 0.5 + qb.y * 0.5);
+        qm.z = (qa.z * 0.5 + qb.z * 0.5);
+        return qm;
+      }
+      double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
+      double ratioB = sin(t * halfTheta) / sinHalfTheta;
+
+      //calculate Quaternion.
+      qm.w = (qa.w * ratioA + qb.w * ratioB);
+      qm.x = (qa.x * ratioA + qb.x * ratioB);
+      qm.y = (qa.y * ratioA + qb.y * ratioB);
+      qm.z = (qa.z * ratioA + qb.z * ratioB);
     }
-
-    // Calculate temporary values.
-    double halfTheta = acos(cosHalfTheta);
-    double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
-
-    // if theta = 180 degrees then result is not fully defined
-    // we could rotate around any axis normal to qa or qb
-    if (sinHalfTheta.abs() < 0.001) {
-      qm.w = (qa.w * 0.5 + qb.w * 0.5);
-      qm.x = (qa.x * 0.5 + qb.x * 0.5);
-      qm.y = (qa.y * 0.5 + qb.y * 0.5);
-      qm.z = (qa.z * 0.5 + qb.z * 0.5);
-      return qm;
-    }
-    double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-    double ratioB = sin(t * halfTheta) / sinHalfTheta;
-
-    //calculate Quaternion.
-    qm.w = (qa.w * ratioA + qb.w * ratioB);
-    qm.x = (qa.x * ratioA + qb.x * ratioB);
-    qm.y = (qa.y * ratioA + qb.y * ratioB);
-    qm.z = (qa.z * ratioA + qb.z * ratioB);
-
     return qm;
   }
 
   Float32List getKeyTimes(GLTFAccessor accessor) {
-    
-
-    Float32List keyTimes = accessor.bufferView.buffer.data.buffer.asFloat32List(
-        accessor.byteOffset, accessor.count * accessor.components);
+    Float32List keyTimes = accessor.bufferView.buffer.data.buffer
+        .asFloat32List(
+        accessor.bufferView.byteOffset + accessor.byteOffset,
+        accessor.count * accessor.components);
     return keyTimes;
   }
 
   // Todo (jpu) : try to return only buffer
   Float32List getKeyValues(GLTFAccessor accessor) {
-    
-
     Float32List keyValues = accessor.bufferView.buffer.data.buffer
         .asFloat32List(
-            accessor.byteOffset, accessor.count * accessor.components);
+        accessor.bufferView.byteOffset + accessor.byteOffset,
+        accessor.count * accessor.components);
     return keyValues;
+  }
+
+  Vector3 vector3Lerp(Vector3 v0, Vector3 v1, double t) {
+    return v0 + (v1 - v0).scaled(t);
   }
 }

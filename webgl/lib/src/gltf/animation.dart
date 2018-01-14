@@ -15,7 +15,7 @@ class GLTFAnimation {
 
   @override
   String toString() {
-    return 'GLTFAnimation{animationId: $animationId, channels: $channels, samplers: $samplers}';
+    return 'GLTFAnimation{animationId: $animationId, \nchannels: $channels, \nsamplers: $samplers}';
   }
 }
 
@@ -35,10 +35,38 @@ class GLTFAnimationChannel {
   }
 }
 
+class ChannelTargetPathType{
+  final String path;
+
+  const ChannelTargetPathType(this.path);
+
+  static const ChannelTargetPathType translation = const ChannelTargetPathType("translation");
+  static const ChannelTargetPathType rotation = const ChannelTargetPathType("rotation");
+  static const ChannelTargetPathType scale = const ChannelTargetPathType("scale");
+  static const ChannelTargetPathType weights = const ChannelTargetPathType("weights");
+
+  static List<ChannelTargetPathType> get values => [
+    translation,
+    rotation,
+    scale,
+    weights,
+  ];
+
+  static ChannelTargetPathType getByValue(String path) =>
+      values.firstWhere((e)=>e.path == path, orElse: ()=> null);
+
+  @override
+  String toString() {
+    return '$path';
+  }
+
+}
+
 /// The Target of the animation
 /// [path] defines the property to animate on the [node]
 class GLTFAnimationChannelTarget {
-  final String path;
+
+  final ChannelTargetPathType path;
 
   GLTFNode _node;
   GLTFNode get node => _node;
@@ -46,7 +74,7 @@ class GLTFAnimationChannelTarget {
     _node = value;
   }
 
-  GLTFAnimationChannelTarget(this.path);
+  GLTFAnimationChannelTarget(String path):this.path = ChannelTargetPathType.getByValue(path);
 
   @override
   String toString() {

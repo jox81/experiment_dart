@@ -1,4 +1,7 @@
 import 'dart:web_gl' as WebGL;
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
+
+
 
 //WebGLRenderingContext
 
@@ -305,6 +308,9 @@ class TextureAttachmentTarget {
 class BufferType {
   static const int ARRAY_BUFFER = WebGL.RenderingContext.ARRAY_BUFFER;
   static const int ELEMENT_ARRAY_BUFFER = WebGL.RenderingContext.ELEMENT_ARRAY_BUFFER;
+
+  static GLEnum.BufferType getByIndex(int index) =>
+      GLEnum.BufferType.getByIndex(index);
 }
 
 class BufferUsageType {
@@ -337,6 +343,9 @@ class VertexAttribArrayType {
   static const int UNSIGNED_SHORT = 
           WebGL.RenderingContext.UNSIGNED_SHORT;
   static const int FLOAT = WebGL.RenderingContext.FLOAT;
+
+  static GLEnum.VertexAttribArrayType getByIndex(int index) =>
+      GLEnum.VertexAttribArrayType.getByIndex(index);
 }
 
 //WebGLTextures

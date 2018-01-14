@@ -1,6 +1,7 @@
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 /// Bufferviews define a segment of the buffer data and define broadly what kind of data lives
 /// there using some obscure shortcodes for usage/target.
@@ -27,6 +28,7 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
   int byteLength;
   int byteStride;//step to next element(next vec3 is at + ( 3 components * 4 bytes) = + 12
 
+  /// BufferType usage
   int target;
   /// BufferType usage
   int usage;
@@ -46,7 +48,7 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFBufferView{bufferViewId:$bufferViewId, buffer: ${_buffer.bufferId}, byteOffset: $byteOffset, byteLength: $byteLength,  byteStride: $byteStride, target: $target, usage: $usage}';
+    return 'GLTFBufferView{bufferViewId:$bufferViewId, buffer: ${_buffer.bufferId}, byteOffset: $byteOffset, byteLength: $byteLength,  byteStride: $byteStride, target: ${BufferType.getByIndex(target)}, usage: ${BufferType.getByIndex(usage)}}';
   }
 
 }
