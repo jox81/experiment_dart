@@ -531,8 +531,8 @@ class GLTFRenderer extends IEditElement implements Interactable {
             channel.target.node.scale = result;
             break;
           case ChannelTargetPathType.weights:
-            int weightsCount = channel.target.node.mesh.weights.length;
-            throw 'Renderer:update() : switch not implemented yet : ${channel.target.path}';
+//            int weightsCount = channel.target.node.mesh.weights.length;
+//            throw 'Renderer:update() : switch not implemented yet : ${channel.target.path}';
             // Todo (jpu) :
             break;
         }
@@ -552,11 +552,15 @@ class GLTFRenderer extends IEditElement implements Interactable {
     //> playtime range
     int previousIndex = 0;
     double previousTime = 0.0;
-    while (keyTimes[previousIndex] < playTime) {
-      previousTime = keyTimes[previousIndex];
-      previousIndex++;
-    }
-    previousIndex--;
+
+    previousTime = keyTimes.lastWhere((e)=> e < playTime, orElse: ()=> null);
+    previousIndex = keyTimes.indexOf(previousTime);
+
+//    while (keyTimes[previousIndex] < playTime) {
+//      previousTime = keyTimes[previousIndex];
+//      previousIndex++;
+//    }
+//    previousIndex--;
 
     int nextIndex = (previousIndex + 1) % keyTimes.length;
     double nextTime = keyTimes[nextIndex];
@@ -630,7 +634,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
         result = resultQuaternion.storage.buffer;
         break;
       case ChannelTargetPathType.weights:
-        throw 'Renderer:getInterpolationValue() : switch not implemented yet : ${targetType}';
+//        throw 'Renderer:getInterpolationValue() : switch not implemented yet : ${targetType}';
         // Todo (jpu) :
         break;
     }

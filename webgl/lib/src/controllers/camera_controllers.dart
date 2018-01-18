@@ -77,7 +77,7 @@ class CameraController {
 
   void changeCameraFov(CameraPerspective camera, num deltaY) {
     var delta = Math.max(-1, Math.min(1, deltaY));
-    fov += delta / 50; //calcul du zoom
+    fov += delta / 100; //calcul du zoom
 
     camera.yfov = fov;
   }

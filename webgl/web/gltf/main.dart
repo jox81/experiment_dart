@@ -20,7 +20,7 @@ Future main() async {
     //Animation
 //    './samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf',
 //    './samples/gltf_2_0/03_animated_triangle/gltf/AnimatedTriangle.gltf',
-    './wip/animation_test/animation_test.gltf',
+//    './wip/animation_test/animation_test.gltf',
 //    './samples/gltf_2_0/BoxAnimated/glTF_embed/BoxAnimated.gltf',
 //    './samples/gltf_2_0/BoxAnimated/glTF/BoxAnimated.gltf',
 
@@ -84,14 +84,11 @@ Future main() async {
 
 
 //    './wip/blender_pbr/01_textured_sphere.gltf'
-// Todo (jpu) :
-// Error: RangeError: Value not in range: -12
-// Error: RangeError (index): Index out of range: index should be less than 3: 3
-//    './blender_pbr/polly/project_polly.gltf'
+    './blender_pbr/polly/project_polly.gltf'
   ];
 
   GLTFProject project = await loadGLTF(gltfSamplesPaths.first, useWebPath : false);
-  await await debugGltf(project, doGlTFProjectLog : true, isDebug:false);
+//  await await debugGltf(project, doGlTFProjectLog : true, isDebug:false);
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
   await new GLTFRenderer(canvas).render(project);
 }
