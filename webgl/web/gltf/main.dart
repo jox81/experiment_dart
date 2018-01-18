@@ -80,11 +80,12 @@ Future main() async {
 
   //Blender test Sphere
 //    './wip/simple_sphere/simple_sphere.gltf',
+    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr_wood_paint.gltf'
 //    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'
 
 
 //    './wip/blender_pbr/01_textured_sphere.gltf'
-    './blender_pbr/polly/project_polly.gltf'
+//    './blender_pbr/polly/project_polly.gltf'
   ];
 
   GLTFProject project = await loadGLTF(gltfSamplesPaths.first, useWebPath : false);
