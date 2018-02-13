@@ -120,8 +120,8 @@
                     <div *ngIf="isVector3(iEditElement.properties[key])">
                         <legend>
                             {{key}}
-                                <input *ngIf="iEditElement.properties[key].setter != null" class="getterSetter setter" type="button" value="S">
-                                <input class="getterSetter getter" type="button" value="G">
+                                <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter)" *ngIf="iEditElement.properties[key].setter != null" >
+                                <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">

@@ -50,7 +50,7 @@ Future main() async {
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
 //    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
-//    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
+    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
 //    './samples/gltf_2_0/NormalTangentTest/glTF/NormalTangentTest.gltf',
 //    './samples/gltf_2_0/BoomBoxWithAxes/glTF/BoomBoxWithAxes.gltf',
@@ -58,7 +58,7 @@ Future main() async {
     //Further pbr models
 //    './samples/gltf_2_0/pbr/TwoSidedPlane/glTF/TwoSidedPlane.gltf',// Todo (jpu) : implement two side material
 //    './samples/gltf_2_0/pbr/suzanne/glTF/Suzanne.gltf',
-//      './samples/gltf_2_0/pbr/SciFiHelmet/glTF/SciFiHelmet.gltf',
+      './samples/gltf_2_0/pbr/SciFiHelmet/glTF/SciFiHelmet.gltf',
 
     //Complex model hierarchy
 // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
@@ -71,6 +71,7 @@ Future main() async {
 
 //    './wip/archi/model_01/model_01.gltf',
 //    './wip/archi/model_02/model_02.gltf',
+    './wip/blender_pbr/test_gltf_blender/test_gltf_blender.gltf',
 
   //Sketchfab export
 //    './samples/gltf_2_0/sketchfab/microphone_gxl_066/glTF/scene.gltf',
@@ -80,7 +81,7 @@ Future main() async {
 
   //Blender test Sphere
 //    './wip/simple_sphere/simple_sphere.gltf',
-    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr_wood_paint.gltf'
+//    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr_wood_paint.gltf'
 //    './blender_pbr/blender_test_ball/blender_test_ball_gltf_pbr.gltf'
 
 

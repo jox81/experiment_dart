@@ -65,4 +65,19 @@
             <a href="#" (click)="editActiveTexture()">ActiveTexture</a>
         </div>
     </li>
+    <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId5')">
+        <a href="javascript:void(0)"
+           class="dropbtn"
+           (click)="headerClick('headerId5')">Nodes</a>
+        <div class="dropdown-content" [class.show]="isMenuVisible('headerId5')">
+            <a href="#" (click)="toggleNodeView()">Node Engine</a>
+            <a href="#" (click)="createNode('NodeType.custom')">Custom</a>
+            <a href="#" (click)="createNode('NodeType.add')">Add</a>
+            <a href="#" (click)="createNode('NodeType.substract')">Substract</a>
+            <a href="#" (click)="createNode('NodeType.divide')">Divide</a>
+            <a href="#" (click)="createNode('NodeType.multiply')">Multiply</a>
+            <a href="#" (click)="createNode('NodeType.log')">Log</a>
+            <a href="#" (click)="createNode('NodeType.int')">Int</a>
+        </div>
+    </li>
 </ul>

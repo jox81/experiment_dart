@@ -7,16 +7,17 @@
     <title>WebGL Scene</title>
 
     <link rel="stylesheet" href="index_scene.css">
+    <link rel="stylesheet" href="packages/node_engine/css/node_engine.css">
 
     <script type="application/dart" src="index_scene.dart"></script>
     <script defer src="packages/browser/dart.js"></script>
 </head>
 
 <body>
+<div id="mainView">
+    <canvas id="glCanvas" width="500" height="500"></canvas>
 
-<canvas id="glCanvas" width="500" height="500"></canvas>
-
-<div id="fps"></div>
-
+    <div id="fps"></div>
+</div>
 </body>
 </html>

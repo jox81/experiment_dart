@@ -36,10 +36,10 @@ class ProjectService {
 }
 
 Future<List<GLTFProject>> loadBaseProjects() async => [
-//  projectSceneViewBase(),
-//    projectPrimitives(),
+  projectSceneViewBase(),
+//  projectPrimitives(),
 //  projectPrimitivesTextured(),
-  projectFrameBuffer(),
+//  projectFrameBuffer(),
 //  projectCubeMap(),
 ];
 

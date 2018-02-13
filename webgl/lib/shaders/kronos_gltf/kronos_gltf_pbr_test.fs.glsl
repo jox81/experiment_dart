@@ -207,7 +207,7 @@ void main()
     // This layout intentionally reserves the 'r' channel for (optional) occlusion map data
     vec4 mrSample = texture2D(u_MetallicRoughnessSampler, v_UV);
     perceptualRoughness = mrSample.g * perceptualRoughness;
-    metallic = mrSample.b * metallic;
+    metallic = (mrSample.r + mrSample.b) * metallic;//This is a hack as it seem there inconsistency in which channel to take r or b, so mix them
 #endif
     perceptualRoughness = clamp(perceptualRoughness, c_MinRoughness, 1.0);
     metallic = clamp(metallic, 0.0, 1.0);

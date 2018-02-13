@@ -16,7 +16,9 @@
                 </properties>
             </div>
             <div class="col-sm-9 second">
-                <canvas_app id="canvasApp"></canvas_app>
+                <div id="mainView">
+                    <canvas_app id="canvasApp"></canvas_app>
+                </div>
             </div>
             <div class="col-sm-0 third">
             </div>
@@ -26,7 +28,9 @@
     <template [ngIf]="!isEditing">
         <div class="row">
             <div class="col-sm-12 second">
-                <canvas_app id="canvasApp"></canvas_app>
+                <div id="mainView">
+                    <canvas_app id="canvasApp"></canvas_app>
+                </div>
             </div>
         </div>
     </template>

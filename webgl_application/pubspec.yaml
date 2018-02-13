@@ -15,6 +15,8 @@ dependencies:
   test:
   logging: "^0.11.3+1"
   stack_trace: "^1.8.2"
+  node_engine:
+    path: D:\JEROME\dev\repositories\node_engine
 
 dev_dependencies:
   browser: '>=0.10.0 <0.11.0'

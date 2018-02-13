@@ -1,6 +1,8 @@
 import 'dart:html';
 import 'dart:mirrors';
 import 'package:angular2/core.dart';
+import 'package:node_engine/src/nodes/custom/node_getter.dart';
+import 'package:node_engine/src/nodes/custom/node_setter.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/buffer.dart';
@@ -251,5 +253,13 @@ class PropertiesComponent {
     ClassMirror compareTypeMirror = reflectClass(compareType);
     bool result = (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);
     return result;
+  }
+
+  //Getter/Setter button
+  void getterClicked(e, getter){
+    new NodeGetter(getter);
+  }
+  void setterClicked(e, setter){
+    new NodeSetter(setter);
   }
 }
