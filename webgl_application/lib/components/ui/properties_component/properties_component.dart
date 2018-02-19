@@ -256,10 +256,12 @@ class PropertiesComponent {
   }
 
   //Getter/Setter button
-  void getterClicked(e, getter){
-    new NodeGetter(getter);
+  void getterClicked(e, getter, IEditElement iEditElement){
+    new NodeGetter(getter)
+    ..referencedOject = iEditElement;
   }
-  void setterClicked(e, setter){
-    new NodeSetter(setter);
+  void setterClicked(e, setter, IEditElement iEditElement){
+    new NodeSetter(setter)
+      ..referencedOject = iEditElement;
   }
 }

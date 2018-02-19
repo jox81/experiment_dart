@@ -71,13 +71,15 @@
            (click)="headerClick('headerId5')">Nodes</a>
         <div class="dropdown-content" [class.show]="isMenuVisible('headerId5')">
             <a href="#" (click)="toggleNodeView()">Node Engine</a>
-            <a href="#" (click)="createNode('NodeType.custom')">Custom</a>
-            <a href="#" (click)="createNode('NodeType.add')">Add</a>
-            <a href="#" (click)="createNode('NodeType.substract')">Substract</a>
-            <a href="#" (click)="createNode('NodeType.divide')">Divide</a>
-            <a href="#" (click)="createNode('NodeType.multiply')">Multiply</a>
-            <a href="#" (click)="createNode('NodeType.log')">Log</a>
-            <a href="#" (click)="createNode('NodeType.int')">Int</a>
+            <a href="#" (click)="createNode('NodeItemType.custom')">Custom</a>
+            <a href="#" (click)="createNode('NodeItemType.add')">Add</a>
+            <a href="#" (click)="createNode('NodeItemType.substract')">Substract</a>
+            <a href="#" (click)="createNode('NodeItemType.divide')">Divide</a>
+            <a href="#" (click)="createNode('NodeItemType.multiply')">Multiply</a>
+            <a href="#" (click)="createNode('NodeItemType.log')">Log</a>
+            <a href="#" (click)="createNode('NodeItemType.int')">Int</a>
+            <a href="#" (click)="createNode('NodeItemType.vector3Split')">vector3Split</a>
+            <a href="#" (click)="createNode('NodeItemType.xyzCombine')">xyzCombine</a>
         </div>
     </li>
 </ul>

@@ -259,7 +259,7 @@ packages:
       path: "D:\\JEROME\\dev\\repositories\\node_engine"
       relative: false
     source: path
-    version: "0.0.2"
+    version: "0.0.6"
   node_preamble:
     dependency: transitive
     description:

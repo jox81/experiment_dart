@@ -1,6 +1,6 @@
 <section id="properties">
     <template [ngIf]="iEditElement != null">
-        <h1>Properties - {{iEditElement.runtimeType}}</h1>
+        <h1>Properties - {{iEditElement.runtimeType}} {{iEditElement.name}}</h1>
 
         <div id="content">
             <div *ngFor="let key of iEditElement.properties.keys">
@@ -45,6 +45,8 @@
                     <div *ngIf="isBool(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -62,6 +64,8 @@
                     <div *ngIf="isNum(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -80,6 +84,8 @@
                     <div *ngIf="isInt(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -100,6 +106,8 @@
                     <div *ngIf="isVector2(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -120,8 +128,8 @@
                     <div *ngIf="isVector3(iEditElement.properties[key])">
                         <legend>
                             {{key}}
-                                <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter)" *ngIf="iEditElement.properties[key].setter != null" >
-                                <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter)">
+                                <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                                <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -142,6 +150,8 @@
                     <div *ngIf="isVector4(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -162,6 +172,8 @@
                     <div *ngIf="isMatrix3(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">
@@ -182,6 +194,8 @@
                     <div *ngIf="isMatrix4(iEditElement.properties[key])">
                         <legend>
                             {{key}}
+                            <input type="button" class="getterSetter setter"  value="S" (click)="setterClicked($event, iEditElement.properties[key].setter, iEditElement)" *ngIf="iEditElement.properties[key].setter != null" >
+                            <input type="button" class="getterSetter getter" value="G" (click)="getterClicked($event, iEditElement.properties[key].getter, iEditElement)">
                         </legend>
                         <section>
                             <section *ngIf="iEditElement.properties[key].setter == null">

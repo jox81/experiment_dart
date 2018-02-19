@@ -305,6 +305,8 @@ class FunctionModel{
 }
 
 abstract class IEditElement {
+  String name;
+  
   Map<String, EditableProperty> _properties;
   Map<String, EditableProperty> get properties {
     if (_properties == null) {
