@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split dynamic</title>
+
+    <link rel="stylesheet" href="main.css">
+
+    <script type="application/dart" src="main.dart"></script>
+    <script defer src="packages/browser/dart.js"></script>
+</head>
+
+<body>
+
+<h1>Compare Two Elements</h1>
+
+<p>Click and slide the blue slider to compare two elements:</p>
+
+<div class="img-comp-container">
+    <div class="img-comp-img">
+        <div style="width:300px; height:200px;color:blue;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie lectus nec neque mattis facilisis. Nullam finibus, est sed maximus condimentum, lorem arcu placerat urna, id molestie mi libero in quam. Nam sollicitudin volutpat lorem, lacinia tristique metus iaculis ut. Suspendisse est lorem, ullamcorper faucibus enim eu, feugiat lobortis odio. Vivamus lacus ipsum, luctus vel ante id, interdum tristique magna. Maecenas elit metus, pretium ac consequat et, consectetur eget diam. Duis non sem dapibus ipsum vulputate viverra ac eget augue.
+            Curabitur non ultricies elit. Aliquam non aliquam turpis. Maecenas eu pretium justo. Vestibulum ac mauris non ex iaculis malesuada. Praesent tempus viverra ante, a laoreet ipsum vehicula eu. Pellentesque egestas, enim a pretium mollis, ligula ante pharetra felis, ut condimentum massa justo ac sem. Duis ac tristique erat. Proin molestie, tellus in eleifend condimentum, eros elit pulvinar justo, euismod cursus dui ipsum nec urna. Donec porta quam sed laoreet sagittis. Aenean egestas non elit sed tristique. Suspendisse aliquet bibendum cursus. Donec scelerisque eros eget vulputate dictum. Proin auctor sodales laoreet.
+            Vestibulum et ante at lorem rhoncus efficitur ac ac ante. Nullam vulputate laoreet orci vel rhoncus. Integer diam metus, sagittis a risus eu, dapibus malesuada eros. Donec cursus finibus blandit. Aliquam blandit at nulla at ultrices. Donec consectetur massa nec dictum vehicula. Suspendisse potenti. Quisque rhoncus malesuada tellus et laoreet. In vulputate sem nec ligula molestie egestas. Ut purus velit, condimentum quis iaculis a, congue quis quam.
+            Mauris gravida commodo nunc, nec mollis nisl pharetra non. Nullam vestibulum a nisl eget aliquet. In eget hendrerit dui. Curabitur lobortis fringilla metus a lobortis. Fusce venenatis diam feugiat, rutrum erat in, hendrerit sem. Praesent at diam vel neque placerat iaculis ullamcorper vel velit. Donec vel diam non nibh convallis lacinia. Maecenas scelerisque mi vel eros vestibulum malesuada. Donec suscipit, mi id lacinia eleifend, velit erat pulvinar lorem, quis suscipit purus ex id erat. Integer eu dictum elit. Cras vitae suscipit lectus, in pulvinar elit. Nullam mauris turpis, volutpat at justo ac, congue varius lorem.
+            Cras interdum ipsum quis neque vestibulum, rutrum porta massa imperdiet. Morbi quis purus suscipit orci volutpat mattis at ac ligula. Nullam dignissim ante nec convallis elementum. Nunc vel ex at justo condimentum vulputate. Aliquam a neque pellentesque, tristique mauris sed, suscipit arcu. Aenean sodales et velit eu viverra. Nunc sodales elit eu nisl commodo tincidunt. Curabitur maximus sem eu lorem faucibus posuere. Sed iaculis metus gravida ante facilisis, a dignissim dui luctus. Fusce rhoncus enim ipsum, vitae ultricies dolor auctor et. Suspendisse vel vulputate elit.
+        </div>
+    </div>
+    <div class="img-comp-img img-comp-overlay">
+        <div style="width:300px; height:200px;color:red;">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie lectus nec neque mattis facilisis. Nullam finibus, est sed maximus condimentum, lorem arcu placerat urna, id molestie mi libero in quam. Nam sollicitudin volutpat lorem, lacinia tristique metus iaculis ut. Suspendisse est lorem, ullamcorper faucibus enim eu, feugiat lobortis odio. Vivamus lacus ipsum, luctus vel ante id, interdum tristique magna. Maecenas elit metus, pretium ac consequat et, consectetur eget diam. Duis non sem dapibus ipsum vulputate viverra ac eget augue.
+            Curabitur non ultricies elit. Aliquam non aliquam turpis. Maecenas eu pretium justo. Vestibulum ac mauris non ex iaculis malesuada. Praesent tempus viverra ante, a laoreet ipsum vehicula eu. Pellentesque egestas, enim a pretium mollis, ligula ante pharetra felis, ut condimentum massa justo ac sem. Duis ac tristique erat. Proin molestie, tellus in eleifend condimentum, eros elit pulvinar justo, euismod cursus dui ipsum nec urna. Donec porta quam sed laoreet sagittis. Aenean egestas non elit sed tristique. Suspendisse aliquet bibendum cursus. Donec scelerisque eros eget vulputate dictum. Proin auctor sodales laoreet.
+            Vestibulum et ante at lorem rhoncus efficitur ac ac ante. Nullam vulputate laoreet orci vel rhoncus. Integer diam metus, sagittis a risus eu, dapibus malesuada eros. Donec cursus finibus blandit. Aliquam blandit at nulla at ultrices. Donec consectetur massa nec dictum vehicula. Suspendisse potenti. Quisque rhoncus malesuada tellus et laoreet. In vulputate sem nec ligula molestie egestas. Ut purus velit, condimentum quis iaculis a, congue quis quam.
+            Mauris gravida commodo nunc, nec mollis nisl pharetra non. Nullam vestibulum a nisl eget aliquet. In eget hendrerit dui. Curabitur lobortis fringilla metus a lobortis. Fusce venenatis diam feugiat, rutrum erat in, hendrerit sem. Praesent at diam vel neque placerat iaculis ullamcorper vel velit. Donec vel diam non nibh convallis lacinia. Maecenas scelerisque mi vel eros vestibulum malesuada. Donec suscipit, mi id lacinia eleifend, velit erat pulvinar lorem, quis suscipit purus ex id erat. Integer eu dictum elit. Cras vitae suscipit lectus, in pulvinar elit. Nullam mauris turpis, volutpat at justo ac, congue varius lorem.
+            Cras interdum ipsum quis neque vestibulum, rutrum porta massa imperdiet. Morbi quis purus suscipit orci volutpat mattis at ac ligula. Nullam dignissim ante nec convallis elementum. Nunc vel ex at justo condimentum vulputate. Aliquam a neque pellentesque, tristique mauris sed, suscipit arcu. Aenean sodales et velit eu viverra. Nunc sodales elit eu nisl commodo tincidunt. Curabitur maximus sem eu lorem faucibus posuere. Sed iaculis metus gravida ante facilisis, a dignissim dui luctus. Fusce rhoncus enim ipsum, vitae ultricies dolor auctor et. Suspendisse vel vulputate elit.
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
