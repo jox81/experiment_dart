@@ -16,13 +16,14 @@ import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'dart:web_gl' as webgl;
-@MirrorsUsed(
-    targets: const [
-      TextureLibrary,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      TextureLibrary,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
+import 'package:path/path.dart' as path;
 
 class TextureLibrary extends IEditElement {
 
@@ -64,6 +65,7 @@ class TextureUtils {
 
   ///Load a single image from an URL
   static Future<ImageElement> loadImage(String url) {
+    print('TextureUtils.loadImage : $url');
     Completer completer = new Completer<ImageElement>();
 
     String assetsPath = UtilsAssets.getWebPath(url);
@@ -527,36 +529,36 @@ class TextureUtils {
     ///List of List because it can have multiple mips level images
     Map<String, List<List<String>>> cubeMapsPath = {
       'test': [[
-        "packages/webgl/images/cubemap/test/test_px.png",
-        "packages/webgl/images/cubemap/test/test_nx.png",
-        "packages/webgl/images/cubemap/test/test_py.png",
-        "packages/webgl/images/cubemap/test/test_ny.png",
-        "packages/webgl/images/cubemap/test/test_pz.png",
-        "packages/webgl/images/cubemap/test/test_nz.png",
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_px.png"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_nx.png"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_py.png"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_ny.png"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_pz.png"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_nz.png"),
       ]],
       'kitchen': [[
-        "packages/webgl/images/cubemap/kitchen/c00.bmp",
-        "packages/webgl/images/cubemap/kitchen/c01.bmp",
-        "packages/webgl/images/cubemap/kitchen/c02.bmp",
-        "packages/webgl/images/cubemap/kitchen/c03.bmp",
-        "packages/webgl/images/cubemap/kitchen/c04.bmp",
-        "packages/webgl/images/cubemap/kitchen/c05.bmp"
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c00.bmp"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c01.bmp"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c02.bmp"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c03.bmp"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c04.bmp"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c05.bmp")
       ]],
       'pisa': [[
-        "packages/webgl/images/cubemap/pisa/pisa_posx.jpg",
-        "packages/webgl/images/cubemap/pisa/pisa_negx.jpg",
-        "packages/webgl/images/cubemap/pisa/pisa_posy.jpg",
-        "packages/webgl/images/cubemap/pisa/pisa_negy.jpg",
-        "packages/webgl/images/cubemap/pisa/pisa_posz.jpg",
-        "packages/webgl/images/cubemap/pisa/pisa_negz.jpg",
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_posx.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_negx.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_posy.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_negy.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_posz.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_negz.jpg"),
       ]],
       'papermill_diffuse': [[
-        "packages/webgl/images/cubemap/papermill/diffuse/diffuse_right_0.jpg",
-        "packages/webgl/images/cubemap/papermill/diffuse/diffuse_left_0.jpg",
-        "packages/webgl/images/cubemap/papermill/diffuse/diffuse_top_0.jpg",
-        "packages/webgl/images/cubemap/papermill/diffuse/diffuse_bottom_0.jpg",
-        "packages/webgl/images/cubemap/papermill/diffuse/diffuse_front_0.jpg",
-        "packages/webgl/images/cubemap/papermill/diffuse/diffuse_back_0.jpg",
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_right_0.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_left_0.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_top_0.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_bottom_0.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_front_0.jpg"),
+        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_back_0.jpg"),
       ]],
       'papermill_specular': (){
         int mipsLevel = 10;
@@ -565,12 +567,12 @@ class TextureUtils {
         for (int i = 0; i < mipsLevel; ++i) {
           images.add(
               [
-                "packages/webgl/images/cubemap/papermill/specular/specular_right_$i.jpg",
-                "packages/webgl/images/cubemap/papermill/specular/specular_left_$i.jpg",
-                "packages/webgl/images/cubemap/papermill/specular/specular_top_$i.jpg",
-                "packages/webgl/images/cubemap/papermill/specular/specular_bottom_$i.jpg",
-                "packages/webgl/images/cubemap/papermill/specular/specular_front_$i.jpg",
-                "packages/webgl/images/cubemap/papermill/specular/specular_back_$i.jpg",
+                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_right_$i.jpg"),
+                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_left_$i.jpg"),
+                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_top_$i.jpg"),
+                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_bottom_$i.jpg"),
+                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_front_$i.jpg"),
+                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_back_$i.jpg"),
               ]);
         }
 

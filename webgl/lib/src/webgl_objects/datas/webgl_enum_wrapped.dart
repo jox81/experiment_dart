@@ -1,52 +1,52 @@
-@MirrorsUsed(targets: const [
-  WebGLEnum,
-  EnableCapabilityType,
-  FacingType,
-  ClearBufferMask,
-  FrontFaceDirection,
-  PixelStorgeType,
-  DrawMode,
-  BufferElementType,
-  ReadPixelDataFormat,
-  ReadPixelDataType,
-  ComparisonFunction,
-  ErrorCode,
-  HintMode,
-  StencilOpMode,
-  BlendFactorMode,
-  BlendFunctionMode,
-  ContextParameter,
-  RenderBufferParameters,
-  RenderBufferTarget,
-  RenderBufferInternalFormatType,
-  FrameBufferStatus,
-  FrameBufferTarget,
-  FrameBufferAttachment,
-  FrameBufferAttachmentType,
-  FrameBufferAttachmentParameters,
-  TextureAttachmentTarget,
-  BufferType,
-  BufferUsageType,
-  BufferParameters,
-  ProgramParameterGlEnum,
-  VertexAttribArrayType,
-  TextureTarget,
-  TextureUnit,
-  TextureParameter,
-  TextureSetParameterType,
-  TextureFilterType,
-  TextureMagnificationFilterType,
-  TextureMinificationFilterType,
-  TextureWrapType,
-  TextureInternalFormat,
-  TexelDataType,
-  ShaderVariableType,
-  PrecisionType,
-  ShaderType,
-  ShaderParameters,
-  VertexAttribGlEnum,
-], override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(targets: const [
+//  WebGLEnum,
+//  EnableCapabilityType,
+//  FacingType,
+//  ClearBufferMask,
+//  FrontFaceDirection,
+//  PixelStorgeType,
+//  DrawMode,
+//  BufferElementType,
+//  ReadPixelDataFormat,
+//  ReadPixelDataType,
+//  ComparisonFunction,
+//  ErrorCode,
+//  HintMode,
+//  StencilOpMode,
+//  BlendFactorMode,
+//  BlendFunctionMode,
+//  ContextParameter,
+//  RenderBufferParameters,
+//  RenderBufferTarget,
+//  RenderBufferInternalFormatType,
+//  FrameBufferStatus,
+//  FrameBufferTarget,
+//  FrameBufferAttachment,
+//  FrameBufferAttachmentType,
+//  FrameBufferAttachmentParameters,
+//  TextureAttachmentTarget,
+//  BufferType,
+//  BufferUsageType,
+//  BufferParameters,
+//  ProgramParameterGlEnum,
+//  VertexAttribArrayType,
+//  TextureTarget,
+//  TextureUnit,
+//  TextureParameter,
+//  TextureSetParameterType,
+//  TextureFilterType,
+//  TextureMagnificationFilterType,
+//  TextureMinificationFilterType,
+//  TextureWrapType,
+//  TextureInternalFormat,
+//  TexelDataType,
+//  ShaderVariableType,
+//  PrecisionType,
+//  ShaderType,
+//  ShaderParameters,
+//  VertexAttribGlEnum,
+//], override: '*')
+//import 'dart:mirrors';
 import 'dart:web_gl' as WebGL;
 
 abstract class WebGLEnum {
@@ -66,35 +66,39 @@ abstract class WebGLEnum {
   static Map<Type, List<WebGLEnum>> typesMap = new Map();
 
   static WebGLEnum findTypeByIndex(Type GLEnum, int enumIndex) {
-    if (typesMap[GLEnum] == null) {
-      List<WebGLEnum> _types = new List();
-      ClassMirror classMirror = reflectClass(GLEnum);
-      List<MethodMirror> decls =
-          classMirror.staticMembers.values.where((e) => e.isGetter).toList();
-
-      decls.forEach((decl) => _types
-          .add(classMirror.getField(decl.simpleName).reflectee as WebGLEnum));
-
-      typesMap[GLEnum] = _types;
-    }
-    return typesMap[GLEnum].firstWhere(
-        (WebGLEnum e) => e.runtimeType == GLEnum && e.index == enumIndex,
-        orElse: () => null);
+    // Todo (jpu) : Mirrors
+    throw new Exception("can't use mirrors");
+//    if (typesMap[GLEnum] == null) {
+//      List<WebGLEnum> _types = new List();
+//      ClassMirror classMirror = reflectClass(GLEnum);
+//      List<MethodMirror> decls =
+//          classMirror.staticMembers.values.where((e) => e.isGetter).toList();
+//
+//      decls.forEach((decl) => _types
+//          .add(classMirror.getField(decl.simpleName).reflectee as WebGLEnum));
+//
+//      typesMap[GLEnum] = _types;
+//    }
+//    return typesMap[GLEnum].firstWhere(
+//        (WebGLEnum e) => e.runtimeType == GLEnum && e.index == enumIndex,
+//        orElse: () => null);
   }
 
   static List<WebGLEnum> getItems(Type GLEnum) {
-    if (typesMap[GLEnum] == null) {
-      typesMap[GLEnum] = new List();
-      ClassMirror classMirror = reflectClass(GLEnum);
-      List<MethodMirror> decls =
-          classMirror.staticMembers.values.where((e) => e.isGetter).toList();
-
-      decls.forEach((decl) => typesMap[GLEnum]
-          .add(classMirror.getField(decl.simpleName).reflectee as WebGLEnum));
-    }
-    return typesMap[GLEnum]
-        .where((WebGLEnum e) => e.runtimeType == GLEnum)
-        .toList();
+    // Todo (jpu) : Mirrors
+    throw new Exception("can't use mirrors");
+//    if (typesMap[GLEnum] == null) {
+//      typesMap[GLEnum] = new List();
+//      ClassMirror classMirror = reflectClass(GLEnum);
+//      List<MethodMirror> decls =
+//          classMirror.staticMembers.values.where((e) => e.isGetter).toList();
+//
+//      decls.forEach((decl) => typesMap[GLEnum]
+//          .add(classMirror.getField(decl.simpleName).reflectee as WebGLEnum));
+//    }
+//    return typesMap[GLEnum]
+//        .where((WebGLEnum e) => e.runtimeType == GLEnum)
+//        .toList();
   }
 }
 

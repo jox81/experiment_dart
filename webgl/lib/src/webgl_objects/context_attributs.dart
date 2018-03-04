@@ -1,4 +1,4 @@
-import 'dart:mirrors';
+//import 'dart:mirrors';
 import 'package:webgl/src/introspection.dart';
 
 class ContextAttributs extends IEditElement {
@@ -41,13 +41,14 @@ class _ReturnedDictionary {
   Map _values;
 
   void noSuchMethod(Invocation invocation) {
-    var key = MirrorSystem.getName(invocation.memberName);
-    if (invocation.isGetter) {
-      return _values[key];
-    } else if (invocation.isSetter && key.endsWith('=')) {
-      key = key.substring(0, key.length - 1);
-      _values[key] = invocation.positionalArguments[0];
-    }
+    // Todo (jpu) : Mirrors
+//    var key = MirrorSystem.getName(invocation.memberName);
+//    if (invocation.isGetter) {
+//      return _values[key];
+//    } else if (invocation.isSetter && key.endsWith('=')) {
+//      key = key.substring(0, key.length - 1);
+//      _values[key] = invocation.positionalArguments[0];
+//    }
   }
 
   Map get toMap => _values;

@@ -1,16 +1,16 @@
+import 'dart:math' as Math;
+//@MirrorsUsed(
+//    targets: const [
+//      Camera,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'dart:math' as Math;
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/context.dart';
-@MirrorsUsed(
-    targets: const [
-      Camera,
-    ],
-    override: '*')
-import 'dart:mirrors';
 import 'package:webgl/src/utils/utils_math.dart';
 
 enum CameraType{
@@ -92,7 +92,7 @@ abstract class Camera extends GLTFNode {
   bool operator ==(Object other) =>
       identical(this, other) ||
           other is Camera &&
-              runtimeType == other.runtimeType &&
+              cameraId == other.cameraId &&
               _isActive == other._isActive &&
               _type == other._type &&
               _znear == other._znear &&
@@ -219,14 +219,14 @@ class CameraPerspective extends Camera{
   }
 
   Map toJson(){
-    Map json = new Map<String, dynamic>();
-    json['fov'] = UtilsMath.roundPrecision(_yfov);//.toDouble();
-    json['zNear'] = UtilsMath.roundPrecision(_znear);//.toDouble();
-    json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
-    json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
-    json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
-//    json['showGizmo'] = showGizmo;
-    return json;
+//    Map json = new Map<String, dynamic>();
+//    json['fov'] = UtilsMath.roundPrecision(_yfov);//.toDouble();
+//    json['zNear'] = UtilsMath.roundPrecision(_znear);//.toDouble();
+//    json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
+//    json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
+//    json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+////    json['showGizmo'] = showGizmo;
+//    return json;
   }
 
   @override
@@ -234,7 +234,7 @@ class CameraPerspective extends Camera{
       identical(this, other) ||
           super == other &&
               other is CameraPerspective &&
-              runtimeType == other.runtimeType &&
+              cameraId == other.cameraId &&
               _aspectRatio == other._aspectRatio &&
               _yfov == other._yfov &&
               _targetPosition == other._targetPosition &&

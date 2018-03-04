@@ -1,33 +1,33 @@
 name: 'webgl'
 version: 0.0.5
-description: Building a webgl application
+description: Building a webgl API
 author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=2.0.0-dev.8.0 <2.0.0'
+  sdk: '>=2.0.0-dev.30.0 <2.0.0'
 
 dependencies:
-  vector_math: any
-  test:
-  gltf: 
-    path: ../gltf
+  browser: '^0.10.0+2'
+  dart_to_js_script_rewriter: '^1.0.3'
+  vector_math: '^2.0.5'
+  gltf:
+#    path: ../gltf
+    git: git://github.com/KhronosGroup/glTF-Validator.git
   datgui: "^0.2.0+1"
   logging: "^0.11.3+1"
   stack_trace: "^1.8.2"
+  resource: "^2.1.2"
 
 dev_dependencies:
-  browser: '>=0.10.0 <0.11.0'
-  dart_to_js_script_rewriter: '^1.0.1'
+  test: '>=0.12.0 <0.13.0'
 
 transformers:
 - test/pub_serve:
     $include: web/
 - dart_to_js_script_rewriter
 - $dart2js:
-    minify: true
-    checked: true
-    commandLineOptions: [--trust-primitives, --trust-type-annotations, --enable-experimental-mirrors]
+    commandLineOptions: [--trust-primitives, --trust-type-annotations, --fast-startup]
 
 web:
   compiler:

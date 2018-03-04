@@ -4,7 +4,6 @@ import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/context_attributs.dart';
-import 'package:webgl/src/debug/debug_rendering_context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -12,12 +11,12 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
-@MirrorsUsed(
-    targets: const [
-      WebGLRenderingContext,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      WebGLRenderingContext,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 class WebGLRenderingContext extends IEditElement {
 
@@ -48,9 +47,6 @@ class WebGLRenderingContext extends IEditElement {
     for (int i = 0; i < names.length; i++) {
       try {
         gl = canvas.getContext(names[i], options) as WebGL.RenderingContext; //Normal context
-        if (debug) {
-          gl = new DebugRenderingContext(gl);
-        }
       } catch (e) {}
       if (gl != null) {
         break;

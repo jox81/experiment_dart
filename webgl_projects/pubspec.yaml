@@ -1,6 +1,6 @@
 name: 'webgl_projects'
 version: 0.0.1
-description: Building a webgl projects
+description: Building a webgl Project
 author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
@@ -10,8 +10,8 @@ environment:
 dependencies:
   webgl:
     path: ../webgl
-  webgl_application:
-    path: ../webgl_application
+#  webgl_application:
+#    path: ../webgl_application
   resource: "^2.1.2"
   browser: "^0.10.0+2"
 
@@ -21,8 +21,9 @@ dev_dependencies:
 transformers:
 - dart_to_js_script_rewriter
 - $dart2js:
-    commandLineOptions: [--trust-primitives, --trust-type-annotations]
+    commandLineOptions: [--trust-primitives, --trust-type-annotations, --enable-experimental-mirrors]
 
 web:
   compiler:
     debug: dartdevc
+

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl_application/components/value_components/bool_component/bool_component.dart';
 import 'package:webgl_application/components/value_components/function_component/parameter_name_component/parameter_name_component.dart';
@@ -36,7 +36,7 @@ class DynamicLoaderComponent implements AfterViewInit{
 
     //TypeComponent
     ComponentFactory newTypeFactory = await componentResolver.resolveComponent(componentType);
-    ComponentRef cdRef = target.createComponent(newTypeFactory, -1, injector);
+    ComponentRef cdRef = target.createComponent<dynamic>(newTypeFactory, -1, injector);
 
     switch(componentType){
       case BoolComponent:
@@ -70,7 +70,7 @@ class DynamicLoaderComponent implements AfterViewInit{
     if(name != null) {
       ComponentFactory nameFactory = await componentResolver.resolveComponent(
           ParameterNameComponent);
-      ComponentRef cdRefName = target.createComponent(nameFactory, -1, injector);
+      ComponentRef cdRefName = target.createComponent<dynamic>(nameFactory, -1, injector);
       ParameterNameComponent parameterNameComponent = cdRefName.instance as ParameterNameComponent;
       parameterNameComponent.name = name;
     }

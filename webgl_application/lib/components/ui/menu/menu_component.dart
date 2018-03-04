@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:node_engine/src/node_editor.dart';
 import 'package:node_engine/src/nodes/node.dart';
 import 'package:webgl/src/gltf/mesh.dart';
@@ -95,7 +95,7 @@ class MenuComponent{
 
   // use enums instead
   // bool createMeshByType(MeshType modelType){
-  bool createMeshByType(String modelTypeString){
+  bool createModelByType(String modelTypeString){
 
     MeshType modelType = MeshType.values.firstWhere((MeshType e)=> e.toString() == modelTypeString, orElse: ()=> null);
 

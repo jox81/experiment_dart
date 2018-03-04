@@ -1,12 +1,12 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/introspection.dart';
-@MirrorsUsed(
-    targets: const [
-      WebglEdit,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      WebglEdit,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 class WebglEdit extends IEditElement {

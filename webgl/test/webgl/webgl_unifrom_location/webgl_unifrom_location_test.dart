@@ -19,9 +19,9 @@ void main() {
   setUp(() async {
     await ShaderSource.loadShaders();
 
-    canvas = new Element.html('<canvas/>') as CanvasElement;
-    canvas.width = 10;
-    canvas.height = 10;
+    canvas = new CanvasElement.created()
+    ..width = 10
+    ..height = 10;
 
     Context.init(canvas,enableExtensions:true,logInfos:false);
   });
@@ -32,18 +32,17 @@ void main() {
   });
 
   WebGLProgram getProgram(){
-    WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.sources['material_base_texture'].vsCode
-      ..compile();
-    vertexShader.logShaderInfos();
+    final WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
+      ..source = ShaderSource.materialBaseTexture.vsCode
+      ..compile()
+      ..logShaderInfos();
 
-    WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.sources['material_base_texture'].fsCode
-      ..compile();
+    final WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
+      ..source = ShaderSource.materialBaseTexture.fsCode
+      ..compile()
+      ..logShaderInfos();
 
-    fragmentShader.logShaderInfos();
-
-    WebGLProgram program = new WebGLProgram()
+    final WebGLProgram program = new WebGLProgram()
       ..attachShader(vertexShader)
       ..attachShader(fragmentShader)
       ..link()
@@ -55,13 +54,13 @@ void main() {
 
   group("WebGLUniformLocation CTOR", () {
     test("WebGLUniformLocation init with nulls", () {
-      WebGLUniformLocation uniform = new WebGLUniformLocation(null, null);
+      final WebGLUniformLocation uniform = new WebGLUniformLocation(null, null);
       expect(uniform, isNotNull);
     });
 
     test("WebGLUniformLocation init with nulls + ", () {
-      WebGLUniformLocation uniform = new WebGLUniformLocation(null, null);
-      Function function = (){
+      final WebGLUniformLocation uniform = new WebGLUniformLocation(null, null);
+      final Function function = (){
         uniform.uniformMatrix4fv(null, null);
       };
       expect(function, throwsA);
@@ -70,8 +69,8 @@ void main() {
 
   group("WebGLUniformLocation uniformMatrix4fv", () {
     test("WebGLUniformLocation init with nulls", () {
-      WebGLProgram program = getProgram();
-      WebGLUniformLocation uniform = new WebGLUniformLocation(program, null);
+      final WebGLProgram program = getProgram();
+      final WebGLUniformLocation uniform = new WebGLUniformLocation(program, null);
       expect(uniform, isNotNull);
     });
   });

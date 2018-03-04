@@ -1,4 +1,6 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
 
 @Component(
     selector: 'num',
@@ -10,11 +12,13 @@ class NumComponent {
   @Input()
   num value;
 
+  final _valueChange = new StreamController<num>.broadcast();
+
   @Output()
-  EventEmitter valueChange = new EventEmitter<num>();
+  Stream get valueChange => _valueChange.stream;
 
   void update(dynamic event){
-    valueChange.emit(double.parse(event.target.value as String, (s)=>0.0));
+    _valueChange.add(double.parse(event.target.value as String, (s)=>0.0));
   }
 
   static void initDynamicComponent(NumComponent component, num defaultValue, Function callBack) {

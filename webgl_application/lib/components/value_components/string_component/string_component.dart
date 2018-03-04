@@ -1,4 +1,6 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
 
 @Component(
     selector: 'string',
@@ -10,11 +12,13 @@ class StringComponent {
   @Input()
   String value;
 
+  final _valueChange = new StreamController<String>.broadcast();
+
   @Output()
-  EventEmitter valueChange = new EventEmitter<String>();
+  Stream get valueChange => _valueChange.stream;
 
   void update(dynamic event){
-    valueChange.emit(event.target.value);
+    _valueChange.add(event.target.value as String);
   }
 
   static void initDynamicComponent(StringComponent component, String defaultValue, Function callBack) {

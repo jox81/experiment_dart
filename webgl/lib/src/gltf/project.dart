@@ -26,27 +26,41 @@ import 'package:webgl/src/light/light.dart';
 // 16/10/2017 : reading .bin files as Uint8List
 
 class GLTFProject extends IEditElement{
+
+  factory GLTFProject.create({bool reset : false}){
+    if(_instance == null || reset){
+      _instance = new GLTFProject._init();
+    }
+    return _instance;
+  }
+
+  GLTFProject._init(){
+    GLTFProject.reset();
+  }
+
   static GLTFProject _instance;
   static GLTFProject get instance => new GLTFProject.create();//_instance != null ? _instance : throw "No project instance is created... Make sure a project is created before using this way.";
 
   ///path of the directory of the gltf file
   String baseDirectory = '';
 
-  List<Camera> cameras = new List();
-  List<GLTFPBRMaterial> materials = new List();
-  List<GLTFTexture> textures = new List();
-  List<GLTFImage> images = new List();
-  List<GLTFMesh> meshes = new List();
-  List<Light> lights = new List();// Todo (jpu) : check how to use gltf extensions
+  List<Camera> cameras = <Camera>[];
+  List<GLTFPBRMaterial> materials = <GLTFPBRMaterial>[];
+  List<GLTFTexture> textures = <GLTFTexture>[];
+  List<GLTFImage> images = <GLTFImage>[];
+  List<GLTFMesh> meshes = <GLTFMesh>[];
+  List<Light> lights = <Light>[];// Todo (jpu) : check how to use gltf extensions
 
-  List<GLTFBuffer> buffers = new List();
-  List<GLTFBufferView> bufferViews = new List();
-  List<GLTFAccessor> accessors = new List();
-  List<GLTFSampler> samplers = new List();
-  List<GLTFAnimation> animations = new List();
+  List<GLTFBuffer> buffers = <GLTFBuffer>[];
+  List<GLTFBufferView> bufferViews = <GLTFBufferView>[];
+  List<GLTFAccessor> accessors = <GLTFAccessor>[];
+  List<GLTFSampler> samplers = <GLTFSampler>[];
+  List<GLTFAnimation> animations = <GLTFAnimation>[];
   GLTFAsset asset = new GLTFAsset("2.0");
 
-  List<GLTFScene> _scenes = new List();
+
+
+  final List<GLTFScene> _scenes = <GLTFScene>[];
   List<GLTFScene> get scenes => _scenes.toList(growable: false);
   void addScene(GLTFScene scene){
     assert(scene != null);
@@ -61,28 +75,15 @@ class GLTFProject extends IEditElement{
     _scene = projectScene;
   }
 
-  List<GLTFNode> _nodes = new List();
+  final List<GLTFNode> _nodes = <GLTFNode>[];
   List<GLTFNode> get nodes => _nodes.toList(growable: false);
   void addNode(GLTFNode value){
     assert(value != null);
     _nodes.add(value);
   }
 
-  GLTFProject._init(){
-    GLTFProject.reset();
-  }
-
-  factory GLTFProject.create({bool reset : false}){
-    if(_instance == null || reset){
-      _instance = new GLTFProject._init();
-    }
-    return _instance;
-  }
-
   @override
-  String toString() {
-    return 'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": ${_scene.sceneId}';
-  }
+  String toString()=>'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": ${_scene.sceneId}';
 
   static void reset({bool fullReset : false}) {
     GLTFBuffer.nextId = 0;

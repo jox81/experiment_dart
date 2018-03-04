@@ -1,9 +1,15 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
+
+import 'package:angular_forms/angular_forms.dart' as forms;
 
 @Component(
     selector: 'map',
     templateUrl: 'map_component.html',
-    styleUrls: const ['map_component.css']
+    styleUrls: const ['map_component.css'],
+    directives: const <dynamic>[COMMON_DIRECTIVES,
+    forms.formDirectives]
 )
 class MapComponent {
 
@@ -15,12 +21,14 @@ class MapComponent {
 
   dynamic element;
 
+  final _elementSelected = new StreamController<Map>.broadcast();
+
   @Output()
-  EventEmitter elementSelected = new EventEmitter<Map>();
+  Stream get elementSelected => _elementSelected.stream;
 
   void selectionChange(dynamic event){
     Map selection = map[(event.target.value.toString().split(': ')[1])] as Map;
-    elementSelected.emit(selection);
+    _elementSelected.add(selection);
   }
 
 }

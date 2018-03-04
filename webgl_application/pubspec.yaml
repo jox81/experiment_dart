@@ -5,12 +5,13 @@ author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=1.0.0 <2.0.0'
+  sdk: '>=2.0.0-dev.3.0 <3.0.0'
 
 dependencies:
   webgl:
     path: ../webgl
-  angular2: ^2.2.0
+  angular: "^5.0.0-alpha+5"
+  angular_forms: ^1.0.0
   vector_math: any
   test:
   logging: "^0.11.3+1"
@@ -21,19 +22,40 @@ dependencies:
 dev_dependencies:
   browser: '>=0.10.0 <0.11.0'
   dart_to_js_script_rewriter: '^1.0.1'
+  build_runner: ^0.7.0
+  build_web_compilers: ^0.2.0
+#  > build angular : pub run build_runner serve
+#   pub run build_runner build --output build
+
+
+#transformers:
+#- test/pub_serve:
+#    $include: web/
+#- angular:
+#    platform_directives:
+#    - 'package:angular/common.dart#COMMON_DIRECTIVES'
+#    platform_pipes:
+#    - 'package:angular/common.dart#COMMON_PIPES'
+#    entry_points: web/index.dart
+#    resolved_identifiers:
+#      BrowserClient: 'package:http/browser_client.dart'
+#      Client: 'package:http/http.dart'
+#- $dart2js:
+#    commandLineOptions: [--enable-experimental-mirrors]
+#- dart_to_js_script_rewriter
 
 transformers:
+- angular:
+    entry_points:
+    - web/index.dart
+    - test/**_test.dart
 - test/pub_serve:
-    $include: web/
-- angular2:
-    platform_directives:
-    - 'package:angular2/common.dart#COMMON_DIRECTIVES'
-    platform_pipes:
-    - 'package:angular2/common.dart#COMMON_PIPES'
-    entry_points: web/index.dart
-    resolved_identifiers:
-      BrowserClient: 'package:http/browser_client.dart'
-      Client: 'package:http/http.dart'
-- $dart2js:
-    commandLineOptions: [--enable-experimental-mirrors]
-- dart_to_js_script_rewriter
+    $include: test/**_test.dart
+#- $dart2js:
+#    commandLineOptions: [--enable-experimental-mirrors]
+#- dart_to_js_script_rewriter
+
+web:
+  compiler:
+    debug: dartdevc
+    release : dartdevc

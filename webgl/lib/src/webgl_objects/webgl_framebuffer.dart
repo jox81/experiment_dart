@@ -7,13 +7,13 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-@MirrorsUsed(
-    targets: const [
-      ActiveFrameBuffer,
-      WebGLFrameBuffer,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      ActiveFrameBuffer,
+//      WebGLFrameBuffer,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 class ActiveFrameBuffer extends IEditElement {
   static ActiveFrameBuffer _instance;

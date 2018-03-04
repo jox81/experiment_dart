@@ -19,7 +19,7 @@ void main() {
 
   group('Node hierarchy', () {
     test("Node child", () async {
-      GLTFProject gltf = new GLTFProject();
+      GLTFProject gltf = new GLTFProject.create();
 
       GLTFNode node01 = new GLTFNode();
       gltf.addNode(node01);
@@ -47,7 +47,7 @@ void main() {
 
     });
     test("Node parenting", () async {
-      GLTFProject gltf = new GLTFProject();
+      GLTFProject gltf = new GLTFProject.create();
 
       GLTFNode node01 = new GLTFNode();
       gltf.addNode(node01);

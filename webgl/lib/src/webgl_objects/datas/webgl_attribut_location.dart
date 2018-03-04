@@ -6,12 +6,12 @@ import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'dart:web_gl' as WebGL;
-@MirrorsUsed(
-    targets: const [
-      WebGLAttributLocation,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      WebGLAttributLocation,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 class WebGLAttributLocation extends IEditElement{
   int _location;

@@ -6,16 +6,16 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/context.dart';
 import 'dart:web_gl' as WebGL;
 import 'dart:typed_data' as WebGlTypedData;
-@MirrorsUsed(
-    targets: const [
-      ActiveTexture,
-      EditTexture,
-      Texture,
-      Texture2D,
-      TextureCubeMap
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      ActiveTexture,
+//      EditTexture,
+//      Texture,
+//      Texture2D,
+//      TextureCubeMap
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 class ActiveTexture extends IEditElement{
 

@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'dart:html';
 import 'dart:mirrors';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:node_engine/src/nodes/custom/node_getter.dart';
 import 'package:node_engine/src/nodes/custom/node_setter.dart';
 import 'package:vector_math/vector_math.dart';
@@ -24,7 +25,7 @@ import 'package:webgl_application/components/value_components/vector2_component/
 import 'package:webgl_application/components/value_components/vector3_component/vector3_component.dart';
 import 'package:webgl_application/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl_application/components/value_components/webglenum_component/webglenum_component.dart';
-import 'package:webgl/src/animation/animation_property.dart';
+import 'package:webgl/src/animation/animation_property.dart' hide PropertyGetter, PropertySetter;
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
@@ -33,6 +34,7 @@ import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl_application/src/application.dart';
+import 'package:angular_forms/angular_forms.dart' as forms;
 
 @Component(
     selector: 'properties',
@@ -41,6 +43,8 @@ import 'package:webgl_application/src/application.dart';
       'properties_component.css'
     ],
     directives: const <dynamic>[
+      COMMON_DIRECTIVES,
+      forms.formDirectives,
       DynamicLoaderComponent,
       Vector2Component,
       Vector3Component,
@@ -62,8 +66,10 @@ class PropertiesComponent {
   set iEditElement(IEditElement value) => _iEditElement = value;
   IEditElement get iEditElement => _iEditElement;
 
+  final _innerSelectionChange = new StreamController<dynamic>.broadcast();
+
   @Output()
-  EventEmitter innerSelectionChange = new EventEmitter<IEditElement>();
+  Stream get innerSelectionChange => _innerSelectionChange.stream;
 
   //Null
   bool isNull(EditableProperty animationProperty) {
@@ -175,7 +181,7 @@ class PropertiesComponent {
 
     selection.edit();
 
-    innerSelectionChange.emit(selection);
+    _innerSelectionChange.add(selection);
   }
 
   //Map
@@ -256,12 +262,16 @@ class PropertiesComponent {
   }
 
   //Getter/Setter button
-  void getterClicked(e, getter, IEditElement iEditElement){
-    new NodeGetter(getter)
+  void getterClicked(Event e, PropertyGetter<dynamic> getter, IEditElement iEditElement){
+    new NodeGetter<dynamic>(getter)
     ..referencedOject = iEditElement;
   }
-  void setterClicked(e, setter, IEditElement iEditElement){
-    new NodeSetter(setter)
+  void setterClicked(Event e, PropertySetter<dynamic> setter, IEditElement iEditElement){
+    new NodeSetter<dynamic>(setter)
       ..referencedOject = iEditElement;
+  }
+
+  void print(dynamic data){
+    print(data);
   }
 }

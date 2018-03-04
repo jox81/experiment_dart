@@ -1,5 +1,5 @@
-@MirrorsUsed(targets:const[WebglConstant, WebglConstants], override:'*')
-import 'dart:mirrors';
+//@MirrorsUsed(targets:const[WebglConstant, WebglConstants], override:'*')
+//import 'dart:mirrors';
 import 'dart:web_gl';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
@@ -33,29 +33,29 @@ class WebglConstants{
 
   void initWebglConstants() {
     _values = new List();
-
-    ClassMirror classMirror = reflectClass(RenderingContext);
-    String className = MirrorSystem.getName(classMirror.simpleName);
-
-    for (DeclarationMirror decl in classMirror.declarations.values) {
-
-      String ownerName = MirrorSystem.getName(decl.owner.simpleName);
-
-      if (className == ownerName) {
-        if (decl is VariableMirror) {
-          String name = MirrorSystem.getName(decl.simpleName);
-          int glEnum = classMirror.getField(decl.simpleName).reflectee as int;
-
-          WebglConstant constant = new WebglConstant()
-            ..glEnum = glEnum
-            ..glName = name;
-
-          constant.isParameter = isParameter(glEnum);
-
-          _values.add(constant);
-        }
-      }
-    }
+// Todo (jpu) : Mirrors
+//    ClassMirror classMirror = reflectClass(RenderingContext);
+//    String className = MirrorSystem.getName(classMirror.simpleName);
+//
+//    for (DeclarationMirror decl in classMirror.declarations.values) {
+//
+//      String ownerName = MirrorSystem.getName(decl.owner.simpleName);
+//
+//      if (className == ownerName) {
+//        if (decl is VariableMirror) {
+//          String name = MirrorSystem.getName(decl.simpleName);
+//          int glEnum = classMirror.getField(decl.simpleName).reflectee as int;
+//
+//          WebglConstant constant = new WebglConstant()
+//            ..glEnum = glEnum
+//            ..glName = name;
+//
+//          constant.isParameter = isParameter(glEnum);
+//
+//          _values.add(constant);
+//        }
+//      }
+//    }
   }
 
   bool isParameter(int glEnum) {

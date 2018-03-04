@@ -4,7 +4,7 @@ import 'package:webgl_application/scene_views/scene_view_base.dart';
 import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
 import 'package:webgl_application/scene_views/scene_view_framebuffer.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:webgl_application/scene_views/scene_view_texturing.dart';
 //import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
 //import 'package:webgl_application/scene_views/scene_view_performance.dart';
@@ -31,7 +31,7 @@ class ProjectService {
   static Function loader;
   static List<GLTFProject> projects;
   Future<List<GLTFProject>> getProjects()  async {
-   return await loader();
+   return (await loader()) as List<GLTFProject>;
   }
 }
 

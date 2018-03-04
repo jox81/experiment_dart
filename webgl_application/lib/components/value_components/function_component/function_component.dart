@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:mirrors';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';
 import 'package:webgl/src/introspection.dart';
 

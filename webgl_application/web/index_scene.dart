@@ -25,7 +25,7 @@ void fullExemple() {
   NodeItem nodeInt03 = new NodeInt(4)..position = new Point<int>(420, 360);
   NodeItem nodeDivide = new NodeDivide()..position = new Point<int>(250, 120);
   NodeItem nodeAdd = new NodeAdd()..position = new Point<int>(480, 200);
-  NodeItem nodeMultiply = new NodeMultiply()..position = new Point<int>(690, 280);
+  NodeItem nodeMultiply = new NodeMultiply<int>()..position = new Point<int>(690, 280);
   NodeItem nodeLog = new NodeLog()..position = new Point<int>(900, 300);
 
   // Connect Nodes

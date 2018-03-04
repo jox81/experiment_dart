@@ -111,8 +111,8 @@ Future main() async {
   gl.bindFramebuffer(webgl.RenderingContext.FRAMEBUFFER, null);
 
   render({num time}) {
-    var now = getCurrentTime();
-    clock += now - then;
+    num now = getCurrentTime();
+    clock += (now - then).toInt();
     then = now;
 
     var scale = 4;
@@ -150,14 +150,14 @@ Future main() async {
   render();
 }
 
-var ctxForMakingTextures;
-webgl.Texture createTextTexture(gl, str, width, height) {
+CanvasRenderingContext2D  ctxForMakingTextures;
+webgl.Texture createTextTexture(webgl.RenderingContext gl, String str, int width, int height) {
   // create an offscreen canvas with a 2D canvas context
   if (ctxForMakingTextures == null) {
     CanvasElement canvas = new CanvasElement();
-    ctxForMakingTextures = canvas.getContext("2d");
+    ctxForMakingTextures = canvas.getContext("2d") as CanvasRenderingContext2D ;
   }
-  var ctx = ctxForMakingTextures;
+  CanvasRenderingContext2D  ctx = ctxForMakingTextures;
 
   // make it a desired size
   ctx.canvas.width = width;
@@ -185,7 +185,7 @@ webgl.Texture createTextTexture(gl, str, width, height) {
   return texture;
 }
 
-buildProgram() {
+webgl.Program buildProgram() {
 
   String vertexShaderSource = '''
     attribute vec4 a_position;
@@ -212,12 +212,12 @@ buildProgram() {
     }
   ''';
 
-  webgl.Shader createShader(type, shaderSource) {
+  webgl.Shader createShader(int type, String shaderSource) {
     webgl.Shader shader = gl.createShader(type);
     gl.shaderSource(shader, shaderSource);
     gl.compileShader(shader);
 
-    var success =
+    bool success =
     gl.getShaderParameter(shader, webgl.RenderingContext.COMPILE_STATUS);
     if (!success) {
       print(gl.getShaderInfoLog(shader));
@@ -232,13 +232,13 @@ buildProgram() {
   var fragmentShader = createShader(
       webgl.RenderingContext.FRAGMENT_SHADER, fragmentShaderSource);
 
-  webgl.Program createProgram(vertexShader, fragmentShader) {
+  webgl.Program createProgram(webgl.Shader vertexShader, webgl.Shader fragmentShader) {
     webgl.Program program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
 
-    var success =
+    bool success =
     gl.getProgramParameter(program, webgl.RenderingContext.LINK_STATUS);
     if (!success) {
       print(gl.getProgramInfoLog(program));
@@ -247,7 +247,7 @@ buildProgram() {
 
     return program;
   }
-  var program = createProgram(vertexShader, fragmentShader);
+  webgl.Program program = createProgram(vertexShader, fragmentShader);
 
   return program;
 }

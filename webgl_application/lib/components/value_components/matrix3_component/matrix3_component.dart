@@ -1,4 +1,6 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl_application/components/value_components/vector3_component/vector3_component.dart';
 
@@ -13,12 +15,14 @@ class Matrix3Component {
   @Input()
   Matrix3 value;
 
+  final _valueChange = new StreamController<Matrix3>.broadcast();
+
   @Output()
-  EventEmitter valueChange = new EventEmitter<Matrix3>();
+  Stream get valueChange => _valueChange.stream;
 
   void updateRow(int rowIndex,Vector3 event){
     value.setRow(rowIndex, event);
-    valueChange.emit(value);
+    _valueChange.add(value);
   }
 
 }

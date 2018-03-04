@@ -129,7 +129,7 @@ void setAttribut(webgl.Program program) {
       positionAttributeLocation, 2, webgl.RenderingContext.FLOAT, false, 0, 0);
 }
 
-buildProgram() {
+webgl.Program buildProgram() {
 
   String vertexShaderSource = '''
     attribute vec2 position;
@@ -153,12 +153,12 @@ buildProgram() {
     }
   ''';
 
-  webgl.Shader createShader(type, shaderSource) {
+  webgl.Shader createShader(int type, String shaderSource) {
     webgl.Shader shader = gl.createShader(type);
     gl.shaderSource(shader, shaderSource);
     gl.compileShader(shader);
 
-    var success =
+    bool success =
     gl.getShaderParameter(shader, webgl.RenderingContext.COMPILE_STATUS);
     if (!success) {
       print(gl.getShaderInfoLog(shader));
@@ -173,13 +173,13 @@ buildProgram() {
   var fragmentShader = createShader(
       webgl.RenderingContext.FRAGMENT_SHADER, fragmentShaderSource);
 
-  webgl.Program createProgram(vertexShader, fragmentShader) {
+  webgl.Program createProgram(webgl.Shader vertexShader, webgl.Shader fragmentShader) {
     webgl.Program program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
 
-    var success =
+    bool success =
     gl.getProgramParameter(program, webgl.RenderingContext.LINK_STATUS);
     if (!success) {
       print(gl.getProgramInfoLog(program));
@@ -194,7 +194,7 @@ buildProgram() {
 }
 
 Future<webgl.Texture> loadImageToTexture() async {
-  Completer completer = new Completer();
+  Completer completer = new Completer<webgl.Texture>();
   webgl.Texture texture;
   ImageElement image = new ImageElement();
   image.crossOrigin = '';
@@ -208,7 +208,7 @@ Future<webgl.Texture> loadImageToTexture() async {
   return texture;
 }
 
-handleLoadedTexture(image) {
+webgl.Texture handleLoadedTexture(dynamic image) {
   gl.activeTexture(webgl.RenderingContext.TEXTURE7);// random
   webgl.Texture texture = gl.createTexture();
   gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, texture);

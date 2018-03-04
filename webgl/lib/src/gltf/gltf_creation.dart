@@ -37,9 +37,9 @@ class GLTFCreation{
     UtilsAssets.useWebPath = useWebPath;
 
     Completer completer = new Completer<glTF.Gltf>();
-    await UtilsAssets.loadJSONResource(url).then((Map<String, dynamic> result) {
+    await UtilsAssets.loadJSONResource(url).then((Map<String, Object> result) {
       try {
-        glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
+        final glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
         completer.complete(gltf);
       } catch (e) {
         completer.completeError(e);

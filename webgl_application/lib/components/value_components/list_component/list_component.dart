@@ -1,9 +1,15 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
+
+import 'package:angular_forms/angular_forms.dart' as forms;
 
 @Component(
     selector: 'list',
     templateUrl: 'list_component.html',
-    styleUrls: const ['list_component.css']
+    styleUrls: const ['list_component.css'],
+    directives: const <dynamic>[COMMON_DIRECTIVES,
+    forms.formDirectives]
 )
 class ListComponent {
 
@@ -15,12 +21,14 @@ class ListComponent {
 
   dynamic element;
 
+  final _elementSelected = new StreamController<dynamic>.broadcast();
+
   @Output()
-  EventEmitter elementSelected = new EventEmitter<dynamic >();
+  Stream get elementSelected => _elementSelected.stream;
 
   void selectionChange(dynamic event){
     dynamic selection = list[event.target.selectedIndex as int];
-    elementSelected.emit(selection);
+    _elementSelected.add(selection);
   }
 
 }

@@ -1,9 +1,10 @@
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 
 @Component(
     selector: 'layout',
     templateUrl: 'layout_component.html',
-    styleUrls: const ['layout_component.css']
+    styleUrls: const ['layout_component.css'],
+    directives: const <dynamic>[COMMON_DIRECTIVES]
 )
 class LayoutComponent {
 

@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 
 @Component(
     selector: 'canvas_app',
@@ -17,3 +17,4 @@ class CanvasComponent implements AfterViewInit{
     canvas = appCanvas.nativeElement as CanvasElement;
   }
 }
+

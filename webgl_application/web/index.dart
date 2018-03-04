@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:angular2/platform/browser.dart';
+import 'package:angular/angular.dart';
+
 import 'package:webgl_application/components/app_component/app_component.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
@@ -15,5 +16,5 @@ Type get context => Context;
 
 Future main() async {
   ProjectService.loader = loadBaseProjects;
-  bootstrap(AppComponent,[ProjectService]);
+  bootstrapStatic<AppComponent>(AppComponent,<dynamic>[ProjectService]);
 }

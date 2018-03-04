@@ -1,5 +1,6 @@
+import 'dart:async';
 import 'dart:html';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 @Directive(
   selector: '[clickOutside]'
 )
@@ -7,8 +8,10 @@ class ClickOutsideDirective {
 
   ElementRef _elementRef;
 
+  final _clickOutside = new StreamController<Object>.broadcast();
+
   @Output()
-  EventEmitter clickOutside = new EventEmitter<Object>();
+  Stream get clickOutside => _clickOutside.stream;
 
   ClickOutsideDirective(this._elementRef) {
     window.onMouseDown.listen((MouseEvent event)=>onMouseDown(event.target));
@@ -17,7 +20,7 @@ class ClickOutsideDirective {
   void onMouseDown(EventTarget targetElement) {
     final bool clickedInside = this._elementRef.nativeElement.contains(targetElement) as bool;
     if (!clickedInside) {
-      this.clickOutside.emit(null);
+      _clickOutside.add(null);
     }
   }
 }

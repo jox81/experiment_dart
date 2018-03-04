@@ -1,4 +1,6 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
 import 'package:vector_math/vector_math.dart';
 
 @Component(
@@ -11,12 +13,14 @@ class Vector3Component {
   @Input()
   Vector3 value;
 
+  final _valueChange = new StreamController<Vector3>.broadcast();
+
   @Output()
-  EventEmitter valueChange = new EventEmitter<Vector3>();
+  Stream get valueChange => _valueChange.stream;
 
   void updateRow(int rowIndex, dynamic event){
     value[rowIndex] = double.parse(event.target.value as String, (s)=>0.0);
-    valueChange.emit(value);
+    _valueChange.add(value);
   }
 
   static void initDynamicComponent(Vector3Component component, Vector3 defaultValue, Function callBack) {

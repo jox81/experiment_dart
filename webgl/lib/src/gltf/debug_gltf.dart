@@ -21,25 +21,26 @@ import 'package:webgl/src/debug/utils_debug.dart' as debug;
 
 GLTFProject _gltf;
 
+/// [gltfUrl] the url to find the gtlf file.
 Future<GLTFProject> loadGLTF(String gltfUrl, {bool useWebPath : false}) async {
 
   // Todo (jpu) : assert path exist and get real file
-  String filePart = new Uri.file(gltfUrl).pathSegments.last;
-  String gtlfDirectory = gltfUrl.replaceFirst(filePart, '');
+  final Uri baseUri = Uri.parse(gltfUrl);
+  final String filePart = baseUri.pathSegments.last;
+  final String gtlfDirectory = gltfUrl.replaceFirst(filePart, '');
 
-  glTF.Gltf gltfSource =
+  final glTF.Gltf gltfSource =
   await GLTFCreation.loadGLTFResource(gltfUrl, useWebPath: useWebPath);
-  GLTFProject _gltf = await GLTFCreation.getGLTFProject(gltfSource, gtlfDirectory);
+  final GLTFProject _gltf = await GLTFCreation.getGLTFProject(gltfSource, gtlfDirectory);
 
   assert(_gltf != null);
   print('');
-  print('> _gltf file loaded : ${gltfUrl}');
+  print('> _gltf file loaded : $gltfUrl');
   print('');
 
   return _gltf;
 }
 
-/// [gltfUrl] the url to find the gtlf file.
 /// [doGlTFProjectLog] log gltf items infos
 /// [isDebug] log traces
 GLTFProject debugGltf(GLTFProject gltfProject, {bool doGlTFProjectLog : false, bool isDebug:false}) {
@@ -67,7 +68,7 @@ void _testScenes() {
     print('scene counts : ${_gltf.scenes.length}');
     for (int i = 0; i < _gltf.scenes.length; i++) {
       print('> $i');
-      GLTFScene scene = _gltf.scenes[i];
+      final GLTFScene scene = _gltf.scenes[i];
       print('$scene');
     }
     print('');
@@ -79,7 +80,7 @@ void _testNodes() {
     print('nodes counts : ${_gltf.nodes.length}');
     for (int i = 0; i < _gltf.nodes.length; i++) {
       print('> $i');
-      GLTFNode node = _gltf.nodes[i];
+      final GLTFNode node = _gltf.nodes[i];
       print('$node');
     }
     print('');
@@ -91,7 +92,7 @@ void _testMeshes() {
     print('meshes counts : ${_gltf.meshes.length}');
     for (int i = 0; i < _gltf.meshes.length; i++) {
       print('> $i');
-      GLTFMesh mesh = _gltf.meshes[i];
+      final GLTFMesh mesh = _gltf.meshes[i];
       print('$mesh');
     }
     print('');
@@ -103,17 +104,17 @@ void _testAccessors() {
     print('accessors counts : ${_gltf.accessors.length}');
     for (int i = 0; i < _gltf.accessors.length; i++) {
       print('> $i');
-      GLTFAccessor accessor = _gltf.accessors[i];
+      final GLTFAccessor accessor = _gltf.accessors[i];
       print('$accessor');
 
       if(accessor.componentType == 5126) {
-        Float32List verticesInfos = accessor.bufferView.buffer.data.buffer
+        final Float32List verticesInfos = accessor.bufferView.buffer.data.buffer
             .asFloat32List(
             accessor.bufferView.byteOffset + accessor.byteOffset,
             accessor.count * accessor.components);
         print(verticesInfos);
       }else if(accessor.componentType == 5123){
-        Uint16List indices = accessor.bufferView.buffer.data.buffer
+        final Uint16List indices = accessor.bufferView.buffer.data.buffer
             .asUint16List(accessor.byteOffset, accessor.count);
         print(indices);
       }
@@ -127,7 +128,7 @@ void _testBufferViews() {
     print('BufferViews counts : ${_gltf.bufferViews.length}');
     for (int i = 0; i < _gltf.bufferViews.length; i++) {
       print('> $i');
-      GLTFBufferView bufferView = _gltf.bufferViews[i];
+      final GLTFBufferView bufferView = _gltf.bufferViews[i];
       print('$bufferView');
     }
     print('');
@@ -139,7 +140,7 @@ void _testBuffers() {
     print('Buffers counts : ${_gltf.buffers.length}');
     for (int i = 0; i < _gltf.buffers.length; i++) {
       print('> $i');
-      GLTFBuffer buffer = _gltf.buffers[i];
+      final GLTFBuffer buffer = _gltf.buffers[i];
       print('$buffer');
       if(buffer.data != null) {
 //        List<String> gltfBits = buffer.data.map((int v) => v.toRadixString(16))
@@ -161,7 +162,7 @@ void _testCameras() {
 
     for (int i = 0; i < _gltf.cameras.length; i++) {
       print('> $i');
-      Camera camera = _gltf.cameras[i];
+      final Camera camera = _gltf.cameras[i];
       print('$camera');
     }
     print('');
@@ -173,7 +174,7 @@ void _testImages() {
     print('Images counts : ${_gltf.cameras.length}');
     for (int i = 0; i < _gltf.images.length; i++) {
       print('> $i');
-      GLTFImage image = _gltf.images[i];
+      final GLTFImage image = _gltf.images[i];
       print('$image');
     }
     print('');
@@ -185,7 +186,7 @@ void _testSamplers() {
     print('Sample counts : ${_gltf.samplers.length}');
     for (int i = 0; i < _gltf.samplers.length; i++) {
       print('> $i');
-      GLTFSampler sampler = _gltf.samplers[i];
+      final GLTFSampler sampler = _gltf.samplers[i];
       print('$sampler');
     }
     print('');
@@ -197,7 +198,7 @@ void _testTextures() {
     print('texture counts : ${_gltf.textures.length}');
     for (int i = 0; i < _gltf.textures.length; i++) {
       print('> $i');
-      GLTFTexture texture = _gltf.textures[i];
+      final GLTFTexture texture = _gltf.textures[i];
       print('$texture');
     }
     print('');
@@ -209,7 +210,7 @@ void _testMaterials() {
     print('material counts : ${_gltf.materials.length}');
     for (int i = 0; i < _gltf.materials.length; i++) {
       print('> $i');
-      GLTFPBRMaterial material = _gltf.materials[i];
+      final GLTFPBRMaterial material = _gltf.materials[i];
       print('$material');
     }
     print('');
@@ -221,7 +222,7 @@ void _testAnimations() {
     print('animations counts : ${_gltf.animations.length}');
     for (int i = 0; i < _gltf.animations.length; i++) {
       print('> $i');
-      GLTFAnimation animation = _gltf.animations[i];
+      final GLTFAnimation animation = _gltf.animations[i];
       print('$animation');
     }
     print('');

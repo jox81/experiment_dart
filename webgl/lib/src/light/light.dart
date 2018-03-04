@@ -1,14 +1,14 @@
 import 'package:vector_math/vector_math.dart';
-@MirrorsUsed(
-    targets: const [
-      Light,
-      AmbientLight,
-      PointLight,
-      DirectionalLight,
-      DirectionalLight,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      Light,
+//      AmbientLight,
+//      PointLight,
+//      DirectionalLight,
+//      DirectionalLight,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 import 'package:webgl/src/gltf/node.dart';
 

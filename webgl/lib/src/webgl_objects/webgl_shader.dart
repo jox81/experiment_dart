@@ -6,12 +6,12 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_shader_precision_format.dart';
-@MirrorsUsed(
-    targets: const [
-      WebGLShader,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      WebGLShader,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 class WebGLShader extends WebGLObject{
 

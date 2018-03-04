@@ -1,0 +1,12 @@
+#analyzer:
+#  strong-mode:
+#    implicit-casts: false
+#    implicit-dynamic: false
+#  errors:
+#    todo: ignore
+#    missing_return: error
+#    dead_code: info
+#
+#linter:
+#  rules:
+#    - avoid_empty_else

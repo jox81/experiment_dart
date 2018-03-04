@@ -1,16 +1,17 @@
 import 'dart:async';
 import 'package:webgl/src/utils/utils_assets.dart';
-@MirrorsUsed(
-    targets: const [
-      ShaderSource,
-    ],
-    override: '*')
-import 'dart:mirrors';
+import 'package:path/path.dart' as path;
+//@MirrorsUsed(
+//    targets: const [
+//      ShaderSource,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 // Todo (jpu) : do not load all shader when not needed
 class ShaderSource{
 
-  static String _currentPackage = "packages/webgl/";
+  static String _currentPackage = path.join(Uri.base.origin, 'packages/webgl');
 
   static Map<String , List<String>> shadersPath = {
     'material_point' :[
@@ -101,16 +102,23 @@ class ShaderSource{
 
   static Future loadShaders() async {
 
+    List<Future> futures = <Future>[];
+
     for(String key in shadersPath.keys){
-
-      ShaderSource shaderSource = new ShaderSource()
-        ..shaderType = key
-        ..vertexShaderPath = _currentPackage + shadersPath[key][0]
-        ..fragmentShaderPath = _currentPackage + shadersPath[key][1];
-      await shaderSource._loadShader();
-
-      _sources[shaderSource.shaderType] = shaderSource;
+      futures.add(loadShader(key));
     }
+
+    await Future.wait<dynamic>(futures);
+  }
+
+  static Future loadShader(String key) async {
+    ShaderSource shaderSource = new ShaderSource()
+      ..shaderType = key
+      ..vertexShaderPath =  path.join(_currentPackage, shadersPath[key][0])
+      ..fragmentShaderPath = path.join(_currentPackage, shadersPath[key][1]);
+    await shaderSource._loadShader();
+
+    _sources[shaderSource.shaderType] = shaderSource;
   }
 
   String shaderType;

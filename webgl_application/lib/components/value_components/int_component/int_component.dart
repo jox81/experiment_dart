@@ -1,4 +1,6 @@
-import 'package:angular2/core.dart';
+import 'dart:async';
+
+import 'package:angular/angular.dart';
 
 @Component(
     selector: 'int',
@@ -10,11 +12,13 @@ class IntComponent {
   @Input()
   int value;
 
+  final _valueChange = new StreamController<int>.broadcast();
+
   @Output()
-  EventEmitter valueChange = new EventEmitter<int>();
+  Stream get valueChange => _valueChange.stream;
 
   void update(dynamic event){
-    valueChange.emit(int.parse(event.target.value as String, onError:(s)=>0));
+    _valueChange.add(int.parse(event.target.value as String, onError:(s)=>0));
   }
 
   static void initDynamicComponent(IntComponent component, int defaultValue, Function callBack) {

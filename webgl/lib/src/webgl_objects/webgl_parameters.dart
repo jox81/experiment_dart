@@ -65,7 +65,7 @@ class WebglParameters{
     WebglParameter param = new WebglParameter()
       ..glName = constant.glName
       ..glValue = glEnumStringValue != null ? glEnumStringValue : result
-      ..glType = result.runtimeType.toString()
+//      ..glType = result.runtimeType.toString()
       ..glEnum = constant.glEnum;
     return param;
   }

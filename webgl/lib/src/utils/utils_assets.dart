@@ -19,7 +19,7 @@ class UtilsAssets{
 
   static String getWebPath(String url) {
     String baseWebPath = UtilsAssets.webPath;
-    if(url.startsWith('/') || url.startsWith('./') || url.startsWith('../')){
+    if(url.startsWith('http://') ||url.startsWith('/') || url.startsWith('./') || url.startsWith('../')){
       baseWebPath = '';
     }
     return '${baseWebPath}${url}';
@@ -38,12 +38,7 @@ class UtilsAssets{
   static Future<String> loadTextResource (String url) {
     Completer completer = new Completer<String>();
 
-    String baseWebPath = UtilsAssets.webPath;
-    if(url.startsWith('/') || url.startsWith('./') || url.startsWith('../')){
-      baseWebPath = '';
-    }
-
-    String assetsPath = '${baseWebPath}${url}';
+    String assetsPath = getWebPath(url);
 
     Random random = new Random();
     HttpRequest request = new HttpRequest();
@@ -117,18 +112,18 @@ class UtilsAssets{
     return result;
   }
 
-  static Future<Map<String, dynamic>> loadJSONResource (String url) async {
+  static Future<Map<String, Object>> loadJSONResource (String url) async {
     Completer completer = new Completer<Map>();
     await loadTextResource(url).then((String result){
       try {
-          Map json = JSON.decode(result) as Map;
+          final Map<String, Object> json = JSON.decode(result) as Map<String, Object>;
           completer.complete(json);
         } catch (e) {
           completer.completeError(e);
         }
     });
 
-    return completer.future as Future<Map<String, dynamic>> ;
+    return completer.future as Future<Map<String, Object>> ;
   }
 
   void makeRequest(Event e) {

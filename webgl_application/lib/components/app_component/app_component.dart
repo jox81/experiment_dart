@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:angular2/core.dart';
+import 'package:angular/angular.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl_application/components/ui/canvas_component/canvas_component.dart';
@@ -16,7 +16,7 @@ import 'package:webgl_application/src/ui_models/toolbar.dart';
     selector: 'my-app',
     templateUrl: 'app_component.html',
     styleUrls: const ['app_component.css'],
-    directives: const <dynamic>[ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
+    directives: const <dynamic>[COMMON_DIRECTIVES, ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
 )
 class AppComponent implements OnInit{
 
