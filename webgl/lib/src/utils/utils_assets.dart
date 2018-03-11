@@ -21,8 +21,13 @@ class UtilsAssets{
     String baseWebPath = UtilsAssets.webPath;
     if(url.startsWith('http://') ||url.startsWith('/') || url.startsWith('./') || url.startsWith('../')){
       baseWebPath = '';
+    }else if(url.startsWith('packages')){
+      baseWebPath = '${Uri.base.origin}/';
     }
-    return '${baseWebPath}${url}';
+
+    String fullPath = '${baseWebPath}${url}';
+    print('UtilsAssets.getWebPath fullPath : $fullPath');
+    return fullPath;
   }
 
   // Todo (jpu) : remove this ?
@@ -113,15 +118,14 @@ class UtilsAssets{
   }
 
   static Future<Map<String, Object>> loadJSONResource (String url) async {
-    Completer completer = new Completer<Map>();
-    await loadTextResource(url).then((String result){
-      try {
-          final Map<String, Object> json = JSON.decode(result) as Map<String, Object>;
-          completer.complete(json);
-        } catch (e) {
-          completer.completeError(e);
-        }
-    });
+    Completer completer = new Completer<Map<String, Object>>();
+    String result = await loadTextResource(url);
+    try {
+      final Map<String, Object> json = JSON.decode(result) as Map<String, Object>;
+      completer.complete(json);
+    } catch (e) {
+      completer.completeError(e);
+    }
 
     return completer.future as Future<Map<String, Object>> ;
   }

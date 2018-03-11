@@ -1,5 +1,3 @@
-import 'package:webgl/src/introspection.dart';
-
 typedef void UpdateFunction();
 typedef void UpdateUserInput();
 
@@ -8,7 +6,7 @@ abstract class IUpdatable{
 
 abstract class IUpdatableScene implements IUpdatable{
 
-  IEditElement currentSelection;
+//  dynamic currentSelection;
 
 //  void update();
 //  void updateUserInput();

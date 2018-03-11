@@ -17,7 +17,7 @@
 //import 'package:webgl/src/utils/utils_assets.dart';
 //import 'package:webgl/src/utils/utils_math.dart';
 //
-//abstract class Scene extends IEditElement implements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
+//abstract class Sceneimplements ISetupScene, IUpdatableScene, IUpdatableSceneFunction{
 //  static int nextId = 0;
 //  final int sceneId = nextId++;
 //

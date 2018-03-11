@@ -46,6 +46,13 @@ class Interaction {
   StreamController<MouseEvent> _onMouseUpController = new StreamController<MouseEvent>.broadcast();
   Stream<MouseEvent> get onMouseUp => _onMouseDownController.stream;
 
+
+  StreamController<TouchEvent> _onTouchStartController = new StreamController<TouchEvent>.broadcast();
+  Stream<TouchEvent> get onTouchStart => _onTouchStartController.stream;
+
+  StreamController<TouchEvent> _onTouchEndController = new StreamController<TouchEvent>.broadcast();
+  Stream<TouchEvent> get onTouchEnd => _onTouchEndController.stream;
+
   StreamController _onDragController = new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onDrag => _onDragController.stream;
 
@@ -66,15 +73,20 @@ class Interaction {
 
     if(elementFPSText != null) elementFPSText.style.display = 'block';
 
+    window.onResize.listen(_onWindowResize);
+
     window.onKeyUp.listen(_onKeyUp);
     window.onKeyDown.listen(_onKeyDown);
-
-    window.onResize.listen(_onWindowResize);
 
     _interactable.canvas.onMouseDown.listen(_onMouseDown);
     _interactable.canvas.onMouseMove.listen(_onMouseMove);
     _interactable.canvas.onMouseUp.listen(_onMouseUp);
     _interactable.canvas.onMouseWheel.listen(_onMouseWheel);
+
+    _interactable.canvas.onTouchStart.listen(_onTouchStart);
+    _interactable.canvas.onTouchMove.listen(_onTouchMove);
+    _interactable.canvas.onTouchEnd.listen(_onTouchEnd);
+
   }
 
   ///
@@ -192,6 +204,55 @@ class Interaction {
 
   String getMouseInfos(){
     return 'currentX : $currentX | currentY : $currentY | deltaX : $deltaX | deltaY : $deltaY | ';
+  }
+
+
+  ///
+  /// Touch
+  ///
+
+  void _onTouchStart(TouchEvent event) {
+    int screenX = event.touches.first.client.x.toInt();
+    int screenY = event.touches.first.client.y.toInt();
+    updateMouseInfos(screenX, screenY);
+
+    cameraController?.beginOrbit(mainCamera, screenX, screenY);
+
+    dragging = false;
+    mouseDown = true;
+
+    _onTouchStartController.add(event);
+  }
+
+  void _onTouchMove(TouchEvent event) {
+    int screenX = event.touches.first.client.x.toInt();
+    int screenY = event.touches.first.client.y.toInt();
+    updateMouseInfos(screenX, screenY);
+
+    cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, 0);
+
+    if(mouseDown) {
+
+      dragging = true;
+
+      _onDragController.add(null);
+
+    }else{
+      dragging = false;
+    }
+  }
+
+  void _onTouchEnd(TouchEvent event) {
+    int screenX = event.touches.first.client.x.toInt();
+    int screenY = event.touches.first.client.y.toInt();
+    updateMouseInfos(screenX, screenY);
+
+    cameraController?.endOrbit(mainCamera);
+
+    dragging = false;
+    mouseDown = false;
+
+    _onTouchEndController.add(event);
   }
 
   ///

@@ -7,7 +7,7 @@ import 'package:webgl_application/components/ui/layout_component/layout_componen
 import 'package:webgl_application/components/ui/properties_component/properties_component.dart';
 import 'package:webgl_application/components/ui/menu/menu_component.dart';
 import 'package:webgl_application/components/ui/toolbar_component/toolbar_component.dart';
-import 'package:webgl/src/introspection.dart';
+import 'package:webgl_application/src/introspection.dart';
 import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
@@ -30,13 +30,13 @@ class AppComponent implements OnInit{
   GLTFScene get currentScene => application?.currentScene;
   GLTFProject get currentProject => application?.project;
 
-  IEditElement _currentElement;
-  IEditElement get currentElement {
+  CustomEditElement _currentElement;
+  CustomEditElement get currentElement {
     if(application != null) {
       if (application.currentSelection != null) {
         _currentElement = application.currentSelection;
       }else{
-        _currentElement = currentProject;
+        _currentElement = new CustomEditElement(currentProject);
       }
     }
 
@@ -62,7 +62,7 @@ class AppComponent implements OnInit{
     application.render();
   }
 
-  void selectElement(IEditElement element){
+  void selectElement(CustomEditElement element){
     application.currentSelection = element;
   }
 

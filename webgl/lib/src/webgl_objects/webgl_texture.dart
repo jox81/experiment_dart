@@ -56,7 +56,6 @@ class WebGLTexture extends EditTexture {
     });
   }
 
-  @override
   void edit() {
     int lastTextureUnit = ActiveTexture.instance.activeTexture;
 

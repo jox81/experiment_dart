@@ -8,7 +8,7 @@ import 'package:webgl/src/gltf/mesh.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/introspection.dart';
+import 'package:webgl_application/src/introspection.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
 import 'package:webgl/src/context.dart';
@@ -28,7 +28,7 @@ class MenuComponent{
   Application get application => Application.instance;
 
   GLTFScene get currentScene => application.currentScene;
-  set currentSelection(IEditElement value) => application?.currentSelection = value;
+  set currentSelection(CustomEditElement value) => application?.currentSelection = value;
 
   Map<String, bool> openedMenus = {
     'headerId0' : false,
@@ -68,7 +68,7 @@ class MenuComponent{
   bool download(Event event){
 
     String fileName = 'scene.json';
-    String content = Uri.encodeFull(JSON.encode(currentScene.toJson()));
+    String content = Uri.encodeFull(JSON.encode(new CustomEditElement(currentScene).toJson()));
 
     AnchorElement anchor = event.currentTarget as AnchorElement;
     anchor.href = 'data:text/plain;charset=utf-8,' + content;
@@ -113,7 +113,7 @@ class MenuComponent{
   // >> Textures
 
   bool editTextures(){
-    currentSelection = TextureLibrary.instance;
+    currentSelection = new CustomEditElement(TextureLibrary.instance);
     closeAllMenus();
     return false;
   }
@@ -140,37 +140,37 @@ class MenuComponent{
   // >> GL Edit
 
   bool editCustomSettings(){
-    currentSelection = WebglEdit.instance(currentScene);
+    currentSelection = new CustomEditElement(WebglEdit.instance(currentScene));
     closeAllMenus();
     return false;
   }
 
   bool editRenderingContext(){
-    currentSelection = Context.glWrapper;
+    currentSelection = new CustomEditElement(Context.glWrapper);
     closeAllMenus();
     return false;
   }
 
   bool editContextAttributs(){
-    currentSelection = Context.glWrapper.contextAttributes;
+    currentSelection = new CustomEditElement(Context.glWrapper.contextAttributes);
     closeAllMenus();
     return false;
   }
 
   bool editActiveFrameBuffer(){
-    currentSelection = Context.glWrapper.activeFrameBuffer;
+    currentSelection = new CustomEditElement(Context.glWrapper.activeFrameBuffer);
     closeAllMenus();
     return false;
   }
 
   bool editCurrentProgram(){
-    currentSelection = Context.glWrapper.currentProgram;
+    currentSelection = new CustomEditElement(Context.glWrapper.currentProgram);
     closeAllMenus();
     return false;
   }
 
   bool editActiveTexture(){
-    currentSelection = Context.glWrapper.activeTexture;
+    currentSelection = new CustomEditElement(Context.glWrapper.activeTexture);
     closeAllMenus();
     return false;
   }

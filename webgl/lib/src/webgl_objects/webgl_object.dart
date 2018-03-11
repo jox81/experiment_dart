@@ -1,4 +1,3 @@
-import 'package:webgl/src/introspection.dart';
 //@MirrorsUsed(
 //    targets: const [
 //      WebGLObject,
@@ -6,7 +5,7 @@ import 'package:webgl/src/introspection.dart';
 //    override: '*')
 //import 'dart:mirrors';
 
-abstract class WebGLObject extends IEditElement {
+abstract class WebGLObject{
   bool invalidated;
   void delete();
 }

@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'dart:convert' show BASE64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
@@ -27,9 +26,8 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/texture.dart';
-import 'package:path/path.dart' as path;
 
-class GLTFRenderer extends IEditElement implements Interactable {
+class GLTFRenderer implements Interactable {
 
   // Direction from where the light is coming to origin
   DirectionalLight light;
@@ -86,7 +84,7 @@ class GLTFRenderer extends IEditElement implements Interactable {
     int wrapT;
 
     //brdfLUT
-    imageElement = await TextureUtils.loadImage(path.join(Uri.base.origin, 'packages/webgl/images/utils/brdfLUT.png'));
+    imageElement = await TextureUtils.loadImage('packages/webgl/images/utils/brdfLUT.png');
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -96,13 +94,13 @@ class GLTFRenderer extends IEditElement implements Interactable {
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
     List<List<ImageElement>> papermill_diffuse =
-        await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: path.join(Uri.base.origin, 'packages/webgl/'));
+        await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: 'packages/webgl/');
     cubeMapTextureDiffuse = TextureUtils.createCubeMapFromImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
 
     gl.activeTexture(TextureUnit.TEXTURE0 + 2);
     List<List<ImageElement>> papermill_specular =
-        await TextureUtils.loadCubeMapImages('papermill_specular', webPath: path.join(Uri.base.origin, 'packages/webgl/'));
+        await TextureUtils.loadCubeMapImages('papermill_specular', webPath: 'packages/webgl/');
     cubeMapTextureSpecular = TextureUtils.createCubeMapFromImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 

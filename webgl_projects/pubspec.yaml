@@ -5,25 +5,27 @@ author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=2.0.0-dev.8.0 <2.0.0'
+  sdk: '>=2.0.0-dev.30.0 <2.0.0'
 
 dependencies:
+  browser: "^0.10.0+2"
+  dart_to_js_script_rewriter: '^1.0.3'
+  resource: "^2.1.2"
   webgl:
     path: ../webgl
 #  webgl_application:
 #    path: ../webgl_application
-  resource: "^2.1.2"
-  browser: "^0.10.0+2"
 
 dev_dependencies:
-  dart_to_js_script_rewriter: '^1.0.1'
+  test: '>=0.12.0 <0.13.0'
 
 transformers:
+- test/pub_serve:
+    $include: web/
 - dart_to_js_script_rewriter
 - $dart2js:
-    commandLineOptions: [--trust-primitives, --trust-type-annotations, --enable-experimental-mirrors]
+    commandLineOptions: [--trust-primitives, --trust-type-annotations, --fast-startup]
 
 web:
   compiler:
     debug: dartdevc
-

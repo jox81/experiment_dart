@@ -29,7 +29,6 @@ class WebglTest {
   }
 
   Future testEmptyTexture() async {
-    int size = 64;
     gl.activeTexture(TextureUnit.TEXTURE7);
 
     WebGLTexture texture1 = new WebGLTexture.texture2d();

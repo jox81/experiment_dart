@@ -20,7 +20,7 @@
 //    override: '*')
 //import 'dart:mirrors';
 //
-//abstract class MaterialTMP extends IEditElement {
+//abstract class MaterialTMP{
 //  static bool debugging = false;
 //
 //  /// GLSL Pragmas

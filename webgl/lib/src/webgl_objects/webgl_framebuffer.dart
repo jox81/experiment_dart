@@ -1,6 +1,5 @@
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
@@ -15,7 +14,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 //    override: '*')
 //import 'dart:mirrors';
 
-class ActiveFrameBuffer extends IEditElement {
+class ActiveFrameBuffer{
   static ActiveFrameBuffer _instance;
   ActiveFrameBuffer._init();
 

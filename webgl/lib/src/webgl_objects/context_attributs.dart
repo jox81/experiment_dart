@@ -1,7 +1,6 @@
 //import 'dart:mirrors';
-import 'package:webgl/src/introspection.dart';
 
-class ContextAttributs extends IEditElement {
+class ContextAttributs{
 
   final dynamic _values;
 

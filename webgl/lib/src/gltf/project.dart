@@ -1,5 +1,3 @@
-import 'package:webgl/src/introspection.dart';
-
 import 'package:webgl/src/camera/camera.dart';
 import 'dart:core';
 import 'package:webgl/src/gltf/accessor.dart';
@@ -25,7 +23,7 @@ import 'package:webgl/src/light/light.dart';
 // Todo (jpu) : Acccessor getElement test ?
 // 16/10/2017 : reading .bin files as Uint8List
 
-class GLTFProject extends IEditElement{
+class GLTFProject{
 
   factory GLTFProject.create({bool reset : false}){
     if(_instance == null || reset){

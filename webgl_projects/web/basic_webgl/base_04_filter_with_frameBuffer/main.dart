@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/material/shader_source.dart';
-import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:webgl/src/webgl_objects/webgl_program.dart';

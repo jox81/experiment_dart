@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -17,7 +16,7 @@ import 'dart:typed_data' as WebGlTypedData;
 //    override: '*')
 //import 'dart:mirrors';
 
-class ActiveTexture extends IEditElement{
+class ActiveTexture {
 
   static ActiveTexture _instance;
   ActiveTexture._init();

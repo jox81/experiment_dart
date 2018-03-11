@@ -1,26 +1,25 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-
 import 'package:webgl/src/geometry/utils_geometry.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/introspection.dart';
+import 'package:webgl_application/src/introspection.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
-@MirrorsUsed(
-    targets: const [
-      AxisType,
-      ActiveToolType,
-      Application,
-    ],
-    override: '*')
-import 'dart:mirrors';
+//@MirrorsUsed(
+//    targets: const [
+//      AxisType,
+//      ActiveToolType,
+//      Application,
+//    ],
+//    override: '*')
+//import 'dart:mirrors';
 
 enum AxisType { view, x, y, z, any }
 enum ActiveToolType { select, move, rotate, scale }
@@ -41,8 +40,8 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
   CanvasElement get canvas => _canvas;
 
   GLTFScene get currentScene => project?.scene;
-  @override
-  IEditElement currentSelection;
+
+  CustomEditElement currentSelection;
   GLTFRenderer renderer;
   GLTFProject project;
   CameraPerspective get mainCamera => Context.mainCamera;
@@ -121,7 +120,7 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
 
   void _onMouseUpHandler(MouseEvent event) {
     if(!interaction.dragging) {
-      currentSelection = tempSelection;
+      currentSelection = new CustomEditElement(tempSelection);
     }
   }
 
@@ -129,7 +128,7 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
     if(activeTool == ActiveToolType.move ||
         activeTool == ActiveToolType.rotate ||
         activeTool == ActiveToolType.scale) {
-      currentSelection = tempSelection;
+      currentSelection = new CustomEditElement(tempSelection);
     }
 
     if(currentSelection != null && currentSelection is GLTFNode) {

@@ -27,13 +27,13 @@ import 'package:webgl_application/components/value_components/vector4_component/
 import 'package:webgl_application/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/animation/animation_property.dart' hide PropertyGetter, PropertySetter;
 import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl_application/src/application.dart';
+import 'package:webgl_application/src/introspection.dart';
 import 'package:angular_forms/angular_forms.dart' as forms;
 
 @Component(
@@ -61,10 +61,10 @@ import 'package:angular_forms/angular_forms.dart' as forms;
 class PropertiesComponent {
   Application get application => Application.instance;
 
-  IEditElement _iEditElement;
+  CustomEditElement _iEditElement;
   @Input()
-  set iEditElement(IEditElement value) => _iEditElement = value;
-  IEditElement get iEditElement => _iEditElement;
+  set iEditElement(CustomEditElement value) => _iEditElement = value;
+  CustomEditElement get iEditElement => _iEditElement;
 
   final _innerSelectionChange = new StreamController<dynamic>.broadcast();
 
@@ -172,8 +172,8 @@ class PropertiesComponent {
   }
 
   void setSelection(dynamic event) {
-    IEditElement selection;
-    if (event is IEditElement) {
+    CustomEditElement selection;
+    if (event is CustomEditElement) {
       selection = event;
     } else {
       selection = new CustomEditElement(event);
@@ -262,11 +262,11 @@ class PropertiesComponent {
   }
 
   //Getter/Setter button
-  void getterClicked(Event e, PropertyGetter<dynamic> getter, IEditElement iEditElement){
+  void getterClicked(Event e, PropertyGetter<dynamic> getter, CustomEditElement iEditElement){
     new NodeGetter<dynamic>(getter)
     ..referencedOject = iEditElement;
   }
-  void setterClicked(Event e, PropertySetter<dynamic> setter, IEditElement iEditElement){
+  void setterClicked(Event e, PropertySetter<dynamic> setter, CustomEditElement iEditElement){
     new NodeSetter<dynamic>(setter)
       ..referencedOject = iEditElement;
   }

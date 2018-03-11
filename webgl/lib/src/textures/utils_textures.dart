@@ -12,8 +12,6 @@ import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_te
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
-import 'package:webgl/src/introspection.dart';
-import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'dart:web_gl' as webgl;
 //@MirrorsUsed(
@@ -25,7 +23,7 @@ import 'dart:web_gl' as webgl;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:path/path.dart' as path;
 
-class TextureLibrary extends IEditElement {
+class TextureLibrary{
 
   static TextureLibrary _instance;
   TextureLibrary._init();
@@ -65,7 +63,7 @@ class TextureUtils {
 
   ///Load a single image from an URL
   static Future<ImageElement> loadImage(String url) {
-    print('TextureUtils.loadImage : $url');
+
     Completer completer = new Completer<ImageElement>();
 
     String assetsPath = UtilsAssets.getWebPath(url);

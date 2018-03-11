@@ -1,7 +1,6 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/debug/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
@@ -17,7 +16,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 //    override: '*')
 //import 'dart:mirrors';
 
-class ProgramInfo extends IEditElement {
+class ProgramInfo{
   int attributeCount = 0;
   List<WebGLActiveInfo> attributes = new List();
 

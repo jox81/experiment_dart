@@ -219,14 +219,14 @@ class CameraPerspective extends Camera{
   }
 
   Map toJson(){
-//    Map json = new Map<String, dynamic>();
-//    json['fov'] = UtilsMath.roundPrecision(_yfov);//.toDouble();
-//    json['zNear'] = UtilsMath.roundPrecision(_znear);//.toDouble();
-//    json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
-//    json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
-//    json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
-////    json['showGizmo'] = showGizmo;
-//    return json;
+    Map json = new Map<String, dynamic>();
+    json['fov'] = UtilsMath.roundPrecision(_yfov);//.toDouble();
+    json['zNear'] = UtilsMath.roundPrecision(_znear);//.toDouble();
+    json['zFar'] = UtilsMath.roundPrecision(_zfar);//.toDouble();
+    json['targetPosition'] = targetPosition.storage.map((v)=> UtilsMath.roundPrecision(v)).toList();
+    json['position'] = translation.storage.map((v)=>UtilsMath.roundPrecision(v)).toList();
+//    json['showGizmo'] = showGizmo;
+    return json;
   }
 
   @override

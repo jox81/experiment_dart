@@ -48,7 +48,7 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFBufferView{bufferViewId:$bufferViewId, buffer: ${_buffer.bufferId}, byteOffset: $byteOffset, byteLength: $byteLength,  byteStride: $byteStride, target: ${BufferType.getByIndex(target)}, usage: ${BufferType.getByIndex(usage)}}';
+    return 'GLTFBufferView{bufferViewId:$bufferViewId, buffer: ${_buffer.bufferId}, byteOffset: $byteOffset, byteLength: $byteLength,  byteStride: $byteStride, target: $target, usage: $usage';
   }
 
 }

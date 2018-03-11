@@ -3,17 +3,8 @@ import 'dart:html';
 import 'dart:math' as Math;
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/gltf/renderer/materials.dart';
-import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/textures/utils_textures.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
-import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
-import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:vector_math/vector_math.dart';
 
 webgl.RenderingContext gl;
@@ -114,8 +105,6 @@ Future main() async {
     num now = getCurrentTime();
     clock += (now - then).toInt();
     then = now;
-
-    var scale = 4;
 
     gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT | webgl.RenderingContext.DEPTH_BUFFER_BIT);
     gl.enable(webgl.RenderingContext.DEPTH_TEST);

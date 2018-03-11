@@ -151,7 +151,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
 
   @override
   String toString() {
-    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: ${bufferView?.bufferViewId}, byteOffset: $byteOffset, byteLength: $byteLength, byteStride: $byteStride, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: ${VertexAttribArrayType.getByIndex(componentType)}, componentLength: $componentLength, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
+    return 'GLTFAccessor{accessorId : $accessorId, bufferViewId: ${bufferView?.bufferViewId}, byteOffset: $byteOffset, byteLength: $byteLength, byteStride: $byteStride, count: $count, elementLength: $elementLength, typeString: $typeString, components: $components, componentType: $componentType, componentLength: $componentLength, normalized: $normalized, max: $max, min: $min, sparse: $sparse}';
   }
 
 }
