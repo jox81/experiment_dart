@@ -13,8 +13,8 @@ dependencies:
   resource: "^2.1.2"
   vector_math: '^2.0.5'
   gltf:
-    path: ../gltf
-#    git: git://github.com/KhronosGroup/glTF-Validator.git
+#    path: ../gltf
+    git: git://github.com/KhronosGroup/glTF-Validator.git
   datgui: "^0.2.0+1"
   logging: "^0.11.3+1"
   stack_trace: "^1.8.2"
@@ -22,12 +22,15 @@ dependencies:
 dev_dependencies:
   test: '>=0.12.0 <0.13.0'
 
+dependency_overrides:
+  analyzer: ^0.31.0-alpha.1
+
 transformers:
 - test/pub_serve:
     $include: web/
 - dart_to_js_script_rewriter
 - $dart2js:
-    commandLineOptions: [--trust-primitives, --trust-type-annotations, --fast-startup]
+    commandLineOptions: [--trust-primitives, --trust-type-annotations]
 
 web:
   compiler:

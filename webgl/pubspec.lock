@@ -2,7 +2,7 @@
 # See https://www.dartlang.org/tools/pub/glossary#lockfile
 packages:
   analyzer:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
       name: analyzer
       url: "https://pub.dartlang.org"
@@ -116,9 +116,11 @@ packages:
   gltf:
     dependency: "direct main"
     description:
-      path: "..\\gltf"
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: ceffc529fe7834aff8752324cddd355a68328bcc
+      url: "git://github.com/KhronosGroup/glTF-Validator.git"
+    source: git
     version: "2.0.0-dev.1.7"
   html:
     dependency: transitive
