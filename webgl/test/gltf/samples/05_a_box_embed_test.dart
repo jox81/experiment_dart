@@ -12,7 +12,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-@TestOn("dartium")
+@TestOn("browser")
 Future main() async {
   GLTFProject gltfProject;
 

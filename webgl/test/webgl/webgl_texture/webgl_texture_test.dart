@@ -5,7 +5,7 @@ import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-@TestOn("dartium")
+@TestOn("browser")
 
 void main() {
 

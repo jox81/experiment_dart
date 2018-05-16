@@ -8,7 +8,7 @@
 //import 'package:webgl/src/utils/utils_assets.dart';
 //import 'package:webgl/src/gltf/mesh.dart';
 //
-//@TestOn("dartium")
+//@TestOn("browser")
 //
 //Future main() async {
 //

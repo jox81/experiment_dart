@@ -2,7 +2,6 @@ import 'package:webgl/src/gltf/accessor_sparse.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 // Accessor types
 const String SCALAR = 'SCALAR';
 const String VEC2 = 'VEC2';

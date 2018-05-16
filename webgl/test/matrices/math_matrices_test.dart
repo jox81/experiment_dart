@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:math';
 
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
@@ -11,8 +10,8 @@ Future main() async {
     test("compare", () async {
       double angle = radians(90.0);
 
-      num c = cos(angle);
-      num s = sin(angle);
+//      num c = cos(angle);
+//      num s = sin(angle);
 
       Vector3 v = new Vector3(1.0,0.0,0.0);
 

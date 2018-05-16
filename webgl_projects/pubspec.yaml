@@ -5,7 +5,7 @@ author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=2.0.0-dev.30.0 <2.0.0'
+  sdk: '>=2.0.0-dev.43.0 <2.0.0'
 
 dependencies:
   browser: "^0.10.0+2"

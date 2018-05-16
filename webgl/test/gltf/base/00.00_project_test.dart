@@ -4,7 +4,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 
-@TestOn("dartium")
+@TestOn("browser")
 
 Future main() async {
   group("Project", () {

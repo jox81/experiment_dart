@@ -121,7 +121,7 @@ class UtilsAssets{
     Completer completer = new Completer<Map<String, Object>>();
     String result = await loadTextResource(url);
     try {
-      final Map<String, Object> json = JSON.decode(result) as Map<String, Object>;
+      final Map<String, Object> json = jsonDecode(result) as Map<String, Object>;
       completer.complete(json);
     } catch (e) {
       completer.completeError(e);

@@ -89,14 +89,14 @@ class CameraController {
     // Calculate the camera position using the distance and angles
     double camX = _camera.targetPosition.x +
         distance *
-            -Math.sin(xAngleRot * (Math.PI / 180)) *
-            Math.cos((yAngleRot) * (Math.PI / 180));
+            -Math.sin(xAngleRot * (Math.pi / 180)) *
+            Math.cos((yAngleRot) * (Math.pi / 180));
     double camY = _camera.targetPosition.y +
-        distance * -Math.sin((yAngleRot) * (Math.PI / 180));
+        distance * -Math.sin((yAngleRot) * (Math.pi / 180));
     double camZ = _camera.targetPosition.z +
         -distance *
-            Math.cos((xAngleRot) * (Math.PI / 180)) *
-            Math.cos((yAngleRot) * (Math.PI / 180));
+            Math.cos((xAngleRot) * (Math.pi / 180)) *
+            Math.cos((yAngleRot) * (Math.pi / 180));
 
     _camera.translation = _camera.translation..setValues(camX, camY, camZ);
   }

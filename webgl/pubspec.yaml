@@ -8,8 +8,8 @@ environment:
   sdk: '>=2.0.0-dev.30.0 <2.0.0'
 
 dependencies:
-  browser: '^0.10.0+2'
-  dart_to_js_script_rewriter: '^1.0.3'
+#  browser: '^0.10.0+2'
+#  dart_to_js_script_rewriter: '^1.0.3'
   resource: "^2.1.2"
   vector_math: '^2.0.5'
   gltf:
@@ -17,21 +17,23 @@ dependencies:
     git: git://github.com/KhronosGroup/glTF-Validator.git
   datgui: "^0.2.0+1"
   logging: "^0.11.3+1"
-  stack_trace: "^1.8.2"
+  stack_trace: "^1.9.2"
+  build_runner:
+  build_web_compilers: ^0.2.0
 
 dev_dependencies:
-  test: '>=0.12.0 <0.13.0'
-
-dependency_overrides:
-  analyzer: ^0.31.0-alpha.1
+  test: "^0.12.38"
+  build_test:
 
 transformers:
+# TODO: only needed because pub serve complains otherwise
 - test/pub_serve:
-    $include: web/
-- dart_to_js_script_rewriter
-- $dart2js:
-    commandLineOptions: [--trust-primitives, --trust-type-annotations]
+    $include: []
+#- dart_to_js_script_rewriter
+#- $dart2js:
+#    commandLineOptions: [--trust-primitives, --trust-type-annotations]
 
-web:
-  compiler:
-    debug: dartdevc
+#web:
+#  compiler:
+#    debug: dartdevc
+# https://github.com/dart-lang/build/blob/master/docs/getting_started.md

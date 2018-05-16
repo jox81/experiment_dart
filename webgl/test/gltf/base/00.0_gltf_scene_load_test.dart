@@ -3,7 +3,7 @@ import "package:test/test.dart";
 import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/project.dart';
 
-@TestOn("dartium")
+@TestOn("browser")
 
 Future main() async {
   group("test camera", () {

@@ -1,7 +1,6 @@
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 /// Bufferviews define a segment of the buffer data and define broadly what kind of data lives
 /// there using some obscure shortcodes for usage/target.

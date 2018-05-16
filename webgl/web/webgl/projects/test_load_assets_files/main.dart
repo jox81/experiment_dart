@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:html';
-import 'dart:convert';
 import 'package:resource/resource.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:path/path.dart' as path;

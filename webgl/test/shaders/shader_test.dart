@@ -7,7 +7,7 @@ import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
-@TestOn("dartium")
+@TestOn("browser")
 
 void main() {
 

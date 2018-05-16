@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert' show BASE64;
+import 'dart:convert' show base64;
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/gltf_creation.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
@@ -17,12 +17,12 @@ Future main() async {
       String baseGltfData64String = fullGltfData64String.substring(
           base64GltFPrefix.length);
 
-      final List<int> base64Decoded = BASE64.decode(baseGltfData64String);
+      final List<int> base64Decoded = base64.decode(baseGltfData64String);
       expect(base64Decoded.length, 36);
       print(base64Decoded.length);
       print(base64Decoded);
 
-      final String base64Encoded = BASE64.encode(base64Decoded);
+      final String base64Encoded = base64.encode(base64Decoded);
       print(base64Encoded);
 
       expect(baseGltfData64String == base64Encoded, true);
@@ -41,7 +41,7 @@ Future main() async {
       print(base64Decoded.length);
       print(base64Decoded);
 
-      final String base64Encoded = BASE64.encode(base64Decoded);
+      final String base64Encoded = base64.encode(base64Decoded);
       print(base64Encoded);
 
       expect(base64Result == base64Encoded, true);
@@ -56,12 +56,12 @@ Future main() async {
 
       String baseGltfData64String = fullGltfData64String.substring(base64GltFPrefix.length);
 
-      final List<int> base64Decoded = BASE64.decode(baseGltfData64String);
+      final List<int> base64Decoded = base64.decode(baseGltfData64String);
       expect(base64Decoded.length, 2433);
       print(base64Decoded.length);
       print(base64Decoded);
 
-      final String base64Encoded = BASE64.encode(base64Decoded);
+      final String base64Encoded = base64.encode(base64Decoded);
       print(base64Encoded);
 
       expect(baseGltfData64String == base64Encoded, true);

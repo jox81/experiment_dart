@@ -1,4 +1,4 @@
-@TestOn("dartium")
+@TestOn("browser")
 
 import 'dart:async';
 import 'dart:convert';
@@ -55,17 +55,17 @@ Future main() async {
   group("json write", () {
     test("change compare", () {
       String jsonString = '{"int":12}';
-      Map jsonMap = JSON.decode(jsonString) as Map;
-      String jsonEncoded = (JSON.encode(jsonMap));
+      Map jsonMap = json.decode(jsonString) as Map;
+      String jsonEncoded = (json.encode(jsonMap));
       expect(jsonString == jsonEncoded, isTrue);
     });
     test("change value", () {
       String jsonString = '{"int":12}';
-      Map jsonMap = JSON.decode(jsonString) as Map;
+      Map jsonMap = json.decode(jsonString) as Map;
 
       jsonMap['int'] += 5;
 
-      String jsonEncoded = (JSON.encode(jsonMap));
+      String jsonEncoded = (json.encode(jsonMap));
       expect(jsonEncoded == '{"int":17}', isTrue);
     });
   });

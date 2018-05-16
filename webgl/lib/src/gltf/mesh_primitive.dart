@@ -640,13 +640,13 @@ class _SphereMeshPrimitive extends MeshPrimitive {
     zRotationStep <= totalZRotationSteps;
     zRotationStep++) {
       double normalizedZ = zRotationStep / totalZRotationSteps;
-      double angleZ = (normalizedZ * PI);//part of vertical half circle
+      double angleZ = (normalizedZ * pi);//part of vertical half circle
 
       for (int yRotationStep = 0;
       yRotationStep <= totalYRotationSteps;
       yRotationStep++) {
         double normalizedY = yRotationStep / totalYRotationSteps;
-        double angleY = normalizedY * PI * 2;//part of horizontal full circle
+        double angleY = normalizedY * pi * 2;//part of horizontal full circle
 
         _matRotZ.setIdentity();//reset
         _matRotZ.rotateZ(-angleZ);

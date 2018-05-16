@@ -3,7 +3,6 @@ import 'dart:html';
 import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {
 

@@ -1,5 +1,5 @@
 import 'dart:async';
-@TestOn("dartium")
+@TestOn("browser")
 
 import 'dart:math';
 import "package:test/test.dart";

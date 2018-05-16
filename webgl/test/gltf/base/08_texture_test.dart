@@ -3,7 +3,7 @@ import 'package:webgl/src/gltf/texture.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/debug_gltf.dart';
-@TestOn("dartium")
+@TestOn("browser")
 
 Future main() async {
 

@@ -12,7 +12,7 @@ import 'package:webgl/src/gltf/mesh_primitive.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
-@TestOn("dartium")
+@TestOn("browser")
 
 //see tutorial : https://github.com/javagl/glTF-Tutorials/blob/master/gltfTutorial/gltfTutorial_006_SimpleAnimation.md
 Future main() async {

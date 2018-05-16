@@ -7,7 +7,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'dart:web_gl' as webgl;
 
-@TestOn("dartium")
+@TestOn("browser")
 
 void main() {
 

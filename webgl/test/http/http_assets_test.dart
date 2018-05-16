@@ -2,7 +2,7 @@ import 'dart:async';
 import "package:test/test.dart";
 import 'dart:html';
 
-@TestOn("dartium")
+@TestOn("browser")
 
 Future main() async {
 

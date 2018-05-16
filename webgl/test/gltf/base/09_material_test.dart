@@ -7,7 +7,7 @@ import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/texture_info.dart';
 import 'package:webgl/src/gltf/debug_gltf.dart';
-@TestOn("dartium")
+@TestOn("browser")
 Future main() async {
   group("Material", () {
     test("Empty array", () async {

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert' show BASE64;
+import 'dart:convert' show base64;
 import 'dart:io';
 import "package:test/test.dart";
 
@@ -13,7 +13,7 @@ Future main() async {
 
       String baseGltfData64String = fullGltfData64String.substring(base64GltFPrefix.length);
 
-      final List<int> base64Decoded = BASE64.decode(baseGltfData64String);
+      final List<int> base64Decoded = base64.decode(baseGltfData64String);
       expect(base64Decoded.length, 2433);
       print(base64Decoded.length);
       print(base64Decoded);

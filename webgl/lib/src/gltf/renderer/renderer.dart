@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:convert' show BASE64;
+import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/light/light.dart';
@@ -120,7 +120,7 @@ class GLTFRenderer implements Interactable {
           imageElement = await TextureUtils.loadImage(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {
-          String base64Encoded = BASE64.encode(gltfTexture.source.data);
+          String base64Encoded = base64.encode(gltfTexture.source.data);
           imageElement = new ImageElement(
               src: "data:${gltfTexture.source.mimeType};base64,$base64Encoded");
         }
@@ -625,7 +625,7 @@ class GLTFRenderer implements Interactable {
 
         //
         double angle = next.radians - previous.radians;
-        if (angle.abs() > PI) {
+        if (angle.abs() > pi) {
           next[3] *= -1;
         }
 

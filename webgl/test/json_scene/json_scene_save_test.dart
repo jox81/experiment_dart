@@ -5,7 +5,7 @@
 //import 'package:webgl/src/TempToRemove/scene.dart';
 //import 'package:webgl/src/utils/utils_assets.dart';
 //
-//@TestOn("dartium")
+//@TestOn("browser")
 //
 //Future main() async {
 //
