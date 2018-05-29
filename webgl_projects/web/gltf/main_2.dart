@@ -74,10 +74,10 @@ Future main() async {
 //    './wip/blender_pbr/test_gltf_blender/test_gltf_blender.gltf',
 
   //Sketchfab export
-    './samples/gltf_2_0/sketchfab/microphone_gxl_066/glTF/scene.gltf',
+//    './samples/gltf_2_0/sketchfab/microphone_gxl_066/glTF/scene.gltf',
 //    './samples/gltf_2_0/sketchfab/microphone_gxl_066/original/source/Unity2Skfb.gltf',// Todo (jpu) : this doesn't work, non display, but no errors
 //    './samples/gltf_2_0/sketchfab/centurion/centurion.gltf',
-//    './samples/gltf_2_0/sketchfab/steampunkExplorer/steampunkExplorer.gltf',
+    './samples/gltf_2_0/sketchfab/steampunkExplorer/steampunkExplorer.gltf',
 
   //Blender test Sphere
 //    './wip/simple_sphere/simple_sphere.gltf',
