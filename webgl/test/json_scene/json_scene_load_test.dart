@@ -1,16 +1,16 @@
-//import 'dart:async';
+import 'dart:async';
 //import 'dart:html';
 //import 'dart:typed_data';
-//import "package:test/test.dart";
+import "package:test/test.dart";
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/camera/camera.dart';
 //import 'package:webgl/src/gltf/scene.dart';
 //import 'package:webgl/src/utils/utils_assets.dart';
 //import 'package:webgl/src/gltf/mesh.dart';
-//
-//@TestOn("browser")
-//
-//Future main() async {
+
+@TestOn("browser")
+
+Future main() async {
 //
 //  UtilsAssets.useWebPath = true;
 //
@@ -135,4 +135,4 @@
 //      expect(scene.meshes.length == 2, isTrue);
 //    });
 //  });
-//}
+}

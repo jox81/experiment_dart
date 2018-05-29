@@ -1,6 +1,6 @@
-//import 'dart:async';
+import 'dart:async';
 //import 'dart:typed_data';
-//import "package:test/test.dart";
+import "package:test/test.dart";
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/gltf/accessor.dart';
 //import 'package:webgl/src/gltf/asset.dart';
@@ -13,10 +13,10 @@
 //import 'package:webgl/src/gltf/project.dart';
 //import 'package:webgl/src/gltf/scene.dart';
 //
-//@TestOn("browser")
-//
-//
-//Future main() async {
+@TestOn("browser")
+
+
+Future main() async {
 //
 //  GLTFProject gltfProject;
 //
@@ -186,4 +186,4 @@
 //      expect(asset.version, "2.0");
 //    });
 //  });
-//}
+}
