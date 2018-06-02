@@ -277,7 +277,7 @@
                     <div *ngIf="isImageElement(iEditElement.properties[key])">
                         <legend></legend>
                         <section>
-                            <htmlComponentLoader [element]='iEditElement.properties[key].getter()'></htmlComponentLoader>
+                            <!--<htmlComponentLoader [element]='iEditElement.properties[key].getter()'></htmlComponentLoader>-->
                             <br/>
                             <input type='file' (change)="selectTexture($event)"/>
                         </section>
@@ -286,7 +286,7 @@
                     <div *ngIf="isFunction(iEditElement.properties[key])">
                         <legend></legend>
                         <section>
-                            <function [functionModel] = 'iEditElement.properties[key].getter()'></function>
+                            <!--<function [functionModel] = 'iEditElement.properties[key].getter()'></function>-->
                         </section>
                     </div>
 

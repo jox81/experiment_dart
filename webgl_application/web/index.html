@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <script>
+      // WARNING: DO NOT set the <base href> like this in production!
+      // Details: https://webdev.dartlang.org/angular/guide/router
+      (function () {
+        var m = document.location.pathname.match(/^(\/[-\w]+)+\/web($|\/)/);
+        document.write('<base href="' + (m ? m[0] : '/') + '" />');
+      }());
+    </script>
 
-<head>
-
+    <title>Angular Tour of Heroes</title>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>webgl app</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" href="favicon.png">
 
-    <script defer src="main.dart.js"></script>
-
-</head>
-
-<body>
+    <script defer src="index_base.dart.js"></script>
+  </head>
+  <body>
     <my-app>Loading...</my-app>
-</body>
-
+  </body>
 </html>

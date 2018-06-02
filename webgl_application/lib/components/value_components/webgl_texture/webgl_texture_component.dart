@@ -9,7 +9,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     selector: 'webglTexture',
     templateUrl: 'webgl_texture_component.html',
     styleUrls: const ['webgl_texture_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES,
+    directives: const <dynamic>[coreDirectives,
     forms.formDirectives]
 )
 class WebGLTextureComponent{

@@ -27,9 +27,11 @@ class ClickOutsideDirective {
 
 @Directive(
     selector: 'ul[counting]',
-    host: const {
-      '(click)': 'onClick(\$event.target)'
-    })
+// Todo (jpu) : replace depracated
+//    host: const {
+//      '(click)': 'onClick(\$event.target)'
+//    }
+    )
 class CountClicks {
   var numberOfClicks = 0;
 

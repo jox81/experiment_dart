@@ -8,7 +8,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     selector: 'map',
     templateUrl: 'map_component.html',
     styleUrls: const ['map_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES,
+    directives: const <dynamic>[coreDirectives,
     forms.formDirectives]
 )
 class MapComponent {

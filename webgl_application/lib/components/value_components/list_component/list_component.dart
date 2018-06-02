@@ -8,7 +8,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     selector: 'list',
     templateUrl: 'list_component.html',
     styleUrls: const ['list_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES,
+    directives: const <dynamic>[coreDirectives,
     forms.formDirectives]
 )
 class ListComponent {

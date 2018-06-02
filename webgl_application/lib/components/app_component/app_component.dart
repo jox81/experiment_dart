@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
@@ -13,17 +14,18 @@ import 'package:webgl_application/src/services/projects.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 @Component(
-    selector: 'my-app',
-    templateUrl: 'app_component.html',
-    styleUrls: const ['app_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES, ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent]
+  selector: 'my-app',
+  templateUrl: 'app_component.html',
+  styleUrls: const ['app_component.css'],
+  directives: const <dynamic>[coreDirectives, ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent],
+  providers: [const ClassProvider(ProjectService), CanvasComponent],
 )
-class AppComponent implements OnInit{
+class AppComponent implements OnInit, AfterViewInit{
 
   final ProjectService projectService;
   List<GLTFProject> projects;
 
-  AppComponent(this.projectService);
+  AppComponent(this.projectService, this.canvasComponent);
 
   Application get application => Application.instance;
 
@@ -78,8 +80,14 @@ class AppComponent implements OnInit{
     }
     return new ToolBar(ToolBarItemsType.single);
   }
+
   @override
   Future ngOnInit() async {
+  }
+
+  @override
+  Future ngAfterViewInit() async {
+    print("");
     await Application.build(canvasComponent.canvas);
     projects = await projectService.getProjects();
     await switchScene ();

@@ -18,7 +18,7 @@ class IntComponent {
   Stream get valueChange => _valueChange.stream;
 
   void update(dynamic event){
-    _valueChange.add(int.parse(event.target.value as String, onError:(s)=>0));
+    _valueChange.add(int.tryParse(event.target.value as String) ?? 0);
   }
 
   static void initDynamicComponent(IntComponent component, int defaultValue, Function callBack) {

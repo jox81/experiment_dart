@@ -4,9 +4,10 @@ import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 @Component(
     selector: 'toolBar',
+    pipes: const [commonPipes],
     templateUrl: 'toolbar_component.html',
     styleUrls: const ['toolbar_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES, ToolBarButtonComponent])
+    directives: const <dynamic>[coreDirectives, ToolBarButtonComponent])
 class ToolBarComponent{
 
   @Input()

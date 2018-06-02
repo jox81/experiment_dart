@@ -8,7 +8,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     selector: 'bool',
     templateUrl: 'bool_component.html',
     styleUrls: const ['bool_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES,
+    directives: const <dynamic>[coreDirectives,
     forms.formDirectives]
 )
 class BoolComponent{

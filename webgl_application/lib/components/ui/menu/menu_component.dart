@@ -68,7 +68,7 @@ class MenuComponent{
   bool download(Event event){
 
     String fileName = 'scene.json';
-    String content = Uri.encodeFull(JSON.encode(new CustomEditElement(currentScene).toJson()));
+    String content = Uri.encodeFull(json.encode(new CustomEditElement(currentScene).toJson()));
 
     AnchorElement anchor = event.currentTarget as AnchorElement;
     anchor.href = 'data:text/plain;charset=utf-8,' + content;

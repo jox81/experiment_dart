@@ -4,7 +4,7 @@ import 'package:angular/angular.dart';
     selector: 'layout',
     templateUrl: 'layout_component.html',
     styleUrls: const ['layout_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES]
+    directives: const <dynamic>[coreDirectives]
 )
 class LayoutComponent {
 

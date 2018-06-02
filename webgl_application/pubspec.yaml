@@ -5,16 +5,14 @@ author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=2.0.0-dev.30.0 <2.0.0'
+  sdk: '>=2.0.0-dev.58.0 <2.0.0'
 
 dependencies:
+  angular: ^5.0.0-alpha
+  angular_forms: ^2.0.0-alpha
+  angular_router: ^2.0.0-alpha
   reflectable:
     git: https://github.com/dart-lang/reflectable.git
-  angular: ^5.0.0-alpha+7
-  angular_components: ^0.9.0-alpha+7
-  angular_forms: ^1.0.1-alpha+7
-  angular_router: ^2.0.0-alpha+7
-  angular_test: ^2.0.0-alpha+5
   webgl:
     path: ../webgl
   vector_math: any
@@ -24,12 +22,17 @@ dependencies:
     path: D:\JEROME\dev\repositories\node_engine
 
 dev_dependencies:
-  build_runner: ^0.7.11+1
-  build_test: ^0.10.1
-  build_web_compilers: ^0.3.1
-  test: '>=0.12.0 <0.13.0'
+  build_runner: ^0.8.8
+  build_web_compilers: ^0.4.0
+  test: ^0.12.35
+  angular_test: ^2.0.0-alpha
 
-dependency_overrides:
-  analyzer: ^0.31.0-alpha.1
+# 1 - launch reflectable builder if needed
+# >> dart tool/builder.dart web/*.dart
+# va générer main.reflectable.dart
 
+# 2 - serve
+# >> webdev serve
+# va générer main.template.reflectable.dart
+# va render disponible http://localhost:8080
 

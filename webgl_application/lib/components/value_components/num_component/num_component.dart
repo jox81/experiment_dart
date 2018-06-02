@@ -18,7 +18,7 @@ class NumComponent {
   Stream get valueChange => _valueChange.stream;
 
   void update(dynamic event){
-    _valueChange.add(double.parse(event.target.value as String, (s)=>0.0));
+    _valueChange.add(double.tryParse(event.target.value as String) ?? 0.0);
   }
 
   static void initDynamicComponent(NumComponent component, num defaultValue, Function callBack) {

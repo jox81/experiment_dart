@@ -19,7 +19,7 @@ class Vector2Component {
   Stream get valueChange => _valueChange.stream;
 
   void updateRow(int rowIndex, dynamic event){
-    value[rowIndex] = double.parse(event.target.value.toString(), (s)=>0.0);
+    value[rowIndex] = double.tryParse(event.target.value.toString())??0.0;
     _valueChange.add(value);
   }
 

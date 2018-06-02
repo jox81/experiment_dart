@@ -6,7 +6,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     selector: 'toolBarButton',
     templateUrl: 'toolbar_button_component.html',
     styleUrls: const ['toolbar_button_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES,
+    directives: const <dynamic>[coreDirectives,
     forms.formDirectives])
 class ToolBarButtonComponent{
   @Input()

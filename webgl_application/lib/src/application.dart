@@ -12,14 +12,6 @@ import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
-//@MirrorsUsed(
-//    targets: const [
-//      AxisType,
-//      ActiveToolType,
-//      Application,
-//    ],
-//    override: '*')
-//import 'dart:mirrors';
 
 enum AxisType { view, x, y, z, any }
 enum ActiveToolType { select, move, rotate, scale }

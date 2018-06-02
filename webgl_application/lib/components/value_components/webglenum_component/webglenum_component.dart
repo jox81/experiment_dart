@@ -9,7 +9,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     selector: 'webglEnum',
     templateUrl: 'webglenum_component.html',
     styleUrls: const ['webglenum_component.css'],
-    directives: const <dynamic>[COMMON_DIRECTIVES,
+    directives: const <dynamic>[coreDirectives,
     forms.formDirectives]
 )
 class WebGLEnumComponent{

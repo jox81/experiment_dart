@@ -376,6 +376,7 @@ abstract class IEditElement {
   }
 }
 
+@reflector
 class CustomEditElement extends IEditElement {
   final dynamic element;
   CustomEditElement(this.element);
