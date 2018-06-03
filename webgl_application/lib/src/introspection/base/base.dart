@@ -1,5 +1,5 @@
 import 'package:webgl/src/animation/animation_property.dart';
-import 'package:webgl_application/src/introspection.dart';
+import 'package:webgl/src/introspection.dart';
 
 @reflector // This annotation enables reflection on A.
 class RefTest extends IEditElement{

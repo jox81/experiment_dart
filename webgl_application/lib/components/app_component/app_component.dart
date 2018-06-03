@@ -8,7 +8,7 @@ import 'package:webgl_application/components/ui/layout_component/layout_componen
 import 'package:webgl_application/components/ui/properties_component/properties_component.dart';
 import 'package:webgl_application/components/ui/menu/menu_component.dart';
 import 'package:webgl_application/components/ui/toolbar_component/toolbar_component.dart';
-import 'package:webgl_application/src/introspection.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
@@ -17,18 +17,20 @@ import 'package:webgl_application/src/ui_models/toolbar.dart';
   selector: 'my-app',
   templateUrl: 'app_component.html',
   styleUrls: const ['app_component.css'],
-  directives: const <dynamic>[coreDirectives, ToolBarComponent, CanvasComponent, LayoutComponent, PropertiesComponent, MenuComponent],
+  directives: const <dynamic>[coreDirectives, CanvasComponent, LayoutComponent, MenuComponent, ToolBarComponent, PropertiesComponent],
   providers: [const ClassProvider(ProjectService), CanvasComponent],
 )
-class AppComponent implements OnInit, AfterViewInit{
+class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy, DoCheck {
 
   final ProjectService projectService;
+
+  @ViewChild(CanvasComponent)
+  CanvasComponent canvasComponent;
+
+  bool isEditing = true;
   List<GLTFProject> projects;
 
-  AppComponent(this.projectService, this.canvasComponent);
-
   Application get application => Application.instance;
-
   GLTFScene get currentScene => application?.currentScene;
   GLTFProject get currentProject => application?.project;
 
@@ -38,16 +40,51 @@ class AppComponent implements OnInit, AfterViewInit{
       if (application.currentSelection != null) {
         _currentElement = application.currentSelection;
       }else{
-        _currentElement = new CustomEditElement(currentProject);
       }
+//      _currentElement = new CustomEditElement(currentProject);
     }
 
     return _currentElement;
   }
 
-  @ViewChild(CanvasComponent)
-  CanvasComponent canvasComponent;
+  AppComponent(this.projectService, this.canvasComponent){
+    print('AppComponent.AppComponent');
+  }
 
+
+  @override
+  void ngOnChanges(Map<String, SimpleChange> changes) {
+//    print('AppComponent.ngOnChanges');
+  }
+  @override
+  Future ngOnInit() async {
+//    print('AppComponent.ngOnInit');
+    _loadProjects();
+  }
+  @override
+  void ngDoCheck() {
+//    print('AppComponent.ngDoCheck');
+  }
+  @override
+  void ngAfterContentInit() {
+//    print('AppComponent.ngAfterContentInit');
+  }
+  @override
+  void ngAfterContentChecked() {
+//    print('AppComponent.ngAfterContentChecked');
+  }
+  @override
+  void ngAfterViewInit() {
+//    print('AppComponent.ngAfterViewInit $projects');
+  }
+  @override
+  void ngAfterViewChecked() {
+//    print('AppComponent.ngAfterViewChecked');
+  }
+  @override
+  void ngOnDestroy() {
+//    print('AppComponent.ngOnDestroy');
+  }
 
 //  int sceneId = -1;
 
@@ -81,19 +118,44 @@ class AppComponent implements OnInit, AfterViewInit{
     return new ToolBar(ToolBarItemsType.single);
   }
 
-  @override
-  Future ngOnInit() async {
-  }
-
-  @override
-  Future ngAfterViewInit() async {
-    print("");
-    await Application.build(canvasComponent.canvas);
+  Future _loadProjects() async {
     projects = await projectService.getProjects();
     await switchScene ();
   }
-
-  bool isEditing = true;
-
-
 }
+
+/*
+CanvasComponent.CanvasComponent null
+
+AppComponent.AppComponent
+AppComponent.ngOnInit
+
+AppComponent.ngDoCheck
+AppComponent.ngAfterContentInit
+AppComponent.ngAfterContentChecked
+CanvasComponent.CanvasComponent null
+CanvasComponent.ngOnInit
+CanvasComponent.ngDoCheck
+CanvasComponent.ngAfterContentInit
+CanvasComponent.ngAfterContentChecked
+CanvasComponent.ngAfterViewInit
+CanvasComponent.ngAfterViewChecked
+AppComponent.ngAfterViewInit
+AppComponent.ngAfterViewChecked
+
+AppComponent.ngDoCheck
+AppComponent.ngAfterContentChecked
+CanvasComponent.ngDoCheck
+CanvasComponent.ngAfterContentChecked
+CanvasComponent.ngAfterViewChecked
+AppComponent.ngAfterViewChecked
+
+AppComponent.ngDoCheck
+AppComponent.ngAfterContentChecked
+CanvasComponent.ngDoCheck
+CanvasComponent.ngAfterContentChecked
+CanvasComponent.ngAfterViewChecked
+AppComponent.ngAfterViewChecked
+
+...
+ */

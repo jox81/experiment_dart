@@ -5,7 +5,9 @@ import 'package:webgl/src/gltf/skin.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/interface/IComponent.dart';
+import 'package:webgl/src/introspection.dart';
 
+@reflector
 class GLTFNode extends GLTFChildOfRootProperty{
   static int nextId = 0;
   final int nodeId = nextId++;

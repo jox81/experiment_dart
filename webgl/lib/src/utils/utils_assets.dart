@@ -26,7 +26,7 @@ class UtilsAssets{
     }
 
     String fullPath = '${baseWebPath}${url}';
-    print('UtilsAssets.getWebPath fullPath : $fullPath');
+//    print('UtilsAssets.getWebPath fullPath : $fullPath');
     return fullPath;
   }
 

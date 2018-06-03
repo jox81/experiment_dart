@@ -1,9 +1,9 @@
 <!-- Rectangular switch -->
 <label class="switch">
-    <template [ngIf]="toolBarItemsType.toString() == 'ToolBarItemsType.multi'">
-        <input type="checkbox" [ngModel] = "checked">
+    <template [ngIf]="isMulti">
+        <input type="checkbox" ><!--[(ngModel)] = "checked"-->
     </template>
-    <template [ngIf]="toolBarItemsType.toString() == 'ToolBarItemsType.single'">
+    <template [ngIf]="!isMulti">
         <input type="radio" name="multi" value = 'text'>
     </template>
 

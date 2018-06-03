@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:node_engine/src/nodes/custom/node_getter.dart';
 import 'package:node_engine/src/nodes/custom/node_setter.dart';
+import 'package:reflectable/reflectable.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/buffer.dart';
@@ -12,10 +13,10 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/mesh_primitive.dart';
 import 'package:webgl/src/gltf/scene.dart';
-//import 'package:webgl_application/components/ui/properties_component/dynamic_load_html_component.dart';
+import 'package:webgl_application/components/ui/properties_component/dynamic_load_html_component.dart';
 import 'package:webgl_application/components/value_components/bool_component/bool_component.dart';
-//import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';
-//import 'package:webgl_application/components/value_components/function_component/function_component.dart';
+import 'package:webgl_application/components/value_components/function_component/dynamic_load_component.dart';
+import 'package:webgl_application/components/value_components/function_component/function_component.dart';
 import 'package:webgl_application/components/value_components/list_component/list_component.dart';
 import 'package:webgl_application/components/value_components/map_component/map_component.dart';
 import 'package:webgl_application/components/value_components/matrix3_component/matrix3_component.dart';
@@ -32,7 +33,7 @@ import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl_application/src/application.dart';
-import 'package:webgl_application/src/introspection.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:angular_forms/angular_forms.dart' as forms;
 
 @Component(
@@ -254,11 +255,10 @@ class PropertiesComponent {
 
   /// Return true if type is the same or if it's a subType
   bool compareType(Type elementType, Type compareType) {
-    return false;// Todo (jpu) :
-//    ClassMirror elementTypeMirror = reflectClass(elementType);
-//    ClassMirror compareTypeMirror = reflectClass(compareType);
-//    bool result = (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);
-//    return result;
+    ClassMirror elementTypeMirror = reflector.reflectType(elementType);
+    ClassMirror compareTypeMirror = reflector.reflectType(compareType);
+    bool result = (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);
+    return result;
   }
 
   //Getter/Setter button

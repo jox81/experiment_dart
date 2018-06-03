@@ -6,7 +6,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl_application/src/introspection.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/interaction.dart';
@@ -21,7 +21,7 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
   static Application _instance;
   static Application get instance => _instance;
   static Future<Application> build(CanvasElement canvas) async {
-
+    print("Application.build");
     if (instance == null) {
       _instance = new Application._(canvas);
     }

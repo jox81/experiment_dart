@@ -16,6 +16,8 @@ dependencies:
   datgui: "^0.2.0+1"
   logging: "^0.11.3+1"
   stack_trace: "^1.9.2"
+  reflectable:
+      git: https://github.com/dart-lang/reflectable.git
 
 dev_dependencies:
   build_runner: ^0.8.8
@@ -24,3 +26,12 @@ dev_dependencies:
   test: "^0.12.38"
 
 # https://webdev-dartlang-org-dev.firebaseapp.com/tools/webdev#build
+
+# 1 - launch reflectable builder if needed
+# >> dart tool/builder.dart web/*.dart
+# va générer main.reflectable.dart
+
+# 2 - serve
+# >> webdev serve
+# va générer main.template.reflectable.dart
+# va render disponible http://localhost:8080

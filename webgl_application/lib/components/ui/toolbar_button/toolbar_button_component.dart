@@ -10,7 +10,9 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     forms.formDirectives])
 class ToolBarButtonComponent{
   @Input()
-  ToolBarItemsType toolBarItemsType = ToolBarItemsType.multi;
+  ToolBarItemsType toolBarItemsType;
+
+  bool get isMulti => toolBarItemsType == ToolBarItemsType.multi;
 
   @Input()
   bool checked = false;

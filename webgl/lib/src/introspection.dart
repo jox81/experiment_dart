@@ -283,6 +283,7 @@ class IntrospectionManager {
   }
 }
 
+@reflector
 class FunctionModel{
   final Function function;
   final InstanceMirror instancesMirror;

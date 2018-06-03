@@ -8,7 +8,7 @@ import 'package:webgl/src/gltf/mesh.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl_application/src/introspection.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
 import 'package:webgl/src/context.dart';
