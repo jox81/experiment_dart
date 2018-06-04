@@ -17,3 +17,7 @@ ngAfterViewChecked(){
 https://webdev.dartlang.org/api/angular/angular/ChangeDetectorRef-class
 
 https://webdev.dartlang.org/api/angular/angular/ChangeDetectionStrategy-class
+
+
+with @input()
+changeDetection: ChangeDetectionStrategy.OnPush
