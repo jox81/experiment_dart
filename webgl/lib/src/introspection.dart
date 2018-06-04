@@ -20,15 +20,15 @@ List<ReflectCapability> capabilities = [
   delegateCapability,
   subtypeQuantifyCapability,
   superclassQuantifyCapability,
-  admitSubtypeCapability
+  admitSubtypeCapability,
 ];
 
 // Annotate with this class to enable reflection.
 class Reflector extends Reflectable {
   const Reflector()
       : super(invokingCapability, declarationsCapability,
-      superclassQuantifyCapability, reflectedTypeCapability,
-//      admitSubtypeCapability,//Todo (jpu) : is is not yet supported ? 2.0.0 (see in packages issues)
+      superclassQuantifyCapability, reflectedTypeCapability,typeRelationsCapability,
+//      admitSubtypeCapability,
       metadataCapability); // Request the capability to invoke methods.
 }
 

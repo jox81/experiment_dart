@@ -41,7 +41,7 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
         _currentElement = application.currentSelection;
       }else{
       }
-//      _currentElement = new CustomEditElement(currentProject);
+      _currentElement = new CustomEditElement(currentProject);
     }
 
     return _currentElement;

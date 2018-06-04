@@ -255,10 +255,34 @@ class PropertiesComponent {
 
   /// Return true if type is the same or if it's a subType
   bool compareType(Type elementType, Type compareType) {
-    ClassMirror elementTypeMirror = reflector.reflectType(elementType);
-    ClassMirror compareTypeMirror = reflector.reflectType(compareType);
-    bool result = (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);
-    return result;
+    ClassMirror elementTypeMirror;
+    ClassMirror compareTypeMirror;
+
+    if(reflector.canReflectType(elementType)){
+      elementTypeMirror = reflector.reflectType(elementType);
+    }
+
+    if(reflector.canReflectType(compareType)){
+      compareTypeMirror = reflector.reflectType(compareType);
+    }
+
+    bool result;
+
+    if(elementTypeMirror != null && compareTypeMirror != null ){
+      try{
+        result = elementTypeMirror.isSubtypeOf(compareTypeMirror);
+      } catch (e) {
+        result = false;
+      }
+
+    }else{
+      result = elementType == compareType;
+    }
+    return (elementType.toString() != "Null") && result;
+
+//    elementTypeMirror = reflector.reflectType(elementType);
+//    compareTypeMirror = reflector.reflectType(compareType);
+//    return (elementType.toString() != "Null") && elementTypeMirror.isSubtypeOf(compareTypeMirror);
   }
 
   //Getter/Setter button
