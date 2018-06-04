@@ -1,24 +1,19 @@
-## Tour of Heroes: HTTP
+Expression has changed after it was checked
 
-Welcome to the example app used in the
-[Tour of Heroes: HTTP](https://webdev-dartlang-org-dev.firebaseapp.com/angular/tutorial/toh-pt6) page
-of [Dart for the web](https://webdev-dartlang-org-dev.firebaseapp.com).
+https://stackoverflow.com/questions/34364880/expression-has-changed-after-it-was-checked?rq=1
+https://blog.angularindepth.com/everything-you-need-to-know-about-the-expressionchangedafterithasbeencheckederror-error-e3fd9ce7dbb4
 
-You can run a [hosted copy](https://webdev-dartlang-org-dev.firebaseapp.com/examples/toh-6) of this
-sample. Or run your own copy:
+````
+import { Component, ChangeDetectorRef } from '@angular/core'; //import ChangeDetectorRef
 
-1. Create a local copy of this repo (use the "Clone or download" button above).
-2. Get the dependencies: `pub get`
-3. Get the webdev tool: `pub global activate webdev`
-4. Launch a development server: `webdev serve`
-5. In a browser, open [http://localhost:8080](http://localhost:8080)
+constructor(private cdr: ChangeDetectorRef) { }
+ngAfterViewChecked(){
+   //your code to update the model
+   this.cdr.detectChanges();
+}
 
----
+````
 
-*Note:* The content of this repository is generated from the
-[Angular docs repository][docs repo] by running the
-[dart-doc-syncer](//github.com/dart-lang/dart-doc-syncer) tool.
-If you find a problem with this sample's code, please open an [issue][].
+https://webdev.dartlang.org/api/angular/angular/ChangeDetectorRef-class
 
-[docs repo]: //github.com/dart-lang/site-webdev/tree/master/examples/ng/doc/toh-6
-[issue]: //github.com/dart-lang/site-webdev/issues/new?title=[master]%20examples/ng/doc/toh-6
+https://webdev.dartlang.org/api/angular/angular/ChangeDetectionStrategy-class
