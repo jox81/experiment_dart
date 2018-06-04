@@ -48,6 +48,7 @@ class IntrospectionManager {
 
   Map<String, EditableProperty> getPropertiesInfos(dynamic element) {
     Map<String, EditableProperty> propertiesInfos = {};
+    if(element == null) return propertiesInfos;
 
     InstanceMirror im = reflector.reflect(element);
     ClassMirror cm = im.type;
@@ -337,6 +338,7 @@ class FunctionModel{
   }
 }
 
+@reflector
 abstract class IEditElement {
   String name;
 

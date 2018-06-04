@@ -12,6 +12,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/texture.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 
 // Todo (jpu) : synchronize id's list cohérent?
@@ -23,6 +24,7 @@ import 'package:webgl/src/light/light.dart';
 // Todo (jpu) : Acccessor getElement test ?
 // 16/10/2017 : reading .bin files as Uint8List
 
+@reflector
 class GLTFProject{
 
   factory GLTFProject.create({bool reset : false}){

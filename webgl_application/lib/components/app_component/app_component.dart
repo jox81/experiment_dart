@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl_application/components/ui/canvas_component/canvas_component.dart';
 import 'package:webgl_application/components/ui/layout_component/layout_component.dart';
 import 'package:webgl_application/components/ui/properties_component/properties_component.dart';
@@ -34,14 +35,14 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
   GLTFScene get currentScene => application?.currentScene;
   GLTFProject get currentProject => application?.project;
 
-  CustomEditElement _currentElement;
+  CustomEditElement _currentElement = new CustomEditElement(new GLTFNode());
   CustomEditElement get currentElement {
     if(application != null) {
       if (application.currentSelection != null) {
         _currentElement = application.currentSelection;
       }else{
+        _currentElement = new CustomEditElement(currentProject);
       }
-      _currentElement = new CustomEditElement(currentProject);
     }
 
     return _currentElement;

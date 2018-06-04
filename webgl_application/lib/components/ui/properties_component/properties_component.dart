@@ -45,7 +45,7 @@ import 'package:angular_forms/angular_forms.dart' as forms;
     directives: const <dynamic>[
       coreDirectives,
       forms.formDirectives,
-//      DynamicLoaderComponent,
+      DynamicLoaderComponent,
       Vector2Component,
       Vector3Component,
       Vector4Component,
@@ -55,8 +55,8 @@ import 'package:angular_forms/angular_forms.dart' as forms;
       MapComponent,
       BoolComponent,
       WebGLEnumComponent,
-//      FunctionComponent,
-//      DynamicLoaderHtmlComponent
+      FunctionComponent,
+      DynamicLoaderHtmlComponent
     ])
 class PropertiesComponent {
   Application get application => Application.instance;

@@ -2,7 +2,9 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 
+@reflector
 class GLTFScene extends GLTFChildOfRootProperty{
   static int nextId = 0;
   final int sceneId = nextId++;
