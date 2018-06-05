@@ -1,5 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/introspection.dart';
 //@MirrorsUsed(
 //    targets: const [
 //      WebglEdit,
@@ -8,6 +9,7 @@ import 'package:webgl/src/gltf/scene.dart';
 //import 'dart:mirrors';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
+@reflector
 class WebglEdit{
   final GLTFScene scene;
 

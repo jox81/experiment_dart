@@ -80,25 +80,6 @@ void main() {
       result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
       expect(result, null);
     });
-    test("DELETE_STATUS", () {
-      webgl.Program program;
-      bool result;
-
-      /// if no program exist, result is null
-      result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
-      expect(result, null);
-
-      program = gl.createProgram();
-
-      result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
-      expect(result, false);
-
-      gl.deleteProgram(program);
-
-      /// when deleted, program doesn't exist anymore, result is null
-      result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
-      expect(result, null);
-    });
   });
 
   group("webgl shaders", () {

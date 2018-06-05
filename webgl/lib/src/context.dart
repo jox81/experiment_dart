@@ -15,7 +15,7 @@ import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 //    override: '*')
 //import 'dart:mirrors';
 
-WebGL.RenderingContext get gl => Context._glWrapper.gl;
+WebGL.RenderingContext get gl => Context._glWrapper?.gl;
 set gl(WebGL.RenderingContext ctx) => Context._glWrapper = new WebGLRenderingContext.fromWebGL(ctx);
 
 class Context{

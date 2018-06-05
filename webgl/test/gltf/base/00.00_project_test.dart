@@ -34,9 +34,13 @@ Future main() async {
       gltf.addScene(scene);
       gltf.scene = scene;
 
-//      print(gltf);
+      print(gltf);
 
       //>>
+
+      print(gltf.nodes[0].name);
+      print(gltf.nodes[1].name);
+
       expect(gltf.nodes.length, 1);
       expect(gltf.nodes[0].name, "singleNode");
 

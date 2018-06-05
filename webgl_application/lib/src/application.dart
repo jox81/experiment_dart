@@ -33,7 +33,10 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
 
   GLTFScene get currentScene => project?.scene;
 
-  CustomEditElement currentSelection;
+  CustomEditElement _currentSelection;
+  CustomEditElement get currentSelection => _currentSelection;
+  set currentSelection(CustomEditElement value) => _currentSelection = value;
+
   GLTFRenderer renderer;
   GLTFProject project;
   CameraPerspective get mainCamera => Context.mainCamera;
@@ -112,7 +115,7 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
 
   void _onMouseUpHandler(MouseEvent event) {
     if(!interaction.dragging) {
-      currentSelection = new CustomEditElement(tempSelection);
+      currentSelection = tempSelection != null ? new CustomEditElement(tempSelection) : null;
     }
   }
 
@@ -120,7 +123,7 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
     if(activeTool == ActiveToolType.move ||
         activeTool == ActiveToolType.rotate ||
         activeTool == ActiveToolType.scale) {
-      currentSelection = new CustomEditElement(tempSelection);
+      currentSelection = tempSelection != null ? new CustomEditElement(tempSelection) : null;
     }
 
     if(currentSelection != null && currentSelection is GLTFNode) {
