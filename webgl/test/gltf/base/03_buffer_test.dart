@@ -5,20 +5,22 @@ import 'dart:async';
 import "package:test/test.dart";
 @TestOn("browser")
 
+String testFolderRelativePath = "../..";
+
 Future main() async {
 
   group("Buffer", () {
     test("Empty array", () async {
-      String gltfPath = 'gltf/tests/base/data/buffer/empty.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer/empty.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 0);
     });
     test("Array length with empty data", () async {
-      String gltfPath = 'gltf/tests/base/data/buffer/valid_full.gltf';
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer/valid_full.gltf';
 
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFBuffer> buffers = gltf.buffers;
@@ -31,10 +33,12 @@ Future main() async {
       expect(buffers[1].data, isNotNull);
     });
     test("Array length", () async {
-      String gltfPath = 'gltf/samples/gltf_2_0/minimal.gltf';
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/minimal.gltf';
 
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
+
+      print(gltf);
 
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 1);
@@ -46,9 +50,9 @@ Future main() async {
 
     });
     test("uri", () async {
-      String gltfPath = 'gltf/tests/base/data/image/valid_full.gltf';
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/image/valid_full.gltf';
 
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFBuffer> buffers = gltf.buffers;

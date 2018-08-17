@@ -212,7 +212,7 @@ class GLTFRenderer implements Interactable {
       ..hasDerivativesExtension = hasDerivativesExtension
       ..hasIndexUIntExtension = hasIndexUIntExtension
       ..sRGBifAvailable =
-      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.RGBA;
+      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.WebGL.RGBA;
 
     await _initTextures();
     setupCameras();

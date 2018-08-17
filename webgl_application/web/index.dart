@@ -7,7 +7,7 @@ import 'package:webgl_application/src/introspection/base/base.dart';
 import 'package:http/http.dart';
 import 'package:webgl/src/introspection.dart';
 
-import 'index.reflectable.dart';
+//import 'index.reflectable.dart';
 import 'index.template.dart' as self;
 
 @GenerateInjector([
@@ -20,7 +20,7 @@ import 'index.template.dart' as self;
 final InjectorFactory injector = self.injector$Injector;
 
 void main() {
-  initializeReflectable();
+//  initializeReflectable();
 //  test_introspection();
   test_introspection_base();
   runApp(ng.AppComponentNgFactory, createInjector: injector);

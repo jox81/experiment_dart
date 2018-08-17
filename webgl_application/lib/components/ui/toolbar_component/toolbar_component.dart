@@ -10,7 +10,7 @@ import 'package:webgl_application/src/ui_models/toolbar.dart';
     templateUrl: 'toolbar_component.html',
     styleUrls: const ['toolbar_component.css'],
     directives: const <dynamic>[coreDirectives, ToolBarButtonComponent])
-class ToolBarComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy, DoCheck{
+class ToolBarComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy{
 
   @Input()
   ToolBar toolBar;
@@ -28,10 +28,6 @@ class ToolBarComponent implements OnInit, AfterViewInit, AfterContentChecked, Af
   @override
   void ngOnInit() {
 //    print('ToolBarComponent.ngOnInit');
-  }
-  @override
-  void ngDoCheck() {
-//    print('ToolBarComponent.ngDoCheck');
   }
   @override
   void ngAfterContentInit() {

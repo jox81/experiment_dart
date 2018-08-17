@@ -24,8 +24,8 @@ Future main() async {
 
   webgl.Texture texture = await loadImageToTexture();
 
-  gl.activeTexture(webgl.RenderingContext.TEXTURE1);
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, texture);
+  gl.activeTexture(webgl.WebGL.TEXTURE1);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, texture);
 
   webgl.Program programBase = buildProgram();
   gl.useProgram(programBase);
@@ -35,24 +35,24 @@ Future main() async {
   webgl.Texture textureRender = createTexture(512,512).webGLTexture;
   //> create a framebuffer and attach texture to it
   webgl.Framebuffer framebuffer = gl.createFramebuffer();
-  gl.bindFramebuffer(webgl.RenderingContext.FRAMEBUFFER, framebuffer);
+  gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, framebuffer);
   gl.framebufferTexture2D(
-      webgl.RenderingContext.FRAMEBUFFER, webgl.RenderingContext.COLOR_ATTACHMENT0,
-      webgl.RenderingContext.TEXTURE_2D, textureRender, 0);
-  var result = gl.checkFramebufferStatus(webgl.RenderingContext.FRAMEBUFFER);
-  if (result != webgl.RenderingContext.FRAMEBUFFER_COMPLETE) {
+      webgl.WebGL.FRAMEBUFFER, webgl.WebGL.COLOR_ATTACHMENT0,
+      webgl.WebGL.TEXTURE_2D, textureRender, 0);
+  var result = gl.checkFramebufferStatus(webgl.WebGL.FRAMEBUFFER);
+  if (result != webgl.WebGL.FRAMEBUFFER_COMPLETE) {
     int status = gl.checkFramebufferStatus(FrameBufferTarget.FRAMEBUFFER);
     print(GLEnum.FrameBufferStatus.getByIndex(status));
     return;
   }
 
   draw();
-  gl.bindFramebuffer(webgl.RenderingContext.FRAMEBUFFER, null);
+  gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, null);
 
   //> apply filter
   await ShaderSource.loadShaders();
   MaterialDotScreen materialDotScreen = new MaterialDotScreen();
-  materialDotScreen.texture = new WebGLTexture.fromWebGL(textureRender, webgl.RenderingContext.TEXTURE_2D);
+  materialDotScreen.texture = new WebGLTexture.fromWebGL(textureRender, webgl.WebGL.TEXTURE_2D);
   WebGLProgram programFilter = materialDotScreen.getProgram();
 
   gl.useProgram(programFilter.webGLProgram);
@@ -65,7 +65,7 @@ Future main() async {
 WebGLTexture createTexture(int width, int height) {
   WebGLTexture texture = new WebGLTexture.texture2d();
 
-  gl.activeTexture(webgl.RenderingContext.TEXTURE0);
+  gl.activeTexture(webgl.WebGL.TEXTURE0);
   Context.glWrapper.activeTexture.texture2d.bind(texture);
 
   Context.glWrapper.activeTexture.texture2d.setParameterInt(
@@ -100,8 +100,8 @@ Future setupProgram(webgl.Program program, webgl.Texture texture) async {
   //uniform
   webgl.UniformLocation uniformLocation = gl.getUniformLocation(program, 'u_texture');
   int activeUnit = 3;
-  gl.activeTexture(webgl.RenderingContext.TEXTURE0 + activeUnit);
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, texture);
+  gl.activeTexture(webgl.WebGL.TEXTURE0 + activeUnit);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, texture);
   gl.uniform1i(uniformLocation, activeUnit);
 
 }
@@ -110,9 +110,9 @@ void setAttribut(webgl.Program program) {
   //attribut
   var positionAttributeLocation = gl.getAttribLocation(program, 'position');
   var positionBuffer = gl.createBuffer();
-  gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, positionBuffer);
+  gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, positionBuffer);
   gl.bufferData(
-      webgl.RenderingContext.ARRAY_BUFFER,
+      webgl.WebGL.ARRAY_BUFFER,
       new Float32List.fromList([
         -1.0, -1.0, //
         -1.0, 1.0,  //
@@ -121,11 +121,11 @@ void setAttribut(webgl.Program program) {
         1.0, -1.0,  //
         -1.0, 1.0,
       ]),
-      webgl.RenderingContext.STATIC_DRAW);
+      webgl.WebGL.STATIC_DRAW);
 
   gl.enableVertexAttribArray(positionAttributeLocation);
   gl.vertexAttribPointer(
-      positionAttributeLocation, 2, webgl.RenderingContext.FLOAT, false, 0, 0);
+      positionAttributeLocation, 2, webgl.WebGL.FLOAT, false, 0, 0);
 }
 
 webgl.Program buildProgram() {
@@ -158,7 +158,7 @@ webgl.Program buildProgram() {
     gl.compileShader(shader);
 
     bool success =
-    gl.getShaderParameter(shader, webgl.RenderingContext.COMPILE_STATUS);
+    gl.getShaderParameter(shader, webgl.WebGL.COMPILE_STATUS);
     if (!success) {
       print(gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
@@ -168,9 +168,9 @@ webgl.Program buildProgram() {
   }
 
   var vertexShader =
-      createShader(webgl.RenderingContext.VERTEX_SHADER, vertexShaderSource);
+      createShader(webgl.WebGL.VERTEX_SHADER, vertexShaderSource);
   var fragmentShader = createShader(
-      webgl.RenderingContext.FRAGMENT_SHADER, fragmentShaderSource);
+      webgl.WebGL.FRAGMENT_SHADER, fragmentShaderSource);
 
   webgl.Program createProgram(webgl.Shader vertexShader, webgl.Shader fragmentShader) {
     webgl.Program program = gl.createProgram();
@@ -179,7 +179,7 @@ webgl.Program buildProgram() {
     gl.linkProgram(program);
 
     bool success =
-    gl.getProgramParameter(program, webgl.RenderingContext.LINK_STATUS);
+    gl.getProgramParameter(program, webgl.WebGL.LINK_STATUS);
     if (!success) {
       print(gl.getProgramInfoLog(program));
       gl.deleteProgram(program);
@@ -208,31 +208,31 @@ Future<webgl.Texture> loadImageToTexture() async {
 }
 
 webgl.Texture handleLoadedTexture(dynamic image) {
-  gl.activeTexture(webgl.RenderingContext.TEXTURE7);// random
+  gl.activeTexture(webgl.WebGL.TEXTURE7);// random
   webgl.Texture texture = gl.createTexture();
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, texture);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, texture);
   gl.texParameteri(
-      webgl.RenderingContext.TEXTURE_2D,
-      webgl.RenderingContext.TEXTURE_WRAP_S,
-      webgl.RenderingContext.CLAMP_TO_EDGE);
+      webgl.WebGL.TEXTURE_2D,
+      webgl.WebGL.TEXTURE_WRAP_S,
+      webgl.WebGL.CLAMP_TO_EDGE);
   gl.texParameteri(
-      webgl.RenderingContext.TEXTURE_2D,
-      webgl.RenderingContext.TEXTURE_WRAP_T,
-      webgl.RenderingContext.CLAMP_TO_EDGE);
+      webgl.WebGL.TEXTURE_2D,
+      webgl.WebGL.TEXTURE_WRAP_T,
+      webgl.WebGL.CLAMP_TO_EDGE);
   gl.texParameteri(
-      webgl.RenderingContext.TEXTURE_2D,
-      webgl.RenderingContext.TEXTURE_MAG_FILTER,
-      webgl.RenderingContext.NEAREST);
+      webgl.WebGL.TEXTURE_2D,
+      webgl.WebGL.TEXTURE_MAG_FILTER,
+      webgl.WebGL.NEAREST);
   gl.texParameteri(
-      webgl.RenderingContext.TEXTURE_2D,
-      webgl.RenderingContext.TEXTURE_MIN_FILTER,
-      webgl.RenderingContext.NEAREST);
+      webgl.WebGL.TEXTURE_2D,
+      webgl.WebGL.TEXTURE_MIN_FILTER,
+      webgl.WebGL.NEAREST);
   gl.texImage2D(
-      webgl.RenderingContext.TEXTURE_2D,
+      webgl.WebGL.TEXTURE_2D,
       0,
-      webgl.RenderingContext.RGBA,
-      webgl.RenderingContext.RGBA,
-      webgl.RenderingContext.UNSIGNED_BYTE,
+      webgl.WebGL.RGBA,
+      webgl.WebGL.RGBA,
+      webgl.WebGL.UNSIGNED_BYTE,
       image);
 
   return texture;
@@ -240,7 +240,7 @@ webgl.Texture handleLoadedTexture(dynamic image) {
 
 void draw() {
   gl.clearColor(1.0, 1.0, 1.0, 1.0);
-  gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
+  gl.clear(webgl.WebGL.COLOR_BUFFER_BIT);
 
-  gl.drawArrays(webgl.RenderingContext.TRIANGLES, 0, 6);
+  gl.drawArrays(webgl.WebGL.TRIANGLES, 0, 6);
 }

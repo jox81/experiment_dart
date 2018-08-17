@@ -8,26 +8,28 @@ import 'package:webgl/src/gltf/debug_gltf.dart';
 
 Future main() async {
 
+  String testFolderRelativePath = "../..";
+
   group("BufferView", () {
     test("Empty array", () async {
-      String gltfPath = 'gltf/tests/base/data/buffer_view/empty.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer_view/empty.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFBufferView> bufferViews = gltf.bufferViews;
       expect(bufferViews.length, 0);
     });
     test("Array length", () async {
-      String gltfPath = 'gltf/tests/base/data/buffer_view/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer_view/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFBufferView> bufferViews = gltf.bufferViews;
       expect(bufferViews.length, 1);
     });
     test("BufferView properties", () async {
-      String gltfPath = 'gltf/tests/base/data/buffer_view/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer_view/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFBufferView bufferView = gltf.bufferViews[0];

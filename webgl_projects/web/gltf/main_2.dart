@@ -20,8 +20,8 @@ Future main() async {
     //Animation
 //    './samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf',
 //    './samples/gltf_2_0/03_animated_triangle/gltf/AnimatedTriangle.gltf',
-//    './wip/animation_test/animation_test.gltf',
-//    './samples/gltf_2_0/BoxAnimated/glTF_embed/BoxAnimated.gltf',
+//    './wip/animation_test/animation_test.gltf',// Todo (jpu) : bug
+//    './samples/gltf_2_0/BoxAnimated/glTF_embed/BoxAnimated.gltf',// Todo (jpu) : bug console
 //    './samples/gltf_2_0/BoxAnimated/glTF/BoxAnimated.gltf',
 
   //Animation with morph
@@ -48,7 +48,7 @@ Future main() async {
 //    './samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    './samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-//    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
@@ -77,7 +77,7 @@ Future main() async {
 //    './samples/gltf_2_0/sketchfab/microphone_gxl_066/glTF/scene.gltf',
 //    './samples/gltf_2_0/sketchfab/microphone_gxl_066/original/source/Unity2Skfb.gltf',// Todo (jpu) : this doesn't work, non display, but no errors
 //    './samples/gltf_2_0/sketchfab/centurion/centurion.gltf',
-    './samples/gltf_2_0/sketchfab/steampunkExplorer/steampunkExplorer.gltf',
+//    './samples/gltf_2_0/sketchfab/steampunkExplorer/steampunkExplorer.gltf',
 
   //Blender test Sphere
 //    './wip/simple_sphere/simple_sphere.gltf',

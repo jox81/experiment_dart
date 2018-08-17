@@ -7,7 +7,7 @@ import 'package:webgl_application/src/application.dart';
     selector: 'canvas_app',
     templateUrl: 'canvas_component.html',
     styleUrls: const ['canvas_component.css'])
-class CanvasComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy, DoCheck{
+class CanvasComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy{
 
   @ViewChild("appCanvasNG")
   HtmlElement appCanvas;
@@ -27,10 +27,6 @@ class CanvasComponent implements OnInit, AfterViewInit, AfterContentChecked, Aft
     print('CanvasComponent.ngOnInit $appCanvas');
     canvas = appCanvas as CanvasElement;
     Application.build(canvas);
-  }
-  @override
-  void ngDoCheck() {
-//    print('CanvasComponent.ngDoCheck $appCanvas');
   }
   @override
   void ngAfterContentInit() {

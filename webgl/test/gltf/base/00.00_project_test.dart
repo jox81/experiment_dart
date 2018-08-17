@@ -6,6 +6,8 @@ import 'package:webgl/src/gltf/scene.dart';
 
 @TestOn("browser")
 
+String testFolderRelativePath = "../..";
+
 Future main() async {
   group("Project", () {
     test("Project creation", () async {
@@ -25,13 +27,11 @@ Future main() async {
 
       GLTFNode node = new GLTFNode()
         ..name = 'singleNode';
-      gltf.addNode(node);
 
       GLTFScene scene = new GLTFScene()
         ..name = 'singleScene';
       scene.addNode(node);
 
-      gltf.addScene(scene);
       gltf.scene = scene;
 
       print(gltf);
@@ -39,7 +39,6 @@ Future main() async {
       //>>
 
       print(gltf.nodes[0].name);
-      print(gltf.nodes[1].name);
 
       expect(gltf.nodes.length, 1);
       expect(gltf.nodes[0].name, "singleNode");

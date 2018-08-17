@@ -8,27 +8,30 @@ import "package:test/test.dart";
 import 'package:webgl/src/gltf/texture_info.dart';
 import 'package:webgl/src/gltf/debug_gltf.dart';
 @TestOn("browser")
+
+String testFolderRelativePath = "../..";
+
 Future main() async {
   group("Material", () {
     test("Empty array", () async {
-      String gltfPath = 'gltf/tests/base/data/material/empty.gltf';;
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/empty.gltf';;
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 0);
     });
     test("Array length", () async {
-      String gltfPath = 'gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 1);
     });
     test("base properties", () async {
-      String gltfPath = 'gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -38,8 +41,8 @@ Future main() async {
       expect(material.doubleSided, true);
     });
     test("properties pbrMetallicRoughness", () async {
-      String gltfPath = 'gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -59,8 +62,8 @@ Future main() async {
 
     });
     test("properties normalTexture", () async {
-      String gltfPath = 'gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -71,8 +74,8 @@ Future main() async {
       expect(normalTexture.scale, 2.1);
     });
     test("properties occlusionTexture", () async {
-      String gltfPath = 'gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -83,8 +86,8 @@ Future main() async {
       expect(occlusionTexture.strength, 0.5);
     });
     test("properties emissiveTexture", () async {
-      String gltfPath = 'gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];

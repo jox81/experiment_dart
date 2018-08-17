@@ -146,7 +146,7 @@ class TextureUtils {
   static WebGLTexture createEmptyTexture2D(int size) {
     WebGLTexture texture = new WebGLTexture.texture2d();
 
-    gl.activeTexture(webgl.RenderingContext.TEXTURE0);
+    gl.activeTexture(webgl.WebGL.TEXTURE0);
     Context.glWrapper.activeTexture.texture2d.bind(texture);
 
     Context.glWrapper.activeTexture.texture2d.setParameterInt(
@@ -436,12 +436,12 @@ class TextureUtils {
   static ImageElement createImageFromTexture(webgl.Texture texture, int width, int height) {
     // Create a framebuffer backed by the texture
     var framebuffer = gl.createFramebuffer();
-    gl.bindFramebuffer(webgl.RenderingContext.FRAMEBUFFER, framebuffer);
-    gl.framebufferTexture2D(webgl.RenderingContext.FRAMEBUFFER, webgl.RenderingContext.COLOR_ATTACHMENT0, webgl.RenderingContext.TEXTURE_2D, texture, 0);
+    gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(webgl.WebGL.FRAMEBUFFER, webgl.WebGL.COLOR_ATTACHMENT0, webgl.WebGL.TEXTURE_2D, texture, 0);
 
     // Read the contents of the framebuffer
     Uint8List data = new Uint8List(width * height * 4);
-    gl.readPixels(0, 0, width, height, webgl.RenderingContext.RGBA, webgl.RenderingContext.UNSIGNED_BYTE, data);
+    gl.readPixels(0, 0, width, height, webgl.WebGL.RGBA, webgl.WebGL.UNSIGNED_BYTE, data);
 
     gl.deleteFramebuffer(framebuffer);
 

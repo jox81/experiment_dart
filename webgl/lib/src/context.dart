@@ -8,12 +8,6 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/render_setting.dart';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
-//@MirrorsUsed(
-//    targets: const [
-//      Context,
-//    ],
-//    override: '*')
-//import 'dart:mirrors';
 
 WebGL.RenderingContext get gl => Context._glWrapper?.gl;
 set gl(WebGL.RenderingContext ctx) => Context._glWrapper = new WebGLRenderingContext.fromWebGL(ctx);

@@ -5,10 +5,12 @@ import 'package:webgl/src/gltf/project.dart';
 
 @TestOn("browser")
 
+String testFolderRelativePath = "../..";
+
 Future main() async {
   group("test camera", () {
     test("test camera creation", () async {
-      GLTFProject project = await loadGLTF('gltf/tests/base/data/camera/empty.gltf', useWebPath : false);
+      GLTFProject project = await loadGLTF('${testFolderRelativePath}/gltf/tests/base/data/camera/empty.gltf', useWebPath : false);
       await debugGltf(project, doGlTFProjectLog : false, isDebug:false);
       expect(project, isNotNull);
     });

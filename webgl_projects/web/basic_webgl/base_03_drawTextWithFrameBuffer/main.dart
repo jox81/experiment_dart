@@ -51,65 +51,65 @@ Future main() async {
 
   //> buffer position
   webgl.Buffer buffer = gl.createBuffer();
-  gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, buffer);
+  gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, buffer);
   gl.bufferData(
-      webgl.RenderingContext.ARRAY_BUFFER,
+      webgl.WebGL.ARRAY_BUFFER,
       new Float32List.fromList(positions),
-      webgl.RenderingContext.STATIC_DRAW);
+      webgl.WebGL.STATIC_DRAW);
   gl.enableVertexAttribArray(positionLoc);
-  gl.vertexAttribPointer(positionLoc, 2, webgl.RenderingContext.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(positionLoc, 2, webgl.WebGL.FLOAT, false, 0, 0);
 
   //> buffer texcoords
   buffer = gl.createBuffer();
-  gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, buffer);
+  gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, buffer);
   gl.bufferData(
-      webgl.RenderingContext.ARRAY_BUFFER,
+      webgl.WebGL.ARRAY_BUFFER,
       new Float32List.fromList(texcoords),
-      webgl.RenderingContext.STATIC_DRAW);
+      webgl.WebGL.STATIC_DRAW);
   gl.enableVertexAttribArray(texcoordLoc);
-  gl.vertexAttribPointer(texcoordLoc, 2, webgl.RenderingContext.FLOAT, false, 0, 0);
+  gl.vertexAttribPointer(texcoordLoc, 2, webgl.WebGL.FLOAT, false, 0, 0);
 
   //> buffer indices
   buffer = gl.createBuffer();
-  gl.bindBuffer(webgl.RenderingContext.ELEMENT_ARRAY_BUFFER, buffer);
+  gl.bindBuffer(webgl.WebGL.ELEMENT_ARRAY_BUFFER, buffer);
   gl.bufferData(
-      webgl.RenderingContext.ELEMENT_ARRAY_BUFFER,
+      webgl.WebGL.ELEMENT_ARRAY_BUFFER,
       new Uint16List.fromList(indices),
-      webgl.RenderingContext.STATIC_DRAW);
+      webgl.WebGL.STATIC_DRAW);
 
   //> create texture with text
   webgl.Texture texture = createTextTexture(gl, "Hello World", 128, 64);
 
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, texture);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, texture);
 
   //> create a framebuffer and attach texture to it
   webgl.Framebuffer framebuffer = gl.createFramebuffer();
-  gl.bindFramebuffer(webgl.RenderingContext.FRAMEBUFFER, framebuffer);
+  gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, framebuffer);
   gl.framebufferTexture2D(
-      webgl.RenderingContext.FRAMEBUFFER, webgl.RenderingContext.COLOR_ATTACHMENT0,
-      webgl.RenderingContext.TEXTURE_2D, texture, 0);
-  var result = gl.checkFramebufferStatus(webgl.RenderingContext.FRAMEBUFFER);
-  if (result != webgl.RenderingContext.FRAMEBUFFER_COMPLETE) {
+      webgl.WebGL.FRAMEBUFFER, webgl.WebGL.COLOR_ATTACHMENT0,
+      webgl.WebGL.TEXTURE_2D, texture, 0);
+  var result = gl.checkFramebufferStatus(webgl.WebGL.FRAMEBUFFER);
+  if (result != webgl.WebGL.FRAMEBUFFER_COMPLETE) {
     window.alert("unsupported framebuffer");
     return;
   }
 
   webgl.Texture newTexture = gl.createTexture();
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, newTexture);
-  gl.copyTexImage2D(webgl.RenderingContext.TEXTURE_2D, 0, webgl.RenderingContext.RGBA, 0, 0, 128, 64, 0);
-  gl.generateMipmap(webgl.RenderingContext.TEXTURE_2D);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, newTexture);
+  gl.copyTexImage2D(webgl.WebGL.TEXTURE_2D, 0, webgl.WebGL.RGBA, 0, 0, 128, 64, 0);
+  gl.generateMipmap(webgl.WebGL.TEXTURE_2D);
 
-  gl.bindFramebuffer(webgl.RenderingContext.FRAMEBUFFER, null);
+  gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, null);
 
   render({num time}) {
     num now = getCurrentTime();
     clock += (now - then).toInt();
     then = now;
 
-    gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT | webgl.RenderingContext.DEPTH_BUFFER_BIT);
-    gl.enable(webgl.RenderingContext.DEPTH_TEST);
+    gl.clear(webgl.WebGL.COLOR_BUFFER_BIT | webgl.WebGL.DEPTH_BUFFER_BIT);
+    gl.enable(webgl.WebGL.DEPTH_TEST);
 
-    var fieldOfView = Math.PI * 0.25;
+    double fieldOfView = Math.pi * 0.25;
     var aspect = canvas.clientWidth / canvas.clientHeight;
     Matrix4 projection = new Matrix4.identity();
     setPerspectiveMatrix(projection, fieldOfView, aspect, 0.0001, 500.0);
@@ -128,7 +128,7 @@ Future main() async {
     var worldViewProjection = (projection * view) as Matrix4;
     gl.uniformMatrix4fv(
         worldViewProjectionLoc, false, worldViewProjection.storage);
-    gl.drawElements(webgl.RenderingContext.TRIANGLES, 1 * 3 * 2, webgl.RenderingContext.UNSIGNED_SHORT, 0);
+    gl.drawElements(webgl.WebGL.TRIANGLES, 1 * 3 * 2, webgl.WebGL.UNSIGNED_SHORT, 0);
     print(gl.getError());
 
     window.requestAnimationFrame((num time) {
@@ -163,13 +163,13 @@ webgl.Texture createTextTexture(webgl.RenderingContext gl, String str, int width
 
   // Now make a texture from it
   webgl.Texture texture = gl.createTexture();
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, texture);
-  gl.texImage2D(webgl.RenderingContext.TEXTURE_2D, 0, webgl.RenderingContext.RGBA, webgl.RenderingContext.RGBA, webgl.RenderingContext.UNSIGNED_BYTE, ctx.canvas);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, texture);
+  gl.texImage2D(webgl.WebGL.TEXTURE_2D, 0, webgl.WebGL.RGBA, webgl.WebGL.RGBA, webgl.WebGL.UNSIGNED_BYTE, ctx.canvas);
 
   // generate mipmaps or set filtering
-  gl.generateMipmap(webgl.RenderingContext.TEXTURE_2D);
+  gl.generateMipmap(webgl.WebGL.TEXTURE_2D);
 
-  gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, null);
+  gl.bindTexture(webgl.WebGL.TEXTURE_2D, null);
 
   return texture;
 }
@@ -207,7 +207,7 @@ webgl.Program buildProgram() {
     gl.compileShader(shader);
 
     bool success =
-    gl.getShaderParameter(shader, webgl.RenderingContext.COMPILE_STATUS);
+    gl.getShaderParameter(shader, webgl.WebGL.COMPILE_STATUS);
     if (!success) {
       print(gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
@@ -217,9 +217,9 @@ webgl.Program buildProgram() {
   }
 
   var vertexShader =
-  createShader(webgl.RenderingContext.VERTEX_SHADER, vertexShaderSource);
+  createShader(webgl.WebGL.VERTEX_SHADER, vertexShaderSource);
   var fragmentShader = createShader(
-      webgl.RenderingContext.FRAGMENT_SHADER, fragmentShaderSource);
+      webgl.WebGL.FRAGMENT_SHADER, fragmentShaderSource);
 
   webgl.Program createProgram(webgl.Shader vertexShader, webgl.Shader fragmentShader) {
     webgl.Program program = gl.createProgram();
@@ -228,7 +228,7 @@ webgl.Program buildProgram() {
     gl.linkProgram(program);
 
     bool success =
-    gl.getProgramParameter(program, webgl.RenderingContext.LINK_STATUS);
+    gl.getProgramParameter(program, webgl.WebGL.LINK_STATUS);
     if (!success) {
       print(gl.getProgramInfoLog(program));
       gl.deleteProgram(program);

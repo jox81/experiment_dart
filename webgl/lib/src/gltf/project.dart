@@ -27,7 +27,7 @@ import 'package:webgl/src/light/light.dart';
 @reflector
 class GLTFProject{
 
-  factory GLTFProject.create({bool reset : false}){
+  factory GLTFProject.create({bool reset : true}){
     if(_instance == null || reset){
       _instance = new GLTFProject._init();
     }
@@ -39,7 +39,7 @@ class GLTFProject{
   }
 
   static GLTFProject _instance;
-  static GLTFProject get instance => new GLTFProject.create();//_instance != null ? _instance : throw "No project instance is created... Make sure a project is created before using this way.";
+  static GLTFProject get instance => new GLTFProject.create(reset: false);//_instance != null ? _instance : throw "No project instance is created... Make sure a project is created before using this way.";
 
   ///path of the directory of the gltf file
   String baseDirectory = '';
@@ -57,8 +57,6 @@ class GLTFProject{
   List<GLTFSampler> samplers = <GLTFSampler>[];
   List<GLTFAnimation> animations = <GLTFAnimation>[];
   GLTFAsset asset = new GLTFAsset("2.0");
-
-
 
   final List<GLTFScene> _scenes = <GLTFScene>[];
   List<GLTFScene> get scenes => _scenes.toList(growable: false);
@@ -81,9 +79,13 @@ class GLTFProject{
     assert(value != null);
     _nodes.add(value);
   }
+  void removeNode(GLTFNode value){
+    assert(value != null);
+    _nodes.remove(value);
+  }
 
   @override
-  String toString()=>'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": ${_scene.sceneId}';
+  String toString()=>'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": ${_scene?.sceneId}';
 
   static void reset({bool fullReset : false}) {
     GLTFBuffer.nextId = 0;
@@ -102,5 +104,4 @@ class GLTFProject{
     GLTFAnimationChannel.nextId = 0;
     GLTFAnimationSampler.nextId = 0;
   }
-
 }

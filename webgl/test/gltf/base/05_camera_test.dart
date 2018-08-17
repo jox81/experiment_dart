@@ -5,29 +5,31 @@ import "package:test/test.dart";
 import 'package:webgl/src/gltf/debug_gltf.dart';
 @TestOn("browser")
 
+String testFolderRelativePath = "../..";
+
 Future main() async {
 
   group("Camera", () {
     test("Empty array", () async {
-      String gltfPath = 'gltf/tests/base/data/camera/empty.gltf';
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/empty.gltf';
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       List<Camera> cameras = gltf.cameras;
       expect(cameras.length, 0);
     });
     test("Filled Array", () async {
-      String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       expect(gltf.cameras.length, 2);
     });
     test("Camera Perspective Type", () async {
-      String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[0], isNotNull);
@@ -41,9 +43,9 @@ Future main() async {
 
     });
     test("Camera Orthographic Type", () async {
-      String gltfPath = 'gltf/tests/base/data/camera/valid_full.gltf';
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : true);
+      GLTFProject gltf = await loadGLTF(gltfPath, useWebPath : false);
       await debugGltf(gltf, doGlTFProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[1], isNotNull);

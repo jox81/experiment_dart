@@ -21,6 +21,7 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
     this.data,
     String name : ''
   }):super(name){
+    print("###");
     GLTFProject.instance.buffers.add(this);
   }
 

@@ -74,14 +74,14 @@ class WebglParameters{
     Debug.log('Test Get Parameters',(){
       print('TEXTURE0 : 0x84C0 = ${0x84C0}'); // == 33984
       print('ACTIVE_TEXTURE : 0x84E0 = ${0x84E0}'); // == 34016
-      print(Context.webglParameters.getParameter(RenderingContext.ACTIVE_TEXTURE));
+      print(Context.webglParameters.getParameter(WebGL.ACTIVE_TEXTURE));
       //OK > ACTIVE_TEXTURE (34016) = TEXTURE0 : glEnum
       print('##################################################################');
 
-      Object result = gl.getParameter(RenderingContext.BLEND_SRC_RGB);
+      Object result = gl.getParameter(WebGL.BLEND_SRC_RGB);
       print(result);
       //NO > comment différencier une valeur int d'une valeur glEnum ?
-      print(Context.webglParameters.getParameter(RenderingContext.BLEND_SRC_RGB));
+      print(Context.webglParameters.getParameter(WebGL.BLEND_SRC_RGB));
       print(0x0001);
     });
   }

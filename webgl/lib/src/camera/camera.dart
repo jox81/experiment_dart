@@ -193,6 +193,8 @@ class CameraPerspective extends Camera{
    super._znear = znear;
    super._zfar = _zfar;
    GLTFProject.instance.cameras.add(this);
+   GLTFProject.instance.removeNode(this);
+   GLTFNode.nextId--;
   }
 
   update() {
@@ -204,7 +206,7 @@ class CameraPerspective extends Camera{
 
   @override
   String toString() {
-    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $translation, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix}';
+    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $translation, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix, super: ${super.toString()}}';
   }
 
   // >> JSON
@@ -271,6 +273,8 @@ class CameraOrthographic extends Camera{
 
   CameraOrthographic(){
     GLTFProject.instance.cameras.add(this);
+    GLTFProject.instance.removeNode(this);
+    GLTFNode.nextId--;
   }
 
   // >> JSON
@@ -289,6 +293,6 @@ class CameraOrthographic extends Camera{
 
   @override
   String toString() {
-    return 'CameraOrthographic{cameraId: $cameraId, _ymag: $_ymag, _xmag: $_xmag}';
+    return 'CameraOrthographic{cameraId: $cameraId, _ymag: $_ymag, _xmag: $_xmag, super: ${super.toString()}}';
   }
 }

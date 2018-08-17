@@ -60,7 +60,7 @@ class Renderer{
     addShader(prog, 'fragment', fs);
 
     gl.linkProgram(prog);
-    if (gl.getProgramParameter(prog, webgl.RenderingContext.LINK_STATUS) == null) {
+    if (gl.getProgramParameter(prog, webgl.WebGL.LINK_STATUS) == null) {
       throw "Could not link the shader program!";
     }
     return prog;
@@ -68,10 +68,10 @@ class Renderer{
 
   void addShader(webgl.Program prog, String type, String source) {
     webgl.Shader s = gl.createShader((type == 'vertex') ?
-    webgl.RenderingContext.VERTEX_SHADER : webgl.RenderingContext.FRAGMENT_SHADER);
+    webgl.WebGL.VERTEX_SHADER : webgl.WebGL.FRAGMENT_SHADER);
     gl.shaderSource(s, source);
     gl.compileShader(s);
-    if (gl.getShaderParameter(s, webgl.RenderingContext.COMPILE_STATUS) == null) {
+    if (gl.getShaderParameter(s, webgl.WebGL.COMPILE_STATUS) == null) {
       throw "Could not compile " + type +
           " shader:\n\n"+gl.getShaderInfoLog(s);
     }
@@ -79,12 +79,12 @@ class Renderer{
   }
 
   void setupAttribut(webgl.Program prog, String attributName, int rsize, List<double> arr) {
-    gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, gl.createBuffer());
-    gl.bufferData(webgl.RenderingContext.ARRAY_BUFFER, new Float32List.fromList(arr),
-        webgl.RenderingContext.STATIC_DRAW);
+    gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, gl.createBuffer());
+    gl.bufferData(webgl.WebGL.ARRAY_BUFFER, new Float32List.fromList(arr),
+        webgl.WebGL.STATIC_DRAW);
     int attr = gl.getAttribLocation(prog, attributName);
     gl.enableVertexAttribArray(attr);
-    gl.vertexAttribPointer(attr, rsize, webgl.RenderingContext.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(attr, rsize, webgl.WebGL.FLOAT, false, 0, 0);
   }
 
   void render({num time : 0.0}) {
@@ -95,7 +95,7 @@ class Renderer{
   }
 
   void draw() {
-    gl.clear(webgl.RenderingContext.COLOR_BUFFER_BIT);
-    gl.drawArrays(webgl.RenderingContext.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
+    gl.clear(webgl.WebGL.COLOR_BUFFER_BIT);
+    gl.drawArrays(webgl.WebGL.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
   }
 }

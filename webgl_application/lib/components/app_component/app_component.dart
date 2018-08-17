@@ -21,7 +21,7 @@ import 'package:webgl_application/src/ui_models/toolbar.dart';
   directives: const <dynamic>[coreDirectives, CanvasComponent, LayoutComponent, MenuComponent, ToolBarComponent, PropertiesComponent],
   providers: [const ClassProvider(ProjectService), CanvasComponent],
 )
-class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy, DoCheck {
+class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterContentInit, AfterViewChecked, OnChanges, OnDestroy {
 
   final ProjectService projectService;
 
@@ -61,10 +61,6 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
   Future ngOnInit() async {
 //    print('AppComponent.ngOnInit');
     _loadProjects();
-  }
-  @override
-  void ngDoCheck() {
-//    print('AppComponent.ngDoCheck');
   }
   @override
   void ngAfterContentInit() {

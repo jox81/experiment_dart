@@ -60,7 +60,7 @@ class WebglConstants{
 
   bool isParameter(int glEnum) {
     gl.getParameter(glEnum);
-    bool isParameter = gl.getError() != RenderingContext.INVALID_ENUM;
+    bool isParameter = gl.getError() != WebGL.INVALID_ENUM;
     return isParameter;
   }
 

@@ -1,1 +1,8 @@
-pour lancer les tests, il faut lancer un pub serve accessible en localhost:8080
+pour lancer les tests avec chargement de fichier, il faut utiliser : 
+useWebPath : false
+String testFolderRelativePath = "../..";
+
+-p chrome
+
+=>
+GLTFProject project = await loadGLTF('${testFolderRelativePath}/gltf/tests/base/data/camera/empty.gltf', useWebPath : false);

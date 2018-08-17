@@ -8,22 +8,6 @@ import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 import 'dart:math';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-//@MirrorsUsed(
-//    targets: const [
-//      MeshPrimitive,
-//      _PointMeshPrimitive,
-//      _LineMeshPrimitive2,
-//      _LineMeshPrimitive,
-//      _TriangleMeshPrimitive,
-//      _QuadMeshPrimitive,
-//      _PyramidMeshPrimitive,
-//      _CubeMeshPrimitive,
-//      _SphereMeshPrimitive,
-//      _AxisMeshPrimitive,
-//      _AxisPointMeshPrimitive,
-//    ],
-//    override: '*')
-//import 'dart:mirrors';
 
 /// Represent a part of a mesh
 /// [attributs] associate an Accessor by vertex attribute usage : POSITION | NORMAL | TANGENT | TEXCOORD_ | COLOR_ | JOINTS_ | WEIGHTS_

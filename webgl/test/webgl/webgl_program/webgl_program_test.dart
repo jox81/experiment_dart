@@ -66,18 +66,18 @@ void main() {
       bool result;
 
       /// if no program exist, result is null
-      result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
+      result = gl.getProgramParameter(program, webgl.WebGL.DELETE_STATUS) as bool;
       expect(result, null);
 
       program = gl.createProgram();
 
-      result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
+      result = gl.getProgramParameter(program, webgl.WebGL.DELETE_STATUS) as bool;
       expect(result, false);
 
       gl.deleteProgram(program);
 
       /// when deleted, program doesn't exist anymore, result is null
-      result = gl.getProgramParameter(program, webgl.RenderingContext.DELETE_STATUS) as bool;
+      result = gl.getProgramParameter(program, webgl.WebGL.DELETE_STATUS) as bool;
       expect(result, null);
     });
   });
@@ -85,13 +85,13 @@ void main() {
   group("webgl shaders", () {
 
     test("createShader / deleteShader", () {
-      webgl.Shader vertexShader = gl.createShader(webgl.RenderingContext.VERTEX_SHADER);
+      webgl.Shader vertexShader = gl.createShader(webgl.WebGL.VERTEX_SHADER);
       expect(gl.isShader(vertexShader), true);
 
       gl.deleteShader(vertexShader);
       expect(gl.isShader(vertexShader), false);
 
-      webgl.Shader fragmentShader = gl.createShader(webgl.RenderingContext.FRAGMENT_SHADER);
+      webgl.Shader fragmentShader = gl.createShader(webgl.WebGL.FRAGMENT_SHADER);
       expect(gl.isShader(fragmentShader), true);
 
       gl.deleteShader(fragmentShader);
@@ -143,7 +143,7 @@ void main() {
 
       //> uniforms
 
-      int activeUniformCount = gl.getProgramParameter( program, webgl.RenderingContext.ACTIVE_UNIFORMS) as int;
+      int activeUniformCount = gl.getProgramParameter( program, webgl.WebGL.ACTIVE_UNIFORMS) as int;
       expect(activeUniformCount, 5); // This is count of the combination of uniforms in vs + fs
 
       for (int i = 0; i < activeUniformCount; ++i) {
@@ -217,7 +217,7 @@ void main() {
 
 
       //infos sur les vertexAttrib du vertex shader
-      int activeAttributsCount = gl.getProgramParameter( program, webgl.RenderingContext.ACTIVE_ATTRIBUTES) as int;
+      int activeAttributsCount = gl.getProgramParameter( program, webgl.WebGL.ACTIVE_ATTRIBUTES) as int;
       expect(activeAttributsCount, 2); // count of attributs in the program
 
       for (int i = 0; i < activeAttributsCount; ++i) {
@@ -227,7 +227,7 @@ void main() {
         print('attributActiveInfos.size = ${attributActiveInfos.size}');
         print('attributActiveInfos.type = ${attributActiveInfos.type}');
         int attributLocation = gl.getAttribLocation(program, attributActiveInfos.name);
-        var vertexAttribValue = gl.getVertexAttrib(attributLocation, webgl.RenderingContext.ARRAY_BUFFER);
+        var vertexAttribValue = gl.getVertexAttrib(attributLocation, webgl.WebGL.ARRAY_BUFFER);
         print('vertexAttribValue : $vertexAttribValue');
         print('');
       }
@@ -240,36 +240,36 @@ void main() {
       ]);
 
       webgl.Buffer buffer = gl.createBuffer();
-      gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, buffer);
-      gl.vertexAttribPointer(0, 3, webgl.RenderingContext.FLOAT, false, 3 * 4, 0);
+      gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, buffer);
+      gl.vertexAttribPointer(0, 3, webgl.WebGL.FLOAT, false, 3 * 4, 0);
       gl.enableVertexAttribArray(0);
-      gl.bufferData(webgl.RenderingContext.ARRAY_BUFFER, vertices, webgl.RenderingContext.STATIC_DRAW);
+      gl.bufferData(webgl.WebGL.ARRAY_BUFFER, vertices, webgl.WebGL.STATIC_DRAW);
 
       int attributLocation = gl.getAttribLocation(program, 'aVertexPosition');
-      print('VERTEX_ATTRIB_ARRAY_BUFFER_BINDING : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)}');
-      print('VERTEX_ATTRIB_ARRAY_ENABLED : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_ENABLED)}');
-      print('VERTEX_ATTRIB_ARRAY_SIZE : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_SIZE)}');
-      print('VERTEX_ATTRIB_ARRAY_STRIDE : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_STRIDE)}');
-      print('VERTEX_ATTRIB_ARRAY_TYPE : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_TYPE)}');
-      print('VERTEX_ATTRIB_ARRAY_NORMALIZED : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_NORMALIZED)}');
-      print('CURRENT_VERTEX_ATTRIB : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.CURRENT_VERTEX_ATTRIB)}');
-      print('VERTEX_ATTRIB_ARRAY_POINTER : ${gl.getVertexAttribOffset(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_POINTER)}');
+      print('VERTEX_ATTRIB_ARRAY_BUFFER_BINDING : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)}');
+      print('VERTEX_ATTRIB_ARRAY_ENABLED : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_ENABLED)}');
+      print('VERTEX_ATTRIB_ARRAY_SIZE : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_SIZE)}');
+      print('VERTEX_ATTRIB_ARRAY_STRIDE : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_STRIDE)}');
+      print('VERTEX_ATTRIB_ARRAY_TYPE : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_TYPE)}');
+      print('VERTEX_ATTRIB_ARRAY_NORMALIZED : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_NORMALIZED)}');
+      print('CURRENT_VERTEX_ATTRIB : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.CURRENT_VERTEX_ATTRIB)}');
+      print('VERTEX_ATTRIB_ARRAY_POINTER : ${gl.getVertexAttribOffset(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_POINTER)}');
 
       // on connecte un autre buffer
       webgl.Buffer buffer2 = gl.createBuffer();
-      gl.bindBuffer(webgl.RenderingContext.ARRAY_BUFFER, buffer2);
+      gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, buffer2);
 
       // on teste les infos sur le premier buffer et on constate que les infos sont aussi gardées dans la mémoire du program
       print('');
       attributLocation = gl.getAttribLocation(program, 'aVertexPosition');
-      print('VERTEX_ATTRIB_ARRAY_BUFFER_BINDING : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)}');
-      print('VERTEX_ATTRIB_ARRAY_ENABLED : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_ENABLED)}');
-      print('VERTEX_ATTRIB_ARRAY_SIZE : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_SIZE)}');
-      print('VERTEX_ATTRIB_ARRAY_STRIDE : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_STRIDE)}');
-      print('VERTEX_ATTRIB_ARRAY_TYPE : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_TYPE)}');
-      print('VERTEX_ATTRIB_ARRAY_NORMALIZED : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_NORMALIZED)}');
-      print('CURRENT_VERTEX_ATTRIB : ${gl.getVertexAttrib(attributLocation, webgl.RenderingContext.CURRENT_VERTEX_ATTRIB)}');
-      print('VERTEX_ATTRIB_ARRAY_POINTER : ${gl.getVertexAttribOffset(attributLocation, webgl.RenderingContext.VERTEX_ATTRIB_ARRAY_POINTER)}');
+      print('VERTEX_ATTRIB_ARRAY_BUFFER_BINDING : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING)}');
+      print('VERTEX_ATTRIB_ARRAY_ENABLED : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_ENABLED)}');
+      print('VERTEX_ATTRIB_ARRAY_SIZE : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_SIZE)}');
+      print('VERTEX_ATTRIB_ARRAY_STRIDE : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_STRIDE)}');
+      print('VERTEX_ATTRIB_ARRAY_TYPE : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_TYPE)}');
+      print('VERTEX_ATTRIB_ARRAY_NORMALIZED : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_NORMALIZED)}');
+      print('CURRENT_VERTEX_ATTRIB : ${gl.getVertexAttrib(attributLocation, webgl.WebGL.CURRENT_VERTEX_ATTRIB)}');
+      print('VERTEX_ATTRIB_ARRAY_POINTER : ${gl.getVertexAttribOffset(attributLocation, webgl.WebGL.VERTEX_ATTRIB_ARRAY_POINTER)}');
 
       gl.deleteProgram(program);
 
@@ -286,9 +286,9 @@ webgl.Program getProgram(String vertexShaderSource, String fragmentShaderSource)
 
   //> vertex shader
 
-  webgl.Shader vertexShader = gl.createShader(webgl.RenderingContext.VERTEX_SHADER);
+  webgl.Shader vertexShader = gl.createShader(webgl.WebGL.VERTEX_SHADER);
 
-  expect(gl.getShaderParameter(vertexShader, webgl.RenderingContext.SHADER_TYPE) as int, webgl.RenderingContext.VERTEX_SHADER);
+  expect(gl.getShaderParameter(vertexShader, webgl.WebGL.SHADER_TYPE) as int, webgl.WebGL.VERTEX_SHADER);
 
   gl.shaderSource(vertexShader, vertexShaderSource);
   gl.compileShader(vertexShader);
@@ -297,13 +297,13 @@ webgl.Program getProgram(String vertexShaderSource, String fragmentShaderSource)
   print('errorVertexShader : $errorVertexShader');
   expect(errorVertexShader.length, 0);
 
-  expect(gl.getShaderParameter(vertexShader, webgl.RenderingContext.COMPILE_STATUS) as bool, true);
+  expect(gl.getShaderParameter(vertexShader, webgl.WebGL.COMPILE_STATUS) as bool, true);
 
   //> fragment shader
 
-  webgl.Shader fragmentShader = gl.createShader(webgl.RenderingContext.FRAGMENT_SHADER);
+  webgl.Shader fragmentShader = gl.createShader(webgl.WebGL.FRAGMENT_SHADER);
 
-  expect(gl.getShaderParameter(fragmentShader, webgl.RenderingContext.SHADER_TYPE) as int, webgl.RenderingContext.FRAGMENT_SHADER);
+  expect(gl.getShaderParameter(fragmentShader, webgl.WebGL.SHADER_TYPE) as int, webgl.WebGL.FRAGMENT_SHADER);
 
   gl.shaderSource(fragmentShader, fragmentShaderSource);
   gl.compileShader(fragmentShader);
@@ -314,7 +314,7 @@ webgl.Program getProgram(String vertexShaderSource, String fragmentShaderSource)
 
   gl.getShaderInfoLog(fragmentShader);
 
-  expect(gl.getShaderParameter(fragmentShader, webgl.RenderingContext.COMPILE_STATUS) as bool, true);
+  expect(gl.getShaderParameter(fragmentShader, webgl.WebGL.COMPILE_STATUS) as bool, true);
 
   //> program
 
@@ -328,10 +328,10 @@ webgl.Program getProgram(String vertexShaderSource, String fragmentShaderSource)
 
   print(gl.getProgramInfoLog(program));
 
-  expect(gl.getProgramParameter( program, webgl.RenderingContext.LINK_STATUS) as bool, true);
-  expect(gl.getProgramParameter( program, webgl.RenderingContext.VALIDATE_STATUS) as bool, true);
+  expect(gl.getProgramParameter( program, webgl.WebGL.LINK_STATUS) as bool, true);
+  expect(gl.getProgramParameter( program, webgl.WebGL.VALIDATE_STATUS) as bool, true);
 
-  expect(gl.getProgramParameter( program, webgl.RenderingContext.ATTACHED_SHADERS) as int, 2);
+  expect(gl.getProgramParameter( program, webgl.WebGL.ATTACHED_SHADERS) as int, 2);
 
   return program;
 }
