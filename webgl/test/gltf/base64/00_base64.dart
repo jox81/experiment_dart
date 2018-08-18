@@ -4,6 +4,8 @@ import "package:test/test.dart";
 import 'package:webgl/src/gltf/gltf_creation.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
+String testFolderRelativePath = "../..";
+
 Future main() async {
 
   group("Base64 convert", () {
@@ -32,7 +34,7 @@ Future main() async {
       /// based on sample data
       /// '/gltf/samples/gltf_2_0/TriangleWithoutIndices/gltf/triangleWithoutIndices.bin'
 
-      String gltfBinUrl = '/gltf/samples/gltf_2_0/00_triangle_without_indices/gltf/triangleWithoutIndices.bin';
+      String gltfBinUrl = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/00_triangle_without_indices/gltf/triangleWithoutIndices.bin';
       String base64Result = 'AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAA';
       UtilsAssets.useWebPath = true;
 

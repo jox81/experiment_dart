@@ -7,12 +7,15 @@ import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 @TestOn("browser")
+
+String testFolderRelativePath = "../..";
+
 Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
     String gltfPath =
-        'gltf/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf';
+        '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf';
     gltfProject = await loadGLTF(gltfPath, useWebPath : true);
     await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });

@@ -13,12 +13,15 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @TestOn("browser")
+
+String testFolderRelativePath = "../..";
+
 Future main() async {
   GLTFProject gltfProject;
 
   setUp(() async {
     String gltfPath =
-        'gltf/samples/gltf_2_0/05_box/gltf_embed/Box.gltf';
+        '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/05_box/gltf_embed/Box.gltf';
     gltfProject = await loadGLTF(gltfPath, useWebPath : true);
     await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });

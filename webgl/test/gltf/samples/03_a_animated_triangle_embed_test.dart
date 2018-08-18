@@ -14,13 +14,15 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 @TestOn("browser")
 
+String testFolderRelativePath = "../..";
+
 //see tutorial : https://github.com/javagl/glTF-Tutorials/blob/master/gltfTutorial/gltfTutorial_006_SimpleAnimation.md
 Future main() async {
 
   GLTFProject gltfProject;
 
   setUp(() async {
-    String gltfPath = 'gltf/samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf';
+    String gltfPath = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/03_animated_triangle/gltf_embed/AnimatedTriangle.gltf';
     gltfProject = await loadGLTF(gltfPath, useWebPath : true);
     await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });

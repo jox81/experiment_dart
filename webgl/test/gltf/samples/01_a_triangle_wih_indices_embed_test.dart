@@ -13,12 +13,14 @@ import 'package:webgl/src/gltf/scene.dart';
 
 @TestOn("browser")
 
+String testFolderRelativePath = "../..";
+
 Future main() async {
 
   GLTFProject gltfProject;
 
   setUp(() async {
-    String gltfPath = 'gltf/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
+    String gltfPath = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
     gltfProject = await loadGLTF(gltfPath, useWebPath : true);
     await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
   });
