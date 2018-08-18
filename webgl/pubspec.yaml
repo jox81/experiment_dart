@@ -28,7 +28,8 @@ dev_dependencies:
 
 # Previous version need to use the following way :
 # https://webdev.dartlang.org/tools/webdev#command-build
-#
+# https://webdev.dartlang.org/dart-2
+
 # 1 - launch reflectable builder if needed. Before launching in, be sure to delete previous generated reflectable files.
 # >> dart tool/builder.dart web/*.dart
 # va générer main.reflectable.dart

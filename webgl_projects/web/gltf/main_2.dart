@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:webgl/src/gltf/debug_gltf.dart';
-import 'package:webgl/src/gltf/project.dart';
-import 'package:webgl/src/gltf/renderer/renderer.dart';
+import 'package:webgl/render_gltf.dart';
 
 Future main() async {
   List<String> gltfSamplesPaths = [
@@ -48,7 +46,7 @@ Future main() async {
 //    './samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    './samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+//    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
@@ -57,7 +55,7 @@ Future main() async {
 
     //Further pbr models
 //    './samples/gltf_2_0/pbr/TwoSidedPlane/glTF/TwoSidedPlane.gltf',// Todo (jpu) : implement two side material
-//    './samples/gltf_2_0/pbr/suzanne/glTF/Suzanne.gltf',
+    './samples/gltf_2_0/pbr/suzanne/glTF/Suzanne.gltf',
 //      './samples/gltf_2_0/pbr/SciFiHelmet/glTF/SciFiHelmet.gltf',
 
     //Complex model hierarchy
@@ -89,8 +87,8 @@ Future main() async {
 //    './blender_pbr/polly/project_polly.gltf'
   ];
 
-  GLTFProject project = await loadGLTF(gltfSamplesPaths.first, useWebPath : false);
-//  await await debugGltf(project, doGlTFProjectLog : true, isDebug:false);
+  String gtltPath = gltfSamplesPaths.first;
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  await new GLTFRenderer(canvas).render(project);
+
+  await renderGltf(gtltPath, canvas);
 }

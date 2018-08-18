@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:webgl/src/gltf/debug_gltf.dart';
-import 'package:webgl/src/gltf/project.dart';
-import 'package:webgl/src/gltf/renderer/renderer.dart';
+import 'package:webgl/render_gltf.dart';
 
 Future main() async {
 
@@ -11,12 +9,8 @@ Future main() async {
 //    './projects/archi/model_02/model_02.gltf',
   ];
 
-  final GLTFProject gltfProject = await loadGLTF(gltfSamplesPaths.first, useWebPath : false);
+  String gtltPath = gltfSamplesPaths.first;
+  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
-
-  final CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  final GLTFRenderer rendered = new GLTFRenderer(canvas);
-
-  debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
-  await rendered.render(gltfProject);
+  await renderGltf(gtltPath, canvas);
 }
