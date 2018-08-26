@@ -15,15 +15,15 @@
            class="dropbtn"
            (click)="headerClick('headerId1')">Models</a>
         <div class="dropdown-content" [class.show]="isMenuVisible('headerId1')">
-            <a href="#" (click)="createModelByType('ModelType.point')">point</a>
-            <a href="#" (click)="createModelByType('ModelType.line')">line</a>
-            <a href="#" (click)="createModelByType('ModelType.triangle')">triangle</a>
-            <a href="#" (click)="createModelByType('ModelType.quad')">quad</a>
-            <a href="#" (click)="createModelByType('ModelType.pyramid')">pyramid</a>
-            <a href="#" (click)="createModelByType('ModelType.cube')">cube</a>
-            <a href="#" (click)="createModelByType('ModelType.sphere')">sphere</a>
-            <a href="#" (click)="createModelByType('ModelType.axis')">axis</a>
-            <a href="#" (click)="createModelByType('ModelType.grid')">grid</a>
+            <a href="#" (click)="createMeshByType('MeshType.point')">point</a>
+            <a href="#" (click)="createMeshByType('MeshType.line')">line</a>
+            <a href="#" (click)="createMeshByType('MeshType.triangle')">triangle</a>
+            <a href="#" (click)="createMeshByType('MeshType.quad')">quad</a>
+            <a href="#" (click)="createMeshByType('MeshType.pyramid')">pyramid</a>
+            <a href="#" (click)="createMeshByType('MeshType.cube')">cube</a>
+            <a href="#" (click)="createMeshByType('MeshType.sphere')">sphere</a>
+            <a href="#" (click)="createMeshByType('MeshType.axis')">axis</a>
+            <a href="#" (click)="createMeshByType('MeshType.grid')">grid</a>
         </div>
     </li>
     <li class="dropdown" clickOutside (clickOutside)="closeThisMenus('headerId2')">

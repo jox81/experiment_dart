@@ -331,4 +331,61 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     MeshPrimitive meshPrimitive = new MeshPrimitive.AxisPoints();
     return createMeshWithPrimitive(meshPrimitive, withIndices, withNormals, withUVs);
   }
+
+  factory GLTFMesh.byMeshType(MeshType meshType, {bool withIndices : true, bool withNormals : true, bool withUVs : true}) {
+    GLTFMesh mesh;
+
+    switch (meshType){
+      case MeshType.point:
+        mesh = new GLTFMesh.point();
+        break;
+      case MeshType.line:
+        mesh = new GLTFMesh.line([new Vector3(0.0,0.0,0.0), new Vector3(2.0,0.0,0.0)]);
+        break;
+      case MeshType.triangle:
+        mesh = new GLTFMesh.triangle();
+        break;
+      case MeshType.quad:
+        mesh = new GLTFMesh.quad();
+        break;
+      case MeshType.pyramid:
+        mesh = new GLTFMesh.pyramid();
+        break;
+      case MeshType.cube:
+        mesh = new GLTFMesh.cube();
+        break;
+      case MeshType.sphere:
+        mesh = new GLTFMesh.sphere();
+        break;
+      case MeshType.torus:
+        throw 'GLTFMesh.byMeshType no torus yet';
+        break;
+      case MeshType.axis:
+        mesh = new GLTFMesh.axis();
+        break;
+      case MeshType.grid:
+        throw 'GLTFMesh.byMeshType no Torus yet';
+        break;
+      case MeshType.custom:
+        throw 'GLTFMesh.byMeshType no custom yet';
+        break;
+      case MeshType.json:
+        throw 'GLTFMesh.byMeshType no json yet';
+        break;
+      case MeshType.multiLine:
+        throw 'GLTFMesh.byMeshType no multiLine yet';
+        break;
+      case MeshType.vector:
+        throw 'GLTFMesh.byMeshType no vector yet';
+        break;
+      case MeshType.skyBox:
+        throw 'GLTFMesh.byMeshType no skyBox yet';
+        break;
+      case MeshType.axisPoints:
+        throw 'GLTFMesh.byMeshType no axisPoints yet';
+        break;
+    }
+
+    return mesh;
+  }
 }

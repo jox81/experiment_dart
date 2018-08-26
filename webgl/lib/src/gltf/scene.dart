@@ -1,4 +1,5 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gltf/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
@@ -29,5 +30,14 @@ class GLTFScene extends GLTFChildOfRootProperty{
 
   void makeCurrent() {
     GLTFProject.instance.scene = this;
+  }
+
+  void createMeshByType(MeshType meshType){
+    GLTFMesh mesh = new GLTFMesh.byMeshType(meshType);
+
+    GLTFNode nodeQuad = new GLTFNode()
+      ..mesh = mesh
+      ..matrix.translate(0.0, 0.0, 0.0);
+    addNode(nodeQuad);
   }
 }

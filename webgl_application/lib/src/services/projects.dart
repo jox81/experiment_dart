@@ -4,10 +4,11 @@ import 'package:angular/angular.dart';
 
 import 'package:webgl_application/scene_views/scene_view_base.dart';
 import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
+import 'package:webgl_application/scene_views/scene_view_empty.dart';
 import 'package:webgl_application/scene_views/scene_view_framebuffer.dart';
 import 'package:webgl_application/scene_views/scene_view_primitives.dart';
 import 'package:webgl_application/scene_views/scene_view_texturing.dart';
-//import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
+import 'package:webgl_application/scene_views/scene_view_cubemap.dart';
 //import 'package:webgl_application/scene_views/scene_view_performance.dart';
 //import 'package:webgl_application/scene_views/scene_view_shader_learning_glsl.dart';
 //import 'package:webgl_application/scene_views/scene_view_test_matrices.dart';
@@ -37,6 +38,7 @@ class ProjectService {
 }
 
 Future<List<GLTFProject>> loadBaseProjects() async => [
+//  projectSceneViewEmpty(),
   projectSceneViewBase(),
 //  projectPrimitives(),
 //  await projectPrimitivesTextured(),
@@ -46,7 +48,6 @@ Future<List<GLTFProject>> loadBaseProjects() async => [
 
 /*
 [
-// new Scene(),
 // new SceneViewPBR(),
 // new SceneViewCubeMap(),
 // new SceneViewTestMatrices(),

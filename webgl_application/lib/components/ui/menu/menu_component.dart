@@ -93,17 +93,17 @@ class MenuComponent{
 
   // >> Meshs
 
-  // use enums instead
-  // bool createMeshByType(MeshType modelType){
-  bool createModelByType(String modelTypeString){
+  // use enums instead in angular template. can't get enum for now
+//   bool createMeshByType(MeshType meshType){
+  bool createMeshByType(String meshTypeString){
 
-    MeshType modelType = MeshType.values.firstWhere((MeshType e)=> e.toString() == modelTypeString, orElse: ()=> null);
+    MeshType meshType = MeshType.values.firstWhere((MeshType e)=> e.toString() == meshTypeString, orElse: ()=> null);
 
-    if(currentScene != null && modelType != null){
-      throw 'MenuComponent.createMeshByType not implemented';
-//      currentScene.createMeshByType(modelType);
+    if(currentScene != null && meshType != null){
+//      throw 'MenuComponent.createMeshByType not implemented';
+      currentScene.createMeshByType(meshType);
     }else{
-      print('$modelTypeString not created');
+      print('$meshTypeString not created');
     }
 
     closeAllMenus();

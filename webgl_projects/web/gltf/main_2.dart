@@ -55,7 +55,7 @@ Future main() async {
 
     //Further pbr models
 //    './samples/gltf_2_0/pbr/TwoSidedPlane/glTF/TwoSidedPlane.gltf',// Todo (jpu) : implement two side material
-    './samples/gltf_2_0/pbr/suzanne/glTF/Suzanne.gltf',
+//    './samples/gltf_2_0/pbr/suzanne/glTF/Suzanne.gltf',
 //      './samples/gltf_2_0/pbr/SciFiHelmet/glTF/SciFiHelmet.gltf',
 
     //Complex model hierarchy
@@ -84,7 +84,7 @@ Future main() async {
 
 
 //    './wip/blender_pbr/01_textured_sphere.gltf'
-//    './blender_pbr/polly/project_polly.gltf'
+    './blender_pbr/polly/project_polly.gltf'
   ];
 
   String gtltPath = gltfSamplesPaths.first;

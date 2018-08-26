@@ -36,7 +36,12 @@ dev_dependencies:
 #
 # 2 - serve
 # >> webdev serve
-# va générer main.template.reflectable.dart
-# va render disponible :
-#  Serving `web` on http://localhost:8080
-#  Serving `test` on http://localhost:8081
+# va générer main.reflectable.dart
+# va render disponible http://localhost:8080
+#
+# 3 - build
+# build > webdev build
+# ||
+# pubspec.yaml > pub.bat global run webdev build --output=web:build
+# va générer main.reflectable.dart
+# va générer le dossier build

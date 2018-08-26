@@ -29,6 +29,7 @@ class Interaction {
 
   bool dragging = false;
   bool mouseDown = false;
+  bool isMiddleMouseButton = false;
 
   int currentX = 0;
   int currentY = 0;
@@ -153,6 +154,7 @@ class Interaction {
 
     dragging = false;
     mouseDown = true;
+    isMiddleMouseButton = event.button == 1;
 
     _onMouseDownController.add(event);
 
@@ -163,7 +165,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, event.button);
+    cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, isMiddleMouseButton ? 1:0);//!! hack : dart doesn't seem to recognize middle mouse button dragging !!
 
     if(mouseDown) {
 
@@ -185,6 +187,7 @@ class Interaction {
 
     dragging = false;
     mouseDown = false;
+    isMiddleMouseButton = false;
 
     _onMouseUpController.add(event);
   }
@@ -205,7 +208,6 @@ class Interaction {
   String getMouseInfos(){
     return 'currentX : $currentX | currentY : $currentY | deltaX : $deltaX | deltaY : $deltaY | ';
   }
-
 
   ///
   /// Touch

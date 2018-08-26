@@ -42,7 +42,7 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
   CameraPerspective get mainCamera => Context.mainCamera;
 
   GLTFNode tempSelection;
-  // TODO: implement interaction
+
   @override
   Interaction get interaction => renderer.interaction;
 
@@ -126,9 +126,9 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
       currentSelection = tempSelection != null ? new CustomEditElement(tempSelection) : null;
     }
 
-    if(currentSelection != null && currentSelection is GLTFNode) {
+    if(currentSelection != null && currentSelection.element is GLTFNode) {
 
-      GLTFNode currentItem = currentSelection as GLTFNode;
+      GLTFNode currentItem = currentSelection.element as GLTFNode;
 
       double delta = interaction.deltaX.toDouble(); // get mouse delta
       double deltaMoveX = (activeAxis[AxisType.x]
