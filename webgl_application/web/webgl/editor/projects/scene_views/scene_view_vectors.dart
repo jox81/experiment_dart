@@ -1,27 +1,27 @@
-//import 'dart:async';
-//import 'package:vector_math/vector_math.dart';
-//import 'package:webgl/src/camera/camera.dart';
-//import 'package:webgl/src/context.dart';
-//
-//
-//
-//import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-//@MirrorsUsed(
-//    targets: const [
-//      SceneViewVectors,
-//    ],
-//    override: '*')
-//import 'dart:mirrors';
-//
-//class SceneViewVectors extends SceneJox{
-//
-//  SceneViewVectors();
-//
+import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/renderer/materials.dart';
+import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/light/light.dart';
+
+GLTFProject projectSceneViewVector() {
+
+  GLTFProject project = new GLTFProject.create();
+  GLTFScene scene = new GLTFScene()
+    ..backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+  project.scene = scene;
+
 //  CameraPerspective cameraTest;
+
+  MaterialBaseColor matVectorA;
+  MaterialBaseColor matVectorB;
+  MaterialBaseColor matVectorResult;
+
+  return project;
+}
 //
-//  MaterialBaseColor matVectorA;
-//  MaterialBaseColor matVectorB;
-//  MaterialBaseColor matVectorResult;
 //
 //  AxisMesh axis;
 //  GridMesh grid;

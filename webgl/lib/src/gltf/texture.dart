@@ -4,6 +4,9 @@ import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
 import 'dart:web_gl' as webgl;
 
+import 'package:webgl/src/introspection.dart';
+
+@reflector
 class GLTFTexture extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int textureId = nextId++;

@@ -51,7 +51,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   List<Triangle> getFaces() {
     _faces = new List();
     for (GLTFMeshPrimitive primitive in primitives) {
-      for (Triangle triangle in primitive.getFaces()) {
+      List<Triangle> faces = primitive.getFaces();
+      for (Triangle triangle in faces) {
         _faces.add(new Triangle.copy(triangle));
       }
     }

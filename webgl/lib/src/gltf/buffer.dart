@@ -1,11 +1,13 @@
 import 'dart:typed_data';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 
 /// Buffer defines the raw data.
 ///
 /// [byteLength] defines the length of the bytes used
 ///
+@reflector
 class GLTFBuffer extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int bufferId = nextId++;

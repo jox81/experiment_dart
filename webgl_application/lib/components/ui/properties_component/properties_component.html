@@ -3,7 +3,7 @@
         no iEditElement
     </template>
     <template [ngIf]="iEditElement != null">
-        <h1>Properties - {{iEditElement.runtimeType}} {{iEditElement.name}}</h1>
+        <h1>Properties - {{iEditElement.element.runtimeType}} {{iEditElement.name}}</h1>
 
         <div id="content">
             <div *ngFor="let key of iEditElement.properties.keys">

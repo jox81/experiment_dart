@@ -136,7 +136,8 @@ class UtilsGeometry{
 
     for(GLTFNode node in nodes){
       if (node.mesh != null) {
-        for(Triangle triangle in node.mesh.getFaces()) {
+        List<Triangle> triangles = node.mesh.getFaces();
+        for(Triangle triangle in triangles) {
           num distance = ray.intersectsWithTriangle(triangle..transform(node.matrix));
 
           if(distance != null) {

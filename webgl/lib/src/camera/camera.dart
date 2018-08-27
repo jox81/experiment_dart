@@ -11,6 +11,7 @@ import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
 enum CameraType{
@@ -19,6 +20,7 @@ enum CameraType{
 }
 
 // Todo (jpu) : add Gizmo
+@reflector
 abstract class Camera extends GLTFNode {
   static int nextId = 0;
   final int cameraId = nextId++;
@@ -110,6 +112,7 @@ abstract class Camera extends GLTFNode {
       _gizmo.hashCode*/;
 }
 
+@reflector
 class CameraPerspective extends Camera{
   double _aspectRatio = 0.1;
   double get aspectRatio => _aspectRatio;
@@ -255,6 +258,7 @@ class CameraPerspective extends Camera{
       _viewMatrix.hashCode;
 }
 
+@reflector
 class CameraOrthographic extends Camera{
 
   double _ymag;

@@ -25,7 +25,6 @@ import 'package:webgl_application/components/value_components/webglenum_componen
     template: r'''<div #target></div>'''
 )
 class DynamicLoaderComponent implements AfterViewInit{
-  final ComponentLoader _loader;
 
   @ViewChild('target', read:ViewContainerRef)
   ViewContainerRef target;
@@ -33,7 +32,7 @@ class DynamicLoaderComponent implements AfterViewInit{
   ComponentRef cmpRef;
   Injector injector;
 
-  DynamicLoaderComponent(this._loader);
+  DynamicLoaderComponent();
 
   Future createDynamicComponentType(Type newType, dynamic defaultValue, Function callBack)async {
 
@@ -68,8 +67,6 @@ class DynamicLoaderComponent implements AfterViewInit{
         throw new Exception('DynamicLoaderComponent::createDynamicComponent : No component for $componentType');
         break;
     }
-
-//    print("Component created : ${cdRef.instance.runtimeType}");
   }
 
   Future createDynamicComponentBaseType(Type newType, dynamic defaultValue, Function callBack, {String name})async {

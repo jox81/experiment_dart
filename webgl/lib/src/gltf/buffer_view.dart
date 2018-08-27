@@ -1,6 +1,7 @@
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 
 /// Bufferviews define a segment of the buffer data and define broadly what kind of data lives
 /// there using some obscure shortcodes for usage/target.
@@ -13,6 +14,7 @@ import 'package:webgl/src/gltf/utils_gltf.dart';
 ///
 /// [usage] define the bufferType : ARRAY_BUFFER | ELEMENT_ARRAY_BUFFER
 ///
+@reflector
 class GLTFBufferView extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int bufferViewId = nextId++;

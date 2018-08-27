@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
@@ -60,7 +59,6 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
   @override
   Future ngOnInit() async {
 //    print('AppComponent.ngOnInit');
-    _loadProjects();
   }
   @override
   void ngAfterContentInit() {
@@ -72,6 +70,7 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
   }
   @override
   void ngAfterViewInit() {
+    _loadProjects();///place this in init to work ?
 //    print('AppComponent.ngAfterViewInit $projects');
   }
   @override

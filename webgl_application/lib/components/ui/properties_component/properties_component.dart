@@ -168,7 +168,8 @@ class PropertiesComponent {
 
   //List
   bool isList(EditableProperty animationProperty) {
-    return animationProperty.type.toString() == 'List';
+    bool isList = animationProperty.type.toString().startsWith('List');
+    return isList;
   }
 
   void setSelection(dynamic event) {

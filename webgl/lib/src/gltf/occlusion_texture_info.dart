@@ -1,6 +1,8 @@
 import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/gltf/texture_info.dart';
+import 'package:webgl/src/introspection.dart';
 
+@reflector
 class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
   double strength;
 

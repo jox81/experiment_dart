@@ -19,9 +19,9 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.scene = scene;
 
   Uri uriImage = new Uri.file("packages/webgl/images/utils/uv.png");
-  ImageElement imageCrate = await TextureUtils.loadImage(uriImage.path);
+  ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
 
-  WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageCrate)
+  WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
     ..textureWrapS = TextureWrapType.REPEAT
     ..textureWrapT = TextureWrapType.REPEAT
     ..textureMatrix = new Matrix4.columns(

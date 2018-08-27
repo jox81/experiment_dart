@@ -6,6 +6,7 @@ import 'package:angular/angular.dart';
 )
 class ClickOutsideDirective {
 
+  // Todo (jpu) : how to replace this deprecated element
   ElementRef _elementRef;
 
   final _clickOutside = new StreamController<Object>.broadcast();
@@ -22,20 +23,5 @@ class ClickOutsideDirective {
     if (!clickedInside) {
       _clickOutside.add(null);
     }
-  }
-}
-
-@Directive(
-    selector: 'ul[counting]',
-// Todo (jpu) : replace depracated
-//    host: const {
-//      '(click)': 'onClick(\$event.target)'
-//    }
-    )
-class CountClicks {
-  var numberOfClicks = 0;
-
-  void onClick(Event el) {
-    print("Element $el, number of clicks: ${numberOfClicks++}.");
   }
 }

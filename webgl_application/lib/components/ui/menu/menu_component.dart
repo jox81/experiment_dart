@@ -81,7 +81,7 @@ class MenuComponent{
     File file = (event.target as FileUploadInputElement).files[0];
     FileReader reader = new FileReader()..readAsText(file);
     reader.onLoadEnd.listen((_)async {
-      String jsonContent = reader.result as String;
+//      String jsonContent = reader.result as String;
       // Todo (jpu) : replace with GLTF
 
       throw 'MenuComponent.open not implemented';

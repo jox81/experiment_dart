@@ -2,6 +2,7 @@ import 'package:webgl/src/gltf/accessor_sparse.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 // Accessor types
 const String SCALAR = 'SCALAR';
 const String VEC2 = 'VEC2';
@@ -88,7 +89,7 @@ const Map<String, int> ACCESSOR_COMPONENT_LENGTHS = const <String, int>{
 ///  stride => 3 * 4 = 12 (VEC3(3 item) * FLOAT 5126 (4 bytes))
 /// Accessor :
 ///   componentType VEC3(3 item) * FLOAT 5126 (4 bytes) * count(2012) = 3 * 4 * 2012 = 24.144 bytes
-///
+@reflector
 class GLTFAccessor extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int accessorId = nextId++;

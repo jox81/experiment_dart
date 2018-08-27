@@ -3,8 +3,10 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
+@reflector
 class GLTFTextureInfo extends GltfProperty {
   int get index => texture.textureId;
 

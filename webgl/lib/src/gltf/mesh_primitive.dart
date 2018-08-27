@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/material.dart';
@@ -202,6 +203,11 @@ class GLTFMeshPrimitive extends GltfProperty {
 
         int stepIndices = 3;
         for(int i = 0; i < indices.length; i += stepIndices) {
+//          print('i : ${i}');
+//          print('indices.length : ${indices.length}');
+//          print('indices[i] : ${indices[i]}');
+//          print('fullVertices.length : ${fullVertices.length}');
+//          print('fullVertices[indices[i]] : ${fullVertices[indices[i]]}');
           Vector3 p1 = new Vector3.fromFloat32List(fullVertices[indices[i]]);
           Vector3 p2 = new Vector3.fromFloat32List(fullVertices[indices[i + 1]]);
           Vector3 p3 = new Vector3.fromFloat32List(fullVertices[indices[i + 2]]);
@@ -213,6 +219,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   }
 }
 
+@reflector
 class MeshPrimitive {
 
   /// DrawMode mode

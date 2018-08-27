@@ -1,7 +1,9 @@
 import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/introspection.dart';
 
+@reflector
 class GLTFAnimation {
   static int nextId = 0;
   final int animationId = nextId++;
