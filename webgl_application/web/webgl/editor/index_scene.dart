@@ -4,10 +4,11 @@ import 'package:node_engine/src/node_editor.dart';
 import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 import 'package:node_engine/src/nodes/node.dart';
-import 'base_projects.dart';
+import 'projects/projects.dart';
+import 'samples/projects.dart';
 
 Future main() async {
-  ProjectService.loader = loadBaseProjects;
+  ProjectService.loader = loadSampleProjects;
   ProjectService service = new ProjectService();
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
@@ -17,6 +18,7 @@ Future main() async {
 
 //  fullNodeExemple();
 }
+
 void fullNodeExemple() {
   Element mainView = querySelector('#mainView');
   new NodeEditor.init(parent: mainView);

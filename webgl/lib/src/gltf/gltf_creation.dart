@@ -7,6 +7,7 @@ import 'package:webgl/src/gltf/occlusion_texture_info.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/texture_info.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/gltf/accessor.dart';
 import 'package:webgl/src/gltf/animation.dart';
@@ -30,6 +31,7 @@ import 'dart:html';
 import 'dart:math';
 import '../utils/utils_assets.dart';
 
+@reflector
 class GLTFCreation {
   static Future<glTF.Gltf> loadGLTFResource(String url,
       {bool useWebPath: false}) async {

@@ -1,3 +1,6 @@
+import 'package:webgl/src/introspection.dart';
+
+@reflector
 abstract class GltfProperty{
   Map<String, Object> extensions;
   Object extras;
@@ -5,6 +8,7 @@ abstract class GltfProperty{
   GltfProperty();
 }
 
+@reflector
 abstract class GLTFChildOfRootProperty extends GltfProperty {
   String name;
 

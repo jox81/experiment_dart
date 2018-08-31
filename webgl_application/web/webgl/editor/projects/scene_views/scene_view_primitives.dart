@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/material.dart';
@@ -7,31 +9,27 @@ import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/textures/utils_textures.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+import 'package:webgl/src/light/light.dart';
 
-GLTFProject projectPrimitives() {
+Future<GLTFProject> projectPrimitives() async {
   GLTFProject project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
   GLTFScene scene = new GLTFScene();
-  scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);// Todo (jpu) : ?
+  scene.backgroundColor = new Vector4(0.2, 0.2, 1.0, 1.0);// Todo (jpu) : ?
   project.addScene(scene);
   project.scene = scene;
 
-  GLTFPBRMaterial material = new GLTFPBRMaterial(
-      pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
-          baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
-          baseColorTexture: null,//GLTFTextureInfo.createTexture(project, 'testTexture.png'),
-          metallicFactor: 0.0,
-          roughnessFactor: 1.0
-      )
-  );
-  project.materials.add(material);
+  GLTFPBRMaterial baseMaterial = getTestGLTFPBRMaterial();
+  RawMaterial material = await getTestRawMaterial();
 
-  MaterialPoint materialPoint = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
 //  project.materials.add(material); // Todo (jpu) : don't add ?
 
   // Todo (jpu) :This doesn't show, use another material ?
   GLTFMesh meshPoint = new GLTFMesh.point()
-    ..primitives[0].material = materialPoint;
+    ..primitives[0].material = material;
   project.meshes.add(meshPoint);
   GLTFNode nodePoint = new GLTFNode()
     ..mesh = meshPoint
@@ -47,7 +45,7 @@ GLTFProject projectPrimitives() {
     new Vector3(10.0, 0.0, 10.0),
     new Vector3(10.0, 10.0, 10.0),
   ])
-    ..primitives[0].baseMaterial = material;
+    ..primitives[0].material = material;
   project.meshes.add(meshLine);
   GLTFNode nodeLine = new GLTFNode()
     ..mesh = meshLine
@@ -57,8 +55,8 @@ GLTFProject projectPrimitives() {
   project.addNode(nodeLine);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshTriangle = new GLTFMesh.triangle(withNormals: false)
-    ..primitives[0].baseMaterial = material;
+  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+    ..primitives[0].material = material;
   project.meshes.add(meshTriangle);
   GLTFNode nodeTriangle = new GLTFNode()
     ..mesh = meshTriangle
@@ -68,8 +66,8 @@ GLTFProject projectPrimitives() {
   project.addNode(nodeTriangle);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshQuad = new GLTFMesh.quad(withNormals: false)
-    ..primitives[0].baseMaterial = material;
+  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+    ..primitives[0].material = material;
   project.meshes.add(meshQuad);
   GLTFNode nodeQuad = new GLTFNode()
     ..mesh = meshQuad
@@ -79,8 +77,8 @@ GLTFProject projectPrimitives() {
   project.addNode(nodeQuad);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshPyramid = new GLTFMesh.pyramid(withNormals: false)
-    ..primitives[0].baseMaterial = material;
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+    ..primitives[0].material = material;
   project.meshes.add(meshPyramid);
   GLTFNode nodePyramid = new GLTFNode()
     ..mesh = meshPyramid
@@ -90,8 +88,8 @@ GLTFProject projectPrimitives() {
   project.addNode(nodePyramid);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshCube = new GLTFMesh.cube(withNormals: false)
-    ..primitives[0].baseMaterial = material;
+  GLTFMesh meshCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+    ..primitives[0].material = material;
   project.meshes.add(meshCube);
   GLTFNode nodeCube = new GLTFNode()
     ..mesh = meshCube
@@ -101,8 +99,8 @@ GLTFProject projectPrimitives() {
   project.addNode(nodeCube);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshSphere = new GLTFMesh.sphere(withNormals: false)
-    ..primitives[0].baseMaterial = material;
+  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+    ..primitives[0].material = material;
   project.meshes.add(meshSphere);
   GLTFNode nodeSphere = new GLTFNode()
     ..mesh = meshSphere
@@ -112,4 +110,72 @@ GLTFProject projectPrimitives() {
   project.addNode(nodeSphere);
 
   return project;
+}
+
+GLTFPBRMaterial getTestGLTFPBRMaterial() {
+
+  GLTFPBRMaterial baseMaterial;
+  baseMaterial = new GLTFPBRMaterial(
+      pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
+          baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
+          baseColorTexture: null,//GLTFTextureInfo.createTexture(project, 'testTexture.png'),
+          metallicFactor: 0.0,
+          roughnessFactor: 1.0
+      )
+  );
+  //  project.materials.add(baseMaterial);
+
+  return baseMaterial;
+}
+
+Future<RawMaterial> getTestRawMaterial() async {
+
+  AmbientLight ambientLight = new AmbientLight()
+    ..color = new Vector3(1.0,1.0,1.0);
+  DirectionalLight directionalLight = new DirectionalLight()
+    ..direction = new Vector3(-0.25,-0.125,-0.25)
+    ..color = new Vector3(0.8, 0.8, 0.8);
+
+  PointLight pointLight = new PointLight()
+  ..color.setFrom(directionalLight.color)
+  ..translation = new Vector3(20.0, 20.0, 20.0);
+
+  bool useLighting = true;
+
+  Uri uriImage = new Uri.file("./projects/images/uv_grid.jpg");
+  ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
+  WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
+    ..textureWrapS = TextureWrapType.REPEAT
+    ..textureWrapT = TextureWrapType.REPEAT;
+
+  RawMaterial material;
+
+//  material = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+
+//  material = new MaterialBase();
+
+//  material = new MaterialBaseColor(new Vector4(1.0, 0.0, 0.0, 1.0));
+
+  material = new MaterialBaseVertexColor();// Todo (jpu) : test with vertex colors on meshes
+
+//  material = new MaterialBaseTexture()..texture = texture;
+
+  // Todo (jpu) : doesn't show correctly
+//  material = new MaterialBaseTextureNormal()
+//    ..texture = texture
+//    ..ambientColor = ambientLight.color
+//    ..directionalLight = directionalLight
+//    ..useLighting = useLighting;
+
+//  material = new MaterialReflection();// Todo (jpu) : test this
+//  material = new MaterialSkyBox();// Todo (jpu) : test this
+//  material = new MaterialDepthTexture();// Todo (jpu) : test this
+
+  // Todo (jpu) : see console : Error From renderer _render method: Exception: can't use mirrors
+//  material = new MaterialPragmaticPBR(pointLight);
+
+//  material = new MaterialDotScreen();// Todo (jpu) : test this
+//  material = new MaterialSAO();// Todo (jpu) : test this
+
+  return material;
 }

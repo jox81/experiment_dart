@@ -50,12 +50,12 @@ class IntrospectionManager {
     Map<String, EditableProperty> propertiesInfos = {};
     if(element == null) return propertiesInfos;
 
-    InstanceMirror im = reflector.reflect(element);
-    ClassMirror cm = im.type;
-
     Map<String, MethodMirror> instance_mirror_getters = new Map();
     Map<String, MethodMirror> instance_mirror_setters = new Map();
     Map<String, MethodMirror> instance_mirror_functions = new Map();
+
+    InstanceMirror im = reflector.reflect(element);
+    ClassMirror cm = im.type;
 
     for (DeclarationMirror dm in cm.instanceMembers.values) {
       String name = dm.simpleName;

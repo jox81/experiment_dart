@@ -65,7 +65,7 @@ GLTFProject projectSceneViewPerformance() {
     int randomWidth = 10;
 
     for (int i = 0; i < count; i++) {
-      GLTFMesh meshCenterCube = new GLTFMesh.cube(withNormals: false)
+      GLTFMesh meshCenterCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
         ..primitives[0].material = materialBaseColor;
       GLTFNode nodeCenterCube = new GLTFNode()
         ..mesh = meshCenterCube

@@ -2,7 +2,9 @@ import 'dart:typed_data';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 
+@reflector
 class GLTFImage extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int sourceId = nextId++;

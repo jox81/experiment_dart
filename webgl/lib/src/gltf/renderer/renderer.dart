@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
@@ -27,6 +28,7 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/texture.dart';
 
+@reflector
 class GLTFRenderer implements Interactable {
 
   // Direction from where the light is coming to origin
@@ -356,6 +358,8 @@ class GLTFRenderer implements Interactable {
     String shaderAttributName;
     if (attributName == 'TEXCOORD_0') {
       shaderAttributName = 'a_UV';
+    } else if(attributName == "COLOR_0"){
+      shaderAttributName = 'a_Color';
     } else {
       shaderAttributName = 'a_${_capitalize(attributName)}';
     }

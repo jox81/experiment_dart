@@ -13,6 +13,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 /// Represent a part of a mesh
 /// [attributs] associate an Accessor by vertex attribute usage : POSITION | NORMAL | TANGENT | TEXCOORD_ | COLOR_ | JOINTS_ | WEIGHTS_
 /// in gltf file the accessor is define by its Id
+@reflector
 class GLTFMeshPrimitive extends GltfProperty {
   Map<String, GLTFAccessor> attributes = new Map<String, GLTFAccessor>();
   Map<String, webgl.Buffer> buffers = new Map();
@@ -43,6 +44,11 @@ class GLTFMeshPrimitive extends GltfProperty {
   GLTFAccessor get uvAccessor => attributes['TEXCOORD_0'];
   set uvAccessor(GLTFAccessor value) {
     attributes['TEXCOORD_0'] = value;
+  }
+
+  GLTFAccessor get colorAccessor => attributes['COLOR_0'];
+  set colorAccessor(GLTFAccessor value) {
+    attributes['COLOR_0'] = value;
   }
 
   GLTFAccessor _indicesAccessor;
@@ -102,6 +108,7 @@ class GLTFMeshPrimitive extends GltfProperty {
   }  //>
 
   Uint16List get indices {
+    if(_indicesAccessor == null) return null;
     return _indicesAccessor.bufferView.buffer.data.buffer
       .asUint16List(_indicesAccessor.byteOffset, _indicesAccessor.count);
   }
@@ -122,7 +129,7 @@ class GLTFMeshPrimitive extends GltfProperty {
         // use _material manually defined
       }
     } else {
-      _material = new KronosPRBMaterial(normalAccessor != null, attributes['TANGENT'] != null, uvAccessor != null, hasLODExtension);
+      _material = new KronosPRBMaterial(normalAccessor != null, attributes['TANGENT'] != null, uvAccessor != null, colorAccessor != null, hasLODExtension);
       KronosPRBMaterial materialPBR = _material as KronosPRBMaterial;
 
       materialPBR.baseColorMap = baseMaterial.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture;
@@ -340,7 +347,6 @@ class _LineMeshPrimitive extends MeshPrimitive {
     }
   }
 }
-
 class _TriangleMeshPrimitive extends MeshPrimitive {
   _TriangleMeshPrimitive() {
     mode = DrawMode.TRIANGLES;

@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/mesh.dart';
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
@@ -27,6 +28,7 @@ enum MaterialType {
   MaterialReflection
 }
 
+@reflector
 class Materials{
   static void assignMaterialTypeToModel(MaterialType materialType, GLTFMesh mesh) {
     switch(materialType){
@@ -98,6 +100,7 @@ class Materials{
   }
 }
 
+@reflector
 abstract class RawMaterial{
   String name;
 
@@ -248,6 +251,7 @@ abstract class RawMaterial{
   }
 }
 
+@reflector
 class KronosPRBMaterial extends RawMaterial{
 
   ShaderSource get shaderSource => ShaderSource.kronosGltfPBRTest;
@@ -255,11 +259,12 @@ class KronosPRBMaterial extends RawMaterial{
   final bool hasNormalAttribut;
   final bool hasTangentAttribut;
   final bool hasUVAttribut;
+  final bool hasColorAttribut;
   final bool hasLODExtension;
 
   bool get useLod => true;
 
-  KronosPRBMaterial(this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut, this.hasLODExtension);
+  KronosPRBMaterial(this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut, this.hasColorAttribut, this.hasLODExtension);
 
   //> BaseColor
   webgl.Texture baseColorMap;
@@ -350,6 +355,7 @@ class KronosPRBMaterial extends RawMaterial{
     defines['HAS_NORMALS'] = hasNormalAttribut;
     defines['HAS_TANGENTS'] = hasTangentAttribut;
     defines['HAS_UV'] = hasUVAttribut;
+    defines['HAS_COLORS'] = hasColorAttribut;
 
     //Material base infos
     defines['HAS_NORMALMAP'] = hasNormalMap;
@@ -503,6 +509,7 @@ class KronosPRBMaterial extends RawMaterial{
   }
 }
 
+@reflector
 class KronosDefaultMaterial extends RawMaterial{
   KronosDefaultMaterial();
 
@@ -560,6 +567,7 @@ class KronosDefaultMaterial extends RawMaterial{
   }
 }
 
+@reflector
 class MaterialDebug extends RawMaterial{
   Vector3 color = new Vector3(0.5, 0.5, 0.5);
 
@@ -602,6 +610,7 @@ class MaterialDebug extends RawMaterial{
 //>
 typedef void SetShaderVariables(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight);
 
+@reflector
 class MaterialCustom extends RawMaterial {
   SetShaderVariables setShaderUniformsVariables;
 
@@ -619,6 +628,7 @@ class MaterialCustom extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialPoint extends RawMaterial {
   num pointSize;
   Vector4 color;
@@ -644,6 +654,7 @@ class MaterialPoint extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialBase extends RawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.materialBase;
@@ -665,6 +676,7 @@ class MaterialBase extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialBaseColor extends RawMaterial {
 
   Vector4 color;
@@ -687,6 +699,7 @@ class MaterialBaseColor extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialBaseVertexColor extends RawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.materialBaseVertexColor;
@@ -706,6 +719,7 @@ class MaterialBaseVertexColor extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialBaseTexture extends RawMaterial {
 
   WebGLTexture texture;
@@ -732,6 +746,7 @@ class MaterialBaseTexture extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialBaseTextureNormal extends RawMaterial {
 
   WebGLTexture texture;
@@ -773,6 +788,7 @@ class MaterialBaseTextureNormal extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialReflection extends RawMaterial {
 
   WebGLTexture skyboxTexture;
@@ -804,6 +820,7 @@ class MaterialReflection extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialSkyBox extends RawMaterial {
 
   WebGLTexture skyboxTexture;
@@ -843,6 +860,7 @@ class MaterialSkyBox extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialDepthTexture extends RawMaterial {
 
   WebGLTexture texture;
@@ -884,6 +902,7 @@ class MaterialDepthTexture extends RawMaterial {
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 ///module explained can be found here : https://github.com/vorg/pragmatic-pbr/tree/master/local_modules
 ///base
+@reflector
 class MaterialPragmaticPBR extends RawMaterial {
 
   PointLight pointLight;
@@ -911,6 +930,7 @@ class MaterialPragmaticPBR extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialDotScreen extends RawMaterial {
 
   WebGLTexture texture;
@@ -943,6 +963,7 @@ class MaterialDotScreen extends RawMaterial {
   }
 }
 
+@reflector
 class MaterialSAO extends RawMaterial{
 
   MaterialSAO();

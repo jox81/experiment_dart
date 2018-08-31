@@ -35,7 +35,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
     ..texture = texture;
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshTriangle = new GLTFMesh.triangle(withNormals: false)
+  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   project.meshes.add(meshTriangle);
   GLTFNode nodeTriangle = new GLTFNode()
@@ -46,7 +46,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodeTriangle);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshQuad = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   project.meshes.add(meshQuad);
   GLTFNode nodeQuad = new GLTFNode()
@@ -57,7 +57,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodeQuad);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshPyramid = new GLTFMesh.pyramid(withNormals: false)
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   project.meshes.add(meshPyramid);
   GLTFNode nodePyramid = new GLTFNode()
@@ -68,7 +68,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodePyramid);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshCube = new GLTFMesh.cube(withNormals: false)
+  GLTFMesh meshCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   project.meshes.add(meshCube);
   GLTFNode nodeCube = new GLTFNode()
@@ -79,7 +79,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodeCube);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshSphere = new GLTFMesh.sphere(withNormals: false)
+  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   project.meshes.add(meshSphere);
   GLTFNode nodeSphere = new GLTFNode()

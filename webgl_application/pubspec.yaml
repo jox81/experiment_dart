@@ -36,6 +36,8 @@ dev_dependencies:
 
 # 1 - launch reflectable builder if needed. Before launching in, be sure to delete previous generated reflectable files.
 # >> dart tool/builder.dart web/*.dart
+# >> dart tool/builder.dart web/webgl/editor/*.dart
+
 # va générer main.reflectable.dart
 #
 # 2 - serve

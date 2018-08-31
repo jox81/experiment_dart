@@ -34,7 +34,7 @@ Future<GLTFProject> projectCubeMap() async {
   MaterialSkyBox materialSkyBox = new MaterialSkyBox();
   materialSkyBox.skyboxTexture = cubeMapTexture;
 
-  GLTFMesh skyBoxMesh = new GLTFMesh.cube(withNormals: false)
+  GLTFMesh skyBoxMesh = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialSkyBox;
   GLTFNode skyBoxNode = new GLTFNode()
     ..mesh = skyBoxMesh
@@ -52,7 +52,7 @@ Future<GLTFProject> projectCubeMap() async {
 //    meshes.add(grid);
 
   GLTFMesh sphereMesh = new GLTFMesh.sphere(
-      radius: 1.0, segmentV: 32, segmentH: 32, withNormals: false)
+      radius: 1.0, segmentV: 32, segmentH: 32, meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   GLTFNode sphereNode = new GLTFNode()
     ..mesh = sphereMesh
@@ -61,7 +61,7 @@ Future<GLTFProject> projectCubeMap() async {
     ..matrix.scale(1.0);
   scene.addNode(sphereNode);
 
-  GLTFMesh planeMesh = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh planeMesh = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   GLTFNode planeNode = new GLTFNode()
     ..mesh = planeMesh
@@ -71,7 +71,7 @@ Future<GLTFProject> projectCubeMap() async {
     ..matrix.rotateX(radians(-90.0));
   scene.addNode(planeNode);
 
-  GLTFMesh cubeMesh = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh cubeMesh = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = material;
   GLTFNode cubeNode = new GLTFNode()
     ..mesh = cubeMesh

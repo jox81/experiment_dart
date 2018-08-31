@@ -1,5 +1,8 @@
 import 'dart:html';
 
+import 'package:webgl/src/introspection.dart';
+
+@reflector
 class GLTFAsset{
   String version;
 

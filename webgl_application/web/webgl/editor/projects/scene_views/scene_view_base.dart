@@ -59,8 +59,8 @@ Future<GLTFProject> projectSceneViewBase() async {
   MaterialBaseTextureNormal materialBaseTextureNormal =
   new MaterialBaseTextureNormal()
     ..ambientColor = ambientLight.color
-    ..directionalLight = directionalLight;
-  materialBaseTextureNormal..useLighting = useLighting;
+    ..directionalLight = directionalLight
+    ..useLighting = useLighting;
   //  project.materials.add(materialBaseTextureNormal); // Todo (jpu) : don't add ?
 
 //  MaterialPragmaticPBR materialPBR = new MaterialPragmaticPBR(pointLight);
@@ -69,16 +69,21 @@ Future<GLTFProject> projectSceneViewBase() async {
 //  MaterialSAO materialSAO = new MaterialSAO();
 
   //Meshes
-  // Todo (jpu) :
-//  AxisMesh axis = new AxisMesh();
-//  meshes.add(axis);
+
+  // Todo (jpu) : problems with the axis not shown
+//  GLTFMesh axisMesh = new GLTFMesh.axis()
+//    ..primitives[0].material = materialBase;
+//  GLTFNode nodeAxis = new GLTFNode()
+//    ..mesh = axisMesh
+//    ..translation = new Vector3(0.0, 0.0, -10.0);
+//  scene.addNode(nodeAxis);
 
   //
-  GLTFMesh point = new GLTFMesh.point()
+  GLTFMesh pointMesh = new GLTFMesh.point()
   ..primitives[0].material = materialPoint;
   GLTFNode nodePoint = new GLTFNode()
-    ..mesh = point
-    ..translation = new Vector3(8.0, 5.0, 10.0);;
+    ..mesh = pointMesh
+    ..translation = new Vector3(8.0, 5.0, 10.0);
   scene.addNode(nodePoint);
 
   //
@@ -95,7 +100,7 @@ Future<GLTFProject> projectSceneViewBase() async {
   scene.addNode(nodeLine);
 
   //
-  GLTFMesh meshTriangle = new GLTFMesh.triangle(withNormals: false)
+  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBase;
   GLTFNode nodeTriangle = new GLTFNode()
     ..mesh = meshTriangle
@@ -104,7 +109,7 @@ Future<GLTFProject> projectSceneViewBase() async {
   scene.addNode(nodeTriangle);
 
   //
-  GLTFMesh meshQuad = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBaseColor;
   GLTFNode nodeQuad = new GLTFNode()
     ..mesh = meshQuad
@@ -113,8 +118,8 @@ Future<GLTFProject> projectSceneViewBase() async {
     ..matrix.rotateX(radians(90.0));
   scene.addNode(nodeQuad);
 
-  // create square
-  GLTFMesh meshSquareX = new GLTFMesh.quad(withNormals: false)
+  //
+  GLTFMesh meshSquareX = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBaseVertexColor;
   GLTFNode nodeSquareX = new GLTFNode()
     ..mesh = meshSquareX
@@ -135,7 +140,7 @@ Future<GLTFProject> projectSceneViewBase() async {
 //  meshes.add(squareX);
 
   //
-  GLTFMesh meshCenterCube = new GLTFMesh.cube(withNormals: false)
+  GLTFMesh meshCenterCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBaseColor;
   GLTFNode nodeCenterCube = new GLTFNode()
     ..mesh = meshCenterCube
@@ -144,8 +149,8 @@ Future<GLTFProject> projectSceneViewBase() async {
     ..scale = new Vector3(0.1, 0.1, 0.1);
   scene.addNode(nodeCenterCube);
 
-  //create Pyramid
-  GLTFMesh meshPyramid = new GLTFMesh.pyramid(withNormals: false)
+  //
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBaseVertexColor;
   GLTFNode nodePyramid = new GLTFNode()
     ..mesh = meshPyramid
@@ -153,8 +158,8 @@ Future<GLTFProject> projectSceneViewBase() async {
     ..matrix.translate(7.0, 1.0, 0.0);
   scene.addNode(nodePyramid);
 
-  //Create Cube textured
-  Uri uriImage = new Uri.file("./images/uv_grid.png");
+  //
+  Uri uriImage = new Uri.file("./projects/images/uv_grid.jpg");
   ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
 
   WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
@@ -169,18 +174,19 @@ Future<GLTFProject> projectSceneViewBase() async {
 
   materialBaseTextureNormal.texture = texture;
 
-  GLTFMesh meshCube = new GLTFMesh.cube(withNormals: false)
+  GLTFMesh meshTexturedCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBaseTextureNormal;
   GLTFNode nodeCube = new GLTFNode()
-    ..mesh = meshCube
+    ..mesh = meshTexturedCube
     ..name = 'cube_textured'
     ..translation = new Vector3(-4.0, 1.0, 0.0)
-    ..scale = new Vector3(0.1, 0.1, 0.1);
+    ..scale = new Vector3(1.0,1.0,1.0);
   scene.addNode(nodeCube);
   // Todo (jpu) : add component
 //  nodeCube
 //    ..addComponent(new TestAnim());
 
+  // Todo (jpu) : add node from json
 //  //SusanMesh
 //  var susanJson = await UtilsAssets.loadJSONResource('./objects/susan/susan.json');
 //  MaterialBaseTexture susanMaterialBaseTexture = new MaterialBaseTexture()
@@ -193,17 +199,17 @@ Future<GLTFProject> projectSceneViewBase() async {
 //    ..addComponent(new TestAnim());
 //  meshes.add(jsonMesh);
 //
-  //Sphere
-  GLTFMesh meshSphere = new GLTFMesh.sphere(withNormals: false)
-    ..primitives[0].material = materialBaseVertexColor;
-  GLTFNode nodeSphere = new GLTFNode()
-    ..mesh = meshSphere
-    ..name = 'sphere'
-    ..matrix.translate(0.0, 0.0, -10.0);
-  scene.addNode(nodeSphere);
-//  SphereMesh sphere = new SphereMesh(radius: 2.5, segmentV: 48, segmentH: 48)
-//    ..matrix.translate(0.0, 0.0, -10.0)
-//    ..material = materialPBR;
+  //
+  // Todo (jpu) : problems : see console
+//  GLTFMesh meshSphere = new GLTFMesh.sphere(radius: 2.5, segmentV: 48, segmentH: 48, withNormals: false)
+//    ..primitives[0].material = materialBaseVertexColor;
+//  GLTFNode nodeSphere = new GLTFNode()
+//    ..mesh = meshSphere
+//    ..name = 'sphere'
+//    ..matrix.translate(0.0, 0.0, -10.0);
+//  scene.addNode(nodeSphere);
+
+  // Todo (jpu) : render mode LINES
 //  //sphere.mode = RenderingContext.LINES;
 //  meshes.add(sphere);
 

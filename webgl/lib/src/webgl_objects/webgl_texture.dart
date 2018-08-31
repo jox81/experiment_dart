@@ -28,6 +28,16 @@ class WebGLTexture extends EditTexture {
     _replaceImage(value);
   }
 
+  /// The textureMatrix can be modifed to adjust mapping
+  /// ex:
+  ///   WebGLTexture texture;
+  ///   //...
+  ///   texture.textureMatrix = new Matrix4.columns(
+  ///     new Vector4(2.0,1.0,0.0,-2.0),
+  ///     new Vector4(0.0,2.0,0.0,-2.0),
+  ///     new Vector4(0.0,0.0,1.0,0.0),
+  ///     new Vector4(0.0,0.0,0.0,1.0),
+  ///   ).transposed()
   Matrix4 textureMatrix = new Matrix4.identity();
 
   bool get isTexture => gl.isTexture(webGLTexture);

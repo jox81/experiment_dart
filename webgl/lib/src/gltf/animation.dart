@@ -22,6 +22,7 @@ class GLTFAnimation {
 }
 
 ///A channel can be imagined as connecting a "source" [sampler] of the animation data to a [target] node.
+@reflector
 class GLTFAnimationChannel {
   static int nextId = 0;
   final int channelId = nextId++;
@@ -37,6 +38,7 @@ class GLTFAnimationChannel {
   }
 }
 
+@reflector
 class ChannelTargetPathType{
   final String path;
 
@@ -66,6 +68,7 @@ class ChannelTargetPathType{
 
 /// The Target of the animation
 /// [path] defines the property to animate on the [node]
+@reflector
 class GLTFAnimationChannelTarget {
 
   final ChannelTargetPathType path;
@@ -88,6 +91,7 @@ class GLTFAnimationChannelTarget {
 /// [input] accessor defines the timing
 /// [output] accessor defines the values corresponding to the timings
 /// [interpolation] type of easer to use. // Todo (jpu) : Should this be replaced by an enum ?
+@reflector
 class GLTFAnimationSampler {
   static int nextId = 0;
   final int samplerId = nextId++;

@@ -1,10 +1,16 @@
 import 'dart:html';
 
+import 'package:webgl/src/introspection.dart';
+
+
+@reflector
 class GLFunctionCall {
   Function function;
   List<dynamic> vals;
 }
 
+
+@reflector
 class GlobalState {
   String vertSource;
   String fragSource;

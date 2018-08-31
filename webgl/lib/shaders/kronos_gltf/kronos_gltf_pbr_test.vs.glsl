@@ -10,6 +10,9 @@ attribute vec4 a_Tangent;
 #ifdef HAS_UV
 attribute vec2 a_UV;
 #endif
+#ifdef HAS_COLORS
+attribute vec4 a_Color;
+#endif
 
 uniform mat4 u_PVMatrix;
 uniform mat4 u_ModelMatrix;

@@ -1,7 +1,9 @@
 import 'package:webgl/src/gltf/accessor_sparse_indices.dart';
 import 'package:webgl/src/gltf/accessor_sparse_values.dart';
 import 'package:webgl/src/gltf/utils_gltf.dart';
+import 'package:webgl/src/introspection.dart';
 
+@reflector
 class GLTFAccessorSparse extends GltfProperty {
   final int count;
   final GLTFAccessorSparseIndices indices;

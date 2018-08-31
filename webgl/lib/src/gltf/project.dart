@@ -66,7 +66,7 @@ class GLTFProject{
   }
 
   GLTFScene _scene;
-  GLTFScene get scene => _scene;
+  GLTFScene get scene => _scene ?? _scenes[0];
   set scene(GLTFScene value) {
     assert(value != null);
     GLTFScene projectScene = _scenes.firstWhere((s)=>s.sceneId == value.sceneId, orElse: ()=> throw new Exception('Scene can only be bound to an existing project Scene. If you want to add a scene to the project use addScene Method.'));

@@ -35,7 +35,7 @@ GLTFProject projectFrameBuffer() {
   new MaterialBaseTexture()
     ..texture = renderedTextures[0];
 
-  GLTFMesh colorMeshQuad = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh colorMeshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialBaseTextureNormal;
   GLTFNode colorNodeQuad = new GLTFNode()
     ..mesh = colorMeshQuad
@@ -49,7 +49,7 @@ GLTFProject projectFrameBuffer() {
   new MaterialDepthTexture()
     ..texture = renderedTextures[1];
 
-  GLTFMesh depthMeshQuad = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh depthMeshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].material = materialDepthTextureNormal;
   GLTFNode depthNodeQuad = new GLTFNode()
     ..mesh = depthMeshQuad

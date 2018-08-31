@@ -6,7 +6,8 @@ import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 import 'package:webgl_application/components/app_component/app_component.template.dart' as ng;
 import 'index_app.reflectable.dart';
-import 'base_projects.dart';
+import 'projects/projects.dart';
+import 'samples/projects.dart';
 
 //This gives access from the web console
 Application get app => Application.instance;
@@ -19,7 +20,7 @@ Future main() async {
   initializeReflectable();
 //  test_introspection();
 
-  ProjectService.loader = loadBaseProjects;
+  ProjectService.loader = loadSampleProjects;
 //  bootstrapStatic<AppComponent>(AppComponent,<dynamic>[ProjectService],ng.initReflector);
 
   runApp(ng.AppComponentNgFactory);
