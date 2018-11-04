@@ -21,5 +21,7 @@ Future main() async {
   node01.children.add(node03);
 
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  await new GLTFRenderer(canvas).render(gltf);
+  GLTFRenderer renderer = new GLTFRenderer(canvas);
+  await renderer.init(gltf);
+  renderer.render();
 }

@@ -1,0 +1,129 @@
+{
+    "accessors" : [
+        {
+            "bufferView" : 0, 
+            "componentType" : 5125, 
+            "count" : 1442112, 
+            "max" : [
+                240353
+            ], 
+            "min" : [
+                0
+            ], 
+            "type" : "SCALAR"
+        }, 
+        {
+            "bufferView" : 1, 
+            "componentType" : 5126, 
+            "count" : 240354, 
+            "max" : [
+                4.577826976776123, 
+                3.7910053730010986, 
+                6.38285493850708
+            ], 
+            "min" : [
+                -4.577826976776123, 
+                -2.5291237831115723, 
+                -5.329855918884277
+            ], 
+            "type" : "VEC3"
+        }, 
+        {
+            "bufferView" : 2, 
+            "componentType" : 5126, 
+            "count" : 240354, 
+            "max" : [
+                1.0, 
+                0.999969482421875, 
+                0.999969482421875
+            ], 
+            "min" : [
+                -1.0, 
+                -0.999969482421875, 
+                -0.999969482421875
+            ], 
+            "type" : "VEC3"
+        }
+    ], 
+    "asset" : {
+        "generator" : "Khronos Blender glTF 2.0 exporter", 
+        "version" : "2.0"
+    }, 
+    "bufferViews" : [
+        {
+            "buffer" : 0, 
+            "byteLength" : 5768448, 
+            "byteOffset" : 0, 
+            "target" : 34963
+        }, 
+        {
+            "buffer" : 0, 
+            "byteLength" : 2884248, 
+            "byteOffset" : 5768448, 
+            "target" : 34962
+        }, 
+        {
+            "buffer" : 0, 
+            "byteLength" : 2884248, 
+            "byteOffset" : 8652696, 
+            "target" : 34962
+        }
+    ], 
+    "buffers" : [
+        {
+            "byteLength" : 11536944, 
+            "uri" : "space_ship_01.bin"
+        }
+    ], 
+    "materials" : [
+        {
+            "name" : "Material", 
+            "pbrMetallicRoughness" : {
+                "baseColorFactor" : [
+                    0.4850594103336334, 
+                    0.07913395762443542, 
+                    0.044387683272361755, 
+                    1.0
+                ], 
+                "metallicFactor" : 0.08984375, 
+                "roughnessFactor" : 0.765625
+            }
+        }
+    ], 
+    "meshes" : [
+        {
+            "name" : "Sphere.003", 
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "NORMAL" : 2, 
+                        "POSITION" : 1
+                    }, 
+                    "indices" : 0, 
+                    "material" : 0
+                }
+            ]
+        }
+    ], 
+    "nodes" : [
+        {
+            "mesh" : 0, 
+            "name" : "Sphere", 
+            "rotation" : [
+                5.15029299208436e-08, 
+                0.1825503706932068, 
+                -0.983196496963501, 
+                -2.7738917651731754e-07
+            ]
+        }
+    ], 
+    "scene" : 0, 
+    "scenes" : [
+        {
+            "name" : "Scene", 
+            "nodes" : [
+                0
+            ]
+        }
+    ]
+}

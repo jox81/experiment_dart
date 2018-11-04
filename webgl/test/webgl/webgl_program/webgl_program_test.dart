@@ -11,7 +11,7 @@ import 'dart:web_gl' as webgl;
 
 void main() {
 
-  UtilsAssets.useWebPath = true;
+  assetManager.useWebPath = true;
 
   CanvasElement canvas;
 

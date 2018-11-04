@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 void main() {
 
-  UtilsAssets.useWebPath = true;
+  assetManager.useWebPath = true;
 
   CanvasElement canvas;
 

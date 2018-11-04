@@ -9,5 +9,6 @@ Future renderGltf(String gltfPath, CanvasElement canvas) async {
   await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
 
   GLTFRenderer rendered = new GLTFRenderer(canvas);
-  await rendered.render(gltfProject);
+  await rendered.init(gltfProject);
+  rendered.render();
 }

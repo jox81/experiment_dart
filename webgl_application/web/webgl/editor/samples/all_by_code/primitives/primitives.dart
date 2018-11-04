@@ -53,7 +53,7 @@ GLTFProject primitives() {
   scene.addNode(nodeLine);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshTriangle = new GLTFMesh.triangle(withNormals: false)
+  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useUVs: false))
     ..primitives[0].baseMaterial = material;
   GLTFNode nodeTriangle = new GLTFNode()
   ..mesh = meshTriangle
@@ -62,7 +62,7 @@ GLTFProject primitives() {
   scene.addNode(nodeTriangle);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshQuad = new GLTFMesh.quad(withNormals: false)
+  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useUVs: false))
     ..primitives[0].baseMaterial = material;
   GLTFNode nodeQuad = new GLTFNode()
     ..mesh = meshQuad
@@ -71,7 +71,7 @@ GLTFProject primitives() {
   scene.addNode(nodeQuad);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshPyramid = new GLTFMesh.pyramid(withNormals: false)
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useUVs: false))
     ..primitives[0].baseMaterial = material;
   GLTFNode nodePyramid = new GLTFNode()
     ..mesh = meshPyramid
@@ -80,7 +80,7 @@ GLTFProject primitives() {
   scene.addNode(nodePyramid);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshCube = new GLTFMesh.cube(withNormals: false)
+  GLTFMesh meshCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useUVs: false))
     ..primitives[0].baseMaterial = material;
   GLTFNode nodeCube = new GLTFNode()
     ..mesh = meshCube
@@ -89,7 +89,7 @@ GLTFProject primitives() {
   scene.addNode(nodeCube);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshSphere = new GLTFMesh.sphere(withNormals: false)
+  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useUVs: false))
     ..primitives[0].baseMaterial = material;
   GLTFNode nodeSphere = new GLTFNode()
     ..mesh = meshSphere

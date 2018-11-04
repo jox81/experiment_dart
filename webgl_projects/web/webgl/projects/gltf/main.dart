@@ -6,7 +6,7 @@ Future main() async {
 
   final List<String> gltfSamplesPaths = [
     './projects/archi/model_01/model_01.gltf',
-//    './projects/archi/model_02/model_02.gltf',
+//    './projects/space_ships/space_ship_01/space_ship_01.gltf',
   ];
 
   String gtltPath = gltfSamplesPaths.first;

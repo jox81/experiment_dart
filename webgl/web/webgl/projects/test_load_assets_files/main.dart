@@ -9,8 +9,8 @@ String baseShaderPath = 'shaders/material_base/material_base.vs.glsl';
 
 Future main() async {
 
-  UtilsAssets.webPath = Uri.base.origin;
-  print('UtilsAssets.webPath : ${UtilsAssets.webPath}');
+  assetManager.webPath = Uri.base.origin;
+  print('UtilsAssets.webPath : ${assetManager.webPath}');
 
   /// Page de test montrant plusieurs manière de récupérer le contenu de fichier se situant dans un autre package dans le dossier /lib
 
@@ -58,7 +58,7 @@ Future loadFileFromOtherPackageUriWithResource() async {
 Future loadFileFromOtherPackagePathWithUtils() async {
   print('loadFileFromOtherPackagePathWithUtils');
   String packagesPath = path.join(Uri.base.origin, 'packages/webgl/$baseShaderPath');
-  String shader = await UtilsAssets.loadGlslShader(packagesPath);
+  String shader = await assetManager.loadGlslShader(packagesPath);
   print(shader);
 }
 
@@ -70,7 +70,7 @@ Future loadFileFromOtherPackageUriWithUtils() async {
   String currentPackage = "packages/webgl";
   String filePath = "/$baseShaderPath";
   Uri uriShader = new Uri.file('$currentPackage/$filePath');
-  String shader = await UtilsAssets.loadGlslShader(uriShader.path);
+  String shader = await assetManager.loadGlslShader(uriShader.path);
   print(shader);
 }
 
@@ -94,6 +94,6 @@ Future loadFileFromWebUriWithUtils() async {
   print('loadFileFromWebUriWithUtils');
   String filePath = "webgl/projects/test_load_assets_files/$baseShaderPath";
   String packagesPath = path.join(Uri.base.origin, filePath);
-  String shader = await UtilsAssets.loadGlslShader(packagesPath);
+  String shader = await assetManager.loadGlslShader(packagesPath);
   print(shader);
 }

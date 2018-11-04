@@ -52,7 +52,9 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
   }
 
   void render() {
-    renderer.render(project);
+    renderer
+    ..gltfProject = project
+    ..render();
   }
 
   /// Active Axis

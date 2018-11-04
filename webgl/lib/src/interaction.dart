@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
+import 'dart:math' as Math;
 
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
@@ -19,7 +20,9 @@ abstract class Interactable{
 class Interaction {
 
   final Interactable _interactable;
-  
+
+  TouchesManager _touchesManager;
+
   //Debug div
   Element elementDebugInfoText;
   Element elementFPSText;
@@ -61,6 +64,7 @@ class Interaction {
   Stream<dynamic> get onResize => _onResizeController.stream;
 
   Interaction(this._interactable) {
+    _touchesManager = new TouchesManager();
     _initEvents();
   }
 
@@ -87,7 +91,9 @@ class Interaction {
     _interactable.canvas.onTouchStart.listen(_onTouchStart);
     _interactable.canvas.onTouchMove.listen(_onTouchMove);
     _interactable.canvas.onTouchEnd.listen(_onTouchEnd);
-
+    _interactable.canvas.onTouchLeave.listen(_onTouchLeave);
+    _interactable.canvas.onTouchCancel.listen(_onTouchCancel);
+    _interactable.canvas.onTouchEnter.listen(_onTouchEnter);
   }
 
   ///
@@ -168,11 +174,8 @@ class Interaction {
     cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, isMiddleMouseButton ? 1:0);//!! hack : dart doesn't seem to recognize middle mouse button dragging !!
 
     if(mouseDown) {
-
       dragging = true;
-
       _onDragController.add(null);
-
     }else{
       dragging = false;
     }
@@ -193,8 +196,9 @@ class Interaction {
   }
 
   void _onMouseWheel(WheelEvent event){
-    num delatY = -event.deltaY;
-    cameraController?.updateCamerFov(mainCamera, delatY);
+    num deltaY = -event.deltaY;
+    deltaY = Math.max(-1, Math.min(1, deltaY))/ 50;
+    cameraController?.updateCameraFov(mainCamera, deltaY);
   }
     
   /// Determine how far we have moved since the last mouse move event.
@@ -213,48 +217,73 @@ class Interaction {
   /// Touch
   ///
 
-  void _onTouchStart(TouchEvent event) {
-    int screenX = event.touches.first.client.x.toInt();
-    int screenY = event.touches.first.client.y.toInt();
-    updateMouseInfos(screenX, screenY);
+  double _startFov;
 
-    cameraController?.beginOrbit(mainCamera, screenX, screenY);
+  void showTouchEventInfos(TouchEvent event){
+    _touchesManager.update(event);
+    print(_touchesManager.getDebugInfos(''));
+    // Todo (jpu) : show this in a div with fps
+  }
+
+  void _onTouchStart(TouchEvent event) {
+    _touchesManager.update(event);
+
+    if(_touchesManager.touchLength > 1){
+      _startFov = mainCamera.yfov;
+    }else {
+      int screenX = _touchesManager[0].client.x.toInt();
+      int screenY = _touchesManager[0].client.y.toInt();
+      updateMouseInfos(screenX, screenY);
+
+      cameraController?.beginOrbit(mainCamera, screenX, screenY);
+    }
 
     dragging = false;
     mouseDown = true;
-
     _onTouchStartController.add(event);
   }
 
   void _onTouchMove(TouchEvent event) {
-    int screenX = event.touches.first.client.x.toInt();
-    int screenY = event.touches.first.client.y.toInt();
-    updateMouseInfos(screenX, screenY);
+    _touchesManager.update(event);
 
-    cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, 0);
+    if(event.targetTouches.length > 1){
+      mainCamera.yfov = _startFov / _touchesManager.scaleChange;
+    }else {
+      int screenX = _touchesManager[0].client.x.toInt();
+      int screenY = _touchesManager[0].client.y.toInt();
+      updateMouseInfos(screenX, screenY);
+      cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, 0);
+    }
 
-    if(mouseDown) {
-
+    if (mouseDown) {
       dragging = true;
-
       _onDragController.add(null);
-
-    }else{
+    } else {
       dragging = false;
     }
+
   }
 
   void _onTouchEnd(TouchEvent event) {
-    int screenX = event.touches.first.client.x.toInt();
-    int screenY = event.touches.first.client.y.toInt();
-    updateMouseInfos(screenX, screenY);
-
     cameraController?.endOrbit(mainCamera);
 
     dragging = false;
     mouseDown = false;
 
     _onTouchEndController.add(event);
+    _startFov = null;
+  }
+
+  void _onTouchLeave(TouchEvent event) {
+    print('Interaction._onTouchLeave');
+  }
+
+  void _onTouchCancel(TouchEvent event) {
+    print('Interaction._onTouchCancel');
+  }
+
+  void _onTouchEnter(TouchEvent event) {
+    print('Interaction._onTouchEnter');
   }
 
   ///
@@ -266,5 +295,76 @@ class Interaction {
     //Todo : readPixels doesn't work in dartium...
 //    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, colorPicked);
     elementDebugInfoText?.text = '[$posX, $posY, $posZ] : $colorPicked';
+  }
+}
+
+/// 3 Touches sont pris sur chrome android
+class TouchesManager{
+  TouchEvent _lastTouchEvent;
+  Touch operator [](int index) => _lastTouchEvent?.targetTouches[index];
+
+  int get touchLength => _lastTouchEvent.targetTouches.length;
+
+  num _startDistance;
+  num get startDistance => _startDistance;
+
+  num get currentDistance => _lastTouchEvent?.targetTouches[0].client.distanceTo(_lastTouchEvent?.targetTouches[1].client);
+
+  num _scaleChange;
+  num get scaleChange => _scaleChange;
+
+  TouchesManager();
+
+  void update(TouchEvent event){
+    event.targetTouches;
+
+    if( event.targetTouches.length > 0){
+      Touch firstTouch = event.targetTouches[0];
+
+      if(event.targetTouches.length > 1) {
+        for (var i = 1; i < event.targetTouches.length; ++i) {
+          Touch otherTouch = event.targetTouches[i];
+          if(_startDistance == null){
+            _startDistance = otherTouch.client.distanceTo(firstTouch.client);
+          }
+          num currentDistance = otherTouch.client.distanceTo(firstTouch.client);
+          _scaleChange = currentDistance/_startDistance;
+        }
+      }else{
+        _startDistance = null;
+      }
+    }
+
+    _lastTouchEvent = event;
+  }
+
+  StringBuffer _stringBuffer = new StringBuffer();
+  String getDebugInfos(String name){
+    void _wrapBufferText(String infos) {
+      _stringBuffer.write('<p>');
+      _stringBuffer.write(infos);
+      _stringBuffer.write('</p>');
+    }
+
+    _stringBuffer.clear();
+
+    _wrapBufferText('$name : ${touchLength}');
+
+    if(touchLength > 0){
+      Touch firstTouch = this[0];
+
+      _wrapBufferText('touch 0 : (${firstTouch.client.x},${firstTouch.client.y})');
+
+      if(touchLength > 1) {
+        for (var i = 1; i < touchLength; ++i) {
+          Touch otherTouch = this[i];
+          _wrapBufferText('otherTouch $i : (${otherTouch.client.x},${otherTouch.client.y}) > ${this[i].client.distanceTo(this[0].client)}');
+          _wrapBufferText('startDistance : ${startDistance}');
+          _wrapBufferText('scaleChange : ${scaleChange}');
+        }
+      }
+    }
+
+    return _stringBuffer.toString();
   }
 }

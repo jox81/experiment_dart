@@ -6,7 +6,7 @@ import "package:test/test.dart";
 
 Future main() async {
 
-  UtilsAssets.useWebPath = true;
+  assetManager.useWebPath = true;
 
   setUp(() async {
 
@@ -17,7 +17,7 @@ Future main() async {
 
   group("Assets load Init", () {
     test("loadTextResource ..", () async {
-      var text = await UtilsAssets.loadTextResource('../test.txt');
+      var text = await assetManager.loadTextResource('../test.txt');
       print(text);
       expect(text, isNotNull);
     });

@@ -35,10 +35,10 @@ import '../utils/utils_assets.dart';
 class GLTFCreation {
   static Future<glTF.Gltf> loadGLTFResource(String url,
       {bool useWebPath: false}) async {
-    UtilsAssets.useWebPath = useWebPath;
+    assetManager.useWebPath = useWebPath;
 
     Completer completer = new Completer<glTF.Gltf>();
-    Map<String, Object> result = await UtilsAssets.loadJSONResource(url);
+    Map<String, Object> result = await assetManager.loadJSONResource(url);
     try {
       final glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
       completer.complete(gltf);
@@ -53,7 +53,7 @@ class GLTFCreation {
       {bool isRelative: true}) {
     Completer completer = new Completer<Uint8List>();
 
-    String assetsPath = UtilsAssets.getWebPath(url);
+    String assetsPath = assetManager.getWebPath(url);
     print('url : $url | assetsPath : $assetsPath');
 
     Random random = new Random();

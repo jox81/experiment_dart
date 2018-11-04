@@ -196,9 +196,9 @@ class GLTFRenderer implements Interactable {
     return texture;
   }
 
-  Future render(GLTFProject gltfProject) async {
+  Future init(GLTFProject gltfProject) async {
     this.gltfProject = gltfProject;
-    
+
     if(currentScene == null) throw new Exception("currentScene must be set before rendering.");
 
     await ShaderSource.loadShaders();
@@ -220,7 +220,9 @@ class GLTFRenderer implements Interactable {
     setupCameras();
 
     Context.backgroundColor = new Vector4(.2, 0.2, 0.2, 1.0);
+  }
 
+  void render() {
     _render();
   }
 
@@ -231,7 +233,7 @@ class GLTFRenderer implements Interactable {
         update();
         _renderCurrentScene();
     } catch (ex) {
-      print("Error From renderer _render method: $ex");
+      print("Error From renderer _render method: $ex ${StackTrace.current}");
     }
 
     window.requestAnimationFrame((num time) {

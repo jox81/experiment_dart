@@ -1,5 +1,4 @@
 import 'dart:math' as Math;
-import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 
 class CameraController {
@@ -12,9 +11,6 @@ class CameraController {
   double deltaX = 0.0;
   double deltaY = 0.0;
 
-  //WheelEvent values
-  double fov = radians(45.0);
-
   CameraController();
 
   CameraPerspective _camera;
@@ -25,9 +21,9 @@ class CameraController {
     yRot = camera.phiAngle;
   }
 
-  void updateCamerFov(CameraPerspective camera, num deltaY){
+  void updateCameraFov(CameraPerspective camera, num deltaY){
     if (camera.isActive) {
-      changeCameraFov(camera, deltaY);
+      camera.yfov += deltaY;
     }
   }
 
@@ -38,11 +34,8 @@ class CameraController {
         if (buttonType == 0) {
           //LMB
           doOrbit(deltaX, deltaY);
-
         } else if (buttonType == 1) {
           //MMB
-          deltaX *= 0.5;
-          deltaY *= 0.5;
           pan(deltaX, deltaY);
         }
       }
@@ -51,7 +44,7 @@ class CameraController {
 
   /// Update the X and Y rotation angles based on the mouse motion.
   void doOrbit(num deltaX, num deltaY) {
-    //LMB
+    // LMB
     // Update the X and Y rotation angles based on the mouse motion.
     yRot = (yRot + deltaX) % 360;
     xRot = (xRot + deltaY);
@@ -75,13 +68,6 @@ class CameraController {
     dragging = false;
   }
 
-  void changeCameraFov(CameraPerspective camera, num deltaY) {
-    var delta = Math.max(-1, Math.min(1, deltaY));
-    fov += delta / 100; //calcul du zoom
-
-    camera.yfov = fov;
-  }
-
   void rotateOrbit(num xAngleRot, num yAngleRot) {
     num distance = _camera.frontDirection
         .length; // Straight line distance between the camera and look at point
@@ -101,7 +87,9 @@ class CameraController {
     _camera.translation = _camera.translation..setValues(camX, camY, camZ);
   }
 
-  void pan(double deltaX, double deltaY) {
+  void pan(double deltaX, double deltaY, {num panScale = 0.05}) {
+    deltaX *= panScale;
+    deltaY *= panScale;
     _camera.translation += _camera.xAxis * deltaX;
     _camera.translation += _camera.yAxis * deltaY;
     _camera.targetPosition += _camera.xAxis * deltaX;

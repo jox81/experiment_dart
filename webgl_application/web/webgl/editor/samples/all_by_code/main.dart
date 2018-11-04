@@ -31,5 +31,5 @@ Future main() async {
   GLTFProject gltf = await projects.first();
   debugGltf(gltf, doGlTFProjectLog : true, isDebug:false);
 
-  renderer.render(gltf);
+  renderer.render();
 }

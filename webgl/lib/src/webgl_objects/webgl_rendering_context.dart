@@ -555,7 +555,7 @@ class WebGLRenderingContext{
       print('viewportDimensions : ${maxViewportDimensions}');
       print('viewport : ${viewport}');
 
-      print('${contextAttributes.logValues()}');
+      contextAttributes.logValues();
 
       print('redBits : ${redBits}');
       print('greenBits : ${greenBits}');
@@ -650,7 +650,7 @@ class WebGLRenderingContext{
 
       print('###  currentProgram  ##############################################');
       print('currentProgram :${currentProgram}');
-      print('${currentProgram.logProgramInfos()}');
+      currentProgram.logProgramInfos();
 
       print('###################################################################');
       print('###################################################################');

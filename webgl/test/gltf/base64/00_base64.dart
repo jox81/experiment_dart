@@ -36,7 +36,7 @@ Future main() async {
 
       String gltfBinUrl = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/00_triangle_without_indices/gltf/triangleWithoutIndices.bin';
       String base64Result = 'AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAA';
-      UtilsAssets.useWebPath = true;
+      assetManager.useWebPath = true;
 
       List<int> base64Decoded = await GLTFCreation.loadGltfBinResource(gltfBinUrl, isRelative: false);
       expect(base64Decoded.length, 36);

@@ -132,7 +132,7 @@ class ShaderSource{
   ShaderSource();
 
   Future _loadShader()async {
-    vsCode = await UtilsAssets.loadGlslShader(vertexShaderPath);
-    fsCode = await UtilsAssets.loadGlslShader(fragmentShaderPath);
+    vsCode = await assetManager.loadGlslShader(vertexShaderPath);
+    fsCode = await assetManager.loadGlslShader(fragmentShaderPath);
   }
 }

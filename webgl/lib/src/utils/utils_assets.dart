@@ -4,21 +4,26 @@ import 'dart:math';
 import 'dart:convert';
 import 'dart:async';
 
-class UtilsAssets{
+// Todo (jpu) : place thos somewhere else ?
+AssetsManager assetManager = new AssetsManager._();
+
+class AssetsManager{
 
   static const String WEB_PATH_LOCALHOST8080 = 'http://localhost:8080/';
   static const String WEB_PATH_RELATIVE = './';
 
+  AssetsManager._();
+
   // This webPath is used within the webFolder but it can be replaced with 'http://localhost:8080/' to use in unit test
   //This is usefull when using unit tests from port 8081... instead of web:8080 Worked with previous version. but now with dart  2.0 no
-  static String _webPath = WEB_PATH_RELATIVE;
-  static String get webPath => _webPath;
-  static set webPath(String value) {
+  String _webPath = WEB_PATH_RELATIVE;
+  String get webPath => _webPath;
+  set webPath(String value) {
     _webPath = value;
   }
 
-  static String getWebPath(String url) {
-    String baseWebPath = UtilsAssets.webPath;
+  String getWebPath(String url) {
+    String baseWebPath = webPath;
     if(url.startsWith('http://') ||url.startsWith('/') || url.startsWith('./') || url.startsWith('../')){
       baseWebPath = '';
     }else if(url.startsWith('packages')){
@@ -31,7 +36,7 @@ class UtilsAssets{
   }
 
   // Todo (jpu) : remove this ?
-  static set useWebPath(bool value){
+  set useWebPath(bool value){
     if(value){
       _webPath = WEB_PATH_LOCALHOST8080;
     }else{
@@ -40,7 +45,7 @@ class UtilsAssets{
   }
 
   ///Load a text resource from a file over the network
-  static Future<String> loadTextResource (String url) {
+  Future<String> loadTextResource (String url) {
     Completer completer = new Completer<String>();
 
     String assetsPath = getWebPath(url);
@@ -48,7 +53,13 @@ class UtilsAssets{
     Random random = new Random();
     HttpRequest request = new HttpRequest();
     request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}', async:true);
-    request.timeout = 2000;
+    request..onProgress.listen((ProgressEvent onData){
+      print("lengthComputable : ${onData.lengthComputable}");
+      print("loaded : ${onData.loaded}");
+      print("total : ${onData.total}");
+      print("% : ${onData.loaded / onData.total * 100}");
+    });
+    request.timeout = 20000;
     request..onLoadEnd.listen((_) {
       if (request.status < 200 || request.status > 299) {
         String fsErr = 'Error: HTTP Status ${request.status} on resource: $assetsPath';
@@ -68,7 +79,7 @@ class UtilsAssets{
   }
 
   ///Load a text resource from a file over the network
-  static String loadTextResourceSync (String url) {
+  String loadTextResourceSync (String url) {
     Completer completer = new Completer<String>();
 
     Random random = new Random();
@@ -91,7 +102,7 @@ class UtilsAssets{
   }
 
   ///Load a Glsl from a file url
-  static Future<String> loadGlslShader(String url) async {
+  Future<String> loadGlslShader(String url) async {
     Completer completer = new Completer<String>();
     await loadTextResource(url).then((String result){
       try {
@@ -106,7 +117,7 @@ class UtilsAssets{
   }
 
   ///Load a Glsl from a file url synchronously
-  static String loadGlslShaderSync(String url) {
+  String loadGlslShaderSync(String url) {
     String result;
     try {
       result = loadTextResourceSync(url);
@@ -117,7 +128,7 @@ class UtilsAssets{
     return result;
   }
 
-  static Future<Map<String, Object>> loadJSONResource (String url) async {
+  Future<Map<String, Object>> loadJSONResource (String url) async {
     Completer completer = new Completer<Map<String, Object>>();
     String result = await loadTextResource(url);
     try {

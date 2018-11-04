@@ -8,11 +8,11 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 
 Future main() async {
-  UtilsAssets.useWebPath = true;
+  assetManager.useWebPath = true;
   Map testJson;
 
   setUp(() async {
-    testJson = await UtilsAssets.loadJSONResource('../objects/json_values.json');
+    testJson = await assetManager.loadJSONResource('../objects/json_values.json');
   });
 
   tearDown(() async {

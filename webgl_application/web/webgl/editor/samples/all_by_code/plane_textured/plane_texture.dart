@@ -24,7 +24,7 @@ GLTFProject planeTexture() {
       )
   );
 
-  GLTFMesh mesh = new GLTFMesh.quad(withIndices:true, withNormals: false, withUVs: true)
+  GLTFMesh mesh = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
     ..primitives[0].baseMaterial = material;
   GLTFNode node = new GLTFNode()
     ..mesh = mesh

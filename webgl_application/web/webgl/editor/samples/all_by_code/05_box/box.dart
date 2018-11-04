@@ -14,7 +14,7 @@ GLTFProject box() {
   GLTFScene scene = new GLTFScene();
   project.scene = scene;
 
-  GLTFMesh mesh = new GLTFMesh.cube(withIndices:true, withNormals: false, withUVs: true);
+  GLTFMesh mesh = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false));
   GLTFNode node = new GLTFNode()
     ..mesh = mesh
     ..name = 'cube';

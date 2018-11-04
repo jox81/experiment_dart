@@ -8,6 +8,8 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/light/light.dart';
+import 'package:webgl/src/context.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -24,10 +26,10 @@ Future<GLTFProject> projectSceneViewBase() async {
   // Todo (jpu) :
   //Cameras
   // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-//  Context.mainCamera = new
-//  CameraPerspective(radians(37.0), 0.1, 1000.0)
-//    ..targetPosition = new Vector3.zero()
-//    ..translation = new Vector3(20.0, 20.0, 20.0);
+  Context.mainCamera = new
+  CameraPerspective(radians(37.0), 0.1, 1000.0)
+    ..targetPosition = new Vector3.zero()
+    ..translation = new Vector3(20.0, 20.0, 20.0);
 
   // Todo (jpu) :
   //Lights

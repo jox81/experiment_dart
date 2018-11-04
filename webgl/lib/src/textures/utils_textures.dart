@@ -52,7 +52,7 @@ class TextureUtils {
     images = [];
 
     for(String url in paths) {
-      String assetsPath = UtilsAssets.getWebPath(url);
+      String assetsPath = assetManager.getWebPath(url);
       ImageElement image = new ImageElement()
         ..src = assetsPath;
       images.add(image);
@@ -66,7 +66,7 @@ class TextureUtils {
 
     Completer completer = new Completer<ImageElement>();
 
-    String assetsPath = UtilsAssets.getWebPath(url);
+    String assetsPath = assetManager.getWebPath(url);
 
     ImageElement image;
     image = new ImageElement()

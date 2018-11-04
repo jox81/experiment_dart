@@ -25,8 +25,8 @@ import 'scene_views/scene_view_primitives.dart';
 
 Future<List<GLTFProject>> loadBaseProjects() async => [
 //  projectSceneViewEmpty(),
-//  await projectSceneViewBase(),
-  await projectPrimitives(),
+  await projectSceneViewBase(),
+//  await projectPrimitives(),
 //  await projectPrimitivesTextured(),
 //  await projectSceneViewGltf(),// Todo (jpu) : bug on getFace()
 //  projectSceneViewPerformance(),

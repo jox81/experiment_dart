@@ -67,7 +67,7 @@ abstract class WebGLEnum {
 
   static WebGLEnum findTypeByIndex(Type GLEnum, int enumIndex) {
     // Todo (jpu) : Mirrors
-    throw new Exception("can't use mirrors");
+    throw new Exception("can't use mirrors throw by (jer) in webgl_enum_wrapped.dart");
 //    if (typesMap[GLEnum] == null) {
 //      List<WebGLEnum> _types = new List();
 //      ClassMirror classMirror = reflectClass(GLEnum);
@@ -86,7 +86,7 @@ abstract class WebGLEnum {
 
   static List<WebGLEnum> getItems(Type GLEnum) {
     // Todo (jpu) : Mirrors
-    throw new Exception("can't use mirrors");
+    throw new Exception("can't use mirrors throw by (jer) in webgl_enum_wrapped.dart");
 //    if (typesMap[GLEnum] == null) {
 //      typesMap[GLEnum] = new List();
 //      ClassMirror classMirror = reflectClass(GLEnum);
