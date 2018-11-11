@@ -258,13 +258,13 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     if(meshPrimitiveInfos.vertexColors != null) {
 
       /// as colors is Vec3, it must be reorganised to match stride split
-      int count = meshPrimitiveInfos.vertexUVs.length ~/ vec4ComponentsCount;
+      int count = meshPrimitiveInfos.vertexColors.length ~/ vec4ComponentsCount;
       meshPrimitiveInfos.vertexColors = meshPrimitiveInfos.vertexColors;
 
       /// Color can use same bufferView as Position.
       /// So there's no need to create a new one.
       /// And length musn't be adjusted in proportion of position beacause it's the same length
-      primitive.positionAccessor.bufferView.byteLength += meshPrimitiveInfos.vertexUVs.buffer.lengthInBytes;
+      primitive.positionAccessor.bufferView.byteLength += meshPrimitiveInfos.vertexColors.buffer.lengthInBytes;
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor colorAccessor = new GLTFAccessor(

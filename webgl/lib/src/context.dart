@@ -25,7 +25,11 @@ class Context{
     gl.clearColor(color.r, color.g, color.g, color.a);
   }
 
-  static CameraPerspective _mainCamera;
+  static CameraPerspective _mainCamera = new
+    CameraPerspective(radians(37.0), 0.1, 1000.0)
+    ..targetPosition = new Vector3.zero()
+    ..translation = new Vector3(20.0, 20.0, 20.0);
+
   static CameraPerspective get mainCamera => _mainCamera;
   static set mainCamera(CameraPerspective value) {
     _mainCamera?.isActive = false;

@@ -24,7 +24,12 @@ Future main() async {
   initializeReflectable();
 //  test_introspection();
 
-  ProjectService.loader = loadSampleProjects;
+  bool useSample = false;
+  if(useSample){
+    ProjectService.loader = loadSampleProjects;
+  }else{
+    ProjectService.loader = loadBaseProjects;
+  }
 //  bootstrapStatic<AppComponent>(AppComponent,<dynamic>[ProjectService],ng.initReflector);
 
   runApp(ng.AppComponentNgFactory);

@@ -61,8 +61,7 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeLine);
   project.addNode(nodeLine);
 
-  // Todo (jpu) : should use normals
-  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshTriangle = new GLTFMesh.triangle()
     ..primitives[0].material = material;
   project.meshes.add(meshTriangle);
   GLTFNode nodeTriangle = new GLTFNode()
@@ -72,8 +71,7 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeTriangle);
   project.addNode(nodeTriangle);
 
-  // Todo (jpu) : should use normals
-  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshQuad = new GLTFMesh.quad()
     ..primitives[0].material = material;
   project.meshes.add(meshQuad);
   GLTFNode nodeQuad = new GLTFNode()
@@ -83,8 +81,7 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeQuad);
   project.addNode(nodeQuad);
 
-  // Todo (jpu) : should use normals
-  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid()
     ..primitives[0].material = material;
   project.meshes.add(meshPyramid);
   GLTFNode nodePyramid = new GLTFNode()
@@ -94,8 +91,7 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodePyramid);
   project.addNode(nodePyramid);
 
-  // Todo (jpu) : should use normals
-  GLTFMesh meshCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshCube = new GLTFMesh.cube()
     ..primitives[0].material = material;
   project.meshes.add(meshCube);
   GLTFNode nodeCube = new GLTFNode()
@@ -105,16 +101,16 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeCube);
   project.addNode(nodeCube);
 
-  // Todo (jpu) : should use normals
-  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
-    ..primitives[0].material = material;
-  project.meshes.add(meshSphere);
-  GLTFNode nodeSphere = new GLTFNode()
-    ..mesh = meshSphere
-    ..name = 'sphere'
-    ..translation = new Vector3(5.0, 0.0, 0.0);
-  scene.addNode(nodeSphere);
-  project.addNode(nodeSphere);
+//  // Todo (jpu) : should use normals
+//  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useColors: false))
+//    ..primitives[0].material = material;
+//  project.meshes.add(meshSphere);
+//  GLTFNode nodeSphere = new GLTFNode()
+//    ..mesh = meshSphere
+//    ..name = 'sphere'
+//    ..translation = new Vector3(5.0, 0.0, 0.0);
+//  scene.addNode(nodeSphere);
+//  project.addNode(nodeSphere);
 
   return project;
 }
@@ -163,8 +159,7 @@ Future<RawMaterial> getTestRawMaterial() async {
 
 //  material = new MaterialBaseColor(new Vector4(1.0, 0.0, 0.0, 1.0));
 
-  material = new MaterialBaseVertexColor();// Todo (jpu) : test with vertex colors on meshes
-
+  material = new MaterialBaseVertexColor();// Todo (jpu) : test with vertex colors on meshes !! bug
 //  material = new MaterialBaseTexture()..texture = texture;
 
   // Todo (jpu) : doesn't show correctly

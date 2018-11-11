@@ -362,6 +362,11 @@ class _TriangleMeshPrimitive extends MeshPrimitive {
       1.0, 0.0,
       0.0, 1.0,
     ];
+    colors = [
+      1.0, 0.0, 0.0, 1.0,
+      0.0, 1.0, 0.0, 1.0,
+      0.0, 0.0, 1.0, 1.0,
+    ];
   }
 }
 
@@ -393,6 +398,12 @@ class _QuadMeshPrimitive extends MeshPrimitive {
       1.0, 0.0,
       1.0, 1.0,
       0.0, 1.0,
+    ];
+    colors = [
+      1.0, 0.0, 0.0, 1.0,
+      1.0, 0.0, 0.0, 1.0,
+      1.0, 0.0, 0.0, 1.0,
+      1.0, 0.0, 0.0, 1.0,
     ];
   }
 }
@@ -467,6 +478,20 @@ class _PyramidMeshPrimitive extends MeshPrimitive {
       ..addAll(new Plane.components(vertices[9], vertices[10], vertices[11], 1.0).normal.storage)
       ..addAll(new Vector3(0.0,-1.0,0.0).storage)
       ..addAll(new Vector3(0.0,-1.0,0.0).storage);
+
+    List<List<double>> _colorsFace = [
+      [1.0, 0.0, 0.0, 1.0], // Front face
+      [1.0, 1.0, 0.0, 1.0], // Back face
+      [0.0, 0.0, 1.0, 1.0], // Right face
+      [1.0, 0.0, 1.0, 1.0], // Left face
+      [0.0, 1.0, 1.0, 1.0], // Bottom face
+    ];
+
+    colors = new List.generate(4 * 4 * _colorsFace.length, (int index) {
+      // index ~/ 16 returns 0-5, that's color index
+      // index % 4 returns 0-3 that's color component for each color
+      return _colorsFace[index ~/ 16][index % 4];
+    }, growable: false);
   }
 }
 

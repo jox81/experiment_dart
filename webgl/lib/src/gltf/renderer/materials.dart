@@ -8,7 +8,8 @@ import 'package:webgl/src/material/shader_source.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as glEnum;
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
+    as glEnum;
 import 'package:webgl/src/debug/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -29,70 +30,73 @@ enum MaterialType {
 }
 
 @reflector
-class Materials{
-  static void assignMaterialTypeToModel(MaterialType materialType, GLTFMesh mesh) {
-    switch(materialType){
+class Materials {
+  static void assignMaterialTypeToModel(
+      MaterialType materialType, GLTFMesh mesh) {
+    switch (materialType) {
 //      case MaterialType.MaterialCustom:
 //        newMaterial = new MaterialCustom();
 //        break;
       case MaterialType.MaterialPoint:
         mesh
           ..primitives[0].drawMode = DrawMode.POINTS
-          ..primitives[0].material = new MaterialPoint(pointSize:5.0, color:new Vector4.all(1.0));
+          ..primitives[0].material =
+              new MaterialPoint(pointSize: 5.0, color: new Vector4.all(1.0));
         break;
       case MaterialType.MaterialBase:
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new MaterialBase();
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = new MaterialBase();
         break;
       case MaterialType.MaterialBaseColor:
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new MaterialBaseColor(new Vector4.all(1.0));
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material =
+              new MaterialBaseColor(new Vector4.all(1.0));
         break;
       case MaterialType.MaterialBaseVertexColor:
         MaterialBaseVertexColor material = new MaterialBaseVertexColor();
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= material;
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = material;
         break;
       case MaterialType.MaterialBaseTexture:
         WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
         MaterialBaseTexture material = new MaterialBaseTexture()
           ..texture = texture;
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= material;
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = material;
         break;
       case MaterialType.MaterialBaseTextureNormal:
         WebGLTexture texture = TextureUtils.getDefaultColoredTexture();
         MaterialBaseTextureNormal material = new MaterialBaseTextureNormal()
           ..texture = texture;
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= material;
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = material;
         break;
       case MaterialType.MaterialPBR:
         PointLight light = new PointLight();
         MaterialPragmaticPBR material = new MaterialPragmaticPBR(light);
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= material;
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = material;
         break;
       case MaterialType.MaterialDepthTexture:
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new MaterialDepthTexture();
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = new MaterialDepthTexture();
         break;
       case MaterialType.MaterialSkyBox:
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new MaterialSkyBox();
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = new MaterialSkyBox();
         break;
       case MaterialType.MaterialReflection:
         mesh
-            ..primitives[0].drawMode = DrawMode.TRIANGLES
-          ..primitives[0].material= new MaterialReflection();
+          ..primitives[0].drawMode = DrawMode.TRIANGLES
+          ..primitives[0].material = new MaterialReflection();
         break;
       default:
         break;
@@ -101,7 +105,7 @@ class Materials{
 }
 
 @reflector
-abstract class RawMaterial{
+abstract class RawMaterial {
   String name;
 
   Matrix4 pvMatrix = new Matrix4.identity();
@@ -127,7 +131,7 @@ abstract class RawMaterial{
   String definesToString(Map<String, bool> defines) {
     //debugLog.logCurrentFunction();
     String outStr = '';
-    if(defines == null) return outStr;
+    if (defines == null) return outStr;
 
     for (String def in defines.keys) {
       if (defines[def]) {
@@ -147,8 +151,7 @@ abstract class RawMaterial{
     String fsSource = definedShaderSource.fsCode;
 
     /// ShaderType type
-    webgl.Shader createShader(
-        int shaderType, String shaderSource) {
+    webgl.Shader createShader(int shaderType, String shaderSource) {
       //debugLog.logCurrentFunction();
 
       webgl.Shader shader = gl.createShader(shaderType);
@@ -156,8 +159,8 @@ abstract class RawMaterial{
       gl.compileShader(shader);
 
       if (debug.isDebug) {
-        bool compiled =
-        gl.getShaderParameter(shader, ShaderParameters.COMPILE_STATUS) as bool;
+        bool compiled = gl.getShaderParameter(
+            shader, ShaderParameters.COMPILE_STATUS) as bool;
         if (!compiled) {
           String compilationLog = gl.getShaderInfoLog(shader);
 
@@ -168,10 +171,10 @@ abstract class RawMaterial{
       return shader;
     }
 
-    webgl.Shader vertexShader = createShader(
-        ShaderType.VERTEX_SHADER, vsSource);
-    webgl.Shader fragmentShader = createShader(
-        ShaderType.FRAGMENT_SHADER, fsSource);
+    webgl.Shader vertexShader =
+        createShader(ShaderType.VERTEX_SHADER, vsSource);
+    webgl.Shader fragmentShader =
+        createShader(ShaderType.FRAGMENT_SHADER, fsSource);
 
     webgl.Program program = gl.createProgram();
 
@@ -180,15 +183,15 @@ abstract class RawMaterial{
     gl.linkProgram(program);
     if (debug.isDebug) {
       if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS)
-      as bool ==
+              as bool ==
           false) {
         throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
       }
     }
     gl.validateProgram(program);
     if (debug.isDebug) {
-      if (gl.getProgramParameter(program, ProgramParameterGlEnum.VALIDATE_STATUS)
-      as bool ==
+      if (gl.getProgramParameter(
+              program, ProgramParameterGlEnum.VALIDATE_STATUS) as bool ==
           false) {
         throw "Could not validate program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
       }
@@ -198,25 +201,37 @@ abstract class RawMaterial{
   }
 
   ///Must be called after gl.useProgram
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight);
 
   /// ShaderVariableType componentType
   void setUniform(WebGLProgram program, String uniformName, int componentType,
       dynamic data) {
     //debugLog.logCurrentFunction(uniformName);
 
-    program.uniformLocations[uniformName] ??= program.getUniformLocation(uniformName);
-    WebGLUniformLocation wrappedUniformLocation = program.uniformLocations[uniformName];
+    program.uniformLocations[uniformName] ??=
+        program.getUniformLocation(uniformName);
+    WebGLUniformLocation wrappedUniformLocation =
+        program.uniformLocations[uniformName];
 
 //    if(uniformName == ())
     //let's pass if u_Camera, else it won't drow reflection correctly wrappedUniformLocation.data == data && uniformName != "u_Camera"
-    if(wrappedUniformLocation.data == data && uniformName != "u_Camera" && uniformName != "u_ModelMatrix") {
+    if (wrappedUniformLocation.data == data &&
+        uniformName != "u_Camera" &&
+        uniformName != "u_ModelMatrix") {
       //      print('same $uniformName > return : $data, ${wrappedUniformLocation.data}');
       return;
-    };
+    }
+    ;
 
     wrappedUniformLocation.data = data;
-    webgl.UniformLocation uniformLocation = wrappedUniformLocation.webGLUniformLocation;
+    webgl.UniformLocation uniformLocation =
+        wrappedUniformLocation.webGLUniformLocation;
     bool transpose = false;
 
     switch (componentType) {
@@ -232,7 +247,7 @@ abstract class RawMaterial{
         gl.uniform2fv(uniformLocation, data);
         break;
       case ShaderVariableType.FLOAT_VEC3:
-        gl.uniform3fv(uniformLocation,data);
+        gl.uniform3fv(uniformLocation, data);
         break;
       case ShaderVariableType.FLOAT_VEC4:
         gl.uniform4fv(uniformLocation, data);
@@ -252,8 +267,7 @@ abstract class RawMaterial{
 }
 
 @reflector
-class KronosPRBMaterial extends RawMaterial{
-
+class KronosPRBMaterial extends RawMaterial {
   ShaderSource get shaderSource => ShaderSource.kronosGltfPBRTest;
 
   final bool hasNormalAttribut;
@@ -264,7 +278,8 @@ class KronosPRBMaterial extends RawMaterial{
 
   bool get useLod => true;
 
-  KronosPRBMaterial(this.hasNormalAttribut, this.hasTangentAttribut, this.hasUVAttribut, this.hasColorAttribut, this.hasLODExtension);
+  KronosPRBMaterial(this.hasNormalAttribut, this.hasTangentAttribut,
+      this.hasUVAttribut, this.hasColorAttribut, this.hasLODExtension);
 
   //> BaseColor
   webgl.Texture baseColorMap;
@@ -274,6 +289,7 @@ class KronosPRBMaterial extends RawMaterial{
   set baseColorSamplerSlot(int value) {
     _baseColorSamplerSlot = value;
   }
+
   List<double> _baseColorFactor;
   List<double> get baseColorFactor => _baseColorFactor;
   set baseColorFactor(List<double> value) {
@@ -288,6 +304,7 @@ class KronosPRBMaterial extends RawMaterial{
   set normalSamplerSlot(int value) {
     _normalSamplerSlot = value;
   }
+
   double _normalScale;
   double get normalScale => _normalScale;
   set normalScale(double value) {
@@ -302,6 +319,7 @@ class KronosPRBMaterial extends RawMaterial{
   set emissiveSamplerSlot(int value) {
     _emissiveSamplerSlot = value;
   }
+
   List<double> _emissiveFactor;
   List<double> get emissiveFactor => _emissiveFactor;
   set emissiveFactor(List<double> value) {
@@ -316,6 +334,7 @@ class KronosPRBMaterial extends RawMaterial{
   set occlusionSamplerSlot(int value) {
     _occlusionSamplerSlot = value;
   }
+
   double _occlusionStrength;
   double get occlusionStrength => _occlusionStrength;
   set occlusionStrength(double value) {
@@ -335,13 +354,15 @@ class KronosPRBMaterial extends RawMaterial{
   set roughness(double value) {
     _roughness = value;
   }
-  double get roughness =>  _roughness;
+
+  double get roughness => _roughness;
 
   double _metallic;
   set metallic(double value) {
     _metallic = value;
   }
-  double get metallic =>  _metallic;
+
+  double get metallic => _metallic;
 
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();
@@ -378,93 +399,113 @@ class KronosPRBMaterial extends RawMaterial{
   Float32List vecData4 = new Float32List(4);
   Float32List matrixData4 = new Float32List(16);
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
     //debugLog.logCurrentFunction();
 
     for (int i = 0; i < matrixData4.length; ++i) {
       matrixData4[i] = modelMatrix[i];
     }
-    setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        matrixData4);
+    setUniform(
+        program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4, matrixData4);
 
-    setUniform(program, 'u_PVMatrix', ShaderVariableType.FLOAT_MAT4,
-        pvMatrix.storage);
+    setUniform(
+        program, 'u_PVMatrix', ShaderVariableType.FLOAT_MAT4, pvMatrix.storage);
 
     // > camera
-    setUniform(program, 'u_Camera', ShaderVariableType.FLOAT_VEC3,
-        vecData3..setAll(0,[cameraPosition[0], cameraPosition[1], cameraPosition[2]])
-    );
+    setUniform(
+        program,
+        'u_Camera',
+        ShaderVariableType.FLOAT_VEC3,
+        vecData3
+          ..setAll(
+              0, [cameraPosition[0], cameraPosition[1], cameraPosition[2]]));
 
     // > Light
-    setUniform(program, 'u_LightDirection', ShaderVariableType.FLOAT_VEC3,
-        vecData3..setAll(0,[directionalLight.direction[0], directionalLight.direction[1], directionalLight.direction[2]]));
+    setUniform(
+        program,
+        'u_LightDirection',
+        ShaderVariableType.FLOAT_VEC3,
+        vecData3
+          ..setAll(0, [
+            directionalLight.direction[0],
+            directionalLight.direction[1],
+            directionalLight.direction[2]
+          ]));
 
-    setUniform(program, 'u_LightColor', ShaderVariableType.FLOAT_VEC3,
-        vecData3..setAll(0,[directionalLight.color[0], directionalLight.color[1], directionalLight.color[2]]));
+    setUniform(
+        program,
+        'u_LightColor',
+        ShaderVariableType.FLOAT_VEC3,
+        vecData3
+          ..setAll(0, [
+            directionalLight.color[0],
+            directionalLight.color[1],
+            directionalLight.color[2]
+          ]));
 
     // > Material base
 
     if (useLod) {
-      setUniform(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D,
-          0);
-      setUniform(program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-          1);
-      setUniform(program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE,
-          2);
+      setUniform(program, 'u_brdfLUT', ShaderVariableType.SAMPLER_2D, 0);
+      setUniform(
+          program, 'u_DiffuseEnvSampler', ShaderVariableType.SAMPLER_CUBE, 1);
+      setUniform(
+          program, 'u_SpecularEnvSampler', ShaderVariableType.SAMPLER_CUBE, 2);
     }
 
     if (hasBaseColorMap) {
 //      gl.activeTexture(baseColorSamplerSlot);
 //      gl.bindTexture(webgl.RenderingContext.TEXTURE_2D, baseColorMap);
-      setUniform(
-          program,
-          'u_BaseColorSampler',
-          ShaderVariableType.SAMPLER_2D,
-          baseColorSamplerSlot
-      );
+      setUniform(program, 'u_BaseColorSampler', ShaderVariableType.SAMPLER_2D,
+          baseColorSamplerSlot);
     }
 
     if (hasNormalMap) {
-      setUniform(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D, normalSamplerSlot);
-      setUniform(program, 'u_NormalScale', ShaderVariableType.FLOAT,
-          normalScale);
+      setUniform(program, 'u_NormalSampler', ShaderVariableType.SAMPLER_2D,
+          normalSamplerSlot);
+      setUniform(
+          program, 'u_NormalScale', ShaderVariableType.FLOAT, normalScale);
     }
 
     if (hasEmissiveMap) {
+      setUniform(program, 'u_EmissiveSampler', ShaderVariableType.SAMPLER_2D,
+          emissiveSamplerSlot);
       setUniform(
           program,
-          'u_EmissiveSampler',
-          ShaderVariableType.SAMPLER_2D, emissiveSamplerSlot);
-      setUniform(program, 'u_EmissiveFactor', ShaderVariableType.FLOAT_VEC3,
-          vecData3..setAll(0,[emissiveFactor[0], emissiveFactor[1], emissiveFactor[2]])
-      );
+          'u_EmissiveFactor',
+          ShaderVariableType.FLOAT_VEC3,
+          vecData3
+            ..setAll(
+                0, [emissiveFactor[0], emissiveFactor[1], emissiveFactor[2]]));
     }
 
     if (hasOcclusionMap) {
-      setUniform(
-          program,
-          'u_OcclusionSampler',
-          ShaderVariableType.SAMPLER_2D,occlusionSamplerSlot);
+      setUniform(program, 'u_OcclusionSampler', ShaderVariableType.SAMPLER_2D,
+          occlusionSamplerSlot);
 
       setUniform(program, 'u_OcclusionStrength', ShaderVariableType.FLOAT,
           occlusionStrength);
     }
 
     if (hasMetallicRoughnessMap) {
-      setUniform(
-          program,
-          'u_MetallicRoughnessSampler',
-          ShaderVariableType.SAMPLER_2D,
-          metallicRoughnessSamplerSlot
-      );
+      setUniform(program, 'u_MetallicRoughnessSampler',
+          ShaderVariableType.SAMPLER_2D, metallicRoughnessSamplerSlot);
     }
 
     setUniform(
         program,
         'u_MetallicRoughnessValues',
-        ShaderVariableType.FLOAT_VEC2,vecData2..setAll(0,[metallic, roughness]));
+        ShaderVariableType.FLOAT_VEC2,
+        vecData2..setAll(0, [metallic, roughness]));
 
-    setUniform(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4, baseColorFactor);
+    setUniform(program, 'u_BaseColorFactor', ShaderVariableType.FLOAT_VEC4,
+        baseColorFactor);
 
     // > Debug values => see in pbr fragment shader
 
@@ -475,12 +516,14 @@ class KronosPRBMaterial extends RawMaterial{
     setUniform(
         program,
         'u_ScaleFGDSpec',
-        ShaderVariableType.FLOAT_VEC4,vecData4..setAll(0,[
-      specularReflectionMask,
-      geometricOcclusionMask,
-      microfacetDistributionMask,
-      specularContributionMask]
-    ));
+        ShaderVariableType.FLOAT_VEC4,
+        vecData4
+          ..setAll(0, [
+            specularReflectionMask,
+            geometricOcclusionMask,
+            microfacetDistributionMask,
+            specularContributionMask
+          ]));
 
     double diffuseContributionMask = 0.0;
     double colorMask = 0.0;
@@ -489,28 +532,24 @@ class KronosPRBMaterial extends RawMaterial{
     setUniform(
         program,
         'u_ScaleDiffBaseMR',
-        ShaderVariableType.FLOAT_VEC4,vecData4..setAll(0,[
-      diffuseContributionMask,
-      colorMask,
-      metallicMask,
-      roughnessMask
-    ]));
+        ShaderVariableType.FLOAT_VEC4,
+        vecData4
+          ..setAll(0, [
+            diffuseContributionMask,
+            colorMask,
+            metallicMask,
+            roughnessMask
+          ]));
 
     double diffuseIBLAmbient = 1.0;
     double specularIBLAmbient = 1.0;
     setUniform(program, 'u_ScaleIBLAmbient', ShaderVariableType.FLOAT_VEC4,
-        vecData4..setAll(0, [
-          diffuseIBLAmbient,
-          specularIBLAmbient,
-          1.0,
-          1.0
-        ])
-    );
+        vecData4..setAll(0, [diffuseIBLAmbient, specularIBLAmbient, 1.0, 1.0]));
   }
 }
 
 @reflector
-class KronosDefaultMaterial extends RawMaterial{
+class KronosDefaultMaterial extends RawMaterial {
   KronosDefaultMaterial();
 
   ShaderSource get shaderSource => ShaderSource.kronosGltfDefault;
@@ -546,7 +585,13 @@ class KronosDefaultMaterial extends RawMaterial{
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
     //debugLog.logCurrentFunction();
 
     setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
@@ -558,7 +603,8 @@ class KronosDefaultMaterial extends RawMaterial{
     setUniform(program, 'u_MVPMatrix', ShaderVariableType.FLOAT_MAT4,
         ((projectionMatrix * viewMatrix * modelMatrix) as Matrix4).storage);
 
-    Matrix3 normalMatrix = (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
+    Matrix3 normalMatrix =
+        (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
     setUniform(program, 'u_NormalMatrix', ShaderVariableType.FLOAT_MAT3,
         normalMatrix.storage);
 
@@ -568,7 +614,7 @@ class KronosDefaultMaterial extends RawMaterial{
 }
 
 @reflector
-class MaterialDebug extends RawMaterial{
+class MaterialDebug extends RawMaterial {
   Vector3 color = new Vector3(0.5, 0.5, 0.5);
 
   MaterialDebug();
@@ -595,26 +641,38 @@ class MaterialDebug extends RawMaterial{
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
     setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        modelMatrix .storage);
+        modelMatrix.storage);
     setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
     setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
-    setUniform(program, 'u_Color', ShaderVariableType.FLOAT_VEC3,
-        color.storage);
+    setUniform(
+        program, 'u_Color', ShaderVariableType.FLOAT_VEC3, color.storage);
   }
 }
 
 //>
-typedef void SetShaderVariables(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight);
+typedef void SetShaderVariables(
+    WebGLProgram program,
+    Matrix4 modelMatrix,
+    Matrix4 viewMatrix,
+    Matrix4 projectionMatrix,
+    Vector3 cameraPosition,
+    DirectionalLight directionalLight);
 
 @reflector
 class MaterialCustom extends RawMaterial {
   SetShaderVariables setShaderUniformsVariables;
 
-  ShaderSource get shaderSource => ShaderSource.materialPoint;// Todo (jpu) : ?
+  ShaderSource get shaderSource => ShaderSource.materialPoint; // Todo (jpu) : ?
 
   MaterialCustom();
 
@@ -623,8 +681,15 @@ class MaterialCustom extends RawMaterial {
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setShaderUniformsVariables(program, modelMatrix, viewMatrix, projectionMatrix, cameraPosition, directionalLight);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setShaderUniformsVariables(program, modelMatrix, viewMatrix,
+        projectionMatrix, cameraPosition, directionalLight);
   }
 }
 
@@ -635,10 +700,9 @@ class MaterialPoint extends RawMaterial {
 
   ShaderSource get shaderSource => ShaderSource.materialPoint;
 
-  MaterialPoint({this.pointSize : 1.0, this.color});
+  MaterialPoint({this.pointSize: 1.0, this.color});
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     defines['USE_COLOR_UNIFORM'] = true;
@@ -646,39 +710,55 @@ class MaterialPoint extends RawMaterial {
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
     setUniform(program, "u_PointSize", ShaderVariableType.FLOAT, pointSize);
-    setUniform(program, "u_Color", ShaderVariableType.FLOAT_VEC4, color.storage);
+    setUniform(
+        program, "u_Color", ShaderVariableType.FLOAT_VEC4, color.storage);
   }
 }
 
 @reflector
 class MaterialBase extends RawMaterial {
-
   ShaderSource get shaderSource => ShaderSource.materialBase;
 
   MaterialBase();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelMatrix", ShaderVariableType.FLOAT_MAT4, modelMatrix.storage);
-    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, viewMatrix.storage);
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelMatrix", ShaderVariableType.FLOAT_MAT4,
+        modelMatrix.storage);
+    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        viewMatrix.storage);
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
   }
 }
 
 @reflector
 class MaterialBaseColor extends RawMaterial {
-
   Vector4 color;
 
   ShaderSource get shaderSource => ShaderSource.materialBaseColor;
@@ -686,42 +766,55 @@ class MaterialBaseColor extends RawMaterial {
   MaterialBaseColor(this.color);
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
-    setUniform(program, "u_Color", ShaderVariableType.FLOAT_VEC4, color.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
+    setUniform(
+        program, "u_Color", ShaderVariableType.FLOAT_VEC4, color.storage);
   }
 }
 
 @reflector
 class MaterialBaseVertexColor extends RawMaterial {
-
   ShaderSource get shaderSource => ShaderSource.materialBaseVertexColor;
 
   MaterialBaseVertexColor();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
   }
 }
 
 @reflector
 class MaterialBaseTexture extends RawMaterial {
-
   WebGLTexture texture;
 
   ShaderSource get shaderSource => ShaderSource.materialBaseTexture;
@@ -729,16 +822,24 @@ class MaterialBaseTexture extends RawMaterial {
   MaterialBaseTexture();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
-    setUniform(program, "u_TextureMatrix", ShaderVariableType.FLOAT_MAT4, texture?.textureMatrix?.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
+    setUniform(program, "u_TextureMatrix", ShaderVariableType.FLOAT_MAT4,
+        texture?.textureMatrix?.storage);
 
     gl.activeTexture(TextureUnit.TEXTURE7);
     gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
@@ -748,7 +849,6 @@ class MaterialBaseTexture extends RawMaterial {
 
 @reflector
 class MaterialBaseTextureNormal extends RawMaterial {
-
   WebGLTexture texture;
   Vector3 ambientColor = new Vector3.all(1.0);
   DirectionalLight directionalLight;
@@ -759,38 +859,50 @@ class MaterialBaseTextureNormal extends RawMaterial {
   MaterialBaseTextureNormal();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
-    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3, normalMatrix.storage);
+    Matrix3 normalMatrix =
+        (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
+    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3,
+        normalMatrix.storage);
 
-    setUniform(program, "u_UseLighting", ShaderVariableType.BOOL, useLighting ? 1 : 0); // must be int, not bool
+    setUniform(program, "u_UseLighting", ShaderVariableType.BOOL,
+        useLighting ? 1 : 0); // must be int, not bool
 
     if (useLighting) {
-      setUniform(program, "u_AmbientColor", ShaderVariableType.FLOAT_VEC3, ambientColor.storage);
+      setUniform(program, "u_AmbientColor", ShaderVariableType.FLOAT_VEC3,
+          ambientColor.storage);
       Vector3 adjustedLD = new Vector3.zero();
       directionalLight.direction.normalizeInto(adjustedLD);
       adjustedLD.scale(-1.0);
 
-      setUniform(program, "u_LightingDirection", ShaderVariableType.FLOAT_VEC3, adjustedLD.storage);
-      setUniform(program, "u_DirectionalColor", ShaderVariableType.FLOAT_VEC3, directionalLight.color.storage);
+      setUniform(program, "u_LightingDirection", ShaderVariableType.FLOAT_VEC3,
+          adjustedLD.storage);
+      setUniform(program, "u_DirectionalColor", ShaderVariableType.FLOAT_VEC3,
+          directionalLight.color.storage);
     }
   }
 }
 
 @reflector
 class MaterialReflection extends RawMaterial {
-
   WebGLTexture skyboxTexture;
 
   ShaderSource get shaderSource => ShaderSource.materialReflection;
@@ -798,21 +910,31 @@ class MaterialReflection extends RawMaterial {
   MaterialReflection();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
-    setUniform(program, "u_InverseViewMatrix", ShaderVariableType.FLOAT_MAT4, new Matrix4.inverted(viewMatrix).storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
+    setUniform(program, "u_InverseViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        new Matrix4.inverted(viewMatrix).storage);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
-    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3, normalMatrix.storage);
+    Matrix3 normalMatrix =
+        (viewMatrix * modelMatrix).getNormalMatrix() as Matrix3;
+    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3,
+        normalMatrix.storage);
 
     gl.activeTexture(TextureUnit.TEXTURE7);
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
@@ -822,7 +944,6 @@ class MaterialReflection extends RawMaterial {
 
 @reflector
 class MaterialSkyBox extends RawMaterial {
-
   WebGLTexture skyboxTexture;
 
   ShaderSource get shaderSource => ShaderSource.materialSkybox;
@@ -830,7 +951,6 @@ class MaterialSkyBox extends RawMaterial {
   MaterialSkyBox();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
@@ -844,15 +964,24 @@ class MaterialSkyBox extends RawMaterial {
 //    gl.enable(EnableCapabilityType.DEPTH_TEST);
 //  }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
     //removing skybox transform
-    setUniform(program, "u_ModelMatrix", ShaderVariableType.FLOAT_MAT4, new Matrix4.identity().storage);
+    setUniform(program, "u_ModelMatrix", ShaderVariableType.FLOAT_MAT4,
+        new Matrix4.identity().storage);
 
     //removing camera translation
     Matrix3 m3 = viewMatrix.getRotation();
     Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
-    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, m4.storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    setUniform(
+        program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, m4.storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
 
     gl.activeTexture(TextureUnit.TEXTURE7);
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
@@ -862,7 +991,6 @@ class MaterialSkyBox extends RawMaterial {
 
 @reflector
 class MaterialDepthTexture extends RawMaterial {
-
   WebGLTexture texture;
 
   num near = 1.0;
@@ -873,21 +1001,30 @@ class MaterialDepthTexture extends RawMaterial {
   MaterialDepthTexture();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
 
     //removing camera translation
     Matrix3 m3 = viewMatrix.getRotation();
     Matrix4 m4 = new Matrix4.identity()..setRotation(m3);
-    setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, m4.storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+    setUniform(
+        program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4, m4.storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
 
     gl.activeTexture(TextureUnit.TEXTURE7);
     gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
@@ -904,7 +1041,6 @@ class MaterialDepthTexture extends RawMaterial {
 ///base
 @reflector
 class MaterialPragmaticPBR extends RawMaterial {
-
   PointLight pointLight;
 
   ShaderSource get shaderSource => ShaderSource.materialPBR;
@@ -912,27 +1048,36 @@ class MaterialPragmaticPBR extends RawMaterial {
   MaterialPragmaticPBR(this.pointLight);
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4, ((viewMatrix * modelMatrix)as Matrix4).storage);
-    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4, projectionMatrix.storage);
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
+        ((viewMatrix * modelMatrix) as Matrix4).storage);
+    setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
+        projectionMatrix.storage);
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
-    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3, normalMatrix.storage);
-    setUniform(program, "u_LightPos", ShaderVariableType.FLOAT_VEC3, pointLight.translation.storage);
+    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix)
+        .getNormalMatrix() as Matrix3;
+    setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3,
+        normalMatrix.storage);
+    setUniform(program, "u_LightPos", ShaderVariableType.FLOAT_VEC3,
+        pointLight.translation.storage);
   }
 }
 
 @reflector
 class MaterialDotScreen extends RawMaterial {
-
   WebGLTexture texture;
   double angle = 0.0;
   double scale = 1.0;
@@ -944,28 +1089,34 @@ class MaterialDotScreen extends RawMaterial {
   MaterialDotScreen();
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-    if(texture != null) {
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
+    if (texture != null) {
       gl.activeTexture(TextureUnit.TEXTURE0);
       gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
       setUniform(program, "texture", ShaderVariableType.SAMPLER_2D, 0);
     }
-    setUniform(program, "center", ShaderVariableType.FLOAT_VEC2, center.storage);
+    setUniform(
+        program, "center", ShaderVariableType.FLOAT_VEC2, center.storage);
     setUniform(program, "angle", ShaderVariableType.FLOAT, angle);
     setUniform(program, "scale", ShaderVariableType.FLOAT, scale);
-    setUniform(program, "texSize", ShaderVariableType.FLOAT_VEC2, texSize.storage);
+    setUniform(
+        program, "texSize", ShaderVariableType.FLOAT_VEC2, texSize.storage);
   }
 }
 
 @reflector
-class MaterialSAO extends RawMaterial{
-
+class MaterialSAO extends RawMaterial {
   MaterialSAO();
 
   ShaderSource get shaderSource => ShaderSource.sao;
@@ -977,11 +1128,10 @@ class MaterialSAO extends RawMaterial{
   double get zNear => 1.0;
   double get zFar => 1000.0;
   Vector2 get viewportResolution => new Vector2(256.0, 256.0);
-  Vector4 get projInfo => new Vector4(1.0,1.0,1.0,0.0);
+  Vector4 get projInfo => new Vector4(1.0, 1.0, 1.0, 0.0);
   double get projScale => 100.0;
 
   Map<String, bool> getDefines() {
-
     Map<String, bool> defines = new Map();
 
     //primitives infos
@@ -1005,36 +1155,33 @@ class MaterialSAO extends RawMaterial{
     return defines;
   }
 
-  void setUniforms(WebGLProgram program, Matrix4 modelMatrix, Matrix4 viewMatrix, Matrix4 projectionMatrix, Vector3 cameraPosition, DirectionalLight directionalLight) {
-
+  void setUniforms(
+      WebGLProgram program,
+      Matrix4 modelMatrix,
+      Matrix4 viewMatrix,
+      Matrix4 projectionMatrix,
+      Vector3 cameraPosition,
+      DirectionalLight directionalLight) {
     setUniform(program, 'u_ModelMatrix', ShaderVariableType.FLOAT_MAT4,
-        modelMatrix .storage);
+        modelMatrix.storage);
     setUniform(program, 'u_ViewMatrix', ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
     setUniform(program, 'u_ProjectionMatrix', ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
 
-
-    setUniform(program, 'tDepth', ShaderVariableType.SAMPLER_2D,
-        depthTextureMap);
-    setUniform(program, 'intensity', ShaderVariableType.FLOAT,
-        intensity);
-    setUniform(program, 'sampleRadiusWS', ShaderVariableType.FLOAT,
-        sampleRadiusWS);
-    setUniform(program, 'bias', ShaderVariableType.FLOAT,
-        bias);
-    setUniform(program, 'zNear', ShaderVariableType.FLOAT,
-        zNear);
-    setUniform(program, 'zFar', ShaderVariableType.FLOAT,
-        zFar);
+    setUniform(
+        program, 'tDepth', ShaderVariableType.SAMPLER_2D, depthTextureMap);
+    setUniform(program, 'intensity', ShaderVariableType.FLOAT, intensity);
+    setUniform(
+        program, 'sampleRadiusWS', ShaderVariableType.FLOAT, sampleRadiusWS);
+    setUniform(program, 'bias', ShaderVariableType.FLOAT, bias);
+    setUniform(program, 'zNear', ShaderVariableType.FLOAT, zNear);
+    setUniform(program, 'zFar', ShaderVariableType.FLOAT, zFar);
     setUniform(program, 'viewportResolution', ShaderVariableType.FLOAT,
         viewportResolution);
-    setUniform(program, 'projInfo', ShaderVariableType.FLOAT,
-        projInfo);
-    setUniform(program, 'projScale', ShaderVariableType.FLOAT,
-        projScale);
+    setUniform(program, 'projInfo', ShaderVariableType.FLOAT, projInfo);
+    setUniform(program, 'projScale', ShaderVariableType.FLOAT, projScale);
   }
-
 }
 
 /*

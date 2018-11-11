@@ -9,15 +9,12 @@ import 'package:webgl/src/material/shader_source.dart';
 Future main() async {
 
   await ShaderSource.loadShaders();
+
   bool useSample = false;
-
-  Function sampleProjectsLoader = loadSampleProjects;
-  Function baseProjectsLoader = loadBaseProjects;
-
   if(useSample){
-    ProjectService.loader = sampleProjectsLoader;
+    ProjectService.loader = loadSampleProjects;
   }else{
-    ProjectService.loader = baseProjectsLoader;
+    ProjectService.loader = loadBaseProjects;
   }
 
   ProjectService service = new ProjectService();

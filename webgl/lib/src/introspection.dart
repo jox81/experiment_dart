@@ -113,7 +113,7 @@ class IntrospectionManager {
 
       String fieldSymbol = mm.simpleName;
 
-      Function function = () => throw "no function here !";//im.getField(fieldSymbol).reflectee as Function;
+      Function function = () => im.invokeGetter(fieldSymbol) as Function;
       FunctionModel functionModel = new FunctionModel(function, im, mm);
 
       propertiesInfos[key] = new EditableProperty<dynamic>(FunctionModel,
@@ -371,7 +371,7 @@ abstract class IEditElement {
     var decls = cm.declarations.values.where((dm) => dm is VariableMirror);
     decls.forEach((dm) {
       String key = dm.simpleName;
-      dynamic val = throw 'im.getField(dm.simpleName).reflectee';//im.getField(dm.simpleName).reflectee;
+      dynamic val = im.invokeGetter(dm.simpleName);
       map[key] = val;
     });
 

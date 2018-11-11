@@ -109,7 +109,7 @@ class _StackTraceInfo {
   }
 }
 
-bool isDebug = true;
+bool isDebug = false;
 
 void logCurrentFunction([String message]) {
   if(isDebug) {

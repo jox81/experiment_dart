@@ -1,8 +1,10 @@
 import 'dart:web_gl' as WebGL;
+import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 
 //WebGLRenderingContext
 
+@reflector
 class EnableCapabilityType {
   static const int BLEND = WebGL.WebGL.BLEND;
   static const int CULL_FACE = WebGL.WebGL.CULL_FACE;
@@ -15,23 +17,27 @@ class EnableCapabilityType {
   static const int STENCIL_TEST = WebGL.WebGL.STENCIL_TEST;
 }
 
+@reflector
 class FacingType {
   static const int FRONT = WebGL.WebGL.FRONT;
   static const int BACK = WebGL.WebGL.BACK;
   static const int FRONT_AND_BACK = WebGL.WebGL.FRONT_AND_BACK;
 }
 
+@reflector
 class ClearBufferMask {
   static const int DEPTH_BUFFER_BIT = WebGL.WebGL.DEPTH_BUFFER_BIT;
   static const int STENCIL_BUFFER_BIT = WebGL.WebGL.STENCIL_BUFFER_BIT;
   static const int COLOR_BUFFER_BIT = WebGL.WebGL.COLOR_BUFFER_BIT;
 }
 
+@reflector
 class FrontFaceDirection {
   static const int CW = WebGL.WebGL.CW;
   static const int CCW = WebGL.WebGL.CCW;
 }
 
+@reflector
 class PixelStorgeType {
   static const int PACK_ALIGNMENT = WebGL.WebGL.PACK_ALIGNMENT;
   static const int UNPACK_ALIGNMENT = WebGL.WebGL.UNPACK_ALIGNMENT;
@@ -40,6 +46,7 @@ class PixelStorgeType {
   static const int UNPACK_COLORSPACE_CONVERSION_WEBGL = WebGL.WebGL.UNPACK_COLORSPACE_CONVERSION_WEBGL;
 }
 
+@reflector
 class DrawMode {
   static const int POINTS = WebGL.WebGL.POINTS;
   static const int LINE_STRIP = WebGL.WebGL.LINE_STRIP;
@@ -50,17 +57,20 @@ class DrawMode {
   static const int TRIANGLES = WebGL.WebGL.TRIANGLES;
 }
 
+@reflector
 class BufferElementType {
   static const int UNSIGNED_BYTE = WebGL.WebGL.UNSIGNED_BYTE;
   static const int UNSIGNED_SHORT = WebGL.WebGL.UNSIGNED_SHORT;
 }
 
+@reflector
 class ReadPixelDataFormat {
   static const int ALPHA = WebGL.WebGL.ALPHA;
   static const int RGB = WebGL.WebGL.RGB;
   static const int RGBA = WebGL.WebGL.RGBA;
 }
 
+@reflector
 class ReadPixelDataType {
   static const int UNSIGNED_BYTE = WebGL.WebGL.UNSIGNED_BYTE;
   static const int UNSIGNED_SHORT_5_6_5 = WebGL.WebGL.UNSIGNED_SHORT_5_6_5;
@@ -69,6 +79,7 @@ class ReadPixelDataType {
   static const int FLOAT = WebGL.WebGL.FLOAT;
 }
 
+@reflector
 class ComparisonFunction {
   static const int NEVER = WebGL.WebGL.NEVER;
   static const int LESS = WebGL.WebGL.LESS;
@@ -80,6 +91,7 @@ class ComparisonFunction {
   static const int ALWAYS = WebGL.WebGL.ALWAYS;
 }
 
+@reflector
 class ErrorCode {
   static const int NO_ERROR = WebGL.WebGL.NO_ERROR;
   static const int INVALID_ENUM = WebGL.WebGL.INVALID_ENUM;
@@ -90,12 +102,14 @@ class ErrorCode {
   static const int CONTEXT_LOST_WEBGL = WebGL.WebGL.CONTEXT_LOST_WEBGL;
 }
 
+@reflector
 class HintMode {
   static const int FASTEST = WebGL.WebGL.FASTEST;
   static const int NICEST = WebGL.WebGL.NICEST;
   static const int DONT_CARE = WebGL.WebGL.DONT_CARE;
 }
 
+@reflector
 class StencilOpMode {
   static const int ZERO = WebGL.WebGL.ZERO;
   static const int KEEP = WebGL.WebGL.KEEP;
@@ -107,6 +121,7 @@ class StencilOpMode {
   static const int DECR_WRAP = WebGL.WebGL.DECR_WRAP;
 }
 
+@reflector
 class BlendFactorMode {
   static const int ZERO = WebGL.WebGL.ZERO;
   static const int ONE = WebGL.WebGL.ONE;
@@ -125,12 +140,14 @@ class BlendFactorMode {
   static const int ONE_MINUS_CONSTANT_ALPHA = WebGL.WebGL.ONE_MINUS_CONSTANT_ALPHA;
 }
 
+@reflector
 class BlendFunctionMode {
   static const int FUNC_ADD = WebGL.WebGL.FUNC_ADD;
   static const int FUNC_SUBTRACT = WebGL.WebGL.FUNC_SUBTRACT;
   static const int FUNC_REVERSE_SUBTRACT = WebGL.WebGL.FUNC_REVERSE_SUBTRACT;
 }
 
+@reflector
 class ContextParameter {
   static const int ACTIVE_TEXTURE = WebGL.WebGL.ACTIVE_TEXTURE;
   static const int ALIASED_LINE_WIDTH_RANGE = WebGL.WebGL.ALIASED_LINE_WIDTH_RANGE;
@@ -223,6 +240,7 @@ class ContextParameter {
 
 //WebGLRenderBuffers
 
+@reflector
 class RenderBufferParameters {
   static const int RENDERBUFFER_WIDTH = WebGL.WebGL.RENDERBUFFER_WIDTH;
   static const int RENDERBUFFER_HEIGHT = WebGL.WebGL.RENDERBUFFER_HEIGHT;
@@ -235,10 +253,12 @@ class RenderBufferParameters {
   static const int RENDERBUFFER_STENCIL_SIZE = WebGL.WebGL.RENDERBUFFER_STENCIL_SIZE;
 }
 
+@reflector
 class RenderBufferTarget {
   static const int RENDERBUFFER = WebGL.WebGL.RENDERBUFFER;
 }
 
+@reflector
 class RenderBufferInternalFormatType {
   static const int RGBA4 = WebGL.WebGL.RGBA4;
   static const int RGB565 = WebGL.WebGL.RGB565;
@@ -250,6 +270,7 @@ class RenderBufferInternalFormatType {
 
 //WebGLFrameBuffers
 
+@reflector
 class FrameBufferStatus {
   static const int FRAMEBUFFER_COMPLETE = WebGL.WebGL.FRAMEBUFFER_COMPLETE;
   static const int FRAMEBUFFER_INCOMPLETE_ATTACHMENT = WebGL.WebGL.FRAMEBUFFER_INCOMPLETE_ATTACHMENT;
@@ -258,22 +279,26 @@ class FrameBufferStatus {
   static const int FRAMEBUFFER_UNSUPPORTED = WebGL.WebGL.FRAMEBUFFER_UNSUPPORTED;
 }
 
+@reflector
 class FrameBufferTarget {
   static const int FRAMEBUFFER = WebGL.WebGL.FRAMEBUFFER;
 }
 
+@reflector
 class FrameBufferAttachment {
   static const int COLOR_ATTACHMENT0 = WebGL.WebGL.COLOR_ATTACHMENT0;
   static const int DEPTH_ATTACHMENT = WebGL.WebGL.DEPTH_ATTACHMENT;
   static const int STENCIL_ATTACHMENT = WebGL.WebGL.STENCIL_ATTACHMENT;
 }
 
+@reflector
 class FrameBufferAttachmentType {
   static const int TEXTURE = WebGL.WebGL.TEXTURE;
   static const int RENDERBUFFER = WebGL.WebGL.RENDERBUFFER;
   static const int NONE = WebGL.WebGL.NONE;
 }
 
+@reflector
 class FrameBufferAttachmentParameters {
   static const int FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE = WebGL.WebGL.FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE;
   static const int FRAMEBUFFER_ATTACHMENT_OBJECT_NAME = WebGL.WebGL.FRAMEBUFFER_ATTACHMENT_OBJECT_NAME;
@@ -281,6 +306,7 @@ class FrameBufferAttachmentParameters {
   static const int FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE = WebGL.WebGL.FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE;
 }
 
+@reflector
 class TextureAttachmentTarget {
   static const int TEXTURE_2D = WebGL.WebGL.TEXTURE_2D;
   static const int TEXTURE_CUBE_MAP_POSITIVE_X = WebGL.WebGL.TEXTURE_CUBE_MAP_POSITIVE_X;
@@ -303,6 +329,7 @@ class TextureAttachmentTarget {
 
 //WebGLBuffers
 
+@reflector
 class BufferType {
   static const int ARRAY_BUFFER = WebGL.WebGL.ARRAY_BUFFER;
   static const int ELEMENT_ARRAY_BUFFER = WebGL.WebGL.ELEMENT_ARRAY_BUFFER;
@@ -311,12 +338,14 @@ class BufferType {
       GLEnum.BufferType.getByIndex(index);
 }
 
+@reflector
 class BufferUsageType {
   static const int STATIC_DRAW = WebGL.WebGL.STATIC_DRAW;
   static const int DYNAMIC_DRAW = WebGL.WebGL.DYNAMIC_DRAW;
   static const int STREAM_DRAW = WebGL.WebGL.STREAM_DRAW;
 }
 
+@reflector
 class BufferParameters {
   static const int BUFFER_SIZE = WebGL.WebGL.BUFFER_SIZE;
   static const int BUFFER_USAGE = WebGL.WebGL.BUFFER_USAGE;
@@ -324,6 +353,7 @@ class BufferParameters {
 
 //WebGLPrograms
 
+@reflector
 class ProgramParameterGlEnum {
   static const int DELETE_STATUS = WebGL.WebGL.DELETE_STATUS;
   static const int LINK_STATUS = WebGL.WebGL.LINK_STATUS;
@@ -333,6 +363,7 @@ class ProgramParameterGlEnum {
   static const int ACTIVE_UNIFORMS = WebGL.WebGL.ACTIVE_UNIFORMS;
 }
 
+@reflector
 class VertexAttribArrayType {
   static const int BYTE = WebGL.WebGL.BYTE;
   static const int UNSIGNED_BYTE = 
@@ -348,11 +379,13 @@ class VertexAttribArrayType {
 
 //WebGLTextures
 
+@reflector
 class TextureTarget {
   static const int TEXTURE_2D = WebGL.WebGL.TEXTURE_2D;
   static const int TEXTURE_CUBE_MAP = WebGL.WebGL.TEXTURE_CUBE_MAP;
 }
 
+@reflector
 class TextureUnit {
   static const int TEXTURE0 = WebGL.WebGL.TEXTURE0;
   static const int TEXTURE1 = WebGL.WebGL.TEXTURE1;
@@ -388,6 +421,7 @@ class TextureUnit {
   static const int TEXTURE31 = WebGL.WebGL.TEXTURE31;
 }
 
+@reflector
 class TextureParameter {
   static const int TEXTURE_MAG_FILTER = WebGL.WebGL.TEXTURE_MAG_FILTER;
   static const int TEXTURE_MIN_FILTER = WebGL.WebGL.TEXTURE_MIN_FILTER;
@@ -395,8 +429,10 @@ class TextureParameter {
   static const int TEXTURE_WRAP_T = WebGL.WebGL.TEXTURE_WRAP_T;
 }
 
+@reflector
 abstract class TextureSetParameterType{}
 
+@reflector
 class TextureFilterType extends TextureSetParameterType {
   static const int LINEAR = WebGL.WebGL.LINEAR;
   static const int NEAREST = WebGL.WebGL.NEAREST;
@@ -406,11 +442,13 @@ class TextureFilterType extends TextureSetParameterType {
   static const int LINEAR_MIPMAP_LINEAR = WebGL.WebGL.LINEAR_MIPMAP_LINEAR;
 }
 
+@reflector
 class TextureMagnificationFilterType extends TextureFilterType {
   static const int LINEAR = WebGL.WebGL.LINEAR;
   static const int NEAREST = WebGL.WebGL.NEAREST;
 }
 
+@reflector
 class TextureMinificationFilterType extends TextureFilterType {
   static const int LINEAR = WebGL.WebGL.LINEAR;
   static const int NEAREST = WebGL.WebGL.NEAREST;
@@ -420,12 +458,14 @@ class TextureMinificationFilterType extends TextureFilterType {
   static const int LINEAR_MIPMAP_LINEAR = WebGL.WebGL.LINEAR_MIPMAP_LINEAR;
 }
 
+@reflector
 class TextureWrapType extends TextureSetParameterType {
   static const int REPEAT = WebGL.WebGL.REPEAT;
   static const int CLAMP_TO_EDGE = WebGL.WebGL.CLAMP_TO_EDGE;
   static const int MIRRORED_REPEAT = WebGL.WebGL.MIRRORED_REPEAT;
 }
 
+@reflector
 class TextureInternalFormat {
   static const int ALPHA = WebGL.WebGL.ALPHA;
   static const int RGB = WebGL.WebGL.RGB;
@@ -435,6 +475,7 @@ class TextureInternalFormat {
           WebGL.WebGL.LUMINANCE_ALPHA;
 }
 
+@reflector
 class TexelDataType {
   static const int UNSIGNED_BYTE = WebGL.WebGL.UNSIGNED_BYTE;
   static const int UNSIGNED_SHORT_5_6_5 = WebGL.WebGL.UNSIGNED_SHORT_5_6_5;
@@ -444,6 +485,7 @@ class TexelDataType {
 
 //WebGLShaders
 
+@reflector
 class ShaderVariableType {
   static const int FLOAT_VEC2 = WebGL.WebGL.FLOAT_VEC2;
   static const int FLOAT_VEC3 = WebGL.WebGL.FLOAT_VEC3;
@@ -502,6 +544,7 @@ class ShaderVariableType {
 
 }
 
+@reflector
 class PrecisionType {
   static const int LOW_INT = WebGL.WebGL.LOW_INT;
   static const int LOW_FLOAT = WebGL.WebGL.LOW_FLOAT;
@@ -511,17 +554,20 @@ class PrecisionType {
   static const int HIGH_FLOAT = WebGL.WebGL.HIGH_FLOAT;
 }
 
+@reflector
 class ShaderType {
   static const int FRAGMENT_SHADER = WebGL.WebGL.FRAGMENT_SHADER;
   static const int VERTEX_SHADER = WebGL.WebGL.VERTEX_SHADER;
 }
 
+@reflector
 class ShaderParameters {
   static const int DELETE_STATUS = WebGL.WebGL.DELETE_STATUS;
   static const int COMPILE_STATUS = WebGL.WebGL.COMPILE_STATUS;
   static const int SHADER_TYPE = WebGL.WebGL.SHADER_TYPE;
 }
 
+@reflector
 class VertexAttribGlEnum {
   static const int VERTEX_ATTRIB_ARRAY_BUFFER_BINDING = WebGL.WebGL.VERTEX_ATTRIB_ARRAY_BUFFER_BINDING;
   static const int VERTEX_ATTRIB_ARRAY_ENABLED = WebGL.WebGL.VERTEX_ATTRIB_ARRAY_ENABLED;

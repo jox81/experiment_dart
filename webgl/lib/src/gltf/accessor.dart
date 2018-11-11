@@ -55,7 +55,7 @@ const Map<String, int> ACCESSOR_COMPONENT_LENGTHS = const <String, int>{
 /// [type] defines whether they should be read singly ("SCALAR") or in vector groups (e.g. "VEC3")
 ///
 ///
-/// Zxemple :
+/// Exemple :
 /// accessor._bufferViewId = 1
 /// accessor.byteOffset = 0
 /// accessor.byteLength = 288
@@ -113,7 +113,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
   String typeString;//SCALAR/VEC3/...
   int components;//Count of components in an element : vec3 -> 3, vec2 -> 2
   ///VertexAttribArrayType componentType
-  int componentType;//Type of a component part : FLOAT, UNSIGNED_SHORT, ...
+  int componentType;//Type of a component part : 5126 FLOAT, 5123 UNSIGNED_SHORT, ...
   int componentLength; //Count of byte per component : FLOAT -> 4, UNSIGNED_SHORT -> 2, BYTE -> 1
   //<
 
