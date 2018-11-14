@@ -84,6 +84,9 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     List<int> baseData = new List();
     int lastBaseDataLength = 0;
 
+    ///offset for vertex data accessor position, normals, uv, color
+    num dataAccessorOffset = 0;
+
     //> Indices
 
     int nextMultipleVertexDataOffset = 0;
@@ -133,9 +136,6 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       int x = meshPrimitiveInfos.vertexIndices.lengthInBytes;
       int n = meshPrimitiveInfos.vertexPositions.elementSizeInBytes;
       nextMultipleVertexDataOffset = findNextIntMultiple(x, n);
-//      print('vertexIndices.lengthInBytes : ${vertexIndices.lengthInBytes}');
-//      print('vertexPositions.elementSizeInBytes : ${vertexPositions.elementSizeInBytes}');
-//      print('nextMultipleVertexDataOffset : $nextMultipleVertexDataOffset');
       ///adjust space end
       int dataOffset = nextMultipleVertexDataOffset - baseData.length;
       for(int i = 0; i < dataOffset; i++) {
@@ -162,7 +162,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
       /// The primitive must have POSITION Accessor infos
       GLTFAccessor positionAccessor = new GLTFAccessor(
-          byteOffset: 0,
+          byteOffset: dataAccessorOffset,
           byteLength: meshPrimitiveInfos.vertexPositions.lengthInBytes,
           byteStride: ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC3],
           count: meshPrimitiveInfos.vertexPositions.length ~/ vec3ComponentsCount,
@@ -184,23 +184,28 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       baseData.addAll(meshPrimitiveInfos.vertexPositions.buffer.asUint8List().toList());
 
       lastBaseDataLength = checkAddedBytes(baseData, lastBaseDataLength);
+
+      dataAccessorOffset += positionAccessor.byteLength;
     }
 
     //> Normals can use same bufferView as Position
 
     if(meshPrimitiveInfos.vertexNormals != null) {
+
+      int count = meshPrimitiveInfos.vertexNormals.length ~/ vec3ComponentsCount;
+
       /// Normals can use same bufferView as Position.
       /// So there's no need to create a new one.
-      /// But length must be adjusted
+      /// Offset is the same but length must be adjusted
       primitive.positionAccessor.bufferView.byteLength += meshPrimitiveInfos.vertexNormals.buffer.lengthInBytes;
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor normalAccessor = new GLTFAccessor(
-          byteOffset: meshPrimitiveInfos.vertexPositions.length ~/ vec3ComponentsCount * 12,
-          byteLength: meshPrimitiveInfos.vertexPositions.lengthInBytes,
+          byteOffset: dataAccessorOffset,
+          byteLength: meshPrimitiveInfos.vertexNormals.lengthInBytes,
           byteStride: ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC3],
-          count: meshPrimitiveInfos.vertexNormals.length ~/ vec3ComponentsCount,
-          type : 35665,
+          count: count,
+          type : 35665,// Todo (jpu) : add map/const
           elementLength: vec3ComponentsCount * ACCESSOR_COMPONENT_LENGTHS[FLOAT],
           typeString: VEC3,
           components: vec3ComponentsCount,
@@ -215,6 +220,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       baseData.addAll(meshPrimitiveInfos.vertexNormals.buffer.asUint8List().toList());
 
       lastBaseDataLength = checkAddedBytes(baseData, lastBaseDataLength);
+
+      dataAccessorOffset += normalAccessor.byteLength;
     }
 
     //> Texture coords
@@ -227,16 +234,16 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
       /// UV can use same bufferView as Position.
       /// So there's no need to create a new one.
-      /// But length must be adjusted in proportion of position even if it's uv
+      /// Offset is the same but length must be adjusted in proportion of position even if it's uv
       primitive.positionAccessor.bufferView.byteLength += meshPrimitiveInfos.vertexUVs.buffer.lengthInBytes;
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor uvAccessor = new GLTFAccessor(
-          byteOffset: count * 12,//byte length
+          byteOffset: dataAccessorOffset,
           byteLength: meshPrimitiveInfos.vertexUVs.lengthInBytes,
           byteStride: ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC3],
           count: count,
-          type : null,
+          type : 35664,
           elementLength: vec2ComponentsCount * ACCESSOR_COMPONENT_LENGTHS[FLOAT],
           typeString: VEC2,
           components: vec2ComponentsCount,
@@ -251,6 +258,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       baseData.addAll(meshPrimitiveInfos.vertexUVs.buffer.asUint8List().toList());
 
       lastBaseDataLength = checkAddedBytes(baseData, lastBaseDataLength);
+
+      dataAccessorOffset += uvAccessor.byteLength;
     }
 
     //> Colors
@@ -263,16 +272,16 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
       /// Color can use same bufferView as Position.
       /// So there's no need to create a new one.
-      /// And length musn't be adjusted in proportion of position beacause it's the same length
+      /// Offset is the same but length must be adjusted in proportion of position beacause it's the same length
       primitive.positionAccessor.bufferView.byteLength += meshPrimitiveInfos.vertexColors.buffer.lengthInBytes;
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor colorAccessor = new GLTFAccessor(
-          byteOffset: count * 12,//byte length
+          byteOffset: dataAccessorOffset,
           byteLength: meshPrimitiveInfos.vertexColors.lengthInBytes,
           byteStride: ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC4],
           count: count,
-          type : null,
+          type : 35666,
           elementLength: vec4ComponentsCount * ACCESSOR_COMPONENT_LENGTHS[FLOAT],
           typeString: VEC4,
           components: vec4ComponentsCount,
@@ -287,6 +296,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       baseData.addAll(meshPrimitiveInfos.vertexColors.buffer.asUint8List().toList());
 
       lastBaseDataLength = checkAddedBytes(baseData, lastBaseDataLength);
+
+      dataAccessorOffset += colorAccessor.byteLength;
     }
 
     //> Fill buffer with datas
@@ -342,7 +353,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
       useIndices : false,
       useNormals : false,
       useUVs : false,
-      useColors : false);
+      useColors : true);
     GLTFMesh mesh =  createMeshWithPrimitive(meshPrimitive, meshPrimitiveInfos)
       ..primitives[0].drawMode = meshPrimitive.mode;
     return mesh;

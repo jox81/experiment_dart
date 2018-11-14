@@ -898,6 +898,10 @@ class MaterialBaseTextureNormal extends RawMaterial {
       setUniform(program, "u_DirectionalColor", ShaderVariableType.FLOAT_VEC3,
           directionalLight.color.storage);
     }
+
+    gl.activeTexture(TextureUnit.TEXTURE7);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture.webGLTexture);
+    setUniform(program, "u_Sampler", ShaderVariableType.SAMPLER_2D, 7);
   }
 }
 

@@ -219,7 +219,7 @@ class GLTFRenderer implements Interactable {
     await _initTextures();
     setupCameras();
 
-    Context.backgroundColor = new Vector4(.2, 0.2, 0.2, 1.0);
+    Context.backgroundColor = gltfProject.scene.backgroundColor;
   }
 
   void render() {

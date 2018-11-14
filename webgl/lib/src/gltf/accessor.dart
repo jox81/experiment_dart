@@ -46,7 +46,10 @@ const Map<String, int> ACCESSOR_COMPONENT_LENGTHS = const <String, int>{
 
 /// The accessors are what actually define the format of the data and
 /// use codes for "componentType"
+///
 /// https://github.com/KhronosGroup/glTF/tree/master/specification/2.0#accessors
+/// > Element size, in bytes, is (size in bytes of the 'componentType') * (number of components defined by 'type')
+/// https://github.com/KhronosGroup/glTF-Tutorials/blob/master/gltfTutorial/gltfTutorial_005_BuffersBufferViewsAccessors.md
 ///
 /// [componentType]
 /// ex:
@@ -57,6 +60,7 @@ const Map<String, int> ACCESSOR_COMPONENT_LENGTHS = const <String, int>{
 ///
 /// Exemple :
 /// accessor._bufferViewId = 1
+///
 /// accessor.byteOffset = 0
 /// accessor.byteLength = 288
 /// --> 288 = 24 * 12

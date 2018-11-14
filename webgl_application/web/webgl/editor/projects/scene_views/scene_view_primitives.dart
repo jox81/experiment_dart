@@ -20,7 +20,7 @@ Future<GLTFProject> projectPrimitives() async {
   GLTFProject project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
   GLTFScene scene = new GLTFScene();
-  scene.backgroundColor = new Vector4(0.2, 0.2, 1.0, 1.0);// Todo (jpu) : ?
+  scene.backgroundColor = new Vector4(0.8, 0.2, 1.0, 1.0);// Todo (jpu) : ?
   project.addScene(scene);
   project.scene = scene;
 
@@ -34,18 +34,19 @@ Future<GLTFProject> projectPrimitives() async {
 
 //  project.materials.add(material); // Todo (jpu) : don't add ?
 
-  // Todo (jpu) :This doesn't show, use another material ?
+  MaterialPoint materialPoint = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+
   GLTFMesh meshPoint = new GLTFMesh.point()
-    ..primitives[0].material = material;
+    ..primitives[0].material = materialPoint;
   project.meshes.add(meshPoint);
   GLTFNode nodePoint = new GLTFNode()
     ..mesh = meshPoint
     ..name = 'point'
-    ..translation = new Vector3(-5.0, 0.0, -5.0);
+    ..translation = new Vector3(5.0, 0.0, 0.0);
   scene.addNode(nodePoint);
   project.addNode(nodePoint);
 
-  // Todo (jpu) :This doesn't show, use another material
+  // Todo (jpu) :This doesn't show, use another material ? what material doesn't work ?
   GLTFMesh meshLine = new GLTFMesh.line([
     new Vector3.all(0.0),
     new Vector3(10.0, 0.0, 0.0),
@@ -101,16 +102,16 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeCube);
   project.addNode(nodeCube);
 
-//  // Todo (jpu) : should use normals
-//  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false, useColors: false))
-//    ..primitives[0].material = material;
-//  project.meshes.add(meshSphere);
-//  GLTFNode nodeSphere = new GLTFNode()
-//    ..mesh = meshSphere
-//    ..name = 'sphere'
-//    ..translation = new Vector3(5.0, 0.0, 0.0);
-//  scene.addNode(nodeSphere);
-//  project.addNode(nodeSphere);
+  // Todo (jpu) : bug with other primitives with MaterialBaseVertexColor
+  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useColors: false))
+    ..primitives[0].material = material;
+  project.meshes.add(meshSphere);
+  GLTFNode nodeSphere = new GLTFNode()
+    ..mesh = meshSphere
+    ..name = 'sphere'
+    ..translation = new Vector3(5.0, 0.0, 0.0);
+  scene.addNode(nodeSphere);
+  project.addNode(nodeSphere);
 
   return project;
 }
@@ -151,29 +152,33 @@ Future<RawMaterial> getTestRawMaterial() async {
     ..textureWrapS = TextureWrapType.REPEAT
     ..textureWrapT = TextureWrapType.REPEAT;
 
-  RawMaterial material;
+  List<List<ImageElement>> cubeMapImages =
+  await TextureUtils.loadCubeMapImages('pisa');
+  WebGLTexture cubeMapTexture =
+  TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
 
-//  material = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+  RawMaterial material;
 
 //  material = new MaterialBase();
 
 //  material = new MaterialBaseColor(new Vector4(1.0, 0.0, 0.0, 1.0));
 
-  material = new MaterialBaseVertexColor();// Todo (jpu) : test with vertex colors on meshes !! bug
+//  material = new MaterialBaseVertexColor();
 //  material = new MaterialBaseTexture()..texture = texture;
 
-  // Todo (jpu) : doesn't show correctly
+  material = new MaterialReflection()..skyboxTexture = cubeMapTexture;
+
+  // Todo (jpu) : test changing lights
 //  material = new MaterialBaseTextureNormal()
 //    ..texture = texture
 //    ..ambientColor = ambientLight.color
 //    ..directionalLight = directionalLight
 //    ..useLighting = useLighting;
 
-//  material = new MaterialReflection();// Todo (jpu) : test this
 //  material = new MaterialSkyBox();// Todo (jpu) : test this
 //  material = new MaterialDepthTexture();// Todo (jpu) : test this
 
-  // Todo (jpu) : see console : Error From renderer _render method: Exception: can't use mirrors
+  // Todo (jpu) : see console : WebGL: INVALID_OPERATION: useProgram: program not valid
 //  material = new MaterialPragmaticPBR(pointLight);
 
 //  material = new MaterialDotScreen();// Todo (jpu) : test this
