@@ -85,7 +85,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     int lastBaseDataLength = 0;
 
     ///offset for vertex data accessor position, normals, uv, color
-    num dataAccessorOffset = 0;
+    int dataAccessorOffset = 0;
 
     //> Indices
 

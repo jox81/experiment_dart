@@ -29,12 +29,24 @@ Future<GLTFProject> projectPrimitives() async {
     ..targetPosition = new Vector3.zero()
     ..translation = new Vector3(20.0, 20.0, 20.0);
 
+  //> materials
+
+  MaterialLibrary materialLibrary = new MaterialLibrary();
   GLTFPBRMaterial baseMaterial = getTestGLTFPBRMaterial();
-  RawMaterial material = await getTestRawMaterial();
-
+  RawMaterial material = await materialLibrary.testRawMaterial;
 //  project.materials.add(material); // Todo (jpu) : don't add ?
-
   MaterialPoint materialPoint = new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
+
+  //> meshes
+
+  GLTFMesh skyBoxMesh = new GLTFMesh.cube()
+    ..primitives[0].material = await materialLibrary.materialSkyBox;/// ! vu ceci, il faut que l'objet qui a ce matériaux soit rendu en premier
+  GLTFNode skyBoxNode = new GLTFNode()
+    ..mesh = skyBoxMesh
+    ..name = 'quadDepth'
+    ..matrix.scale(2.0);
+  scene.addNode(skyBoxNode);
+
 
   GLTFMesh meshPoint = new GLTFMesh.point()
     ..primitives[0].material = materialPoint;
@@ -102,7 +114,7 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeCube);
   project.addNode(nodeCube);
 
-  // Todo (jpu) : bug with other primitives with MaterialBaseVertexColor
+//  // Todo (jpu) : bug with other primitives with MaterialBaseVertexColor
   GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useColors: false))
     ..primitives[0].material = material;
   project.meshes.add(meshSphere);
@@ -113,7 +125,68 @@ Future<GLTFProject> projectPrimitives() async {
   scene.addNode(nodeSphere);
   project.addNode(nodeSphere);
 
+
   return project;
+}
+
+class MaterialLibrary {
+  Future<MaterialSkyBox> get materialSkyBox async => _materialSkyBox ??= new MaterialSkyBox()
+    ..skyboxTexture = await getCubeMap();
+  MaterialSkyBox _materialSkyBox;
+  WebGLTexture _cubeMapTexture;
+  Future<WebGLTexture> getCubeMap() async {
+    if(_cubeMapTexture == null) {
+      List<List<ImageElement>> cubeMapImages =
+      await TextureUtils.loadCubeMapImages('pisa');
+      _cubeMapTexture =
+          TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
+    }
+    return _cubeMapTexture;
+  }
+
+  Future<RawMaterial> get testRawMaterial async {
+    AmbientLight ambientLight = new AmbientLight()
+      ..color = new Vector3(1.0,1.0,1.0);
+    DirectionalLight directionalLight = new DirectionalLight()
+      ..direction = new Vector3(-0.25,-0.125,-0.25)
+      ..color = new Vector3(0.8, 0.8, 0.8);
+
+    PointLight pointLight = new PointLight()
+      ..color.setFrom(directionalLight.color)
+      ..translation = new Vector3(20.0, 20.0, 20.0);
+
+    bool useLighting = true;
+
+    Uri uriImage = new Uri.file("./projects/images/uv_grid.jpg");
+    ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
+    WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
+      ..textureWrapS = TextureWrapType.REPEAT
+      ..textureWrapT = TextureWrapType.REPEAT;
+
+    RawMaterial material;
+
+//  material = new MaterialBase();
+//  material = new MaterialBaseColor(new Vector4(1.0, 0.0, 0.0, 1.0));
+//  material = new MaterialBaseVertexColor();
+//  material = new MaterialBaseTexture()..texture = texture;
+    material = new MaterialReflection()..skyboxTexture = await getCubeMap();
+
+    // Todo (jpu) : test changing lights
+//  material = new MaterialBaseTextureNormal()
+//    ..texture = texture
+//    ..ambientColor = ambientLight.color
+//    ..directionalLight = directionalLight
+//    ..useLighting = useLighting;
+
+//  material = new MaterialDepthTexture();// Todo (jpu) : test this
+
+    // Todo (jpu) : see console : WebGL: INVALID_OPERATION: useProgram: program not valid
+//  material = new MaterialPragmaticPBR(pointLight);
+//  material = new MaterialDotScreen();// Todo (jpu) : test this
+//  material = new MaterialSAO();// Todo (jpu) : test this
+
+    return material;
+  }
 }
 
 GLTFPBRMaterial getTestGLTFPBRMaterial() {
@@ -130,59 +203,4 @@ GLTFPBRMaterial getTestGLTFPBRMaterial() {
   //  project.materials.add(baseMaterial);
 
   return baseMaterial;
-}
-
-Future<RawMaterial> getTestRawMaterial() async {
-
-  AmbientLight ambientLight = new AmbientLight()
-    ..color = new Vector3(1.0,1.0,1.0);
-  DirectionalLight directionalLight = new DirectionalLight()
-    ..direction = new Vector3(-0.25,-0.125,-0.25)
-    ..color = new Vector3(0.8, 0.8, 0.8);
-
-  PointLight pointLight = new PointLight()
-  ..color.setFrom(directionalLight.color)
-  ..translation = new Vector3(20.0, 20.0, 20.0);
-
-  bool useLighting = true;
-
-  Uri uriImage = new Uri.file("./projects/images/uv_grid.jpg");
-  ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
-  WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
-    ..textureWrapS = TextureWrapType.REPEAT
-    ..textureWrapT = TextureWrapType.REPEAT;
-
-  List<List<ImageElement>> cubeMapImages =
-  await TextureUtils.loadCubeMapImages('pisa');
-  WebGLTexture cubeMapTexture =
-  TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
-
-  RawMaterial material;
-
-//  material = new MaterialBase();
-
-//  material = new MaterialBaseColor(new Vector4(1.0, 0.0, 0.0, 1.0));
-
-//  material = new MaterialBaseVertexColor();
-//  material = new MaterialBaseTexture()..texture = texture;
-
-  material = new MaterialReflection()..skyboxTexture = cubeMapTexture;
-
-  // Todo (jpu) : test changing lights
-//  material = new MaterialBaseTextureNormal()
-//    ..texture = texture
-//    ..ambientColor = ambientLight.color
-//    ..directionalLight = directionalLight
-//    ..useLighting = useLighting;
-
-//  material = new MaterialSkyBox();// Todo (jpu) : test this
-//  material = new MaterialDepthTexture();// Todo (jpu) : test this
-
-  // Todo (jpu) : see console : WebGL: INVALID_OPERATION: useProgram: program not valid
-//  material = new MaterialPragmaticPBR(pointLight);
-
-//  material = new MaterialDotScreen();// Todo (jpu) : test this
-//  material = new MaterialSAO();// Todo (jpu) : test this
-
-  return material;
 }

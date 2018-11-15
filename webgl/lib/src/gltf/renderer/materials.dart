@@ -264,6 +264,10 @@ abstract class RawMaterial {
         break;
     }
   }
+
+  void setupBeforeRender() {}
+
+  void setupAfterRender() {}
 }
 
 @reflector
@@ -960,13 +964,13 @@ class MaterialSkyBox extends RawMaterial {
     return defines;
   }
 
-  // Todo (jpu) :
-//  setupBeforeRender(){
-//    gl.disable(EnableCapabilityType.DEPTH_TEST);
-//  }
-//  setupAfterRender(){
-//    gl.enable(EnableCapabilityType.DEPTH_TEST);
-//  }
+  /// ! vu ceci, il faut que l'objet qui a ce matériaux soit rendu en premier
+  void setupBeforeRender(){
+    gl.disable(EnableCapabilityType.DEPTH_TEST);
+  }
+  void setupAfterRender(){
+    gl.enable(EnableCapabilityType.DEPTH_TEST);
+  }
 
   void setUniforms(
       WebGLProgram program,
@@ -987,9 +991,10 @@ class MaterialSkyBox extends RawMaterial {
     setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
 
-    gl.activeTexture(TextureUnit.TEXTURE7);
+    // Todo (jpu) : si dans ce matériaux, l'active texture n'est pas TEXTURE0, 0 alors ça plante ! pq ?
+    gl.activeTexture(TextureUnit.TEXTURE0);
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, skyboxTexture.webGLTexture);
-    setUniform(program, "u_EnvMap", ShaderVariableType.SAMPLER_CUBE, 7);
+    setUniform(program, "u_EnvMap", ShaderVariableType.SAMPLER_CUBE, 0);
   }
 }
 

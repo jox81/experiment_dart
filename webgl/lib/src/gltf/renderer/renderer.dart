@@ -275,11 +275,13 @@ class GLTFRenderer implements Interactable {
 
           _setupPrimitiveBuffers(program, primitive);
 
+          primitive.material.setupBeforeRender();
           primitive.material.pvMatrix = (mainCamera.projectionMatrix * mainCamera.viewMatrix) as Matrix4;
           primitive.material.setUniforms(
               program, (node.parentMatrix * node.matrix) as Matrix4, mainCamera.viewMatrix, mainCamera.projectionMatrix, mainCamera.translation, light);
 
           _drawPrimitive(primitive);
+          primitive.material.setupAfterRender();
         }
       }
     }
