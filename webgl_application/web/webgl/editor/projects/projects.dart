@@ -26,9 +26,10 @@ import 'scene_views/scene_view_primitives.dart';
 Future<List<GLTFProject>> loadBaseProjects() async => [
 //  projectSceneViewEmpty(),
 //  await projectSceneViewBase(),
-  await projectPrimitives(),// Todo (jpu) :  bug with vertexColor
+//  await projectPrimitives(),
 //  await projectPrimitivesTextured(),
-//  await projectSceneViewGltf(),// Todo (jpu) : bug on getFace()
+  await projectSceneViewVector(),
+//  await projectSceneViewGltf(),// Todo (jpu) : bug
 ];
 
 /*
@@ -36,7 +37,6 @@ Future<List<GLTFProject>> loadBaseProjects() async => [
 //  projectSceneViewPerformance(),
 //  projectSceneViewVector(),
 // await projectCubeMap(),
-//  await projectCubeMap(),
 // new SceneViewPBR(),
 // new SceneViewTestMatrices(),
 // new SceneViewWebGLEdit(),

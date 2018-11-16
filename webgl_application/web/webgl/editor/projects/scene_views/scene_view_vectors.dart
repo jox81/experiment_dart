@@ -5,53 +5,56 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/light/light.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/context.dart';
+import 'package:webgl/src/camera/camera.dart';
 
-GLTFProject projectSceneViewVector() {
+import 'material_library.dart';
+
+Future<GLTFProject> projectSceneViewVector() async {
 
   GLTFProject project = new GLTFProject.create();
   GLTFScene scene = new GLTFScene()
     ..backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
   project.scene = scene;
 
-//  CameraPerspective cameraTest;
+  Context.mainCamera = new
+  CameraPerspective(radians(37.0), 0.1, 1000.0)
+    ..targetPosition = new Vector3.zero()
+    ..translation = new Vector3(10.0, 10.0, 10.0);
+//    ..showGizmo = true;// Todo (jpu) :
+
+  //> materials
+
+  MaterialLibrary materialLibrary = new MaterialLibrary();
+  await materialLibrary.loadRessources();
 
   MaterialBaseColor matVectorA;
   MaterialBaseColor matVectorB;
   MaterialBaseColor matVectorResult;
 
-  return project;
-}
+  matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));
+  matVectorB = new MaterialBaseColor(new Vector4(0.0,0.0,1.0,1.0));
+  matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
+
+  GLTFMesh meshAxis = new GLTFMesh.axis()
+    ..primitives[0].material = materialLibrary.materialBaseVertexColor;
+  project.meshes.add(meshAxis);
+  GLTFNode nodeLine = new GLTFNode()
+    ..mesh = meshAxis
+    ..name = 'axis'
+    ..translation = new Vector3(0.0, 0.0, 0.0);
+  scene.addNode(nodeLine);
+  project.addNode(nodeLine);
+
 //
-//
-//  AxisMesh axis;
 //  GridMesh grid;
-//
-//  @override
-//  Future setupScene() async {
-//
-//    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
-//
-//    //Cameras
-//    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
-//      ..targetPosition = new Vector3.zero()
-//      ..translation = new Vector3(3.0, 10.0, 10.0);
-//    Context.mainCamera = camera;
-//
-//    matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));
-//    matVectorB = new MaterialBaseColor(new Vector4(0.0,0.0,1.0,1.0));
-//    matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
-//
-//    cameraTest = new CameraPerspective(radians(45.0), 0.2, 5.0)
-//      ..targetPosition = new Vector3(1.0, 0.0, 0.0)
-//      ..translation = new Vector3(3.0, 3.0, 3.0)
-//      ..showGizmo = true;
-//    cameras.add(cameraTest);
-//
-//    axis = new AxisMesh();
-//    meshes.add(axis);
 //    grid = new GridMesh();
 //    meshes.add(grid);
-//
+
+  return project;
+}
+
 ////    test01();
 ////    test02();
 //    test03();

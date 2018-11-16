@@ -9,6 +9,8 @@ import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/textures/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
+import 'package:webgl/src/context.dart';
+import 'package:webgl/src/camera/camera.dart';
 
 Future<GLTFProject> projectPrimitivesTextured() async {
   GLTFProject project = new GLTFProject.create();
@@ -17,6 +19,11 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);// Todo (jpu) : ?
   project.addScene(scene);
   project.scene = scene;
+
+  Context.mainCamera = new
+  CameraPerspective(radians(37.0), 0.1, 1000.0)
+    ..targetPosition = new Vector3.zero()
+    ..translation = new Vector3(20.0, 20.0, 20.0);
 
   Uri uriImage = new Uri.file("packages/webgl/images/utils/uv.png");
   ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
@@ -35,7 +42,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
     ..texture = texture;
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshTriangle = new GLTFMesh.triangle(meshPrimitiveInfos : new MeshPrimitiveInfos())
     ..primitives[0].material = material;
   project.meshes.add(meshTriangle);
   GLTFNode nodeTriangle = new GLTFNode()
@@ -46,7 +53,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodeTriangle);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshQuad = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos())
     ..primitives[0].material = material;
   project.meshes.add(meshQuad);
   GLTFNode nodeQuad = new GLTFNode()
@@ -57,7 +64,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodeQuad);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos())
     ..primitives[0].material = material;
   project.meshes.add(meshPyramid);
   GLTFNode nodePyramid = new GLTFNode()
@@ -68,7 +75,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodePyramid);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshCube = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos())
     ..primitives[0].material = material;
   project.meshes.add(meshCube);
   GLTFNode nodeCube = new GLTFNode()
@@ -79,7 +86,7 @@ Future<GLTFProject> projectPrimitivesTextured() async {
   project.addNode(nodeCube);
 
   // Todo (jpu) : should use normals
-  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
+  GLTFMesh meshSphere = new GLTFMesh.sphere(meshPrimitiveInfos : new MeshPrimitiveInfos())
     ..primitives[0].material = material;
   project.meshes.add(meshSphere);
   GLTFNode nodeSphere = new GLTFNode()

@@ -386,7 +386,8 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
   factory GLTFMesh.axis({MeshPrimitiveInfos meshPrimitiveInfos}) {
     MeshPrimitive meshPrimitive = new MeshPrimitive.Axis();
-    return createMeshWithPrimitive(meshPrimitive, meshPrimitiveInfos ??= new MeshPrimitiveInfos());
+    return createMeshWithPrimitive(meshPrimitive, meshPrimitiveInfos ??= new MeshPrimitiveInfos(useIndices: false, useUVs: false, useNormals: false))
+      ..primitives[0].drawMode = meshPrimitive.mode;
   }
 
   factory GLTFMesh.axisPoint({MeshPrimitiveInfos meshPrimitiveInfos}) {
