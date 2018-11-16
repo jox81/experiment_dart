@@ -135,21 +135,6 @@
 //  }
 //}
 //
-//class AxisMesh extends Mesh {
-//  MeshType get meshType => MeshType.axis;
-//  AxisMesh({bool doInitMaterial: true}) {
-//    primitive = new MeshPrimitive.Axis()
-//    ..material = doInitMaterial ? new MaterialPoint() : null;
-//  }
-//}
-//
-//class AxisPointsMesh extends Mesh {
-//  MeshType get meshType => MeshType.axisPoints;
-//  AxisPointsMesh({bool doInitMaterial: true}) {
-//    primitive = new MeshPrimitive.AxisPoints()
-//    ..material = doInitMaterial ? new MaterialPoint(pointSize: 5.0) : null;
-//  }
-//}
 //
 //class FrustrumGizmo extends Mesh implements IGizmo {
 //  bool visible = false;
@@ -255,41 +240,7 @@
 //    }
 //  }
 //}
-//
-//class GridMesh extends Mesh {
-//  MeshType get meshType => MeshType.grid;
-//  GridMesh({bool doInitMaterial: true}) {
-//    int gridHalfWidthCount = 5;
-//    constructGrid(gridHalfWidthCount);
-//
-//    primitive.material = doInitMaterial
-//        ? new MaterialBaseColor(new Vector4(0.5, 0.5, 0.5, 1.0))
-//        : null;
-//  }
-//
-//  void constructGrid(int gridHalfWidthCount) {
-//    List<Vector3> points = [];
-//    for (int i = -gridHalfWidthCount; i <= gridHalfWidthCount; i++) {
-//      Vector3 p1 =
-//          new Vector3(i.toDouble(), 0.0, gridHalfWidthCount.toDouble());
-//      Vector3 p2 =
-//          new Vector3(i.toDouble(), 0.0, -gridHalfWidthCount.toDouble());
-//      points.add(p1);
-//      points.add(p2);
-//    }
-//    for (int i = -gridHalfWidthCount; i <= gridHalfWidthCount; i++) {
-//      Vector3 p1 =
-//          new Vector3(-gridHalfWidthCount.toDouble(), 0.0, i.toDouble());
-//      Vector3 p2 =
-//          new Vector3(gridHalfWidthCount.toDouble(), 0.0, i.toDouble());
-//      points.add(p1);
-//      points.add(p2);
-//    }
-//
-//    primitive = new MeshPrimitive.Line(points)..mode = DrawMode.LINES;
-//  }
-//}
-//
+
 ////Todo : convert from javascript
 //class TorusMesh extends Mesh {
 //  /*
@@ -337,17 +288,4 @@
 //}
 //   */
 //}
-//
-//class VectorMesh extends Mesh {
-//  MeshType get meshType => MeshType.vector;
-//  final Vector3 vec;
-//  VectorMesh(this.vec, {bool doInitMaterial: true}) {
-//    List<Vector3> points = new List();
-//
-//    points..add(new Vector3.all(0.0))..add(vec);
-//
-//    primitive = new MeshPrimitive.Line(points)
-//      ..mode = DrawMode.LINES
-//    ..material = doInitMaterial ? new MaterialBase() : null;
-//  }
-//}
+

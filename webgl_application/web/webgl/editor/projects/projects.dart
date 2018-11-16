@@ -28,15 +28,13 @@ Future<List<GLTFProject>> loadBaseProjects() async => [
 //  await projectSceneViewBase(),
 //  await projectPrimitives(),
 //  await projectPrimitivesTextured(),
-  await projectSceneViewVector(),
+//  await projectSceneViewVector(),
 //  await projectSceneViewGltf(),// Todo (jpu) : bug
+//  await projectCubeMap(),
+  projectSceneViewPerformance(),
 ];
 
-/*
-[
-//  projectSceneViewPerformance(),
-//  projectSceneViewVector(),
-// await projectCubeMap(),
+var exp = [
 // new SceneViewPBR(),
 // new SceneViewTestMatrices(),
 // new SceneViewWebGLEdit(),
@@ -46,5 +44,4 @@ Future<List<GLTFProject>> loadBaseProjects() async => [
 // new SceneViewShaderLearning01(),
 // new SceneViewExperiment(),
 // await Scene.fromJsonFilePath('./objects/scene_texturing.json'),
-]
-*/
+];
