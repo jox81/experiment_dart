@@ -239,17 +239,17 @@ class GLTFMesh extends GLTFChildOfRootProperty {
 
       /// The primitive may have Indices Accessor infos
       GLTFAccessor uvAccessor = new GLTFAccessor(
-          byteOffset: dataAccessorOffset,
-          byteLength: meshPrimitiveInfos.vertexUVs.lengthInBytes,
-          byteStride: ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC3],
-          count: count,
-          type : 35664,
-          elementLength: vec2ComponentsCount * ACCESSOR_COMPONENT_LENGTHS[FLOAT],
-          typeString: VEC2,
-          components: vec2ComponentsCount,
-          componentType: VertexAttribArrayType.FLOAT,
-          componentLength: ACCESSOR_COMPONENT_LENGTHS[FLOAT],
-          normalized: false,
+        byteOffset: dataAccessorOffset,
+        byteLength: meshPrimitiveInfos.vertexUVs.lengthInBytes,
+        byteStride: ACCESSOR_ELEMENT_LENGTH_IN_BYTE[VEC3],
+        count: count,
+        type : 35664,
+        elementLength: vec2ComponentsCount * ACCESSOR_COMPONENT_LENGTHS[FLOAT],
+        typeString: VEC2,
+        components: vec2ComponentsCount,
+        componentType: VertexAttribArrayType.FLOAT,
+        componentLength: ACCESSOR_COMPONENT_LENGTHS[FLOAT],
+        normalized: false,
       );
       uvAccessor.bufferView = primitive.positionAccessor.bufferView; //Re-use position bufferview
 
@@ -395,6 +395,18 @@ class GLTFMesh extends GLTFChildOfRootProperty {
     return createMeshWithPrimitive(meshPrimitive, meshPrimitiveInfos ??= new MeshPrimitiveInfos());
   }
 
+  factory GLTFMesh.grid({MeshPrimitiveInfos meshPrimitiveInfos}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Grid();
+    return createMeshWithPrimitive(meshPrimitive, meshPrimitiveInfos ??= new MeshPrimitiveInfos(useIndices: false, useUVs: false, useNormals: false))
+      ..primitives[0].drawMode = meshPrimitive.mode;
+  }
+
+  factory GLTFMesh.vector(Vector3 vector, {MeshPrimitiveInfos meshPrimitiveInfos}) {
+    MeshPrimitive meshPrimitive = new MeshPrimitive.Vector(vector);
+    return createMeshWithPrimitive(meshPrimitive, meshPrimitiveInfos ??= new MeshPrimitiveInfos(useIndices: false, useUVs: false, useNormals: false))
+      ..primitives[0].drawMode = meshPrimitive.mode;
+  }
+
   factory GLTFMesh.byMeshType(MeshType meshType, {MeshPrimitiveInfos meshPrimitiveInfos}) {
     GLTFMesh mesh;
 
@@ -427,7 +439,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
         mesh = new GLTFMesh.axis();
         break;
       case MeshType.grid:
-        throw 'GLTFMesh.byMeshType no Torus yet';
+        mesh = new GLTFMesh.grid();
         break;
       case MeshType.custom:
         throw 'GLTFMesh.byMeshType no custom yet';
@@ -439,7 +451,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
         throw 'GLTFMesh.byMeshType no multiLine yet';
         break;
       case MeshType.vector:
-        throw 'GLTFMesh.byMeshType no vector yet';
+        mesh = new GLTFMesh.vector(new Vector3(10.0, 0.0, 0.0));
         break;
       case MeshType.skyBox:
         throw 'GLTFMesh.byMeshType no skyBox yet';

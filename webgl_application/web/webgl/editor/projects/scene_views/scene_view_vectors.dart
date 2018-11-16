@@ -29,146 +29,203 @@ Future<GLTFProject> projectSceneViewVector() async {
   MaterialLibrary materialLibrary = new MaterialLibrary();
   await materialLibrary.loadRessources();
 
-  MaterialBaseColor matVectorA;
-  MaterialBaseColor matVectorB;
-  MaterialBaseColor matVectorResult;
-
-  matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));
-  matVectorB = new MaterialBaseColor(new Vector4(0.0,0.0,1.0,1.0));
-  matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
+  MaterialBaseColor matVectorA = new MaterialBaseColor(new Vector4(1.0,1.0,0.0,1.0));
+  MaterialBaseColor matVectorB = new MaterialBaseColor(new Vector4(0.0,1.0,1.0,1.0));
+  MaterialBaseColor matVectorResult = new MaterialBaseColor(new Vector4(1.0,0.0,0.0,1.0));
 
   GLTFMesh meshAxis = new GLTFMesh.axis()
     ..primitives[0].material = materialLibrary.materialBaseVertexColor;
   project.meshes.add(meshAxis);
-  GLTFNode nodeLine = new GLTFNode()
+  GLTFNode nodeAxis = new GLTFNode()
     ..mesh = meshAxis
     ..name = 'axis'
     ..translation = new Vector3(0.0, 0.0, 0.0);
-  scene.addNode(nodeLine);
-  project.addNode(nodeLine);
+  scene.addNode(nodeAxis);
+  project.addNode(nodeAxis);
 
-//
-//  GridMesh grid;
-//    grid = new GridMesh();
-//    meshes.add(grid);
+  GLTFMesh meshGrid = new GLTFMesh.grid()
+    ..primitives[0].material = materialLibrary.materialBaseVertexColor;
+  project.meshes.add(meshGrid);
+  GLTFNode nodeGrid = new GLTFNode()
+    ..mesh = meshGrid
+    ..name = 'grid'
+    ..translation = new Vector3(0.0, 0.0, 0.0);
+  scene.addNode(nodeGrid);
+  project.addNode(nodeGrid);
 
-  return project;
-}
+  /// basic add vector result
+  void test01() {
+    Vector3 vectorA = new Vector3(3.0,0.0,-3.0);
+    Vector3 vectorB = new Vector3(-2.0,0.0,-2.0);
+    Vector3 vectorResult = vectorA + vectorB;
 
-////    test01();
-////    test02();
-//    test03();
-////    testViewProjectionMatrix();
-////    testViewProjectionMatrix2();
-////    testDisplayNormals();
-//  }
-//
-//  /// basic add vector result
-//  void test01() {
-//    VectorMesh vectorMeshA = new VectorMesh(new Vector3(3.0,0.0,-3.0))
-//    ..material = matVectorA;
-//    meshes.add(vectorMeshA);
-//
-//    VectorMesh vectorMeshB = new VectorMesh(new Vector3(-2.0,0.0,-2.0))
-//      ..material = matVectorB;
-//    meshes.add(vectorMeshB);
-//
-//    VectorMesh vectorMeshR = new VectorMesh(vectorMeshA.vec + vectorMeshB.vec)
-//      ..material = matVectorResult;
-//    meshes.add(vectorMeshR);
-//  }
-//
-//  /// matrix transform
-//  void test02() {
-//
-//    Matrix4 matrixTest = new Matrix4.identity()..rotateZ(radians(45.0));
-//
-//    VectorMesh vectorMeshA = new VectorMesh(new Vector3(3.0,0.0,0.0))
-//      ..material = matVectorA;
-//    meshes.add(vectorMeshA);
-//
-//    VectorMesh vectorMeshR = new VectorMesh((matrixTest * vectorMeshA.vec) as Vector3)
-//      ..material = matVectorResult;
-//    meshes.add(vectorMeshR);
-//  }
-//
-//  /// camera
-//  void test03() {
-//
-//    Matrix4 uModelViewMatrix = Context.mainCamera.viewMatrix.multiplied(Context.modelMatrix);
-//    Matrix4 uProjectionMatrix = Context.mainCamera.projectionMatrix;
-//
-//    VectorMesh vectorMeshA = new VectorMesh(new Vector3(3.0,0.0,0.0))
-//      ..material = matVectorA;
-//    meshes.add(vectorMeshA);
-//
-//    VectorMesh vectorMeshR = new VectorMesh((uProjectionMatrix * uModelViewMatrix * vectorMeshA.vec) as Vector3)
-//      ..material = matVectorResult;
-//    meshes.add(vectorMeshR);
-//  }
-//
-//  //Projection view Matrix test
-//  void testViewProjectionMatrix() {
-//
-//    Vector3 cameraPosition = new Vector3(0.0,2.0,2.0);
-//    Vector3 cameraTargetPosition = new Vector3(0.0,0.0,1.0);
-//
-//    cameraTest
-//      ..yfov = radians(150.0)
-//      ..targetPosition = cameraTargetPosition
-//      ..translation = cameraPosition;
-//
-//    AxisMesh axisTest = new AxisMesh()
-//    ..translation = new Vector3(0.0,0.0,0.0)
-//    ..matrix.rotateY(radians(0.0));
-//    meshes.add(axisTest);
-//
-//    GridMesh gridTest = new GridMesh();
-//    meshes.add(gridTest);
-//
+    GLTFMesh meshVectorA = new GLTFMesh.vector(vectorA)
+      ..primitives[0].material = matVectorA;
+    project.meshes.add(meshVectorA);
+    GLTFNode nodeVectorA = new GLTFNode()
+      ..mesh = meshVectorA
+      ..name = 'vector';
+    scene.addNode(nodeVectorA);
+    project.addNode(nodeVectorA);
+
+    GLTFMesh meshVectorB = new GLTFMesh.vector(vectorB)
+      ..primitives[0].material = matVectorB;
+    project.meshes.add(meshVectorB);
+    GLTFNode nodeVectorB = new GLTFNode()
+      ..mesh = meshVectorB
+      ..name = 'vector';
+    scene.addNode(nodeVectorB);
+    project.addNode(nodeVectorB);
+
+    GLTFMesh meshVectorR = new GLTFMesh.vector(vectorResult)
+      ..primitives[0].material = matVectorResult;
+    project.meshes.add(meshVectorR);
+    GLTFNode nodeVectorR = new GLTFNode()
+      ..mesh = meshVectorR
+      ..name = 'vector';
+    scene.addNode(nodeVectorR);
+    project.addNode(nodeVectorR);
+  }
+
+  /// matrix transform
+  void test02() {
+
+    Matrix4 matrixTest = new Matrix4.identity()..rotateZ(radians(45.0));
+    Vector3 vectorA = new Vector3(3.0,0.0,0.0);
+    Vector3 vectorResult = matrixTest * vectorA;
+
+    GLTFMesh meshVectorA = new GLTFMesh.vector(vectorA)
+      ..primitives[0].material = matVectorA;
+    project.meshes.add(meshVectorA);
+    GLTFNode nodeVectorA = new GLTFNode()
+      ..mesh = meshVectorA
+      ..name = 'vector';
+    scene.addNode(nodeVectorA);
+    project.addNode(nodeVectorA);
+
+    GLTFMesh meshVectorR = new GLTFMesh.vector(vectorResult)
+      ..primitives[0].material = matVectorResult;
+    project.meshes.add(meshVectorR);
+    GLTFNode nodeVectorR = new GLTFNode()
+      ..mesh = meshVectorR
+      ..name = 'vector';
+    scene.addNode(nodeVectorR);
+    project.addNode(nodeVectorR);
+  }
+
+  /// camera
+  void test03() {
+    Matrix4 uModelViewMatrix = Context.mainCamera.viewMatrix.multiplied(Context.modelMatrix);
+    Matrix4 uProjectionMatrix = Context.mainCamera.projectionMatrix;
+    Vector3 vectorA = new Vector3(3.0,0.0,0.0);
+    Vector3 vectorResult = uProjectionMatrix * uModelViewMatrix * vectorA;
+
+    GLTFMesh meshVectorA = new GLTFMesh.vector(vectorA)
+      ..primitives[0].material = matVectorA;
+    project.meshes.add(meshVectorA);
+    GLTFNode nodeVectorA = new GLTFNode()
+      ..mesh = meshVectorA
+      ..name = 'vector';
+    scene.addNode(nodeVectorA);
+    project.addNode(nodeVectorA);
+
+    GLTFMesh meshVectorR = new GLTFMesh.vector(vectorResult)
+      ..primitives[0].material = matVectorResult;
+    project.meshes.add(meshVectorR);
+    GLTFNode nodeVectorR = new GLTFNode()
+      ..mesh = meshVectorR
+      ..name = 'vector';
+    scene.addNode(nodeVectorR);
+    project.addNode(nodeVectorR);
+
+  }
+
+  //Projection view Matrix test
+  void testViewProjectionMatrix() {
+
+    Vector3 cameraPosition = new Vector3(0.0,2.0,2.0);
+    Vector3 cameraTargetPosition = new Vector3(0.0,0.0,1.0);
+
+    Context.mainCamera
+      ..yfov = radians(150.0)
+      ..targetPosition = cameraTargetPosition
+      ..translation = cameraPosition;
+
+    GLTFMesh meshAxisTest = new GLTFMesh.axis()
+      ..primitives[0].material = materialLibrary.materialBaseVertexColor;
+    project.meshes.add(meshAxisTest);
+    GLTFNode nodeAxisTest = new GLTFNode()
+      ..mesh = meshAxisTest
+      ..name = 'axisTest'
+      ..translation = new Vector3(0.0, 0.0, 0.0)
+      ..matrix.rotateY(radians(0.0));
+    scene.addNode(nodeAxisTest);
+    project.addNode(nodeAxisTest);
+
+    GLTFMesh meshGridTest = new GLTFMesh.grid()
+      ..primitives[0].material = materialLibrary.materialBaseVertexColor;
+    project.meshes.add(meshGridTest);
+    GLTFNode nodeGridTest = new GLTFNode()
+      ..mesh = meshGridTest
+      ..name = 'grid'
+      ..translation = new Vector3(0.0, 0.0, 0.0);
+    scene.addNode(nodeGridTest);
+    project.addNode(nodeGridTest);
+
 //    PointMesh pointTest = new PointMesh()
 //    ..translation = new Vector3(1.0,0.0,1.0);
 //    meshes.add(pointTest);
+
+//    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
 //
-////    Vector3 vertexPosition = new Vector3(1.0, 0.0, 1.0);
-////
-////    Matrix4 modelMatrix = axis.transform;
-////
-////    Matrix4 viewMatrix = cameraTest.lookAtMatrix;
-////    Matrix4 projectionMatrix = cameraTest.perspectiveMatrix;
+//    Matrix4 modelMatrix = axis.transform;
 //
-////    Matrix4 finalMatrix = projectionMatrix * viewMatrix * new Matrix4.identity();
-////    pointTest.transform = finalMatrix * axisTest.transform * pointTest.transform;
-////    gridTest.transform = finalMatrix * gridTest.transform;
-////    axisTest.transform = finalMatrix * axisTest.transform;
-//
-//    Matrix4 finalMatrix = new Matrix4.inverted(cameraTest.viewMatrix).multiplied(new Matrix4.identity());
-//    gridTest.matrix = (finalMatrix * gridTest.matrix) as Matrix4;
-//    axisTest.matrix = (finalMatrix * axisTest.matrix) as Matrix4;
-//
-//  }
-//
-//  //Projection view Matrix test
-//  void testViewProjectionMatrix2() {
-//    Vector3 cameraPosition = new Vector3(0.0,1.0,3.0);
-//    Vector3 cameraTargetPosition = new Vector3(0.0,0.0,0.0);
-//
-//    cameraTest
-//      ..yfov = radians(45.0)
-//      ..targetPosition = cameraTargetPosition
-//      ..translation = cameraPosition;
-//
-//    AxisMesh axisTest = new AxisMesh()
-//      ..translation = new Vector3(0.0,0.0,0.0)
-//      ..matrix.rotateY(radians(0.0));
-//    meshes.add(axisTest);
-//
-//    // à tester :
-//
-//    axisTest.matrix = cameraTest.matrix;
-//
-//  }
-//
+//    Matrix4 viewMatrix = cameraTest.lookAtMatrix;
+//    Matrix4 projectionMatrix = cameraTest.perspectiveMatrix;
+
+//    Matrix4 finalMatrix = projectionMatrix * viewMatrix * new Matrix4.identity();
+//    pointTest.transform = finalMatrix * axisTest.transform * pointTest.transform;
+//    gridTest.transform = finalMatrix * gridTest.transform;
+//    axisTest.transform = finalMatrix * axisTest.transform;
+
+    Matrix4 finalMatrix = new Matrix4.inverted(Context.mainCamera.viewMatrix).multiplied(new Matrix4.identity());
+    nodeGridTest.matrix = (finalMatrix * nodeGridTest.matrix) as Matrix4;
+    nodeAxisTest.matrix = (finalMatrix * nodeAxisTest.matrix) as Matrix4;
+
+  }
+
+  //Projection view Matrix test
+  void testViewProjectionMatrix2() {
+    Vector3 cameraPosition = new Vector3(0.0,1.0,3.0);
+    Vector3 cameraTargetPosition = new Vector3(0.0,0.0,0.0);
+
+    CameraPerspective cameraTest = new
+    CameraPerspective(radians(37.0), 0.1, 1000.0)
+      ..targetPosition = new Vector3.zero()
+      ..translation = new Vector3(10.0, 10.0, 10.0);
+    cameraTest
+      ..yfov = radians(45.0)
+      ..targetPosition = cameraTargetPosition
+      ..translation = cameraPosition;
+
+    GLTFMesh meshAxisTest = new GLTFMesh.axis()
+      ..primitives[0].material = materialLibrary.materialBaseVertexColor;
+    project.meshes.add(meshAxisTest);
+    GLTFNode nodeAxisTest = new GLTFNode()
+      ..mesh = meshAxisTest
+      ..name = 'axisTest'
+      ..translation = new Vector3(0.0, 0.0, 0.0)
+      ..matrix.rotateY(radians(0.0));
+    scene.addNode(nodeAxisTest);
+    project.addNode(nodeAxisTest);
+
+    // à tester :
+
+    nodeAxisTest.matrix = cameraTest.matrix;
+
+  }
+
+  // Todo (jpu) :
 //  //Nomral tests
 //  void testDisplayNormals() {
 //
@@ -207,5 +264,13 @@ Future<GLTFProject> projectSceneViewVector() async {
 //      ..material = matVectorA;
 //    meshes.add(normals);
 //  }
-//
-//}
+
+  test01();
+//  test02();
+//  test03();
+//  testViewProjectionMatrix();
+//  testViewProjectionMatrix2();
+//  testDisplayNormals();// Todo (jpu) :
+
+  return project;
+}
