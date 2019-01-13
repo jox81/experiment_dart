@@ -1,23 +1,13 @@
 import 'dart:math' as Math;
-//@MirrorsUsed(
-//    targets: const [
-//      Camera,
-//    ],
-//    override: '*')
-//import 'dart:mirrors';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/camera/camera_type.dart';
 import 'package:webgl/src/controllers/camera_controllers.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
-
-enum CameraType{
-  perspective,
-  orthographic
-}
 
 // Todo (jpu) : add Gizmo
 @reflector

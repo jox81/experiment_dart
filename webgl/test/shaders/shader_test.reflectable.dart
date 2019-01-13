@@ -3,14 +3,15 @@
 
 import "dart:core";
 import 'dart:html' as prefix37;
-import 'dart:math' as prefix43;
+import 'dart:math' as prefix44;
 import 'dart:typed_data' as prefix31;
 import 'dart:web_gl' as prefix30;
 import 'package:reflectable/mirrors.dart' as prefix36;
 import 'package:vector_math/vector_math.dart' as prefix29;
-import 'package:webgl/src/animation/animation_property.dart' as prefix46;
+import 'package:webgl/src/animation/animation_property.dart' as prefix47;
 import 'package:webgl/src/camera/camera.dart' as prefix2;
-import 'package:webgl/src/controllers/camera_controllers.dart' as prefix39;
+import 'package:webgl/src/camera/camera_type.dart' as prefix39;
+import 'package:webgl/src/controllers/camera_controllers.dart' as prefix40;
 import 'package:webgl/src/gltf/accessor.dart' as prefix10;
 import 'package:webgl/src/gltf/accessor_sparse.dart' as prefix22;
 import 'package:webgl/src/gltf/accessor_sparse_indices.dart' as prefix28;
@@ -39,16 +40,16 @@ import 'package:webgl/src/interface/IComponent.dart' as prefix35;
 import 'package:webgl/src/introspection.dart' as prefix0;
 import 'package:webgl/src/light/light.dart' as prefix33;
 import 'package:webgl/src/material/shader_source.dart' as prefix38;
-import 'package:webgl/src/webgl_objects/context_attributs.dart' as prefix40;
+import 'package:webgl/src/webgl_objects/context_attributs.dart' as prefix41;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_indexed.dart'
     as prefix6;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
     as prefix5;
-import 'package:webgl/src/webgl_objects/webgl_active_texture.dart' as prefix41;
-import 'package:webgl/src/webgl_objects/webgl_buffer.dart' as prefix44;
-import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart' as prefix42;
+import 'package:webgl/src/webgl_objects/webgl_active_texture.dart' as prefix42;
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart' as prefix45;
+import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart' as prefix43;
 import 'package:webgl/src/webgl_objects/webgl_program.dart' as prefix32;
-import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart' as prefix45;
+import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart' as prefix46;
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart'
     as prefix3;
 import 'package:webgl/src/webgl_objects/webgl_texture.dart' as prefix34;
@@ -29497,8 +29498,8 @@ final _data = <r.Reflectable, r.ReflectorData>{
         Map,
         prefix32.WebGLProgram,
         prefix38.ShaderSource,
-        prefix2.CameraType,
-        prefix39.CameraController,
+        prefix39.CameraType,
+        prefix40.CameraController,
         prefix29.Quaternion,
         const m.TypeValue<List<prefix7.GLTFNode>>().type,
         List,
@@ -29507,17 +29508,17 @@ final _data = <r.Reflectable, r.ReflectorData>{
         const m.TypeValue<List<String>>().type,
         List,
         prefix37.CanvasElement,
-        prefix40.ContextAttributs,
-        prefix41.ActiveTexture,
-        prefix42.ActiveFrameBuffer,
+        prefix41.ContextAttributs,
+        prefix42.ActiveTexture,
+        prefix43.ActiveFrameBuffer,
         prefix31.Int32List,
-        const m.TypeValue<prefix43.Rectangle<int>>().type,
-        prefix43.Rectangle,
+        const m.TypeValue<prefix44.Rectangle<int>>().type,
+        prefix44.Rectangle,
         const m.TypeValue<List<bool>>().type,
         List,
         prefix31.Uint32List,
-        prefix44.WebGLBuffer,
-        prefix45.WebGLRenderBuffer,
+        prefix45.WebGLBuffer,
+        prefix46.WebGLRenderBuffer,
         prefix29.Triangle,
         const m.TypeValue<List<prefix29.Triangle>>().type,
         List,
@@ -29525,7 +29526,7 @@ final _data = <r.Reflectable, r.ReflectorData>{
         prefix36.ParameterMirror,
         const m.TypeValue<List<prefix36.ParameterMirror>>().type,
         List,
-        const m.TypeValue<Map<String, prefix46.EditableProperty<dynamic>>>()
+        const m.TypeValue<Map<String, prefix47.EditableProperty<dynamic>>>()
             .type,
         Map,
         const m.TypeValue<List<prefix16.GLTFScene>>().type,

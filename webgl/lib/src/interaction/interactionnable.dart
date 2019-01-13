@@ -9,4 +9,7 @@ abstract class Interactionable{
   void onTouchStart(int screenX, int screenY);
   void onTouchMove(double deltaX, double deltaY, {num scaleChange});
   void onTouchEnd(int screenX, int screenY);
+
+  //KeyBoard
+  void onKeyPressed(List<bool> currentlyPressedKeys);
 }

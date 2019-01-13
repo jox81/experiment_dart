@@ -7,24 +7,33 @@ class CustomInteractionable extends Interactionable{
 
   CustomInteractionable(this._item);
 
-  @override
-  void onMouseDown(int screenX, int screenY) => _item().onMouseDown(screenX, screenY);
+  ///Mouse
 
   @override
-  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton) => _item().onMouseMove(deltaX, deltaY, isMiddleMouseButton);
+  void onMouseDown(int screenX, int screenY) => _item()?.onMouseDown(screenX, screenY);
 
   @override
-  void onMouseUp(int screenX, int screenY) => _item().onMouseUp(screenX, screenY);
+  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton) => _item()?.onMouseMove(deltaX, deltaY, isMiddleMouseButton);
 
   @override
-  void onMouseWheel(num deltaY) => _item().onMouseWheel(deltaY);
+  void onMouseUp(int screenX, int screenY) => _item()?.onMouseUp(screenX, screenY);
 
   @override
-  void onTouchEnd(int screenX, int screenY) => _item().onTouchEnd(screenX, screenY);
+  void onMouseWheel(num deltaY) => _item()?.onMouseWheel(deltaY);
+
+  ///Touch
 
   @override
-  void onTouchMove(double deltaX, double deltaY, {num scaleChange}) => _item().onTouchMove(deltaX, deltaY);
+  void onTouchEnd(int screenX, int screenY) => _item()?.onTouchEnd(screenX, screenY);
 
   @override
-  void onTouchStart(int screenX, int screenY) => _item().onTouchStart(screenX, screenY);
+  void onTouchMove(double deltaX, double deltaY, {num scaleChange}) => _item()?.onTouchMove(deltaX, deltaY);
+
+  @override
+  void onTouchStart(int screenX, int screenY) => _item()?.onTouchStart(screenX, screenY);
+
+  ///Keyboard
+
+  @override
+  void onKeyPressed(List<bool> currentlyPressedKeys) => _item()?.onKeyPressed(currentlyPressedKeys);
 }

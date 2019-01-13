@@ -30,17 +30,19 @@ dev_dependencies:
 # https://webdev.dartlang.org/dart-2
 
 # 1 - launch reflectable builder if needed. Before launching in, be sure to delete previous generated reflectable files.
-# >> dart tool/builder.dart web/*.dart
+# >> dart tool/builder.dart web/**/*.dart
 # va générer main.reflectable.dart
 #
 # 2 - serve
-# >> webdev serve
+# >> webdev serve --delete-conflicting-outputs
 # va générer main.reflectable.dart
 # va render disponible http://localhost:8080
 #
 # 3 - build
 # build > webdev build
 # ||
-# pubspec.yaml > pub.bat global run webdev build --output=web:build
+# pubspec.yaml > pub.bat global run webdev build
 # va générer main.reflectable.dart
 # va générer le dossier build
+
+## !! si blocage au lancement, ne pas hésiter à supprimer tous les fichier *.reflectable.dart du dossier webgl puis relancer

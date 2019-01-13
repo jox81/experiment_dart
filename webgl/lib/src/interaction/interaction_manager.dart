@@ -1,21 +1,19 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:vector_math/vector_math.dart';
-import 'dart:typed_data';
 import 'dart:math' as Math;
-
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/controllers/base_camera_controller.dart';
+import 'package:webgl/src/controllers/camera_controller_mode.dart';
 import 'package:webgl/src/interaction/interactionnable.dart';
+import 'package:webgl/src/interaction/touch_manager.dart';
 import 'package:webgl/src/time/time.dart';
 
-class Interaction {
+class InteractionManager {
 
   final CanvasElement canvas;
-
-  TouchesManager _touchesManager;
+  final TouchesManager _touchesManager = new TouchesManager();
 
   //Debug div
-  Element elementDebugInfoText;
   Element elementFPSText;
 
   //Interaction with keyboard
@@ -55,8 +53,7 @@ class Interaction {
   StreamController _onResizeController = new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onResize => _onResizeController.stream;
 
-  Interaction(this.canvas) {
-    _touchesManager = new TouchesManager();
+  InteractionManager(this.canvas) {
     _initEvents();
   }
 
@@ -65,7 +62,6 @@ class Interaction {
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
     // Todo (jpu) : externalise this
-    elementDebugInfoText = querySelector("#debugInfosText");
     elementFPSText = querySelector("#fps");
 
     if(elementFPSText != null) elementFPSText.style.display = 'block';
@@ -111,42 +107,25 @@ class Interaction {
   ///
 
   void _onKeyDown(KeyboardEvent event) {
-    if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
-      if ((elementDebugInfoText != null)) {
-        elementDebugInfoText.text =
-            "Camera Position: ${Context.mainCamera.translation}";
-      }
-    } else {}
-    _currentlyPressedKeys[event.keyCode] = true;
+    if ((event.keyCode > 0) && (event.keyCode < 128)) {
+      _currentlyPressedKeys[event.keyCode] = true;
+    }
   }
 
   void _onKeyUp(KeyboardEvent event) {
-    if ((event.keyCode > 0) && (event.keyCode < 128))
+    if ((event.keyCode > 0) && (event.keyCode < 128)) {
       _currentlyPressedKeys[event.keyCode] = false;
+
+      // Todo (jpu) : replace this
+      if(event.keyCode == KeyCode.NUM_ONE) (Context.mainCamera.cameraController as BaseCameraController).toggleInteraction(CameraControllerMode.orbit);
+      if(event.keyCode == KeyCode.NUM_TWO) (Context.mainCamera.cameraController as BaseCameraController).toggleInteraction(CameraControllerMode.rotate);
+      if(event.keyCode == KeyCode.NUM_THREE) (Context.mainCamera.cameraController as BaseCameraController).toggleInteraction(CameraControllerMode.pan);
+    }
   }
 
   void update() {
-    _handleKeys();
+    _interactionables.forEach((i)=> i.onKeyPressed(_currentlyPressedKeys));
     Time.showFps(elementFPSText);
-  }
-
-  void _handleKeys() {
-    if (_currentlyPressedKeys[KeyCode.UP]) {
-      // Key Up
-      Context.mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
-    }
-    if (_currentlyPressedKeys[KeyCode.DOWN]) {
-      // Key Down
-      Context.mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
-    }
-    if (_currentlyPressedKeys[KeyCode.LEFT]) {
-      // Key Up
-      Context.mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
-    }
-    if (_currentlyPressedKeys[KeyCode.RIGHT]) {
-      // Key Down
-      Context.mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
-    }
   }
 
   ///
@@ -291,86 +270,5 @@ class Interaction {
   void _onTouchEnter(TouchEvent event) {
     print('Interaction._onTouchEnter');
   }
-
-  ///
-  /// Debug
-  ///
-
-  void debugInfo(num posX, num posY, num posZ) {
-    var colorPicked = new Uint8List(4);
-    //Todo : readPixels doesn't work in dartium...
-//    gl.readPixels(posX.toInt(), posY.toInt(), 1, 1, RenderingContext.RGBA, RenderingContext.UNSIGNED_BYTE, colorPicked);
-    elementDebugInfoText?.text = '[$posX, $posY, $posZ] : $colorPicked';
-  }
 }
 
-/// 3 Touches sont pris sur chrome android
-class TouchesManager{
-  TouchEvent _lastTouchEvent;
-  Touch operator [](int index) => _lastTouchEvent?.targetTouches[index];
-
-  int get touchLength => _lastTouchEvent.targetTouches.length;
-
-  num _startDistance;
-  num get startDistance => _startDistance;
-
-  num get currentDistance => _lastTouchEvent?.targetTouches[0].client.distanceTo(_lastTouchEvent?.targetTouches[1].client);
-
-  num _scaleChange;
-  num get scaleChange => _scaleChange;
-
-  TouchesManager();
-
-  void update(TouchEvent event){
-    event.targetTouches;
-
-    if( event.targetTouches.length > 0){
-      Touch firstTouch = event.targetTouches[0];
-
-      if(event.targetTouches.length > 1) {
-        for (var i = 1; i < event.targetTouches.length; ++i) {
-          Touch otherTouch = event.targetTouches[i];
-          if(_startDistance == null){
-            _startDistance = otherTouch.client.distanceTo(firstTouch.client);
-          }
-          num currentDistance = otherTouch.client.distanceTo(firstTouch.client);
-          _scaleChange = currentDistance/_startDistance;
-        }
-      }else{
-        _startDistance = null;
-      }
-    }
-
-    _lastTouchEvent = event;
-  }
-
-  StringBuffer _stringBuffer = new StringBuffer();
-  String getDebugInfos(String name){
-    void _wrapBufferText(String infos) {
-      _stringBuffer.write('<p>');
-      _stringBuffer.write(infos);
-      _stringBuffer.write('</p>');
-    }
-
-    _stringBuffer.clear();
-
-    _wrapBufferText('$name : ${touchLength}');
-
-    if(touchLength > 0){
-      Touch firstTouch = this[0];
-
-      _wrapBufferText('touch 0 : (${firstTouch.client.x},${firstTouch.client.y})');
-
-      if(touchLength > 1) {
-        for (var i = 1; i < touchLength; ++i) {
-          Touch otherTouch = this[i];
-          _wrapBufferText('otherTouch $i : (${otherTouch.client.x},${otherTouch.client.y}) > ${this[i].client.distanceTo(this[0].client)}');
-          _wrapBufferText('startDistance : ${startDistance}');
-          _wrapBufferText('scaleChange : ${scaleChange}');
-        }
-      }
-    }
-
-    return _stringBuffer.toString();
-  }
-}

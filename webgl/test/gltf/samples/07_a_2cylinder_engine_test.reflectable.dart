@@ -4,7 +4,7 @@
 import "dart:core";
 import 'dart:async' as prefix41;
 import 'dart:html' as prefix31;
-import 'dart:math' as prefix47;
+import 'dart:math' as prefix48;
 import 'dart:typed_data' as prefix32;
 import 'dart:web_gl' as prefix36;
 import 'package:gltf/src/base/gltf.dart' as prefix40;
@@ -12,7 +12,8 @@ import 'package:reflectable/mirrors.dart' as prefix34;
 import 'package:vector_math/vector_math.dart' as prefix30;
 import 'package:webgl/src/animation/animation_property.dart' as prefix39;
 import 'package:webgl/src/camera/camera.dart' as prefix13;
-import 'package:webgl/src/controllers/camera_controllers.dart' as prefix42;
+import 'package:webgl/src/camera/camera_type.dart' as prefix42;
+import 'package:webgl/src/controllers/camera_controllers.dart' as prefix43;
 import 'package:webgl/src/gltf/accessor.dart' as prefix14;
 import 'package:webgl/src/gltf/accessor_sparse.dart' as prefix22;
 import 'package:webgl/src/gltf/accessor_sparse_indices.dart' as prefix21;
@@ -41,17 +42,17 @@ import 'package:webgl/src/gltf/utils_gltf.dart' as prefix6;
 import 'package:webgl/src/interface/IComponent.dart' as prefix35;
 import 'package:webgl/src/introspection.dart' as prefix0;
 import 'package:webgl/src/light/light.dart' as prefix33;
-import 'package:webgl/src/material/shader_source.dart' as prefix43;
-import 'package:webgl/src/webgl_objects/context_attributs.dart' as prefix44;
+import 'package:webgl/src/material/shader_source.dart' as prefix44;
+import 'package:webgl/src/webgl_objects/context_attributs.dart' as prefix45;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_indexed.dart'
     as prefix26;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
     as prefix29;
-import 'package:webgl/src/webgl_objects/webgl_active_texture.dart' as prefix45;
-import 'package:webgl/src/webgl_objects/webgl_buffer.dart' as prefix48;
-import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart' as prefix46;
+import 'package:webgl/src/webgl_objects/webgl_active_texture.dart' as prefix46;
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart' as prefix49;
+import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart' as prefix47;
 import 'package:webgl/src/webgl_objects/webgl_program.dart' as prefix37;
-import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart' as prefix49;
+import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart' as prefix50;
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart'
     as prefix28;
 import 'package:webgl/src/webgl_objects/webgl_texture.dart' as prefix38;
@@ -29486,25 +29487,25 @@ final _data = <r.Reflectable, r.ReflectorData>{
         prefix30.Quaternion,
         const m.TypeValue<List<prefix11.ChannelTargetPathType>>().type,
         List,
-        prefix13.CameraType,
-        prefix42.CameraController,
+        prefix42.CameraType,
+        prefix43.CameraController,
         prefix37.WebGLProgram,
         prefix32.Uint16List,
         const m.TypeValue<Map<String, bool>>().type,
         Map,
-        prefix43.ShaderSource,
+        prefix44.ShaderSource,
         prefix31.CanvasElement,
-        prefix44.ContextAttributs,
-        prefix45.ActiveTexture,
-        prefix46.ActiveFrameBuffer,
+        prefix45.ContextAttributs,
+        prefix46.ActiveTexture,
+        prefix47.ActiveFrameBuffer,
         prefix32.Int32List,
-        const m.TypeValue<prefix47.Rectangle<int>>().type,
-        prefix47.Rectangle,
+        const m.TypeValue<prefix48.Rectangle<int>>().type,
+        prefix48.Rectangle,
         const m.TypeValue<List<bool>>().type,
         List,
         prefix32.Uint32List,
-        prefix48.WebGLBuffer,
-        prefix49.WebGLRenderBuffer,
+        prefix49.WebGLBuffer,
+        prefix50.WebGLRenderBuffer,
         const m.TypeValue<List<prefix29.WebGLEnum>>().type,
         Invocation,
         prefix7.MeshType,

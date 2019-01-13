@@ -1,3 +1,4 @@
+import 'package:webgl/src/camera/camera_type.dart';
 import 'package:webgl/src/gltf/accessor_sparse.dart';
 import 'package:webgl/src/gltf/accessor_sparse_indices.dart';
 import 'package:webgl/src/gltf/accessor_sparse_values.dart';
