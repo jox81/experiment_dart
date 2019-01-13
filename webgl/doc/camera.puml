@@ -1,10 +1,73 @@
 @startuml
 
-enum CameraControllerMode{
-  pan,
-  orbit,
-  rotate
+'----------------------------------------------------------------------------
+
+abstract class Engine  #009dff {
+  Renderer get renderer;
+  Interaction get interaction;
+
+  void render({num time: 0.0})
 }
+
+abstract class Renderer{
+  void render();
+}
+
+Engine *-- Renderer
+Engine *-- Interaction
+
+
+
+
+
+
+'----------------------------------------------------------------------------
+
+class GLTFEngine extends Engine{
+    @override
+    final CanvasElement canvas;
+
+    @override
+    final GLTFRenderer renderer;
+}
+
+GLTFEngine *-- GLTFRenderer
+GLTFEngine *-- CanvasElement
+
+class GLTFRenderer extends Renderer
+
+
+
+
+
+
+'----------------------------------------------------------------------------
+
+abstract class Interactionable #009dff{
+  void onMouseDown(int screenX, int screenY);
+  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton);
+  void onMouseUp(int screenX, int screenY);
+  void onMouseWheel(num deltaY);
+
+  void onTouchStart(int screenX, int screenY);
+  void onTouchMove(double deltaX, double deltaY, {num scaleChange});
+  void onTouchEnd(int screenX, int screenY);
+}
+
+class Interaction {
+    CanvasElement canvas
+    TouchesManager touchesManager;
+    List<Interactionable> interactionable
+}
+Interaction *-- TouchesManager
+Interaction *-- CanvasElement
+Interaction "* - 0" *--  Interactionable
+
+class TouchesManager
+
+
+
+'----------------------------------------------------------------------------
 
 abstract class Camera #009dff{
     CameraController cameraController
@@ -33,44 +96,25 @@ class BaseCameraController extends CameraController{
 BaseCameraController *-- CameraControllerMode
 
 class BaseCameraControllerInteraction implements CameraControllerInteraction{
-
   final BaseCameraController cameraController;
 }
+BaseCameraControllerInteraction *-- BaseCameraController
 
-abstract class Interactionable #009dff{
-  void onMouseDown(int screenX, int screenY);
-  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton);
-  void onMouseUp(int screenX, int screenY);
-  void onMouseWheel(num deltaY);
-
-  void onTouchStart(int screenX, int screenY);
-  void onTouchMove(double deltaX, double deltaY, {num scaleChange});
-  void onTouchEnd(int screenX, int screenY);
+enum CameraControllerMode{
+  pan,
+  orbit,
+  rotate
 }
 
-abstract class Interactable #009dff{
-  Interaction get interaction;
-  Camera get mainCamera;
-  CanvasElement get canvas;
+'----------------------------------------------------------------------------
 
-  /// called this in CTOR
-  void initInteraction();
-}
-Interactable *-- Interaction
-Interactable *-- Camera
-Interactable *-- CanvasElement
 
-class GLTFRenderer implements Interactable
 
-class Interaction {
-    final Interactable _interactable
-    Camera get mainCamera
-    Interactionable get cameraControllerInteraction
-    TouchesManager touchesManager;
-}
-Interaction *-- Camera
-Interaction *-- Interactionable
-Interaction *-- TouchesManager
 
-class TouchesManager
+
+
+
+
+
+
 @enduml

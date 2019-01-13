@@ -4,22 +4,13 @@ import 'package:vector_math/vector_math.dart';
 import 'dart:typed_data';
 import 'dart:math' as Math;
 
-import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/interaction/interactionnable.dart';
 import 'package:webgl/src/time/time.dart';
 
-abstract class Interactable{
-  Interaction get interaction;
-  Camera get mainCamera;
-  CanvasElement get canvas;
-
-  /// called this in CTOR
-  void initInteraction();
-}
-
 class Interaction {
 
-  final Interactable _interactable;
+  final CanvasElement canvas;
 
   TouchesManager _touchesManager;
 
@@ -41,9 +32,7 @@ class Interaction {
 
   num scaleFactor = 3.0;
 
-  // Todo (jpu) : should remove this first one
-  Camera get mainCamera => _interactable.mainCamera;
-  Interactionable get cameraControllerInteraction => _interactable.mainCamera?.cameraController?.cameraControllerInteraction;
+  List<Interactionable> _interactionables = new List<Interactionable>();
 
   ///Mouse
   StreamController<MouseEvent> _onMouseDownController = new StreamController<MouseEvent>.broadcast();
@@ -66,7 +55,7 @@ class Interaction {
   StreamController _onResizeController = new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onResize => _onResizeController.stream;
 
-  Interaction(this._interactable) {
+  Interaction(this.canvas) {
     _touchesManager = new TouchesManager();
     _initEvents();
   }
@@ -81,22 +70,32 @@ class Interaction {
 
     if(elementFPSText != null) elementFPSText.style.display = 'block';
 
+    onResize.listen((dynamic event){
+      Context.resizeCanvas();
+    });
+
     window.onResize.listen(_onWindowResize);
 
     window.onKeyUp.listen(_onKeyUp);
     window.onKeyDown.listen(_onKeyDown);
 
-    _interactable.canvas.onMouseDown.listen(_onMouseDown);
-    _interactable.canvas.onMouseMove.listen(_onMouseMove);
-    _interactable.canvas.onMouseUp.listen(_onMouseUp);
-    _interactable.canvas.onMouseWheel.listen(_onMouseWheel);
+    canvas.onMouseDown.listen(_onMouseDown);
+    canvas.onMouseMove.listen(_onMouseMove);
+    canvas.onMouseUp.listen(_onMouseUp);
+    canvas.onMouseWheel.listen(_onMouseWheel);
 
-    _interactable.canvas.onTouchStart.listen(_onTouchStart);
-    _interactable.canvas.onTouchMove.listen(_onTouchMove);
-    _interactable.canvas.onTouchEnd.listen(_onTouchEnd);
-    _interactable.canvas.onTouchLeave.listen(_onTouchLeave);
-    _interactable.canvas.onTouchCancel.listen(_onTouchCancel);
-    _interactable.canvas.onTouchEnter.listen(_onTouchEnter);
+    canvas.onTouchStart.listen(_onTouchStart);
+    canvas.onTouchMove.listen(_onTouchMove);
+    canvas.onTouchEnd.listen(_onTouchEnd);
+    canvas.onTouchLeave.listen(_onTouchLeave);
+    canvas.onTouchCancel.listen(_onTouchCancel);
+    canvas.onTouchEnter.listen(_onTouchEnter);
+  }
+
+  void addInteractable(Interactionable interactionable){
+    if(interactionable != null) {
+      _interactionables.add(interactionable);
+    }
   }
 
   ///
@@ -115,7 +114,7 @@ class Interaction {
     if (KeyCode.UP == event.keyCode || KeyCode.DOWN == event.keyCode) {
       if ((elementDebugInfoText != null)) {
         elementDebugInfoText.text =
-            "Camera Position: ${mainCamera.translation}";
+            "Camera Position: ${Context.mainCamera.translation}";
       }
     } else {}
     _currentlyPressedKeys[event.keyCode] = true;
@@ -134,19 +133,19 @@ class Interaction {
   void _handleKeys() {
     if (_currentlyPressedKeys[KeyCode.UP]) {
       // Key Up
-      mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
+      Context.mainCamera.translate(new Vector3(0.0, 0.0, 0.1));
     }
     if (_currentlyPressedKeys[KeyCode.DOWN]) {
       // Key Down
-      mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
+      Context.mainCamera.translate(new Vector3(0.0, 0.0, -0.1));
     }
     if (_currentlyPressedKeys[KeyCode.LEFT]) {
       // Key Up
-      mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
+      Context.mainCamera.translate(new Vector3(-0.1, 0.0, 0.0));
     }
     if (_currentlyPressedKeys[KeyCode.RIGHT]) {
       // Key Down
-      mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
+      Context.mainCamera.translate(new Vector3(0.1, 0.0, 0.0));
     }
   }
 
@@ -159,7 +158,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraControllerInteraction?.onMouseDown(screenX, screenY);
+    _interactionables.forEach((i)=> i.onMouseDown(screenX, screenY));
 
     dragging = false;
     mouseDown = true;
@@ -173,7 +172,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraControllerInteraction?.onMouseMove(deltaX, deltaY, isMiddleMouseButton);
+    _interactionables.forEach((i)=> i.onMouseMove(deltaX, deltaY, isMiddleMouseButton));
 
     if(mouseDown) {
       dragging = true;
@@ -188,7 +187,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraControllerInteraction?.onMouseUp(screenX, screenY);
+    _interactionables.forEach((i)=> i.onMouseUp(screenX, screenY));
 
     dragging = false;
     mouseDown = false;
@@ -200,7 +199,7 @@ class Interaction {
   void _onMouseWheel(WheelEvent event){
     num deltaY = -event.deltaY;
     deltaY = Math.max(-1, Math.min(1, deltaY))/ 50;
-    cameraControllerInteraction?.onMouseWheel(deltaY);
+    _interactionables.forEach((i)=> i.onMouseWheel(deltaY));
   }
     
   /// Determine how far we have moved since the last mouse move event.
@@ -229,13 +228,13 @@ class Interaction {
     _touchesManager.update(event);
 
     if(_touchesManager.touchLength > 1){
-      cameraControllerInteraction?.onTouchStart(null, null);
+      _interactionables.forEach((i)=> i.onTouchStart(null, null));
     }else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      cameraControllerInteraction?.onTouchStart(screenX, screenY);
+      _interactionables.forEach((i)=> i.onTouchStart(screenX, screenY));
     }
 
     dragging = false;
@@ -247,7 +246,7 @@ class Interaction {
     _touchesManager.update(event);
 
     if(event.targetTouches.length > 1){
-      cameraControllerInteraction?.onTouchMove(null, null, scaleChange : _touchesManager.scaleChange);
+      _interactionables.forEach((i)=> i.onTouchMove(null, null, scaleChange : _touchesManager.scaleChange));
 //      //position with center of 2 first touches
 //      int screenX = (_touchesManager[0].client.x.toInt() + _touchesManager[1].client.x.toInt())~/2;
 //      int screenY = (_touchesManager[0].client.y.toInt() + _touchesManager[1].client.y.toInt())~/2;
@@ -258,7 +257,7 @@ class Interaction {
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      cameraControllerInteraction?.onTouchMove(deltaX, deltaY);
+      _interactionables.forEach((i)=> i.onTouchMove(deltaX, deltaY));
     }
 
     if (mouseDown) {
@@ -273,7 +272,7 @@ class Interaction {
     int screenX = _touchesManager[0].client.x.toInt();
     int screenY = _touchesManager[0].client.y.toInt();
     updateMouseInfos(screenX, screenY);
-    cameraControllerInteraction?.onTouchEnd(screenX, screenY);
+    _interactionables.forEach((i)=> i.onTouchEnd(screenX, screenY));
 
     dragging = false;
     mouseDown = false;

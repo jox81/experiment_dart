@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/interaction/interaction.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
@@ -33,7 +32,7 @@ abstract class Renderer{
 }
 
 @reflector
-class GLTFRenderer extends Renderer implements Interactable {
+class GLTFRenderer extends Renderer {
 
   // Direction from where the light is coming to origin
   DirectionalLight light;
@@ -63,16 +62,10 @@ class GLTFRenderer extends Renderer implements Interactable {
       ..color =  new Vector3(1.0, 1.0, 1.0);
 
     Context.init(_canvas);
-    initInteraction();
     Context.resizeCanvas();
   }
 
-  @override
-  void initInteraction() {
-    interaction = new Interaction(this);
 
-    interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
-  }
 
   Future _initTextures() async {
     
@@ -225,30 +218,13 @@ class GLTFRenderer extends Renderer implements Interactable {
   }
 
   void render() {
-    _render();
-  }
-
-  void _render({num time: 0.0}) {
-    Time.currentTime = time;
-
     try {
-        update();
-        _renderCurrentScene();
+      Context.resizeCanvas();
+      gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
+      drawNodes(currentScene.nodes);
     } catch (ex) {
       print("Error From renderer _render method: $ex ${StackTrace.current}");
     }
-
-    window.requestAnimationFrame((num time) {
-      this._render(time: time);
-    });
-  }
-
-  void _renderCurrentScene() {
-    Context.resizeCanvas();
-
-    gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
-
-    drawNodes(currentScene.nodes);
   }
 
   void drawNodes(List<GLTFNode> nodes) {
@@ -512,9 +488,6 @@ class GLTFRenderer extends Renderer implements Interactable {
   // > updates
 
   void update() {
-
-    interaction.update();
-
     for (int i = 0; i < gltfProject.animations.length; i++) {
       GLTFAnimation animation = gltfProject.animations[i];
       for (int j = 0; j < animation.channels.length; j++) {
