@@ -2,8 +2,8 @@ import 'dart:html';
 
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
+import 'package:webgl/src/interaction/custom_interactionable.dart';
 import 'package:webgl/src/interaction/interaction.dart';
-import 'package:webgl/src/interaction/interactionnable.dart';
 import 'package:webgl/src/time/time.dart';
 
 abstract class Engine {
@@ -39,6 +39,6 @@ class GLTFEngine extends Engine{
   GLTFEngine(this.canvas):
         this.interaction = new Interaction(canvas),
         this.renderer = new GLTFRenderer(canvas){
-    interaction.addInteractable(new CustomInteractionnable(() => Context.mainCamera?.cameraController?.cameraControllerInteraction));
+    interaction.addInteractable(new CustomInteractionable(() => Context.mainCamera?.cameraController?.cameraControllerInteraction));
   }
 }

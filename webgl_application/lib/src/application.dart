@@ -7,16 +7,17 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/introspection.dart';
+import 'package:webgl/src/interaction/interaction.dart';
+import 'package:webgl/engine/engine.dart';
 import 'package:webgl/src/interface/IScene.dart';
 import 'package:webgl/src/context.dart' hide gl;
-import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 enum AxisType { view, x, y, z, any }
 enum ActiveToolType { select, move, rotate, scale }
 
-class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableScene{
+class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
   //Singleton
   static Application _instance;
   static Application get instance => _instance;
@@ -37,24 +38,24 @@ class Application implements Interactable, ToolBarAxis, ToolBarTool, IUpdatableS
   CustomEditElement get currentSelection => _currentSelection;
   set currentSelection(CustomEditElement value) => _currentSelection = value;
 
-  GLTFRenderer renderer;
+  GLTFEngine engine;
   GLTFProject project;
   CameraPerspective get mainCamera => Context.mainCamera;
 
   GLTFNode tempSelection;
 
   @override
-  Interaction get interaction => renderer.interaction;
+  Interaction get interaction => engine.interaction;
 
   Application._(CanvasElement canvas){
-    renderer = new GLTFRenderer(canvas);
+    engine = new GLTFEngine(canvas);
     initInteraction();
   }
 
   void render() {
-    renderer
-    ..gltfProject = project
-    ..render();
+    engine.renderer
+    ..gltfProject = project;
+    engine.renderer.render();
   }
 
   /// Active Axis

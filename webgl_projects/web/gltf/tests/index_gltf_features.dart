@@ -1,14 +1,14 @@
 import 'dart:html';
 
+import 'package:webgl/engine/engine.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'dart:async';
 
 import 'package:webgl/src/gltf/project.dart';
-import 'package:webgl/src/gltf/renderer/renderer.dart';
 
 Future main() async {
 
-  GLTFProject gltf = new GLTFProject.create();
+  GLTFProject gltfProject = new GLTFProject.create();
 
   GLTFNode node01 = new GLTFNode();
 
@@ -21,7 +21,8 @@ Future main() async {
   node01.children.add(node03);
 
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  GLTFRenderer renderer = new GLTFRenderer(canvas);
-  await renderer.init(gltf);
-  renderer.render();
+
+  GLTFEngine engine = new GLTFEngine(canvas);
+  await engine.renderer.init(gltfProject);
+  engine.render();
 }

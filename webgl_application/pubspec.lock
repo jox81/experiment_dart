@@ -445,12 +445,10 @@ packages:
   reflectable:
     dependency: "direct main"
     description:
-      path: "."
-      ref: HEAD
-      resolved-ref: c0891b0426436ee258a927671971e4bdbc1268e6
-      url: "https://github.com/dart-lang/reflectable.git"
-    source: git
-    version: "2.0.8"
+      name: reflectable
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.8+1"
   resource:
     dependency: "direct main"
     description:
@@ -641,4 +639,4 @@ packages:
     source: hosted
     version: "2.1.15"
 sdks:
-  dart: ">=2.1.0-dev.5.0 <=2.1.0-dev.9.1"
+  dart: ">=2.1.0-dev.5.0 <=2.1.0"

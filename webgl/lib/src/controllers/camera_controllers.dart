@@ -15,7 +15,7 @@ abstract class CameraController{
   void init(Camera camera);
 }
 
-class BaseCameraController extends CameraController{
+class BaseCameraController implements CameraController{
   final Vector3 upAxis = new Vector3(0.0, 1.0, 0.0);
 
   CameraControllerMode cameraControllerMode;

@@ -47,8 +47,6 @@ class GLTFRenderer extends Renderer {
 
   GLTFScene get currentScene => gltfProject.scenes.length > 0 ? gltfProject.scenes[0] : null;
 
-  CameraPerspective get mainCamera => Context.mainCamera;
-
   CanvasElement _canvas;
   CanvasElement get canvas => _canvas;
 
@@ -65,10 +63,7 @@ class GLTFRenderer extends Renderer {
     Context.resizeCanvas();
   }
 
-
-
   Future _initTextures() async {
-    
 
     ImageElement imageElement;
     ///TextureFilterType magFilter;
@@ -157,7 +152,6 @@ class GLTFRenderer extends Renderer {
   }
 
   webgl.Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
-    
 
     //create texture
     webgl.Texture texture = gl.createTexture();
@@ -252,9 +246,9 @@ class GLTFRenderer extends Renderer {
           _setupPrimitiveBuffers(program, primitive);
 
           primitive.material.setupBeforeRender();
-          primitive.material.pvMatrix = (mainCamera.projectionMatrix * mainCamera.viewMatrix) as Matrix4;
+          primitive.material.pvMatrix = (Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix) as Matrix4;
           primitive.material.setUniforms(
-              program, (node.parentMatrix * node.matrix) as Matrix4, mainCamera.viewMatrix, mainCamera.projectionMatrix, mainCamera.translation, light);
+              program, (node.parentMatrix * node.matrix) as Matrix4, Context.mainCamera.viewMatrix, Context.mainCamera.projectionMatrix, Context.mainCamera.translation, light);
 
           _drawPrimitive(primitive);
           primitive.material.setupAfterRender();

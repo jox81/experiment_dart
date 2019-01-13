@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'package:webgl/src/interaction.dart';
+import 'package:webgl/src/interaction/interaction.dart';
 
 TouchesManager touchesManager;
 DivElement divInfos;

@@ -3,14 +3,14 @@
 '----------------------------------------------------------------------------
 
 abstract class Engine  #009dff {
-  Renderer get renderer;
-  Interaction get interaction;
+  Renderer get renderer
+  Interaction get interaction
 
   void render({num time: 0.0})
 }
 
-abstract class Renderer{
-  void render();
+abstract class Renderer #009dff{
+  void render()
 }
 
 Engine *-- Renderer
@@ -18,17 +18,12 @@ Engine *-- Interaction
 
 
 
-
-
-
 '----------------------------------------------------------------------------
 
 class GLTFEngine extends Engine{
-    @override
-    final CanvasElement canvas;
-
-    @override
-    final GLTFRenderer renderer;
+  final GLTFRenderer renderer
+  final Interaction interaction
+  final CanvasElement canvas
 }
 
 GLTFEngine *-- GLTFRenderer
@@ -44,19 +39,19 @@ class GLTFRenderer extends Renderer
 '----------------------------------------------------------------------------
 
 abstract class Interactionable #009dff{
-  void onMouseDown(int screenX, int screenY);
-  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton);
-  void onMouseUp(int screenX, int screenY);
-  void onMouseWheel(num deltaY);
+  void onMouseDown(int screenX, int screenY)
+  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton)
+  void onMouseUp(int screenX, int screenY)
+  void onMouseWheel(num deltaY)
 
-  void onTouchStart(int screenX, int screenY);
-  void onTouchMove(double deltaX, double deltaY, {num scaleChange});
-  void onTouchEnd(int screenX, int screenY);
+  void onTouchStart(int screenX, int screenY)
+  void onTouchMove(double deltaX, double deltaY, {num scaleChange})
+  void onTouchEnd(int screenX, int screenY)
 }
 
 class Interaction {
     CanvasElement canvas
-    TouchesManager touchesManager;
+    TouchesManager touchesManager
     List<Interactionable> interactionable
 }
 Interaction *-- TouchesManager
@@ -78,25 +73,27 @@ class CameraPerspective extends Camera
 class CameraOrthographic extends Camera
 
 abstract class CameraController #009dff{
-  CameraControllerInteraction get cameraControllerInteraction;
-  Camera get camera;
-  void init(Camera camera);
+  CameraControllerInteraction get cameraControllerInteraction
+  Camera get camera
+  void init(Camera camera)
 }
 CameraController *-- CameraControllerInteraction
 CameraController *-- Camera
 
 abstract class CameraControllerInteraction #009dff implements Interactionable {
-  CameraController get cameraController;
+  CameraController get cameraController
 }
 
-class BaseCameraController extends CameraController{
+CameraControllerInteraction *-- CameraController
+
+class BaseCameraController implements CameraController{
     CameraControllerMode cameraControllerMode
 }
 
 BaseCameraController *-- CameraControllerMode
 
 class BaseCameraControllerInteraction implements CameraControllerInteraction{
-  final BaseCameraController cameraController;
+  final BaseCameraController cameraController
 }
 BaseCameraControllerInteraction *-- BaseCameraController
 
