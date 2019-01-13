@@ -42,7 +42,7 @@ class Context{
   static CameraController _cameraController;
   static CameraController get cameraController{
     if(_cameraController == null){
-      _cameraController = new CameraController();
+      _cameraController = new BaseCameraController();
     }
     return _cameraController;
   }

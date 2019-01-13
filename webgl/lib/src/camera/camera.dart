@@ -134,7 +134,7 @@ class CameraPerspective extends Camera{
     update();
   }
 
-  Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
+  final Vector3 upDirection = new Vector3(0.0, 1.0, 0.0);
   Vector3 get frontDirection => targetPosition - translation;
 
   Vector3 get zAxis => frontDirection.normalized();
@@ -152,7 +152,7 @@ class CameraPerspective extends Camera{
   //roll on x
   //Form up 0 to bottom 180°
   double get pitch {
-    Vector3 y = new Vector3(0.0, 1.0, 0.0);
+    Vector3 y = upDirection;
     Vector3 forward = frontDirection;
     forward.normalize();
     return degrees(Math.acos(forward.dot(y)));

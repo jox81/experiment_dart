@@ -5,7 +5,7 @@ author: jox81 <info@3d-jox.be>
 homepage: https://www.3d-jox.be
 
 environment:
-  sdk: '>=2.0.0-dev.68.0 <=2.1.0-dev.9.1'
+  sdk: '>=2.0.0-dev.68.0 <= 2.1.0'
 
 dependencies:
   resource: ^2.1.5
@@ -42,3 +42,4 @@ dev_dependencies:
 # rappel : webdev build [--no-release] --output [<dirname>:]<dirname>
 # va générer main.reflectable.dart
 # va générer le dossier build
+# >> webdev build --output build

@@ -60,7 +60,7 @@ List<String> gltfSamplesPaths = [
 //    './samples/gltf_2_0/BoomBox/glTF/BoomBox.gltf',
 //    './samples/gltf_2_0/corset/glTF/Corset.gltf',
 //    './samples/gltf_2_0/waterBottle/glTF/WaterBottle.gltf',
-    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
+//    './samples/gltf_2_0/DamagedHelmet/glTF/DamagedHelmet.gltf',
 //    './samples/gltf_2_0/lantern/gltf/Lantern.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF/MetalRoughSpheres.gltf',
 //    './samples/gltf_2_0/MetalRoughSpheres/glTF-Embedded/MetalRoughSpheres.gltf',// Todo (jpu) : problem with the base colors ?
@@ -99,4 +99,7 @@ List<String> gltfSamplesPaths = [
 
 //    './wip/blender_pbr/01_textured_sphere.gltf'
 //    './blender_pbr/polly/project_polly.gltf'
+
+  //project
+  './projects/maison/maison_ivoz.gltf',
 ];

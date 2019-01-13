@@ -5,12 +5,12 @@ import 'dart:typed_data';
 import 'dart:math' as Math;
 
 import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/controllers/camera_controllers.dart';
+import 'package:webgl/src/interaction/interactionnable.dart';
 import 'package:webgl/src/time/time.dart';
 
 abstract class Interactable{
   Interaction get interaction;
-  CameraPerspective get mainCamera;
+  Camera get mainCamera;
   CanvasElement get canvas;
 
   /// called this in CTOR
@@ -41,22 +41,25 @@ class Interaction {
 
   num scaleFactor = 3.0;
 
-  CameraPerspective get mainCamera => _interactable.mainCamera;
-  CameraController get cameraController => _interactable.mainCamera?.cameraController;
+  // Todo (jpu) : should remove this first one
+  Camera get mainCamera => _interactable.mainCamera;
+  Interactionable get cameraControllerInteraction => _interactable.mainCamera?.cameraController?.cameraControllerInteraction;
 
+  ///Mouse
   StreamController<MouseEvent> _onMouseDownController = new StreamController<MouseEvent>.broadcast();
   Stream<MouseEvent> get onMouseDown => _onMouseDownController.stream;
 
   StreamController<MouseEvent> _onMouseUpController = new StreamController<MouseEvent>.broadcast();
   Stream<MouseEvent> get onMouseUp => _onMouseDownController.stream;
 
-
+  /// Touch
   StreamController<TouchEvent> _onTouchStartController = new StreamController<TouchEvent>.broadcast();
   Stream<TouchEvent> get onTouchStart => _onTouchStartController.stream;
 
   StreamController<TouchEvent> _onTouchEndController = new StreamController<TouchEvent>.broadcast();
   Stream<TouchEvent> get onTouchEnd => _onTouchEndController.stream;
 
+  ///
   StreamController _onDragController = new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onDrag => _onDragController.stream;
 
@@ -156,14 +159,13 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraController?.beginOrbit(mainCamera, screenX, screenY);
+    cameraControllerInteraction?.onMouseDown(screenX, screenY);
 
     dragging = false;
     mouseDown = true;
     isMiddleMouseButton = event.button == 1;
 
     _onMouseDownController.add(event);
-
   }
 
   void _onMouseMove(MouseEvent event) {
@@ -171,7 +173,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, isMiddleMouseButton ? 1:0);//!! hack : dart doesn't seem to recognize middle mouse button dragging !!
+    cameraControllerInteraction?.onMouseMove(deltaX, deltaY, isMiddleMouseButton);
 
     if(mouseDown) {
       dragging = true;
@@ -186,7 +188,7 @@ class Interaction {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    cameraController?.endOrbit(mainCamera);
+    cameraControllerInteraction?.onMouseUp(screenX, screenY);
 
     dragging = false;
     mouseDown = false;
@@ -198,7 +200,7 @@ class Interaction {
   void _onMouseWheel(WheelEvent event){
     num deltaY = -event.deltaY;
     deltaY = Math.max(-1, Math.min(1, deltaY))/ 50;
-    cameraController?.updateCameraFov(mainCamera, deltaY);
+    cameraControllerInteraction?.onMouseWheel(deltaY);
   }
     
   /// Determine how far we have moved since the last mouse move event.
@@ -217,8 +219,6 @@ class Interaction {
   /// Touch
   ///
 
-  double _startFov;
-
   void showTouchEventInfos(TouchEvent event){
     _touchesManager.update(event);
     print(_touchesManager.getDebugInfos(''));
@@ -229,13 +229,13 @@ class Interaction {
     _touchesManager.update(event);
 
     if(_touchesManager.touchLength > 1){
-      _startFov = mainCamera.yfov;
+      cameraControllerInteraction?.onTouchStart(null, null);
     }else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      cameraController?.beginOrbit(mainCamera, screenX, screenY);
+      cameraControllerInteraction?.onTouchStart(screenX, screenY);
     }
 
     dragging = false;
@@ -247,12 +247,18 @@ class Interaction {
     _touchesManager.update(event);
 
     if(event.targetTouches.length > 1){
-      mainCamera.yfov = _startFov / _touchesManager.scaleChange;
+      cameraControllerInteraction?.onTouchMove(null, null, scaleChange : _touchesManager.scaleChange);
+//      //position with center of 2 first touches
+//      int screenX = (_touchesManager[0].client.x.toInt() + _touchesManager[1].client.x.toInt())~/2;
+//      int screenY = (_touchesManager[0].client.y.toInt() + _touchesManager[1].client.y.toInt())~/2;
+//      updateMouseInfos(screenX, screenY);
+//      cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, CameraControllerMode.pan);
     }else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
-      cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, 0);
+
+      cameraControllerInteraction?.onTouchMove(deltaX, deltaY);
     }
 
     if (mouseDown) {
@@ -261,17 +267,18 @@ class Interaction {
     } else {
       dragging = false;
     }
-
   }
 
   void _onTouchEnd(TouchEvent event) {
-    cameraController?.endOrbit(mainCamera);
+    int screenX = _touchesManager[0].client.x.toInt();
+    int screenY = _touchesManager[0].client.y.toInt();
+    updateMouseInfos(screenX, screenY);
+    cameraControllerInteraction?.onTouchEnd(screenX, screenY);
 
     dragging = false;
     mouseDown = false;
 
     _onTouchEndController.add(event);
-    _startFov = null;
   }
 
   void _onTouchLeave(TouchEvent event) {

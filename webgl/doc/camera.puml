@@ -1,0 +1,76 @@
+@startuml
+
+enum CameraControllerMode{
+  pan,
+  orbit,
+  rotate
+}
+
+abstract class Camera #009dff{
+    CameraController cameraController
+}
+Camera *-- CameraController
+
+class CameraPerspective extends Camera
+class CameraOrthographic extends Camera
+
+abstract class CameraController #009dff{
+  CameraControllerInteraction get cameraControllerInteraction;
+  Camera get camera;
+  void init(Camera camera);
+}
+CameraController *-- CameraControllerInteraction
+CameraController *-- Camera
+
+abstract class CameraControllerInteraction #009dff implements Interactionable {
+  CameraController get cameraController;
+}
+
+class BaseCameraController extends CameraController{
+    CameraControllerMode cameraControllerMode
+}
+
+BaseCameraController *-- CameraControllerMode
+
+class BaseCameraControllerInteraction implements CameraControllerInteraction{
+
+  final BaseCameraController cameraController;
+}
+
+abstract class Interactionable #009dff{
+  void onMouseDown(int screenX, int screenY);
+  void onMouseMove(double deltaX, double deltaY, bool isMiddleMouseButton);
+  void onMouseUp(int screenX, int screenY);
+  void onMouseWheel(num deltaY);
+
+  void onTouchStart(int screenX, int screenY);
+  void onTouchMove(double deltaX, double deltaY, {num scaleChange});
+  void onTouchEnd(int screenX, int screenY);
+}
+
+abstract class Interactable #009dff{
+  Interaction get interaction;
+  Camera get mainCamera;
+  CanvasElement get canvas;
+
+  /// called this in CTOR
+  void initInteraction();
+}
+Interactable *-- Interaction
+Interactable *-- Camera
+Interactable *-- CanvasElement
+
+class GLTFRenderer implements Interactable
+
+class Interaction {
+    final Interactable _interactable
+    Camera get mainCamera
+    Interactionable get cameraControllerInteraction
+    TouchesManager touchesManager;
+}
+Interaction *-- Camera
+Interaction *-- Interactionable
+Interaction *-- TouchesManager
+
+class TouchesManager
+@enduml

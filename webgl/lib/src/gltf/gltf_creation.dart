@@ -385,14 +385,16 @@ class GLTFCreation {
         camera = new CameraPerspective(gltfCamera.perspective.yfov,
             gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
           ..type = CameraType.perspective
-          ..aspectRatio = gltfCamera.perspective.aspectRatio;
+          ..aspectRatio = gltfCamera.perspective.aspectRatio
+          ..name = gltfCamera.name;
       } else if (gltfCamera.orthographic != null) {
         camera = new CameraOrthographic()
           ..type = CameraType.orthographic
           ..znear = gltfCamera.orthographic.znear
           ..zfar = gltfCamera.orthographic.zfar
           ..xmag = gltfCamera.orthographic.xmag
-          ..ymag = gltfCamera.orthographic.ymag;
+          ..ymag = gltfCamera.orthographic.ymag
+          ..name = gltfCamera.name;
 
         // Todo (jpu) :
 //      cameraPerspective.extensions;

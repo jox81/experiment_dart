@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/interaction/interaction.dart';
 import 'package:webgl/src/introspection.dart';
 import 'package:webgl/src/light/light.dart';
 import 'package:webgl/src/material/shader_source.dart';
@@ -15,7 +16,6 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/context.dart' as ctxWrapper show gl;
-import 'package:webgl/src/interaction.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/gltf/mesh_primitive.dart';
@@ -28,8 +28,12 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/texture.dart';
 
+abstract class Renderer{
+  void render();
+}
+
 @reflector
-class GLTFRenderer implements Interactable {
+class GLTFRenderer extends Renderer implements Interactable {
 
   // Direction from where the light is coming to origin
   DirectionalLight light;
@@ -43,8 +47,6 @@ class GLTFRenderer implements Interactable {
   GLTFProject gltfProject;
 
   GLTFScene get currentScene => gltfProject.scenes.length > 0 ? gltfProject.scenes[0] : null;
-
-  Interaction interaction;
 
   CameraPerspective get mainCamera => Context.mainCamera;
 
@@ -240,8 +242,6 @@ class GLTFRenderer implements Interactable {
       this._render(time: time);
     });
   }
-
-
 
   void _renderCurrentScene() {
     Context.resizeCanvas();
@@ -449,7 +449,7 @@ class GLTFRenderer implements Interactable {
 
     Camera currentCamera;
 
-    bool debugCamera = true;
+    bool debugCamera = false;
 
     if(debugCamera){
       currentCamera = new CameraPerspective(radians(47.0), 0.1, 1000.0)
@@ -465,12 +465,18 @@ class GLTFRenderer implements Interactable {
       if (currentCamera == null) {
         if (gltfProject.cameras.length > 0) {
           currentCamera = gltfProject.cameras[0];
+          GLTFNode node = gltfProject.nodes.firstWhere((n)=> n.name == currentCamera.name, orElse: ()=> null);
+          currentCamera.matrix = node.matrix;
+//          currentCamera.translation = node.translation;
+//          currentCamera.rotation = node.rotation;
+//          currentCamera.scale = node.scale;
         } else {
           currentCamera = new CameraPerspective(radians(47.0), 0.1, 100.0)
             ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
+          currentCamera.translation = new Vector3(5.0, 5.0, 10.0);
         }
-        currentCamera.translation = new Vector3(5.0, 5.0, 10.0);
+
 //      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
       }
     }
@@ -488,7 +494,8 @@ class GLTFRenderer implements Interactable {
 
     for (var i = 0; i < nodes.length && result == null; i++) {
       GLTFNode node = nodes[i];
-      if (node.camera != null) {
+      //Correction is from blender export but not yet used
+      if (node.camera != null && !node.name.contains('Correction')) {
         setupNodeCamera(node);
         result = node.camera;
       }
@@ -498,8 +505,6 @@ class GLTFRenderer implements Interactable {
   }
 
   void setupNodeCamera(GLTFNode node) {
-    
-
     CameraPerspective camera = node.camera as CameraPerspective;
     camera.translation = node.translation;
   }

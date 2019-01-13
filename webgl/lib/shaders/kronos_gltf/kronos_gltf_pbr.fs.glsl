@@ -138,7 +138,7 @@ vec3 getIBLContribution(PBRInfo pbrInputs, vec3 n, vec3 reflection)
 #ifdef USE_TEX_LOD
     vec3 specularLight = textureCubeLodEXT(u_SpecularEnvSampler, reflection, lod).rgb;
 #else
-    vec3 specularLight = textureCube(u_SpecularEnvSampler, reflection).rgb;
+    vec3 specularLight = vec3(1.0,1.0,1.0);//textureCube(u_SpecularEnvSampler, reflection).rgb;
 #endif
 
     vec3 diffuse = diffuseLight * pbrInputs.diffuseColor;

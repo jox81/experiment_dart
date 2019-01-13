@@ -1,7 +1,28 @@
 import 'dart:math' as Math;
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/interaction/camera_controller_interaction.dart';
 
-class CameraController {
+enum CameraControllerMode{
+  pan,
+  orbit,
+  rotate
+}
+
+abstract class CameraController{
+  CameraControllerInteraction get cameraControllerInteraction;
+  Camera get camera;
+  void init(Camera camera);
+}
+
+class BaseCameraController extends CameraController{
+  final Vector3 upAxis = new Vector3(0.0, 1.0, 0.0);
+
+  CameraControllerMode cameraControllerMode;
+
+  CameraPerspective _camera;
+  CameraPerspective get camera => _camera;
+
   num xRot = 0.0;
   num yRot = 0.0;
   num scaleFactor = 3.0;
@@ -11,31 +32,37 @@ class CameraController {
   double deltaX = 0.0;
   double deltaY = 0.0;
 
-  CameraController();
+  @override
+  CameraControllerInteraction get cameraControllerInteraction => _cameraControllerInteraction;
+  CameraControllerInteraction _cameraControllerInteraction;
 
-  CameraPerspective _camera;
+  BaseCameraController(){
+    _cameraControllerInteraction = new BaseCameraControllerInteraction(this);
+  }
 
-  void init(CameraPerspective camera) {
+  double get yfov => _camera.yfov;
+
+  void init(covariant CameraPerspective camera) {
     _camera = camera;
     xRot = 90 - camera.pitch;
     yRot = camera.phiAngle;
   }
 
-  void updateCameraFov(CameraPerspective camera, num deltaY){
-    if (camera.isActive) {
-      camera.yfov += deltaY;
+  void updateCameraFov(num deltaY) {
+    if (_camera.isActive) {
+      _camera.yfov += deltaY;
     }
   }
 
-  void updateCameraPosition(CameraPerspective camera,double deltaX, double deltaY, int buttonType){
-    if (camera.isActive) {
+  void updateCameraPosition(double deltaX, double deltaY) {
+    if (_camera.isActive) {
       if (dragging) {
-
-        if (buttonType == 0) {
-          //LMB
+        if(cameraControllerMode == null) throw 'cameraControllerMode must be set just before using this commande';
+        if (cameraControllerMode == CameraControllerMode.orbit) {
           doOrbit(deltaX, deltaY);
-        } else if (buttonType == 1) {
-          //MMB
+        } else if (cameraControllerMode == CameraControllerMode.rotate) {
+          rotateView(-deltaX,deltaY);
+        }else if (cameraControllerMode == CameraControllerMode.pan) {
           pan(deltaX, deltaY);
         }
       }
@@ -57,14 +84,14 @@ class CameraController {
     }
 
     //Todo : create first person eye Rotation with ctrl key
-    rotateOrbit(yRot, xRot); //why inverted ?
+    rotateOrbit(yRot, xRot); // Todo (jpu) : why inverted ?
   }
 
-  void beginOrbit(Camera camera, int screenX, int screenY) {
+  void beginOrbit(int screenX, int screenY) {
     dragging = true;
   }
 
-  void endOrbit(Camera camera) {
+  void endOrbit() {
     dragging = false;
   }
 
@@ -72,7 +99,7 @@ class CameraController {
     num distance = _camera.frontDirection
         .length; // Straight line distance between the camera and look at point
 
-    // Calculate the camera position using the distance and angles
+    // Calculate the new camera position using the distance and angles
     double camX = _camera.targetPosition.x +
         distance *
             -Math.sin(xAngleRot * (Math.pi / 180)) *
@@ -85,6 +112,18 @@ class CameraController {
             Math.cos((yAngleRot) * (Math.pi / 180));
 
     _camera.translation = _camera.translation..setValues(camX, camY, camZ);
+  }
+
+
+  num _rotateViewYaw = 0;
+  num _rotateViewPitch = 0;
+  /// Pour faire une rotation de la vue, on déplace la target
+  void rotateView(num xAngleRot, num yAngleRot) {
+    Vector3 rotateViewDirection = new Vector3(0.0, 0.0, 1.0);
+    _rotateViewYaw -= xAngleRot;
+    _rotateViewPitch -= yAngleRot;
+    rotateViewDirection.applyQuaternion(Quaternion.euler(radians(_rotateViewYaw.toDouble()), radians(_rotateViewPitch.toDouble()), 0));
+    _camera.targetPosition = _camera.translation + rotateViewDirection;
   }
 
   void pan(double deltaX, double deltaY, {num panScale = 0.05}) {

@@ -53,7 +53,7 @@ Future<GLTFProject> projectSceneViewVector() async {
   scene.addNode(nodeGrid);
   project.addNode(nodeGrid);
 
-  /// basic add vector result
+  /// basic vector operation result
   void test01() {
     Vector3 vectorA = new Vector3(3.0,0.0,-3.0);
     Vector3 vectorB = new Vector3(-2.0,0.0,-2.0);
@@ -138,6 +138,48 @@ Future<GLTFProject> projectSceneViewVector() async {
     scene.addNode(nodeVectorR);
     project.addNode(nodeVectorR);
 
+  }
+
+  /// rotate Vector3
+  void testRotateVector() {
+    Vector3 vectorA = new Vector3(-3.0,2.0,3.0);//camera.targetPosition
+    Vector3 vectorB = new Vector3(3.0,2.0,3.0);//camera.translation
+
+    num xAngleRot = -45;
+
+    Vector3 targetForm0 = vectorB - vectorA;
+    Matrix4 identity = new Matrix4.identity()..rotateY(radians(xAngleRot.toDouble()));
+    targetForm0.applyMatrix4(identity);
+    targetForm0 += vectorA;
+    Vector3 vectorResult = targetForm0;
+
+
+    GLTFMesh meshVectorA = new GLTFMesh.vector(vectorA)
+      ..primitives[0].material = matVectorA;
+    project.meshes.add(meshVectorA);
+    GLTFNode nodeVectorA = new GLTFNode()
+      ..mesh = meshVectorA
+      ..name = 'vector';
+    scene.addNode(nodeVectorA);
+    project.addNode(nodeVectorA);
+
+    GLTFMesh meshVectorB = new GLTFMesh.vector(vectorB)
+      ..primitives[0].material = matVectorB;
+    project.meshes.add(meshVectorB);
+    GLTFNode nodeVectorB = new GLTFNode()
+      ..mesh = meshVectorB
+      ..name = 'vector';
+    scene.addNode(nodeVectorB);
+    project.addNode(nodeVectorB);
+
+    GLTFMesh meshVectorR = new GLTFMesh.vector(vectorResult)
+      ..primitives[0].material = matVectorResult;
+    project.meshes.add(meshVectorR);
+    GLTFNode nodeVectorR = new GLTFNode()
+      ..mesh = meshVectorR
+      ..name = 'vector';
+    scene.addNode(nodeVectorR);
+    project.addNode(nodeVectorR);
   }
 
   //Projection view Matrix test
@@ -265,9 +307,10 @@ Future<GLTFProject> projectSceneViewVector() async {
 //    meshes.add(normals);
 //  }
 
-  test01();
+//  test01();
 //  test02();
 //  test03();
+  testRotateVector();
 //  testViewProjectionMatrix();
 //  testViewProjectionMatrix2();
 //  testDisplayNormals();// Todo (jpu) :
