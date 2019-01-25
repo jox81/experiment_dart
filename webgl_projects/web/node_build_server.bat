@@ -1,1 +1,0 @@
-http-server ../build -p 8080
