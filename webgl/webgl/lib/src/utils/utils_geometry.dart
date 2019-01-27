@@ -16,10 +16,10 @@ class UtilsGeometry{
   ///En webgl, l'axe y pointant vers le haut, x vers la droite
   static bool unProjectScreenPoint(CameraPerspective camera, Vector3 pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
     num pickX = screenX;
-    num pickY = Context.height - screenY;
+    num pickY = Context.glWrapper.height - screenY;
 
-    bool unProjected = unproject(camera.viewProjectionMatrix, 0, Context.width,
-        0, Context.height, pickX, pickY, pickZ, pickWorld);
+    bool unProjected = unproject(camera.viewProjectionMatrix, 0, Context.glWrapper.width,
+        0, Context.glWrapper.height, pickX, pickY, pickZ, pickWorld);
 
     return unProjected;
   }
@@ -29,8 +29,8 @@ class UtilsGeometry{
     num pickX = screenX;
     num pickY = screenY;
 
-    bool rayPicked = pickRay(camera.viewProjectionMatrix, 0, Context.width,
-        0, Context.height, pickX, pickY, outRayNear, outRayFar);
+    bool rayPicked = pickRay(camera.viewProjectionMatrix, 0, Context.glWrapper.width,
+        0, Context.glWrapper.height, pickX, pickY, outRayNear, outRayFar);
 
     return rayPicked;
   }
@@ -40,13 +40,13 @@ class UtilsGeometry{
     List<GLTFNode> resultPoints = [];
 
     num pickX = 0.0;
-    num pickY = Context.height * 0.25;
+    num pickY = Context.glWrapper.height * 0.25;
     num pickZ = 0.0;
 
     Vector3 pickWorld = new Vector3.zero();
 
     for (num i = 0.0; i < 1.0; i += 0.1) {
-      pickX = i * Context.width;
+      pickX = i * Context.glWrapper.width;
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
       GLTFMesh meshPoint = new GLTFMesh.point()

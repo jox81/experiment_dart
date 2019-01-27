@@ -56,7 +56,7 @@ class InteractionManager {
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
     onResize.listen((dynamic event){
-      Context.resizeCanvas();
+      Context.glWrapper.resizeCanvas();
     });
 
     window.onResize.listen(_onWindowResize);

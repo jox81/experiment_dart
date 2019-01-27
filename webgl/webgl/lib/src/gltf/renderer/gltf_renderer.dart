@@ -63,8 +63,8 @@ class GLTFRenderer extends Renderer {
       ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
       ..color =  new Vector3(1.0, 1.0, 1.0);
 
-    Context.init(_canvas);
-    Context.resizeCanvas();
+    context.init(_canvas);
+    Context.glWrapper.resizeCanvas();
   }
 
   Future _initTextures() async {
@@ -212,14 +212,14 @@ class GLTFRenderer extends Renderer {
     await _initTextures();
     setupCameras();
 
-    Context.backgroundColor = gltfProject.scene.backgroundColor;
+    context.backgroundColor = gltfProject.scene.backgroundColor;
   }
 
   void render({num currentTime: 0.0}) {
     _currentTime = currentTime;
 
     try {
-      Context.resizeCanvas();
+      Context.glWrapper.resizeCanvas();
       gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
       drawNodes(currentScene.nodes);
     } catch (ex) {

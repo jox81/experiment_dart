@@ -2,6 +2,8 @@ import 'dart:html';
 import 'dart:typed_data' as WebGlTypedData;
 import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/context.dart';
+import 'package:webgl/src/render_setting.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/webgl_objects/active_framebuffer.dart';
@@ -9,6 +11,8 @@ import 'package:webgl/src/webgl_objects/context_attributs.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_constants.dart';
+import 'package:webgl/src/webgl_objects/webgl_parameters.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 
@@ -18,6 +22,27 @@ class WebGLRenderingContext{
   WebGL.RenderingContext gl;
 
   CanvasElement get canvas => gl.canvas;
+
+  WebglConstants get webglConstants => WebglConstants.instance();
+  WebglParameters get webglParameters => WebglParameters.instance();
+
+  RenderSetting _renderSetting;
+  RenderSetting get renderSettings {
+    if(_renderSetting == null){
+      _renderSetting = new RenderSetting();
+    }
+    return _renderSetting;
+  }
+
+  num get width => gl.drawingBufferWidth;
+  num get height => gl.drawingBufferHeight;
+
+  double get viewAspectRatio {
+    if(gl != null) {
+      return width / height;
+    }
+    return 1.0;
+  }
 
   WebGLRenderingContext._init(this.gl);
 
@@ -55,6 +80,27 @@ class WebGLRenderingContext{
     return new WebGLRenderingContext._init(gl);
   }
 
+  void resizeCanvas() {
+    var realToCSSPixels = 1.0;//window.devicePixelRatio;
+
+    // Lookup the size the browser is displaying the canvas.
+//    var displayWidth = (_canvas.parent.offsetWidth* realToCSSPixels).floor();
+//    var displayHeight = (window.innerHeight* realToCSSPixels).floor();
+
+    var displayWidth  = (gl.canvas.clientWidth  * realToCSSPixels).floor();
+    var displayHeight = (gl.canvas.clientHeight * realToCSSPixels).floor();
+
+    // Check if the canvas is not the same size.
+    if (gl.canvas.width != displayWidth || gl.canvas.height != displayHeight) {
+      // Make the canvas the same size
+      gl.canvas.width = displayWidth;
+      gl.canvas.height = displayHeight;
+
+//      gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
+      viewport = new Rectangle(0, 0, gl.canvas.width, gl.canvas.height);
+      Context.mainCamera?.update();
+    }
+  }
 
   // >>> Parameteres
   /// ContextParameter parameter

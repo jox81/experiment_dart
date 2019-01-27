@@ -93,7 +93,7 @@ class CameraPerspective extends Camera{
   }
 
   update() {
-    _aspectRatio = Context.viewAspectRatio;
+    _aspectRatio = Context.glWrapper.viewAspectRatio;
     setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, znear, zfar);
     setViewMatrix(_viewMatrix, translation, _targetPosition, upDirection);
 //    _updateGizmo();

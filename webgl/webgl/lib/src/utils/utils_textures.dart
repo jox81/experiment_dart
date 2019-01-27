@@ -488,7 +488,7 @@ class TextureUtils {
 
   static void readPixels({Rectangle<int> rectangle}) {
     if (rectangle == null)
-      rectangle = new Rectangle(0, 0, Context.width.toInt(), Context.height.toInt());
+      rectangle = new Rectangle(0, 0, Context.glWrapper.width.toInt(), Context.glWrapper.height.toInt());
 
     var pixels = new Uint8List(rectangle.width * rectangle.height * 4);
 //    var pixels = new Float32List(rectangle.width * rectangle.height * 4);

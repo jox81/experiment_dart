@@ -25,7 +25,7 @@ class WebglParameters{
 
   void _fillWebglParameters() {
     _values = new List();
-    for (WebglConstant webglConstant in Context.webglConstants.parameters) {
+    for (WebglConstant webglConstant in Context.glWrapper.webglConstants.parameters) {
       WebglParameter webglParameter = getParameter(webglConstant.glEnum);
       if (webglParameter != null) {
         _values.add(webglParameter);
@@ -43,7 +43,7 @@ class WebglParameters{
 
   WebglParameter getParameter(int glEnum) {
 
-    WebglConstant constant = Context.webglConstants.values
+    WebglConstant constant = Context.glWrapper.webglConstants.values
         .firstWhere((c) => c.glEnum == glEnum);
 
     if(!constant.isParameter) return null;
@@ -52,10 +52,10 @@ class WebglParameters{
     String glEnumStringValue;
 
     if (result is int && result > 1) {
-      List<WebglConstant> constants = Context.webglConstants.values
+      List<WebglConstant> constants = Context.glWrapper.webglConstants.values
           .where((c) => c.glEnum == result).toList();
       if (constants.length == 1) { // >1 pour ne pas avoir de confusion dans les enums possibles
-        glEnumStringValue = Context.webglConstants.values
+        glEnumStringValue = Context.glWrapper.webglConstants.values
             .firstWhere((c) => c.glEnum == constants[0].glEnum)
             .glName;
       }else if(constants.length > 1){
@@ -75,14 +75,14 @@ class WebglParameters{
     Debug.log('Test Get Parameters',(){
       print('TEXTURE0 : 0x84C0 = ${0x84C0}'); // == 33984
       print('ACTIVE_TEXTURE : 0x84E0 = ${0x84E0}'); // == 34016
-      print(Context.webglParameters.getParameter(WebGL.ACTIVE_TEXTURE));
+      print(Context.glWrapper.webglParameters.getParameter(WebGL.ACTIVE_TEXTURE));
       //OK > ACTIVE_TEXTURE (34016) = TEXTURE0 : glEnum
       print('##################################################################');
 
       Object result = gl.getParameter(WebGL.BLEND_SRC_RGB);
       print(result);
       //NO > comment différencier une valeur int d'une valeur glEnum ?
-      print(Context.webglParameters.getParameter(WebGL.BLEND_SRC_RGB));
+      print(Context.glWrapper.webglParameters.getParameter(WebGL.BLEND_SRC_RGB));
       print(0x0001);
     });
   }
