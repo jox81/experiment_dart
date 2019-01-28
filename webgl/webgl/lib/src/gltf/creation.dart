@@ -9,6 +9,7 @@ import 'package:webgl/src/gltf/animation/animation_channel_target.dart';
 import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
+import 'package:webgl/src/gltf/property/gltf_load_project.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
@@ -109,7 +110,7 @@ class GLTFCreation {
       glTF.Gltf gltfSource, String baseDirectory) async {
     if (gltfSource == null) return null;
 
-    GLTFProject _gltfProject = new GLTFProject.create()
+    GLTFProject _gltfProject = new GLTFLoadProject()
       ..baseDirectory = baseDirectory;
 
     GLTFCreation gltf = new GLTFCreation._(_gltfProject, gltfSource);

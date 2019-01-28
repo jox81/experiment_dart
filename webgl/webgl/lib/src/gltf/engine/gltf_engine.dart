@@ -4,8 +4,6 @@ import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/gltf_renderer.dart';
 
 class GLTFEngine extends Engine {
-  final CanvasElement canvas;
-
   static GLTFEngine get currentEngine => Engine.currentEngine as GLTFEngine;
   static GLTFProject get activeProject =>
       currentEngine.currentProject as GLTFProject;
@@ -13,7 +11,7 @@ class GLTFEngine extends Engine {
   @override
   GLTFRenderer renderer;
 
-  GLTFEngine(this.canvas) : super(canvas) {
+  GLTFEngine(CanvasElement canvas) : super(canvas) {
     this.renderer = new GLTFRenderer(canvas);
   }
 

@@ -14,9 +14,9 @@ import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-class CubeMapProject{
-  GLTFProject _project;
-  GLTFProject get project => _project;
+class CubeMapProject extends GLTFProject{
+
+  final String baseDirectory = 'primitives/';
 
   GLTFNode _sphereNode;
   GLTFNode get sphereNode => _sphereNode;
@@ -28,13 +28,12 @@ class CubeMapProject{
   }
 
   Future _setup() async{
-    _project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
     nodeInteractionnable.controller = new Drive2dNodeController();
-    _project.addInteractable(nodeInteractionnable);
-    GLTFScene scene = new GLTFScene();
+    addInteractable(nodeInteractionnable);
+
+    scene = new GLTFScene();
     scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0); // Todo (jpu) : ?
-    _project.scene = scene;
 
 //    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 

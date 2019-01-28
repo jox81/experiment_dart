@@ -1,4 +1,7 @@
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/engine/engine_type.dart';
 import 'dart:core';
@@ -30,25 +33,17 @@ import 'package:webgl/src/project/project.dart';
 // 16/10/2017 : reading .bin files as Uint8List
 
 @reflector
-class GLTFProject extends Project{
+abstract class GLTFProject extends Project{
+
 
   @override
   EngineType get engineType => EngineType.GLTF;
 
-  factory GLTFProject.create({bool reset : true}){
-    if(_instance == null || reset){
-      _instance = new GLTFProject._init();
-    }
-    return _instance;
-  }
-
-  GLTFProject._init(){
+  GLTFProject({bool doReset: true}){
     Engine.currentEngine.currentProject = this;
     reset();
-  }
 
-  static GLTFProject _instance;
-  static GLTFProject get instance => new GLTFProject.create(reset: false);//_instance != null ? _instance : throw "No project instance is created... Make sure a project is created before using this way.";
+  }
 
   ///path of the directory of the gltf file
   String baseDirectory = '';
