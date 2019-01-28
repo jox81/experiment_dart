@@ -30,9 +30,9 @@ class CubeMapProject{
   Future _setup() async{
     _project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
-    GLTFScene scene = new GLTFScene();
     nodeInteractionnable.controller = new Drive2dNodeController();
     _project.addInteractable(nodeInteractionnable);
+    GLTFScene scene = new GLTFScene();
     scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0); // Todo (jpu) : ?
     _project.scene = scene;
 

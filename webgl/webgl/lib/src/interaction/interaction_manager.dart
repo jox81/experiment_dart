@@ -7,7 +7,6 @@ import 'package:webgl/src/interaction/interactionnable.dart';
 import 'package:webgl/src/interaction/touch_manager.dart';
 
 class InteractionManager {
-
   final Engine engine;
   final TouchesManager _touchesManager = new TouchesManager();
 
@@ -26,24 +25,30 @@ class InteractionManager {
   num scaleFactor = 3.0;
 
   ///Mouse
-  StreamController<MouseEvent> _onMouseDownController = new StreamController<MouseEvent>.broadcast();
+  StreamController<MouseEvent> _onMouseDownController =
+      new StreamController<MouseEvent>.broadcast();
   Stream<MouseEvent> get onMouseDown => _onMouseDownController.stream;
 
-  StreamController<MouseEvent> _onMouseUpController = new StreamController<MouseEvent>.broadcast();
+  StreamController<MouseEvent> _onMouseUpController =
+      new StreamController<MouseEvent>.broadcast();
   Stream<MouseEvent> get onMouseUp => _onMouseDownController.stream;
 
   /// Touch
-  StreamController<TouchEvent> _onTouchStartController = new StreamController<TouchEvent>.broadcast();
+  StreamController<TouchEvent> _onTouchStartController =
+      new StreamController<TouchEvent>.broadcast();
   Stream<TouchEvent> get onTouchStart => _onTouchStartController.stream;
 
-  StreamController<TouchEvent> _onTouchEndController = new StreamController<TouchEvent>.broadcast();
+  StreamController<TouchEvent> _onTouchEndController =
+      new StreamController<TouchEvent>.broadcast();
   Stream<TouchEvent> get onTouchEnd => _onTouchEndController.stream;
 
   ///
-  StreamController _onDragController = new StreamController<dynamic>.broadcast();
+  StreamController _onDragController =
+      new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onDrag => _onDragController.stream;
 
-  StreamController _onResizeController = new StreamController<dynamic>.broadcast();
+  StreamController _onResizeController =
+      new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onResize => _onResizeController.stream;
 
   InteractionManager(this.engine) {
@@ -54,7 +59,7 @@ class InteractionManager {
     _currentlyPressedKeys = new List<bool>(128);
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
-    onResize.listen((dynamic event){
+    onResize.listen((dynamic event) {
       Context.glWrapper.resizeCanvas();
     });
 
@@ -114,7 +119,8 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    engine.currentProject.interactionables.forEach((i)=> i.onMouseDown(screenX, screenY));
+    engine.currentProject.interactionables
+        .forEach((i) => i.onMouseDown(screenX, screenY));
 
     dragging = false;
     mouseDown = true;
@@ -128,12 +134,13 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    engine.currentProject.interactionables.forEach((i)=> i.onMouseMove(deltaX, deltaY, isMiddleMouseButton));
+    engine.currentProject.interactionables
+        .forEach((i) => i.onMouseMove(deltaX, deltaY, isMiddleMouseButton));
 
-    if(mouseDown) {
+    if (mouseDown) {
       dragging = true;
       _onDragController.add(null);
-    }else{
+    } else {
       dragging = false;
     }
   }
@@ -143,7 +150,8 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    engine.currentProject.interactionables.forEach((i)=> i.onMouseUp(screenX, screenY));
+    engine.currentProject.interactionables
+        .forEach((i) => i.onMouseUp(screenX, screenY));
 
     dragging = false;
     mouseDown = false;
@@ -152,12 +160,13 @@ class InteractionManager {
     _onMouseUpController.add(event);
   }
 
-  void _onMouseWheel(WheelEvent event){
+  void _onMouseWheel(WheelEvent event) {
     num deltaY = -event.deltaY;
-    deltaY = Math.max(-1, Math.min(1, deltaY))/ 50;
-    engine.currentProject.interactionables.forEach((i)=> i.onMouseWheel(deltaY));
+    deltaY = Math.max(-1, Math.min(1, deltaY)) / 50;
+    engine.currentProject.interactionables
+        .forEach((i) => i.onMouseWheel(deltaY));
   }
-    
+
   /// Determine how far we have moved since the last mouse move event.
   void updateMouseInfos(int screenX, int screenY) {
     deltaX = (currentX - screenX) / scaleFactor;
@@ -166,7 +175,7 @@ class InteractionManager {
     currentY = screenY;
   }
 
-  String getMouseInfos(){
+  String getMouseInfos() {
     return 'currentX : $currentX | currentY : $currentY | deltaX : $deltaX | deltaY : $deltaY | ';
   }
 
@@ -174,7 +183,7 @@ class InteractionManager {
   /// Touch
   ///
 
-  void showTouchEventInfos(TouchEvent event){
+  void showTouchEventInfos(TouchEvent event) {
     _touchesManager.update(event);
     print(_touchesManager.getDebugInfos(''));
     // Todo (jpu) : show this in a div with fps
@@ -183,14 +192,16 @@ class InteractionManager {
   void _onTouchStart(TouchEvent event) {
     _touchesManager.update(event);
 
-    if(_touchesManager.touchLength > 1){
-      engine.currentProject.interactionables.forEach((i)=> i.onTouchStart(null, null));
-    }else {
+    if (_touchesManager.touchLength > 1) {
+      engine.currentProject.interactionables
+          .forEach((i) => i.onTouchStart(null, null));
+    } else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      engine.currentProject.interactionables.forEach((i)=> i.onTouchStart(screenX, screenY));
+      engine.currentProject.interactionables
+          .forEach((i) => i.onTouchStart(screenX, screenY));
     }
 
     dragging = false;
@@ -201,19 +212,21 @@ class InteractionManager {
   void _onTouchMove(TouchEvent event) {
     _touchesManager.update(event);
 
-    if(event.targetTouches.length > 1){
-      engine.currentProject.interactionables.forEach((i)=> i.onTouchMove(null, null, scaleChange : _touchesManager.scaleChange));
+    if (event.targetTouches.length > 1) {
+      engine.currentProject.interactionables.forEach((i) =>
+          i.onTouchMove(null, null, scaleChange: _touchesManager.scaleChange));
 //      //position with center of 2 first touches
 //      int screenX = (_touchesManager[0].client.x.toInt() + _touchesManager[1].client.x.toInt())~/2;
 //      int screenY = (_touchesManager[0].client.y.toInt() + _touchesManager[1].client.y.toInt())~/2;
 //      updateMouseInfos(screenX, screenY);
 //      cameraController?.updateCameraPosition(mainCamera, deltaX, deltaY, CameraControllerMode.pan);
-    }else {
+    } else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      engine.currentProject.interactionables.forEach((i)=> i.onTouchMove(deltaX, deltaY));
+      engine.currentProject.interactionables
+          .forEach((i) => i.onTouchMove(deltaX, deltaY));
     }
 
     if (mouseDown) {
@@ -228,7 +241,8 @@ class InteractionManager {
     int screenX = _touchesManager[0].client.x.toInt();
     int screenY = _touchesManager[0].client.y.toInt();
     updateMouseInfos(screenX, screenY);
-    engine.currentProject.interactionables.forEach((i)=> i.onTouchEnd(screenX, screenY));
+    engine.currentProject.interactionables
+        .forEach((i) => i.onTouchEnd(screenX, screenY));
 
     dragging = false;
     mouseDown = false;
@@ -248,4 +262,3 @@ class InteractionManager {
     print('Interaction._onTouchEnter');
   }
 }
-

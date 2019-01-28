@@ -64,7 +64,6 @@ class GLTFRenderer extends Renderer {
       ..color =  new Vector3(1.0, 1.0, 1.0);
 
     context.init(_canvas);
-    Context.glWrapper.resizeCanvas();
   }
 
   Future _initTextures() async {

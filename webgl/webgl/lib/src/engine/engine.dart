@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:meta/meta.dart';
+import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';
 import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/renderer/renderer.dart';
@@ -27,6 +28,7 @@ abstract class Engine {
 
   @mustCallSuper
   Future render(Project project) async {
+    Context.glWrapper.resizeCanvas();
     _currentProject = project;
     await renderer.init(project);
     _render();
