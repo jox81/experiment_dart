@@ -11,12 +11,9 @@ class GLTFEngine extends Engine{
   @override
   final GLTFRenderer renderer;
 
-  @override
-  final InteractionManager interaction;
-
   GLTFEngine(this.canvas):
-        this.interaction = new InteractionManager(canvas),
-        this.renderer = new GLTFRenderer(canvas);
+        this.renderer = new GLTFRenderer(canvas),
+        super(canvas);
 
   @override
   Future render(covariant GLTFProject project) async {

@@ -15,8 +15,6 @@ Future main() async {
 
   CubeMapProject cubeMapProject = await CubeMapProject.build();
 
-  cubeMapProject.nodeInteractionnable.controller = new Drive2dNodeController();
-  engine.interaction.addInteractable(cubeMapProject.nodeInteractionnable);
   canvas.onMouseDown.listen((MouseEvent event){
     GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Context.mainCamera, event.client.x, event.client.y, cubeMapProject.project.nodes);
     if(node != null) {

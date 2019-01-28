@@ -8,17 +8,26 @@ import 'package:webgl/src/interaction/interaction_manager.dart';
 
 abstract class Engine {
   final EngineClock _engineClock = new EngineClock();
+  final CanvasElement canvas;
 
   Renderer get renderer;
-  InteractionManager get interaction;
+
+  InteractionManager _interaction;
 
   StreamController<num> _onRenderStreamController = new StreamController<num>.broadcast();
   Stream<num> get onRender => _onRenderStreamController.stream;
 
-  Engine();
+  Project _currentProject;
+  Project get currentProject => _currentProject;
+  set currentProject(Project value) => _currentProject = value;
+
+  Engine(this.canvas){
+    _interaction = new InteractionManager(this);
+  }
 
   @mustCallSuper
   Future render(Project project) async {
+    _currentProject = project;
     await renderer.init(project);
     _render();
   }
@@ -27,7 +36,7 @@ abstract class Engine {
     _engineClock.currentTime = currentTime;
 
     try {
-      interaction.update(currentTime:currentTime);
+      _interaction.update(currentTime:currentTime);
       renderer.render(currentTime:currentTime);
     } catch (ex) {
       print("Error From Engine render method: $ex ${StackTrace.current}");

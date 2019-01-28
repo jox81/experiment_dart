@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:math' as Math;
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/interaction/interactionnable.dart';
 import 'package:webgl/src/interaction/touch_manager.dart';
 
 class InteractionManager {
 
-  final CanvasElement canvas;
+  final Engine engine;
   final TouchesManager _touchesManager = new TouchesManager();
 
   //Interaction with keyboard
@@ -23,8 +24,6 @@ class InteractionManager {
   double deltaY = 0.0;
 
   num scaleFactor = 3.0;
-
-  List<Interactionable> _interactionables = new List<Interactionable>();
 
   ///Mouse
   StreamController<MouseEvent> _onMouseDownController = new StreamController<MouseEvent>.broadcast();
@@ -47,7 +46,7 @@ class InteractionManager {
   StreamController _onResizeController = new StreamController<dynamic>.broadcast();
   Stream<dynamic> get onResize => _onResizeController.stream;
 
-  InteractionManager(this.canvas) {
+  InteractionManager(this.engine) {
     _initEvents();
   }
 
@@ -64,23 +63,17 @@ class InteractionManager {
     window.onKeyUp.listen(_onKeyUp);
     window.onKeyDown.listen(_onKeyDown);
 
-    canvas.onMouseDown.listen(_onMouseDown);
-    canvas.onMouseMove.listen(_onMouseMove);
-    canvas.onMouseUp.listen(_onMouseUp);
-    canvas.onMouseWheel.listen(_onMouseWheel);
+    engine.canvas.onMouseDown.listen(_onMouseDown);
+    engine.canvas.onMouseMove.listen(_onMouseMove);
+    engine.canvas.onMouseUp.listen(_onMouseUp);
+    engine.canvas.onMouseWheel.listen(_onMouseWheel);
 
-    canvas.onTouchStart.listen(_onTouchStart);
-    canvas.onTouchMove.listen(_onTouchMove);
-    canvas.onTouchEnd.listen(_onTouchEnd);
-    canvas.onTouchLeave.listen(_onTouchLeave);
-    canvas.onTouchCancel.listen(_onTouchCancel);
-    canvas.onTouchEnter.listen(_onTouchEnter);
-  }
-
-  void addInteractable(Interactionable interactionable){
-    if(interactionable != null) {
-      _interactionables.add(interactionable);
-    }
+    engine.canvas.onTouchStart.listen(_onTouchStart);
+    engine.canvas.onTouchMove.listen(_onTouchMove);
+    engine.canvas.onTouchEnd.listen(_onTouchEnd);
+    engine.canvas.onTouchLeave.listen(_onTouchLeave);
+    engine.canvas.onTouchCancel.listen(_onTouchCancel);
+    engine.canvas.onTouchEnter.listen(_onTouchEnter);
   }
 
   ///
@@ -108,7 +101,8 @@ class InteractionManager {
   }
 
   void update({num currentTime: 0.0}) {
-    _interactionables.forEach((i)=> i.onKeyPressed(_currentlyPressedKeys));
+    engine.currentProject.interactionables
+        .forEach((i) => i.onKeyPressed(_currentlyPressedKeys));
   }
 
   ///
@@ -120,7 +114,7 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    _interactionables.forEach((i)=> i.onMouseDown(screenX, screenY));
+    engine.currentProject.interactionables.forEach((i)=> i.onMouseDown(screenX, screenY));
 
     dragging = false;
     mouseDown = true;
@@ -134,7 +128,7 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    _interactionables.forEach((i)=> i.onMouseMove(deltaX, deltaY, isMiddleMouseButton));
+    engine.currentProject.interactionables.forEach((i)=> i.onMouseMove(deltaX, deltaY, isMiddleMouseButton));
 
     if(mouseDown) {
       dragging = true;
@@ -149,7 +143,7 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    _interactionables.forEach((i)=> i.onMouseUp(screenX, screenY));
+    engine.currentProject.interactionables.forEach((i)=> i.onMouseUp(screenX, screenY));
 
     dragging = false;
     mouseDown = false;
@@ -161,7 +155,7 @@ class InteractionManager {
   void _onMouseWheel(WheelEvent event){
     num deltaY = -event.deltaY;
     deltaY = Math.max(-1, Math.min(1, deltaY))/ 50;
-    _interactionables.forEach((i)=> i.onMouseWheel(deltaY));
+    engine.currentProject.interactionables.forEach((i)=> i.onMouseWheel(deltaY));
   }
     
   /// Determine how far we have moved since the last mouse move event.
@@ -190,13 +184,13 @@ class InteractionManager {
     _touchesManager.update(event);
 
     if(_touchesManager.touchLength > 1){
-      _interactionables.forEach((i)=> i.onTouchStart(null, null));
+      engine.currentProject.interactionables.forEach((i)=> i.onTouchStart(null, null));
     }else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      _interactionables.forEach((i)=> i.onTouchStart(screenX, screenY));
+      engine.currentProject.interactionables.forEach((i)=> i.onTouchStart(screenX, screenY));
     }
 
     dragging = false;
@@ -208,7 +202,7 @@ class InteractionManager {
     _touchesManager.update(event);
 
     if(event.targetTouches.length > 1){
-      _interactionables.forEach((i)=> i.onTouchMove(null, null, scaleChange : _touchesManager.scaleChange));
+      engine.currentProject.interactionables.forEach((i)=> i.onTouchMove(null, null, scaleChange : _touchesManager.scaleChange));
 //      //position with center of 2 first touches
 //      int screenX = (_touchesManager[0].client.x.toInt() + _touchesManager[1].client.x.toInt())~/2;
 //      int screenY = (_touchesManager[0].client.y.toInt() + _touchesManager[1].client.y.toInt())~/2;
@@ -219,7 +213,7 @@ class InteractionManager {
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      _interactionables.forEach((i)=> i.onTouchMove(deltaX, deltaY));
+      engine.currentProject.interactionables.forEach((i)=> i.onTouchMove(deltaX, deltaY));
     }
 
     if (mouseDown) {
@@ -234,7 +228,7 @@ class InteractionManager {
     int screenX = _touchesManager[0].client.x.toInt();
     int screenY = _touchesManager[0].client.y.toInt();
     updateMouseInfos(screenX, screenY);
-    _interactionables.forEach((i)=> i.onTouchEnd(screenX, screenY));
+    engine.currentProject.interactionables.forEach((i)=> i.onTouchEnd(screenX, screenY));
 
     dragging = false;
     mouseDown = false;

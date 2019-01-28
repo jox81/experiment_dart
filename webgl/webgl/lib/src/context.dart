@@ -24,15 +24,6 @@ class Context{
 
     _mainCamera = value;
     _mainCamera.isActive = true;
-    _mainCamera.cameraController = cameraController;
-  }
-
-  static CameraController _cameraController;
-  static CameraController get cameraController{
-    if(_cameraController == null){
-      _cameraController = new OrbitPerspectiveCameraController();
-    }
-    return _cameraController;
   }
 
   //Use to add parenting models space (hierarchy)

@@ -26,8 +26,8 @@ Future renderProject(Engine engine, Project project) async {
     elementFPSText.text = "${value.toStringAsFixed(2)} fps";
   });
 
-  engine.interaction.addInteractable(new CustomInteractionable(() => Context.mainCamera?.cameraController));
-  engine.interaction.addInteractable(new CombinedPerspectiveCameraController());
+  project.addInteractable(new CustomInteractionable(() => Context.mainCamera?.cameraController));
+  project.addInteractable(new CombinedPerspectiveCameraController());
 
   await engine.render(project);
 }

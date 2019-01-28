@@ -3,6 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/gltf/contoller/node_conrtoller_type/drive_2d_node_controller.dart';
 import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
@@ -30,6 +31,8 @@ class CubeMapProject{
     _project = new GLTFProject.create()..baseDirectory = 'primitives/';
 
     GLTFScene scene = new GLTFScene();
+    nodeInteractionnable.controller = new Drive2dNodeController();
+    _project.addInteractable(nodeInteractionnable);
     scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0); // Todo (jpu) : ?
     _project.scene = scene;
 

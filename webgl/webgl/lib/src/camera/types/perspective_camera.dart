@@ -2,6 +2,8 @@ import 'dart:math' as Math;
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/orbit_perspective_camera_controller.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/context.dart';
@@ -90,6 +92,7 @@ class CameraPerspective extends Camera{
     GLTFProject.instance.addNode(this);
     GLTFProject.instance.removeNode(this);
     GLTFNode.nextId--;
+    cameraController = new OrbitPerspectiveCameraController();
   }
 
   update() {
