@@ -1,4 +1,3 @@
-import 'package:webgl/src/engine/engine_type.dart';
 import 'package:webgl/src/interaction/interactionnable.dart';
 
 abstract class Project{

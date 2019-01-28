@@ -8,7 +8,6 @@ import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/mesh/mesh_type.dart';
 import 'package:webgl/src/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
-import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';

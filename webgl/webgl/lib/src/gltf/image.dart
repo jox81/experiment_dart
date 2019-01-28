@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
-import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 

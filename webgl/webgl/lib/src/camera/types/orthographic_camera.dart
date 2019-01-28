@@ -3,7 +3,6 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 

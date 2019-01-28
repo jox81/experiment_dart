@@ -3,7 +3,6 @@ import 'dart:html';
 import 'package:webgl/engine.dart';
 import 'package:webgl/render_project.dart';
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/gltf/contoller/node_conrtoller_type/drive_2d_node_controller.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/utils/utils_geometry.dart';
 import 'projects/scene_view_cubemap.dart';

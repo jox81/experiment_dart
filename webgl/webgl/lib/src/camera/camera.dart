@@ -1,7 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera_type.dart';
 import 'package:webgl/src/camera/controller/camera_controller.dart';
-import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/orbit_perspective_camera_controller.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/introspection/introspection.dart';

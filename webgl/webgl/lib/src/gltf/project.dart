@@ -1,6 +1,5 @@
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/engine/engine.dart';
-import 'package:webgl/src/engine/engine_type.dart';
 import 'dart:core';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/animation/animation.dart';
@@ -31,9 +30,6 @@ import 'package:webgl/src/project/project.dart';
 
 @reflector
 abstract class GLTFProject extends Project{
-
-  @override
-  EngineType get engineType => EngineType.GLTF;
 
   GLTFProject({bool doReset: true}){
     Engine.currentEngine.currentProject = this;

@@ -1,6 +1,5 @@
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/image.dart';
-import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'dart:web_gl' as webgl;
