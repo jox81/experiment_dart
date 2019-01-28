@@ -1,4 +1,5 @@
 import 'package:webgl/src/gltf/buffer.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
@@ -44,7 +45,7 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
     String name : ''}):
       this._buffer = buffer,
       super(name){
-    GLTFProject.instance.bufferViews.add(this);
+    GLTFEngine.activeProject.bufferViews.add(this);
   }
 
   @override

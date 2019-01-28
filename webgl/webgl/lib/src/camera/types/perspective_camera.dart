@@ -88,9 +88,9 @@ class CameraPerspective extends Camera{
   CameraPerspective(this._yfov, double znear, double _zfar){
     super.znear = znear;
     super.zfar = _zfar;
-    GLTFProject.instance.cameras.add(this);
-    GLTFProject.instance.addNode(this);
-    GLTFProject.instance.removeNode(this);
+    GLTFEngine.activeProject.cameras.add(this);
+    GLTFEngine.activeProject.addNode(this);
+    GLTFEngine.activeProject.removeNode(this);
     GLTFNode.nextId--;
     cameraController = new OrbitPerspectiveCameraController();
   }

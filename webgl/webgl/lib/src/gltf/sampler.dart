@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
@@ -24,7 +25,7 @@ class GLTFSampler extends GLTFChildOfRootProperty {
     this.wrapT,// Todo (jpu) : add default value ?
     String name : ''
   }):super(name){
-      GLTFProject.instance.samplers.add(this);
+    GLTFEngine.activeProject.samplers.add(this);
   }
 
   @override

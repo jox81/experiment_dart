@@ -3,6 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/mesh/mesh_type.dart';
 import 'package:webgl/src/mesh/mesh_primitive.dart';
@@ -23,7 +24,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   List<GLTFMeshPrimitive> primitives = new List();
 
   GLTFMesh({this.weights, String name: ''}) : super(name){
-    GLTFProject.instance.meshes.add(this);
+    GLTFEngine.activeProject.meshes.add(this);
   }
 
   @override

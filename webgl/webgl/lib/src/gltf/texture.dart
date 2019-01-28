@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/image.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
@@ -27,7 +28,7 @@ class GLTFTexture extends GLTFChildOfRootProperty {
   bool clamp;
 
   GLTFTexture({GLTFSampler sampler, GLTFImage source, String name : ''}):this._sampler =sampler, this._source = source, super(name){
-    GLTFProject.instance.textures.add(this);
+    GLTFEngine.activeProject.textures.add(this);
   }
 
   @override

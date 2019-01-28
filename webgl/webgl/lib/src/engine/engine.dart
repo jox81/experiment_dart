@@ -8,6 +8,9 @@ import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/interaction/interaction_manager.dart';
 
 abstract class Engine {
+  static Engine _currentEngine;
+  static Engine get currentEngine => _currentEngine ?? (throw 'No engine Define in Engine');
+
   final EngineClock _engineClock = new EngineClock();
   final CanvasElement canvas;
 
@@ -21,8 +24,9 @@ abstract class Engine {
   Project _currentProject;
   Project get currentProject => _currentProject;
   set currentProject(Project value) => _currentProject = value;
-
+  
   Engine(this.canvas){
+    Engine._currentEngine = this;
     _interaction = new InteractionManager(this);
   }
 
@@ -31,6 +35,7 @@ abstract class Engine {
     Context.glWrapper.resizeCanvas();
     _currentProject = project;
     await renderer.init(project);
+
     _render();
   }
 

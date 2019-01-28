@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
@@ -24,7 +25,7 @@ class GLTFBuffer extends GLTFChildOfRootProperty {
     String name : ''
   }):super(name){
     print("###");
-    GLTFProject.instance.buffers.add(this);
+    GLTFEngine.activeProject.buffers.add(this);
   }
 
   @override

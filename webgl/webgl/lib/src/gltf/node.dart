@@ -1,4 +1,5 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
@@ -57,7 +58,7 @@ class GLTFNode extends GLTFChildOfRootProperty{
   GLTFNode({
     String name : ''
   }): super(name){
-    GLTFProject.instance.addNode(this);
+    GLTFEngine.activeProject.addNode(this);
   }
 
   Matrix4 get parentMatrix =>  parent != null ?  (parent.parentMatrix * parent.matrix) as Matrix4 : new Matrix4.identity();

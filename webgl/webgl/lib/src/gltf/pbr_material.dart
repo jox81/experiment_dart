@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
@@ -35,7 +36,7 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
       this.doubleSided : false,
       String name: ''})
       : super(name){
-      GLTFProject.instance.materials.add(this);
+    GLTFEngine.activeProject.materials.add(this);
   }
 
   @override

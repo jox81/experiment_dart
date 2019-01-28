@@ -3,12 +3,11 @@ import 'dart:html';
 import 'dart:math' as Math;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine.dart';
-import 'package:webgl/src/interaction/interactionnable.dart';
 import 'package:webgl/src/interaction/touch_manager.dart';
 
 class InteractionManager {
-  final Engine engine;
   final TouchesManager _touchesManager = new TouchesManager();
+  final Engine engine;
 
   //Interaction with keyboard
   List<bool> _currentlyPressedKeys;

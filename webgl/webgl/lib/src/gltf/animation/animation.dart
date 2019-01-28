@@ -1,5 +1,6 @@
 import 'package:webgl/src/gltf/animation/animation_channel.dart';
 import 'package:webgl/src/gltf/animation/animation_sampler.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
@@ -12,7 +13,7 @@ class GLTFAnimation {
   List<GLTFAnimationChannel> channels;
 
   GLTFAnimation({String name : ''}){
-    GLTFProject.instance.animations.add(this);
+    GLTFEngine.activeProject.animations.add(this);
   }
 
   @override

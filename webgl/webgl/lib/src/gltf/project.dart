@@ -1,4 +1,5 @@
 import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/engine/engine_type.dart';
 import 'dart:core';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
@@ -42,7 +43,8 @@ class GLTFProject extends Project{
   }
 
   GLTFProject._init(){
-    GLTFProject.reset();
+    Engine.currentEngine.currentProject = this;
+    reset();
   }
 
   static GLTFProject _instance;
@@ -94,7 +96,7 @@ class GLTFProject extends Project{
   @override
   String toString()=>'GLTFProject: {"buffers": $buffers, "bufferViews": $bufferViews, "cameras": $cameras, "images": $images, "samplers": $samplers, "textures": $textures, "materials": $materials, "accessors": $accessors, "meshes": $meshes, "scenes": $scenes, "nodes": $nodes, "sceneId": ${_scene?.sceneId}';
 
-  static void reset({bool fullReset : false}) {
+  void reset({bool fullReset : false}) {
     GLTFBuffer.nextId = 0;
     GLTFBufferView.nextId = 0;
     GLTFImage.nextId = 0;

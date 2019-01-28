@@ -7,6 +7,7 @@ import 'package:webgl/src/gltf/accessor/accessor_sparse_values.dart';
 import 'package:webgl/src/gltf/animation/animation_channel.dart';
 import 'package:webgl/src/gltf/animation/animation_channel_target.dart';
 import 'package:webgl/src/gltf/animation/animation_sampler.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
@@ -125,7 +126,7 @@ class GLTFCreation {
   GLTFCreation._(this._gltfProject, this._gltfSource);
 
   void _initGLTF() {
-    GLTFProject.reset();
+    GLTFEngine.activeProject.reset();
 
     assert(_gltfSource != null);
 

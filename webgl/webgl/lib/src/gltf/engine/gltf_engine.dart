@@ -2,18 +2,20 @@ import 'dart:html';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/renderer/gltf_renderer.dart';
-import 'package:webgl/src/interaction/interaction_manager.dart';
 
-class GLTFEngine extends Engine{
-
+class GLTFEngine extends Engine {
   final CanvasElement canvas;
 
-  @override
-  final GLTFRenderer renderer;
+  static GLTFEngine get currentEngine => Engine.currentEngine as GLTFEngine;
+  static GLTFProject get activeProject =>
+      currentEngine.currentProject as GLTFProject;
 
-  GLTFEngine(this.canvas):
-        this.renderer = new GLTFRenderer(canvas),
-        super(canvas);
+  @override
+  GLTFRenderer renderer;
+
+  GLTFEngine(this.canvas) : super(canvas) {
+    this.renderer = new GLTFRenderer(canvas);
+  }
 
   @override
   Future render(covariant GLTFProject project) async {

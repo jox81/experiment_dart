@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/introspection/introspection.dart';
@@ -26,8 +27,8 @@ class CameraOrthographic extends Camera{
   Vector3 get frontDirection => null;
 
   CameraOrthographic(){
-    GLTFProject.instance.cameras.add(this);
-    GLTFProject.instance.removeNode(this);
+    GLTFEngine.activeProject.cameras.add(this);
+    GLTFEngine.activeProject.removeNode(this);
     GLTFNode.nextId--;
   }
 

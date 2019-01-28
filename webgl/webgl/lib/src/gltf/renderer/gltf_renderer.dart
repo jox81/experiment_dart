@@ -55,14 +55,6 @@ class GLTFRenderer extends Renderer {
   num _currentTime;
 
   GLTFRenderer(this._canvas) {
-
-    // Todo (jpu) :
-    //> déplacer, la lumière devrait faire partie du projet, pas du renderer
-    light = new DirectionalLight()
-      ..translation = new Vector3(50.0, 50.0, -50.0)
-      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
-      ..color =  new Vector3(1.0, 1.0, 1.0);
-
     context.init(_canvas);
   }
 
@@ -192,6 +184,13 @@ class GLTFRenderer extends Renderer {
     _gltfProject = gltfProject;
 
     if(currentScene == null) throw new Exception("currentScene must be set before init.");
+
+    // Todo (jpu) :
+    //> déplacer, la lumière devrait faire partie du projet, pas du renderer
+    light = new DirectionalLight()
+      ..translation = new Vector3(50.0, 50.0, -50.0)
+      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
+      ..color =  new Vector3(1.0, 1.0, 1.0);
 
     await ShaderSource.loadShaders();
     //> Init extensions
