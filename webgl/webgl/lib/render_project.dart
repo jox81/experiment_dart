@@ -10,11 +10,11 @@ import 'package:webgl/src/project/project_factory.dart';
 
 Future renderProjectFromPath(String projectPath, CanvasElement canvas) async {
 
+  EngineFactory engineFactory = new EngineFactory();
+  Engine engine = engineFactory.create(canvas, projectPath);
+
   ProjectFactory projectFactory = new ProjectFactory();
   Project project = await projectFactory.create(projectPath);
-
-  EngineFactory engineFactory = new EngineFactory();
-  Engine engine = engineFactory.create(canvas, project.engineType);
 
   renderProject(engine, project);
 }
