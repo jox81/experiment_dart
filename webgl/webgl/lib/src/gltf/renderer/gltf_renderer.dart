@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
-import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/lights.dart';
@@ -11,17 +10,16 @@ import 'package:webgl/src/gltf/animation/animation_channel.dart';
 import 'package:webgl/src/gltf/animation/animation_channel_target_path_type.dart';
 import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
+import 'package:webgl/src/gltf/renderer/utils_texture.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/context.dart' as ctxWrapper show gl;
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/renderer/utils_renderer.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
@@ -29,7 +27,6 @@ import 'package:webgl/src/gltf/animation/animation.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/gltf/texture.dart';
 
 @reflector
 class GLTFRenderer extends Renderer {
@@ -50,134 +47,10 @@ class GLTFRenderer extends Renderer {
   CanvasElement _canvas;
   CanvasElement get canvas => _canvas;
 
-  WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
-
   num _currentTime;
 
   GLTFRenderer(this._canvas) {
     context.init(_canvas);
-  }
-
-  Future _initTextures() async {
-
-    ImageElement imageElement;
-    ///TextureFilterType magFilter;
-    int magFilter;
-    /// TextureFilterType minFilter;
-    int minFilter;
-    /// TextureWrapType wrapS;
-    int wrapS;
-    /// TextureWrapType wrapT;
-    int wrapT;
-
-    //brdfLUT
-    imageElement = await TextureUtils.loadImage('packages/webgl/images/utils/brdfLUT.png');
-    magFilter = TextureFilterType.LINEAR;
-    minFilter = TextureFilterType.LINEAR;
-    wrapS = TextureWrapType.REPEAT;
-    wrapT = TextureWrapType.REPEAT;
-    brdfLUTTexture = new WebGLTexture.fromWebGL(createImageTexture(TextureUnit.TEXTURE0 + 0, imageElement, magFilter, minFilter, wrapS, wrapT), TextureTarget.TEXTURE_2D);
-
-    //Environnement
-    gl.activeTexture(TextureUnit.TEXTURE0 + 1);
-    List<List<ImageElement>> papermill_diffuse =
-    await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: 'packages/webgl/');
-    cubeMapTextureDiffuse = TextureUtils.createCubeMapFromImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
-    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
-
-    gl.activeTexture(TextureUnit.TEXTURE0 + 2);
-    List<List<ImageElement>> papermill_specular =
-    await TextureUtils.loadCubeMapImages('papermill_specular', webPath: 'packages/webgl/');
-    cubeMapTextureSpecular = TextureUtils.createCubeMapFromImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
-    gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
-
-    _reservedTextureUnits = 3;
-
-    bool useDebugTexture = false;
-    for (int i = 0; i < _gltfProject.textures.length; i++) {
-      int textureUnitId = 0;
-
-      GLTFTexture gltfTexture;
-      if (!useDebugTexture) {
-        gltfTexture = _gltfProject.textures[i];
-        if (gltfTexture.source.data == null) {
-          //load image
-          String fileUrl =
-              _gltfProject.baseDirectory + gltfTexture.source.uri.toString();
-          imageElement = await TextureUtils.loadImage(fileUrl);
-          textureUnitId = gltfTexture.textureId;
-        } else {
-          String base64Encoded = base64.encode(gltfTexture.source.data);
-          imageElement = new ImageElement(
-              src: "data:${gltfTexture.source.mimeType};base64,$base64Encoded");
-        }
-
-        magFilter = gltfTexture.sampler != null
-            ? gltfTexture.sampler.magFilter
-            : TextureFilterType.LINEAR;
-        minFilter = gltfTexture.sampler != null
-            ? gltfTexture.sampler.minFilter
-            : TextureFilterType.LINEAR;
-        wrapS = gltfTexture.sampler != null
-            ? gltfTexture.sampler.wrapS
-            : TextureWrapType.REPEAT;
-        wrapT = gltfTexture.sampler != null
-            ? gltfTexture.sampler.wrapT
-            : TextureWrapType.REPEAT;
-      } else {
-//        String imagePath = '/images/utils/uv.png';
-        String imagePath = '/images/utils/uv_grid.png';
-//      String imagePath = '/images/crate.gif';
-//      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat.png';
-//      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat_256.png';
-        imageElement = await TextureUtils.loadImage(imagePath);
-
-        magFilter = TextureFilterType.LINEAR;
-        minFilter = TextureFilterType.LINEAR;
-        wrapS = TextureWrapType.CLAMP_TO_EDGE;
-        wrapT = TextureWrapType.CLAMP_TO_EDGE;
-      }
-
-      //create model texture
-      webgl.Texture texture = createImageTexture(TextureUnit.TEXTURE0 + textureUnitId + _reservedTextureUnits, imageElement, magFilter, minFilter, wrapS, wrapT);
-      if(gltfTexture != null){
-        gltfTexture.webglTexture = texture;
-      }
-    }
-  }
-
-  webgl.Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
-
-    //create texture
-    webgl.Texture texture = gl.createTexture();
-
-    //bind it to an active texture unit
-    gl.activeTexture(textureUnitId);
-    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
-    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 0);
-
-    //fill texture data
-    int mipMapLevel = 0;
-    gl.texImage2D(
-        TextureAttachmentTarget.TEXTURE_2D,
-        mipMapLevel,
-        TextureInternalFormat.RGBA,
-        TextureInternalFormat.RGBA,
-        TexelDataType.UNSIGNED_BYTE,
-        imageElement);
-    gl.generateMipmap(TextureTarget.TEXTURE_2D);
-
-    //set textureUnit format
-    gl.texParameteri(TextureTarget.TEXTURE_2D,
-        TextureParameter.TEXTURE_MAG_FILTER, magFilter);
-    gl.texParameteri(TextureTarget.TEXTURE_2D,
-        TextureParameter.TEXTURE_MIN_FILTER, minFilter);
-    gl.texParameteri(
-        TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_S, wrapS);
-    gl.texParameteri(
-        TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, wrapT);
-
-    return texture;
   }
 
   Future init(covariant GLTFProject gltfProject) async {
@@ -192,7 +65,17 @@ class GLTFRenderer extends Renderer {
       ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
       ..color =  new Vector3(1.0, 1.0, 1.0);
 
+    globalState = getGlobalState();
+
     await ShaderSource.loadShaders();
+    _reservedTextureUnits = await UtilsTextureGLTF.initTextures(_gltfProject);
+
+    setupCameras();
+
+    clearBackground(gltfProject.scene.backgroundColor);
+  }
+
+  GlobalState getGlobalState() {
     //> Init extensions
     //This activate extensions
     var hasSRGBExt = gl.getExtension('EXT_SRGB');
@@ -200,17 +83,16 @@ class GLTFRenderer extends Renderer {
     var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
     var hasIndexUIntExtension = gl.getExtension('OES_element_index_uint');
 
-    globalState = new GlobalState()
+    return new GlobalState()
       ..hasLODExtension = hasLODExtension
       ..hasDerivativesExtension = hasDerivativesExtension
       ..hasIndexUIntExtension = hasIndexUIntExtension
       ..sRGBifAvailable =
       hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.WebGL.RGBA;
+  }
 
-    await _initTextures();
-    setupCameras();
-
-    context.backgroundColor = gltfProject.scene.backgroundColor;
+  void clearBackground(Vector4 color){
+    gl.clearColor(color.r, color.g, color.g, color.a);
   }
 
   void render({num currentTime: 0.0}) {
@@ -226,7 +108,6 @@ class GLTFRenderer extends Renderer {
   }
 
   void drawNodes(List<GLTFNode> nodes) {
-
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
       drawNode(node);
@@ -416,8 +297,6 @@ class GLTFRenderer extends Renderer {
   }
 
   void setupCameras() {
-
-
     Camera currentCamera;
 
     bool debugCamera = false;

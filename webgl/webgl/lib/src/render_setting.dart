@@ -1,9 +1,11 @@
-import 'package:webgl/src/context.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 
 class RenderSetting{
-  RenderSetting();
+
+  final WebGLRenderingContext gl;
+  RenderSetting(this.gl);
 
   void showBackFace(bool visible){
     if(!visible) {

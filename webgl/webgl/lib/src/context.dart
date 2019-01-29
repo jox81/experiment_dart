@@ -27,14 +27,7 @@ class Context{
   //Use to add parenting models space (hierarchy)
   static Matrix4 modelMatrix = new Matrix4.identity();
 
-  bool debugging = false;
-
-  Vector4 _backgroundColor;
-  Vector4 get backgroundColor => _backgroundColor;
-  set backgroundColor(Vector4 color) {
-    _backgroundColor = color;
-    _gl.clearColor = new Vector4(color.r, color.g, color.g, color.a);
-  }
+//  bool debugging = false;
 
   void init(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
     _gl = new WebGLRenderingContext.create(canvas);

@@ -635,4 +635,38 @@ class TextureUtils {
     Context.glWrapper.activeTexture.textureCubeMap.unBind();
     return texture;
   }
+
+  static webgl.Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
+
+    //create texture
+    webgl.Texture texture = gl.createTexture();
+
+    //bind it to an active texture unit
+    gl.activeTexture(textureUnitId);
+    gl.bindTexture(TextureTarget.TEXTURE_2D, texture);
+    gl.pixelStorei(PixelStorgeType.UNPACK_FLIP_Y_WEBGL, 0);
+
+    //fill texture data
+    int mipMapLevel = 0;
+    gl.texImage2D(
+        TextureAttachmentTarget.TEXTURE_2D,
+        mipMapLevel,
+        TextureInternalFormat.RGBA,
+        TextureInternalFormat.RGBA,
+        TexelDataType.UNSIGNED_BYTE,
+        imageElement);
+    gl.generateMipmap(TextureTarget.TEXTURE_2D);
+
+    //set textureUnit format
+    gl.texParameteri(TextureTarget.TEXTURE_2D,
+        TextureParameter.TEXTURE_MAG_FILTER, magFilter);
+    gl.texParameteri(TextureTarget.TEXTURE_2D,
+        TextureParameter.TEXTURE_MIN_FILTER, minFilter);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_S, wrapS);
+    gl.texParameteri(
+        TextureTarget.TEXTURE_2D, TextureParameter.TEXTURE_WRAP_T, wrapT);
+
+    return texture;
+  }
 }

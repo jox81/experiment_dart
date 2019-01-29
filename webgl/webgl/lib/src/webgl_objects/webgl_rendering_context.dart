@@ -29,7 +29,7 @@ class WebGLRenderingContext{
   RenderSetting _renderSetting;
   RenderSetting get renderSettings {
     if(_renderSetting == null){
-      _renderSetting = new RenderSetting();
+      _renderSetting = new RenderSetting(this);
     }
     return _renderSetting;
   }

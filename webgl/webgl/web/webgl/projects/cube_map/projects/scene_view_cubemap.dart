@@ -16,10 +16,8 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class CubeMapProject extends GLTFProject{
 
-  final String baseDirectory = 'primitives/';
+  final String baseDirectory = 'primitives/';// Todo (jpu) : usage ?
 
-  GLTFNode _sphereNode;
-  GLTFNode get sphereNode => _sphereNode;
   NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
 
   CubeMapProject._();
@@ -33,9 +31,7 @@ class CubeMapProject extends GLTFProject{
     addInteractable(nodeInteractionnable);
 
     scene = new GLTFScene();
-    scene.backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0); // Todo (jpu) : ?
-
-//    backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
+    scene.backgroundColor = new Vector4(0.839, 0.815, 0.713, 1.0);
 
     //Cameras
     CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
@@ -71,7 +67,7 @@ class CubeMapProject extends GLTFProject{
     GLTFMesh sphereMesh = new GLTFMesh.sphere(
         radius: 1.0, segmentV: 32, segmentH: 32, meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
       ..primitives[0].material = material;
-    _sphereNode = new GLTFNode()
+    GLTFNode sphereNode = new GLTFNode()
       ..mesh = sphereMesh
       ..name = 'sphere'
       ..matrix.translate(0.0, 0.0, 0.0)
