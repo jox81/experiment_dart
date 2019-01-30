@@ -39,7 +39,7 @@ class MaterialPragmaticPBR extends Material {
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix)
+    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * modelMatrix)
         .getNormalMatrix() as Matrix3;
     setUniform(program, "u_NormalMatrix", ShaderVariableType.FLOAT_MAT3,
         normalMatrix.storage);

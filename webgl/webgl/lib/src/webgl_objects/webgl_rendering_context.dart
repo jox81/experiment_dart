@@ -44,14 +44,12 @@ class WebGLRenderingContext{
     return 1.0;
   }
 
-  WebGLRenderingContext._init(this.gl);
-
   factory WebGLRenderingContext.fromWebGL(WebGL.RenderingContext gl){
     return new WebGLRenderingContext._init(gl);
   }
 
   //Todo add default parameters
-  factory WebGLRenderingContext.create(CanvasElement canvas,{bool debug : false, bool preserveDrawingBuffer:true}){
+  factory WebGLRenderingContext.create(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false, bool preserveDrawingBuffer:true}){
     WebGL.RenderingContext gl;
 
     List<String> names = [
@@ -77,7 +75,37 @@ class WebGLRenderingContext{
       return null;
     }
 
-    return new WebGLRenderingContext._init(gl);
+    return new WebGLRenderingContext._init(gl, enableExtensions:enableExtensions, initConstant:initConstant, logInfos:logInfos);
+  }
+
+  WebGLRenderingContext._init(this.gl, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
+    if(initConstant) {
+      webglConstants.initWebglConstants();
+    }
+
+    if(enableExtensions){
+      renderSettings.enableExtensions(log: logInfos);
+    }
+
+    if(logInfos) {
+      _logInfos();
+    }
+
+    clear(ClearBufferMask.COLOR_BUFFER_BIT);
+    frontFace = FrontFaceDirection.CCW;
+
+    renderSettings.enableDepth(true);
+    renderSettings.showBackFace(true);
+    renderSettings.enableExtensions();
+  }
+
+  void _logInfos() {
+    contextAttributes.logValues();
+    renderSettings.logSupportedExtensions();
+    webglConstants.logConstants();
+    webglConstants.logParameters();
+    webglParameters.logValues();
+    webglParameters.testGetParameter();
   }
 
   void resizeCanvas() {
