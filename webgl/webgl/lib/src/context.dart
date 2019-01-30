@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/utils/utils_renderer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
@@ -60,5 +61,23 @@ class Context{
     _gl.webglParameters.logValues();
 
     _gl.webglParameters.testGetParameter();
+  }
+
+  GlobalState _globalState;
+  GlobalState get globalState => _globalState ??= _getGlobalState();
+  GlobalState _getGlobalState() {
+    //> Init extensions
+    //This activate extensions
+    var hasSRGBExt = gl.getExtension('EXT_SRGB');
+    var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
+    var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
+    var hasIndexUIntExtension = gl.getExtension('OES_element_index_uint');
+
+    return new GlobalState()
+      ..hasLODExtension = hasLODExtension
+      ..hasDerivativesExtension = hasDerivativesExtension
+      ..hasIndexUIntExtension = hasIndexUIntExtension
+      ..sRGBifAvailable =
+      hasSRGBExt != null ? WebGL.EXTsRgb.SRGB_EXT : WebGL.WebGL.RGBA;
   }
 }

@@ -4,13 +4,13 @@ import 'dart:math';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/lights.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/animation/animation_channel.dart';
 import 'package:webgl/src/gltf/animation/animation_channel_target_path_type.dart';
 import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/renderer/utils_texture.dart';
+import 'package:webgl/src/lights/types/directional_light.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
@@ -21,7 +21,6 @@ import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/context.dart' as ctxWrapper show gl;
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
-import 'package:webgl/src/gltf/renderer/utils_renderer.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/animation/animation.dart';
 import 'package:webgl/src/gltf/node.dart';
@@ -31,64 +30,31 @@ import 'package:webgl/src/gltf/scene.dart';
 @reflector
 class GLTFRenderer extends Renderer {
 
-  // Direction from where the light is coming to origin
-  DirectionalLight light;
-
-  GlobalState globalState;
-
-  int _reservedTextureUnits;
-
-  webgl.RenderingContext get gl => ctxWrapper.gl;
-
   GLTFProject _gltfProject;
-
-  GLTFScene get currentScene => _gltfProject.scenes.length > 0 ? _gltfProject.scenes[0] : null;
-
-  CanvasElement _canvas;
-  CanvasElement get canvas => _canvas;
-
+  int _reservedTextureUnits;
   num _currentTime;
 
-  GLTFRenderer(this._canvas) {
-    context.init(_canvas);
-  }
+  webgl.RenderingContext get gl => ctxWrapper.gl;
+  GLTFScene get currentScene => _gltfProject.scenes.length > 0 ? _gltfProject.scenes[0] : null;
+
+  GLTFRenderer(CanvasElement canvas) : super(canvas);
 
   Future init(covariant GLTFProject gltfProject) async {
     _gltfProject = gltfProject;
 
     if(currentScene == null) throw new Exception("currentScene must be set before init.");
 
-    // Todo (jpu) :
-    //> déplacer, la lumière devrait faire partie du projet, pas du renderer
-    light = new DirectionalLight()
-      ..translation = new Vector3(50.0, 50.0, -50.0)
-      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
-      ..color =  new Vector3(1.0, 1.0, 1.0);
-
-    globalState = getGlobalState();
-
     await ShaderSource.loadShaders();
     _reservedTextureUnits = await UtilsTextureGLTF.initTextures(_gltfProject);
 
+    // Todo (jpu) : pourquoi si je ne le fait pas ici, il y a des soucis de rendu ?!!
+    _gltfProject.defaultLight = new DirectionalLight()
+      ..translation = new Vector3(50.0, 50.0, -50.0)
+      ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
+      ..color =  new Vector3(1.0, 1.0, 1.0);
     setupCameras();
 
     clearBackground(gltfProject.scene.backgroundColor);
-  }
-
-  GlobalState getGlobalState() {
-    //> Init extensions
-    //This activate extensions
-    var hasSRGBExt = gl.getExtension('EXT_SRGB');
-    var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
-    var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
-    var hasIndexUIntExtension = gl.getExtension('OES_element_index_uint');
-
-    return new GlobalState()
-      ..hasLODExtension = hasLODExtension
-      ..hasDerivativesExtension = hasDerivativesExtension
-      ..hasIndexUIntExtension = hasIndexUIntExtension
-      ..sRGBifAvailable =
-      hasSRGBExt != null ? webgl.EXTsRgb.SRGB_EXT : webgl.WebGL.RGBA;
   }
 
   void clearBackground(Vector4 color){
@@ -123,7 +89,7 @@ class GLTFRenderer extends Renderer {
         for (int i = 0; i < mesh.primitives.length; i++) {
           GLTFMeshPrimitive primitive = mesh.primitives[i];
 
-          primitive.bindMaterial(globalState?.hasLODExtension != null, _reservedTextureUnits);
+          primitive.bindMaterial(context.globalState?.hasLODExtension != null, _reservedTextureUnits);
 
           WebGLProgram program = primitive.program;
           gl.useProgram(program.webGLProgram);
@@ -133,7 +99,7 @@ class GLTFRenderer extends Renderer {
           primitive.material.setupBeforeRender();
           primitive.material.pvMatrix = (Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix) as Matrix4;
           primitive.material.setUniforms(
-              program, (node.parentMatrix * node.matrix) as Matrix4, Context.mainCamera.viewMatrix, Context.mainCamera.projectionMatrix, Context.mainCamera.translation, light);
+              program, (node.parentMatrix * node.matrix) as Matrix4, Context.mainCamera.viewMatrix, Context.mainCamera.projectionMatrix, Context.mainCamera.translation, _gltfProject.defaultLight);
 
           _drawPrimitive(primitive);
           primitive.material.setupAfterRender();
@@ -263,7 +229,7 @@ class GLTFRenderer extends Renderer {
           accessorIndices.count);
       //debug.logCurrentFunction(indices.toString());
     }else if(accessorIndices.componentType == 5125){
-      if(globalState.hasIndexUIntExtension == null) throw "hasIndexUIntExtension : extension not supported";
+      if(context.globalState.hasIndexUIntExtension == null) throw "hasIndexUIntExtension : extension not supported";
       indices = accessorIndices.bufferView.buffer.data.buffer
           .asUint32List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,

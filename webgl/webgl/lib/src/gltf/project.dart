@@ -1,3 +1,4 @@
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'dart:core';
@@ -31,9 +32,17 @@ import 'package:webgl/src/project/project.dart';
 @reflector
 abstract class GLTFProject extends Project{
 
+  DirectionalLight _defaultLight;
+  DirectionalLight get defaultLight => _defaultLight;
+  set defaultLight(DirectionalLight value) {
+    _defaultLight = value;
+  }
+
   GLTFProject({bool doReset: true}){
     Engine.currentEngine.currentProject = this;
     reset();
+
+    setupDefault();
   }
 
   ///path of the directory of the gltf file
@@ -52,6 +61,10 @@ abstract class GLTFProject extends Project{
   List<GLTFSampler> samplers = <GLTFSampler>[];
   List<GLTFAnimation> animations = <GLTFAnimation>[];
   GLTFAsset asset = new GLTFAsset("2.0");
+
+  void setupDefault() {
+
+  }
 
   final List<GLTFScene> _scenes = <GLTFScene>[];
   List<GLTFScene> get scenes => _scenes.toList(growable: false);
@@ -99,4 +112,5 @@ abstract class GLTFProject extends Project{
     GLTFAnimationChannel.nextId = 0;
     GLTFAnimationSampler.nextId = 0;
   }
+
 }
