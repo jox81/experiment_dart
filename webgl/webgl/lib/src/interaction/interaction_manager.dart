@@ -4,6 +4,7 @@ import 'dart:math' as Math;
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/interaction/touch_manager.dart';
+import 'package:webgl/src/project/project.dart';
 
 class InteractionManager {
   final TouchesManager _touchesManager = new TouchesManager();
@@ -80,6 +81,17 @@ class InteractionManager {
     engine.canvas.onTouchEnter.listen(_onTouchEnter);
   }
 
+  Project _project;
+
+  void init(covariant Project project){
+    _project = project;
+  }
+
+  void update( {num currentTime: 0.0}) {
+    _project.interactionables
+        .forEach((i) => i.onKeyPressed(_currentlyPressedKeys));
+  }
+
   ///
   /// Window
   ///
@@ -104,11 +116,6 @@ class InteractionManager {
     }
   }
 
-  void update({num currentTime: 0.0}) {
-    engine.currentProject.interactionables
-        .forEach((i) => i.onKeyPressed(_currentlyPressedKeys));
-  }
-
   ///
   /// Mouse
   ///
@@ -118,7 +125,7 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    engine.currentProject.interactionables
+    _project.interactionables
         .forEach((i) => i.onMouseDown(screenX, screenY));
 
     dragging = false;
@@ -133,7 +140,7 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    engine.currentProject.interactionables
+    _project.interactionables
         .forEach((i) => i.onMouseMove(deltaX, deltaY, isMiddleMouseButton));
 
     if (mouseDown) {
@@ -149,7 +156,7 @@ class InteractionManager {
     int screenY = event.client.y.toInt();
     updateMouseInfos(screenX, screenY);
 
-    engine.currentProject.interactionables
+    _project.interactionables
         .forEach((i) => i.onMouseUp(screenX, screenY));
 
     dragging = false;
@@ -162,7 +169,7 @@ class InteractionManager {
   void _onMouseWheel(WheelEvent event) {
     num deltaY = -event.deltaY;
     deltaY = Math.max(-1, Math.min(1, deltaY)) / 50;
-    engine.currentProject.interactionables
+    _project.interactionables
         .forEach((i) => i.onMouseWheel(deltaY));
   }
 
@@ -192,14 +199,14 @@ class InteractionManager {
     _touchesManager.update(event);
 
     if (_touchesManager.touchLength > 1) {
-      engine.currentProject.interactionables
+      _project.interactionables
           .forEach((i) => i.onTouchStart(null, null));
     } else {
       int screenX = _touchesManager[0].client.x.toInt();
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      engine.currentProject.interactionables
+      _project.interactionables
           .forEach((i) => i.onTouchStart(screenX, screenY));
     }
 
@@ -212,7 +219,7 @@ class InteractionManager {
     _touchesManager.update(event);
 
     if (event.targetTouches.length > 1) {
-      engine.currentProject.interactionables.forEach((i) =>
+      _project.interactionables.forEach((i) =>
           i.onTouchMove(null, null, scaleChange: _touchesManager.scaleChange));
 //      //position with center of 2 first touches
 //      int screenX = (_touchesManager[0].client.x.toInt() + _touchesManager[1].client.x.toInt())~/2;
@@ -224,7 +231,7 @@ class InteractionManager {
       int screenY = _touchesManager[0].client.y.toInt();
       updateMouseInfos(screenX, screenY);
 
-      engine.currentProject.interactionables
+      _project.interactionables
           .forEach((i) => i.onTouchMove(deltaX, deltaY));
     }
 
@@ -240,7 +247,7 @@ class InteractionManager {
     int screenX = _touchesManager[0].client.x.toInt();
     int screenY = _touchesManager[0].client.y.toInt();
     updateMouseInfos(screenX, screenY);
-    engine.currentProject.interactionables
+    _project.interactionables
         .forEach((i) => i.onTouchEnd(screenX, screenY));
 
     dragging = false;

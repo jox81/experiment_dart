@@ -2,7 +2,7 @@ import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_indices.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_values.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';

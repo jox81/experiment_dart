@@ -2,7 +2,7 @@ import 'dart:html';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/context.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';

@@ -1,5 +1,5 @@
 import 'package:webgl/src/gltf/image.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/debug_gltf.dart';

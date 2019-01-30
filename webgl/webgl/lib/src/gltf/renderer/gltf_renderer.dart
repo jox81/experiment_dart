@@ -1,115 +1,132 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:math';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
-import 'package:webgl/src/gltf/animation/animation_channel.dart';
-import 'package:webgl/src/gltf/animation/animation_channel_target_path_type.dart';
-import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
-import 'package:webgl/src/gltf/renderer/utils_texture.dart';
+import 'package:webgl/src/gltf/utils/utils_texture.dart';
 import 'package:webgl/src/lights/types/directional_light.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
+import 'package:webgl/src/utils/utils_text.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
-import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
+    as GLEnum;
 import 'package:webgl/src/context.dart' hide gl;
 import 'package:webgl/src/context.dart' as ctxWrapper show gl;
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
-import 'package:webgl/src/gltf/animation/animation.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
-import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 
 @reflector
 class GLTFRenderer extends Renderer {
-
   GLTFProject _gltfProject;
-  int _reservedTextureUnits;
-  num _currentTime;
 
   webgl.RenderingContext get gl => ctxWrapper.gl;
-  GLTFScene get currentScene => _gltfProject.scenes.length > 0 ? _gltfProject.scenes[0] : null;
 
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
   Future init(covariant GLTFProject gltfProject) async {
     _gltfProject = gltfProject;
 
-    if(currentScene == null) throw new Exception("currentScene must be set before init.");
+    if (_gltfProject.currentScene == null)
+      throw new Exception("currentScene must be set before init.");
 
     await ShaderSource.loadShaders();
-    _reservedTextureUnits = await UtilsTextureGLTF.initTextures(_gltfProject);
+    context.globalState.reservedTextureUnits =
+        await UtilsTextureGLTF.initTextures(_gltfProject);
 
     // Todo (jpu) : pourquoi si je ne le fait pas ici, il y a des soucis de rendu ?!!
     _gltfProject.defaultLight = new DirectionalLight()
       ..translation = new Vector3(50.0, 50.0, -50.0)
       ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
-      ..color =  new Vector3(1.0, 1.0, 1.0);
-    setupCameras();
+      ..color = new Vector3(1.0, 1.0, 1.0);
 
-    clearBackground(gltfProject.scene.backgroundColor);
+    Context.mainCamera = _gltfProject.getCurrentCamera();
+
+    _backgroundColor = gltfProject.scene.backgroundColor;
   }
 
-  void clearBackground(Vector4 color){
+  set _backgroundColor(Vector4 color) {
     gl.clearColor(color.r, color.g, color.g, color.a);
   }
 
   void render({num currentTime: 0.0}) {
-    _currentTime = currentTime;
-
     try {
       Context.glWrapper.resizeCanvas();
-      gl.clear(ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
-      drawNodes(currentScene.nodes);
+      gl.clear(
+          ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
+      _drawNodes(_gltfProject.currentScene.nodes);
     } catch (ex) {
-      print("Error From renderer _render method: $ex ${StackTrace.current}");
+      print(
+          "GLTFRenderer : Error From renderer _render method: $ex ${StackTrace.current}");
     }
   }
 
-  void drawNodes(List<GLTFNode> nodes) {
+  void _drawNodes(List<GLTFNode> nodes) {
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
-      drawNode(node);
-      drawNodes(node.children);
+      _drawNode(node);
+      _drawNodes(node.children); //recursive
     }
   }
 
-  void drawNode(GLTFNode node){
-    if (node.mesh != null) {
-      GLTFMesh mesh = node.mesh;
-      if (mesh.primitives != null) {
+  void _drawNode(GLTFNode node) {
+    if (node.mesh == null) return;
+    if (node.mesh.primitives == null) return;
 
-        for (int i = 0; i < mesh.primitives.length; i++) {
-          GLTFMeshPrimitive primitive = mesh.primitives[i];
+    List<GLTFMeshPrimitive> primitives = node.mesh.primitives;
+    for (int i = 0; i < primitives.length; i++) {
+      GLTFMeshPrimitive primitive = primitives[i];
+      Matrix4 modeMatrix = (node.parentMatrix * node.matrix) as Matrix4;
 
-          primitive.bindMaterial(context.globalState?.hasLODExtension != null, _reservedTextureUnits);
+      _drawPrimitive(primitive, modeMatrix);
+    }
+  }
 
-          WebGLProgram program = primitive.program;
-          gl.useProgram(program.webGLProgram);
+  void _drawPrimitive(GLTFMeshPrimitive primitive, Matrix4 modeMatrix) {
+    primitive.bindMaterial(context.globalState);
 
-          _setupPrimitiveBuffers(program, primitive);
+    WebGLProgram program = primitive.program;
+    gl.useProgram(program.webGLProgram);
 
-          primitive.material.setupBeforeRender();
-          primitive.material.pvMatrix = (Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix) as Matrix4;
-          primitive.material.setUniforms(
-              program, (node.parentMatrix * node.matrix) as Matrix4, Context.mainCamera.viewMatrix, Context.mainCamera.projectionMatrix, Context.mainCamera.translation, _gltfProject.defaultLight);
+    _setupPrimitiveBuffers(program, primitive);
 
-          _drawPrimitive(primitive);
-          primitive.material.setupAfterRender();
-        }
+    primitive.material.setupBeforeRender();
+    primitive.material.pvMatrix = (Context.mainCamera.projectionMatrix *
+        Context.mainCamera.viewMatrix) as Matrix4;
+    primitive.material.setUniforms(
+        program,
+        modeMatrix,
+        Context.mainCamera.viewMatrix,
+        Context.mainCamera.projectionMatrix,
+        Context.mainCamera.translation,
+        _gltfProject.defaultLight);
+
+    {
+      if (primitive.indicesAccessor == null ||
+          primitive.drawMode == DrawMode.POINTS) {
+        GLTFAccessor accessorPosition = primitive.positionAccessor;
+        if (accessorPosition == null)
+          throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
+        gl.drawArrays(primitive.drawMode, accessorPosition.byteOffset,
+            accessorPosition.count);
+      } else {
+        GLTFAccessor accessorIndices = primitive.indicesAccessor;
+        gl.drawElements(primitive.drawMode, accessorIndices.count,
+            accessorIndices.componentType, 0);
       }
+
+      // _drawLayer(canvas);
     }
+
+    primitive.material.setupAfterRender();
   }
 
-  void _setupPrimitiveBuffers(WebGLProgram program, GLTFMeshPrimitive primitive) {
-
+  void _setupPrimitiveBuffers(
+      WebGLProgram program, GLTFMeshPrimitive primitive) {
     _bindVertexArrayData(program, primitive);
 
     if (primitive.indicesAccessor != null) {
@@ -117,38 +134,60 @@ class GLTFRenderer extends Renderer {
     }
   }
 
-  void _bindVertexArrayData(
-      WebGLProgram program, GLTFMeshPrimitive primitive) {
+  void _bindIndices(GLTFMeshPrimitive primitive) {
+    GLTFAccessor accessorIndices = primitive.indicesAccessor;
+    TypedData indices;
+    if (accessorIndices.componentType == 5123 ||
+        accessorIndices.componentType == 5121) {
+      indices = accessorIndices.bufferView.buffer.data.buffer.asUint16List(
+          accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+          accessorIndices.count);
+      //debug.logCurrentFunction(indices.toString());
+    } else if (accessorIndices.componentType == 5125) {
+      if (context.globalState.hasIndexUIntExtension == null)
+        throw "hasIndexUIntExtension : extension not supported";
+      indices = accessorIndices.bufferView.buffer.data.buffer.asUint32List(
+          accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
+          accessorIndices.count);
+    } else {
+      throw "_bindIndices : componentType not implemented ${GLEnum.VertexAttribArrayType.getByIndex(accessorIndices.componentType)}";
+    }
+    _initBuffer(
+        primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
+  }
 
-
+  void _bindVertexArrayData(WebGLProgram program, GLTFMeshPrimitive primitive) {
     for (String attributName in primitive.attributes.keys) {
       GLTFAccessor accessor = primitive.attributes[attributName];
 
-      if(accessor.bufferView == null) throw 'bufferView must be defined';
-      if(accessor.bufferView.buffer == null) throw 'buffer must be defined';
+      if (accessor.bufferView == null) throw 'bufferView must be defined';
+      if (accessor.bufferView.buffer == null) throw 'buffer must be defined';
 
-      Float32List verticesInfos = accessor.bufferView.buffer.data.buffer.asFloat32List(
-          accessor.byteOffset + accessor.bufferView.byteOffset,
-          accessor.count * (accessor.byteStride ~/ accessor.componentLength));
+      Float32List verticesInfos = accessor.bufferView.buffer.data.buffer
+          .asFloat32List(
+              accessor.byteOffset + accessor.bufferView.byteOffset,
+              accessor.count *
+                  (accessor.byteStride ~/ accessor.componentLength));
 
       //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
       assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
-          accessor.componentLength ==
+              accessor.componentLength ==
           0);
 
       //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
-      assert(accessor.byteOffset +
-          accessor.byteStride * (accessor.count - 1) +
-          (accessor.components * accessor.componentLength) <=
-          accessor.bufferView.byteLength, '${accessor.byteOffset +
-          accessor.byteStride * (accessor.count - 1) +
-          (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
+      assert(
+          accessor.byteOffset +
+                  accessor.byteStride * (accessor.count - 1) +
+                  (accessor.components * accessor.componentLength) <=
+              accessor.bufferView.byteLength,
+          '${accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
 
       //debug.logCurrentFunction('$attributName');
       //debug.logCurrentFunction(verticesInfos.toString());
 
       //>
-      _initBuffer(primitive, attributName, accessor.bufferView.usage, verticesInfos);
+      _initBuffer(
+          primitive, attributName, accessor.bufferView.usage, verticesInfos);
 
       //>
       _setAttribut(program, attributName, accessor);
@@ -157,20 +196,16 @@ class GLTFRenderer extends Renderer {
 
   /// BufferType bufferType
   // Todo (jpu) : is it possible to use only one of the bufferViews
-  void _initBuffer(GLTFMeshPrimitive primitive, String bufferName, int bufferType, TypedData data) {
-    if(primitive.buffers[bufferName] == null) {
-      primitive.buffers[bufferName] =
-          gl.createBuffer();
+  void _initBuffer(GLTFMeshPrimitive primitive, String bufferName,
+      int bufferType, TypedData data) {
+    if (primitive.buffers[bufferName] == null) {
+      primitive.buffers[bufferName] = gl.createBuffer();
       gl.bindBuffer(bufferType, primitive.buffers[bufferName]);
       gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
-    }else{
+    } else {
       gl.bindBuffer(bufferType, primitive.buffers[bufferName]);
     }
   }
-
-  //text utils
-  String _capitalize(String s) =>
-      s[0].toUpperCase() + s.substring(1).toLowerCase();
 
   /// [componentCount] => ex : 3 (x, y, z)
   void _setAttribut(
@@ -180,14 +215,15 @@ class GLTFRenderer extends Renderer {
     String shaderAttributName;
     if (attributName == 'TEXCOORD_0') {
       shaderAttributName = 'a_UV';
-    } else if(attributName == "COLOR_0"){
+    } else if (attributName == "COLOR_0") {
       shaderAttributName = 'a_Color';
     } else {
-      shaderAttributName = 'a_${_capitalize(attributName)}';
+      shaderAttributName = 'a_${UtilsText.capitalize(attributName)}';
     }
 
     //>
-    program.attributLocations[attributName] ??= gl.getAttribLocation(program.webGLProgram, shaderAttributName);
+    program.attributLocations[attributName] ??=
+        gl.getAttribLocation(program.webGLProgram, shaderAttributName);
     int attributLocation = program.attributLocations[attributName];
 
     //if exist
@@ -207,7 +243,7 @@ class GLTFRenderer extends Renderer {
       int offset = 0;
 
       //debug.logCurrentFunction(
-//          'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+      //'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
       //debug.logCurrentFunction('$accessor');
 
       //>
@@ -218,344 +254,15 @@ class GLTFRenderer extends Renderer {
     }
   }
 
-  void _bindIndices(GLTFMeshPrimitive primitive) {
-
-    GLTFAccessor accessorIndices = primitive.indicesAccessor;
-    TypedData indices;
-    if(accessorIndices.componentType == 5123 || accessorIndices.componentType == 5121) {
-      indices = accessorIndices.bufferView.buffer.data.buffer
-          .asUint16List(
-          accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
-          accessorIndices.count);
-      //debug.logCurrentFunction(indices.toString());
-    }else if(accessorIndices.componentType == 5125){
-      if(context.globalState.hasIndexUIntExtension == null) throw "hasIndexUIntExtension : extension not supported";
-      indices = accessorIndices.bufferView.buffer.data.buffer
-          .asUint32List(
-          accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
-          accessorIndices.count);
-    }else{
-      throw "_bindIndices : componentType not implemented ${GLEnum.VertexAttribArrayType.getByIndex(accessorIndices.componentType)}";
+  ///what is it for ? this show primitives layers drawn
+  int _countImage = 0;
+  void _drawLayer(CanvasElement canvas) {
+    if (_countImage < 10) {
+      String dataUrl = canvas.toDataUrl();
+      ImageElement image = new ImageElement(src: dataUrl);
+      DivElement div = querySelector('#debug') as DivElement;
+      div.children.add(image);
+      _countImage++;
     }
-    _initBuffer(primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
-  }
-
-  int countImage = 0;
-  void _drawPrimitive(GLTFMeshPrimitive primitive) {
-    if (primitive.indicesAccessor == null || primitive.drawMode == DrawMode.POINTS) {
-      GLTFAccessor accessorPosition = primitive.positionAccessor;
-      if(accessorPosition == null) throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
-      gl.drawArrays(
-          primitive.drawMode, accessorPosition.byteOffset, accessorPosition.count);
-    } else {
-      GLTFAccessor accessorIndices = primitive.indicesAccessor;
-      gl.drawElements(primitive.drawMode, accessorIndices.count,
-          accessorIndices.componentType, 0);
-
-//      if(countImage < 10) {
-//        String dataUrl = canvas.toDataUrl();
-//        ImageElement image = new ImageElement(src: dataUrl);
-//        DivElement div = querySelector('#debug') as DivElement;
-//        div.children.add(image);
-//        countImage++;
-//      }
-    }
-  }
-
-  void setupCameras() {
-    Camera currentCamera;
-
-    bool debugCamera = false;
-
-    if(debugCamera){
-      currentCamera = new CameraPerspective(radians(47.0), 0.1, 1000.0)
-        ..targetPosition = new Vector3(0.0, 0.0, 0.0)
-        ..translation = new Vector3(10.0, 10.0, 10.0);
-    }else {
-      //find first activeScene camera
-      currentCamera = findActiveSceneCamera(currentScene.nodes);
-      //or use first in project else default
-      if (currentCamera == null) {
-        currentCamera = findActiveSceneCamera(_gltfProject.nodes);
-      }
-      if (currentCamera == null) {
-        if (_gltfProject.cameras.length > 0) {
-          currentCamera = _gltfProject.cameras[0];
-          GLTFNode node = _gltfProject.nodes.firstWhere((n)=> n.name == currentCamera.name, orElse: ()=> null);
-          currentCamera.matrix = node.matrix;
-//          currentCamera.translation = node.translation;
-//          currentCamera.rotation = node.rotation;
-//          currentCamera.scale = node.scale;
-        } else {
-          currentCamera = new CameraPerspective(radians(47.0), 0.1, 100.0)
-            ..targetPosition = new Vector3(0.0, 0.03, 0.0);
-//          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
-          currentCamera.translation = new Vector3(5.0, 5.0, 10.0);
-        }
-
-//      currentCamera.position = new Vector3(.5, 0.0, 0.2);//Avocado
-      }
-    }
-    //>
-    if (currentCamera is CameraPerspective) {
-      Context.mainCamera = currentCamera;
-    } else {
-      // ortho ?
-    }
-  }
-
-  Camera findActiveSceneCamera(List<GLTFNode> nodes) {
-
-    Camera result;
-
-    for (var i = 0; i < nodes.length && result == null; i++) {
-      GLTFNode node = nodes[i];
-      //Correction is from blender export but not yet used
-      if (node.camera != null && !node.name.contains('Correction')) {
-        setupNodeCamera(node);
-        result = node.camera;
-      }
-    }
-
-    return result;
-  }
-
-  void setupNodeCamera(GLTFNode node) {
-    CameraPerspective camera = node.camera as CameraPerspective;
-    camera.translation = node.translation;
-  }
-
-  // > updates
-
-  void update() {
-    for (int i = 0; i < _gltfProject.animations.length; i++) {
-      GLTFAnimation animation = _gltfProject.animations[i];
-      for (int j = 0; j < animation.channels.length; j++) {
-        GLTFAnimationChannel channel = animation.channels[j];
-
-        // Todo (jpu) : is it possible to refacto ByteBuffer outside switch ? see when doing weights
-        switch(channel.target.path){
-          case AnimationChannelTargetPathType.translation:
-            ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler, channel.target.path);
-            Vector3 result = new Vector3.fromBuffer(byteBuffer, 0);
-            channel.target.node.translation = result;
-//            channel.target.node.translation += new Vector3(0.0, 0.0, 0.1);
-//            print(channel.target.node.translation);
-            break;
-          case AnimationChannelTargetPathType.rotation:
-            if(channel.target.node == null) break;
-            ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler, channel.target.path);
-            Quaternion result = new Quaternion.fromBuffer(byteBuffer, 0);
-//            print(result);
-            channel.target.node.rotation = result;
-            break;
-          case AnimationChannelTargetPathType.scale:
-            ByteBuffer byteBuffer = getNextInterpolatedValues(channel.sampler, channel.target.path);
-            Vector3 result = new Vector3.fromBuffer(byteBuffer, 0);
-//            print(result);
-            channel.target.node.scale = result;
-            break;
-          case AnimationChannelTargetPathType.weights:
-//            int weightsCount = channel.target.node.mesh.weights.length;
-//            throw 'Renderer:update() : switch not implemented yet : ${channel.target.path}';
-          // Todo (jpu) :
-            break;
-        }
-      }
-    }
-  }
-
-  ByteBuffer getNextInterpolatedValues(GLTFAnimationSampler sampler, AnimationChannelTargetPathType targetType) {
-    ByteBuffer result;
-
-    Float32List keyTimes = getKeyTimes(sampler.input);
-    Float32List keyValues = getKeyValues(sampler.output);
-
-    num playTime =
-        (_currentTime / 1000) % keyTimes.last; // Todo (jpu) : find less cost ?
-
-    //> playtime range
-    int previousIndex = 0;
-    double previousTime = 0.0;
-
-    previousTime = keyTimes.lastWhere((e)=> e < playTime, orElse: ()=> null);
-    previousIndex = keyTimes.indexOf(previousTime);
-
-//    while (keyTimes[previousIndex] < playTime) {
-//      previousTime = keyTimes[previousIndex];
-//      previousIndex++;
-//    }
-//    previousIndex--;
-
-    int nextIndex = (previousIndex + 1) % keyTimes.length;
-    double nextTime = keyTimes[nextIndex];
-
-    //> values
-    int nextStartIndex =
-        nextIndex *
-            sampler.output.components;//sampler.output.byteOffset +
-    Float32List nextValues = keyValues.sublist(nextStartIndex,nextStartIndex + sampler.output.components);
-
-    Float32List previousValues;
-    if(previousIndex == -1){
-      previousValues = nextValues;
-    }else {
-      int previousStartIndex =
-          previousIndex *
-              sampler.output.components;//sampler.output.byteOffset +
-      previousValues =  keyValues.sublist(previousStartIndex,previousStartIndex + sampler.output.components) as Float32List;
-    }
-
-    double interpolationValue = nextTime - previousTime != 0.0 ?
-    (playTime - previousTime) / (nextTime - previousTime) : 0.0;
-
-    // Todo (jpu) : add easer ratio interpolation
-    result = getInterpolationValue(
-        previousValues,
-        nextValues,
-        interpolationValue,
-        previousIndex,
-        previousTime,
-        playTime,
-        nextIndex,
-        nextTime, targetType);
-
-    return result;
-  }
-
-  ByteBuffer getInterpolationValue(
-      Float32List previousValues,
-      Float32List nextValues,
-      double interpolationValue,
-      int previousIndex,
-      double previousTime,
-      num playTime,
-      int nextIndex,
-      double nextTime,
-      AnimationChannelTargetPathType targetType) {
-
-    ByteBuffer result;
-
-    switch(targetType){
-      case AnimationChannelTargetPathType.translation:
-      case AnimationChannelTargetPathType.scale:
-        Vector3 previous = new Vector3.fromFloat32List(previousValues);
-        Vector3 next = new Vector3.fromFloat32List(nextValues);
-
-        Vector3 resultVector3 = vector3Lerp(previous, next, interpolationValue);
-        result = resultVector3.storage.buffer;
-        break;
-      case AnimationChannelTargetPathType.rotation:
-        Quaternion previous = new Quaternion.fromFloat32List(previousValues);
-        Quaternion next = new Quaternion.fromFloat32List(nextValues);
-
-        //
-        double angle = next.radians - previous.radians;
-        if (angle.abs() > pi) {
-          next[3] *= -1;
-        }
-
-        Quaternion resultQuaternion = slerp(previous, next, interpolationValue);
-        result = resultQuaternion.storage.buffer;
-        break;
-      case AnimationChannelTargetPathType.weights:
-//        throw 'Renderer:getInterpolationValue() : switch not implemented yet : ${targetType}';
-      // Todo (jpu) :
-        break;
-    }
-
-    //debug.logCurrentFunction('interpolationValue : $interpolationValue');
-    //debug.logCurrentFunction(
-//        'previous : $previousIndex > ${previousTime.toStringAsFixed(3)} \t: ${degrees(previous.radians).toStringAsFixed(3)} ${previousTime.toStringAsFixed(3)} \t| $previous');
-    //debug.logCurrentFunction(
-//        'result   : - > ${playTime.toStringAsFixed(3)} \t: ${degrees(result.radians).toStringAsFixed(3)} ${playTime.toStringAsFixed(3)} \t| $result');
-    //debug.logCurrentFunction(
-//        'next     : $nextIndex > ${nextTime.toStringAsFixed(3)} \t: ${degrees(next.radians).toStringAsFixed(3)} ${nextTime.toStringAsFixed(3)} \t| $next');
-    //debug.logCurrentFunction('');
-
-    return result;
-  }
-
-  Float32List getInterpolatedValues(Float32List previousValues,
-      Float32List nextValues, num interpolationValue) {
-
-
-    Float32List result = new Float32List(previousValues.length);
-
-    for (int i = 0; i < previousValues.length; i++) {
-      result[i] = previousValues[i] +
-          interpolationValue * (nextValues[i] - previousValues[i]);
-    }
-    return result;
-  }
-
-  Quaternion slerp(Quaternion qa, Quaternion qb, double t) {
-    bool useSimple = true;
-
-    // quaternion to return
-    Quaternion qm;
-
-    if(useSimple){
-      qm = qa + (qb - qa).scaled(t);
-    }else {
-      qm = new Quaternion.identity();
-
-      // Calculate angle between them.
-      double cosHalfTheta = qa.w * qb.w + qa.x * qb.x + qa.y * qb.y +
-          qa.z * qb.z;
-
-      // if qa=qb or qa=-qb then theta = 0 and we can return qa
-      if (cosHalfTheta.abs() >= 1.0) {
-        qm.w = qa.w;
-        qm.x = qa.x;
-        qm.y = qa.y;
-        qm.z = qa.z;
-        return qm;
-      }
-
-      // Calculate temporary values.
-      double halfTheta = acos(cosHalfTheta);
-      double sinHalfTheta = sqrt(1.0 - cosHalfTheta * cosHalfTheta);
-
-      // if theta = 180 degrees then result is not fully defined
-      // we could rotate around any axis normal to qa or qb
-      if (sinHalfTheta.abs() < 0.001) {
-        qm.w = (qa.w * 0.5 + qb.w * 0.5);
-        qm.x = (qa.x * 0.5 + qb.x * 0.5);
-        qm.y = (qa.y * 0.5 + qb.y * 0.5);
-        qm.z = (qa.z * 0.5 + qb.z * 0.5);
-        return qm;
-      }
-      double ratioA = sin((1 - t) * halfTheta) / sinHalfTheta;
-      double ratioB = sin(t * halfTheta) / sinHalfTheta;
-
-      //calculate Quaternion.
-      qm.w = (qa.w * ratioA + qb.w * ratioB);
-      qm.x = (qa.x * ratioA + qb.x * ratioB);
-      qm.y = (qa.y * ratioA + qb.y * ratioB);
-      qm.z = (qa.z * ratioA + qb.z * ratioB);
-    }
-    return qm;
-  }
-
-  Float32List getKeyTimes(GLTFAccessor accessor) {
-    Float32List keyTimes = accessor.bufferView.buffer.data.buffer
-        .asFloat32List(
-        accessor.bufferView.byteOffset + accessor.byteOffset,
-        accessor.count * accessor.components);
-    return keyTimes;
-  }
-
-  // Todo (jpu) : try to return only buffer
-  Float32List getKeyValues(GLTFAccessor accessor) {
-    Float32List keyValues = accessor.bufferView.buffer.data.buffer
-        .asFloat32List(
-        accessor.bufferView.byteOffset + accessor.byteOffset,
-        accessor.count * accessor.components);
-    return keyValues;
-  }
-
-  Vector3 vector3Lerp(Vector3 v0, Vector3 v1, double t) {
-    return v0 + (v1 - v0).scaled(t);
   }
 }

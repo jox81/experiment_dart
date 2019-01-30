@@ -9,7 +9,7 @@ import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 @TestOn("browser")

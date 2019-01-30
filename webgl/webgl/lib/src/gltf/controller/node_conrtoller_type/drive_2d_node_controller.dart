@@ -1,6 +1,6 @@
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gltf/contoller/node_controller.dart';
+import 'package:webgl/src/gltf/controller/node_controller.dart';
 import 'package:webgl/src/gltf/node.dart';
 
 class Drive2dNodeController extends GLTFNodeController{

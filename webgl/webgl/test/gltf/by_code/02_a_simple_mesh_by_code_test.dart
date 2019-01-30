@@ -10,7 +10,7 @@ import "package:test/test.dart";
 //import 'package:webgl/src/gltf/mesh/mesh.dart';
 //import 'package:webgl/src/gltf/mesh_primitive.dart';
 //import 'package:webgl/src/gltf/node.dart';
-//import 'package:webgl/src/gltf/project.dart';
+//import 'package:webgl/src/gltf/project/project.dart';
 //import 'package:webgl/src/gltf/scene.dart';
 //
 @TestOn("browser")

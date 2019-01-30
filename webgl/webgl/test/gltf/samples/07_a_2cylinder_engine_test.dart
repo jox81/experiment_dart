@@ -4,7 +4,7 @@ import 'package:webgl/src/gltf/asset.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/debug_gltf.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 @TestOn("browser")
 

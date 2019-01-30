@@ -14,7 +14,7 @@ import 'package:webgl/src/project/project_debugger.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as utilsDebug;
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 
 class GLTFProjectDebugger extends ProjectDebugger{
 

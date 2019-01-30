@@ -1,4 +1,4 @@
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/texture.dart';
 import 'dart:async';
 import "package:test/test.dart";

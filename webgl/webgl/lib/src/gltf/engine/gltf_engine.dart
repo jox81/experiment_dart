@@ -1,6 +1,8 @@
 import 'dart:html';
+import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/engine/engine.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/animation/gltf_animator.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/renderer/gltf_renderer.dart';
 
 class GLTFEngine extends Engine {
@@ -11,7 +13,11 @@ class GLTFEngine extends Engine {
   @override
   GLTFRenderer renderer;
 
+  @override
+  Animator animator;
+
   GLTFEngine(CanvasElement canvas) : super(canvas) {
+    this.animator = new GLTFAnimator();
     this.renderer = new GLTFRenderer(canvas);
   }
 

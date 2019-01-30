@@ -2,7 +2,7 @@ import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/types/orthographic_camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/camera/camera_type.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/debug_gltf.dart';

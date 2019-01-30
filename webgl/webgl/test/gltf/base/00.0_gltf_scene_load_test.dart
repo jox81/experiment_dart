@@ -2,7 +2,7 @@ import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/debug_gltf.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/project/project_debugger.dart';
 
 @TestOn("browser")

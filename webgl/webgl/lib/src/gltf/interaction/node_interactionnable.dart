@@ -1,5 +1,5 @@
 
-import 'package:webgl/src/gltf/contoller/node_controller.dart';
+import 'package:webgl/src/gltf/controller/node_controller.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/interaction/interactionnable.dart';
 

@@ -68,16 +68,16 @@ class Context{
   GlobalState _getGlobalState() {
     //> Init extensions
     //This activate extensions
-    var hasSRGBExt = gl.getExtension('EXT_SRGB');
-    var hasLODExtension = gl.getExtension('EXT_shader_texture_lod');
-    var hasDerivativesExtension = gl.getExtension('OES_standard_derivatives');
-    var hasIndexUIntExtension = gl.getExtension('OES_element_index_uint');
+    bool hasSRGBExt = gl.getExtension('EXT_SRGB') != null;
+    bool hasLODExtension = gl.getExtension('EXT_shader_texture_lod') != null;
+    bool hasDerivativesExtension = gl.getExtension('OES_standard_derivatives') != null;
+    bool hasIndexUIntExtension = gl.getExtension('OES_element_index_uint') != null;
 
     return new GlobalState()
       ..hasLODExtension = hasLODExtension
       ..hasDerivativesExtension = hasDerivativesExtension
       ..hasIndexUIntExtension = hasIndexUIntExtension
       ..sRGBifAvailable =
-      hasSRGBExt != null ? WebGL.EXTsRgb.SRGB_EXT : WebGL.WebGL.RGBA;
+      hasSRGBExt ? WebGL.EXTsRgb.SRGB_EXT : WebGL.WebGL.RGBA;
   }
 }

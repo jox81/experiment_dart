@@ -1,7 +1,7 @@
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 
 @TestOn("browser")

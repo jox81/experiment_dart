@@ -1,5 +1,5 @@
 import 'package:webgl/src/gltf/image.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/property/property.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/gltf/texture.dart';

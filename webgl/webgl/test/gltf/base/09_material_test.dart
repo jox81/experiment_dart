@@ -2,7 +2,7 @@ import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';

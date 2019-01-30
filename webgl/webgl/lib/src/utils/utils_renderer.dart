@@ -2,9 +2,10 @@ import 'package:webgl/src/introspection/introspection.dart';
 
 @reflector
 class GlobalState {
+  int reservedTextureUnits;//units frozen
   int sRGBifAvailable; // else : webgl.RGBA
 
-  dynamic hasLODExtension;
-  dynamic hasDerivativesExtension;
-  dynamic hasIndexUIntExtension;
+  bool hasLODExtension;
+  bool hasDerivativesExtension;
+  bool hasIndexUIntExtension;
 }
