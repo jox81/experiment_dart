@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:meta/meta.dart';
+import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';
 import 'package:webgl/src/project/project.dart';
@@ -13,11 +15,20 @@ abstract class Engine {
   static Engine _currentEngine;
   static Engine get currentEngine => _currentEngine ?? (throw 'No engine Define in Engine');
 
-  // Todo (jpu) : bug name conflict
   static Project get currentProject => _currentEngine.activeProject ?? (throw 'No Project Define in Engine');
   static set currentProject(Project value) => currentEngine.activeProject = value;
 
-  static Camera get mainCamera => currentEngine.activeProject.mainCamera;
+  static Camera _mainCamera;
+  static Camera get mainCamera => _mainCamera ??= new
+  CameraPerspective(radians(37.0), 0.1, 1000.0)
+  ..targetPosition = new Vector3.zero()
+  ..translation = new Vector3(20.0, 20.0, 20.0);
+  static set mainCamera(Camera value) {
+    _mainCamera?.isActive = false;
+    _mainCamera = value;
+    _mainCamera.isActive = true;
+    _mainCamera?.update();
+  }
 
   final EngineClock _engineClock = new EngineClock();
   final CanvasElement canvas;

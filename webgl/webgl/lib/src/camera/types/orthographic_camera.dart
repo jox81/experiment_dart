@@ -49,4 +49,12 @@ class CameraOrthographic extends Camera{
   String toString() {
     return 'CameraOrthographic{cameraId: $cameraId, _ymag: $_ymag, _xmag: $_xmag, super: ${super.toString()}}';
   }
+
+  @override
+  // TODO: implement projectionMatrix
+  Matrix4 get projectionMatrix => null;
+
+  @override
+  // TODO: implement viewMatrix
+  Matrix4 get viewMatrix => null;
 }

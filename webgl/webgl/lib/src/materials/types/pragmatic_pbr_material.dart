@@ -5,7 +5,6 @@ import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/context.dart';
 
 ///PBR's
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/

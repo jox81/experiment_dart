@@ -2,7 +2,6 @@ import 'dart:html';
 import 'dart:typed_data' as WebGlTypedData;
 import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/render_setting.dart';
 import 'package:webgl/src/utils/utils_debug.dart';

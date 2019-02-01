@@ -1,7 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
-import 'package:webgl/src/engine/engine.dart';
 import 'dart:core';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/animation/animation.dart';
@@ -98,7 +97,7 @@ abstract class GLTFProject extends Project{
   Camera getCurrentCamera() {
     Camera currentCamera;
 
-    bool debugCamera = false;
+    bool debugCamera = true;
 
     if (debugCamera) {
       currentCamera = new CameraPerspective(radians(47.0), 0.1, 1000.0)

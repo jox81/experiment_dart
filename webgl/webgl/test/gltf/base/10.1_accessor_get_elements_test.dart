@@ -1,4 +1,3 @@
-import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import "package:test/test.dart";
 

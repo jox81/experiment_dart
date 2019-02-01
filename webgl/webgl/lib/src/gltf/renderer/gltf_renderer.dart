@@ -46,7 +46,7 @@ class GLTFRenderer extends Renderer {
       ..color = new Vector3(1.0, 1.0, 1.0);
 
     // Todo (jpu) : replace this in camera
-    _gltfProject.mainCamera = _gltfProject.getCurrentCamera();
+    Engine.mainCamera = _gltfProject.getCurrentCamera();
 
     _backgroundColor = gltfProject.scene.backgroundColor;
   }

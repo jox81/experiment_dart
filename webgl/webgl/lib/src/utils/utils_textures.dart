@@ -377,7 +377,7 @@ class TextureUtils {
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
         ..translation = new Vector3(5.0, 15.0, 15.0);
 
-      Engine.currentProject.mainCamera = cameraTexture;
+      Engine.mainCamera = cameraTexture;
 
       //bound frameBuffer component will be filled up
       gl.clearColor(.5, .5, .5, 0.0); // green;
@@ -415,7 +415,7 @@ class TextureUtils {
 
       if (baseCam != null) {
         Context.glWrapper.viewport = previousViewport;
-        Engine.currentProject.mainCamera = baseCam;
+        Engine.mainCamera = baseCam;
       }
     }
 

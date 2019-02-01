@@ -6,7 +6,6 @@ import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/asset.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
-import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';

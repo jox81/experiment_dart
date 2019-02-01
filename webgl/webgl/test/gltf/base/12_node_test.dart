@@ -1,5 +1,4 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import "package:test/test.dart";

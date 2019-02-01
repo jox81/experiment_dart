@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/controller/node_conrtoller_type/drive_2d_node_controller.dart';
 import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
@@ -38,7 +38,7 @@ class CubeMapProject extends GLTFProject{
     CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..translation = new Vector3(20.0, 20.0, 20.0);
-    mainCamera = camera;
+    Engine.mainCamera = camera;
 
     List<List<ImageElement>> cubeMapImages =
         await TextureUtils.loadCubeMapImages('pisa');

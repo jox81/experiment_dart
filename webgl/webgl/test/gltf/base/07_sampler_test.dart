@@ -3,7 +3,6 @@ import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'dart:async';
 import "package:test/test.dart";
-import 'package:webgl/src/gltf/debug_gltf.dart';
 @TestOn("browser")
 
 

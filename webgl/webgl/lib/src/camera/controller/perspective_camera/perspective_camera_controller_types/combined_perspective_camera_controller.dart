@@ -3,7 +3,6 @@ import 'package:webgl/src/camera/controller/perspective_camera/perspective_camer
 import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/orbit_perspective_camera_controller.dart';
 import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/pan_perspective_camera_controlle.dart';
 import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/rotate_perspective_camera_controller.dart';
-import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/interaction/interactionnable.dart';
 

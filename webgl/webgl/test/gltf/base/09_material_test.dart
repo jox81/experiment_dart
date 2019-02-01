@@ -6,7 +6,6 @@ import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';
-import 'package:webgl/src/gltf/debug_gltf.dart';
 @TestOn("browser")
 
 String testFolderRelativePath = "../..";
