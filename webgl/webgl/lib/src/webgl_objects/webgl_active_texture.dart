@@ -1,6 +1,6 @@
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/textures/type/cube_map_texture.dart';
 import 'dart:web_gl' as WebGL;
 

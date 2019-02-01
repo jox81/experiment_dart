@@ -5,7 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';
 import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/renderer/renderer.dart';
@@ -51,7 +51,7 @@ abstract class Engine {
 
   @mustCallSuper
   Future render(Project project) async {
-    Context.glWrapper.resizeCanvas();
+    GL.resizeCanvas();
     _activeProject = project;
 
     _interaction.init(project);

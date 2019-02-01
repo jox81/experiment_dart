@@ -5,7 +5,7 @@ import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/orbit_perspective_camera_controller.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
@@ -95,7 +95,7 @@ class CameraPerspective extends Camera{
   }
 
   update() {
-    _aspectRatio = Context.glWrapper.viewAspectRatio;
+    _aspectRatio = GL.viewAspectRatio;
     setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, znear, zfar);
     setViewMatrix(_viewMatrix, translation, _targetPosition, upDirection);
 //    _updateGizmo();

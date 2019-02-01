@@ -1,6 +1,6 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
@@ -16,10 +16,10 @@ class UtilsGeometry{
   ///En webgl, l'axe y pointant vers le haut, x vers la droite
   static bool unProjectScreenPoint(CameraPerspective camera, Vector3 pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
     num pickX = screenX;
-    num pickY = Context.glWrapper.height - screenY;
+    num pickY = GL.height - screenY;
 
-    bool unProjected = unproject(camera.viewProjectionMatrix, 0, Context.glWrapper.width,
-        0, Context.glWrapper.height, pickX, pickY, pickZ, pickWorld);
+    bool unProjected = unproject(camera.viewProjectionMatrix, 0, GL.width,
+        0, GL.height, pickX, pickY, pickZ, pickWorld);
 
     return unProjected;
   }
@@ -29,8 +29,8 @@ class UtilsGeometry{
     num pickX = screenX;
     num pickY = screenY;
 
-    bool rayPicked = pickRay(camera.viewProjectionMatrix, 0, Context.glWrapper.width,
-        0, Context.glWrapper.height, pickX, pickY, outRayNear, outRayFar);
+    bool rayPicked = pickRay(camera.viewProjectionMatrix, 0, GL.width,
+        0, GL.height, pickX, pickY, outRayNear, outRayFar);
 
     return rayPicked;
   }
@@ -40,13 +40,13 @@ class UtilsGeometry{
     List<GLTFNode> resultPoints = [];
 
     num pickX = 0.0;
-    num pickY = Context.glWrapper.height * 0.25;
+    num pickY = GL.height * 0.25;
     num pickZ = 0.0;
 
     Vector3 pickWorld = new Vector3.zero();
 
     for (num i = 0.0; i < 1.0; i += 0.1) {
-      pickX = i * Context.glWrapper.width;
+      pickX = i * GL.width;
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
       GLTFMesh meshPoint = new GLTFMesh.point()

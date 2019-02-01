@@ -1,4 +1,4 @@
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -17,9 +17,9 @@ abstract class EditTexture extends WebGLObject{
   /// TextureUnit textureUnit
   void bind({int textureUnit}) {
     if(textureUnit != null){
-      Context.glWrapper.activeTexture.activeTexture = textureUnit;
+      GL.activeTexture.activeTexture = textureUnit;
     }
-    Context.glWrapper.activeTexture.bindTexture(textureTarget, (this as WebGLTexture).webGLTexture);
+    GL.activeTexture.bindTexture(textureTarget, (this as WebGLTexture).webGLTexture);
   }
 
   // > TEXTURE_MAG_FILTER

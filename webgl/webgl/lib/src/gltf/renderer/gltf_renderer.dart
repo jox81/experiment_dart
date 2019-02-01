@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
-import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
@@ -13,9 +12,8 @@ import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/utils/utils_text.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
-    as GLEnum;
-import 'package:webgl/src/context.dart' hide gl;
-import 'package:webgl/src/context.dart' as ctxWrapper show gl;
+as GLEnum;
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/node.dart';
@@ -24,8 +22,6 @@ import 'package:webgl/src/gltf/project/project.dart';
 @reflector
 class GLTFRenderer extends Renderer {
   GLTFProject _gltfProject;
-
-  webgl.RenderingContext get gl => ctxWrapper.gl;
 
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
@@ -36,7 +32,7 @@ class GLTFRenderer extends Renderer {
       throw new Exception("currentScene must be set before init.");
 
     await ShaderSource.loadShaders();
-    context.globalState.reservedTextureUnits =
+    GL.globalState.reservedTextureUnits =
         await UtilsTextureGLTF.initTextures(_gltfProject);
 
     // Todo (jpu) : pourquoi si je ne le fait pas ici, il y a des soucis de rendu ?!!
@@ -57,7 +53,7 @@ class GLTFRenderer extends Renderer {
 
   void render({num currentTime: 0.0}) {
     try {
-      Context.glWrapper.resizeCanvas();
+      GL.resizeCanvas();
       gl.clear(
           ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
       _drawNodes(_gltfProject.currentScene.nodes);
@@ -89,7 +85,7 @@ class GLTFRenderer extends Renderer {
   }
 
   void _drawPrimitive(GLTFMeshPrimitive primitive, Matrix4 modeMatrix) {
-    primitive.bindMaterial(context.globalState);
+    primitive.bindMaterial(GL.globalState);
 
     WebGLProgram program = primitive.program;
     gl.useProgram(program.webGLProgram);
@@ -146,7 +142,7 @@ class GLTFRenderer extends Renderer {
           accessorIndices.count);
       //debug.logCurrentFunction(indices.toString());
     } else if (accessorIndices.componentType == 5125) {
-      if (context.globalState.hasIndexUIntExtension == null)
+      if (GL.globalState.hasIndexUIntExtension == null)
         throw "hasIndexUIntExtension : extension not supported";
       indices = accessorIndices.bufferView.buffer.data.buffer.asUint32List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,

@@ -3,7 +3,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/lights.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
     as glEnum;

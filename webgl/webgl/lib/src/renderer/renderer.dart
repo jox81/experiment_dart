@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/project/project.dart';
 
 abstract class Renderer{

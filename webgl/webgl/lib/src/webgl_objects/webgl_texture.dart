@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/textures/edit_texture.dart';
@@ -85,16 +85,16 @@ class WebGLTexture extends EditTexture {
 
     ActiveTexture.instance.activeTexture = editTextureUnit;
 
-    Context.glWrapper.activeTexture.texture2d.bind(this);
+    GL.activeTexture.texture2d.bind(this);
 
-    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2D(
+    GL.activeTexture.texture2d.attachmentTexture2d.texImage2D(
         0,
         TextureInternalFormat.RGBA,
         TextureInternalFormat.RGBA,
         TexelDataType.UNSIGNED_BYTE,
         image);
 
-    Context.glWrapper.activeTexture.texture2d.unBind();
+    GL.activeTexture.texture2d.unBind();
 
     ActiveTexture.instance.activeTexture = lastTextureUnit;
   }

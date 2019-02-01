@@ -6,6 +6,7 @@ import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/render_setting.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/introspection/introspection.dart';
+import 'package:webgl/src/utils/utils_renderer.dart';
 import 'package:webgl/src/webgl_objects/active_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/context_attributs.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
@@ -105,6 +106,24 @@ class WebGLRenderingContext{
     webglConstants.logParameters();
     webglParameters.logValues();
     webglParameters.testGetParameter();
+  }
+
+  GlobalState get globalState => _globalState ??= _getGlobalState();
+  GlobalState _globalState;
+  GlobalState _getGlobalState() {
+    //> Init extensions
+    //This activate extensions
+    bool hasSRGBExt = gl.getExtension('EXT_SRGB') != null;
+    bool hasLODExtension = gl.getExtension('EXT_shader_texture_lod') != null;
+    bool hasDerivativesExtension = gl.getExtension('OES_standard_derivatives') != null;
+    bool hasIndexUIntExtension = gl.getExtension('OES_element_index_uint') != null;
+
+    return new GlobalState()
+      ..hasLODExtension = hasLODExtension
+      ..hasDerivativesExtension = hasDerivativesExtension
+      ..hasIndexUIntExtension = hasIndexUIntExtension
+      ..sRGBifAvailable =
+      hasSRGBExt ? WebGL.EXTsRgb.SRGB_EXT : WebGL.WebGL.RGBA;
   }
 
   void resizeCanvas() {

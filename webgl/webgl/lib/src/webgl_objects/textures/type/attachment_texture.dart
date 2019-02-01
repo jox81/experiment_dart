@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'dart:typed_data' as WebGlTypedData;
 
 class TextureAttachment{

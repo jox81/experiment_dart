@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:math' as Math;
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/interaction/touch_manager.dart';
 import 'package:webgl/src/project/project.dart';
@@ -60,7 +60,7 @@ class InteractionManager {
     for (int i = 0; i < 128; i++) _currentlyPressedKeys[i] = false;
 
     onResize.listen((dynamic event) {
-      Context.glWrapper.resizeCanvas();
+      GL.resizeCanvas();
     });
 
     window.onResize.listen(_onWindowResize);
