@@ -43,8 +43,8 @@
 //  Material defaultMaterial = new MaterialBase();
 //
 //  SceneJox(){
-//    if(Context.mainCamera == null){
-//      Context.mainCamera = new
+//    if(Engine.mainCamera == null){
+//      Engine.mainCamera = new
 //      CameraPerspective(radians(25.0), 0.1, 1000.0)
 //        ..targetPosition = new Vector3.zero()
 //        ..translation = new Vector3(20.0, 20.0, 20.0);
@@ -196,12 +196,12 @@
 //      }
 //
 //      if(cameras.length > 0) {
-//        Context.mainCamera = cameras[0];
+//        Engine.mainCamera = cameras[0];
 //      }
 //    }
 //
-//    if(Context.mainCamera == null){
-//      Context.mainCamera = new
+//    if(Engine.mainCamera == null){
+//      Engine.mainCamera = new
 //      CameraPerspective(radians(25.0), 0.1, 1000.0)
 //        ..targetPosition = new Vector3.zero()
 //        ..translation = new Vector3(20.0, 20.0, 20.0);

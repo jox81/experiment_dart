@@ -44,7 +44,7 @@ class GLTFBufferView extends GLTFChildOfRootProperty {
     String name : ''}):
       this._buffer = buffer,
       super(name){
-    GLTFEngine.activeProject.bufferViews.add(this);
+    GLTFEngine.currentProject.bufferViews.add(this);
   }
 
   @override

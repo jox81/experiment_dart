@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:meta/meta.dart';
 import 'package:webgl/src/animation/animator.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';
 import 'package:webgl/src/project/project.dart';
@@ -12,15 +13,21 @@ abstract class Engine {
   static Engine _currentEngine;
   static Engine get currentEngine => _currentEngine ?? (throw 'No engine Define in Engine');
 
+  // Todo (jpu) : bug name conflict
+  static Project get currentProject => _currentEngine.activeProject ?? (throw 'No Project Define in Engine');
+  static set currentProject(Project value) => currentEngine.activeProject = value;
+
+  static Camera get mainCamera => currentEngine.activeProject.mainCamera;
+
   final EngineClock _engineClock = new EngineClock();
   final CanvasElement canvas;
 
   final StreamController<num> _onRenderStreamController = new StreamController<num>.broadcast();
   Stream<num> get onRender => _onRenderStreamController.stream;
 
-  Project _currentProject;
-  Project get currentProject => _currentProject;
-  set currentProject(Project value) => _currentProject = value;
+  Project _activeProject;
+  Project get activeProject => _activeProject;
+  set activeProject(Project value) => _activeProject = value;
 
   InteractionManager _interaction;
   Animator get animator;
@@ -34,7 +41,7 @@ abstract class Engine {
   @mustCallSuper
   Future render(Project project) async {
     Context.glWrapper.resizeCanvas();
-    _currentProject = project;
+    _activeProject = project;
 
     _interaction.init(project);
     animator.init(project);

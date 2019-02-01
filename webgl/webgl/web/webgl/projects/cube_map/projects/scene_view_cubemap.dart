@@ -34,10 +34,11 @@ class CubeMapProject extends GLTFProject{
     scene.backgroundColor = new Vector4(0.839, 0.815, 0.713, 1.0);
 
     //Cameras
-    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
+    CameraPerspective camera = new
+    CameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..translation = new Vector3(0.0, 5.0, -10.0);
-    Context.mainCamera = camera;
+      ..translation = new Vector3(20.0, 20.0, 20.0);
+    mainCamera = camera;
 
     List<List<ImageElement>> cubeMapImages =
         await TextureUtils.loadCubeMapImages('pisa');

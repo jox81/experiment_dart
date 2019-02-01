@@ -39,6 +39,27 @@ abstract class Camera extends GLTFNode {
     update();
   }
 
+  //projectionMatrix
+  Matrix4 _projectionMatrix = new Matrix4.identity();
+  Matrix4 get projectionMatrix {
+    return (_projectionMatrix * new Matrix4.identity()) as Matrix4;// Why is it needed to update shader uniform!!?
+  }
+  set projectionMatrix(Matrix4 value){
+    _projectionMatrix = value;
+//    _updateGizmo();
+  }
+
+  //viewMatrix
+  Matrix4 _viewMatrix = new Matrix4.identity();
+  Matrix4 get viewMatrix {
+    return (_viewMatrix * new Matrix4.identity()) as Matrix4; // Why is it needed to update shader shader uniform!!?
+  }
+
+  //viewProjectionMatrix
+  Matrix4 get viewProjectionMatrix {
+    return (projectionMatrix * viewMatrix) as Matrix4;
+  }
+
   double _znear = 0.1;
   double get znear => _znear;
   set znear(double value) {

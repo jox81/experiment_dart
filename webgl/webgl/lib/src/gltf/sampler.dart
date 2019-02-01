@@ -24,7 +24,7 @@ class GLTFSampler extends GLTFChildOfRootProperty {
     this.wrapT,// Todo (jpu) : add default value ?
     String name : ''
   }):super(name){
-    GLTFEngine.activeProject.samplers.add(this);
+    GLTFEngine.currentProject.samplers.add(this);
   }
 
   @override

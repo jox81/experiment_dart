@@ -21,11 +21,11 @@ class GLTFScene extends GLTFChildOfRootProperty{
   }
 
   GLTFScene({String name:''}):super(name){
-    GLTFEngine.activeProject.addScene(this);
+    GLTFEngine.currentProject.addScene(this);
   }
 
   void makeCurrent() {
-    GLTFEngine.activeProject.scene = this;
+    GLTFEngine.currentProject.scene = this;
   }
 
   void createMeshByType(MeshType meshType){

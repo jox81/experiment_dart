@@ -23,7 +23,7 @@ class GLTFMesh extends GLTFChildOfRootProperty {
   List<GLTFMeshPrimitive> primitives = new List();
 
   GLTFMesh({this.weights, String name: ''}) : super(name){
-    GLTFEngine.activeProject.meshes.add(this);
+    GLTFEngine.currentProject.meshes.add(this);
   }
 
   @override

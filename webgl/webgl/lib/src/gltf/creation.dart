@@ -127,7 +127,7 @@ class GLTFCreation {
   GLTFCreation._(this._gltfProject, this._gltfSource);
 
   void _initGLTF() {
-    GLTFEngine.activeProject.reset();
+    GLTFEngine.currentProject.reset();
 
     assert(_gltfSource != null);
 

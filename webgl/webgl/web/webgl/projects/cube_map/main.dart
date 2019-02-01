@@ -15,7 +15,7 @@ Future main() async {
   CubeMapProject cubeMapProject = await CubeMapProject.build();
 
   canvas.onMouseDown.listen((MouseEvent event){
-    GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Context.mainCamera, event.client.x, event.client.y, cubeMapProject.nodes);
+    GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera, event.client.x, event.client.y, cubeMapProject.nodes);
     if(node != null) {
       cubeMapProject.nodeInteractionnable.node = node;
       print('node switch > ${node.name}');

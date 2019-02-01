@@ -150,7 +150,7 @@ class GLTFAccessor extends GLTFChildOfRootProperty {
       String name
       }):
       super(name){
-    GLTFEngine.activeProject.accessors.add(this);
+    GLTFEngine.currentProject.accessors.add(this);
   }
 
 

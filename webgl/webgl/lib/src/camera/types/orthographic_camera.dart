@@ -26,8 +26,8 @@ class CameraOrthographic extends Camera{
   Vector3 get frontDirection => null;
 
   CameraOrthographic(){
-    GLTFEngine.activeProject.cameras.add(this);
-    GLTFEngine.activeProject.removeNode(this);
+    GLTFEngine.currentProject.cameras.add(this);
+    GLTFEngine.currentProject.removeNode(this);
     GLTFNode.nextId--;
   }
 

@@ -16,7 +16,7 @@ class GLTFImage extends GLTFChildOfRootProperty {
 
   GLTFImage({this.uri, this.mimeType, this.bufferView, this.data, String name})
       : super(name){
-    GLTFEngine.activeProject.images.add(this);
+    GLTFEngine.currentProject.images.add(this);
   }
 
   @override

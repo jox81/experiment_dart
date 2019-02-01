@@ -35,7 +35,7 @@ class GLTFPBRMaterial extends GLTFChildOfRootProperty {
       this.doubleSided : false,
       String name: ''})
       : super(name){
-    GLTFEngine.activeProject.materials.add(this);
+    GLTFEngine.currentProject.materials.add(this);
   }
 
   @override

@@ -63,47 +63,26 @@ class CameraPerspective extends Camera{
     return mirrorFactor * degrees(Math.acos(forwardHorizontal.dot(z)));
   }
 
-  //projectionMatrix
-  Matrix4 _projectionMatrix = new Matrix4.identity();
-  Matrix4 get projectionMatrix {
-    return (_projectionMatrix * new Matrix4.identity()) as Matrix4;// Why is it needed to update shader uniform!!?
-  }
-  set projectionMatrix(Matrix4 value){
-    _projectionMatrix = value;
-//    _updateGizmo();
-  }
-
-  //viewMatrix
-  Matrix4 _viewMatrix = new Matrix4.identity();
-  Matrix4 get viewMatrix {
-    return (_viewMatrix * new Matrix4.identity()) as Matrix4; // Why is it needed to update shader shader uniform!!?
-  }
-
-  //viewProjectionMatrix
-  Matrix4 get viewProjectionMatrix {
-    return (projectionMatrix * viewMatrix) as Matrix4;
-  }
-
   CameraPerspective(this._yfov, double znear, double _zfar){
     super.znear = znear;
     super.zfar = _zfar;
-    GLTFEngine.activeProject.cameras.add(this);
-    GLTFEngine.activeProject.addNode(this);
-    GLTFEngine.activeProject.removeNode(this);
+    GLTFEngine.currentProject.cameras.add(this);
+    GLTFEngine.currentProject.addNode(this);
+    GLTFEngine.currentProject.removeNode(this);
     GLTFNode.nextId--;
     cameraController = new OrbitPerspectiveCameraController();
   }
 
   update() {
     _aspectRatio = Context.glWrapper.viewAspectRatio;
-    setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, znear, zfar);
-    setViewMatrix(_viewMatrix, translation, _targetPosition, upDirection);
+    setPerspectiveMatrix(projectionMatrix, _yfov, _aspectRatio, znear, zfar);
+    setViewMatrix(viewMatrix, translation, _targetPosition, upDirection);
 //    _updateGizmo();
   }
 
   @override
   String toString() {
-    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $translation, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $_projectionMatrix, _lookAtMatrix: $_viewMatrix, super: ${super.toString()}}';
+    return 'CameraPerspective{cameraId: $cameraId, _aspectRatio: $_aspectRatio, _yfov: $_yfov, position : $translation, _targetPosition: $_targetPosition, upDirection: $upDirection, _perspectiveMatrix: $projectionMatrix, _lookAtMatrix: $viewMatrix, super: ${super.toString()}}';
   }
 
   // >> JSON
@@ -138,8 +117,8 @@ class CameraPerspective extends Camera{
               _yfov == other._yfov &&
               _targetPosition == other._targetPosition &&
               upDirection == other.upDirection &&
-              _projectionMatrix == other._projectionMatrix &&
-              _viewMatrix == other._viewMatrix;
+              projectionMatrix == other.projectionMatrix &&
+              viewMatrix == other.viewMatrix;
 
   @override
   int get hashCode =>
@@ -148,6 +127,6 @@ class CameraPerspective extends Camera{
       _yfov.hashCode ^
       _targetPosition.hashCode ^
       upDirection.hashCode ^
-      _projectionMatrix.hashCode ^
-      _viewMatrix.hashCode;
+      projectionMatrix.hashCode ^
+      viewMatrix.hashCode;
 }

@@ -29,23 +29,23 @@ class MaterialNormalMapping extends Material {
 //    print("###############");
 
 //    print("uModelMatrix: \n${Context.modelMatrix}");
-//    print("uViewMatrix: \n${Context.mainCamera.lookAtMatrix}");
+//    print("uViewMatrix: \n${Engine.mainCamera.lookAtMatrix}");
 //    setShaderUniform("uModelMatrix", Context.modelMatrix);
-//    setShaderUniform("uViewMatrix", Context.mainCamera.lookAtMatrix);
+//    setShaderUniform("uViewMatrix", Engine.mainCamera.lookAtMatrix);
 //use in common with vertex shader ?
 
-//    print("uModelViewMatrix: \n${Context.mainCamera.lookAtMatrix * Context.modelMatrix}");
-    setShaderUniform("uModelViewMatrix", Context.mainCamera.viewMatrix * Context.modelMatrix);
+//    print("uModelViewMatrix: \n${Engine.mainCamera.lookAtMatrix * Context.modelMatrix}");
+    setShaderUniform("uModelViewMatrix", Engine.mainCamera.viewMatrix * Context.modelMatrix);
 
 
-    setShaderUniform("uProjectionMatrix", Context.mainCamera.projectionMatrix);
+    setShaderUniform("uProjectionMatrix", Engine.mainCamera.projectionMatrix);
 
     setShaderUniform("uInverseViewMatrix",
-        new Matrix4.inverted(Context.mainCamera.viewMatrix));
+        new Matrix4.inverted(Engine.mainCamera.viewMatrix));
 
     /// The normal matrix is the transpose inverse of the modelview matrix.
     /// mat4 normalMatrix = transpose(inverse(modelView));
-    Matrix3 normalMatrix = (Context.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
+    Matrix3 normalMatrix = (Engine.mainCamera.viewMatrix * Context.modelMatrix).getNormalMatrix() as Matrix3;
     setShaderUniform("uNormalMatrix", normalMatrix);
 
     gl.activeTexture(TextureUnit.TEXTURE0);

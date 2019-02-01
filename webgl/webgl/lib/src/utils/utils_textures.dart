@@ -5,6 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/context.dart';
 import 'package:webgl/materials.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
@@ -366,7 +367,7 @@ class TextureUtils {
       List<GLTFNode> models = new List();
 
       //backup camera
-      CameraPerspective baseCam = Context.mainCamera;
+      CameraPerspective baseCam = Engine.mainCamera;
       Rectangle<int> previousViewport =
       new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
@@ -376,7 +377,7 @@ class TextureUtils {
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
         ..translation = new Vector3(5.0, 15.0, 15.0);
 
-      Context.mainCamera = cameraTexture;
+      Engine.currentProject.mainCamera = cameraTexture;
 
       //bound frameBuffer component will be filled up
       gl.clearColor(.5, .5, .5, 0.0); // green;
@@ -414,7 +415,7 @@ class TextureUtils {
 
       if (baseCam != null) {
         Context.glWrapper.viewport = previousViewport;
-        Context.mainCamera = baseCam;
+        Engine.currentProject.mainCamera = baseCam;
       }
     }
 

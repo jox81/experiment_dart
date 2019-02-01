@@ -43,7 +43,6 @@ abstract class GLTFProject extends Project{
   }
 
   GLTFProject({bool doReset: true}){
-    Engine.currentEngine.currentProject = this;
     reset();
 
     setupDefault();

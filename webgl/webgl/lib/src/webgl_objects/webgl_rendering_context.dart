@@ -3,6 +3,7 @@ import 'dart:typed_data' as WebGlTypedData;
 import 'dart:web_gl' as WebGL;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/context.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/render_setting.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/introspection/introspection.dart';
@@ -22,7 +23,6 @@ class WebGLRenderingContext{
   WebGL.RenderingContext gl;
 
   CanvasElement get canvas => gl.canvas;
-
   WebglConstants get webglConstants => WebglConstants.instance();
   WebglParameters get webglParameters => WebglParameters.instance();
 
@@ -126,7 +126,7 @@ class WebGLRenderingContext{
 
 //      gl.viewport(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
       viewport = new Rectangle(0, 0, gl.canvas.width, gl.canvas.height);
-      Context.mainCamera?.update();
+      Engine.mainCamera?.update();
     }
   }
 

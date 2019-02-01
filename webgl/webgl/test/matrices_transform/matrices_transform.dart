@@ -26,7 +26,7 @@ Future main() async {
 //      Camera camera = new Camera(radians(37.0), 0.1, 100.0)
 //        ..targetPosition = new Vector3.zero()
 //        ..position = new Vector3(0.0, 0.0, -1.0);
-//      Context.mainCamera = camera;
+//      Engine.mainCamera = camera;
 //
 //      //Todo ?...
 //    });

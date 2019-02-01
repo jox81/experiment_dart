@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/utils/utils_texture.dart';
 import 'package:webgl/src/lights/types/directional_light.dart';
@@ -44,7 +45,8 @@ class GLTFRenderer extends Renderer {
       ..direction = new Vector3(50.0, 50.0, -50.0).normalized()
       ..color = new Vector3(1.0, 1.0, 1.0);
 
-    Context.mainCamera = _gltfProject.getCurrentCamera();
+    // Todo (jpu) : replace this in camera
+    _gltfProject.mainCamera = _gltfProject.getCurrentCamera();
 
     _backgroundColor = gltfProject.scene.backgroundColor;
   }
@@ -95,14 +97,14 @@ class GLTFRenderer extends Renderer {
     _setupPrimitiveBuffers(program, primitive);
 
     primitive.material.setupBeforeRender();
-    primitive.material.pvMatrix = (Context.mainCamera.projectionMatrix *
-        Context.mainCamera.viewMatrix) as Matrix4;
+    primitive.material.pvMatrix = (Engine.mainCamera.projectionMatrix *
+        Engine.mainCamera.viewMatrix) as Matrix4;
     primitive.material.setUniforms(
         program,
         modeMatrix,
-        Context.mainCamera.viewMatrix,
-        Context.mainCamera.projectionMatrix,
-        Context.mainCamera.translation,
+        Engine.mainCamera.viewMatrix,
+        Engine.mainCamera.projectionMatrix,
+        Engine.mainCamera.translation,
         _gltfProject.defaultLight);
 
     {

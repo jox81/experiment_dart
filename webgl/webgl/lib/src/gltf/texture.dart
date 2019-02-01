@@ -27,7 +27,7 @@ class GLTFTexture extends GLTFChildOfRootProperty {
   bool clamp;
 
   GLTFTexture({GLTFSampler sampler, GLTFImage source, String name : ''}):this._sampler =sampler, this._source = source, super(name){
-    GLTFEngine.activeProject.textures.add(this);
+    GLTFEngine.currentProject.textures.add(this);
   }
 
   @override

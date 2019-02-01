@@ -12,7 +12,7 @@ class GLTFAnimation {
   List<GLTFAnimationChannel> channels;
 
   GLTFAnimation({String name : ''}){
-    GLTFEngine.activeProject.animations.add(this);
+    GLTFEngine.currentProject.animations.add(this);
   }
 
   @override
