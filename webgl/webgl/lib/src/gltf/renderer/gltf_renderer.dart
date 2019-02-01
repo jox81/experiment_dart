@@ -54,7 +54,7 @@ class GLTFRenderer extends Renderer {
   void render({num currentTime: 0.0}) {
     try {
       GL.resizeCanvas();
-      gl.clear(
+      GL.clear(
           ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
       _drawNodes(_gltfProject.currentScene.nodes);
     } catch (ex) {

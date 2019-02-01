@@ -581,12 +581,15 @@ class WebGLRenderingContext{
   //if glEnume isWrapped or not
   ///masks : List<ClearBufferMask> || int
   void clear(dynamic masks) {
-    int bitmask = 0;
+    int bitmask;
     
     if(isWrapper && masks is List<ClearBufferMask>) {
+      bitmask = 0;
       for (dynamic mask in masks) {
         bitmask |= mask as int;
       }
+    }else{
+      bitmask = masks;
     }
     
     gl.clear(bitmask);
