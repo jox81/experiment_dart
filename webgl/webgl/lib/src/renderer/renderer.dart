@@ -4,13 +4,11 @@ import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/project/project.dart';
 
 abstract class Renderer{
-  final Context context = new Context();
+  Context _context;
+  CanvasElement get canvas => _context.canvas;
 
-  final CanvasElement _canvas;
-  CanvasElement get canvas => _canvas;
-
-  Renderer(this._canvas) {
-    context.init(_canvas);
+  Renderer(CanvasElement canvas) {
+    _context = new Context(canvas);
   }
 
   void init(Project project);

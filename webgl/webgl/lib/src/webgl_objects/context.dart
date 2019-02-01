@@ -7,9 +7,8 @@ WebGLRenderingContext get GL => _GL;
 WebGL.RenderingContext get gl => _GL?.gl;
 
 class Context{
-  Context();
-
-  void init(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
+  final CanvasElement canvas;
+  Context(this.canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
     _GL = new WebGLRenderingContext.create(canvas, enableExtensions:enableExtensions, initConstant:initConstant, logInfos:logInfos);
   }
 
