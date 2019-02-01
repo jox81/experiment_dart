@@ -109,11 +109,11 @@ class GLTFRenderer extends Renderer {
         GLTFAccessor accessorPosition = primitive.positionAccessor;
         if (accessorPosition == null)
           throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
-        gl.drawArrays(primitive.drawMode, accessorPosition.byteOffset,
+        GL.drawArrays(primitive.drawMode, accessorPosition.byteOffset,
             accessorPosition.count);
       } else {
         GLTFAccessor accessorIndices = primitive.indicesAccessor;
-        gl.drawElements(primitive.drawMode, accessorIndices.count,
+        GL.drawElements(primitive.drawMode, accessorIndices.count,
             accessorIndices.componentType, 0);
       }
 
