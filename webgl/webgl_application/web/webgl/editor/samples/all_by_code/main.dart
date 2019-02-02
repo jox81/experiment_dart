@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:webgl/src/gltf/debug_gltf.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
 
 //import '00_triangle_without_indices/triangle_without_indices.dart';
@@ -29,7 +29,7 @@ Future main() async {
   GLTFRenderer renderer = await new GLTFRenderer(canvas);
 
   GLTFProject gltf = await projects.first();
-  debugGltf(gltf, doGlTFProjectLog : true, isDebug:false);
+  gltf.debug(doProjectLog : true, isDebug:false);
 
   renderer.render();
 }

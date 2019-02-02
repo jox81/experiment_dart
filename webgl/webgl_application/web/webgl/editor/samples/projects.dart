@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/creation.dart';
 
 import 'all_by_code/00_triangle_without_indices/triangle_without_indices.dart';
 
@@ -11,7 +12,7 @@ Future<List<GLTFProject>> loadSampleProjects() async => [
 ];
 
 Future getProjectGltfPath(String gltfPath) async {
-  return await loadGLTF(gltfPath, useWebPath : false);
+  return await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
 }
 
 List<String> gltfSamplesPaths = [

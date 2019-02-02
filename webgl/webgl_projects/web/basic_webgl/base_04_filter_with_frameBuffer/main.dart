@@ -6,21 +6,16 @@ import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/materials/types/dot_screen_material.dart';
 
 ///From : https://medium.com/david-guan/webgl-and-image-filter-101-5017b290d02f
 
-webgl.RenderingContext gl;
-
 Future main() async {
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
-  WebGLRenderingContext renderingContext = new WebGLRenderingContext.create(canvas);
-  gl = renderingContext.gl;
-  GL = renderingContext;
+  new Context(canvas);
 
   webgl.Texture texture = await loadImageToTexture();
 

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
@@ -23,7 +23,7 @@ Future main() async {
 class WebglTest {
 
   WebglTest(CanvasElement canvas) {
-    Context.init(canvas, enableExtensions: true, logInfos: false);
+    new Context(canvas, enableExtensions: true, logInfos: false);
   }
 
   void setup() {

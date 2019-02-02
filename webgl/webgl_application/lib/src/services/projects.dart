@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:angular/angular.dart';
 
 // Todo (jpu) :

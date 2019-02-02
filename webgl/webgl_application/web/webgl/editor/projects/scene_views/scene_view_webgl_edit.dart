@@ -1,7 +1,7 @@
 //import 'dart:async';
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/camera/camera.dart';
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //import 'package:webgl/introspection.dart';
 //
 //
@@ -30,7 +30,7 @@
 //    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 1000.0)
 //      ..targetPosition = new Vector3.zero()
 //      ..translation = new Vector3(3.0, 10.0, 10.0);
-//    Context.mainCamera = camera;
+//    Engine.mainCamera = camera;
 //
 //    MultiLineMesh line = new MultiLineMesh([
 //      new Vector3.all(0.0),

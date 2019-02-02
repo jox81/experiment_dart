@@ -1,4 +1,4 @@
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //import 'package:webgl/src/gltf/mesh_primitive.dart';
 //
 //import 'dart:async';

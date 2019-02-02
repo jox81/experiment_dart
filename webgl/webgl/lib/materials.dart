@@ -14,3 +14,4 @@ export 'package:webgl/src/materials/types/sky_box_material.dart';
 export 'package:webgl/src/materials/types/debug_material.dart';
 export 'package:webgl/src/materials/types/kronos_default_material.dart';
 export 'package:webgl/src/materials/types/kronos_pbr_material.dart';
+export 'package:webgl/src/gltf/pbr_material.dart';

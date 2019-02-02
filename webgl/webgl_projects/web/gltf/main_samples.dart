@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:webgl/render_gltf.dart';
+import 'package:webgl/render_project.dart';
 
 Future main() async {
   List<String> gltfSamplesPaths = [
@@ -38,7 +38,7 @@ Future main() async {
 //    './samples/gltf_2_0/BoxTextured/glTF-Embedded/BoxTextured.gltf',// Todo (jpu) : render black ? =>
 
   //vertex colors
-    './samples/gltf_2_0/VertexColorTest/glTF/VertexColorTest.gltf',
+//    './samples/gltf_2_0/VertexColorTest/glTF/VertexColorTest.gltf',
 
   //Others
 //    './samples/gltf_2_0/06_duck/gltf_embed/Duck.gltf',
@@ -59,7 +59,7 @@ Future main() async {
     //Further pbr models
 //    './samples/gltf_2_0/pbr/TwoSidedPlane/glTF/TwoSidedPlane.gltf',// Todo (jpu) : implement two side material
 //    './samples/gltf_2_0/pbr/suzanne/glTF/Suzanne.gltf',
-//      './samples/gltf_2_0/pbr/SciFiHelmet/glTF/SciFiHelmet.gltf',
+      './samples/gltf_2_0/pbr/SciFiHelmet/glTF/SciFiHelmet.gltf',
 
     //Complex model hierarchy
 // Todo (jpu) :GL ERROR :GL_INVALID_OPERATION : glDrawElements: range out of bounds for buffer > do change indices offset ?
@@ -93,5 +93,5 @@ Future main() async {
   String gtltPath = gltfSamplesPaths.first;
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
-  await renderGltf(gtltPath, canvas);
+  await renderProjectFromPath(gtltPath, canvas);
 }

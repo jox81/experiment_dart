@@ -1,7 +1,7 @@
 //import 'dart:async';
 //import 'dart:html';
 //import 'package:webgl/src/gltf/debug_gltf.dart';
-//import 'package:webgl/src/gltf/project.dart';
+//import 'package:webgl/src/gltf/project/project.dart';
 //import 'package:webgl/src/gltf/renderer/renderer.dart';
 //import 'package:webgl/src/gltf/mesh/mesh.dart';
 //import 'package:webgl/src/gltf/node.dart';

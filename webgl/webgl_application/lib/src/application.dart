@@ -2,21 +2,20 @@ import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/engine.dart';
-import 'package:webgl/src/geometry/utils_geometry.dart';
+import 'package:webgl/src/utils/utils_geometry.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/interaction/interaction_manager.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/introspection.dart';
-import 'package:webgl/src/interface/IScene.dart';
-import 'package:webgl/src/context.dart' hide gl;
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl_application/src/ui_models/toolbar.dart';
 
 enum AxisType { view, x, y, z, any }
 enum ActiveToolType { select, move, rotate, scale }
 
-class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
+class Application implements ToolBarAxis, ToolBarTool{
   //Singleton
   static Application _instance;
   static Application get instance => _instance;
@@ -39,11 +38,10 @@ class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
 
   GLTFEngine engine;
   GLTFProject project;
-  CameraPerspective get mainCamera => Context.mainCamera;
+  CameraPerspective get mainCamera => Engine.mainCamera;
 
   GLTFNode tempSelection;
 
-  @override
   InteractionManager get interaction => engine.interaction;
 
   Application._(CanvasElement canvas){
@@ -52,9 +50,7 @@ class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
   }
 
   void render() {
-    engine.renderer
-    ..project = project;
-    engine.renderer.render();
+    engine.render(project);
   }
 
   /// Active Axis
@@ -84,16 +80,16 @@ class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
     print(_activeTool);
     switch (_activeTool){
       case ActiveToolType.select:
-        Context.mainCamera.isActive = true;
+        Engine.mainCamera.isActive = true;
         break;
       case ActiveToolType.move:
-        Context.mainCamera.isActive = false;
+        Engine.mainCamera.isActive = false;
         break;
       case ActiveToolType.rotate:
-        Context.mainCamera.isActive = false;
+        Engine.mainCamera.isActive = false;
         break;
       case ActiveToolType.scale:
-        Context.mainCamera.isActive = false;
+        Engine.mainCamera.isActive = false;
         break;
     }
   }
@@ -103,13 +99,13 @@ class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
     interaction.onMouseDown.listen(_onMouseDownHandler);
     interaction.onMouseUp.listen(_onMouseUpHandler);
     interaction.onDrag.listen(_onDragHandler);
-    interaction.onResize.listen((dynamic event){Context.resizeCanvas();});
+    interaction.onResize.listen((dynamic event){GL.resizeCanvas();});
   }
 
   void _onMouseDownHandler(MouseEvent event) {
-    if (Context.mainCamera != null) {
+    if (Engine.mainCamera != null) {
       GLTFNode modelHit = UtilsGeometry.findNodeFromMouseCoords(
-          Context.mainCamera, event.offset.x, event.offset.y,
+          Engine.mainCamera, event.offset.x, event.offset.y,
           currentScene.nodes);
       tempSelection = modelHit;
     }

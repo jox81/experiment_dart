@@ -1,10 +1,11 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 
 import 'material_library.dart';
@@ -16,7 +17,7 @@ Future<GLTFProject> projectSceneViewVector() async {
     ..backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
   project.scene = scene;
 
-  Context.mainCamera = new
+  Engine.mainCamera = new
   CameraPerspective(radians(37.0), 0.1, 1000.0)
     ..targetPosition = new Vector3.zero()
     ..translation = new Vector3(10.0, 10.0, 10.0);
@@ -113,8 +114,8 @@ Future<GLTFProject> projectSceneViewVector() async {
 
   /// camera
   void test03() {
-    Matrix4 uModelViewMatrix = Context.mainCamera.viewMatrix.multiplied(Context.modelMatrix);
-    Matrix4 uProjectionMatrix = Context.mainCamera.projectionMatrix;
+    Matrix4 uModelViewMatrix = Engine.mainCamera.viewMatrix.multiplied(new Matrix4.identity());
+    Matrix4 uProjectionMatrix = Engine.mainCamera.projectionMatrix;
     Vector3 vectorA = new Vector3(3.0,0.0,0.0);
     Vector3 vectorResult = uProjectionMatrix * uModelViewMatrix * vectorA;
 
@@ -186,7 +187,7 @@ Future<GLTFProject> projectSceneViewVector() async {
     Vector3 cameraPosition = new Vector3(0.0,2.0,2.0);
     Vector3 cameraTargetPosition = new Vector3(0.0,0.0,1.0);
 
-    Context.mainCamera
+    (Engine.mainCamera as CameraPerspective)
       ..yfov = radians(150.0)
       ..targetPosition = cameraTargetPosition
       ..translation = cameraPosition;
@@ -228,7 +229,7 @@ Future<GLTFProject> projectSceneViewVector() async {
 //    gridTest.transform = finalMatrix * gridTest.transform;
 //    axisTest.transform = finalMatrix * axisTest.transform;
 
-    Matrix4 finalMatrix = new Matrix4.inverted(Context.mainCamera.viewMatrix).multiplied(new Matrix4.identity());
+    Matrix4 finalMatrix = new Matrix4.inverted(Engine.mainCamera.viewMatrix).multiplied(new Matrix4.identity());
     nodeGridTest.matrix = (finalMatrix * nodeGridTest.matrix) as Matrix4;
     nodeAxisTest.matrix = (finalMatrix * nodeAxisTest.matrix) as Matrix4;
 

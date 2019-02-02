@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:angular/angular.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl_application/components/ui/canvas_component/canvas_component.dart';

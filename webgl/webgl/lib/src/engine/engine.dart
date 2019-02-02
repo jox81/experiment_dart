@@ -41,6 +41,8 @@ abstract class Engine {
   set activeProject(Project value) => _activeProject = value;
 
   InteractionManager _interaction;
+  InteractionManager get interaction => _interaction;
+
   Animator get animator;
   Renderer get renderer;
 

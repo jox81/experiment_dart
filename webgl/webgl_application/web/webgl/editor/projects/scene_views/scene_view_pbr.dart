@@ -1,6 +1,6 @@
 ﻿//import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/camera/camera.dart';
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //import 'package:webgl/src/light/light.dart';
 //import 'dart:async';
 //
@@ -27,7 +27,7 @@
 //    CameraPerspective camera = new CameraPerspective(radians(45.0), 0.1, 1000.0)
 //      ..targetPosition = new Vector3.zero()
 //      ..translation = new Vector3(0.0, 10.0, 5.0);
-//    Context.mainCamera = camera;
+//    Engine.mainCamera = camera;
 //
 //    //Lights
 //    PointLight pointlLight = new PointLight()

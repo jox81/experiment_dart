@@ -1,7 +1,7 @@
 //import 'dart:async';
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/camera/camera.dart';
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //
 //
 //@MirrorsUsed(
@@ -24,16 +24,16 @@
 //    CameraPerspective camera = new CameraPerspective(radians(37.0), 0.1, 100.0)
 //      ..targetPosition = new Vector3(0.0, 0.0, 0.0)
 //      ..translation = new Vector3(0.0, 2.0, -1.0);
-//    Context.mainCamera = camera;
+//    Engine.mainCamera = camera;
 //
-//    print('Context.mainCamera.position : \n${Context.mainCamera.translation}');
-//    print('Context.mainCamera.targetPosition : \n${Context.mainCamera.targetPosition}');
-//    print('Context.mainCamera.lookAtMatrix : \n${Context.mainCamera.viewMatrix}');
-//    print('Context.mainCamera.perspectiveMatrix : \n${Context.mainCamera.projectionMatrix}');
+//    print('Engine.mainCamera.position : \n${Engine.mainCamera.translation}');
+//    print('Engine.mainCamera.targetPosition : \n${Engine.mainCamera.targetPosition}');
+//    print('Engine.mainCamera.lookAtMatrix : \n${Engine.mainCamera.viewMatrix}');
+//    print('Engine.mainCamera.perspectiveMatrix : \n${Engine.mainCamera.projectionMatrix}');
 //
 //    //idems
-////    print('Context.mainCamera.viewProjectionMatrix : \n${Context.mainCamera.viewProjectionMatrix}');
-//    print('Context.mainCamera.viewProjectionMatrix calc: \n${Context.mainCamera.projectionMatrix * Context.mainCamera.viewMatrix}');
+////    print('Engine.mainCamera.viewProjectionMatrix : \n${Engine.mainCamera.viewProjectionMatrix}');
+//    print('Engine.mainCamera.viewProjectionMatrix calc: \n${Engine.mainCamera.projectionMatrix * Engine.mainCamera.viewMatrix}');
 //
 //    PointMesh model = new PointMesh()
 //      ..translation = new Vector3(1.0,0.0,0.0);
@@ -58,9 +58,9 @@
 //    aVertexPosition = new Vector3(0.0,0.0,0.0);
 //
 //    uModelMatrix = model.matrix;
-//    uViewMatrix = Context.mainCamera.viewMatrix;
-//    uModelViewMatrix = (Context.mainCamera.viewMatrix * uModelMatrix) as Matrix4;
-//    uProjectionMatrix = Context.mainCamera.projectionMatrix;
+//    uViewMatrix = Engine.mainCamera.viewMatrix;
+//    uModelViewMatrix = (Engine.mainCamera.viewMatrix * uModelMatrix) as Matrix4;
+//    uProjectionMatrix = Engine.mainCamera.projectionMatrix;
 //    uNormalMatrix;
 //
 //    print("${uProjectionMatrix * uViewMatrix * uModelMatrix * aVertexPosition}");

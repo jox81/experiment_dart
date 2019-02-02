@@ -2,7 +2,7 @@
 //import 'dart:html';
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/camera/camera.dart';
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //import 'package:webgl/src/shaders/shader_source.dart';
 //import 'package:webgl/src/utils/utils_assets.dart';
 //import 'package:webgl/src/geometry/utils_geometry.dart';
@@ -45,7 +45,7 @@
 //  }
 //
 //  void initGL(CanvasElement canvas) {
-//    Context.init(canvas,enableExtensions:true,logInfos:false);
+//    new Context(canvas,enableExtensions:true,logInfos:false);
 //  }
 //
 //  void setup(){
@@ -57,7 +57,7 @@
 //  }
 //
 //  void setupCamera()  {
-//    Context.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
+//    Engine.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
 //      ..targetPosition = new Vector3.zero()
 //      ..translation = new Vector3(10.0,10.0,10.0);
 //  }
@@ -208,7 +208,7 @@
 //    models.addAll(UtilsGeometry.drawModelVertices(modelsHit[0]));
 //
 //    gl.canvas.onMouseUp.listen((MouseEvent e) {
-//      Ray ray = UtilsGeometry.findRay(Context.mainCamera, e.offset.x, e.offset.y);
+//      Ray ray = UtilsGeometry.findRay(Engine.mainCamera, e.offset.x, e.offset.y);
 //
 //      models.addAll(UtilsGeometry.findNodeHitPoint(modelsHit[1],ray));
 ////      print(UtilsGeometry.findModelHit(modelsHit, ray)?.name);// Todo (jpu) :

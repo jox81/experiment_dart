@@ -3,7 +3,7 @@
 //import 'package:vector_math/vector_math.dart';
 //import 'package:webgl/src/geometry/node.dart';
 //import 'package:webgl/src/camera.dart';
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //import 'package:webgl/src/introspection/introspection.dart';
 //import 'package:webgl/src/light.dart';
 //import 'package:webgl/src/interface/IScene.dart';

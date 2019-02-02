@@ -66,25 +66,25 @@ class GLTFRenderer extends Renderer {
   void _drawNodes(List<GLTFNode> nodes) {
     for (int i = 0; i < nodes.length; i++) {
       GLTFNode node = nodes[i];
-      _drawNode(node);
+      drawNode(node);
       _drawNodes(node.children); //recursive
     }
   }
 
-  void _drawNode(GLTFNode node) {
+  void drawNode(GLTFNode node) {
     if (node.mesh == null) return;
     if (node.mesh.primitives == null) return;
 
     List<GLTFMeshPrimitive> primitives = node.mesh.primitives;
     for (int i = 0; i < primitives.length; i++) {
       GLTFMeshPrimitive primitive = primitives[i];
-      Matrix4 modeMatrix = (node.parentMatrix * node.matrix) as Matrix4;
+      Matrix4 modelMatrix = (node.parentMatrix * node.matrix) as Matrix4;
 
-      _drawPrimitive(primitive, modeMatrix);
+      _drawPrimitive(primitive, modelMatrix);
     }
   }
 
-  void _drawPrimitive(GLTFMeshPrimitive primitive, Matrix4 modeMatrix) {
+  void _drawPrimitive(GLTFMeshPrimitive primitive, Matrix4 modelMatrix) {
     primitive.bindMaterial(GL.globalState);
 
     WebGLProgram program = primitive.program;
@@ -97,7 +97,7 @@ class GLTFRenderer extends Renderer {
         Engine.mainCamera.viewMatrix) as Matrix4;
     primitive.material.setUniforms(
         program,
-        modeMatrix,
+        modelMatrix,
         Engine.mainCamera.viewMatrix,
         Engine.mainCamera.projectionMatrix,
         Engine.mainCamera.translation,

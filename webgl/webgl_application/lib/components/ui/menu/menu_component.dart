@@ -4,14 +4,14 @@ import 'dart:html';
 import 'package:angular/angular.dart';
 import 'package:node_engine/src/node_editor.dart';
 import 'package:node_engine/src/nodes/node.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/gltf/mesh/mesh_type.dart';
+import 'package:webgl/src/mesh/mesh_type.dart';
 import 'package:webgl/src/materials/material_type.dart';
 import 'package:webgl/introspection.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 import 'package:webgl_application/src/application.dart';
 
@@ -59,7 +59,7 @@ class MenuComponent{
   // >> Files
 
   Future<bool> reset(Event event)async {
-    GLTFProject newProject = new GLTFProject.create(reset: true);
+    GLTFProject newProject = new GLTFProject.create();
     application.project = newProject;
     closeAllMenus();
     return false;

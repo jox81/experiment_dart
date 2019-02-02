@@ -3,11 +3,9 @@ import 'dart:html';
 import 'dart:math' as Math;
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/context.dart';
-import 'package:webgl/src/webgl_objects/webgl_rendering_context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:vector_math/vector_math.dart';
 
-webgl.RenderingContext gl;
 CanvasElement canvas;
 
 var clock = 0;
@@ -19,9 +17,7 @@ Future main() async {
 
   canvas = querySelector('#glCanvas') as CanvasElement;
 
-  WebGLRenderingContext renderingContext = new WebGLRenderingContext.create(canvas);
-  gl = renderingContext.gl;
-  GL = renderingContext;
+  new Context(canvas);
 
   webgl.Program program = buildProgram();
   gl.useProgram(program);

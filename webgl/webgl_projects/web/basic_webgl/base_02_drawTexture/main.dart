@@ -3,7 +3,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -18,8 +18,6 @@ Future main() async {
 }
 
 class Renderer{
-  webgl.RenderingContext gl;
-
   List<double> vertices;
   int elementsByVertices;
 
@@ -41,8 +39,7 @@ class Renderer{
 
   Renderer(){
     CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-    Context.init(canvas);
-    gl = GL.gl;
+    new Context(canvas);
     gl.clearColor(0.8, 0.8, 0.8, 1);
 
     program = buildProgram(vsSource,fsSource);

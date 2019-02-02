@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:html';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -16,7 +16,7 @@ Future main() async {
 
 class WebglTest {
   WebglTest(CanvasElement canvas) {
-    Context.init(canvas, enableExtensions: true, logInfos: false);
+    new Context(canvas, enableExtensions: true, logInfos: false);
   }
 
   Future setup() async {

@@ -8,7 +8,7 @@
 //import 'package:webgl/src/camera/camera.dart';
 //
 //
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //@MirrorsUsed(
 //    targets: const [
 //      SceneViewExperiment,
@@ -30,7 +30,7 @@
 //      ..translation = new Vector3(5.0, 7.5, 10.0)
 //      ..showGizmo = true;
 //    cameras.add(camera);
-//    Context.mainCamera = camera;
+//    Engine.mainCamera = camera;
 //
 //    Mesh model = await exp004.experiment();
 //    materials.add(model.material);

@@ -1,7 +1,7 @@
-import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/creation.dart';
 import 'dart:async';
 
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 
 List<String> gltfTestsSamples = [
   ///Buffer tests
@@ -67,6 +67,6 @@ List<String> gltfSamples = [
 ];
 
 Future main() async {
-  GLTFProject project = await loadGLTF(gltfSamples.first, useWebPath : true);
-  debugGltf(project, doGlTFProjectLog : true, isDebug:false);
+  GLTFProject project = await GLTFCreation.loadGLTFProject(gltfSamples.first, useWebPath : true);
+  project.debug(doProjectLog : true, isDebug:false);
 }

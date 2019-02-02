@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -19,7 +19,7 @@ Future main() async {
 class WebglTest {
 
   WebglTest(CanvasElement canvas) {
-    Context.init(canvas, enableExtensions: true, logInfos: false);
+    new Context(canvas, enableExtensions: true, logInfos: false);
   }
 
   void test(){

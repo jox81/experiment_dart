@@ -2,14 +2,14 @@ import 'dart:async';
 import 'dart:html';
 
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/lights.dart';
-import 'package:webgl/src/context.dart';
-import 'package:webgl/src/gltf/mesh/mesh_primitive_infos.dart';
+import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -27,7 +27,7 @@ Future<GLTFProject> projectSceneViewBase() async {
   // Todo (jpu) :
   //Cameras
   // field of view is 45°, width-to-height ratio, hide things closer than 0.1 or further than 100
-  Context.mainCamera = new
+  Engine.mainCamera = new
   CameraPerspective(radians(37.0), 0.1, 1000.0)
     ..targetPosition = new Vector3.zero()
     ..translation = new Vector3(20.0, 20.0, 20.0);

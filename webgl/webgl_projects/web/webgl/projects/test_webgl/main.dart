@@ -2,12 +2,12 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:web_gl';
 
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 
 Future main() async {
 
   final CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  Context.init(canvas);
+  new Context(canvas);
 
   Program program;
   bool result;

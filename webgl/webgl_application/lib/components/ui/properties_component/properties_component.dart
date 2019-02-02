@@ -220,7 +220,7 @@ class PropertiesComponent {
       _isEditable(animationProperty, Texture) ||
       _isEditable(animationProperty, WebGLTexture) ||
       _isEditable(animationProperty, WebGLBuffer) ||
-      _isEditable(animationProperty, MeshPrimitive) ||
+      _isEditable(animationProperty, GLTFMeshPrimitive) ||
       _isEditable(animationProperty, Camera) ||
       _isEditable(animationProperty, Light) ||
       _isEditable(animationProperty, GLTFAccessor) ||

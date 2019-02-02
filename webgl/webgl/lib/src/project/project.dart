@@ -16,7 +16,6 @@ abstract class Project{
     _interactionables.add(customInteractionable);
   }
 
-  ///inhérited project must implement the projectDebugger;
   debug({bool doProjectLog:false, bool isDebug:false}) {
     projectDebugger.debug(this, doProjectLog: doProjectLog, isDebug: isDebug);
   }

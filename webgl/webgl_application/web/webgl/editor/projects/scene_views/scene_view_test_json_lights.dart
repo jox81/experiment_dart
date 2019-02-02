@@ -1,5 +1,5 @@
 //import 'package:vector_math/vector_math.dart';
-//import 'package:webgl/src/context.dart';
+//import 'package:webgl/src/webgl_objects/context.dart';
 //import 'package:webgl/src/camera/camera.dart';
 //import 'dart:async';
 //
@@ -27,7 +27,7 @@
 //      ..translation = new Vector3(5.0, 7.5, 10.0)
 //      ..showGizmo = true;
 //    cameras.add(camera);
-//    Context.mainCamera = camera;
+//    Engine.mainCamera = camera;
 //
 //  }
 //}

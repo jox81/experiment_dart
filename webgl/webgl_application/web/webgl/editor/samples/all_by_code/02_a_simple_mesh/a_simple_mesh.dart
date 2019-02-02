@@ -1,9 +1,9 @@
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/gltf/mesh/mesh_primitive_infos.dart';
+import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 
 GLTFProject aSimpleMesh() {
   GLTFProject project = new GLTFProject.create();

@@ -10,12 +10,12 @@ environment:
 dependencies:
   resource: ^2.1.5
   vector_math: ^2.0.8
-  gltf:
-    path: ../../gltf
-#    git: git://github.com/KhronosGroup/glTF-Validator.git
   logging: ^0.11.3+1
   stack_trace: ^1.9.2
   reflectable: ^2.0.8+1
+  gltf:
+    path: ../../gltf
+  #    git: git://github.com/KhronosGroup/glTF-Validator.git
 
 dev_dependencies:
   build_runner: ^1.0.0
