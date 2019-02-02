@@ -146,31 +146,31 @@ class MenuComponent{
   }
 
   bool editRenderingContext(){
-    currentSelection = new CustomEditElement(Context.glWrapper);
+    currentSelection = new CustomEditElement(GL);
     closeAllMenus();
     return false;
   }
 
   bool editContextAttributs(){
-    currentSelection = new CustomEditElement(Context.glWrapper.contextAttributes);
+    currentSelection = new CustomEditElement(GL.contextAttributes);
     closeAllMenus();
     return false;
   }
 
   bool editActiveFrameBuffer(){
-    currentSelection = new CustomEditElement(Context.glWrapper.activeFrameBuffer);
+    currentSelection = new CustomEditElement(GL.activeFrameBuffer);
     closeAllMenus();
     return false;
   }
 
   bool editCurrentProgram(){
-    currentSelection = new CustomEditElement(Context.glWrapper.currentProgram);
+    currentSelection = new CustomEditElement(GL.currentProgram);
     closeAllMenus();
     return false;
   }
 
   bool editActiveTexture(){
-    currentSelection = new CustomEditElement(Context.glWrapper.activeTexture);
+    currentSelection = new CustomEditElement(GL.activeTexture);
     closeAllMenus();
     return false;
   }

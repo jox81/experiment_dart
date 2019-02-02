@@ -8,7 +8,7 @@ import 'package:webgl/src/gltf/project.dart';
 
 Future main() async {
 
-  GLTFProject gltfProject = new GLTFProject.create();
+  GLTFProject project = new GLTFProject.create();
 
   GLTFNode node01 = new GLTFNode();
 
@@ -23,6 +23,6 @@ Future main() async {
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
   GLTFEngine engine = new GLTFEngine(canvas);
-  await engine.renderer.init(gltfProject);
+  await engine.renderer.init(project);
   engine.render();
 }

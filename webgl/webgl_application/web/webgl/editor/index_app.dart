@@ -13,7 +13,7 @@ import 'package:webgl/src/shaders/shader_source.dart';
 //This gives access from the web console
 Application get app => Application.instance;
 
-WebGLRenderingContext get gl => Context.glWrapper;
+WebGLRenderingContext get gl => GL;
 Type get context => Context;
 
 Future main() async {

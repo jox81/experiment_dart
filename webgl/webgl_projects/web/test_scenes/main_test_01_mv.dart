@@ -70,8 +70,8 @@
 //  }
 //
 //  void initShaders() {
-//    WebGLShader fragmentShader = _getShader(Context.glWrapper, "shader-fs");
-//    WebGLShader vertexShader = _getShader(Context.glWrapper, "shader-vs");
+//    WebGLShader fragmentShader = _getShader(GL, "shader-fs");
+//    WebGLShader vertexShader = _getShader(GL, "shader-vs");
 //
 //    shaderProgram = new WebGLProgram();
 //    shaderProgram.attachShader(vertexShader);
@@ -126,13 +126,13 @@
 //    List<int> indices = nodes[0].mesh.primitives[0].indices;
 //
 //    vertexBuffer = new WebGLBuffer();
-//    Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
+//    GL.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
 //    gl.bufferData(
 //        BufferType.ARRAY_BUFFER, new Float32List.fromList(vertices), BufferUsageType.STATIC_DRAW);
 //    gl.bindBuffer(BufferType.ARRAY_BUFFER, null);
 //
 //    indicesBuffer = new WebGLBuffer();
-//    Context.glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+//    GL.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 //    gl.bufferData(BufferType.ELEMENT_ARRAY_BUFFER, new Uint16List.fromList(indices),
 //        BufferUsageType.STATIC_DRAW);
 //    gl.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, null);
@@ -152,8 +152,8 @@
 //  }
 //
 //  void _render() {
-//    Context.glWrapper.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
-//    Context.glWrapper.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+//    GL.bindBuffer(BufferType.ARRAY_BUFFER, vertexBuffer);
+//    GL.bindBuffer(BufferType.ELEMENT_ARRAY_BUFFER, indicesBuffer);
 //
 //    vertexPositionAttribute.vertexAttribPointer(nodes[0].mesh.primitives[0].positionAccessor.components, ShaderVariableType.FLOAT, false, 0, 0);
 //

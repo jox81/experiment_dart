@@ -9,6 +9,7 @@ import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/gltf/asset.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/debug_gltf.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/image.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
@@ -19,6 +20,7 @@ import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/lights.dart';
 import 'package:webgl/src/project/project.dart';
+import 'package:webgl/src/gltf/project/gltf_load_project.dart';
 
 // Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
@@ -31,6 +33,9 @@ import 'package:webgl/src/project/project.dart';
 
 @reflector
 abstract class GLTFProject extends Project{
+
+  GLTFProjectDebugger _projectDebugger;
+  GLTFProjectDebugger get projectDebugger => _projectDebugger ??= new GLTFProjectDebugger();
 
   GLTFScene get currentScene =>
       scenes.length > 0 ? scenes[0] : null;
@@ -46,6 +51,8 @@ abstract class GLTFProject extends Project{
 
     setupDefault();
   }
+  
+  factory GLTFProject.create() = GLTFLoadProject;
 
   ///path of the directory of the gltf file
   String baseDirectory = '';
@@ -175,5 +182,7 @@ abstract class GLTFProject extends Project{
     GLTFAnimationChannel.nextId = 0;
     GLTFAnimationSampler.nextId = 0;
   }
+
+  debug({bool doProjectLog, bool isDebug}) {}
 
 }

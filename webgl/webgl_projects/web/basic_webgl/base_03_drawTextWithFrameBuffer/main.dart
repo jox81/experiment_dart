@@ -21,7 +21,7 @@ Future main() async {
 
   WebGLRenderingContext renderingContext = new WebGLRenderingContext.create(canvas);
   gl = renderingContext.gl;
-  Context.glWrapper = renderingContext;
+  GL = renderingContext;
 
   webgl.Program program = buildProgram();
   gl.useProgram(program);

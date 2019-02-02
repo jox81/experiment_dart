@@ -9,8 +9,8 @@ class ProjectFactory{
     if(projectPath.endsWith('.gltf')){
       project = await GLTFCreation.loadGLTFProject(projectPath, useWebPath : false);
 
-      ProjectDebugger projectDebugger = new GLTFProjectDebugger();
-      await projectDebugger.debug(project, doProjectLog : false, isDebug:false);
+
+      await project.debug(doProjectLog : false, isDebug:false);
     }
     return project;
   }

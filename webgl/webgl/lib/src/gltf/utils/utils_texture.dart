@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class UtilsTextureGLTF {
-  static Future<int> initTextures(GLTFProject gltfProject) async {
+  static Future<int> initTextures(GLTFProject project) async {
 
     WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
@@ -47,16 +47,16 @@ class UtilsTextureGLTF {
     int _reservedTextureUnits = 3;
 
     bool useDebugTexture = false;
-    for (int i = 0; i < gltfProject.textures.length; i++) {
+    for (int i = 0; i < project.textures.length; i++) {
       int textureUnitId = 0;
 
       GLTFTexture gltfTexture;
       if (!useDebugTexture) {
-        gltfTexture = gltfProject.textures[i];
+        gltfTexture = project.textures[i];
         if (gltfTexture.source.data == null) {
           //load image
           String fileUrl =
-              gltfProject.baseDirectory + gltfTexture.source.uri.toString();
+              project.baseDirectory + gltfTexture.source.uri.toString();
           imageElement = await TextureUtils.loadImage(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {

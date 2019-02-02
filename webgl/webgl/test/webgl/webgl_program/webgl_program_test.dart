@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:typed_data';
 import "package:test/test.dart";
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -14,6 +14,7 @@ void main() {
   assetManager.useWebPath = true;
 
   CanvasElement canvas;
+  Context context;
 
   setUp(() async {
 
@@ -21,11 +22,12 @@ void main() {
     canvas.width = 10;
     canvas.height = 10;
 
-    Context.init(canvas,enableExtensions:true,logInfos:false);
+    context = new Context(canvas,enableExtensions:true,logInfos:false);
   });
 
   tearDown(() async {
-    gl = null;
+    context.clear();
+    context = null;
     canvas = null;
   });
 

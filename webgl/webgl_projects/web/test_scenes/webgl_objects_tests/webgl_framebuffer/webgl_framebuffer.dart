@@ -38,11 +38,11 @@ class WebglTest {
   Future simpleBindTest() async {
     print('@ simple de test de binding');
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
   }
 
   Future bindUnbindTestNull() async {
@@ -50,38 +50,38 @@ class WebglTest {
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
 
-    assert(Context.glWrapper.activeFrameBuffer.boundFrameBuffer == null);
+    assert(GL.activeFrameBuffer.boundFrameBuffer == null);
 
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
-    assert(Context.glWrapper.activeFrameBuffer.boundFrameBuffer != null);
+    GL.activeFrameBuffer.bind(frameBuffer);
+    assert(GL.activeFrameBuffer.boundFrameBuffer != null);
 
-    Context.glWrapper.activeFrameBuffer.unBind();
-    assert(Context.glWrapper.activeFrameBuffer.boundFrameBuffer == null);
+    GL.activeFrameBuffer.unBind();
+    assert(GL.activeFrameBuffer.boundFrameBuffer == null);
 
     print('test ok');
   }
 
   void createFrameBufferNoAttachment() {
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
 
     //Tant que le frameBuffer n'est pas bindé, il n'est pas vraiment initialisé
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     //Il reste initialisé après être détaché
-    Context.glWrapper.activeFrameBuffer.unBind();
+    GL.activeFrameBuffer.unBind();
     frameBuffer.logFrameBufferInfos();
   }
 
   void createFrameBufferColorAttachment() {
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture.texture2d();
-    Context.glWrapper.activeTexture.texture2d.bind(texture);
-    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+    GL.activeTexture.texture2d.bind(texture);
+    GL.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,
@@ -93,15 +93,15 @@ class WebglTest {
         null);
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
-    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
+    GL.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
         texture,
         0);
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
   }
 
   void createFrameBufferDepthTextureAttachment() {
@@ -114,12 +114,12 @@ class WebglTest {
 
     //
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.bind(frameBuffer);
 
     //The texture to bind must have a correct InternalFormatType
     WebGLTexture texture = new WebGLTexture.texture2d();
-    Context.glWrapper.activeTexture.texture2d.bind(texture);
-    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+    GL.activeTexture.texture2d.bind(texture);
+    GL.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         WEBGL_depth_texture_InternalFormat.DEPTH_COMPONENT,
@@ -130,44 +130,44 @@ class WebglTest {
         WEBGL_depth_texture_TexelDataType.UNSIGNED_SHORT,
         null);
 
-    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
+    GL.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, TextureAttachmentTarget.TEXTURE_2D, texture, 0);
 
-    Context.glWrapper.activeTexture.logActiveTextureInfo();
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeTexture.logActiveTextureInfo();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
   }
 
   void createFrameBufferDepthBufferAttachment() {
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.bind(frameBuffer);
 
     WebGLRenderBuffer depthRenderbuffer = new WebGLRenderBuffer();
     depthRenderbuffer.bind();
     depthRenderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, RenderBufferInternalFormatType.DEPTH_COMPONENT16, 64, 64);
 
-    Context.glWrapper.activeFrameBuffer.framebufferRenderbuffer(
+    GL.activeFrameBuffer.framebufferRenderbuffer(
         FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.DEPTH_ATTACHMENT, RenderBufferTarget.RENDERBUFFER, depthRenderbuffer);
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
   }
 
   void createFrameBufferStencilAttachment() {
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.bind(frameBuffer);
 
     WebGLRenderBuffer stencilRenderbuffer = new WebGLRenderBuffer();
     stencilRenderbuffer.bind();
     stencilRenderbuffer.renderbufferStorage(RenderBufferTarget.RENDERBUFFER, RenderBufferInternalFormatType.STENCIL_INDEX8, 64, 64);
 
-    Context.glWrapper.activeFrameBuffer.framebufferRenderbuffer(
+    GL.activeFrameBuffer.framebufferRenderbuffer(
         FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.STENCIL_ATTACHMENT, RenderBufferTarget.RENDERBUFFER, stencilRenderbuffer);
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
   }
 
   void createFrameBuffer02() {
@@ -176,9 +176,9 @@ class WebglTest {
 
     // 1. Init Texture
     WebGLTexture texture = new WebGLTexture.texture2d();
-    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    GL.activeTexture.texture2d.bind(texture);
     try {
-      Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+      GL.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
 //          TextureAttachmentTarget.TEXTURE_2D,
           0,
           TextureInternalFormat.RGBA,
@@ -201,25 +201,25 @@ class WebglTest {
 
     // 3. Init Frame Buffer
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
-    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
+    GL.activeFrameBuffer.bind(framebuffer);
+    GL.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
         texture,
         0);
-    Context.glWrapper.activeFrameBuffer.framebufferRenderbuffer(
+    GL.activeFrameBuffer.framebufferRenderbuffer(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.DEPTH_ATTACHMENT,
         RenderBufferTarget.RENDERBUFFER,
         renderbuffer);
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     // 4. Clean up
-    Context.glWrapper.activeTexture.texture2d.unBind();
+    GL.activeTexture.texture2d.unBind();
     renderbuffer.unBind();
-    Context.glWrapper.activeFrameBuffer.unBind();
+    GL.activeFrameBuffer.unBind();
   }
 
   void createFrameBuffer03() {
@@ -239,24 +239,24 @@ class WebglTest {
     // 3. Init Frame Buffer
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
 
-    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
-    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
+    GL.activeFrameBuffer.bind(framebuffer);
+    GL.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
         renderedTextures[0],
         0);
-    Context.glWrapper.activeFrameBuffer.framebufferRenderbuffer(
+    GL.activeFrameBuffer.framebufferRenderbuffer(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.DEPTH_ATTACHMENT,
         RenderBufferTarget.RENDERBUFFER,
         renderbuffer);
 
-    Context.glWrapper.activeFrameBuffer.logActiveFrameBufferInfos();
+    GL.activeFrameBuffer.logActiveFrameBufferInfos();
 
     // 4. Clean up
-    Context.glWrapper.activeTexture.texture2d.unBind();
+    GL.activeTexture.texture2d.unBind();
     renderbuffer.unBind();
-    Context.glWrapper.activeFrameBuffer.unBind();
+    GL.activeFrameBuffer.unBind();
   }
 }

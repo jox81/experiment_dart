@@ -14,11 +14,11 @@ Future main() async {
   String gltfPath = gltfSamplesPaths.first;
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
-  GLTFProject gltfProject = await loadGLTF(gltfPath, useWebPath : false);
-  await debugGltf(gltfProject, doGlTFProjectLog : false, isDebug:false);
+  GLTFProject project = await loadGLTF(gltfPath, useWebPath : false);
+  await debugGltf(project, doGlTFProjectLog : false, isDebug:false);
 
   GLTFEngine engine = new GLTFEngine(canvas);
-  await engine.renderer.init(gltfProject);
+  await engine.renderer.init(project);
   Context.mainCamera.yfov = 44.07;
   engine.render();
 }

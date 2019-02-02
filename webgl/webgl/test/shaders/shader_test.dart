@@ -1,7 +1,7 @@
 import 'dart:html';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/materials/types/sao_material.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
@@ -15,6 +15,7 @@ void main() {
   assetManager.useWebPath = true;
 
   CanvasElement canvas;
+  Context context;
 
   setUp(() async {
 
@@ -24,11 +25,12 @@ void main() {
 
     await ShaderSource.loadShaders();
 
-    Context.init(canvas,enableExtensions:true,logInfos:false);
+    context = new Context(canvas,enableExtensions:true,logInfos:false);
   });
 
   tearDown(() async {
-    gl = null;
+    context.clear();
+    context = null;
     canvas = null;
   });
 

@@ -1,6 +1,6 @@
 import 'dart:html';
 import "package:test/test.dart";
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -15,19 +15,20 @@ void main() {
   assetManager.useWebPath = true;
 
   CanvasElement canvas;
+  Context context;
 
   setUp(() async {
-    await ShaderSource.loadShaders();
 
-    canvas = new CanvasElement.created()
-    ..width = 10
-    ..height = 10;
+    canvas = new Element.html('<canvas/>') as CanvasElement;
+    canvas.width = 10;
+    canvas.height = 10;
 
-    Context.init(canvas,enableExtensions:true,logInfos:false);
+    context = new Context(canvas,enableExtensions:true,logInfos:false);
   });
 
   tearDown(() async {
-    gl = null;
+    context.clear();
+    context = null;
     canvas = null;
   });
 

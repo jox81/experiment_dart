@@ -1,6 +1,6 @@
 import 'dart:html';
 import "package:test/test.dart";
-import 'package:webgl/src/context.dart';
+import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -12,18 +12,20 @@ void main() {
   assetManager.useWebPath = true;
 
   CanvasElement canvas;
+  Context context;
 
   setUp(() async {
 
     canvas = new Element.html('<canvas/>') as CanvasElement;
-    canvas.width = 500;
-    canvas.height = 500;
+    canvas.width = 10;
+    canvas.height = 10;
 
-    Context.init(canvas,enableExtensions:true,logInfos:false);
+    context = new Context(canvas,enableExtensions:true,logInfos:false);
   });
 
   tearDown(() async {
-    gl = null;
+    context.clear();
+    context = null;
     canvas = null;
   });
 
@@ -38,19 +40,19 @@ void main() {
 
   group("Webgl ActiveTexture", () {
     test("Check ActiveTexture default activeUnit", () {
-      expect(Context.glWrapper.activeTexture.activeTexture, equals(TextureUnit.TEXTURE0));
+      expect(GL.activeTexture.activeTexture, equals(TextureUnit.TEXTURE0));
     });
     test("Check ActiveTexture activeUnit change", () {
-      Context.glWrapper.activeTexture.activeTexture = TextureUnit.TEXTURE2;
-      expect(Context.glWrapper.activeTexture.activeTexture, equals(TextureUnit.TEXTURE2));
+      GL.activeTexture.activeTexture = TextureUnit.TEXTURE2;
+      expect(GL.activeTexture.activeTexture, equals(TextureUnit.TEXTURE2));
     });
 
     test("activeTexture texture2d textureTarget", () {
-      expect(Context.glWrapper.activeTexture.texture2d.textureTarget, equals(TextureTarget.TEXTURE_2D));
+      expect(GL.activeTexture.texture2d.textureTarget, equals(TextureTarget.TEXTURE_2D));
     });
 
     test("activeTexture textureCubeMap textureTarget", () {
-      expect(Context.glWrapper.activeTexture.textureCubeMap.textureTarget, equals(TextureTarget.TEXTURE_CUBE_MAP));
+      expect(GL.activeTexture.textureCubeMap.textureTarget, equals(TextureTarget.TEXTURE_CUBE_MAP));
     });
   });
 
@@ -75,13 +77,13 @@ void main() {
     });
     test("texture2d bind unbind test null", () {
       WebGLTexture texture = new WebGLTexture.texture2d();
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNull);
 
-      Context.glWrapper.activeTexture.texture2d.bind(texture);
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
+      GL.activeTexture.texture2d.bind(texture);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
 
-      Context.glWrapper.activeTexture.texture2d.unBind();
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNull);
+      GL.activeTexture.texture2d.unBind();
+      expect(GL.activeTexture.texture2d.boundTexture, isNull);
     });
 
     // >> textureCubeMap
@@ -103,13 +105,13 @@ void main() {
     });
     test("textureCubeMap unbind test null", () {
       WebGLTexture texture = new WebGLTexture.textureCubeMap();
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNull);
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNull);
 
-      Context.glWrapper.activeTexture.textureCubeMap.bind(texture);
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNotNull);
+      GL.activeTexture.textureCubeMap.bind(texture);
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNotNull);
 
-      Context.glWrapper.activeTexture.textureCubeMap.unBind();
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNull);
+      GL.activeTexture.textureCubeMap.unBind();
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNull);
     });
   });
 
@@ -123,27 +125,27 @@ void main() {
 
       gl.activeTexture(TextureUnit.TEXTURE0);
 
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNull);
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNull);
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..texture2d.bind(texture1);
 
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..textureCubeMap.bind(texture2);
 
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNotNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNotNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..texture2d.unBind()
         ..textureCubeMap.unBind();
 
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNull);
-      expect(Context.glWrapper.activeTexture.textureCubeMap.boundTexture, isNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNull);
+      expect(GL.activeTexture.textureCubeMap.boundTexture, isNull);
     });
 
     test("texture2d textureCubeMap wrong swap textureTarget", () {
@@ -153,7 +155,7 @@ void main() {
       int error;
 
       gl.activeTexture(TextureUnit.TEXTURE0);
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..texture2d.bind(texture)
         ..texture2d.unBind();
       error = gl.getError();
@@ -161,7 +163,7 @@ void main() {
 
       //Une fois une texture bindé à une TextureTarget, il n'est plus possible
       //de la binder à une autre TextureTarget
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE1
         ..textureCubeMap.bind(texture);
       error = gl.getError();
@@ -174,31 +176,31 @@ void main() {
 
       WebGLTexture texture = new WebGLTexture.texture2d();
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE0;
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE0
         ..texture2d.bind(texture);
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE1
         ..texture2d.bind(texture);
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE0;
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
 
       //Check same
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE0;
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture.webGLTexture, equals(texture.webGLTexture));
-      Context.glWrapper.activeTexture
+      expect(GL.activeTexture.texture2d.boundTexture.webGLTexture, equals(texture.webGLTexture));
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE1;
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture.webGLTexture, equals(texture.webGLTexture));
+      expect(GL.activeTexture.texture2d.boundTexture.webGLTexture, equals(texture.webGLTexture));
     });
 
     test("une TextureTraget est simplement remplacée par un nouveau bind", () {
@@ -206,19 +208,19 @@ void main() {
       WebGLTexture texture1 = new WebGLTexture.texture2d();
       WebGLTexture texture2 = new WebGLTexture.texture2d();
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..activeTexture = TextureUnit.TEXTURE0;
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..texture2d.bind(texture1);
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
 
-      Context.glWrapper.activeTexture
+      GL.activeTexture
         ..texture2d.bind(texture2);
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture, isNotNull);
+      expect(GL.activeTexture.texture2d.boundTexture, isNotNull);
 
-      expect(Context.glWrapper.activeTexture.texture2d.boundTexture.webGLTexture, equals(texture2.webGLTexture));
+      expect(GL.activeTexture.texture2d.boundTexture.webGLTexture, equals(texture2.webGLTexture));
 
     });
 

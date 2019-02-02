@@ -25,8 +25,8 @@ class GLTFRenderer extends Renderer {
 
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
-  Future init(covariant GLTFProject gltfProject) async {
-    _gltfProject = gltfProject;
+  Future init(covariant GLTFProject project) async {
+    _gltfProject = project;
 
     if (_gltfProject.currentScene == null)
       throw new Exception("currentScene must be set before init.");
@@ -44,7 +44,7 @@ class GLTFRenderer extends Renderer {
     // Todo (jpu) : replace this in camera
     Engine.mainCamera = _gltfProject.getCurrentCamera();
 
-    _backgroundColor = gltfProject.scene.backgroundColor;
+    _backgroundColor = project.scene.backgroundColor;
   }
 
   set _backgroundColor(Vector4 color) {

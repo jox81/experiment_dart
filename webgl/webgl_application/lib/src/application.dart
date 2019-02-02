@@ -53,7 +53,7 @@ class Application implements ToolBarAxis, ToolBarTool, IUpdatableScene{
 
   void render() {
     engine.renderer
-    ..gltfProject = project;
+    ..project = project;
     engine.renderer.render();
   }
 

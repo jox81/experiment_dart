@@ -42,7 +42,7 @@ class Renderer{
   Renderer(){
     CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
     Context.init(canvas);
-    gl = Context.glWrapper.gl;
+    gl = GL.gl;
     gl.clearColor(0.8, 0.8, 0.8, 1);
 
     program = buildProgram(vsSource,fsSource);
@@ -147,8 +147,8 @@ class Renderer{
 
 
     WebGLFrameBuffer frameBuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(frameBuffer);
-    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(
+    GL.activeFrameBuffer.bind(frameBuffer);
+    GL.activeFrameBuffer.framebufferTexture2D(
         FrameBufferTarget.FRAMEBUFFER,
         FrameBufferAttachment.COLOR_ATTACHMENT0,
         TextureAttachmentTarget.TEXTURE_2D,
@@ -161,7 +161,7 @@ class Renderer{
     // Now draw with the texture to the canvas
     gl.clear(webgl.WebGL.COLOR_BUFFER_BIT);
     gl.drawArrays(webgl.WebGL.TRIANGLE_STRIP, 0, vertices.length ~/ elementsByVertices);
-    Context.glWrapper.activeFrameBuffer.unBind();
+    GL.activeFrameBuffer.unBind();
 
 
     ImageElement image = TextureUtils.createImageFromTexture(texture.webGLTexture, 512, 512);
@@ -173,21 +173,21 @@ class Renderer{
     WebGLTexture texture = new WebGLTexture.texture2d();
 
     gl.activeTexture(webgl.WebGL.TEXTURE0);
-    Context.glWrapper.activeTexture.texture2d.bind(texture);
+    GL.activeTexture.texture2d.bind(texture);
 
-    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+    GL.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MIN_FILTER,
         TextureMinificationFilterType.NEAREST);
-    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+    GL.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_MAG_FILTER,
         TextureMagnificationFilterType.NEAREST);
-    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+    GL.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-    Context.glWrapper.activeTexture.texture2d.setParameterInt(
+    GL.activeTexture.texture2d.setParameterInt(
         TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-//    Context.glWrapper.activeTexture.texture2d.generateMipmap();
+//    GL.activeTexture.texture2d.generateMipmap();
 
-    Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+    GL.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
     //        TextureAttachmentTarget.TEXTURE_2D,
         0,
         TextureInternalFormat.RGBA,

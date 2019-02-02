@@ -22,9 +22,9 @@ class GLTFProjectDebugger extends ProjectDebugger{
 
   /// [doProjectLog] log gltf items infos
   /// [isDebug] log traces
-  GLTFProject debug(covariant GLTFProject gltfProject, {bool doProjectLog : false, bool isDebug:false}) {
+  GLTFProject debug(covariant GLTFProject project, {bool doProjectLog : false, bool isDebug:false}) {
     utilsDebug.isDebug = isDebug;
-    _gltf = gltfProject;
+    _gltf = project;
     if(doProjectLog) {
       _testScenes();
       _testNodes();

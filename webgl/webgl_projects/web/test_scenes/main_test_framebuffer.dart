@@ -75,14 +75,14 @@ class Webgl01 {
 
     // Create a framebuffer and attach the texture.
     WebGLFrameBuffer framebuffer = new WebGLFrameBuffer();
-    Context.glWrapper.activeFrameBuffer.bind(framebuffer);
-    Context.glWrapper.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, textureCrate, 0);
+    GL.activeFrameBuffer.bind(framebuffer);
+    GL.activeFrameBuffer.framebufferTexture2D(FrameBufferTarget.FRAMEBUFFER, FrameBufferAttachment.COLOR_ATTACHMENT0, TextureAttachmentTarget.TEXTURE_2D, textureCrate, 0);
 
     // Now draw with the texture to the canvas
     // NOTE: We clear the canvas to red so we'll know
     // we're drawing the texture and not seeing the clear
     // from above.
-    Context.glWrapper.activeFrameBuffer.unBind();
+    GL.activeFrameBuffer.unBind();
     gl.clearColor(1.0, 0.0, 0.0, 1.0); // red
     gl.clear(ClearBufferMask.COLOR_BUFFER_BIT);
     gl.drawArrays(DrawMode.TRIANGLES, 0, 6);

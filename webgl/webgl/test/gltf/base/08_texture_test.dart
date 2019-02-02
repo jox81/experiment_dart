@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/texture.dart';
 import 'dart:async';
@@ -11,24 +12,24 @@ Future main() async {
   group("Texture", () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/texture/empty.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 0);
     });
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/texture/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 1);
     });
     test("properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/texture/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFTexture> textures = gltf.textures;
       expect(textures.length, 1);

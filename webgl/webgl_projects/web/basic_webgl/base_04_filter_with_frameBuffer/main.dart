@@ -20,7 +20,7 @@ Future main() async {
 
   WebGLRenderingContext renderingContext = new WebGLRenderingContext.create(canvas);
   gl = renderingContext.gl;
-  Context.glWrapper = renderingContext;
+  GL = renderingContext;
 
   webgl.Texture texture = await loadImageToTexture();
 
@@ -66,21 +66,21 @@ WebGLTexture createTexture(int width, int height) {
   WebGLTexture texture = new WebGLTexture.texture2d();
 
   gl.activeTexture(webgl.WebGL.TEXTURE0);
-  Context.glWrapper.activeTexture.texture2d.bind(texture);
+  GL.activeTexture.texture2d.bind(texture);
 
-  Context.glWrapper.activeTexture.texture2d.setParameterInt(
+  GL.activeTexture.texture2d.setParameterInt(
       TextureParameter.TEXTURE_MIN_FILTER,
       TextureMinificationFilterType.NEAREST);
-  Context.glWrapper.activeTexture.texture2d.setParameterInt(
+  GL.activeTexture.texture2d.setParameterInt(
       TextureParameter.TEXTURE_MAG_FILTER,
       TextureMagnificationFilterType.NEAREST);
-  Context.glWrapper.activeTexture.texture2d.setParameterInt(
+  GL.activeTexture.texture2d.setParameterInt(
       TextureParameter.TEXTURE_WRAP_S, TextureWrapType.CLAMP_TO_EDGE);
-  Context.glWrapper.activeTexture.texture2d.setParameterInt(
+  GL.activeTexture.texture2d.setParameterInt(
       TextureParameter.TEXTURE_WRAP_T, TextureWrapType.CLAMP_TO_EDGE);
-//    Context.glWrapper.activeTexture.texture2d.generateMipmap();
+//    GL.activeTexture.texture2d.generateMipmap();
 
-  Context.glWrapper.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
+  GL.activeTexture.texture2d.attachmentTexture2d.texImage2DWithWidthAndHeight(
     //        TextureAttachmentTarget.TEXTURE_2D,
       0,
       TextureInternalFormat.RGBA,

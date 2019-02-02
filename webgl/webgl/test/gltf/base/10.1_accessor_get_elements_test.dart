@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import "package:test/test.dart";
 
@@ -23,8 +24,8 @@ void main() {
     setUpAll(() async {
       String gltfPath =
           '${testFolderRelativePath}/gltf/tests/base/data/accessor/get_elements.gltf';
-      gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
 
       // All buffers are loaded

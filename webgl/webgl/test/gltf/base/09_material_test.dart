@@ -1,3 +1,4 @@
+import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
@@ -14,24 +15,24 @@ Future main() async {
   group("Material", () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/empty.gltf';;
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 0);
     });
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 1);
     });
     test("base properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
       expect(material.emissiveFactor, <double>[0.0, 1.0, 0.0]);
@@ -41,8 +42,8 @@ Future main() async {
     });
     test("properties pbrMetallicRoughness", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
@@ -62,8 +63,8 @@ Future main() async {
     });
     test("properties normalTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
@@ -74,8 +75,8 @@ Future main() async {
     });
     test("properties occlusionTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
@@ -86,8 +87,8 @@ Future main() async {
     });
     test("properties emissiveTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await loadGLTFProject(gltfPath, useWebPath : false);
-      await debugProject(gltf, doProjectLog : false, isDebug:false);
+      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
