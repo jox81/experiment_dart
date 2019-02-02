@@ -8,7 +8,7 @@ import 'package:webgl/src/gltf/renderer/renderer.dart';
 class GLTFEngine extends Engine {
   static GLTFEngine get currentEngine => Engine.currentEngine as GLTFEngine;
 
-  static GLTFProject get currentProject => currentEngine.activeProject;
+  static GLTFProject get currentProject => currentEngine?.activeProject;
   static set currentProject(GLTFProject value) => currentEngine.activeProject = value;
 
   @override

@@ -34,7 +34,7 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
   GLTFScene get currentScene => application?.currentScene;
   GLTFProject get currentProject => application?.project;
 
-  CustomEditElement _currentElement = new CustomEditElement(new GLTFNode());
+  CustomEditElement _currentElement;
   CustomEditElement get currentElement {
     if(application != null) {
       if (application.currentSelection != null) {
@@ -42,6 +42,8 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
       }else{
         _currentElement = new CustomEditElement(currentProject);
       }
+    }else{
+      _currentElement = new CustomEditElement(new EmptyObject());
     }
 
     return _currentElement;
@@ -50,7 +52,6 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
   AppComponent(this.projectService, this.canvasComponent){
     print('AppComponent.AppComponent');
   }
-
 
   @override
   void ngOnChanges(Map<String, SimpleChange> changes) {
@@ -118,6 +119,10 @@ class AppComponent implements OnInit, AfterViewInit, AfterContentChecked, AfterC
     projects = await projectService.getProjects();
     await switchScene ();
   }
+}
+
+@reflector
+class EmptyObject {
 }
 
 /*

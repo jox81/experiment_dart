@@ -28,9 +28,9 @@ Future<List<GLTFProject>> loadBaseProjects() async => [
 //  await projectSceneViewBase(),
 //  await projectPrimitives(),
 //  await projectPrimitivesTextured(),
-  await projectSceneViewVector(),
+//  await projectSceneViewVector(),
 //  await projectSceneViewGltf(),// Todo (jpu) : bug
-//  await projectCubeMap(),
+  await projectCubeMap(),
 //  projectSceneViewPerformance(),
 ];
 

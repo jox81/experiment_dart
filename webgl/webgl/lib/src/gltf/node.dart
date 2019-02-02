@@ -57,7 +57,7 @@ class GLTFNode extends GLTFChildOfRootProperty{
   GLTFNode({
     String name : ''
   }): super(name){
-    GLTFEngine.currentProject.addNode(this);
+    GLTFEngine.currentProject?.addNode(this);
   }
 
   Matrix4 get parentMatrix =>  parent != null ?  (parent.parentMatrix * parent.matrix) as Matrix4 : new Matrix4.identity();
