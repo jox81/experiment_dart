@@ -1,6 +1,7 @@
 import 'package:webgl/src/camera/camera_type.dart';
 import 'package:webgl/src/camera/types/orthographic_camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_indices.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_values.dart';
@@ -9,7 +10,6 @@ import 'package:webgl/src/gltf/animation/animation_channel_target.dart';
 import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
-import 'package:webgl/src/gltf/project/gltf_load_project.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
@@ -33,100 +33,17 @@ import 'dart:core';
 import 'dart:typed_data';
 import 'package:gltf/gltf.dart' as glTF;
 import 'dart:async';
-import 'dart:html';
-import 'dart:math';
-import '../utils/utils_assets.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
 
 @reflector
 class GLTFCreation {
 
-  /// [gltfUrl] the url to find the gtlf file.
-  static Future<GLTFProject> loadGLTFProject(String gltfUrl, {bool useWebPath : false}) async {
-
-    // Todo (jpu) : assert path exist and get real file
-    final Uri baseUri = Uri.parse(gltfUrl);
-    final String filePart = baseUri.pathSegments.last;
-    final String gtlfDirectory = gltfUrl.replaceFirst(filePart, '');
-
-    final glTF.Gltf gltfSource =
-    await GLTFCreation.loadGLTFResource(gltfUrl, useWebPath: useWebPath);
-    final GLTFProject _gltf = await GLTFCreation.getGLTFProject(gltfSource, gtlfDirectory);
-
-    assert(_gltf != null);
-    print('');
-    print('> _gltf file loaded : $gltfUrl');
-    print('');
-
-    return _gltf;
-  }
-
-  static Future<glTF.Gltf> loadGLTFResource(String url,
-      {bool useWebPath: false}) async {
-    assetManager.useWebPath = useWebPath;
-
-    Completer completer = new Completer<glTF.Gltf>();
-    Map<String, Object> result = await assetManager.loadJSONResource(url);
-    try {
-      final glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
-      completer.complete(gltf);
-    } catch (e) {
-      completer.completeError(e);
-    }
-
-    return completer.future as Future<glTF.Gltf>;
-  }
-
-  static Future<Uint8List> loadGltfBinResource(String url,
-      {bool isRelative: true}) {
-    Completer completer = new Completer<Uint8List>();
-
-    String assetsPath = assetManager.getWebPath(url);
-    print('url : $url | assetsPath : $assetsPath');
-
-    Random random = new Random();
-    HttpRequest request = new HttpRequest()..responseType = 'arraybuffer';
-    request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}',
-        async: true);
-    request.timeout = 2000;
-    request.onLoadEnd.listen((_) {
-      if (request.status < 200 || request.status > 299) {
-        String fsErr =
-            'Error: HTTP Status ${request.status} on resource: $assetsPath';
-        window.alert('Fatal error getting text ressource (see console)');
-        print(fsErr);
-        return completer.completeError(fsErr);
-      } else {
-        ByteBuffer byteBuffer = request.response as ByteBuffer;
-        completer.complete(new Uint8List.view(byteBuffer));
-      }
-    });
-    request.send();
-
-    return completer.future as Future<Uint8List>;
-  }
-
-  static Future<GLTFProject> getGLTFProject(
-      glTF.Gltf gltfSource, String baseDirectory) async {
-    if (gltfSource == null) return null;
-
-    GLTFProject _gltfProject = new GLTFLoadProject()
-      ..baseDirectory = baseDirectory;
-
-    GLTFCreation gltf = new GLTFCreation._(_gltfProject, gltfSource);
-    gltf._initGLTF();
-
-    await gltf.fillBuffersData();
-
-    return _gltfProject;
-  }
-
   final GLTFProject _gltfProject;
   final glTF.Gltf _gltfSource;
 
-  GLTFCreation._(this._gltfProject, this._gltfSource);
+  GLTFCreation(this._gltfProject, this._gltfSource);
 
-  void _initGLTF() {
+  void init() {
     GLTFEngine.currentProject.reset();
 
     assert(_gltfSource != null);
@@ -212,8 +129,10 @@ class GLTFCreation {
           buffer.uri != null &&
           buffer.uri.path.length > 0) {
         String ressourcePath = '${_gltfProject.baseDirectory}${buffer.uri}';
+
+
         buffer.data =
-            await loadGltfBinResource(ressourcePath, isRelative: false);
+            await Engine.assetsManager.loadGltfBinResource(ressourcePath, isRelative: false);
       }
     }
   }

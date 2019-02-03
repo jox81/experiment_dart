@@ -5,7 +5,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/assets_manager/assets_manager.dart';
 
 Future main() async {
   assetManager.useWebPath = true;

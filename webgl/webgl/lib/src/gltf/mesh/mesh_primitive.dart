@@ -4,7 +4,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/property/property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
-import 'package:webgl/src/utils/utils_renderer.dart';
+import 'package:webgl/src/renderer/render_state.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
@@ -112,7 +112,7 @@ class GLTFMeshPrimitive extends GltfProperty {
       .asUint16List(_indicesAccessor.byteOffset, _indicesAccessor.count);
   }
 
-  void bindMaterial(GlobalState globalState){//}bool hasLODExtension, int reservedTextureUnits) {
+  void bindMaterial(RenderState renderState){//}bool hasLODExtension, int reservedTextureUnits) {
     if(_isMaterialInitialized) return;
 
     bool debug = false;
@@ -128,19 +128,19 @@ class GLTFMeshPrimitive extends GltfProperty {
         // use _material manually defined
       }
     } else {
-      _material = new KronosPRBMaterial(normalAccessor != null, attributes['TANGENT'] != null, uvAccessor != null, colorAccessor != null, globalState.hasLODExtension);
+      _material = new KronosPRBMaterial(normalAccessor != null, attributes['TANGENT'] != null, uvAccessor != null, colorAccessor != null, renderState.hasLODExtension);
       KronosPRBMaterial materialPBR = _material as KronosPRBMaterial;
 
       materialPBR.baseColorMap = baseMaterial.pbrMetallicRoughness.baseColorTexture?.texture?.webglTexture;
       if (materialPBR.hasBaseColorMap) {
-        materialPBR.baseColorSamplerSlot = baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + globalState.reservedTextureUnits;
+        materialPBR.baseColorSamplerSlot = baseMaterial.pbrMetallicRoughness.baseColorTexture.texture.textureId + renderState.reservedTextureUnits;
       }
       materialPBR.baseColorFactor = baseMaterial.pbrMetallicRoughness.baseColorFactor;
 
       materialPBR.normalMap = baseMaterial.normalTexture?.texture?.webglTexture;
       if(materialPBR.hasNormalMap) {
         materialPBR.normalSamplerSlot =
-            baseMaterial.normalTexture.texture.textureId + globalState.reservedTextureUnits;
+            baseMaterial.normalTexture.texture.textureId + renderState.reservedTextureUnits;
         materialPBR.normalScale = baseMaterial.normalTexture.scale != null
             ? baseMaterial.normalTexture.scale
             : 1.0;
@@ -149,14 +149,14 @@ class GLTFMeshPrimitive extends GltfProperty {
       materialPBR.emissiveMap = baseMaterial.emissiveTexture?.texture?.webglTexture;
       if(materialPBR.hasEmissiveMap) {
         materialPBR.emissiveSamplerSlot =
-            baseMaterial.emissiveTexture.texture.textureId + globalState.reservedTextureUnits;
+            baseMaterial.emissiveTexture.texture.textureId + renderState.reservedTextureUnits;
         materialPBR.emissiveFactor = baseMaterial.emissiveFactor;
       }
 
       materialPBR.occlusionMap = baseMaterial.occlusionTexture?.texture?.webglTexture;
       if(materialPBR.hasOcclusionMap) {
         materialPBR.occlusionSamplerSlot =
-            baseMaterial.occlusionTexture.texture.textureId + globalState.reservedTextureUnits;
+            baseMaterial.occlusionTexture.texture.textureId + renderState.reservedTextureUnits;
         materialPBR.occlusionStrength = baseMaterial.occlusionTexture.strength != null
             ? baseMaterial.occlusionTexture.strength
             : 1.0;
@@ -166,7 +166,7 @@ class GLTFMeshPrimitive extends GltfProperty {
       if(materialPBR.hasMetallicRoughnessMap) {
         materialPBR.metallicRoughnessSamplerSlot =
             baseMaterial.pbrMetallicRoughness.metallicRoughnessTexture.texture
-                .textureId + globalState.reservedTextureUnits;
+                .textureId + renderState.reservedTextureUnits;
       }
 
       materialPBR.roughness = baseMaterial.pbrMetallicRoughness.roughnessFactor;

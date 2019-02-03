@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/assets_manager/assets_manager.dart';
 import "package:test/test.dart";
 
 @TestOn("chrome")

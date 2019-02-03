@@ -8,7 +8,6 @@ import 'package:webgl/materials.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_depth_texture/webgl_depth_texture_wrapped.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
@@ -20,63 +19,20 @@ import 'package:path/path.dart' as path;
 
 class TextureLibrary{
 
-  static TextureLibrary _instance;
-  TextureLibrary._init();
-
-  static TextureLibrary get instance{
-    if(_instance == null){
-      _instance = new TextureLibrary._init();
-    }
-    return _instance;
-  }
-
-  List<ImageElement> get images => TextureUtils.loadImages();
-
-}
-
-class TextureUtils {
-  static List<String> paths = [
+  List<String> paths = [
     "images/crate.gif",
     "images/fabric_bump.jpg",
   ];
 
-  static List<ImageElement> images;
+  List<ImageElement> _images;
+  List<ImageElement> get images => _images ??= Engine.assetsManager.loadImages(paths);
 
-  static List<ImageElement> loadImages() {
+  TextureLibrary();
+}
 
-    images = [];
+class TextureUtils {
 
-    for(String url in paths) {
-      String assetsPath = assetManager.getWebPath(url);
-      ImageElement image = new ImageElement()
-        ..src = assetsPath;
-      images.add(image);
-    }
 
-    return images;
-  }
-
-  ///Load a single image from an URL
-  static Future<ImageElement> loadImage(String url) {
-
-    Completer completer = new Completer<ImageElement>();
-
-    String assetsPath = assetManager.getWebPath(url);
-
-    ImageElement image;
-    image = new ImageElement()
-      ..src = assetsPath
-      ..onLoad.listen((e) {
-        if(!completer.isCompleted) {
-          completer.complete(image);
-        }
-      })
-      ..onError.listen((Event event){
-        print('Error : url : $url | assetsPath : $assetsPath');
-      });
-
-    return completer.future as Future<ImageElement>;
-  }
 
 
   // To use float :
@@ -128,7 +84,7 @@ class TextureUtils {
         bool repeatV: false,
         bool mirrorV: false}) async {
 
-    ImageElement image = await loadImage(fileUrl);
+    ImageElement image = await Engine.assetsManager.loadImage(fileUrl);
     WebGLTexture texture = createTexture2DFromImageElement(image,
         repeatU: repeatU,
         mirrorU: mirrorU,
@@ -579,7 +535,7 @@ class TextureUtils {
 
     for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
       for (int i = 0; i < 6; i++) {
-        imageElements[mipsLevels][i] = await TextureUtils.loadImage(paths[mipsLevels][i]);
+        imageElements[mipsLevels][i] = await Engine.assetsManager.loadImage(paths[mipsLevels][i]);
       }
     }
 

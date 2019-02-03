@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert' show base64;
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/creation.dart';
-import 'package:webgl/src/utils/utils_assets.dart';
+import 'package:webgl/src/assets_manager/assets_manager.dart';
 
 String testFolderRelativePath = "../..";
 

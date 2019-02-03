@@ -23,6 +23,7 @@ import 'package:webgl/src/gltf/project/project.dart';
 class GLTFRenderer extends Renderer {
   GLTFProject _gltfProject;
 
+
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
   Future init(covariant GLTFProject project) async {
@@ -31,8 +32,10 @@ class GLTFRenderer extends Renderer {
     if (_gltfProject.currentScene == null)
       throw new Exception("currentScene must be set before init.");
 
-    await ShaderSource.loadShaders();
-    GL.globalState.reservedTextureUnits =
+    ShaderSource _shaderSource=  new ShaderSource();
+    await _shaderSource.loadShaders();
+
+    renderState.reservedTextureUnits =
         await UtilsTextureGLTF.initTextures(_gltfProject);
 
     // Todo (jpu) : pourquoi si je ne le fait pas ici, il y a des soucis de rendu ?!!
@@ -85,7 +88,7 @@ class GLTFRenderer extends Renderer {
   }
 
   void _drawPrimitive(GLTFMeshPrimitive primitive, Matrix4 modelMatrix) {
-    primitive.bindMaterial(GL.globalState);
+    primitive.bindMaterial(renderState);
 
     WebGLProgram program = primitive.program;
     gl.useProgram(program.webGLProgram);
@@ -142,7 +145,7 @@ class GLTFRenderer extends Renderer {
           accessorIndices.count);
       //debug.logCurrentFunction(indices.toString());
     } else if (accessorIndices.componentType == 5125) {
-      if (GL.globalState.hasIndexUIntExtension == null)
+      if (renderState.hasIndexUIntExtension == null)
         throw "hasIndexUIntExtension : extension not supported";
       indices = accessorIndices.bufferView.buffer.data.buffer.asUint32List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,

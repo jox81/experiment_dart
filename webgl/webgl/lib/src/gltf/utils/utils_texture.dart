@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
+import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/texture.dart';
@@ -24,7 +25,7 @@ class UtilsTextureGLTF {
     int wrapT;
 
     //brdfLUT
-    imageElement = await TextureUtils.loadImage('packages/webgl/images/utils/brdfLUT.png');
+    imageElement = await Engine.assetsManager.loadImage('packages/webgl/images/utils/brdfLUT.png');
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -57,7 +58,7 @@ class UtilsTextureGLTF {
           //load image
           String fileUrl =
               project.baseDirectory + gltfTexture.source.uri.toString();
-          imageElement = await TextureUtils.loadImage(fileUrl);
+          imageElement = await Engine.assetsManager.loadImage(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {
           String base64Encoded = base64.encode(gltfTexture.source.data);
@@ -83,7 +84,7 @@ class UtilsTextureGLTF {
 //      String imagePath = '/images/crate.gif';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat.png';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat_256.png';
-        imageElement = await TextureUtils.loadImage(imagePath);
+        imageElement = await Engine.assetsManager.loadImage(imagePath);
 
         magFilter = TextureFilterType.LINEAR;
         minFilter = TextureFilterType.LINEAR;
