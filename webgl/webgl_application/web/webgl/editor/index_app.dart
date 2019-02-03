@@ -18,7 +18,8 @@ Type get context => Context;
 
 Future main() async {
 
-  await ShaderSource.loadShaders();
+  ShaderSource shaderSource = new ShaderSource();
+  await shaderSource.loadShaders();
 
   initializeReflectable();
 //  test_introspection();

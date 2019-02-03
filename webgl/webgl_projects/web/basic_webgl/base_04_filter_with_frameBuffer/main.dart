@@ -45,7 +45,8 @@ Future main() async {
   gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, null);
 
   //> apply filter
-  await ShaderSource.loadShaders();
+  ShaderSource shaderSource = new ShaderSource();
+  await shaderSource.loadShaders();
   MaterialDotScreen materialDotScreen = new MaterialDotScreen();
   materialDotScreen.texture = new WebGLTexture.fromWebGL(textureRender, webgl.WebGL.TEXTURE_2D);
   WebGLProgram programFilter = materialDotScreen.getProgram();

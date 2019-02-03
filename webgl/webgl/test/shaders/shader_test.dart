@@ -23,7 +23,8 @@ void main() {
     canvas.width = 10;
     canvas.height = 10;
 
-    await ShaderSource.loadShaders();
+    ShaderSource shaderSource = new ShaderSource();
+    await shaderSource.loadShaders();
 
     context = new Context(canvas,enableExtensions:true,logInfos:false);
   });

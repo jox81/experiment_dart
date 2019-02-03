@@ -7,7 +7,8 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 Future main() async {
-  await ShaderSource.loadShaders();
+  ShaderSource shaderSource = new ShaderSource();
+  await shaderSource.loadShaders();
 
   WebglTest webglTest =
       new WebglTest(querySelector('#glCanvas') as CanvasElement);

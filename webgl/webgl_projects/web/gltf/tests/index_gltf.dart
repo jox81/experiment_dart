@@ -1,6 +1,7 @@
-import 'package:webgl/src/gltf/creation.dart';
 import 'dart:async';
+import 'dart:html';
 
+import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 
 List<String> gltfTestsSamples = [
@@ -67,6 +68,9 @@ List<String> gltfSamples = [
 ];
 
 Future main() async {
-  GLTFProject project = await GLTFCreation.loadGLTFProject(gltfSamples.first, useWebPath : true);
+  CanvasElement canvas = new CanvasElement();
+  GLTFEngine engine = new GLTFEngine(canvas);
+
+  GLTFProject project = await Engine.assetsManager.loadGLTFProject(gltfSamples.first, useWebPath : true);
   project.debug(doProjectLog : true, isDebug:false);
 }

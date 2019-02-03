@@ -12,7 +12,8 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/materials/types/dot_screen_material.dart';
 
 Future main() async {
-  await ShaderSource.loadShaders();
+  ShaderSource shaderSource = new ShaderSource();
+  await shaderSource.loadShaders();
 
   new Renderer()..render();
 }

@@ -32,8 +32,7 @@ class GLTFRenderer extends Renderer {
     if (_gltfProject.currentScene == null)
       throw new Exception("currentScene must be set before init.");
 
-    ShaderSource _shaderSource=  new ShaderSource();
-    await _shaderSource.loadShaders();
+
 
     renderState.reservedTextureUnits =
         await UtilsTextureGLTF.initTextures(_gltfProject);

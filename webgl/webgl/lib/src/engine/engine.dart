@@ -40,6 +40,7 @@ abstract class Engine {
   final CanvasElement canvas;
   final AssetsManager _assetsManager;
 
+
   final StreamController<num> _onRenderStreamController =
       new StreamController<num>.broadcast();
   Stream<num> get onRender => _onRenderStreamController.stream;

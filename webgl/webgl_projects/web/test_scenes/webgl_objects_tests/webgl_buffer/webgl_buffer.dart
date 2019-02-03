@@ -8,7 +8,8 @@ import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 Future main() async {
-  await ShaderSource.loadShaders();
+  ShaderSource shaderSource = new ShaderSource();
+  await shaderSource.loadShaders();
 
   WebglTest webglTest =
       new WebglTest(querySelector('#glCanvas') as CanvasElement);

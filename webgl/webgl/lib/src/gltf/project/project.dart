@@ -21,6 +21,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/lights.dart';
 import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/gltf/project/gltf_load_project.dart';
+import 'package:gltf/gltf.dart' as glTF;
 
 // Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?

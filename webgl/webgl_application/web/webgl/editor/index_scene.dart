@@ -8,7 +8,8 @@ import 'package:webgl/src/shaders/shader_source.dart';
 
 Future main() async {
 
-  await ShaderSource.loadShaders();
+  ShaderSource shaderSource = new ShaderSource();
+  await shaderSource.loadShaders();
 
   bool useSample = false;
   if(useSample){
