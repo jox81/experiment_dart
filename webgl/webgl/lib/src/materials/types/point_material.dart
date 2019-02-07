@@ -11,7 +11,7 @@ class MaterialPoint extends Material {
   num pointSize;
   Vector4 color;
 
-  ShaderSource get shaderSource => ShaderSource.materialPoint;
+  ShaderSource get shaderSource => ShaderSources.materialPoint;
 
   MaterialPoint({this.pointSize: 1.0, this.color});
 

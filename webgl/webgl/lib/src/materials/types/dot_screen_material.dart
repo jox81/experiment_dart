@@ -16,7 +16,7 @@ class MaterialDotScreen extends Material {
   Vector2 center = new Vector2(0.0, 0.0);
   Vector2 texSize = new Vector2(200.0, 200.0);
 
-  ShaderSource get shaderSource => ShaderSource.dotScreen;
+  ShaderSource get shaderSource => ShaderSources.dotScreen;
 
   MaterialDotScreen();
 

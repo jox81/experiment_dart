@@ -1,0 +1,1 @@
+pub.bat global run webdev serve web:8080

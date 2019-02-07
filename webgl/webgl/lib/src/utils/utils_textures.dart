@@ -25,15 +25,12 @@ class TextureLibrary{
   ];
 
   List<ImageElement> _images;
-  List<ImageElement> get images => _images ??= Engine.assetsManager.loadImages(paths);
+  List<ImageElement> get images => _images ??= Engine.assetManager.loadImages(paths);
 
   TextureLibrary();
 }
 
 class TextureUtils {
-
-
-
 
   // To use float :
   //  var ext = gl.getExtension("OES_texture_float");
@@ -84,7 +81,7 @@ class TextureUtils {
         bool repeatV: false,
         bool mirrorV: false}) async {
 
-    ImageElement image = await Engine.assetsManager.loadImage(fileUrl);
+    ImageElement image = await Engine.assetManager.loadImage(fileUrl);
     WebGLTexture texture = createTexture2DFromImageElement(image,
         repeatU: repeatU,
         mirrorU: mirrorU,
@@ -535,7 +532,7 @@ class TextureUtils {
 
     for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
       for (int i = 0; i < 6; i++) {
-        imageElements[mipsLevels][i] = await Engine.assetsManager.loadImage(paths[mipsLevels][i]);
+        imageElements[mipsLevels][i] = await Engine.assetManager.loadImage(paths[mipsLevels][i]);
       }
     }
 

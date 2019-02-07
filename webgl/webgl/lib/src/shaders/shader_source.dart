@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:webgl/src/engine/engine.dart';
+import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:path/path.dart' as path;
+import 'package:webgl/src/assets_manager/loader/glsl_loader.dart';
+import 'package:webgl/src/utils/utils_http.dart';
 
-// Todo (jpu) : do not load all shader when not needed
-class ShaderSource{
-
+class ShaderSources{
   static Map<String, ShaderSource> _sources = new Map();
   static ShaderSource get materialPoint => _sources['material_point'];
   static ShaderSource get materialBase => _sources['material_base'];
@@ -23,7 +23,10 @@ class ShaderSource{
   static ShaderSource get sao => _sources['sao'];
   static ShaderSource get dotScreen => _sources['dot_screen'];
 
-  String _currentPackage = path.join(Uri.base.origin, 'packages/webgl');
+  final AssetManager assetManager;
+
+  String _webPath;
+  String _currentPackage;
 
   Map<String , List<String>> shadersPath = {
     'material_point' :[
@@ -94,15 +97,10 @@ class ShaderSource{
     ]
   };
 
-  String shaderType;
-
-  String vertexShaderPath;
-  String fragmentShaderPath;
-
-  String vsCode;
-  String fsCode;
-
-  ShaderSource();
+  ShaderSources(this.assetManager){
+    _webPath = UtilsHttp.useWebPath ? UtilsHttp.webPath : Uri.base.origin;
+    _currentPackage = path.join(_webPath, 'packages/webgl');
+  }
 
   Future loadShaders() async {
 
@@ -116,17 +114,28 @@ class ShaderSource{
   }
 
   Future loadShader(String key) async {
-    ShaderSource shaderSource = new ShaderSource()
+    ShaderSource shaderSource;
+    shaderSource = new ShaderSource()
       ..shaderType = key
       ..vertexShaderPath =  path.join(_currentPackage, shadersPath[key][0])
       ..fragmentShaderPath = path.join(_currentPackage, shadersPath[key][1]);
-    await shaderSource._loadShader();
+
+    shaderSource.vsCode = await new GLSLLoader(shaderSource.vertexShaderPath).load();
+    shaderSource.fsCode = await new GLSLLoader(shaderSource.fragmentShaderPath).load();
 
     _sources[shaderSource.shaderType] = shaderSource;
   }
+}
 
-  Future _loadShader()async {
-    vsCode = await Engine.assetsManager.loadGlslShader(vertexShaderPath);
-    fsCode = await Engine.assetsManager.loadGlslShader(fragmentShaderPath);
-  }
+class ShaderSource{
+
+  String shaderType;
+
+  String vertexShaderPath;
+  String fragmentShaderPath;
+
+  String vsCode;
+  String fsCode;
+
+  ShaderSource();
 }

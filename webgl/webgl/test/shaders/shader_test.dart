@@ -12,19 +12,20 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 void main() {
 
-  assetManager.useWebPath = true;
+  AssetManager assetManager;
 
   CanvasElement canvas;
   Context context;
 
   setUp(() async {
-
+    assetManager = new AssetManager();
+    assetManager.useWebPath = true;
     canvas = new Element.html('<canvas/>') as CanvasElement;
     canvas.width = 10;
     canvas.height = 10;
 
-    ShaderSource shaderSource = new ShaderSource();
-    await shaderSource.loadShaders();
+    ShaderSources shaderSources = new ShaderSources(assetManager);
+    await shaderSources.loadShaders();
 
     context = new Context(canvas,enableExtensions:true,logInfos:false);
   });
@@ -33,6 +34,7 @@ void main() {
     context.clear();
     context = null;
     canvas = null;
+    assetManager = null;
   });
 
   group("Shader", () {

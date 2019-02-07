@@ -6,6 +6,8 @@ WebGLRenderingContext _GL;
 WebGLRenderingContext get GL => _GL;
 WebGL.RenderingContext get gl => _GL?.gl;
 
+// Todo (jpu) :
+// call this WebglContext ?
 class Context{
   final CanvasElement canvas;
   Context(this.canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){

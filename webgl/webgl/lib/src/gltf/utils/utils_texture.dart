@@ -25,7 +25,7 @@ class UtilsTextureGLTF {
     int wrapT;
 
     //brdfLUT
-    imageElement = await Engine.assetsManager.loadImage('packages/webgl/images/utils/brdfLUT.png');
+    imageElement = await Engine.assetManager.loadImage('packages/webgl/images/utils/brdfLUT.png');
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -58,7 +58,7 @@ class UtilsTextureGLTF {
           //load image
           String fileUrl =
               project.baseDirectory + gltfTexture.source.uri.toString();
-          imageElement = await Engine.assetsManager.loadImage(fileUrl);
+          imageElement = await Engine.assetManager.loadImage(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {
           String base64Encoded = base64.encode(gltfTexture.source.data);
@@ -84,7 +84,7 @@ class UtilsTextureGLTF {
 //      String imagePath = '/images/crate.gif';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat.png';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat_256.png';
-        imageElement = await Engine.assetsManager.loadImage(imagePath);
+        imageElement = await Engine.assetManager.loadImage(imagePath);
 
         magFilter = TextureFilterType.LINEAR;
         minFilter = TextureFilterType.LINEAR;

@@ -8,7 +8,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 @reflector
 class MaterialBaseVertexColor extends Material {
-  ShaderSource get shaderSource => ShaderSource.materialBaseVertexColor;
+  ShaderSource get shaderSource => ShaderSources.materialBaseVertexColor;
 
   MaterialBaseVertexColor();
 

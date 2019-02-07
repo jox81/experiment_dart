@@ -50,6 +50,7 @@ class Application implements ToolBarAxis, ToolBarTool{
   }
 
   void render() {
+    engine.init();
     engine.render(project);
   }
 

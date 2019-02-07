@@ -10,7 +10,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class MaterialSAO extends Material {
   MaterialSAO();
 
-  ShaderSource get shaderSource => ShaderSource.sao;
+  ShaderSource get shaderSource => ShaderSources.sao;
 
   int get depthTextureMap => null;
   double get intensity => 100.0;

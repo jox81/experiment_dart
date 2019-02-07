@@ -12,7 +12,7 @@ import 'package:webgl/src/webgl_objects/context.dart';
 class MaterialSkyBox extends Material {
   WebGLTexture skyboxTexture;
 
-  ShaderSource get shaderSource => ShaderSource.materialSkybox;
+  ShaderSource get shaderSource => ShaderSources.materialSkybox;
 
   MaterialSkyBox();
 

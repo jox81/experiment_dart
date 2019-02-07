@@ -8,7 +8,7 @@ abstract class Project{
   List<Interactionable> _interactionables = new List<Interactionable>();
   List<Interactionable> get interactionables => _interactionables;
 
-  ProjectDebugger get projectDebugger;
+  ProjectDebugger get projectDebugger => null;// Todo (jpu) : optionnal
 
   Project(){
     Engine.currentProject = this;

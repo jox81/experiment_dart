@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:webgl/engine.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
 Future main() async {
-  ShaderSource shaderSource = new ShaderSource();
-  await shaderSource.loadShaders();
-
   WebglTest webglTest =
       new WebglTest(querySelector('#glCanvas') as CanvasElement);
 
@@ -20,12 +17,13 @@ Future main() async {
 class WebglTest {
 
   WebglTest(CanvasElement canvas) {
-    new Context(canvas, enableExtensions: true, logInfos: false);
+    GLTFEngine engine = new GLTFEngine(canvas);
+    engine.init();
   }
 
   void test(){
-//    test01();
-    test02();
+    test01();
+//    test02();
   }
 
   void test01() {

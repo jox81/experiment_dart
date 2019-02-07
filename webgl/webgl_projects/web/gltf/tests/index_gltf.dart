@@ -71,6 +71,6 @@ Future main() async {
   CanvasElement canvas = new CanvasElement();
   GLTFEngine engine = new GLTFEngine(canvas);
 
-  GLTFProject project = await Engine.assetsManager.loadGLTFProject(gltfSamples.first, useWebPath : true);
+  GLTFProject project = await Engine.assetManager.loadGLTFProject(gltfSamples.first, useWebPath : true);
   project.debug(doProjectLog : true, isDebug:false);
 }

@@ -36,10 +36,10 @@ dev_dependencies:
 #
 #
 # 2 - serve
-# générer main.reflectable.dart
+# générer main.reflectable.dart et construire le dossier .dart_tool/build
 # render disponible http://localhost:8080
-# >> webdev serve --delete-conflicting-outputs
-# >> pub.bat global run webdev serve web:57155
+# >> webdev serve
+# >> pub.bat global run webdev serve web:8080
 #
 #
 # 3 - build

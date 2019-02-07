@@ -10,7 +10,7 @@ import 'dart:web_gl' as webgl;
 
 @reflector
 class KronosPRBMaterial extends Material {
-  ShaderSource get shaderSource => ShaderSource.kronosGltfPBRTest;
+  ShaderSource get shaderSource => ShaderSources.kronosGltfPBRTest;
 
   final bool hasNormalAttribut;
   final bool hasTangentAttribut;

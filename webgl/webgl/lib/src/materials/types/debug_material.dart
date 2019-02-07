@@ -12,7 +12,7 @@ class MaterialDebug extends Material {
 
   MaterialDebug();
 
-  ShaderSource get shaderSource => ShaderSource.debugShader;
+  ShaderSource get shaderSource => ShaderSources.debugShader;
 
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();

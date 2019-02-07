@@ -17,7 +17,7 @@ typedef void SetShaderVariables(
 class MaterialCustom extends Material {
   SetShaderVariables setShaderUniformsVariables;
 
-  ShaderSource get shaderSource => ShaderSource.materialPoint; // Todo (jpu) : ?
+  ShaderSource get shaderSource => ShaderSources.materialPoint; // Todo (jpu) : ?
 
   MaterialCustom();
 

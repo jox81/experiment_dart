@@ -10,7 +10,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class MaterialBaseColor extends Material {
   Vector4 color;
 
-  ShaderSource get shaderSource => ShaderSource.materialBaseColor;
+  ShaderSource get shaderSource => ShaderSources.materialBaseColor;
 
   MaterialBaseColor(this.color);
 

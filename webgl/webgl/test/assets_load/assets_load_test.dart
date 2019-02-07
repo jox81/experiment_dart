@@ -6,18 +6,20 @@ import "package:test/test.dart";
 
 Future main() async {
 
-  assetManager.useWebPath = true;
+  AssetManager assetManager;
 
   setUp(() async {
-
+    assetManager = new AssetManager();
+    assetManager.useWebPath = true;
   });
 
   tearDown(() async {
+    assetManager = null;
   });
 
   group("Assets load Init", () {
-    test("loadTextResource ..", () async {
-      var text = await assetManager.loadTextResource('../test.txt');
+    test("loadTextResource in test folder ...", () async {
+      var text = await assetManager.loadTextResource('../data/test.txt');
       print(text);
       expect(text, isNotNull);
     });

@@ -12,7 +12,7 @@ import 'package:webgl/src/webgl_objects/context.dart';
 class MaterialBaseTexture extends Material {
   WebGLTexture texture;
 
-  ShaderSource get shaderSource => ShaderSource.materialBaseTexture;
+  ShaderSource get shaderSource => ShaderSources.materialBaseTexture;
 
   MaterialBaseTexture();
 

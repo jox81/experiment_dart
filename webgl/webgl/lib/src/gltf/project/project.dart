@@ -33,7 +33,7 @@ import 'package:gltf/gltf.dart' as glTF;
 // 16/10/2017 : reading .bin files as Uint8List
 
 @reflector
-abstract class GLTFProject extends Project{
+class GLTFProject extends Project{
 
   GLTFProjectDebugger _projectDebugger;
   GLTFProjectDebugger get projectDebugger => _projectDebugger ??= new GLTFProjectDebugger();

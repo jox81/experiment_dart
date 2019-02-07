@@ -10,7 +10,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class KronosDefaultMaterial extends Material {
   KronosDefaultMaterial();
 
-  ShaderSource get shaderSource => ShaderSource.kronosGltfDefault;
+  ShaderSource get shaderSource => ShaderSources.kronosGltfDefault;
 
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();

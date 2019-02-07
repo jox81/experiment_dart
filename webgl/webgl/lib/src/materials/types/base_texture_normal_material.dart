@@ -15,7 +15,7 @@ class MaterialBaseTextureNormal extends Material {
   DirectionalLight directionalLight;
   bool useLighting = false;
 
-  ShaderSource get shaderSource => ShaderSource.materialBaseTextureNormal;
+  ShaderSource get shaderSource => ShaderSources.materialBaseTextureNormal;
 
   MaterialBaseTextureNormal();
 

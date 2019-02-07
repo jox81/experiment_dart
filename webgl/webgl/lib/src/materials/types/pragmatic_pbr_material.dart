@@ -14,7 +14,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class MaterialPragmaticPBR extends Material {
   PointLight pointLight;
 
-  ShaderSource get shaderSource => ShaderSource.materialPBR;
+  ShaderSource get shaderSource => ShaderSources.materialPBR;
 
   MaterialPragmaticPBR(this.pointLight);
 

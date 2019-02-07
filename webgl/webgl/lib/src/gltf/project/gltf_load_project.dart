@@ -1,10 +1,10 @@
 import 'package:webgl/introspection.dart';
+import 'package:webgl/src/assets_manager/loader/gltf_bin_loader.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/camera/camera_type.dart';
 import 'package:webgl/src/camera/types/orthographic_camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
-import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_indices.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_values.dart';
@@ -126,7 +126,6 @@ class GLTFLoadProject extends GLTFProject{
     await _fillBuffersData();
   }
 
-
   ///permet de remplir les buffers du project
   Future _fillBuffersData() async {
     for (GLTFBuffer buffer in buffers) {
@@ -136,10 +135,12 @@ class GLTFLoadProject extends GLTFProject{
         String ressourcePath = '${baseDirectory}${buffer.uri}';
 
         buffer.data =
-        await Engine.assetsManager.loadGltfBinResource(ressourcePath, isRelative: false);
+        await new GLTFBinLoader(ressourcePath).load();
       }
     }
   }
+
+
 
   GLTFBuffer _createBuffer(glTF.Buffer gltfSource) {
     if (gltfSource == null) return null;

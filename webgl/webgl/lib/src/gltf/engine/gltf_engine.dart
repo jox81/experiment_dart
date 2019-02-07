@@ -18,8 +18,9 @@ class GLTFEngine extends Engine {
   Animator animator;
 
   GLTFEngine(CanvasElement canvas) : super(canvas) {
-    this.animator = new GLTFAnimator();
-    this.renderer = new GLTFRenderer(canvas);
+    animator = new GLTFAnimator();
+    renderer = new GLTFRenderer(canvas);
+    activeProject = new GLTFProject();
   }
 
   @override

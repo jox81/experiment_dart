@@ -113,7 +113,7 @@ class MenuComponent{
   // >> Textures
 
   bool editTextures(){
-    currentSelection = new CustomEditElement(TextureLibrary.instance);
+    currentSelection = new CustomEditElement(new TextureLibrary());
     closeAllMenus();
     return false;
   }

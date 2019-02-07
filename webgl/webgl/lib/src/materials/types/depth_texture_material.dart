@@ -15,7 +15,7 @@ class MaterialDepthTexture extends Material {
   num near = 1.0;
   num far = 1000.0;
 
-  ShaderSource get shaderSource => ShaderSource.materialDepthTexture;
+  ShaderSource get shaderSource => ShaderSources.materialDepthTexture;
 
   MaterialDepthTexture();
 

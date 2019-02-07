@@ -569,7 +569,12 @@ class WebGLRenderingContext{
       for (dynamic mask in masks) {
         bitmask |= mask as int;
       }
-    }else{
+    }else if(!isWrapper && masks is List<int>) {
+      bitmask = 0;
+      for (dynamic mask in masks) {
+        bitmask |= mask as int;
+      }
+    }else {
       bitmask = masks;
     }
     
