@@ -8,7 +8,7 @@ import 'package:webgl_application/components/app_component/app_component.templat
 import 'index_app.reflectable.dart';
 import 'projects/projects.dart';
 import 'samples/projects.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
+import 'package:webgl/src/shaders/shader_sources.dart';
 
 //This gives access from the web console
 Application get app => Application.instance;
@@ -18,8 +18,8 @@ Type get context => Context;
 
 Future main() async {
 
-  ShaderSource shaderSource = new ShaderSource();
-  await shaderSource.loadShaders();
+  ShaderSources shaderSources = new ShaderSources();
+  await shaderSources.loadShaders();
 
   initializeReflectable();
 //  test_introspection();

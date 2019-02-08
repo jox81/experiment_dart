@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
@@ -15,20 +16,6 @@ import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'dart:web_gl' as webgl;
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
-import 'package:path/path.dart' as path;
-
-class TextureLibrary{
-
-  List<String> paths = [
-    "images/crate.gif",
-    "images/fabric_bump.jpg",
-  ];
-
-  List<ImageElement> _images;
-  List<ImageElement> get images => _images ??= Engine.assetManager.loadImages(paths);
-
-  TextureLibrary();
-}
 
 class TextureUtils {
 
@@ -81,7 +68,7 @@ class TextureUtils {
         bool repeatV: false,
         bool mirrorV: false}) async {
 
-    ImageElement image = await Engine.assetManager.loadImage(fileUrl);
+    ImageElement image = await new ImageLoader().load(fileUrl);
     WebGLTexture texture = createTexture2DFromImageElement(image,
         repeatU: repeatU,
         mirrorU: mirrorU,
@@ -469,75 +456,7 @@ class TextureUtils {
     print(pixels);
   }
 
-  static Future<List<List<ImageElement>>> loadCubeMapImages(
-      String cubeMapName, {String webPath:""}) async {
 
-    ///List of List because it can have multiple mips level images
-    Map<String, List<List<String>>> cubeMapsPath = {
-      'test': [[
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_px.png"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_nx.png"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_py.png"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_ny.png"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_pz.png"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/test/test_nz.png"),
-      ]],
-      'kitchen': [[
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c00.bmp"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c01.bmp"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c02.bmp"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c03.bmp"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c04.bmp"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/kitchen/c05.bmp")
-      ]],
-      'pisa': [[
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_posx.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_negx.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_posy.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_negy.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_posz.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/pisa/pisa_negz.jpg"),
-      ]],
-      'papermill_diffuse': [[
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_right_0.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_left_0.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_top_0.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_bottom_0.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_front_0.jpg"),
-        path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/diffuse/diffuse_back_0.jpg"),
-      ]],
-      'papermill_specular': (){
-        int mipsLevel = 10;
-        List<List<String>> images = [];
-
-        for (int i = 0; i < mipsLevel; ++i) {
-          images.add(
-              [
-                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_right_$i.jpg"),
-                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_left_$i.jpg"),
-                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_top_$i.jpg"),
-                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_bottom_$i.jpg"),
-                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_front_$i.jpg"),
-                path.join(Uri.base.origin, "packages/webgl/images/cubemap/papermill/specular/specular_back_$i.jpg"),
-              ]);
-        }
-
-        return images;
-      }()
-    };
-
-    List<List<String>> paths = cubeMapsPath[cubeMapName];
-
-    List<List<ImageElement>> imageElements = new List.generate(paths.length, (i) => new List(6));
-
-    for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
-      for (int i = 0; i < 6; i++) {
-        imageElements[mipsLevels][i] = await Engine.assetManager.loadImage(paths[mipsLevels][i]);
-      }
-    }
-
-    return imageElements;
-  }
 
   static WebGLTexture createCubeMapFromImages(
       List<List<ImageElement>> cubeMapImages,

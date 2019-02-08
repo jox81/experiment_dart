@@ -3,7 +3,7 @@ import 'package:webgl/lights.dart';
 import 'package:webgl/src/materials/material.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/shaders/shader_sources.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 typedef void SetShaderVariables(
@@ -18,7 +18,7 @@ typedef void SetShaderVariables(
 class MaterialCustom extends Material {
   SetShaderVariables setShaderUniformsVariables;
 
-  ShaderSource get shaderSource => ShaderSources.materialPoint; // Todo (jpu) : ?
+  ShaderSource get shaderSource => AssetLibrary.shaders.materialPoint;
 
   MaterialCustom();
 

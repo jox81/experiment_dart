@@ -3,7 +3,7 @@ import 'package:webgl/lights.dart';
 import 'package:webgl/src/materials/material.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/shaders/shader_sources.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
@@ -17,7 +17,7 @@ class MaterialDotScreen extends Material {
   Vector2 center = new Vector2(0.0, 0.0);
   Vector2 texSize = new Vector2(200.0, 200.0);
 
-  ShaderSource get shaderSource => ShaderSources.dotScreen;
+  ShaderSource get shaderSource => AssetLibrary.shaders.dotScreen;
 
   MaterialDotScreen();
 

@@ -14,10 +14,10 @@ class LoadProgressEvent{
     ##############################
     id : ${id}
     name : ${name}
-    lengthComputable : ${progressEvent.lengthComputable}
-    loaded : ${progressEvent.loaded} octets
-    total : ${progressEvent.total} octets
-    % : ${progressEvent.loaded / progressEvent.total * 100}
+    lengthComputable : ${progressEvent?.lengthComputable}
+    loaded : ${progressEvent?.loaded} octets
+    total : ${progressEvent?.total} octets
+    % : ${progressEvent!= null ? progressEvent.loaded / progressEvent.total * 100 : ''}
     ''';
   }
 }

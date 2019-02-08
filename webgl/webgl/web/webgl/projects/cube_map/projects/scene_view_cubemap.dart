@@ -11,6 +11,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
@@ -41,7 +42,7 @@ class CubeMapProject extends GLTFProject{
     Engine.mainCamera = camera;
 
     List<List<ImageElement>> cubeMapImages =
-        await TextureUtils.loadCubeMapImages('pisa');
+        await AssetLibrary.cubeMaps.init(CubeMapName.pisa);
     WebGLTexture cubeMapTexture =
     TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
 

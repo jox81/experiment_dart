@@ -3,6 +3,7 @@ import 'dart:html';
 
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/project/project.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_project_loader.dart';
 
 List<String> gltfTestsSamples = [
   ///Buffer tests
@@ -71,6 +72,6 @@ Future main() async {
   CanvasElement canvas = new CanvasElement();
   GLTFEngine engine = new GLTFEngine(canvas);
 
-  GLTFProject project = await Engine.assetManager.loadGLTFProject(gltfSamples.first, useWebPath : true);
+  GLTFProject project = await new GLTFProjectLoader().load(gltfSamples.first, useWebPath:true);
   project.debug(doProjectLog : true, isDebug:false);
 }

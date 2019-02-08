@@ -4,14 +4,14 @@ import 'package:webgl/lights.dart';
 import 'package:webgl/src/materials/material.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/shaders/shader_sources.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'dart:web_gl' as webgl;
 
 @reflector
 class KronosPRBMaterial extends Material {
-  ShaderSource get shaderSource => ShaderSources.kronosGltfPBRTest;
+  ShaderSource get shaderSource => AssetLibrary.shaders.kronosGltfPBRTest;
 
   final bool hasNormalAttribut;
   final bool hasTangentAttribut;

@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:resource/resource.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
+import 'package:webgl/src/utils/utils_http.dart';
+import 'package:webgl/src/assets_manager/loaders/glsl_loader.dart';
 import 'package:path/path.dart' as path;
 
 Future main() async {
 
-  assetManager.webPath = Uri.base.origin;
+  UtilsHttp.webPath = Uri.base.origin;
 
   /// Page de test montrant plusieurs manière de récupérer le contenu de fichier se situant dans un autre package dans le dossier /lib
 
@@ -22,7 +23,7 @@ Future main() async {
 
 //  Uri from other package
   String packagesPath2 = path.join(Uri.base.origin, 'packages/webgl/shaders/material_point/material_point.vs.glsl');
-  String shaderPackage = await assetManager.loadGlslShader(packagesPath2);
+  String shaderPackage = await new GLSLLoader().load(packagesPath2);
   print(shaderPackage);
 //
 ////  Uri from local project in lib

@@ -3,9 +3,9 @@ import 'package:webgl/src/assets_manager/load_progress_event.dart';
 
 /// Un [Loader] permet d'afficher un widget indiquant la progression de chargement.
 /// https://www.w3schools.com/howto/howto_css_loader.asp
-class Loader{
+class LoaderWidget{
 
-  Loader(){
+  LoaderWidget(){
     document.head.append(new StyleElement());
     final styleSheet = document.styleSheets[0] as CssStyleSheet;
 

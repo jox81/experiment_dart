@@ -3,9 +3,11 @@ import 'dart:html';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation/animator.dart';
+import 'package:webgl/src/assets_manager/loaders/shader_source_loader.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';
 import 'package:webgl/src/project/project.dart';
@@ -65,7 +67,7 @@ abstract class Engine {
   @mustCallSuper
   Future init() async {
     if(!_isInitialized) {
-      await _assetsManager.loadShaders();
+      await AssetLibrary.shaders.init();
     }
     _isInitialized = true;
   }

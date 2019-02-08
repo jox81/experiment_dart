@@ -12,8 +12,6 @@ import 'package:webgl/src/assets_manager/loaders/text_loader.dart';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/gltf/project/project.dart';
-import 'package:webgl/src/shaders/shader_sources.dart';
-import 'package:webgl/src/utils/utils_http.dart';
 
 //    count : ${id}/${assetManager.loadedFiles.length - 1}
 
@@ -32,26 +30,26 @@ class AssetManager{
 
   ///Load a text resource from a file over the network
   Future<String> loadTextResource (String url) async {
-    return await new TextLoader(url).load();
+    return await new TextLoader().load(url);
   }
 
   ///Load a text resource from a file over the network
   String loadTextResourceSync (String url) {
-    return new TextLoader(url).loadSync();
+    return new TextLoader().loadSync(url);
   }
 
   ///Load a Glsl from a file url
   Future<String> loadGlslShader(String url) async {
-    return await new GLSLLoader(url).load();
+    return await new GLSLLoader().load(url);
   }
 
   ///Load a Glsl from a file url synchronously
   String loadGlslShaderSync(String url) {
-    return new GLSLLoader(url).loadSync();
+    return new GLSLLoader().loadSync(url);
   }
 
   Future<Map<String, Object>> loadJSONResource (String url) async {
-    return await new JsonLoader(url).load();
+    return await new JsonLoader().load(url);
   }
 
 //  void makeRequest(Event e) {
@@ -75,38 +73,29 @@ class AssetManager{
 //    }
 //  }
 
-  Future loadShaders() async {
-    await new ShaderSources().loadShaders();
-  }
+//  Future loadShaders() async {
+//    await new ShaderSources().loadShaders();
+//  }
+//
+//  /// [gltfUrl] the url to find the gtlf file.
+//  Future<GLTFProject> loadGLTFProject(String gltfUrl, {bool useWebPath : false}) async {
+//    return await new GLTFProjectLoader().load(gltfUrl, useWebPath:useWebPath);
+//  }
+//
+//  Future<Uint8List> loadGltfBinResource(String url) async {
+//    return new GLTFBinLoader().load(url);
+//  }
 
-  /// [gltfUrl] the url to find the gtlf file.
-  Future<GLTFProject> loadGLTFProject(String gltfUrl, {bool useWebPath : false}) async {
-    return await new GLTFProjectLoader(gltfUrl, useWebPath:useWebPath).load();
-  }
+//  Future<ByteBuffer> loadByteBuffer(String url) async {
+//    return await new ByteBufferLoader().load(url);
+//  }
 
-  Future<Uint8List> loadGltfBinResource(String url) async {
-    return new GLTFBinLoader(url).load();
-  }
+//  ///Load a single image from an URL
+//  Future<ImageElement> loadImage(String url) async {
+//    return new ImageLoader().load(url);
+//  }
 
-  Future<ByteBuffer> loadByteBuffer(String url) async {
-    return await new ByteBufferLoader(url).load();
-  }
-
-  ///Load a single image from an URL
-  Future<ImageElement> loadImage(String url) async {
-    return new ImageLoader(url).load();
-  }
-
-  List<ImageElement> loadImages(List<String> paths) {
-    List<ImageElement> images = [];
-
-    for(String url in paths) {
-      String assetsPath = UtilsHttp.getWebPath(url);
-      ImageElement image = new ImageElement()
-        ..src = assetsPath;
-      images.add(image);
-    }
-
-    return images;
-  }
+//  List<ImageElement> loadImages(List<String> paths) {
+//    return new ImageLoader().loadImages(paths);
+//  }
 }

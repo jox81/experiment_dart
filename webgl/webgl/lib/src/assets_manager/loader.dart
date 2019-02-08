@@ -12,12 +12,10 @@ abstract class Loader<T> {
   static StreamController<LoadProgressEvent> _onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
   static Stream<LoadProgressEvent> get onLoadProgress => _onLoadProgressStreamController.stream;
 
-  final String filePath;
+  Loader();
 
-  Loader(this.filePath);
-
-  Future<T> load();
-  T loadSync();
+  Future<T> load(Object data);
+  T loadSync(Object data);
 
   void updateLoadProgress(ProgressEvent event, String url) {
     LoadProgressEvent existingProgressEvent = _loadedFiles[url];

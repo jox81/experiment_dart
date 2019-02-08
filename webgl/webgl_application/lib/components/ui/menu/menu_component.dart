@@ -9,11 +9,11 @@ import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/mesh/mesh_type.dart';
 import 'package:webgl/src/materials/material_type.dart';
 import 'package:webgl/introspection.dart';
-import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl_application/directives/clickoutside_directive.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_edit.dart';
 import 'package:webgl_application/src/application.dart';
+import 'package:webgl/src/textures/texture_library.dart';
 
 // Suivant l'exemple :
 // http://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_dropdown_navbar_click

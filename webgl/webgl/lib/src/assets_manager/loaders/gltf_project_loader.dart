@@ -8,11 +8,10 @@ import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/utils/utils_http.dart';
 
 class GLTFProjectLoader extends Loader<GLTFProject>{
-  final bool useWebPath;
-  GLTFProjectLoader(String filePath, {this.useWebPath : false}):super(filePath);
+  GLTFProjectLoader();
 
   @override
-  Future<GLTFProject> load() async {
+  Future<GLTFProject> load(covariant String filePath, {bool useWebPath : false}) async {
     // Todo (jpu) : assert path exist and get real file
     final Uri baseUri = Uri.parse(filePath);
     final String filePart = baseUri.pathSegments.last;
@@ -41,12 +40,12 @@ class GLTFProjectLoader extends Loader<GLTFProject>{
     return _gltfProject;
   }
 
-  Future<glTF.Gltf> _loadGLTFResource(String url,
+  Future<glTF.Gltf> _loadGLTFResource(String filePath,
       {bool useWebPath: false}) async {
     UtilsHttp.useWebPath = useWebPath;
 
     Completer completer = new Completer<glTF.Gltf>();
-    Map<String, Object> result = await new JsonLoader(url).load();
+    Map<String, Object> result = await new JsonLoader().load(filePath);
     try {
       final glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
       completer.complete(gltf);
@@ -58,8 +57,7 @@ class GLTFProjectLoader extends Loader<GLTFProject>{
   }
 
   @override
-  GLTFProject loadSync() {
-    // TODO: implement loadSync
-    return null;
+  GLTFProject loadSync(covariant String filePath, {bool useWebPath : false}) {
+    throw new Exception('not yet implemented');
   }
 }

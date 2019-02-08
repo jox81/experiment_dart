@@ -6,10 +6,10 @@ import 'package:webgl/src/utils/utils_http.dart';
 
 class TextLoader extends Loader<String>{
 
-  TextLoader(String filePath):super(filePath);
+  TextLoader();
 
   @override
-  Future<String> load() {
+  Future<String> load(covariant String filePath) {
     Completer completer = new Completer<String>();
 
     String assetsPath = UtilsHttp.getWebPath(filePath);
@@ -39,7 +39,7 @@ class TextLoader extends Loader<String>{
     return completer.future as Future<String>;
   }
 
-  String loadSync(){
+  String loadSync(covariant String filePath){
 
     Completer completer = new Completer<String>();
 

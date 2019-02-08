@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/shaders/shader_sources.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -45,8 +45,7 @@ Future main() async {
   gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, null);
 
   //> apply filter
-  ShaderSources shaderSources = new ShaderSources();
-  await shaderSources.loadShaders();
+  await AssetLibrary.shaders.init();
   MaterialDotScreen materialDotScreen = new MaterialDotScreen();
   materialDotScreen.texture = new WebGLTexture.fromWebGL(textureRender, webgl.WebGL.TEXTURE_2D);
   WebGLProgram programFilter = materialDotScreen.getProgram();

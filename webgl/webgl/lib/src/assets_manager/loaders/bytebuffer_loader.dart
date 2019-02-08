@@ -7,10 +7,10 @@ import 'package:webgl/src/utils/utils_http.dart';
 
 class ByteBufferLoader extends Loader<ByteBuffer>{
 
-  ByteBufferLoader(String filePath):super(filePath);
+  ByteBufferLoader();
 
   @override
-  Future<ByteBuffer> load() {
+  Future<ByteBuffer> load(covariant String filePath) {
     Completer completer = new Completer<ByteBuffer>();
 
     String assetsPath = UtilsHttp.getWebPath(filePath);
@@ -42,8 +42,8 @@ class ByteBufferLoader extends Loader<ByteBuffer>{
   }
 
   @override
-  ByteBuffer loadSync() {
+  ByteBuffer loadSync(covariant String filePath) {
     // TODO: implement loadSync
-    return null;
+    throw new Exception('not yet implemented');
   }
 }

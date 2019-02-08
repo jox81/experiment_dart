@@ -1,7 +1,8 @@
 import 'dart:html';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/engine/engine.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/texture.dart';
@@ -25,7 +26,7 @@ class UtilsTextureGLTF {
     int wrapT;
 
     //brdfLUT
-    imageElement = await Engine.assetManager.loadImage('packages/webgl/images/utils/brdfLUT.png');
+    imageElement = await new ImageLoader().load('packages/webgl/images/utils/brdfLUT.png');
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -35,13 +36,13 @@ class UtilsTextureGLTF {
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
     List<List<ImageElement>> papermill_diffuse =
-    await TextureUtils.loadCubeMapImages('papermill_diffuse', webPath: 'packages/webgl/');
+    await AssetLibrary.cubeMaps.init(CubeMapName.papermill_diffuse);
     cubeMapTextureDiffuse = TextureUtils.createCubeMapFromImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
 
     gl.activeTexture(TextureUnit.TEXTURE0 + 2);
     List<List<ImageElement>> papermill_specular =
-    await TextureUtils.loadCubeMapImages('papermill_specular', webPath: 'packages/webgl/');
+    await AssetLibrary.cubeMaps.init(CubeMapName.papermill_specular);
     cubeMapTextureSpecular = TextureUtils.createCubeMapFromImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 
@@ -58,7 +59,7 @@ class UtilsTextureGLTF {
           //load image
           String fileUrl =
               project.baseDirectory + gltfTexture.source.uri.toString();
-          imageElement = await Engine.assetManager.loadImage(fileUrl);
+          imageElement = await new ImageLoader().load(fileUrl);
           textureUnitId = gltfTexture.textureId;
         } else {
           String base64Encoded = base64.encode(gltfTexture.source.data);
@@ -84,7 +85,7 @@ class UtilsTextureGLTF {
 //      String imagePath = '/images/crate.gif';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat.png';
 //      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat_256.png';
-        imageElement = await Engine.assetManager.loadImage(imagePath);
+        imageElement = await new ImageLoader().load(imagePath);
 
         magFilter = TextureFilterType.LINEAR;
         minFilter = TextureFilterType.LINEAR;

@@ -1,5 +1,5 @@
 import 'package:webgl/src/shaders/shader_infos.dart';
-import 'package:webgl/src/shaders/shader_name.dart';
+import 'package:webgl/asset_library.dart';
 
 class ShaderSource {
   final ShaderInfos _shaderInfos;

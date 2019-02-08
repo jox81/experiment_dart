@@ -4,12 +4,12 @@ import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 import 'samples/projects.dart';
 import 'projects/projects.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
+import 'package:webgl/src/shaders/shader_sources.dart';
 
 Future main() async {
 
-  ShaderSource shaderSource = new ShaderSource();
-  await shaderSource.loadShaders();
+  ShaderSources shaderSources = new ShaderSources();
+  await shaderSources.loadShaders();
 
   bool useSample = false;
   if(useSample){

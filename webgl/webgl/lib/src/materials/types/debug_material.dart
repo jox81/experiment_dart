@@ -3,7 +3,7 @@ import 'package:webgl/lights.dart';
 import 'package:webgl/src/materials/material.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/shaders/shader_sources.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
@@ -13,7 +13,7 @@ class MaterialDebug extends Material {
 
   MaterialDebug();
 
-  ShaderSource get shaderSource => ShaderSources.debugShader;
+  ShaderSource get shaderSource => AssetLibrary.shaders.debugShader;
 
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();

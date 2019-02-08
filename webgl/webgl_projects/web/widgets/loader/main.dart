@@ -1,33 +1,42 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:math';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_project_loader.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/text_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
 import 'package:webgl_projects/loader.dart';
 
 Future main() async {
+//  test01();
+  test02();
+}
 
-  Loader loader = new Loader();
+Future test01() async {
+  LoaderWidget loaderWidget = new LoaderWidget();
 
   CanvasElement canvas = new CanvasElement();
   GLTFEngine engine = new GLTFEngine(canvas);
   AssetManager assetManager = Engine.assetManager;
   assetManager.onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
-//    loader.showProgress(loadProgressEvent);
+    loaderWidget.showProgress(loadProgressEvent);
   });
 
   engine.init();
 
   String gltf = '/gltf/projects/archi/model_01/model_01.gltf';
-  await assetManager.loadGLTFProject(gltf);
+  await new GLTFProjectLoader().load(gltf);
 
   String bin = '/webgl/projects/jerome/projects/maison/maison_ivoz.bin';
-  await assetManager.loadGltfBinResource(bin);
+  await new GLTFBinLoader().load(bin);
 
   print('done');
 
-  loadTextResource(gltf);
+  await new TextLoader().load(gltf);
 
   print('loadedFiles length: ${assetManager.loadedFiles.values.length}');
   print('loadedFiles size: ${assetManager.loadedFiles.values.map((p)=> p.progressEvent.total).reduce((v,e)=>v+e)}');
@@ -37,31 +46,18 @@ Future main() async {
   });
 }
 
-///Load a text resource from a file over the network
-Future<String> loadTextResource (String url) {
-  Completer completer = new Completer<String>();
+Future test02() async {
+  LoaderWidget loaderWidget = new LoaderWidget();
 
-  String assetsPath = url;//getWebPath(url);
-
-  Random random = new Random();
-  HttpRequest request = new HttpRequest();
-  request.open('HEAD', '$assetsPath?please-dont-cache=${random.nextInt(1000)}', async:true);
-  request.timeout = 20000;
-  request.onLoadEnd.listen((_) {
-    if (request.status < 200 || request.status > 299) {
-      String fsErr = 'Error: HTTP Status ${request.status} on resource: $assetsPath';
-      window.alert('Fatal error getting text ressource (see console)');
-      print(fsErr);
-      return completer.completeError(fsErr);
-    } else {
-      var v = request.responseHeaders['content-length'];
-      completer.complete(v);
-    }
+  Loader.onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
+    loaderWidget.showProgress(loadProgressEvent);
   });
-  request.onError.listen((ProgressEvent event){
-      print('Error : url : $url | assetsPath : $assetsPath');
-    });
-  request.send();
 
-  return completer.future as Future<String>;
+  //1
+  ImageElement brdfLUT = await new ImageLoader().load(AssetLibrary.images.brdfLUTPath);
+
+  //2
+  AssetLibrary.images.loadAll();
+  ImageElement brdfLUT2 = AssetLibrary.images.brdfLUT;
+
 }
