@@ -1,31 +1,32 @@
 import 'dart:core';
 import 'dart:html';
 import 'dart:async';
-import 'package:webgl/src/assets_manager/loader/bytebuffer_loader.dart';
-import 'package:webgl/src/assets_manager/loader/glsl_loader.dart';
-import 'package:webgl/src/assets_manager/loader/gltf_bin_loader.dart';
-import 'package:webgl/src/assets_manager/loader/gltf_project_loader.dart';
-import 'package:webgl/src/assets_manager/loader/image_loader.dart';
-import 'package:webgl/src/assets_manager/loader/json_loader.dart';
-import 'package:webgl/src/assets_manager/loader/load_progress_event.dart';
-import 'package:webgl/src/assets_manager/loader/text_loader.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
+import 'package:webgl/src/assets_manager/loaders/bytebuffer_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/glsl_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_project_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/json_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/text_loader.dart';
+import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/gltf/project/project.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
+import 'package:webgl/src/shaders/shader_sources.dart';
 import 'package:webgl/src/utils/utils_http.dart';
 
 //    count : ${id}/${assetManager.loadedFiles.length - 1}
 
 class AssetManager{
 
-  List<String> _filesToLoad = new List();
-  List<String> get filesToLoad => _filesToLoad;
-
-  Map<String, LoadProgressEvent> _loadedFiles = new Map();
-  Map<String, LoadProgressEvent> get loadedFiles => _loadedFiles;
-
-  StreamController<LoadProgressEvent> _onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
-  Stream<LoadProgressEvent> get onLoadProgress => _onLoadProgressStreamController.stream;
+//  List<String> _filesToLoad = new List();
+  List<String> get filesToLoad => Loader.filesToLoad;
+//
+//  Map<String, LoadProgressEvent> _loadedFiles = new Map();
+  Map<String, LoadProgressEvent> get loadedFiles => Loader.loadedFiles;
+//
+//  StreamController<LoadProgressEvent> _onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
+  Stream<LoadProgressEvent> get onLoadProgress => Loader.onLoadProgress;
 
   AssetManager();
 
@@ -75,7 +76,7 @@ class AssetManager{
 //  }
 
   Future loadShaders() async {
-    await new ShaderSources(this).loadShaders();
+    await new ShaderSources().loadShaders();
   }
 
   /// [gltfUrl] the url to find the gtlf file.

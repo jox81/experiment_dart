@@ -23,7 +23,6 @@ import 'package:webgl/src/gltf/project/project.dart';
 class GLTFRenderer extends Renderer {
   GLTFProject _gltfProject;
 
-
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
   Future init(covariant GLTFProject project) async {

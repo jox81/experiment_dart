@@ -1,5 +1,5 @@
 import 'package:webgl/introspection.dart';
-import 'package:webgl/src/assets_manager/loader/gltf_bin_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/camera/camera_type.dart';

@@ -1,5 +1,5 @@
-import 'package:webgl/src/assets_manager/loader/json_loader.dart';
-import 'package:webgl/src/assets_manager/loader/loader.dart';
+import 'package:webgl/src/assets_manager/loaders/json_loader.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/gltf/project/gltf_load_project.dart';
 import 'dart:core';
 import 'dart:async';
@@ -9,22 +9,22 @@ import 'package:webgl/src/utils/utils_http.dart';
 
 class GLTFProjectLoader extends Loader<GLTFProject>{
   final bool useWebPath;
-  GLTFProjectLoader(String path, {this.useWebPath : false}):super(path);
+  GLTFProjectLoader(String filePath, {this.useWebPath : false}):super(filePath);
 
   @override
   Future<GLTFProject> load() async {
     // Todo (jpu) : assert path exist and get real file
-    final Uri baseUri = Uri.parse(path);
+    final Uri baseUri = Uri.parse(filePath);
     final String filePart = baseUri.pathSegments.last;
-    final String gtlfDirectory = path.replaceFirst(filePart, '');
+    final String gtlfDirectory = filePath.replaceFirst(filePart, '');
 
     final glTF.Gltf gltfSource =
-        await _loadGLTFResource(path, useWebPath: useWebPath);
+        await _loadGLTFResource(filePath, useWebPath: useWebPath);
     final GLTFProject _gltf = await _getGLTFProject(gltfSource, gtlfDirectory);
 
     assert(_gltf != null);
     print('');
-    print('> _gltf file loaded : $path');
+    print('> _gltf file loaded : $filePath');
     print('');
 
     return _gltf;

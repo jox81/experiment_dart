@@ -3,20 +3,21 @@ import 'dart:html';
 import 'dart:math';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
+import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'package:webgl_projects/loader.dart';
 
 Future main() async {
 
-  CanvasElement canvas = new CanvasElement();
-  GLTFEngine engine = new GLTFEngine(canvas);
-
   Loader loader = new Loader();
 
-  AssetManager assetManager = new AssetManager();
-  assetManager.onLoadProgress.listen((LoadProgressEvent loadprogressEvent){
-    loader.showProgress(loadprogressEvent);
-    print(loadprogressEvent);
+  CanvasElement canvas = new CanvasElement();
+  GLTFEngine engine = new GLTFEngine(canvas);
+  AssetManager assetManager = Engine.assetManager;
+  assetManager.onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
+//    loader.showProgress(loadProgressEvent);
   });
+
+  engine.init();
 
   String gltf = '/gltf/projects/archi/model_01/model_01.gltf';
   await assetManager.loadGLTFProject(gltf);
@@ -27,6 +28,13 @@ Future main() async {
   print('done');
 
   loadTextResource(gltf);
+
+  print('loadedFiles length: ${assetManager.loadedFiles.values.length}');
+  print('loadedFiles size: ${assetManager.loadedFiles.values.map((p)=> p.progressEvent.total).reduce((v,e)=>v+e)}');
+
+  (assetManager.loadedFiles.values.toList()..sort((a, b) => a.progressEvent.total.compareTo(b.progressEvent.total))).forEach((e){
+    print('${e.id} : ${e.progressEvent.total} : ${e.name}');
+  });
 }
 
 ///Load a text resource from a file over the network

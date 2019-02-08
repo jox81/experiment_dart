@@ -1,24 +1,24 @@
 import 'dart:async';
 import 'dart:html';
 import 'dart:math';
-import 'package:webgl/src/assets_manager/loader/loader.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/utils/utils_http.dart';
 
 class TextLoader extends Loader<String>{
 
-  TextLoader(String path):super(path);
+  TextLoader(String filePath):super(filePath);
 
   @override
   Future<String> load() {
     Completer completer = new Completer<String>();
 
-    String assetsPath = UtilsHttp.getWebPath(path);
+    String assetsPath = UtilsHttp.getWebPath(filePath);
 
     Random random = new Random();
     HttpRequest request = new HttpRequest();
     request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}', async:true);
     request.onProgress.listen((ProgressEvent event){
-      updateLoadProgress(event, path);
+      updateLoadProgress(event, filePath);
     });
     request.timeout = 20000;
     request..onLoadEnd.listen((_) {
@@ -32,7 +32,7 @@ class TextLoader extends Loader<String>{
       }
     })
       ..onError.listen((ProgressEvent event){
-        print('Error : url : $path | assetsPath : $assetsPath');
+        print('Error : url : $filePath | assetsPath : $assetsPath');
       });
     request.send();
 
@@ -45,14 +45,14 @@ class TextLoader extends Loader<String>{
 
     Random random = new Random();
     var request = new HttpRequest();
-    request.open('GET', '${path}?please-dont-cache=${random.nextInt(1000)}', async:false);
+    request.open('GET', '${filePath}?please-dont-cache=${random.nextInt(1000)}', async:false);
     request.timeout = 2000;
     request.onProgress.listen((ProgressEvent event){
-      updateLoadProgress(event, path);
+      updateLoadProgress(event, filePath);
     });
     request.onLoadEnd.listen((_) {
       if (request.status < 200 || request.status > 299) {
-        String fsErr = 'Error: HTTP Status ${request.status} on resource ' + path;
+        String fsErr = 'Error: HTTP Status ${request.status} on resource ' + filePath;
         window.alert('Fatal error getting text ressource (see console)');
         print(fsErr);
         return completer.completeError(fsErr);

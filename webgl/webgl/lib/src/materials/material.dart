@@ -22,20 +22,8 @@ abstract class Material {
   Map<String, bool> _defines;
   Map<String, bool> get defines => _defines ??= getDefines();
 
-  ShaderSource _definedShaderSource;
-  ShaderSource get definedShaderSource {
-    //debugLog.logCurrentFunction();
-    return _definedShaderSource ??= () {
-      String shaderDefines = definesToString(defines);
-      ShaderSource shaderSourceDefined = new ShaderSource()
-        ..vsCode = shaderDefines + shaderSource.vsCode
-        ..fsCode = shaderDefines + shaderSource.fsCode;
-      return shaderSourceDefined;
-    }();
-  }
-
   /// This builds Preprocessors for glsl shader source
-  String definesToString(Map<String, bool> defines) {
+  String _definesToString(Map<String, bool> defines) {
     //debugLog.logCurrentFunction();
     String outStr = '';
     if (defines == null) return outStr;
@@ -54,8 +42,10 @@ abstract class Material {
   WebGLProgram getProgram() {
     //debugLog.logCurrentFunction();
 
-    String vsSource = definedShaderSource.vsCode;
-    String fsSource = definedShaderSource.fsCode;
+    String shaderDefines = _definesToString(defines);
+
+    String vsSource = shaderDefines + shaderSource.vsCode;
+    String fsSource = shaderDefines + shaderSource.fsCode;
 
     /// ShaderType type
     webgl.Shader createShader(int shaderType, String shaderSource) {

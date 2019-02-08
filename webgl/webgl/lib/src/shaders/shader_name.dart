@@ -1,0 +1,18 @@
+enum ShaderName{
+  material_point,
+  material_base,
+  material_base_color,
+  material_base_vertex_color,
+  material_base_texture,
+  material_depth_texture,
+  material_base_texture_normal,
+  material_pbr,
+  material_skybox,
+  material_reflection,
+  kronos_gltf_pbr,
+  kronos_gltf_pbr_test,
+  kronos_gltf_default,
+  debug_shader,
+  sao,
+  dot_screen,
+}

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/shaders/shader_source.dart';
+import 'package:webgl/src/shaders/shader_sources.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -12,8 +12,8 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/materials/types/dot_screen_material.dart';
 
 Future main() async {
-  ShaderSource shaderSource = new ShaderSource();
-  await shaderSource.loadShaders();
+  ShaderSources shaderSources = new ShaderSources();
+  await shaderSources.loadShaders();
 
   new Renderer()..render();
 }

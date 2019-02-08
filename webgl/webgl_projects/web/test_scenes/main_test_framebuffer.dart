@@ -7,7 +7,7 @@ import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/renderer/renderer.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
+import 'package:webgl/src/shaders/shader_sources.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
@@ -22,8 +22,8 @@ Future main() async {
 
   Webgl01 webgl01 = new Webgl01(querySelector('#glCanvas') as CanvasElement);
 
-  ShaderSource shaderSource = new ShaderSource();
-  await shaderSource.loadShaders();
+  ShaderSources shaderSources = new ShaderSources();
+  await shaderSources.loadShaders();
   textureCrate = await TextureUtils.createTexture2DFromImageUrl("../images/crate.gif");
 
   webgl01.setup();

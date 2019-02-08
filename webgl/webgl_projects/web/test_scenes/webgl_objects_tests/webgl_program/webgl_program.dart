@@ -3,6 +3,7 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
+import 'package:webgl/src/shaders/shader_sources.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_attribut_location.dart';
@@ -12,8 +13,8 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 Future main() async {
-  ShaderSource shaderSource = new ShaderSource();
-  await shaderSource.loadShaders();
+  ShaderSources shaderSources = new ShaderSources();
+  await shaderSources.loadShaders();
 
   WebglTest webglTest =
       new WebglTest(querySelector('#glCanvas') as CanvasElement);
@@ -35,12 +36,12 @@ class WebglTest {
 
   void test01() {
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.materialPoint.vsCode
+      ..source = ShaderSources.materialPoint.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.materialPoint.fsCode
+      ..source = ShaderSources.materialPoint.fsCode
       ..compile();
 
     fragmentShader.logShaderInfos();
@@ -77,12 +78,12 @@ class WebglTest {
 //    materialSkyBox.skyboxTexture = cubeMapTexture;
 
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.materialSkybox.vsCode
+      ..source = ShaderSources.materialSkybox.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.materialSkybox.fsCode
+      ..source = ShaderSources.materialSkybox.fsCode
       ..compile();
 
     fragmentShader.logShaderInfos();
@@ -115,12 +116,12 @@ class WebglTest {
   // c'est donc inutile de les setter à nouveau si ils n'ont pas changé
   void shouldProgramAlwaysSetUniform() {
     WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.materialBaseColor.vsCode
+      ..source = ShaderSources.materialBaseColor.vsCode
       ..compile();
     vertexShader.logShaderInfos();
 
     WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.materialBaseColor.fsCode
+      ..source = ShaderSources.materialBaseColor.fsCode
       ..compile();
     fragmentShader.logShaderInfos();
 
@@ -149,11 +150,11 @@ class WebglTest {
     //>
     void useNewTempProgram(){
       WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-        ..source = ShaderSource.materialSkybox.vsCode
+        ..source = ShaderSources.materialSkybox.vsCode
         ..compile();
 
       WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-        ..source = ShaderSource.materialSkybox.fsCode
+        ..source = ShaderSources.materialSkybox.fsCode
         ..compile();
 
       WebGLProgram program = new WebGLProgram()

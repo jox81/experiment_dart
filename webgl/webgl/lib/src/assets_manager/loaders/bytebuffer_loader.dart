@@ -2,26 +2,26 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:math';
 import 'dart:typed_data';
-import 'package:webgl/src/assets_manager/loader/loader.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/utils/utils_http.dart';
 
 class ByteBufferLoader extends Loader<ByteBuffer>{
 
-  ByteBufferLoader(String path):super(path);
+  ByteBufferLoader(String filePath):super(filePath);
 
   @override
   Future<ByteBuffer> load() {
     Completer completer = new Completer<ByteBuffer>();
 
-    String assetsPath = UtilsHttp.getWebPath(path);
-    print('url : $path | assetsPath : $assetsPath');
+    String assetsPath = UtilsHttp.getWebPath(filePath);
+    print('url : $filePath | assetsPath : $assetsPath');
 
     Random random = new Random();
     HttpRequest request = new HttpRequest()..responseType = 'arraybuffer';
     request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}',
         async: true);
     request.onProgress.listen((ProgressEvent event){
-      updateLoadProgress(event, path);
+      updateLoadProgress(event, filePath);
     });
     request.timeout = 2000;
     request.onLoadEnd.listen((_) {

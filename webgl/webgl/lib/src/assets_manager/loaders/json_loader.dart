@@ -1,15 +1,15 @@
 import 'dart:async';
-import 'package:webgl/src/assets_manager/loader/loader.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
 import 'dart:convert';
-import 'package:webgl/src/assets_manager/loader/text_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/text_loader.dart';
 
 class JsonLoader extends Loader<Map<String, Object>>{
-  JsonLoader(String path) : super(path);
+  JsonLoader(String filePath) : super(filePath);
 
   @override
   Future<Map<String, Object>> load() async {
     Completer completer = new Completer<Map<String, Object>>();
-    String result = await new TextLoader(path).load();
+    String result = await new TextLoader(filePath).load();
     try {
       final Map<String, Object> json = jsonDecode(result) as Map<String, Object>;
       completer.complete(json);

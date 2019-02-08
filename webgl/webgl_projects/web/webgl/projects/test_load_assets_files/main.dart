@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'package:resource/resource.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
+import 'package:webgl/src/utils/utils_http.dart';
 import 'package:path/path.dart' as path;
 
 Future main() async {
 
   AssetManager assetManager = new AssetManager();
 
-  assetManager.webPath = Uri.base.origin;
+  UtilsHttp.webPath = Uri.base.origin;
 
   /// Page de test montrant plusieurs manière de récupérer le contenu de fichier se situant dans un autre package dans le dossier /lib
 
