@@ -65,8 +65,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
   Set<GLTFNode> _children = new Set();
   List<GLTFNode> get children => _children.toList(growable: false);
   set children(List<GLTFNode> children) {
-    print('GLTFNode.children');
-    print(children.length);
     for (GLTFNode node in children) {
       node._parent = this;
     }
@@ -75,7 +73,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
   }
 
   void addChild(GLTFNode node){
-    print('GLTFNode.addChild');
     if(node == null) return;
     _children.add(node);
     node._parent = this;
@@ -84,7 +81,6 @@ class GLTFNode extends GLTFChildOfRootProperty{
   GLTFNode _parent;
   GLTFNode get parent => _parent;
   set parent(GLTFNode node) {
-    print('GLTFNode.parent');
     if(node != null)node._children.add(this);
     _parent = node;
   }

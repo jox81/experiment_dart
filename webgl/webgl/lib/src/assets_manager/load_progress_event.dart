@@ -10,7 +10,6 @@ class LoadProgressEvent{
   @override
   String toString() {
     return '''
-    
     ##############################
     id : ${id}
     name : ${name}

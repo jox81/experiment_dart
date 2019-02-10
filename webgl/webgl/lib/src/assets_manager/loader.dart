@@ -16,14 +16,14 @@ abstract class Loader<T> {
   static StreamController<LoadProgressEvent> _onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
   static Stream<LoadProgressEvent> get onLoadProgress => _onLoadProgressStreamController.stream;
 
-  static int totalFileSize = 1;
-//  static int get totalFileSize => _totalFileSize;
+//  static int totalFileSize = 1;
+  static int get totalFileSize => _loadedFiles.values.map((p)=>p.progressEvent.total).reduce((a,b)=>a+b);
 
-  static int totalFileCount = 0;
-//  static int get totalFileCount => _totalFileCount;
+  static int _totalFileCount = 0;
+  static int get totalFileCount => _loadedFiles.length;
 
-  static int _loadedSize = 0;
-  static int get loadedSize => _loadedSize;
+  static int _totalLoadedSize = 0;
+  static int get loadedSize => _loadedFiles.values.map((p)=>p.progressEvent.loaded).reduce((a,b)=>a+b);
 
   Loader();
 
@@ -62,10 +62,6 @@ abstract class Loader<T> {
   void updateLoadProgress(ProgressEvent event, String url) {
     LoadProgressEvent existingProgressEvent = _loadedFiles[url];
     LoadProgressEvent progressEvent = new LoadProgressEvent(event, url, existingProgressEvent == null ? _loadedFiles.length : existingProgressEvent.id);
-
-    print('');
-
-    _loadedSize += progressEvent.progressEvent.loaded - (existingProgressEvent != null ? existingProgressEvent.progressEvent.loaded : 0);
     _loadedFiles[url] = progressEvent;
     _onLoadProgressStreamController.add(progressEvent);
   }

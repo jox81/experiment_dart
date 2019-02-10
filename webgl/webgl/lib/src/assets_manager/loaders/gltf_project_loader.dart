@@ -22,9 +22,6 @@ class GLTFProjectLoader extends Loader<GLTFProject>{
     final GLTFProject _gltf = await _getGLTFProject(gltfSource, gtlfDirectory);
 
     assert(_gltf != null);
-    print('');
-    print('> _gltf file loaded : $filePath');
-    print('');
 
     return _gltf;
   }

@@ -14,7 +14,6 @@ class ByteBufferLoader extends Loader<ByteBuffer>{
     Completer completer = new Completer<ByteBuffer>();
 
     String assetsPath = UtilsHttp.getWebPath(filePath);
-    print('url : $filePath | assetsPath : $assetsPath');
 
     Random random = new Random();
     HttpRequest request = new HttpRequest()..responseType = 'arraybuffer';

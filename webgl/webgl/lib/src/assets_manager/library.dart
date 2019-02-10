@@ -42,10 +42,10 @@ class Library{
     // Todo (jpu) : add check for the total size of the files to load
 
     await Future.forEach(_data.keys, (LibraryLoader libraryLoader) async {
-      Loader.totalFileCount++;
-      int fileSize = await libraryLoader.getFileSize();
-      Loader.totalFileSize += fileSize;
-      print("will load : ${fileSize} |${libraryLoader.filePath}");
+
+//      int fileSize = await libraryLoader.getFileSize();
+//      Loader.totalFileSize += fileSize;
+//      print("will load : ${fileSize} |${libraryLoader.filePath}");
     });
 
     await Future.forEach(_data.keys, (LibraryLoader libraryLoader) async {

@@ -102,9 +102,9 @@ Future test_LoadLibraryLocal() async {
   MyLibrary myLibrary = new MyLibrary();
   await myLibrary.loadAll();
 
-  ImageElement uv = myLibrary.uv;
+//  ImageElement uv = myLibrary.uv;
 
-  document.body.children.add(uv);
+//  document.body.children.add(uv);
 }
 
 class MyLibrary extends Library{
@@ -119,7 +119,7 @@ class MyLibrary extends Library{
 
   MyLibrary(){
     addImageElementPath(_uvFilePath);
-//    addGLTFProjectPath(_model01Path);// Todo (jpu) :  calculate full loaded file size with images and bin ?
+    addGLTFProjectPath(_model01Path);// Todo (jpu) :  calculate full loaded file size with images and bin ?
     addGLTFBinPath(_model01BinPath);
   }
 }
