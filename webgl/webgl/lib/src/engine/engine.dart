@@ -14,13 +14,20 @@ import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/interaction/interaction_manager.dart';
 
+class NoEngineException implements Exception{
+  final String message = 'No engine Define in Engine';
+}
+class NoProjectException implements Exception{
+  final String message = 'No Project Define in Engine';
+}
+
 abstract class Engine {
   static Engine _currentEngine;
   static Engine get currentEngine =>
-      _currentEngine ?? (throw 'No engine Define in Engine');
+      _currentEngine ?? (throw new NoEngineException());
 
   static Project get currentProject =>
-      _currentEngine.activeProject ?? (throw 'No Project Define in Engine');
+      _currentEngine.activeProject ?? (throw new NoProjectException());
   static set currentProject(Project value) =>
       currentEngine.activeProject = value;
 

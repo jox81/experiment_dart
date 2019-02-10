@@ -13,44 +13,33 @@ import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'dart:typed_data';
 import 'package:webgl/src/gltf/project/project.dart';
 
-//    count : ${id}/${assetManager.loadedFiles.length - 1}
-
 class AssetManager{
-
-//  List<String> _filesToLoad = new List();
-  List<String> get filesToLoad => Loader.filesToLoad;
-//
-//  Map<String, LoadProgressEvent> _loadedFiles = new Map();
-  Map<String, LoadProgressEvent> get loadedFiles => Loader.loadedFiles;
-//
-//  StreamController<LoadProgressEvent> _onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
-  Stream<LoadProgressEvent> get onLoadProgress => Loader.onLoadProgress;
 
   AssetManager();
 
-  ///Load a text resource from a file over the network
-  Future<String> loadTextResource (String url) async {
-    return await new TextLoader().load(url);
-  }
-
-  ///Load a text resource from a file over the network
-  String loadTextResourceSync (String url) {
-    return new TextLoader().loadSync(url);
-  }
-
-  ///Load a Glsl from a file url
-  Future<String> loadGlslShader(String url) async {
-    return await new GLSLLoader().load(url);
-  }
-
-  ///Load a Glsl from a file url synchronously
-  String loadGlslShaderSync(String url) {
-    return new GLSLLoader().loadSync(url);
-  }
-
-  Future<Map<String, Object>> loadJSONResource (String url) async {
-    return await new JsonLoader().load(url);
-  }
+//  ///Load a text resource from a file over the network
+//  Future<String> loadTextResource (String url) async {
+//    return await new TextLoader().load(url);
+//  }
+//
+//  ///Load a text resource from a file over the network
+//  String loadTextResourceSync (String url) {
+//    return new TextLoader().loadSync(url);
+//  }
+//
+//  ///Load a Glsl from a file url
+//  Future<String> loadGlslShader(String url) async {
+//    return await new GLSLLoader().load(url);
+//  }
+//
+//  ///Load a Glsl from a file url synchronously
+//  String loadGlslShaderSync(String url) {
+//    return new GLSLLoader().loadSync(url);
+//  }
+//
+//  Future<Map<String, Object>> loadJSONResource (String url) async {
+//    return await new JsonLoader().load(url);
+//  }
 
 //  void makeRequest(Event e) {
 //    String path = 'shaderModel.vs.glsl';

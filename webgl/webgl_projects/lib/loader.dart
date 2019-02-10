@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
 
 /// Un [Loader] permet d'afficher un widget indiquant la progression de chargement.
 /// https://www.w3schools.com/howto/howto_css_loader.asp
@@ -71,6 +72,6 @@ class LoaderWidget{
 
   /// le ProgressEvent viendra lors de request.onProgress
   void showProgress(LoadProgressEvent loadProgressEvent){
-    print(loadProgressEvent);
+    print('Loaded : ${(Loader.loadedSize / Loader.totalFileSize * 100).toStringAsFixed(2)} % : ${Loader.loadedSize} / ${Loader.totalFileSize}');
   }
 }

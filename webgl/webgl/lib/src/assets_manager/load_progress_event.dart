@@ -1,4 +1,3 @@
-
 import 'dart:html';
 
 class LoadProgressEvent{
@@ -11,6 +10,7 @@ class LoadProgressEvent{
   @override
   String toString() {
     return '''
+    
     ##############################
     id : ${id}
     name : ${name}
@@ -18,6 +18,7 @@ class LoadProgressEvent{
     loaded : ${progressEvent?.loaded} octets
     total : ${progressEvent?.total} octets
     % : ${progressEvent!= null ? progressEvent.loaded / progressEvent.total * 100 : ''}
+    ##############################
     ''';
   }
 }

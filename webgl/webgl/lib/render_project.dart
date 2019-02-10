@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
+import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/engine/engine_factory.dart';
 import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/project/project_factory.dart';
@@ -11,7 +12,7 @@ Future renderProjectFromPath(String projectPath, CanvasElement canvas) async {
   EngineFactory engineFactory = new EngineFactory();
   Engine engine = engineFactory.create(canvas, projectPath);
 
-  Engine.assetManager.onLoadProgress.listen((LoadProgressEvent loadprogressEvent){
+  Loader.onLoadProgress.listen((LoadProgressEvent loadprogressEvent){
     print(loadprogressEvent);
   });
 
