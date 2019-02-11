@@ -5,12 +5,18 @@ class GLSLLoader extends Loader<String>{
   GLSLLoader();
 
   @override
-  Future<String> load(covariant String filePath) async {
-    return await new TextLoader().load(filePath);
+  Future<String> load() async {
+    TextLoader textLoader = new TextLoader()
+      ..onLoadProgress.listen(onLoadProgressStreamController.add)
+      ..filePath = filePath;
+    return await textLoader.load();
   }
 
   @override
-  String loadSync(covariant String filePath) {
-    return new TextLoader().loadSync(filePath);
+  String loadSync() {
+    TextLoader textLoader = new TextLoader()
+      ..onLoadProgress.listen(onLoadProgressStreamController.add)
+      ..filePath = filePath;
+    return textLoader.loadSync();
   }
 }

@@ -1,4 +1,8 @@
+import 'dart:html';
+
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
+import 'package:webgl/src/assets_manager/not_loaded_exception.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'dart:core';
@@ -49,8 +53,6 @@ class GLTFProject extends Project{
 
   GLTFProject({bool doReset: true}){
     reset();
-
-    setupDefault();
   }
   
   factory GLTFProject.create() = GLTFLoadProject;
@@ -71,10 +73,6 @@ class GLTFProject extends Project{
   List<GLTFSampler> samplers = <GLTFSampler>[];
   List<GLTFAnimation> animations = <GLTFAnimation>[];
   GLTFAsset asset = new GLTFAsset("2.0");
-
-  void setupDefault() {
-
-  }
 
   final List<GLTFScene> _scenes = <GLTFScene>[];
   List<GLTFScene> get scenes => _scenes.toList(growable: false);
@@ -186,4 +184,23 @@ class GLTFProject extends Project{
 
   debug({bool doProjectLog, bool isDebug}) {}
 
+  Map<String, ImageElement> _data = new Map<String, ImageElement>();
+
+  ImageElement getImage(String textureUri) => _data[textureUri] ?? (throw new NotLoadedAssetException());
+
+  Future _loadImage(String textureUri) async {
+    String filePath = baseDirectory + textureUri;
+    ImageLoader loader = new ImageLoader()..filePath = filePath;
+    ImageElement imageElement = await loader.load();
+    _data[textureUri] = imageElement;
+  }
+
+  Future loadImages() async {
+    for (int i = 0; i < textures.length; i++) {
+      GLTFTexture gltfTexture = textures[i];
+      if (gltfTexture.source.data == null) {
+        await _loadImage(gltfTexture.source.uri.toString());// Todo (jpu) : add this to a library auto filled ?
+      }
+    }
+  }
 }

@@ -43,11 +43,11 @@ abstract class Engine {
     _mainCamera?.update();
   }
 
-  static AssetManager get assetManager => _currentEngine._assetsManager;
+  AssetManager get assetsManager => _assetManager;
 
   final EngineClock _engineClock;
   final CanvasElement canvas;
-  final AssetManager _assetsManager;
+  final AssetManager _assetManager;
 
   final StreamController<num> _onRenderStreamController =
       new StreamController<num>.broadcast();
@@ -64,7 +64,7 @@ abstract class Engine {
   Renderer get renderer;
 
   Engine(this.canvas)
-      : _assetsManager = new AssetManager(),
+      : _assetManager = new AssetManager(),
         _engineClock = new EngineClock() {
     Engine._currentEngine = this;
     _interaction = new InteractionManager(this);
@@ -72,22 +72,19 @@ abstract class Engine {
 
   bool _isInitialized = false;
   @mustCallSuper
-  Future init() async {
+  Future init(Project project) async {
     if(!_isInitialized) {
-      await AssetLibrary.shaders.init();
+      _activeProject = project;
+      _interaction.init(project);
+      animator.init(project);
+      renderer.init(project);
     }
     _isInitialized = true;
   }
 
   @mustCallSuper
-  Future render(Project project) async {
-    if(!_isInitialized) throw 'engine must be init before render';
-
-    _activeProject = project;
-    _interaction.init(project);
-    animator.init(project);
-    await renderer.init(project);
-
+  void render() {
+    if(!_isInitialized) throw new Exception('engine must be init before render');
     GL.resizeCanvas();
     _render();
   }

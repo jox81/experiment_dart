@@ -12,7 +12,7 @@ import 'package:webgl/src/assets_manager/loaders/bytebuffer_loader.dart';
 import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/assets_manager/loaders/text_loader.dart';
 import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
-import 'package:webgl_projects/loader.dart';
+import 'package:webgl/src/widget/loader.dart';
 
 Future main() async {
 //  test_getSize();

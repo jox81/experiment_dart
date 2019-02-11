@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/materials.dart';
@@ -6,11 +7,22 @@ import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gltf/project/project.dart';
+import 'package:webgl/src/assets_manager/library.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+
+class ProjectLibrary extends Library{
+  String testTexturePath = 'materials/testTexture.png';
+  ImageElement get testTexture => getImageElement(testTexturePath);
+
+  ProjectLibrary(){
+    addImageElementPath(testTexturePath);
+  }
+}
 
 Future<GLTFProject> projectTestMaterials() async {
   GLTFProject project = new GLTFProject.create()..baseDirectory = 'materials/';
@@ -28,11 +40,14 @@ Future<GLTFProject> projectTestMaterials() async {
       )
   );
 
+  ProjectLibrary library = new ProjectLibrary();
+  await library.loadAll();
+
   List<Material> materials = [
     new MaterialPoint(pointSize:5.0, color:new Vector4(0.0, 0.66, 1.0, 1.0)),
     new MaterialBase(),
     new MaterialBaseColor(new Vector4(1.0, 1.0, 0.0, 1.0)),
-    new MaterialBaseTexture()..texture = await TextureUtils.createTexture2DFromImageUrl('materials/testTexture.png'),
+    new MaterialBaseTexture()..texture = TextureUtils.createTexture2DFromImageElement(library.testTexture),
   ];
 
   int materialsIndex = 0;

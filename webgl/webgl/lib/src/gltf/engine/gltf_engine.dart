@@ -1,4 +1,5 @@
 import 'dart:html';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/animation/gltf_animator.dart';
@@ -18,13 +19,24 @@ class GLTFEngine extends Engine {
   Animator animator;
 
   GLTFEngine(CanvasElement canvas) : super(canvas) {
-    animator = new GLTFAnimator();
     renderer = new GLTFRenderer(canvas);
+    animator = new GLTFAnimator();
     activeProject = new GLTFProject();
   }
 
   @override
-  Future render(covariant GLTFProject project) async {
-    await super.render(project);
+  Future init(covariant GLTFProject project) async {
+    await AssetLibrary.images.loadAll();
+    await AssetLibrary.cubeMaps.load(CubeMapName.papermill_diffuse);
+    await AssetLibrary.cubeMaps.load(CubeMapName.papermill_specular);
+    await AssetLibrary.shaders.loadAll();
+    await project?.loadImages();
+
+    await super.init(project);
+  }
+
+  @override
+  void render() {
+    super.render();
   }
 }

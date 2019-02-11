@@ -7,9 +7,12 @@ class JsonLoader extends Loader<Map<String, Object>>{
   JsonLoader();
 
   @override
-  Future<Map<String, Object>> load(covariant String filePath) async {
+  Future<Map<String, Object>> load() async {
     Completer completer = new Completer<Map<String, Object>>();
-    String result = await new TextLoader().load(filePath);
+    TextLoader loader = new TextLoader()
+      ..onLoadProgress.listen(onLoadProgressStreamController.add)
+      ..filePath = filePath;
+    String result = await loader.load();
     try {
       final Map<String, Object> json = jsonDecode(result) as Map<String, Object>;
       completer.complete(json);
@@ -21,7 +24,7 @@ class JsonLoader extends Loader<Map<String, Object>>{
   }
 
   @override
-  Map<String, Object> loadSync(covariant String filePath) {
+  Map<String, Object> loadSync() {
     // TODO: implement loadSync
     throw new Exception('not yet implemented');
   }

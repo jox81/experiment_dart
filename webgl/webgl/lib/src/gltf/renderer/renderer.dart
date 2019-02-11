@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/utils/utils_texture.dart';
@@ -25,14 +26,13 @@ class GLTFRenderer extends Renderer {
 
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
-  Future init(covariant GLTFProject project) async {
+  void init(covariant GLTFProject project) {
     _gltfProject = project;
 
     if (_gltfProject.currentScene == null)
       throw new Exception("currentScene must be set before init.");
 
-    renderState.reservedTextureUnits =
-        await UtilsTextureGLTF.initTextures(_gltfProject);
+    renderState.reservedTextureUnits = UtilsTextureGLTF.initTextures(_gltfProject);
 
     // Todo (jpu) : pourquoi si je ne le fait pas ici, il y a des soucis de rendu ?!!
     _gltfProject.defaultLight = new DirectionalLight()

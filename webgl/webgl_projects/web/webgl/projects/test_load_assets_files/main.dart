@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'package:resource/resource.dart';
 import 'package:webgl/src/assets_manager/loaders/glsl_loader.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/utils/utils_http.dart';
 import 'package:path/path.dart' as path;
 
 Future main() async {
-
-  AssetManager assetManager = new AssetManager();
 
   UtilsHttp.webPath = Uri.base.origin;
 

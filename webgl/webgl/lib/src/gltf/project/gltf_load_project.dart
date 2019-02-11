@@ -134,13 +134,12 @@ class GLTFLoadProject extends GLTFProject{
           buffer.uri.path.length > 0) {
         String ressourcePath = '${baseDirectory}${buffer.uri}';
 
+        GLTFBinLoader loader = new GLTFBinLoader()..filePath = ressourcePath;
         buffer.data =
-        await new GLTFBinLoader().load(ressourcePath);
+        await loader.load();
       }
     }
   }
-
-
 
   GLTFBuffer _createBuffer(glTF.Buffer gltfSource) {
     if (gltfSource == null) return null;

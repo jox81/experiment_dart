@@ -5,7 +5,9 @@ class ProjectFactory{
   Future<Project> create(String projectPath) async{
     Project project;
     if(projectPath.endsWith('.gltf')){
-      project = await new GLTFProjectLoader().load(projectPath, useWebPath:false);
+      GLTFProjectLoader loader = new GLTFProjectLoader()
+      ..filePath = projectPath;
+      project = await loader.load();
       await project.debug(doProjectLog : false, isDebug:false);
     }
     return project;

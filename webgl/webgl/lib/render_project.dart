@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
-import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/engine/engine_factory.dart';
 import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/project/project_factory.dart';
@@ -12,9 +11,9 @@ Future renderProjectFromPath(String projectPath, CanvasElement canvas) async {
   EngineFactory engineFactory = new EngineFactory();
   Engine engine = engineFactory.create(canvas, projectPath);
 
-  Loader.onLoadProgress.listen((LoadProgressEvent loadprogressEvent){
-    print(loadprogressEvent);
-  });
+//  engine.assetsManager.onLoadProgress.listen((LoadProgressEvent loadprogressEvent){
+//    print(loadprogressEvent);
+//  });
 
   ProjectFactory projectFactory = new ProjectFactory();
   Project project = await projectFactory.create(projectPath);
@@ -29,6 +28,6 @@ Future renderProject(Engine engine, Project project) async {
     elementFPSText.text = "${value.toStringAsFixed(2)} fps";
   });
 
-  await engine.init();
-  await engine.render(project);
+  await engine.init(project);
+  await engine.render();
 }

@@ -2,11 +2,13 @@ import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
 import 'package:webgl/src/assets_manager/loaders/gltf_project_loader.dart';
 import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
+import 'package:webgl/src/assets_manager/loaders/shader_source_loader.dart';
 
 enum LoaderType{
   imageElement,
   gltfProject,
-  gltfBin
+  gltfBin,
+  shaderSource,
 }
 
 class LoaderFactory {
@@ -22,6 +24,9 @@ class LoaderFactory {
         break;
       case LoaderType.gltfBin:
         return new GLTFBinLoader();
+        break;
+      case LoaderType.shaderSource:
+        return new ShaderSourceLoader();
         break;
     }
     return loader;

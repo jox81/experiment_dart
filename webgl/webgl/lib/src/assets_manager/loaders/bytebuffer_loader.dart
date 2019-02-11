@@ -1,47 +1,27 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:webgl/src/assets_manager/loader.dart';
-import 'package:webgl/src/utils/utils_http.dart';
 
 class ByteBufferLoader extends Loader<ByteBuffer>{
 
   ByteBufferLoader();
 
   @override
-  Future<ByteBuffer> load(covariant String filePath) {
-    Completer completer = new Completer<ByteBuffer>();
+  Future<ByteBuffer> load() async {
 
-    String assetsPath = UtilsHttp.getWebPath(filePath);
+    Blob blob = await loadFileAsBlob();
 
-    Random random = new Random();
-    HttpRequest request = new HttpRequest()..responseType = 'arraybuffer';
-    request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}',
-        async: true);
-    request.onProgress.listen((ProgressEvent event){
-      updateLoadProgress(event, filePath);
-    });
-    request.timeout = 2000;
-    request.onLoadEnd.listen((_) {
-      if (request.status < 200 || request.status > 299) {
-        String fsErr =
-            'Error: HTTP Status ${request.status} on resource: $assetsPath';
-        window.alert('Fatal error getting text ressource (see console)');
-        print(fsErr);
-        return completer.completeError(fsErr);
-      } else {
-        ByteBuffer byteBuffer = request.response as ByteBuffer;
-        completer.complete(byteBuffer);
-      }
-    });
-    request.send();
-
-    return completer.future as Future<ByteBuffer>;
+    FileReader fileReader = new FileReader();
+    var event = fileReader.onLoad.first;
+    fileReader.readAsArrayBuffer(blob);
+    await event;
+    ByteBuffer byteBuffer =  new Uint8List.fromList(fileReader.result).buffer;
+    return byteBuffer;
   }
 
   @override
-  ByteBuffer loadSync(covariant String filePath) {
+  ByteBuffer loadSync() {
     // TODO: implement loadSync
     throw new Exception('not yet implemented');
   }

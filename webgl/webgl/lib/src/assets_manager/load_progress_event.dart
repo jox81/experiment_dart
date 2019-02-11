@@ -2,17 +2,15 @@ import 'dart:html';
 
 class LoadProgressEvent{
   final ProgressEvent progressEvent;
-  final String name;
-  final int id;
+  final String filePath;
 
-  LoadProgressEvent(this.progressEvent, this.name, this.id);
+  LoadProgressEvent(this.progressEvent, this.filePath);
 
   @override
   String toString() {
     return '''
     ##############################
-    id : ${id}
-    name : ${name}
+    filePath : ${filePath}
     lengthComputable : ${progressEvent?.lengthComputable}
     loaded : ${progressEvent?.loaded} octets
     total : ${progressEvent?.total} octets

@@ -1,7 +1,6 @@
 import 'dart:html';
 import 'dart:convert' show base64;
 import 'dart:web_gl' as webgl;
-import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/project/project.dart';
@@ -11,7 +10,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class UtilsTextureGLTF {
-  static Future<int> initTextures(GLTFProject project) async {
+  static int initTextures(GLTFProject project) {
 
     WebGLTexture brdfLUTTexture, cubeMapTextureDiffuse, cubeMapTextureSpecular;
 
@@ -26,7 +25,7 @@ class UtilsTextureGLTF {
     int wrapT;
 
     //brdfLUT
-    imageElement = await new ImageLoader().load('packages/webgl/images/utils/brdfLUT.png');
+    imageElement = AssetLibrary.images.brdfLUT;
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -35,14 +34,14 @@ class UtilsTextureGLTF {
 
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);
-    List<List<ImageElement>> papermill_diffuse =
-    await AssetLibrary.cubeMaps.init(CubeMapName.papermill_diffuse);
+
+    List<List<ImageElement>> papermill_diffuse = AssetLibrary.cubeMaps.papermillDiffuse;
+
     cubeMapTextureDiffuse = TextureUtils.createCubeMapFromImages(papermill_diffuse, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureDiffuse.webGLTexture);
 
     gl.activeTexture(TextureUnit.TEXTURE0 + 2);
-    List<List<ImageElement>> papermill_specular =
-    await AssetLibrary.cubeMaps.init(CubeMapName.papermill_specular);
+    List<List<ImageElement>> papermill_specular = AssetLibrary.cubeMaps.papermillSpecular;
     cubeMapTextureSpecular = TextureUtils.createCubeMapFromImages(papermill_specular, flip: false); //, textureInternalFormat: globalState.sRGBifAvailable
     gl.bindTexture(TextureTarget.TEXTURE_CUBE_MAP, cubeMapTextureSpecular.webGLTexture);
 
@@ -56,10 +55,7 @@ class UtilsTextureGLTF {
       if (!useDebugTexture) {
         gltfTexture = project.textures[i];
         if (gltfTexture.source.data == null) {
-          //load image
-          String fileUrl =
-              project.baseDirectory + gltfTexture.source.uri.toString();
-          imageElement = await new ImageLoader().load(fileUrl);
+          imageElement = project.getImage(gltfTexture.source.uri.toString());
           textureUnitId = gltfTexture.textureId;
         } else {
           String base64Encoded = base64.encode(gltfTexture.source.data);
@@ -80,13 +76,7 @@ class UtilsTextureGLTF {
             ? gltfTexture.sampler.wrapT
             : TextureWrapType.REPEAT;
       } else {
-//        String imagePath = '/images/utils/uv.png';
-        String imagePath = '/images/utils/uv_grid.png';
-//      String imagePath = '/images/crate.gif';
-//      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat.png';
-//      String imagePath = '/gltf/samples/gltf_2_0/BoxTextured/CesiumLogoFlat_256.png';
-        imageElement = await new ImageLoader().load(imagePath);
-
+        imageElement = AssetLibrary.images.uvGrid;
         magFilter = TextureFilterType.LINEAR;
         minFilter = TextureFilterType.LINEAR;
         wrapS = TextureWrapType.CLAMP_TO_EDGE;

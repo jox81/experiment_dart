@@ -7,26 +7,31 @@ import 'package:path/path.dart' as path;
 
 class ShaderSourceLoader extends Loader<ShaderSource>{
 
+  ShaderInfos shaderInfos;
+
   ShaderSourceLoader();
 
   @override
-  Future<ShaderSource> load(covariant ShaderInfos shaderInfos) async {
-    String _webPath = UtilsHttp.useWebPath ? UtilsHttp.webPath : Uri.base.origin;
-    String _currentPackage = path.join(_webPath, 'packages/webgl');
-
-    shaderInfos.vertexShaderPath = path.join(_currentPackage, shaderInfos.vertexShaderPath);
-    shaderInfos.fragmentShaderPath = path.join(_currentPackage, shaderInfos.fragmentShaderPath);
+  Future<ShaderSource> load() async {
+    {
+      filePath = '';
+      super.load();
+      assert(shaderInfos!=null||(throw 'shaderInfos must be set before'));
+    }
 
     ShaderSource shaderSource = new ShaderSource(shaderInfos);
 
-    shaderSource.vsCode = await new GLSLLoader().load(shaderSource.vertexShaderPath);
-    shaderSource.fsCode = await new GLSLLoader().load(shaderSource.fragmentShaderPath);
+    GLSLLoader loader = new GLSLLoader()
+    ..onLoadProgress.listen(onLoadProgressStreamController.add);
+    shaderSource.vsCode = await (loader..filePath = shaderSource.vertexShaderPath).load();
+    shaderSource.fsCode = await (loader..filePath = shaderSource.fragmentShaderPath).load();
 
     return shaderSource;
   }
 
   @override
-  ShaderSource loadSync(covariant ShaderInfos shaderInfos) {
+  ShaderSource loadSync() {
+    super.loadSync();
     // TODO: implement loadSync
     throw new Exception('not yet implemented');
   }
@@ -37,7 +42,10 @@ class ShaderSourceLoader extends Loader<ShaderSource>{
     List<ShaderSource> shaderSources = [];
     for (ShaderInfos shaderInfos in shadersInfos) {
       futures.add(() async{
-        ShaderSource shaderSource = await new ShaderSourceLoader().load(shaderInfos);
+        ShaderSourceLoader shaderSourceLoader = new ShaderSourceLoader()
+          ..onLoadProgress.listen(onLoadProgressStreamController.add)
+          ..shaderInfos = shaderInfos;
+        ShaderSource shaderSource = await shaderSourceLoader.load();
         shaderSources.add(shaderSource);
       }());
     }

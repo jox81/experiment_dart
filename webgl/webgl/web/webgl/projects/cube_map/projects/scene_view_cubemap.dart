@@ -41,8 +41,9 @@ class CubeMapProject extends GLTFProject{
       ..translation = new Vector3(20.0, 20.0, 20.0);
     Engine.mainCamera = camera;
 
-    List<List<ImageElement>> cubeMapImages =
-        await AssetLibrary.cubeMaps.init(CubeMapName.pisa);
+    await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
+
+    List<List<ImageElement>> cubeMapImages = AssetLibrary.cubeMaps.pisa;
     WebGLTexture cubeMapTexture =
     TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
 

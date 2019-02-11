@@ -62,22 +62,6 @@ class TextureUtils {
     return texture;
   }
 
-  static Future<WebGLTexture> createTexture2DFromImageUrl(String fileUrl,
-      {bool repeatU: false,
-        bool mirrorU: false,
-        bool repeatV: false,
-        bool mirrorV: false}) async {
-
-    ImageElement image = await new ImageLoader().load(fileUrl);
-    WebGLTexture texture = createTexture2DFromImageElement(image,
-        repeatU: repeatU,
-        mirrorU: mirrorU,
-        repeatV: repeatV,
-        mirrorV: mirrorV);
-
-    return texture;
-  }
-
   static WebGLTexture createEmptyTexture2D(int size) {
     WebGLTexture texture = new WebGLTexture.texture2d();
 

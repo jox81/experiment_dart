@@ -1,7 +1,9 @@
 import 'dart:html';
+import 'package:webgl/src/assets_manager/library.dart';
 import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:path/path.dart' as path;
 import 'package:webgl/src/assets_manager/loaders/shader_source_loader.dart';
+import 'package:webgl/src/assets_manager/not_loaded_exception.dart';
 import 'package:webgl/src/shaders/shader_infos.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
 
@@ -9,29 +11,32 @@ class AssetLibrary{
   AssetLibrary();
 
   static _ImageLibrary images = new _ImageLibrary();
+  // Todo (jpu) : extends library for those 2
   static _CubeMapLibrary cubeMaps = new _CubeMapLibrary();
   static _ShaderLibrary shaders = new _ShaderLibrary();
 }
 
-class _ImageLibrary{
+class _ImageLibrary extends Library{
 
-  String brdfLUTPath = 'packages/webgl/images/utils/brdfLUT.png';
-  ImageElement get brdfLUT => _images[brdfLUTPath];
+  String _brdfLUTPath = 'packages/webgl/images/utils/brdfLUT.png';
+  ImageElement get brdfLUT => getImageElement(_brdfLUTPath);
 
-  List<String> _paths;
-  List<String> get paths => _paths ??= [
-    brdfLUTPath,
-  ];
+  String _uvPath = 'packages/webgl/images/utils/uv.png';
+  ImageElement get uv => getImageElement(_uvPath);
 
-  Map<String, ImageElement> _images = {};
+  String _uvGridPath = 'packages/webgl/images/utils/uv_grid.jpg';
+  ImageElement get uvGrid => getImageElement(_uvGridPath);
 
-  void loadAll(){
-    _images = {};
-    paths.forEach((String path){
-      _images[path] ??= new ImageLoader().loadSync(path);
-    });
+  String _cratePath = 'packages/webgl/images/crate.gif';
+  ImageElement get crate => getImageElement(_cratePath);
+
+  _ImageLibrary(){
+    addImageElementPath(_brdfLUTPath);
+    addImageElementPath(_uvPath);
+    addImageElementPath(_uvGridPath);
+    addImageElementPath(_cratePath);
   }
-}
+ }
 
 enum CubeMapName{
   test,
@@ -96,7 +101,17 @@ class _CubeMapLibrary{
     }()
   };
 
-  Future<List<List<ImageElement>>> init(CubeMapName cubeMapName) async {
+  Map<CubeMapName, List<List<ImageElement>>> _data = {};
+
+  List<List<ImageElement>> _getAsset(CubeMapName cubeMapName) => _data[cubeMapName] ?? (throw new NotLoadedAssetException());
+
+  List<List<ImageElement>> get papermillDiffuse => _getAsset(CubeMapName.papermill_diffuse);
+  List<List<ImageElement>> get papermillSpecular => _getAsset(CubeMapName.papermill_specular);
+  List<List<ImageElement>> get pisa => _getAsset(CubeMapName.pisa);
+  List<List<ImageElement>> get kitchen => _getAsset(CubeMapName.kitchen);
+  List<List<ImageElement>> get test => _getAsset(CubeMapName.test);
+
+  Future<void> load(CubeMapName cubeMapName) async {
 
     List<List<String>> paths = _cubeMapsPath[cubeMapName];
 
@@ -104,11 +119,12 @@ class _CubeMapLibrary{
 
     for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
       for (int i = 0; i < 6; i++) {
-        imageElements[mipsLevels][i] = await new ImageLoader().load(paths[mipsLevels][i]);
+        ImageLoader loader = new ImageLoader()..filePath = paths[mipsLevels][i];
+        imageElements[mipsLevels][i] = await loader.load();
       }
     }
 
-    return imageElements;
+    _data[cubeMapName] = imageElements;
   }
 }
 
@@ -153,73 +169,73 @@ class _ShaderLibrary{
   List<ShaderInfos> _shadersInfos = [
     new ShaderInfos(
         ShaderName.material_point,
-        'shaders/material_point/material_point.vs.glsl',
-        'shaders/material_point/material_point.fs.glsl'),
+        'packages/webgl/shaders/material_point/material_point.vs.glsl',
+        'packages/webgl/shaders/material_point/material_point.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_base,
-        'shaders/material_base/material_base.vs.glsl',
-        'shaders/material_base/material_base.fs.glsl'),
+        'packages/webgl/shaders/material_base/material_base.vs.glsl',
+        'packages/webgl/shaders/material_base/material_base.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_base_color,
-        'shaders/material_base_color/material_base_color.vs.glsl',
-        'shaders/material_base_color/material_base_color.fs.glsl'),
+        'packages/webgl/shaders/material_base_color/material_base_color.vs.glsl',
+        'packages/webgl/shaders/material_base_color/material_base_color.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_base_vertex_color,
-        'shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl',
-        'shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl'),
+        'packages/webgl/shaders/material_base_vertex_color/material_base_vertex_color.vs.glsl',
+        'packages/webgl/shaders/material_base_vertex_color/material_base_vertex_color.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_base_texture,
-        'shaders/material_base_texture/material_base_texture.vs.glsl',
-        'shaders/material_base_texture/material_base_texture.fs.glsl'),
+        'packages/webgl/shaders/material_base_texture/material_base_texture.vs.glsl',
+        'packages/webgl/shaders/material_base_texture/material_base_texture.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_depth_texture,
-        'shaders/material_depth_texture/material_depth_texture.vs.glsl',
-        'shaders/material_depth_texture/material_depth_texture.fs.glsl'),
+        'packages/webgl/shaders/material_depth_texture/material_depth_texture.vs.glsl',
+        'packages/webgl/shaders/material_depth_texture/material_depth_texture.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_base_texture_normal,
-        'shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl',
-        'shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl'),
+        'packages/webgl/shaders/material_base_texture_normal/material_base_texture_normal.vs.glsl',
+        'packages/webgl/shaders/material_base_texture_normal/material_base_texture_normal.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_pbr,
-        'shaders/material_pbr/material_pbr.vs.glsl',
-        'shaders/material_pbr/material_pbr.fs.glsl'),
+        'packages/webgl/shaders/material_pbr/material_pbr.vs.glsl',
+        'packages/webgl/shaders/material_pbr/material_pbr.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_skybox,
-        'shaders/material_skybox/material_skybox.vs.glsl',
-        'shaders/material_skybox/material_skybox.fs.glsl'),
+        'packages/webgl/shaders/material_skybox/material_skybox.vs.glsl',
+        'packages/webgl/shaders/material_skybox/material_skybox.fs.glsl'),
     new ShaderInfos(
         ShaderName.material_reflection,
-        'shaders/reflection/reflection.vs.glsl',
-        'shaders/reflection/reflection.fs.glsl'),
+        'packages/webgl/shaders/reflection/reflection.vs.glsl',
+        'packages/webgl/shaders/reflection/reflection.fs.glsl'),
     new ShaderInfos(
         ShaderName.kronos_gltf_pbr,
-        'shaders/kronos_gltf/kronos_gltf_pbr.vs.glsl',
-        'shaders/kronos_gltf/kronos_gltf_pbr.fs.glsl'),
+        'packages/webgl/shaders/kronos_gltf/kronos_gltf_pbr.vs.glsl',
+        'packages/webgl/shaders/kronos_gltf/kronos_gltf_pbr.fs.glsl'),
     new ShaderInfos(
         ShaderName.kronos_gltf_pbr_test,
-        'shaders/kronos_gltf/kronos_gltf_pbr_test.vs.glsl',
-        'shaders/kronos_gltf/kronos_gltf_pbr_test.fs.glsl'),
+        'packages/webgl/shaders/kronos_gltf/kronos_gltf_pbr_test.vs.glsl',
+        'packages/webgl/shaders/kronos_gltf/kronos_gltf_pbr_test.fs.glsl'),
     new ShaderInfos(
         ShaderName.kronos_gltf_default,
-        'shaders/kronos_gltf/kronos_gltf_default.vs.glsl',
-        'shaders/kronos_gltf/kronos_gltf_default.fs.glsl'),
+        'packages/webgl/shaders/kronos_gltf/kronos_gltf_default.vs.glsl',
+        'packages/webgl/shaders/kronos_gltf/kronos_gltf_default.fs.glsl'),
     new ShaderInfos(
         ShaderName.debug_shader,
-        'shaders/debug_shader/debug_shader.vs.glsl',
-        'shaders/debug_shader/debug_shader.fs.glsl'),
+        'packages/webgl/shaders/debug_shader/debug_shader.vs.glsl',
+        'packages/webgl/shaders/debug_shader/debug_shader.fs.glsl'),
     new ShaderInfos(
         ShaderName.sao,
-        'shaders/sao/sao.vs.glsl',
-        'shaders/sao/sao.fs.glsl'),
+        'packages/webgl/shaders/sao/sao.vs.glsl',
+        'packages/webgl/shaders/sao/sao.fs.glsl'),
 
     //> Filters
     new ShaderInfos(
         ShaderName.dot_screen,
-        'shaders/filters/dot_screen/dot_screen.vs.glsl',
-        'shaders/filters/dot_screen/dot_screen.fs.glsl')
+        'packages/webgl/shaders/filters/dot_screen/dot_screen.vs.glsl',
+        'packages/webgl/shaders/filters/dot_screen/dot_screen.fs.glsl')
   ];
 
-  Future init() async {
+  Future loadAll() async {
     List<ShaderSource> shaderSources = await new ShaderSourceLoader().loadAll(_shadersInfos);
 
     for (ShaderSource shaderSource in shaderSources) {

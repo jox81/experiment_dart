@@ -9,53 +9,25 @@ class ImageLoader extends Loader<ImageElement>{
 
   ///Load a single image from an URL
   @override
-  Future<ImageElement> load(covariant String filePath) {
-    Completer<ImageElement> completer = new Completer<ImageElement>();
-
-    String assetsPath = UtilsHttp.getWebPath(filePath);
-    print('url : $filePath | assetsPath : $assetsPath');
-
-    Random random = new Random();
-    HttpRequest request = new HttpRequest()..responseType = 'arraybuffer';
-    request.timeout = 2000;
-    request.open('GET', '$assetsPath?please-dont-cache=${random.nextInt(1000)}',
-        async: true);
-    request.onProgress.listen((ProgressEvent event){
-      updateLoadProgress(event, filePath);
-    });
-    request.onLoadEnd.listen((_) {
-      if (request.status < 200 || request.status > 299) {
-        String fsErr =
-            'Error: HTTP Status ${request.status} on resource: $assetsPath';
-        window.alert('Fatal error getting text ressource (see console)');
-        print(fsErr);
-        return completer.completeError(fsErr);
-      } else {
-        Blob blob = new Blob([request.response]);
-        completer.complete(loadBlobAsImg(blob));
-      }
-    });
-    request.send();
-
-    return completer.future;
+  Future<ImageElement> load() async {
+    Blob blob = await loadFileAsBlob();
+    return _loadBlobAsImg(blob);
   }
 
-  Future<ImageElement> loadBlobAsImg(Blob blob) async {
+  Future<ImageElement> _loadBlobAsImg(Blob blob) async {
     ImageElement image = new ImageElement();
-    String dataUri = await loadBlobAsDataUri(blob);
-    var loaded = image.onLoad.first;
+    String dataUri = await _loadBlobAsDataUri(blob);
     image.src = dataUri;
-    return loaded.then((_) => image);
+    await image.onLoad.first;
+    return image;
   }
 
-  Future<String> loadBlobAsDataUri(Blob blob) async{
-    var fileReader = new FileReader();
+  Future<String> _loadBlobAsDataUri(Blob blob) async{
+    FileReader fileReader = new FileReader();
     fileReader.readAsDataUrl(blob);
-    ProgressEvent event = await fileReader.onLoad.first;
+    await fileReader.onLoadEnd.first;
     return fileReader.result;
   }
-
-//  loadBlobAsImg(blob).then((img) => canvas.drawImage(img));
 
   ///Load a single image from an URL
   @override
@@ -81,7 +53,8 @@ class ImageLoader extends Loader<ImageElement>{
   }
 
   @override
-  ImageElement loadSync(covariant String filePath) {
+  ImageElement loadSync() {
+    super.loadSync();
     String assetsPath = UtilsHttp.getWebPath(filePath);
 
     return new ImageElement()
@@ -91,11 +64,12 @@ class ImageLoader extends Loader<ImageElement>{
     });
   }
 
-  List<ImageElement> loadImages(List<String> paths) {
+  List<ImageElement> loadImages(List<String> filePaths) {
     List<ImageElement> images = [];
 
-    for(String url in paths) {
-      images.add(loadSync(url));
+    for(String filePath in filePaths) {
+      this.filePath = filePath;
+      images.add(loadSync());
     }
 
     return images;

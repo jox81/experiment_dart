@@ -1,38 +1,71 @@
 import 'dart:html';
 import 'dart:math';
 import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'package:webgl/src/utils/utils_http.dart';
 
 export 'loader_factory.dart';
 
 abstract class Loader<T> {
-  static List<String> _filesToLoad = new List();
-  static List<String> get filesToLoad => _filesToLoad;
 
-  static Map<String, LoadProgressEvent> _loadedFiles = new Map();
-  static Map<String, LoadProgressEvent> get loadedFiles => _loadedFiles;
+  final StreamController<LoadProgressEvent> onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
+  Stream<LoadProgressEvent> get onLoadProgress => onLoadProgressStreamController.stream;
 
-  static StreamController<LoadProgressEvent> _onLoadProgressStreamController = new StreamController<LoadProgressEvent>.broadcast();
-  static Stream<LoadProgressEvent> get onLoadProgress => _onLoadProgressStreamController.stream;
-
-//  static int totalFileSize = 1;
-  static int get totalFileSize => _loadedFiles.values.map((p)=>p.progressEvent.total).reduce((a,b)=>a+b);
-
-  static int _totalFileCount = 0;
-  static int get totalFileCount => _loadedFiles.length;
-
-  static int _totalLoadedSize = 0;
-  static int get loadedSize => _loadedFiles.values.map((p)=>p.progressEvent.loaded).reduce((a,b)=>a+b);
+  LoadProgressEvent _progressEvent;
 
   Loader();
 
-  Future<T> load(Object data);
-  T loadSync(Object data);
+  String filePath;
 
+  @protected
+  Future<Blob> loadFileAsBlob(){
+    assert(filePath != null||(throw 'filePath must be set before'));
 
+    Completer<Blob> completer = new Completer<Blob>();
+
+    String assetsPath = UtilsHttp.getWebPath(filePath);
+
+    print('temp : $assetsPath');
+
+    Random random = new Random();
+    HttpRequest request = new HttpRequest()..responseType = 'blob';
+    request.open('POST', '$assetsPath?please-dont-cache=${random.nextInt(1000)}',
+        async: true);
+    request.timeout = 2000;
+    request.onLoadEnd.listen((_)async  {
+      if (request.status < 200 || request.status > 299) {
+        String fsErr =
+            'Error: HTTP Status ${request.status} on resource: $assetsPath';
+        window.alert('Fatal error getting text ressource (see console)');
+        print(fsErr);
+        return completer.completeError(fsErr);
+      } else {
+
+        Blob blob = request.response;
+        completer.complete(blob);
+      }
+    });
+    request.onProgress.listen((ProgressEvent event){
+      updateLoadProgress(event, filePath);
+    });
+    request.send();
+
+    return completer.future;
+  }
+
+  @mustCallSuper
+  Future<T> load(){
+    assert(filePath != null||(throw 'FilePath must be set before'));
+  }
+  @mustCallSuper
+  T loadSync(){
+    assert(filePath != null||(throw 'FilePath must be set before'));
+  }
   @override
-  Future<int> getFileSize(covariant String filePath) {
+  Future<int> getFileSize() {
+
+    assert(filePath != null||(throw 'FilePath must be set before'));
 
     Completer<int> completer = new Completer<int>();
 
@@ -58,12 +91,9 @@ abstract class Loader<T> {
 
     return completer.future;
   }
-
-  void updateLoadProgress(ProgressEvent event, String url) {
-    LoadProgressEvent existingProgressEvent = _loadedFiles[url];
-    LoadProgressEvent progressEvent = new LoadProgressEvent(event, url, existingProgressEvent == null ? _loadedFiles.length : existingProgressEvent.id);
-    _loadedFiles[url] = progressEvent;
-    _onLoadProgressStreamController.add(progressEvent);
+  void updateLoadProgress(ProgressEvent event, String filePath) {
+    _progressEvent = new LoadProgressEvent(event, filePath);
+    onLoadProgressStreamController.add(_progressEvent);
   }
 }
 

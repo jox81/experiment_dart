@@ -1,9 +1,7 @@
 import 'dart:html';
-import 'package:webgl/src/assets_manager/load_progress_event.dart';
-import 'package:webgl/src/assets_manager/loader.dart';
 
-/// Un [Loader] permet d'afficher un widget indiquant la progression de chargement.
-/// https://www.w3schools.com/howto/howto_css_loader.asp
+/// Un [LoaderWidget] permet d'afficher un widget indiquant la progression de chargement.
+/// https://www.w3schools.com/howto/howto_css_asp
 class LoaderWidget{
 
   DivElement _divProgressValueElement;
@@ -98,8 +96,8 @@ class LoaderWidget{
   }
 
   /// le ProgressEvent viendra lors de request.onProgress
-  void showProgress(LoadProgressEvent loadProgressEvent){
-    _divProgressValueElement.innerHtml = '${(Loader.loadedSize / Loader.totalFileSize * 100).toStringAsFixed(2)} % <br/> ${(Loader.loadedSize / 1024/1024).toStringAsFixed(2)}Mo / ${(Loader.totalFileSize/1024/1024).toStringAsFixed(2)}Mo';
-    print('Loaded : ${Loader.totalFileCount} files : ${(Loader.loadedSize / Loader.totalFileSize * 100).toStringAsFixed(2)} % : ${Loader.loadedSize} / ${Loader.totalFileSize}');
+  void showProgress(int loadedSize, int totalFileSize, int totalFileCount){
+    _divProgressValueElement.innerHtml = '${(loadedSize / totalFileSize * 100).toStringAsFixed(2)} % <br/> ${(loadedSize / 1024/1024).toStringAsFixed(2)}Mo / ${(totalFileSize/1024/1024).toStringAsFixed(2)}Mo';
+    print('Loaded : ${totalFileCount} files : ${(loadedSize / totalFileSize * 100).toStringAsFixed(2)} % : ${loadedSize} octets / ${totalFileSize} octets');
   }
 }
