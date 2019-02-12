@@ -1,31 +1,36 @@
 import 'dart:async';
+import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'package:webgl/src/assets_manager/loader.dart';
 import 'dart:convert';
 import 'package:webgl/src/assets_manager/loaders/text_loader.dart';
 
-class JsonLoader extends Loader<Map<String, Object>>{
+class JsonLoader extends FileLoader<Map<String, Object>>{
   JsonLoader();
 
   @override
-  Future<Map<String, Object>> load() async {
-    Completer completer = new Completer<Map<String, Object>>();
-    TextLoader loader = new TextLoader()
+  Future load() async {
+    TextLoader fileLoader = new TextLoader()
       ..onLoadProgress.listen(onLoadProgressStreamController.add)
+      ..onLoadEnd.listen((LoadProgressEvent event) {
+        progressEvent = event;
+      })
       ..filePath = filePath;
-    String result = await loader.load();
-    try {
-      final Map<String, Object> json = jsonDecode(result) as Map<String, Object>;
-      completer.complete(json);
-    } catch (e) {
-      completer.completeError(e);
-    }
 
-    return completer.future as Future<Map<String, Object>> ;
+    fileLoader.load();
+    await fileLoader.onLoadEnd.first;
+
+    try {
+      final Map<String, Object> json = jsonDecode(fileLoader.result) as Map<String, Object>;
+
+      result = json;
+      onLoadEndStreamController.add(progressEvent);
+
+    } catch (e) {
+    }
   }
 
   @override
-  Map<String, Object> loadSync() {
-    // TODO: implement loadSync
+  void loadSync() {
     throw new Exception('not yet implemented');
   }
 }

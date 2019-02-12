@@ -1,6 +1,7 @@
 import 'dart:html';
 
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/assets_manager/not_loaded_exception.dart';
 import 'package:webgl/src/camera/camera.dart';
@@ -191,7 +192,9 @@ class GLTFProject extends Project{
   Future _loadImage(String textureUri) async {
     String filePath = baseDirectory + textureUri;
     ImageLoader loader = new ImageLoader()..filePath = filePath;
-    ImageElement imageElement = await loader.load();
+    AssetLibrary.project.addLoader(loader);
+    await loader.load();
+    ImageElement imageElement = loader.result;
     _data[textureUri] = imageElement;
   }
 

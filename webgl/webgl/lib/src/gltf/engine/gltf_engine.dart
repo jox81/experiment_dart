@@ -30,7 +30,6 @@ class GLTFEngine extends Engine {
     await AssetLibrary.cubeMaps.load(CubeMapName.papermill_diffuse);
     await AssetLibrary.cubeMaps.load(CubeMapName.papermill_specular);
     await AssetLibrary.shaders.loadAll();
-    await project?.loadImages();
 
     await super.init(project);
   }

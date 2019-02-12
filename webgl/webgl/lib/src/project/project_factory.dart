@@ -7,7 +7,11 @@ class ProjectFactory{
     if(projectPath.endsWith('.gltf')){
       GLTFProjectLoader loader = new GLTFProjectLoader()
       ..filePath = projectPath;
-      project = await loader.load();
+
+      loader.load();
+      await loader.onLoadEnd.first;
+
+      project = loader.result;
       await project.debug(doProjectLog : false, isDebug:false);
     }
     return project;

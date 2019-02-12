@@ -12,8 +12,8 @@ enum LoaderType{
 }
 
 class LoaderFactory {
-  Loader create(LoaderType loaderType) {
-    Loader loader;
+  FileLoader create(LoaderType loaderType) {
+    FileLoader fileLoader;
 
     switch(loaderType){
       case LoaderType.imageElement:
@@ -29,6 +29,6 @@ class LoaderFactory {
         return new ShaderSourceLoader();
         break;
     }
-    return loader;
+    return fileLoader;
   }
 }

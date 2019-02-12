@@ -17,7 +17,7 @@ Future main() async {
 //  test_singleLoader();
 //  test_loadCustomLibrary();
 //  test_loadMultipleFiles();
-  test_loadFromBaseImageLibrayr();
+  test_loadFromBaseImageLibrary();
 }
 
 Future test_getSingleFileSize() async {
@@ -28,7 +28,9 @@ Future test_getSingleFileSize() async {
   var size = await loader.getFileSize();
   print(size);
 
-  ByteBuffer byteBuffer = await loader.load();
+  await loader.load();
+
+  ByteBuffer byteBuffer = loader.result;
   assert(byteBuffer != null);
 }
 
@@ -41,7 +43,8 @@ Future test_singleLoader() async {
     ..onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
       loaderWidget.showProgress(loadProgressEvent.progressEvent.loaded, loadProgressEvent.progressEvent.total, 1);
     });
-  ImageElement uv = await imageLoader.load();
+  await imageLoader.load();
+  ImageElement uv = imageLoader.result;
   document.body.children.add(uv);
 }
 
@@ -64,18 +67,22 @@ Future test_loadMultipleFiles() async {
   String gltf = '/webgl/projects/gltf/projects/archi/model_01/model_01.gltf';
   GLTFProjectLoader gLTFProjectLoader = new GLTFProjectLoader()..filePath = gltf;
   library.addLoader(gLTFProjectLoader);
-  GLTFProject project = await gLTFProjectLoader.load();
+  await gLTFProjectLoader.load();
+  GLTFProject project = gLTFProjectLoader.result;
   assert(project!=null);
 
   String bin = '/webgl/projects/gltf/projects/archi/model_01/model_01.bin';
   GLTFBinLoader gLTFBinLoader = new GLTFBinLoader()..filePath = bin;
   library.addLoader(gLTFBinLoader);
-  Uint8List uint8List = await gLTFBinLoader.load();
+
+  await gLTFBinLoader.load();
+  Uint8List uint8List = gLTFBinLoader.result;
   assert(uint8List != null);
 
   TextLoader textLoader = new TextLoader()..filePath = gltf;
   library.addLoader(textLoader);
-  String text = await textLoader.load();
+  await textLoader.load();
+  String text = textLoader.result;
   assert(text != null);
 
   print('done');
@@ -89,7 +96,6 @@ Future test_loadMultipleFiles() async {
 }
 
 /// ou crée une [Library] à part
-
 Future test_loadCustomLibrary() async {
   LoaderWidget loaderWidget = new LoaderWidget();
 
@@ -106,20 +112,23 @@ Future test_loadCustomLibrary() async {
   document.body.children.add(uv);
 }
 
-Future test_loadFromBaseImageLibrayr() async {
+Future test_loadFromBaseImageLibrary() async {
   LoaderWidget loaderWidget = new LoaderWidget();
+  AssetLibrary.images
+    ..onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
+      loaderWidget.showProgress(AssetLibrary.images.loadedFileSize, AssetLibrary.images.totalFileSize, AssetLibrary.images.totalFileCount);
+    });
 
   //1 add loader to defaultImageLibrary
   ImageLoader imageLoader = new ImageLoader()
     ..filePath = 'packages/webgl/images/crate.gif';
   AssetLibrary.images.addLoader(imageLoader);
-  AssetLibrary.images
-    ..onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
-      loaderWidget.showProgress(AssetLibrary.images.loadedFileSize, AssetLibrary.images.totalFileSize, AssetLibrary.images.totalFileCount);
-    });
-  ImageElement brdfLUT = await imageLoader.load();
-  assert(brdfLUT != null);
-  document.body.children.add(brdfLUT);
+
+  await imageLoader.load();
+
+  ImageElement crate = imageLoader.result;
+  assert(crate != null);
+  document.body.children.add(crate);
 
   //2 : utilisation de la libraire par défault
   await AssetLibrary.images.loadAll();

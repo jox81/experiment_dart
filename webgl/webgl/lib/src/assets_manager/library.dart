@@ -19,22 +19,27 @@ class Library{
   int get totalFileCount => _loadedFiles.length;
   int get loadedFileSize => _loadedFiles.values.map((p)=>p.progressEvent.loaded).reduce((a,b)=>a+b);
 
-  Map<Loader, Object> _data = new Map<Loader, Object>();
+  Map<FileLoader, Object> _data = new Map<FileLoader, Object>();
 
   Object _getAsset(String filePath) => _data[_data.keys.firstWhere((k)=> k.filePath == filePath)] ?? (throw new NotLoadedAssetException());
   void _addAssetPath(String filePath, LoaderType loaderType) {
-    Loader loader = new LoaderFactory().create(loaderType)
+    FileLoader fileLoader = new LoaderFactory().create(loaderType)
     ..filePath = filePath;
-    addLoader(loader);
+    addLoader(fileLoader);
   }
 
-  void addLoader(Loader loader){
-    assert(loader.filePath != null);
-    loader.onLoadProgress.listen((LoadProgressEvent progressEvent){
-      _loadedFiles[progressEvent.filePath] = progressEvent;
-      _onLoadProgressStreamController.add(progressEvent);
-    });
-    _data[loader] = null;
+  void addLoader(FileLoader fileLoader){
+    assert(fileLoader.filePath != null);
+    _data[fileLoader] = null;
+
+    fileLoader
+      ..onLoadProgress.listen((LoadProgressEvent progressEvent){
+        _loadedFiles[progressEvent.filePath] = progressEvent;
+        _onLoadProgressStreamController.add(progressEvent);
+      })
+      ..onLoadEnd.listen((LoadProgressEvent progressEvent){
+        _data[fileLoader] = fileLoader.result;
+      });
   }
 
   @protected
@@ -58,9 +63,11 @@ class Library{
     _addAssetPath(filePath, LoaderType.gltfBin);
   }
 
+  /// Will load only _data[loader] empty
   Future loadAll() async{
-    await Future.forEach(_data.keys, (Loader loader) async {
-      _data[loader] ??= await loader.load();
+    print(_data.keys);
+    await Future.forEach(_data.keys, (FileLoader fileLoader) async {
+      if(_data[fileLoader] == null) await fileLoader.load();
     });
   }
 }

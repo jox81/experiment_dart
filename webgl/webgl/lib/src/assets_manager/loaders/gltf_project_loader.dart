@@ -1,16 +1,19 @@
+import 'package:webgl/asset_library.dart';
+import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
 import 'package:webgl/src/assets_manager/loaders/json_loader.dart';
 import 'package:webgl/src/assets_manager/loader.dart';
+import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/project/gltf_load_project.dart';
 import 'dart:core';
 import 'dart:async';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:gltf/gltf.dart' as glTF;
 
-class GLTFProjectLoader extends Loader<GLTFProject>{
+class GLTFProjectLoader extends FileLoader<GLTFProject>{
   GLTFProjectLoader();
 
   @override
-  Future<GLTFProject> load() async {
+  Future load() async {
     // Todo (jpu) : assert path exist and get real file
     final Uri baseUri = Uri.parse(filePath);
     final String filePart = baseUri.pathSegments.last;
@@ -18,31 +21,59 @@ class GLTFProjectLoader extends Loader<GLTFProject>{
 
     final glTF.Gltf gltfSource =
         await _loadGLTFResource(filePath);
-    final GLTFProject _gltf = await _getGLTFProject(gltfSource, gtlfDirectory);
+    final GLTFProject project = await _getGLTFProject(gltfSource, gtlfDirectory);
 
-    assert(_gltf != null);
+    assert(project != null);
 
-    return _gltf;
+    result = project;
+    onLoadEndStreamController.add(progressEvent);
   }
 
   Future<GLTFProject> _getGLTFProject(
       glTF.Gltf gltfSource, String baseDirectory) async {
     if (gltfSource == null) return null;
 
-    GLTFLoadProject _gltfProject = new GLTFLoadProject()
+    GLTFLoadProject project = new GLTFLoadProject()
       ..baseDirectory = baseDirectory;
-    await _gltfProject.initFromSource(gltfSource);
 
-    return _gltfProject;
+    await project.initFromSource(gltfSource);
+    await _fillBuffersData(project);
+    await project.loadImages();
+
+    return project;
+  }
+
+  ///permet de remplir les buffers du project. ici à cause des loaders
+  Future _fillBuffersData(GLTFLoadProject project) async {
+    for (GLTFBuffer buffer in project.buffers) {
+      if (buffer.data == null &&
+          buffer.uri != null &&
+          buffer.uri.path.length > 0) {
+        String ressourcePath = '${project.baseDirectory}${buffer.uri}';
+
+        GLTFBinLoader loader = new GLTFBinLoader()..filePath = ressourcePath;
+        AssetLibrary.project.addLoader(loader);
+
+        loader.load();
+        await loader.onLoadEnd.first;
+
+        buffer.data = loader.result;
+      }
+    }
   }
 
   Future<glTF.Gltf> _loadGLTFResource(String filePath) async {
 
     Completer completer = new Completer<glTF.Gltf>();
-    JsonLoader loader = new JsonLoader()
+    JsonLoader fileLoader = new JsonLoader()
       ..onLoadProgress.listen(onLoadProgressStreamController.add)
       ..filePath = filePath;
-    Map<String, Object> result = await loader.load();
+
+    fileLoader.load();
+    await fileLoader.onLoadEnd.first;
+
+    Map<String, Object> result = fileLoader.result;
+
     try {
       final glTF.Gltf gltf = new glTF.Gltf.fromMap(result, new glTF.Context());
       completer.complete(gltf);

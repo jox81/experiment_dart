@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'dart:html';
-import 'dart:math';
+import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/utils/utils_http.dart';
 
-class ImageLoader extends Loader<ImageElement>{
+class ImageLoader extends FileLoader<ImageElement>{
   ImageLoader();
 
   ///Load a single image from an URL
   @override
-  Future<ImageElement> load() async {
+  Future load() async {
     Blob blob = await loadFileAsBlob();
-    return _loadBlobAsImg(blob);
+    ImageElement image = await _loadBlobAsImg(blob);
+
+    result = image;
+    onLoadEndStreamController.add(progressEvent);
   }
 
   Future<ImageElement> _loadBlobAsImg(Blob blob) async {
@@ -23,7 +26,10 @@ class ImageLoader extends Loader<ImageElement>{
   }
 
   Future<String> _loadBlobAsDataUri(Blob blob) async{
-    FileReader fileReader = new FileReader();
+    FileReader fileReader = new FileReader()
+      ..onLoad.listen((ProgressEvent event){
+        progressEvent = new LoadProgressEvent(event, filePath);
+      });
     fileReader.readAsDataUrl(blob);
     await fileReader.onLoadEnd.first;
     return fileReader.result;
@@ -53,11 +59,10 @@ class ImageLoader extends Loader<ImageElement>{
   }
 
   @override
-  ImageElement loadSync() {
-    super.loadSync();
+  void loadSync() {
     String assetsPath = UtilsHttp.getWebPath(filePath);
 
-    return new ImageElement()
+    result =  new ImageElement()
       ..src = assetsPath
     ..onLoad.listen((e){
       updateLoadProgress(null, filePath);
@@ -69,7 +74,8 @@ class ImageLoader extends Loader<ImageElement>{
 
     for(String filePath in filePaths) {
       this.filePath = filePath;
-      images.add(loadSync());
+      loadSync();
+      images.add(result);
     }
 
     return images;

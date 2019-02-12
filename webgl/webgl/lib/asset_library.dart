@@ -14,6 +14,8 @@ class AssetLibrary{
   // Todo (jpu) : extends library for those 2
   static _CubeMapLibrary cubeMaps = new _CubeMapLibrary();
   static _ShaderLibrary shaders = new _ShaderLibrary();
+
+  static Library project = new Library();
 }
 
 class _ImageLibrary extends Library{
@@ -120,7 +122,8 @@ class _CubeMapLibrary{
     for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
       for (int i = 0; i < 6; i++) {
         ImageLoader loader = new ImageLoader()..filePath = paths[mipsLevels][i];
-        imageElements[mipsLevels][i] = await loader.load();
+        await loader.load();
+        imageElements[mipsLevels][i] = loader.result;
       }
     }
 

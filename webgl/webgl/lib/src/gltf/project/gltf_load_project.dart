@@ -1,5 +1,4 @@
 import 'package:webgl/introspection.dart';
-import 'package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/camera/camera_type.dart';
@@ -123,22 +122,7 @@ class GLTFLoadProject extends GLTFProject{
       _createAnimation(gltfAnimation);
     }
 
-    await _fillBuffersData();
-  }
-
-  ///permet de remplir les buffers du project
-  Future _fillBuffersData() async {
-    for (GLTFBuffer buffer in buffers) {
-      if (buffer.data == null &&
-          buffer.uri != null &&
-          buffer.uri.path.length > 0) {
-        String ressourcePath = '${baseDirectory}${buffer.uri}';
-
-        GLTFBinLoader loader = new GLTFBinLoader()..filePath = ressourcePath;
-        buffer.data =
-        await loader.load();
-      }
-    }
+    //do not forget to initalise buffer somewhere after calling this method
   }
 
   GLTFBuffer _createBuffer(glTF.Buffer gltfSource) {
