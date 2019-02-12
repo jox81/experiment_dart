@@ -10,12 +10,10 @@ import 'package:webgl/src/shaders/shader_source.dart';
 class AssetLibrary{
   AssetLibrary();
 
-  static _ImageLibrary images = new _ImageLibrary();
+  static _ImageLibrary project = new _ImageLibrary();
   // Todo (jpu) : extends library for those 2
   static _CubeMapLibrary cubeMaps = new _CubeMapLibrary();
   static _ShaderLibrary shaders = new _ShaderLibrary();
-
-  static Library project = new Library();
 }
 
 class _ImageLibrary extends Library{
@@ -122,6 +120,7 @@ class _CubeMapLibrary{
     for (int mipsLevels = 0; mipsLevels < paths.length; mipsLevels++) {
       for (int i = 0; i < 6; i++) {
         ImageLoader loader = new ImageLoader()..filePath = paths[mipsLevels][i];
+        AssetLibrary.project.addLoader(loader);
         await loader.load();
         imageElements[mipsLevels][i] = loader.result;
       }
@@ -239,8 +238,8 @@ class _ShaderLibrary{
   ];
 
   Future loadAll() async {
-    List<ShaderSource> shaderSources = await new ShaderSourceLoader().loadAll(_shadersInfos);
-
+    ShaderSourceLoader shaderSourceLoader = new ShaderSourceLoader();
+    List<ShaderSource> shaderSources = await shaderSourceLoader.loadAll(_shadersInfos);
     for (ShaderSource shaderSource in shaderSources) {
       _sources[shaderSource.shaderName] = shaderSource;
     }

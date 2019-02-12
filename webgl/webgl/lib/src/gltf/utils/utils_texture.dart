@@ -25,7 +25,7 @@ class UtilsTextureGLTF {
     int wrapT;
 
     //brdfLUT
-    imageElement = AssetLibrary.images.brdfLUT;
+    imageElement = AssetLibrary.project.brdfLUT;
     magFilter = TextureFilterType.LINEAR;
     minFilter = TextureFilterType.LINEAR;
     wrapS = TextureWrapType.REPEAT;
@@ -76,7 +76,7 @@ class UtilsTextureGLTF {
             ? gltfTexture.sampler.wrapT
             : TextureWrapType.REPEAT;
       } else {
-        imageElement = AssetLibrary.images.uvGrid;
+        imageElement = AssetLibrary.project.uvGrid;
         magFilter = TextureFilterType.LINEAR;
         minFilter = TextureFilterType.LINEAR;
         wrapS = TextureWrapType.CLAMP_TO_EDGE;

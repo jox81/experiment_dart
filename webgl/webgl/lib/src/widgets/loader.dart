@@ -4,13 +4,14 @@ import 'dart:html';
 /// https://www.w3schools.com/howto/howto_css_asp
 class LoaderWidget{
 
+  DivElement _divContainer;
   DivElement _divProgressValueElement;
   LoaderWidget(){
     document.head.append(new StyleElement());
-    final styleSheet = document.styleSheets[0] as CssStyleSheet;
+    final styleSheet = document.styleSheets.last as CssStyleSheet;
 
-    DivElement divContainer = createLoader(styleSheet);
-    document.body.append(divContainer);
+    _divContainer = createLoader(styleSheet);
+    document.body.append(_divContainer);
   }
 
   DivElement createLoader(CssStyleSheet styleSheet) {
@@ -19,11 +20,12 @@ class LoaderWidget{
         width: 120px;
         height: 120px;
         position: absolute;
-        top:50px;
+        top:100px;
         left:50px;
+        display:none;
       }
     ''';
-    styleSheet..insertRule(containerRule, 0);
+    styleSheet..insertRule(containerRule);
 
     final String loaderRule = '''
       .loader {
@@ -38,7 +40,7 @@ class LoaderWidget{
         animation: spin 2s linear infinite;
       }
     ''';
-    styleSheet..insertRule(loaderRule, 0);
+    styleSheet..insertRule(loaderRule);
 
     final spinAnimationRule = '''
       @keyframes spin {
@@ -46,7 +48,7 @@ class LoaderWidget{
         100% { transform: rotate(360deg); }
       }
     ''';
-    styleSheet..insertRule(spinAnimationRule, 0);
+    styleSheet..insertRule(spinAnimationRule);
 
     DivElement loaderContainer = new DivElement()
       ..classes.add("container");
@@ -88,11 +90,11 @@ class LoaderWidget{
   }
 
   void show(){
-
+    _divContainer.style.display = 'block';
   }
 
   void hide(){
-
+    _divContainer.style.display = 'none';
   }
 
   /// le ProgressEvent viendra lors de request.onProgress

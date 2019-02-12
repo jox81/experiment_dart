@@ -1,3 +1,4 @@
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/assets_manager/load_progress_event.dart';
 import 'package:webgl/src/assets_manager/loader.dart';
 import 'package:webgl/src/assets_manager/loaders/glsl_loader.dart';
@@ -20,19 +21,23 @@ class ShaderSourceLoader extends FileLoader<ShaderSource>{
     ShaderSource shaderSource = new ShaderSource(shaderInfos);
 
     GLSLLoader vsfileLoader = new GLSLLoader()
+    ..filePath = shaderSource.vertexShaderPath
     ..onLoadProgress.listen(onLoadProgressStreamController.add)
       ..onLoadEnd.listen((LoadProgressEvent event) {
         progressEvent = event;
       });
-    await (vsfileLoader..filePath = shaderSource.vertexShaderPath).load();
+    AssetLibrary.project.addLoader(vsfileLoader);
+    await vsfileLoader.load();
     shaderSource.vsCode = vsfileLoader.result;
 
     GLSLLoader fsfileLoader = new GLSLLoader()
+      ..filePath = shaderSource.fragmentShaderPath
       ..onLoadProgress.listen(onLoadProgressStreamController.add)
       ..onLoadEnd.listen((LoadProgressEvent event) {
         progressEvent = event;
       });
-    await (fsfileLoader..filePath = shaderSource.fragmentShaderPath).load();
+    AssetLibrary.project.addLoader(fsfileLoader);
+    await fsfileLoader.load();
     shaderSource.fsCode = fsfileLoader.result;
 
     result = shaderSource;

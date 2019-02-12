@@ -114,15 +114,15 @@ Future test_loadCustomLibrary() async {
 
 Future test_loadFromBaseImageLibrary() async {
   LoaderWidget loaderWidget = new LoaderWidget();
-  AssetLibrary.images
+  AssetLibrary.project
     ..onLoadProgress.listen((LoadProgressEvent loadProgressEvent){
-      loaderWidget.showProgress(AssetLibrary.images.loadedFileSize, AssetLibrary.images.totalFileSize, AssetLibrary.images.totalFileCount);
+      loaderWidget.showProgress(AssetLibrary.project.loadedFileSize, AssetLibrary.project.totalFileSize, AssetLibrary.project.totalFileCount);
     });
 
   //1 add loader to defaultImageLibrary
   ImageLoader imageLoader = new ImageLoader()
     ..filePath = 'packages/webgl/images/crate.gif';
-  AssetLibrary.images.addLoader(imageLoader);
+  AssetLibrary.project.addLoader(imageLoader);
 
   await imageLoader.load();
 
@@ -131,9 +131,9 @@ Future test_loadFromBaseImageLibrary() async {
   document.body.children.add(crate);
 
   //2 : utilisation de la libraire par défault
-  await AssetLibrary.images.loadAll();
+  await AssetLibrary.project.loadAll();
 
-  ImageElement brdfLUT2 = AssetLibrary.images.brdfLUT;
+  ImageElement brdfLUT2 = AssetLibrary.project.brdfLUT;
   assert(brdfLUT2 != null);
   document.body.children.add(brdfLUT2);
 }

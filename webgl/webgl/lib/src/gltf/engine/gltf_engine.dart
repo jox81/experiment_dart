@@ -26,7 +26,7 @@ class GLTFEngine extends Engine {
 
   @override
   Future init(covariant GLTFProject project) async {
-    await AssetLibrary.images.loadAll();
+    await AssetLibrary.project.loadAll();
     await AssetLibrary.cubeMaps.load(CubeMapName.papermill_diffuse);
     await AssetLibrary.cubeMaps.load(CubeMapName.papermill_specular);
     await AssetLibrary.shaders.loadAll();

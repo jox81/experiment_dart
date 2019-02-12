@@ -69,6 +69,8 @@ class GLTFProjectLoader extends FileLoader<GLTFProject>{
       ..onLoadProgress.listen(onLoadProgressStreamController.add)
       ..filePath = filePath;
 
+    AssetLibrary.project.addLoader(fileLoader);
+
     fileLoader.load();
     await fileLoader.onLoadEnd.first;
 
