@@ -1,0 +1,12 @@
+# This package's tests are very slow. Double the default timeout.
+timeout: 2x
+
+# This is a browser-only package, so test on chrome by default.
+platforms: [chrome]
+
+# Integration tests are even slower, so increase the timeout again.
+integration: {timeout: 2x}
+
+# Sanity tests are quick and verify that nothing is obviously wrong. Declaring
+# the tag allows us to tag tests with it without getting warnings.
+sanity:

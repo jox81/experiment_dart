@@ -22,11 +22,6 @@ class AssetManager{
   /// should manage libraries and loadprogress
 
 
-
-
-
-
-
 //  ///Load a text resource from a file over the network
 //  Future<String> loadTextResource (String url) async {
 //    return await new TextLoader().load(url);

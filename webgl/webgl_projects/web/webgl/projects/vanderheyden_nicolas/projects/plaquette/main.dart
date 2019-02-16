@@ -18,9 +18,11 @@ Future main() async {
   GLTFEngine engine = new GLTFEngine(canvas);
   (Engine.mainCamera as CameraPerspective).yfov = 44.07;
 
-  GLTFProject project = await new GLTFProjectLoader().load(gltfPath, useWebPath : false);
+  GLTFProjectLoader gLTFProjectLoader = new GLTFProjectLoader()..filePath = gltfPath;
+  await gLTFProjectLoader.load();
+  GLTFProject project = gLTFProjectLoader.result;
   await project.debug(doProjectLog : false, isDebug:false);
 
-  await engine.init();
-  await engine.render(project);
+  await engine.init(project);
+  await engine.render();
 }

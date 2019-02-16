@@ -1,8 +1,9 @@
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/image.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
+
+import '../../data/gltf_helper.dart';
 @TestOn("browser")
 
 
@@ -13,7 +14,7 @@ Future main() async {
   group("Image", () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/image/empty.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFImage> images = gltf.images;
@@ -21,7 +22,7 @@ Future main() async {
     });
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/image/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFImage> images = gltf.images;
@@ -29,7 +30,7 @@ Future main() async {
     });
     test("properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/image/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFImage image00 = gltf.images[0];

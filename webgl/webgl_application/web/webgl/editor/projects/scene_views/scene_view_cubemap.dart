@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
@@ -27,8 +28,8 @@ Future<GLTFProject> projectCubeMap() async {
     ..translation = new Vector3(0.0, 5.0, -10.0);
   Engine.mainCamera = camera;
 
-  List<List<ImageElement>> cubeMapImages =
-      await TextureUtils.loadCubeMapImages('pisa');
+  await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
+  List<List<ImageElement>> cubeMapImages = AssetLibrary.cubeMaps.pisa;
   WebGLTexture cubeMapTexture =
       TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
 

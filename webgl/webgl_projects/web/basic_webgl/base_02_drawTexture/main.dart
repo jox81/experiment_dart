@@ -6,13 +6,14 @@ import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/materials/types/dot_screen_material.dart';
 
 Future main() async {
-  await AssetLibrary.shaders.init();
+  await AssetLibrary.shaders.loadAll();
 
   new Renderer()..render();
 }
@@ -95,23 +96,22 @@ class Renderer{
     gl.clearColor(.0, .5, .5, 1.0); // green;
     gl.clear(webgl.WebGL.COLOR_BUFFER_BIT);
 
-    webgl.Texture texture = (await TextureUtils.createTexture2DFromImageUrl("packages/webgl/images/utils/uv.png")).webGLTexture;
+    ImageLoader imageLoader = new ImageLoader()
+    ..filePath = "packages/webgl/images/utils/uv.png";
+    await imageLoader.load();
+    ImageElement image = imageLoader.result;
+
+    webgl.Texture texture = TextureUtils.createTexture2DFromImageElement(image).webGLTexture;
     gl.bindTexture(webgl.WebGL.TEXTURE_2D, texture);
     gl.activeTexture(webgl.WebGL.TEXTURE0);
 
-
-
     webgl.Buffer positionBuffer = gl.createBuffer();
     gl.bindBuffer(webgl.WebGL.ARRAY_BUFFER, positionBuffer);
-
 
     MaterialDotScreen materialDotScreen = new MaterialDotScreen();
     materialDotScreen.texture = new WebGLTexture.fromWebGL(texture, webgl.WebGL.TEXTURE_2D);
     WebGLProgram program = materialDotScreen.getProgram();
     program.use();
-
-
-
 
     int positionLocation = gl.getAttribLocation(program.webGLProgram, 'position');
     gl.enableVertexAttribArray(positionLocation);

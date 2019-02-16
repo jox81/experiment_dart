@@ -1,6 +1,7 @@
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import "package:test/test.dart";
+
+import '../../data/gltf_helper.dart';
 
 String testFolderRelativePath = "../..";
 
@@ -24,7 +25,7 @@ void main() {
     setUpAll(() async {
       String gltfPath =
           '${testFolderRelativePath}/gltf/tests/base/data/accessor/get_elements.gltf';
-      gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
 

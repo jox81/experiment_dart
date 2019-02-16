@@ -23,6 +23,6 @@ Future main() async {
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
   GLTFEngine engine = new GLTFEngine(canvas);
-  await engine.init();
-  await engine.render(project);
+  await engine.init(project);
+  await engine.render();
 }

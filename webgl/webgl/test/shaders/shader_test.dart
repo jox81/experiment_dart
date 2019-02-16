@@ -1,10 +1,10 @@
 import 'dart:html';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/materials/types/sao_material.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
@@ -18,14 +18,11 @@ void main() {
   Context context;
 
   setUp(() async {
-    assetManager = new AssetManager();
-    assetManager.useWebPath = true;
-    canvas = new Element.html('<canvas/>') as CanvasElement;
+    canvas = new CanvasElement();
     canvas.width = 10;
     canvas.height = 10;
 
-    ShaderSources shaderSources = new ShaderSources(assetManager);
-    await shaderSources.loadShaders();
+    await AssetLibrary.shaders.loadAll();
 
     context = new Context(canvas,enableExtensions:true,logInfos:false);
   });

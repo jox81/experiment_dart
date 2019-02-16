@@ -18,7 +18,7 @@ class WebglTest {
 
   WebglTest(CanvasElement canvas) {
     GLTFEngine engine = new GLTFEngine(canvas);
-    engine.init();
+    engine.init(new GLTFProject());
   }
 
   void test(){

@@ -2,10 +2,11 @@ import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/camera/types/orthographic_camera.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/camera/camera_type.dart';
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
+
+import '../../data/gltf_helper.dart';
 @TestOn("browser")
 
 String testFolderRelativePath = "../..";
@@ -15,7 +16,7 @@ Future main() async {
   group("Camera", () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/empty.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<Camera> cameras = gltf.cameras;
@@ -24,7 +25,7 @@ Future main() async {
     test("Filled Array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf.cameras.length, 2);
@@ -32,7 +33,7 @@ Future main() async {
     test("Camera Perspective Type", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[0], isNotNull);
@@ -48,7 +49,7 @@ Future main() async {
     test("Camera Orthographic Type", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[1], isNotNull);

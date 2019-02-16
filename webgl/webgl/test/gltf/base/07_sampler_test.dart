@@ -1,11 +1,11 @@
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'dart:async';
 import "package:test/test.dart";
-@TestOn("browser")
+import '../../data/gltf_helper.dart';
 
+@TestOn("browser")
 
 String testFolderRelativePath = "../..";
 
@@ -14,7 +14,7 @@ Future main() async {
   group("Sampler", () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/sampler/empty.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFSampler> samplers = gltf.samplers;
@@ -22,7 +22,7 @@ Future main() async {
     });
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/sampler/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFSampler> samplers = gltf.samplers;
@@ -30,7 +30,7 @@ Future main() async {
     });
     test("properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/sampler/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFSampler> samplers = gltf.samplers;

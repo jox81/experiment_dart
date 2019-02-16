@@ -2,7 +2,6 @@ import 'dart:html';
 import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:webgl/src/webgl_objects/context.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'dart:web_gl' as webgl;
@@ -11,14 +10,12 @@ import 'dart:web_gl' as webgl;
 
 void main() {
 
-  assetManager.useWebPath = true;
-
   CanvasElement canvas;
   Context context;
 
   setUp(() async {
 
-    canvas = new Element.html('<canvas/>') as CanvasElement;
+    canvas = new CanvasElement();
     canvas.width = 10;
     canvas.height = 10;
 

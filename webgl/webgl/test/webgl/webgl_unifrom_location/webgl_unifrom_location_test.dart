@@ -1,8 +1,8 @@
 import 'dart:html';
 import "package:test/test.dart";
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/shaders/shader_source.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
@@ -12,14 +12,14 @@ import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 void main() {
 
-  assetManager.useWebPath = true;
-
   CanvasElement canvas;
   Context context;
 
   setUp(() async {
 
-    canvas = new Element.html('<canvas/>') as CanvasElement;
+    await AssetLibrary.shaders.loadAll();
+
+    canvas = new CanvasElement();
     canvas.width = 10;
     canvas.height = 10;
 
@@ -34,12 +34,12 @@ void main() {
 
   WebGLProgram getProgram(){
     final WebGLShader vertexShader = new WebGLShader(ShaderType.VERTEX_SHADER)
-      ..source = ShaderSource.materialBaseTexture.vsCode
+      ..source = AssetLibrary.shaders.materialBaseTexture.vsCode
       ..compile()
       ..logShaderInfos();
 
     final WebGLShader fragmentShader = new WebGLShader(ShaderType.FRAGMENT_SHADER)
-      ..source = ShaderSource.materialBaseTexture.fsCode
+      ..source = AssetLibrary.shaders.materialBaseTexture.fsCode
       ..compile()
       ..logShaderInfos();
 

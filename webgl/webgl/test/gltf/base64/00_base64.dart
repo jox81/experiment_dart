@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert' show base64;
 import "package:test/test.dart";
-import 'package:webgl/src/gltf/creation.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
+import "package:webgl/src/assets_manager/loaders/gltf_bin_loader.dart";
 
 String testFolderRelativePath = "../..";
 
@@ -36,9 +35,13 @@ Future main() async {
 
       String gltfBinUrl = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/00_triangle_without_indices/gltf/triangleWithoutIndices.bin';
       String base64Result = 'AAAAAAAAAAAAAAAAAACAPwAAAAAAAAAAAAAAAAAAgD8AAAAA';
-      assetManager.useWebPath = true;
 
-      List<int> base64Decoded = await GLTFCreation.loadGltfBinResource(gltfBinUrl, isRelative: false);
+      GLTFBinLoader binLoader = new GLTFBinLoader()
+      ..filePath = gltfBinUrl;
+
+      await binLoader.load();
+
+      List<int> base64Decoded = binLoader.result;
       expect(base64Decoded.length, 36);
       print(base64Decoded.length);
       print(base64Decoded);

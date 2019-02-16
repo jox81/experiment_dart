@@ -2,17 +2,18 @@ import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/lights.dart';
-import 'package:webgl/materials.dart';
 
 class MaterialLibrary {
 
-  String cubeMapName = 'pisa';
+  CubeMapName cubeMapName = CubeMapName.pisa;
 
   WebGLTexture get cubeMapTexture => _cubeMapTexture ?? (throw 'load ressource first');
 
@@ -53,17 +54,21 @@ class MaterialLibrary {
     bool useLighting = true;
 
     Uri uriImage = new Uri.file("./projects/images/uv_grid.jpg");
-    ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
+    ImageLoader imageLoader = new ImageLoader()..filePath = uriImage.path;
+    await imageLoader.load();
+    ImageElement imageUV = imageLoader.result;
     WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
       ..textureWrapS = TextureWrapType.REPEAT
       ..textureWrapT = TextureWrapType.REPEAT;
   }
 
   WebGLTexture _cubeMapTexture;
-  Future<WebGLTexture> _getCubeMapTexture(String cubeMapName) async {
+  Future<WebGLTexture> _getCubeMapTexture(CubeMapName cubeMapName) async {
     if(_cubeMapTexture == null) {
+
+      await AssetLibrary.cubeMaps.load(cubeMapName);
       List<List<ImageElement>> cubeMapImages =
-      await TextureUtils.loadCubeMapImages(cubeMapName);
+      await AssetLibrary.cubeMaps.getCubeMap(cubeMapName);
       _cubeMapTexture =
           TextureUtils.createCubeMapFromImages(cubeMapImages, flip: false);
     }

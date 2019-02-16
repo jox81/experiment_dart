@@ -7,7 +7,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 Future main() async {
-  await AssetLibrary.shaders.init();
+  await AssetLibrary.shaders.loadAll();
 
   WebglTest webglTest = new WebglTest(querySelector('#glCanvas') as CanvasElement);
 
@@ -61,7 +61,7 @@ class WebglTest {
     print('@ Test de loading d\'un cubemap');
 
     List<List<ImageElement>> cubeMapImages =
-    await AssetLibrary.cubeMaps.init(CubeMapName.kitchen);
+    await AssetLibrary.cubeMaps.load(CubeMapName.kitchen);
     WebGLTexture cubeMapTexture =
     TextureUtils.createCubeMapFromImages(cubeMapImages);
     GL.activeTexture.textureCubeMap.bind(cubeMapTexture);

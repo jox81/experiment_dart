@@ -4,6 +4,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
+import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
@@ -27,7 +28,9 @@ Future<GLTFProject> projectPrimitivesTextured() async {
     ..translation = new Vector3(20.0, 20.0, 20.0);
 
   Uri uriImage = new Uri.file("packages/webgl/images/utils/uv.png");
-  ImageElement imageUV = await TextureUtils.loadImage(uriImage.path);
+  ImageLoader imageLoader = new ImageLoader()..filePath = uriImage.path;
+  await imageLoader.load();
+  ImageElement imageUV = imageLoader.result;
 
   WebGLTexture texture = await TextureUtils.createTexture2DFromImageElement(imageUV)
     ..textureWrapS = TextureWrapType.REPEAT

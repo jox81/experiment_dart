@@ -1,7 +1,8 @@
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import "package:test/test.dart";
+
+import '../../data/gltf_helper.dart';
 
 String testFolderRelativePath = "../..";
 
@@ -9,7 +10,7 @@ void main() {
   group('Scene', () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/scene/empty.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf, isNotNull);
@@ -20,7 +21,7 @@ void main() {
 
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/scene/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf, isNotNull);
@@ -31,7 +32,7 @@ void main() {
 
     test("Property", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/scene/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFScene scene = gltf.scenes[0];

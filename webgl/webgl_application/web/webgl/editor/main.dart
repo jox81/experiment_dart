@@ -23,7 +23,9 @@ Future main() async {
 
 //  Uri from other package
   String packagesPath2 = path.join(Uri.base.origin, 'packages/webgl/shaders/material_point/material_point.vs.glsl');
-  String shaderPackage = await new GLSLLoader().load(packagesPath2);
+  GLSLLoader gLSLLoader = new GLSLLoader()..filePath = packagesPath2;
+  await gLSLLoader.load();
+  String shaderPackage = gLSLLoader.result;
   print(shaderPackage);
 //
 ////  Uri from local project in lib

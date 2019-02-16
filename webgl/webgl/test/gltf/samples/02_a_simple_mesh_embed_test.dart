@@ -6,12 +6,13 @@ import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/asset.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
+
+import '../../data/gltf_helper.dart';
 @TestOn("browser")
 
 String testFolderRelativePath = "../..";
@@ -22,7 +23,7 @@ Future main() async {
 
   setUp(() async {
     String gltfPath = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/02_simple_meshes/gltf_embed/SimpleMeshes.gltf';
-    project = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : true);
+    project = await loadGLTFProject(gltfPath);
     await project.debug(doProjectLog : false, isDebug:false);
   });
 

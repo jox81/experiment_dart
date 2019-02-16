@@ -1,18 +1,20 @@
-@TestOn("browser")
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
+import 'package:webgl/src/assets_manager/loaders/json_loader.dart';
+
+@TestOn("browser")
 
 Future main() async {
-  assetManager.useWebPath = true;
   Map testJson;
 
   setUp(() async {
-    testJson = await assetManager.loadJSONResource('../objects/json_values.json');
+    JsonLoader jsonLoader = new JsonLoader()
+    ..filePath = '../objects/json_values.json';
+    await jsonLoader.load();
+    testJson = jsonLoader.result;
   });
 
   tearDown(() async {

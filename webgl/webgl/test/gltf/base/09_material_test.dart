@@ -1,4 +1,3 @@
-import 'package:webgl/src/gltf/creation.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/texture_info/normal_texture_info.dart';
 import 'package:webgl/src/gltf/texture_info/occlusion_texture_info.dart';
@@ -7,6 +6,8 @@ import 'package:webgl/src/gltf/project/project.dart';
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';
+
+import '../../data/gltf_helper.dart';
 @TestOn("browser")
 
 String testFolderRelativePath = "../..";
@@ -15,7 +16,7 @@ Future main() async {
   group("Material", () {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/empty.gltf';;
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
@@ -23,7 +24,7 @@ Future main() async {
     });
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
@@ -31,7 +32,7 @@ Future main() async {
     });
     test("base properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -42,7 +43,7 @@ Future main() async {
     });
     test("properties pbrMetallicRoughness", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -63,7 +64,7 @@ Future main() async {
     });
     test("properties normalTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -75,7 +76,7 @@ Future main() async {
     });
     test("properties occlusionTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
@@ -87,7 +88,7 @@ Future main() async {
     });
     test("properties emissiveTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
-      GLTFProject gltf = await GLTFCreation.loadGLTFProject(gltfPath, useWebPath : false);
+      GLTFProject gltf = await loadGLTFProject(gltfPath);
       await gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];

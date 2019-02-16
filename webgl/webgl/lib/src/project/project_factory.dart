@@ -8,8 +8,7 @@ class ProjectFactory{
       GLTFProjectLoader loader = new GLTFProjectLoader()
       ..filePath = projectPath;
 
-      loader.load();
-      await loader.onLoadEnd.first;
+      await loader.load();
 
       project = loader.result;
       await project.debug(doProjectLog : false, isDebug:false);

@@ -104,6 +104,7 @@ class _CubeMapLibrary{
   Map<CubeMapName, List<List<ImageElement>>> _data = {};
 
   List<List<ImageElement>> _getAsset(CubeMapName cubeMapName) => _data[cubeMapName] ?? (throw new NotLoadedAssetException());
+  List<List<ImageElement>> getCubeMap(CubeMapName cubeMapName) => _getAsset(cubeMapName);
 
   List<List<ImageElement>> get papermillDiffuse => _getAsset(CubeMapName.papermill_diffuse);
   List<List<ImageElement>> get papermillSpecular => _getAsset(CubeMapName.papermill_specular);
@@ -111,7 +112,7 @@ class _CubeMapLibrary{
   List<List<ImageElement>> get kitchen => _getAsset(CubeMapName.kitchen);
   List<List<ImageElement>> get test => _getAsset(CubeMapName.test);
 
-  Future<void> load(CubeMapName cubeMapName) async {
+  Future load(CubeMapName cubeMapName) async {
 
     List<List<String>> paths = _cubeMapsPath[cubeMapName];
 

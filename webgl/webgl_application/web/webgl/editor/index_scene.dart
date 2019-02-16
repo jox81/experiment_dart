@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'dart:html' hide Node;
+import 'package:webgl/asset_library.dart';
 import 'package:webgl_application/src/application.dart';
 import 'package:webgl_application/src/services/projects.dart';
 import 'samples/projects.dart';
 import 'projects/projects.dart';
-import 'package:webgl/src/shaders/shader_sources.dart';
 
 Future main() async {
 
-  ShaderSources shaderSources = new ShaderSources();
-  await shaderSources.loadShaders();
+  await AssetLibrary.shaders.loadAll();
 
   bool useSample = false;
   if(useSample){
