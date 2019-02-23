@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller_types/combined_perspective_camera_controller.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/interaction/custom_interactionable.dart';
@@ -9,6 +11,8 @@ abstract class Project{
   List<Interactionable> get interactionables => _interactionables;
 
   ProjectDebugger get projectDebugger => null;// Todo (jpu) : optionnal
+
+  CanvasElement get canvas => Engine.currentEngine.canvas;
 
   Project(){
     Engine.currentProject = this;

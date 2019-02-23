@@ -1,0 +1,10 @@
+chrome://version/
+chrome://gpu/
+chrome://settings/
+chrome://settings/addresses
+chrome://settings/autofill
+chrome://flags/
+
+
+https://webglstats.com/
+http://webglreport.com/

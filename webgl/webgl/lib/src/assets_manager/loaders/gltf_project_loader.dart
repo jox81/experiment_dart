@@ -20,7 +20,7 @@ class GLTFProjectLoader extends FileLoader<GLTFProject>{
     final String gtlfDirectory = filePath.replaceFirst(filePart, '');
 
     final glTF.Gltf gltfSource =
-        await _loadGLTFResource(filePath);
+        await loadGLTFResource(filePath);
     final GLTFProject project = await _getGLTFProject(gltfSource, gtlfDirectory);
 
     assert(project != null);
@@ -37,14 +37,14 @@ class GLTFProjectLoader extends FileLoader<GLTFProject>{
       ..baseDirectory = baseDirectory;
 
     await project.initFromSource(gltfSource);
-    await _fillBuffersData(project);
+    await fillBuffersData(project);
     await project.loadImages();
 
     return project;
   }
 
   ///permet de remplir les buffers du project. ici à cause des loaders
-  Future _fillBuffersData(GLTFLoadProject project) async {
+  Future fillBuffersData(GLTFLoadProject project) async {
     for (GLTFBuffer buffer in project.buffers) {
       if (buffer.data == null &&
           buffer.uri != null &&
@@ -62,7 +62,7 @@ class GLTFProjectLoader extends FileLoader<GLTFProject>{
     }
   }
 
-  Future<glTF.Gltf> _loadGLTFResource(String filePath) async {
+  Future<glTF.Gltf> loadGLTFResource(String filePath) async {
 
     Completer completer = new Completer<glTF.Gltf>();
     JsonLoader fileLoader = new JsonLoader()

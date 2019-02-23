@@ -1,15 +1,12 @@
-import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/utils/utils_texture.dart';
 import 'package:webgl/src/lights/types/directional_light.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/introspection/introspection.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/utils/utils_text.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
@@ -251,15 +248,15 @@ class GLTFRenderer extends Renderer {
     }
   }
 
-  ///what is it for ? this show primitives layers drawn
-  int _countImage = 0;
-  void _drawLayer(CanvasElement canvas) {
-    if (_countImage < 10) {
-      String dataUrl = canvas.toDataUrl();
-      ImageElement image = new ImageElement(src: dataUrl);
-      DivElement div = querySelector('#debug') as DivElement;
-      div.children.add(image);
-      _countImage++;
-    }
-  }
+//  ///what is it for ? this show primitives layers drawn
+//  int _countImage = 0;
+//  void _drawLayer(CanvasElement canvas) {
+//    if (_countImage < 10) {
+//      String dataUrl = canvas.toDataUrl();
+//      ImageElement image = new ImageElement(src: dataUrl);
+//      DivElement div = querySelector('#debug') as DivElement;
+//      div.children.add(image);
+//      _countImage++;
+//    }
+//  }
 }

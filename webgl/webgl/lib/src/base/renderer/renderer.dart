@@ -5,11 +5,11 @@ import 'package:webgl/src/renderer/renderer.dart';
 class BaseRenderer extends Renderer{
   BaseRenderer(CanvasElement canvas) : super(canvas);
 
-  BaseProject _project;
+//  BaseProject _project;
 
   @override
   void init(covariant BaseProject project) {
-    _project = project;
+//    _project = project;
   }
 
   @override

@@ -1,13 +1,8 @@
 import 'dart:html';
-import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/base/animator/animator.dart';
 import 'package:webgl/src/base/project/project.dart';
 import 'package:webgl/src/base/renderer/renderer.dart';
 import 'package:webgl/src/engine/engine.dart';
-import 'package:webgl/src/gltf/animation/gltf_animator.dart';
-import 'package:webgl/src/gltf/project/project.dart';
-import 'package:webgl/src/gltf/renderer/renderer.dart';
-import 'package:webgl/src/project/project.dart';
 
 class BaseEngine extends Engine {
   static BaseEngine get currentEngine => Engine.currentEngine as BaseEngine;

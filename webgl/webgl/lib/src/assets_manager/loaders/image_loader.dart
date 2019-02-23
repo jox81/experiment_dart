@@ -29,6 +29,9 @@ class ImageLoader extends FileLoader<ImageElement>{
     FileReader fileReader = new FileReader()
       ..onLoad.listen((ProgressEvent event){
         progressEvent = new LoadProgressEvent(event, filePath);
+      })
+      ..onError.listen((ProgressEvent event){
+        throw '_loadBlobAsDataUri error';
       });
     fileReader.readAsDataUrl(blob);
     await fileReader.onLoadEnd.first;
@@ -36,7 +39,6 @@ class ImageLoader extends FileLoader<ImageElement>{
   }
 
   ///Load a single image from an URL
-  @override
   Future<ImageElement> loadDirect(covariant String filePath) {
     Completer completer = new Completer<ImageElement>();
 

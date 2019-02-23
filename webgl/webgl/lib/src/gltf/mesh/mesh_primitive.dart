@@ -198,9 +198,12 @@ class GLTFMeshPrimitive extends GltfProperty {
     */
 
     if(_faces == null){
+      //création d'une liste de triangle
       _faces = [];
 
       if(indicesAccessor != null) {
+        //besoin des indices
+
         List<Float32List> fullVertices = [];
         int stepVertices = 3;
         for(int vertex = 0; vertex < vertices.length &&  vertices.length > stepVertices; vertex += stepVertices) {

@@ -12,17 +12,20 @@ import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/asset_library.dart';
+import 'package:webgl/src/utils/utils_geometry.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class CubeMapProject extends GLTFProject{
 
-  final String baseDirectory = 'primitives/';// Todo (jpu) : usage ?
+  final String baseDirectory = '';// Todo (jpu) : usage ?
 
   NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
 
   CubeMapProject._();
   static Future<CubeMapProject> build() async {
+    await AssetLibrary.loadDefault();
+    await CubeMapProject.loadAssets();
     return await new CubeMapProject._().._setup();
   }
 
@@ -30,6 +33,15 @@ class CubeMapProject extends GLTFProject{
 
     nodeInteractionnable.controller = new Drive2dNodeController();
     addInteractable(nodeInteractionnable);
+
+    canvas.onMouseDown.listen((MouseEvent event){
+      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera, event.client.x, event.client.y, nodes);
+      if(node != null) {
+        nodeInteractionnable.node = node;
+        print('node switch > ${node.name}');
+        print('${event.client.x}, ${event.client.y}');
+      }
+    });
 
     scene = new GLTFScene();
     scene.backgroundColor = new Vector4(0.839, 0.815, 0.713, 1.0);
@@ -40,8 +52,6 @@ class CubeMapProject extends GLTFProject{
       ..targetPosition = new Vector3.zero()
       ..translation = new Vector3(20.0, 20.0, 20.0);
     Engine.mainCamera = camera;
-
-    await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
 
     List<List<ImageElement>> cubeMapImages = AssetLibrary.cubeMaps.pisa;
     WebGLTexture cubeMapTexture =
@@ -70,7 +80,7 @@ class CubeMapProject extends GLTFProject{
     GLTFMesh sphereMesh = new GLTFMesh.sphere(
         radius: 1.0, segmentV: 32, segmentH: 32, meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
       ..primitives[0].material = material;
-    GLTFNode sphereNode = new GLTFNode()
+    GLTFNode sphereNode = new GLTFNode.sphere()
       ..mesh = sphereMesh
       ..name = 'sphere'
       ..matrix.translate(0.0, 0.0, 0.0)
@@ -103,5 +113,9 @@ class CubeMapProject extends GLTFProject{
       ..name = 'pyramid'
       ..matrix.translate(7.0, 1.0, 0.0);
     scene.addNode(nodePyramid);
+  }
+
+  static Future loadAssets() async {
+    await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
   }
 }

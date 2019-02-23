@@ -18,29 +18,25 @@ class ShaderSourceLoader extends FileLoader<ShaderSource>{
       assert(shaderInfos!=null||(throw 'shaderInfos must be set before'));
     }
 
-    ShaderSource shaderSource = new ShaderSource(shaderInfos);
-
     GLSLLoader vsfileLoader = new GLSLLoader()
-    ..filePath = shaderSource.vertexShaderPath
+    ..filePath = shaderInfos.vertexShaderUri.toString()
     ..onLoadProgress.listen(onLoadProgressStreamController.add)
       ..onLoadEnd.listen((LoadProgressEvent event) {
         progressEvent = event;
       });
     AssetLibrary.project.addLoader(vsfileLoader);
     await vsfileLoader.load();
-    shaderSource.vsCode = vsfileLoader.result;
 
     GLSLLoader fsfileLoader = new GLSLLoader()
-      ..filePath = shaderSource.fragmentShaderPath
+      ..filePath = shaderInfos.fragmentShaderUri.toString()
       ..onLoadProgress.listen(onLoadProgressStreamController.add)
       ..onLoadEnd.listen((LoadProgressEvent event) {
         progressEvent = event;
       });
     AssetLibrary.project.addLoader(fsfileLoader);
     await fsfileLoader.load();
-    shaderSource.fsCode = fsfileLoader.result;
 
-    result = shaderSource;
+    result = new ShaderSource(shaderInfos.name, vsfileLoader.result, fsfileLoader.result);
     onLoadEndStreamController.add(progressEvent);// Todo (jpu) : wrong, should be both files emited, not only one
   }
 

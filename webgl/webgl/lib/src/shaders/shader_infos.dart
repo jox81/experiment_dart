@@ -1,9 +1,9 @@
-import 'package:webgl/asset_library.dart';
 
+/// Un [ShaderInfos] est utilisé pour charger des fichiers glsl en indiquant leur chemin
 class ShaderInfos {
-  final ShaderName shaderName;
-  String vertexShaderPath;
-  String fragmentShaderPath;
+  String name;
+  Uri vertexShaderUri;
+  Uri fragmentShaderUri;
 
-  ShaderInfos(this.shaderName, this.vertexShaderPath, this.fragmentShaderPath);
+  ShaderInfos(this.name, this.vertexShaderUri, this.fragmentShaderUri);
 }

@@ -16,11 +16,15 @@ typedef void SetShaderVariables(
 
 @reflector
 class MaterialCustom extends Material {
+
+  final String vShader;
+  final String fShader;
+
   SetShaderVariables setShaderUniformsVariables;
 
   ShaderSource get shaderSource => AssetLibrary.shaders.materialPoint;
 
-  MaterialCustom();
+  MaterialCustom(this.vShader, this.fShader);
 
   Map<String, bool> getDefines() {
     Map<String, bool> defines = new Map();

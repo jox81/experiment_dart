@@ -5,14 +5,11 @@ import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/materials/types/sao_material.dart';
-import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 @TestOn("browser")
 
 void main() {
-
-  AssetManager assetManager;
 
   CanvasElement canvas;
   Context context;
@@ -31,7 +28,6 @@ void main() {
     context.clear();
     context = null;
     canvas = null;
-    assetManager = null;
   });
 
   group("Shader", () {

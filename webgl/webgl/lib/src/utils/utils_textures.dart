@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
