@@ -5,7 +5,7 @@
 //import '003.dart' as exp003;
 //import '004.dart' as exp004;
 //import 'dart:async';
-//import 'package:webgl/src/camera/camera.dart';
+//import 'package:webgl/src/gltf/camera/camera.dart';
 //
 //
 //import 'package:webgl/src/webgl_objects/context.dart';

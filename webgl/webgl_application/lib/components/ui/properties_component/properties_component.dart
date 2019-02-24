@@ -34,7 +34,7 @@ import 'package:webgl_application/components/value_components/vector3_component/
 import 'package:webgl_application/components/value_components/vector4_component/vector4_component.dart';
 import 'package:webgl_application/components/value_components/webglenum_component/webglenum_component.dart';
 import 'package:webgl/src/introspection/editable_property.dart' hide PropertyGetter, PropertySetter;
-import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
 import 'package:webgl/lights.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -221,7 +221,7 @@ class PropertiesComponent {
       _isEditable(animationProperty, WebGLTexture) ||
       _isEditable(animationProperty, WebGLBuffer) ||
       _isEditable(animationProperty, GLTFMeshPrimitive) ||
-      _isEditable(animationProperty, Camera) ||
+      _isEditable(animationProperty, GLTFCamera) ||
       _isEditable(animationProperty, Light) ||
       _isEditable(animationProperty, GLTFAccessor) ||
       _isEditable(animationProperty, GLTFBufferView) ||

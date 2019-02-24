@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/assets_manager/loaders/gltf_project_loader.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 
 Future main() async {
 
@@ -15,7 +15,7 @@ Future main() async {
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
   GLTFEngine engine = new GLTFEngine(canvas);
-  (Engine.mainCamera as CameraPerspective).yfov = 44.07;
+  (Engine.mainCamera as GLTFCameraPerspective).yfov = 44.07;
 
   GLTFProjectLoader gLTFProjectLoader = new GLTFProjectLoader()..filePath = gltfPath;
   await gLTFProjectLoader.load();

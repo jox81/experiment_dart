@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:html';
+import 'package:webgl/asset_library.dart';
 import 'package:webgl/render_project.dart';
 
 Future main() async {
@@ -11,6 +12,8 @@ Future main() async {
 
   String gtltPath = gltfSamplesPaths.first;
   CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
+
+  await AssetLibrary.loadDefault();
 
   await renderProjectFromPath(gtltPath, canvas);
 }

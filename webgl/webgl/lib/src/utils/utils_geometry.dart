@@ -1,5 +1,5 @@
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
@@ -14,7 +14,7 @@ class UtilsGeometry{
   ///Le pick Z indique la profondeur à laquelle il faut place le point dé-projeté, z ayant un range de 0.0 à 1.0
   ///En webgl, l'origine en screen se trouve en bas à gauche du plan near
   ///En webgl, l'axe y pointant vers le haut, x vers la droite
-  static bool unProjectScreenPoint(CameraPerspective camera, Vector3 pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
+  static bool unProjectScreenPoint(GLTFCameraPerspective camera, Vector3 pickWorld, num screenX, num screenY, {num pickZ:0.0}) {
     num pickX = screenX;
     num pickY = GL.height - screenY;
 
@@ -24,7 +24,7 @@ class UtilsGeometry{
     return unProjected;
   }
 
-  static bool pickRayFromScreenPoint(CameraPerspective camera, Vector3 outRayNear,
+  static bool pickRayFromScreenPoint(GLTFCameraPerspective camera, Vector3 outRayNear,
       Vector3 outRayFar, num screenX, num screenY) {
     num pickX = screenX;
     num pickY = screenY;
@@ -36,7 +36,7 @@ class UtilsGeometry{
   }
 
   /// Experiment with unProject
-  static List<GLTFNode> unProjectMultiScreenPoints(CameraPerspective camera) {
+  static List<GLTFNode> unProjectMultiScreenPoints(GLTFCameraPerspective camera) {
     List<GLTFNode> resultPoints = [];
 
     num pickX = 0.0;
@@ -93,7 +93,7 @@ class UtilsGeometry{
   }
 
   /// Find ray with mouse coord in the camera
-  static Ray findRay(CameraPerspective camera, num screenX, num screenY) {
+  static Ray findRay(GLTFCameraPerspective camera, num screenX, num screenY) {
     Vector3 outRayNear = new Vector3.zero();
     UtilsGeometry.unProjectScreenPoint(camera, outRayNear, screenX, screenY);
 
@@ -123,7 +123,7 @@ class UtilsGeometry{
     return resultPoints;
   }
 
-  static GLTFNode findNodeFromMouseCoords(CameraPerspective camera, num x, num y, List<GLTFNode> nodes) {
+  static GLTFNode findNodeFromMouseCoords(GLTFCameraPerspective camera, num x, num y, List<GLTFNode> nodes) {
     Ray ray = UtilsGeometry.findRay(camera, x, y);
     GLTFNode itemHit = UtilsGeometry.findNodeHit(nodes, ray);
     return itemHit;

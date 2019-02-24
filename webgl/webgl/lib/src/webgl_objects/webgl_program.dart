@@ -1,5 +1,6 @@
 import 'dart:html';
 import 'dart:web_gl' as WebGL;
+import 'package:webgl/src/utils/utils_text.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/utils/utils_debug.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_active_info.dart';
@@ -9,6 +10,8 @@ import 'package:webgl/src/webgl_objects/program/program_info.dart';
 import 'package:webgl/src/webgl_objects/webgl_object.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
+import 'dart:typed_data';
 
 class WebGLProgram extends WebGLObject{
 
@@ -16,6 +19,8 @@ class WebGLProgram extends WebGLObject{
 
   Map<String, WebGLUniformLocation> uniformLocations = new Map();
   Map<String, int> attributLocations = new Map();
+
+  Map<String, WebGLBuffer> buffers = new Map();
 
   WebGLProgram() : this.webGLProgram = gl.createProgram();
   WebGLProgram.fromWebGL(this.webGLProgram);
@@ -123,6 +128,65 @@ class WebGLProgram extends WebGLObject{
     return result;
   }
 
+  void initBindBuffer(String attributName, int usage, TypedData verticesInfos) {
+    WebGLBuffer buffer = _initBuffer(buffers[attributName], usage, verticesInfos);
+    buffers[attributName] ??= buffer;
+  }
+
+  /// BufferType bufferType
+  /// Todo (jpu) : is it possible to use only one of the bufferViews
+  WebGLBuffer _initBuffer(WebGLBuffer buffer,
+      int bufferType, TypedData data) {
+    if (buffer == null) {
+      buffer = new WebGLBuffer();
+      buffer.bindBuffer(bufferType);
+      gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
+    } else {
+      buffer.bindBuffer(bufferType);
+    }
+
+    return buffer;
+  }
+
+  /// [componentCount] => ex : 3 (x, y, z)
+  /// ShaderVariableType componentType
+  /// int stride :
+  ///   how many bytes to move to the next vertex
+  ///   0 = use the correct stride for type and numComponents
+  void setAttribut(String attributName, int components, int componentType, bool normalized, int stride) {
+
+    String shaderAttributName;
+    if (attributName == 'TEXCOORD_0') {
+      shaderAttributName = 'a_UV';
+    } else if (attributName == "COLOR_0") {
+      shaderAttributName = 'a_Color';
+    } else {
+      shaderAttributName = 'a_${UtilsText.capitalize(attributName)}';
+    }
+
+    //>
+    attributLocations[attributName] ??=
+        gl.getAttribLocation(webGLProgram, shaderAttributName);
+    int attributLocation = attributLocations[attributName];
+
+    //if exist
+    if (attributLocation >= 0) {
+
+      // start at the beginning of the buffer that contains the sent data in the initBuffer.
+      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
+      int offset = 0;
+
+      //debug.logCurrentFunction(
+      //'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
+      //debug.logCurrentFunction('$accessor');
+
+      //>
+      gl.vertexAttribPointer(attributLocation, components, componentType,
+          normalized, stride, offset);
+      gl.enableVertexAttribArray(
+          attributLocation); // turn on getting data out of a buffer for this attribute
+    }
+  }
 
   // >>> Parameteres
   //dynamic getParameter(ProgramParameterGlEnum parameter){

@@ -3,7 +3,7 @@ import 'dart:async';
 //import 'dart:typed_data';
 import "package:test/test.dart";
 //import 'package:vector_math/vector_math.dart';
-//import 'package:webgl/src/camera/camera.dart';
+//import 'package:webgl/src/gltf/camera/camera.dart';
 //import 'package:webgl/src/gltf/scene.dart';
 //import 'package:webgl/src/utils/utils_assets.dart';
 //import 'package:webgl/src/gltf/mesh/mesh.dart';

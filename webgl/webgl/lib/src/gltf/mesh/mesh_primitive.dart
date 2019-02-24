@@ -5,6 +5,7 @@ import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/property/property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/renderer/render_state.dart';
+import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
@@ -15,7 +16,6 @@ import 'package:webgl/src/gltf/pbr_material.dart';
 @reflector
 class GLTFMeshPrimitive extends GltfProperty {
   Map<String, GLTFAccessor> attributes = new Map<String, GLTFAccessor>();
-  Map<String, webgl.Buffer> buffers = new Map();
 
   /// DrawMode mode
   int drawMode;
@@ -173,7 +173,7 @@ class GLTFMeshPrimitive extends GltfProperty {
       materialPBR.metallic = baseMaterial.pbrMetallicRoughness.metallicFactor;
     }
 
-    _program = _material.getProgram();
+    _program = _material.program;
     _isMaterialInitialized = true;
   }
 

@@ -17,7 +17,7 @@
 //
 //  List<Mesh> get meshes;
 //
-//  List<Camera> get cameras;
+//  List<GLTFCamera> get cameras;
 //
 //  Vector4 get backgroundColor;
 //
@@ -129,7 +129,7 @@
 //      model.render();
 //    }
 //
-//    for (Camera camera in cameras) {
+//    for (GLTFCamera camera in cameras) {
 //      camera.render();
 //    }
 //  }
@@ -143,7 +143,7 @@
 //
 //      meshes.add(node);
 //      currentSelection = node;
-//    }else if(node is Camera){
+//    }else if(node is GLTFCamera){
 //
 //    }
 //  }

@@ -1,11 +1,12 @@
-import 'dart:html';import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller.dart';
+import 'dart:html';
+import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gltf/camera/controller/perspective_camera/perspective_camera_controller.dart';
 
-class RotatePerspectiveCameraController extends PerspectiveCameraController{
+class FlyPerspectiveCameraController extends PerspectiveCameraController{
 
   double _startFov;
 
-  RotatePerspectiveCameraController();
+  FlyPerspectiveCameraController();
 
   ///Mouse
 
@@ -75,27 +76,39 @@ class RotatePerspectiveCameraController extends PerspectiveCameraController{
   }
 
   void updateCameraTransformWithKeys(List<bool> currentlyPressedKeys) {
-    double orbitAmplitude = 1.0;
-    Vector2 direction = new Vector2.zero();
+    //move
+    double moveAmplitude = 0.1;
+    Vector3 moveDelta = new Vector3.zero();
 
-    if (currentlyPressedKeys[KeyCode.UP]) {
-      direction += new Vector2(0.0, -orbitAmplitude);
+    // front
+    if (currentlyPressedKeys[KeyCode.NUM_EIGHT]) {
+      moveDelta += new Vector3(0.0, 0.0, moveAmplitude);
     }
-    if (currentlyPressedKeys[KeyCode.DOWN]) {
-      direction += new Vector2(0.0, orbitAmplitude);
+    // rear
+    if (currentlyPressedKeys[KeyCode.NUM_TWO]) {
+      moveDelta += new Vector3(0.0, 0.0, -moveAmplitude);
     }
-    if (currentlyPressedKeys[KeyCode.LEFT]) {
-      direction += new Vector2(orbitAmplitude, 0.0);
+    //left
+    if (currentlyPressedKeys[KeyCode.NUM_FOUR]) {
+      moveDelta += new Vector3(-moveAmplitude, 0.0, 0.0);
     }
-    if (currentlyPressedKeys[KeyCode.RIGHT]) {
-      direction += new Vector2(-orbitAmplitude, 0.0);
+    //right
+    if (currentlyPressedKeys[KeyCode.NUM_SIX]) {
+      moveDelta += new Vector3(moveAmplitude, 0.0, 0.0);
     }
 
-    if(direction != new Vector2.zero()) {
+    //up
+    if (currentlyPressedKeys[KeyCode.NUM_FIVE]) {
+      moveDelta += new Vector3(0.0, -moveAmplitude, 0.0);
+    }
+    //down
+    if (currentlyPressedKeys[KeyCode.NUM_ZERO]) {
+      moveDelta += new Vector3(0.0, moveAmplitude, 0.0);
+    }
+
+    if(moveDelta != new Vector3.zero()) {
       if (camera.isActive) {
-        beginTransform();
-        updateCameraTransform(direction.x, direction.y);
-        endTransform();
+        move(moveDelta);
       }
     }
   }
@@ -112,5 +125,14 @@ class RotatePerspectiveCameraController extends PerspectiveCameraController{
     rotateViewDirection.applyAxisAngle(camera.upDirection, radians(xAngleRot.toDouble()));
     rotateViewDirection.applyAxisAngle(camera.frontDirection.cross(camera.upDirection), radians(yAngleRot.toDouble()));
     camera.targetPosition = camera.translation + rotateViewDirection;
+  }
+
+  void move(Vector3 moveDelta) {
+    camera.translation += camera.xAxis.normalized() * moveDelta.x;
+    camera.translation += camera.yAxis.normalized() * moveDelta.y;
+    camera.translation += camera.zAxis.normalized() * moveDelta.z;
+    camera.targetPosition += camera.xAxis.normalized() * moveDelta.x;
+    camera.targetPosition += camera.yAxis.normalized() * moveDelta.y;
+    camera.targetPosition += camera.zAxis.normalized() * moveDelta.z;
   }
 }

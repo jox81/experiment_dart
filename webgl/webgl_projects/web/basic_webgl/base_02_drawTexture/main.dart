@@ -110,7 +110,7 @@ class Renderer{
 
     MaterialDotScreen materialDotScreen = new MaterialDotScreen();
     materialDotScreen.texture = new WebGLTexture.fromWebGL(texture, webgl.WebGL.TEXTURE_2D);
-    WebGLProgram program = materialDotScreen.getProgram();
+    WebGLProgram program = materialDotScreen.program;
     program.use();
 
     int positionLocation = gl.getAttribLocation(program.webGLProgram, 'position');

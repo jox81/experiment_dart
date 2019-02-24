@@ -1,12 +1,11 @@
-import 'dart:html';
-import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller.dart';
+import 'dart:html';import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/gltf/camera/controller/perspective_camera/perspective_camera_controller.dart';
 
-class PanPerspectiveCameraController extends PerspectiveCameraController{
+class RotatePerspectiveCameraController extends PerspectiveCameraController{
 
   double _startFov;
 
-  PanPerspectiveCameraController();
+  RotatePerspectiveCameraController();
 
   ///Mouse
 
@@ -76,43 +75,42 @@ class PanPerspectiveCameraController extends PerspectiveCameraController{
   }
 
   void updateCameraTransformWithKeys(List<bool> currentlyPressedKeys) {
-    double panAmplitude = 5.0;
+    double orbitAmplitude = 1.0;
     Vector2 direction = new Vector2.zero();
 
     if (currentlyPressedKeys[KeyCode.UP]) {
-      direction += new Vector2(0.0, panAmplitude);
+      direction += new Vector2(0.0, -orbitAmplitude);
     }
     if (currentlyPressedKeys[KeyCode.DOWN]) {
-      direction += new Vector2(0.0, -panAmplitude);
+      direction += new Vector2(0.0, orbitAmplitude);
     }
     if (currentlyPressedKeys[KeyCode.LEFT]) {
-      direction += new Vector2(panAmplitude, 0.0);
+      direction += new Vector2(orbitAmplitude, 0.0);
     }
     if (currentlyPressedKeys[KeyCode.RIGHT]) {
-      direction += new Vector2(-panAmplitude, 0.0);
+      direction += new Vector2(-orbitAmplitude, 0.0);
     }
 
     if(direction != new Vector2.zero()) {
       if (camera.isActive) {
-          beginTransform();
-          updateCameraTransform(direction.x, direction.y);
-          endTransform();
+        beginTransform();
+        updateCameraTransform(direction.x, direction.y);
+        endTransform();
       }
     }
   }
 
   void updateCameraTransform(double deltaX, double deltaY) {
     if (camera.isActive && isDragging) {
-      pan(deltaX, deltaY);
+      rotateView(deltaX, deltaY);
     }
   }
 
-  void pan(double deltaX, double deltaY, {num panScale = 0.05}) {
-    deltaX *= panScale;
-    deltaY *= panScale;
-    camera.translation += camera.xAxis * deltaX;
-    camera.translation += camera.yAxis * deltaY;
-    camera.targetPosition += camera.xAxis * deltaX;
-    camera.targetPosition += camera.yAxis * deltaY;
+  /// Pour faire une rotation de la vue, on déplace la target
+  void rotateView(num xAngleRot, num yAngleRot) {
+    Vector3 rotateViewDirection = camera.frontDirection;
+    rotateViewDirection.applyAxisAngle(camera.upDirection, radians(xAngleRot.toDouble()));
+    rotateViewDirection.applyAxisAngle(camera.frontDirection.cross(camera.upDirection), radians(yAngleRot.toDouble()));
+    camera.targetPosition = camera.translation + rotateViewDirection;
   }
 }

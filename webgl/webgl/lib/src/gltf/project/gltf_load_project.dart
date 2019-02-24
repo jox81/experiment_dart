@@ -1,9 +1,9 @@
 import 'package:webgl/introspection.dart';
+import 'package:webgl/src/gltf/camera/types/orthographic_camera.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:gltf/gltf.dart' as glTF;
 import 'package:webgl/src/camera/camera_type.dart';
-import 'package:webgl/src/camera/types/orthographic_camera.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_indices.dart';
 import 'package:webgl/src/gltf/accessor/accessor_sparse_values.dart';
@@ -29,7 +29,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/sampler.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/texture.dart';
-import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
 import 'dart:core';
 import 'dart:typed_data';
 import 'dart:async';
@@ -313,17 +313,17 @@ class GLTFLoadProject extends GLTFProject{
             'Mesh material can only be bound to an existing project material'));
   }
 
-  Camera _createCamera(glTF.Camera gltfCamera) {
-    Camera camera;
+  GLTFCamera _createCamera(glTF.Camera gltfCamera) {
+    GLTFCamera camera;
     if (gltfCamera != null) {
       if (gltfCamera.perspective != null) {
-        camera = new CameraPerspective(gltfCamera.perspective.yfov,
+        camera = new GLTFCameraPerspective(gltfCamera.perspective.yfov,
             gltfCamera.perspective.znear, gltfCamera.perspective.zfar)
           ..type = CameraType.perspective
           ..aspectRatio = gltfCamera.perspective.aspectRatio
           ..name = gltfCamera.name;
       } else if (gltfCamera.orthographic != null) {
-        camera = new CameraOrthographic()
+        camera = new GLTFCameraOrthographic()
           ..type = CameraType.orthographic
           ..znear = gltfCamera.orthographic.znear
           ..zfar = gltfCamera.orthographic.zfar
@@ -340,11 +340,11 @@ class GLTFLoadProject extends GLTFProject{
     return camera;
   }
 
-  Camera _getCamera(glTF.Camera gltfCamera) {
+  GLTFCamera _getCamera(glTF.Camera gltfCamera) {
     int id = _gltfSource.cameras.indexOf(gltfCamera);
     return cameras.firstWhere((c) => c.cameraId == id,
         orElse: () => throw new Exception(
-            'Camera can only be bound to an existing project camera'));
+            'GLTFCamera can only be bound to an existing project camera'));
   }
 
   GLTFMesh _createMesh(glTF.Mesh gltfSource) {
@@ -385,7 +385,7 @@ class GLTFLoadProject extends GLTFProject{
     }
 
     if (gltfSource.camera != null) {
-      Camera camera = _getCamera(gltfSource.camera);
+      GLTFCamera camera = _getCamera(gltfSource.camera);
       node.camera = camera;
     }
 

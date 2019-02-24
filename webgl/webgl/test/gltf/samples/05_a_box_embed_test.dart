@@ -27,7 +27,7 @@ Future main() async {
     await project.debug(doProjectLog : false, isDebug:false);
   });
 
-  group("Camera Embed", () {
+  group("GLTFCamera Embed", () {
     test("Project creation", () async {
       expect(project, isNotNull);
     });

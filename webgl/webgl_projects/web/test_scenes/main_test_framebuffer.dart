@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/engine.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/node.dart';
@@ -63,7 +63,7 @@ class Webgl01 {
   }
 
   void setupCamera()  {
-    Engine.mainCamera = new CameraPerspective(radians(45.0), 0.1, 100.0)
+    Engine.mainCamera = new GLTFCameraPerspective(radians(45.0), 0.1, 100.0)
       ..targetPosition = new Vector3.zero()
       ..translation = new Vector3(10.0,10.0,10.0);
   }

@@ -9,7 +9,7 @@ import 'package:webgl/materials.dart';
 import 'package:webgl/lights.dart';
 import 'dart:math';
 import 'package:webgl/src/webgl_objects/context.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 
 GLTFProject projectSceneViewPerformance() {
 

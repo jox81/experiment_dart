@@ -1,10 +1,10 @@
 import 'dart:async';
 import "package:test/test.dart";
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
 import 'package:webgl/src/camera/camera_type.dart';
-import 'package:webgl/src/camera/types/orthographic_camera.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/orthographic_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/asset.dart';
 import 'package:webgl/src/gltf/buffer.dart';
@@ -30,7 +30,7 @@ Future main() async {
     await project.debug(doProjectLog : false, isDebug:false);
   });
 
-  group("Camera Embed", () {
+  group("GLTFCamera Embed", () {
     test("Project creation", () async {
       expect(project, isNotNull);
     });
@@ -76,23 +76,23 @@ Future main() async {
     test("cameras", () async {
       expect(project.cameras.length, 2);
 
-      Camera camera0 = project.cameras[0];
+      GLTFCamera camera0 = project.cameras[0];
       expect(camera0, isNotNull);
       expect(camera0.type, CameraType.perspective);
       expect(camera0.cameraId, 0);
 
-      CameraPerspective camera0Perspective = camera0 as CameraPerspective;
+      GLTFCameraPerspective camera0Perspective = camera0 as GLTFCameraPerspective;
       expect(camera0Perspective.aspectRatio, 1.0);
       expect(camera0Perspective.yfov, 0.7);
       expect(camera0Perspective.zfar, 100);
       expect(camera0Perspective.znear, 0.01);
 
-      Camera camera1 = project.cameras[1];
+      GLTFCamera camera1 = project.cameras[1];
       expect(camera1, isNotNull);
       expect(camera1.type, CameraType.orthographic);
       expect(camera1.cameraId, 1);
 
-      CameraOrthographic camera1Orthographic = camera1 as CameraOrthographic;
+      GLTFCameraOrthographic camera1Orthographic = camera1 as GLTFCameraOrthographic;
       expect(camera1Orthographic.xmag, 1.0);
       expect(camera1Orthographic.ymag, 1.0);
       expect(camera1Orthographic.zfar, 100);

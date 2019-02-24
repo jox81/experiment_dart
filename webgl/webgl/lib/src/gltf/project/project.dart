@@ -4,8 +4,8 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
 import 'package:webgl/src/assets_manager/not_loaded_exception.dart';
-import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'dart:core';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/animation/animation.dart';
@@ -46,6 +46,12 @@ class GLTFProject extends Project{
   GLTFScene get currentScene =>
       scenes.length > 0 ? scenes[0] : null;
 
+  @override
+  GLTFCameraPerspective get mainCamera => super.mainCamera ??=
+     new GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
+      ..targetPosition = new Vector3.zero()
+      ..translation = new Vector3(20.0, 20.0, 20.0);
+
   DirectionalLight _defaultLight;
   DirectionalLight get defaultLight => _defaultLight;
   set defaultLight(DirectionalLight value) {
@@ -61,7 +67,7 @@ class GLTFProject extends Project{
   ///path of the directory of the gltf file
   String baseDirectory = '';
 
-  List<Camera> cameras = <Camera>[];
+  List<GLTFCamera> cameras = <GLTFCamera>[];
   List<GLTFPBRMaterial> materials = <GLTFPBRMaterial>[];
   List<GLTFTexture> textures = <GLTFTexture>[];
   List<GLTFImage> images = <GLTFImage>[];
@@ -101,13 +107,13 @@ class GLTFProject extends Project{
     _nodes.remove(value);
   }
 
-  Camera getCurrentCamera() {
-    Camera currentCamera;
+  GLTFCamera getCurrentCamera() {
+    GLTFCamera currentCamera;
 
     bool debugCamera = true;
 
     if (debugCamera) {
-      currentCamera = new CameraPerspective(radians(47.0), 0.1, 1000.0)
+      currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 1000.0)
         ..targetPosition = new Vector3(0.0, 0.0, 0.0)
         ..translation = new Vector3(10.0, 10.0, 10.0);
     } else {
@@ -128,7 +134,7 @@ class GLTFProject extends Project{
 //          currentCamera.rotation = node.rotation;
 //          currentCamera.scale = node.scale;
         } else {
-          currentCamera = new CameraPerspective(radians(47.0), 0.1, 100.0)
+          currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 100.0)
             ..targetPosition = new Vector3(0.0, 0.03, 0.0);
 //          ..targetPosition = new Vector3(0.0, .03, 0.0);//Avocado
           currentCamera.translation = new Vector3(5.0, 5.0, 10.0);
@@ -141,8 +147,8 @@ class GLTFProject extends Project{
     return currentCamera;
   }
 
-  Camera _findActiveSceneCamera(List<GLTFNode> nodes) {
-    Camera result;
+  GLTFCamera _findActiveSceneCamera(List<GLTFNode> nodes) {
+    GLTFCamera result;
 
     for (var i = 0; i < nodes.length && result == null; i++) {
       GLTFNode node = nodes[i];
@@ -157,7 +163,7 @@ class GLTFProject extends Project{
   }
 
   void _setupNodeCamera(GLTFNode node) {
-    CameraPerspective camera = node.camera as CameraPerspective;
+    GLTFCameraPerspective camera = node.camera as GLTFCameraPerspective;
     camera.translation = node.translation;
   }
 
@@ -173,7 +179,7 @@ class GLTFProject extends Project{
     GLTFTexture.nextId = 0;
     GLTFPBRMaterial.nextId = 0;
     GLTFAccessor.nextId = 0;
-    Camera.nextId = 0;
+    GLTFCamera.nextId = 0;
     GLTFMesh.nextId = 0;
     GLTFNode.nextId = 0;
     GLTFNode.nextId = 0;

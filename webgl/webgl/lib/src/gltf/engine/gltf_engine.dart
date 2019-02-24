@@ -1,5 +1,4 @@
 import 'dart:html';
-import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/animation/gltf_animator.dart';
@@ -26,8 +25,6 @@ class GLTFEngine extends Engine {
 
   @override
   Future init(covariant GLTFProject project) async {
-
-
     await super.init(project);
   }
 

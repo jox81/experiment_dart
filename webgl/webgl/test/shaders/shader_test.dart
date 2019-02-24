@@ -36,7 +36,7 @@ void main() {
       expect(material, isNotNull);
       expect(material.shaderSource, isNotNull);
 
-      WebGLProgram program = material.getProgram();
+      WebGLProgram program = material.program;
       expect(program, isNotNull);
     });
 //    test("KronosPRBMaterial", () {
@@ -52,7 +52,7 @@ void main() {
       expect(material, isNotNull);
       expect(material.shaderSource, isNotNull);
 
-      WebGLProgram program = material.getProgram();
+      WebGLProgram program = material.program;
       expect(program, isNotNull);
     });
   });

@@ -7,7 +7,7 @@ import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 
 import 'material_library.dart';
 

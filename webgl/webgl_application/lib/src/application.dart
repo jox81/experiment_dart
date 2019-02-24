@@ -6,7 +6,7 @@ import 'package:webgl/src/utils/utils_geometry.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/interaction/interaction_manager.dart';
 import 'package:webgl/src/gltf/project/project.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/introspection.dart';
 import 'package:webgl/src/webgl_objects/context.dart';

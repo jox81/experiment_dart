@@ -15,12 +15,6 @@ class MaterialBaseColor extends Material {
 
   MaterialBaseColor(this.color);
 
-  Map<String, bool> getDefines() {
-    Map<String, bool> defines = new Map();
-
-    return defines;
-  }
-
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

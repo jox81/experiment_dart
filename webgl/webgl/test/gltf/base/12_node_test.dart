@@ -170,7 +170,7 @@ void main() {
       GLTFNode node = gltf.nodes[0];
       expect(node, isNotNull);
 
-      //Camera
+      //GLTFCamera
       expect(gltf.cameras, isNotNull);
       expect(node.camera, isNotNull);
 //      expect(node.camera == gltf.cameras[0], true);// Todo (jpu) : this fail

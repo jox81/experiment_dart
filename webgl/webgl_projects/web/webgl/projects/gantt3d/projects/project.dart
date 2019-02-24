@@ -1,22 +1,13 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
 import 'package:webgl/src/engine/engine.dart';
-import 'package:webgl/src/gltf/controller/node_conrtoller_type/drive_2d_node_controller.dart';
-import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
-import 'package:webgl/src/gltf/mesh/mesh.dart';
-import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
-import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
-import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/asset_library.dart';
-import 'package:webgl/src/utils/utils_textures.dart';
-import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-
-import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/textures/text_style.dart';
 import 'package:webgl/src/utils/utils_geometry.dart';
+
+import 'package:webgl/gltf.dart';
 
 class Gantt3dProject extends GLTFProject{
 
@@ -45,8 +36,8 @@ class Gantt3dProject extends GLTFProject{
     scene.backgroundColor = new Vector4(0.850, 0.847, 0.807, 1.0);
 
     //Cameras
-    CameraPerspective camera = new
-    CameraPerspective(radians(37.0), 0.1, 1000.0)
+    GLTFCameraPerspective camera = new
+    GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..translation = new Vector3(20.0, 20.0, 20.0);
     Engine.mainCamera = camera;
@@ -138,6 +129,14 @@ class ProjectContainer{
         ..matrix.translate( i * 1.0, 0.0, 0.0)
         ..matrix.scale(.1);
       scene.addNode(timeCoord);
+
+      GLTFNode labelNode = new GLTFNode.label(timeItems.toList()[i-1].date.toString(), 128, 64, new TextStyle())
+//        ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(90))
+//        ..rotation = new Quaternion.axisAngle(new Vector3(1.0, 0.0, 0.0), radians(90))
+        ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 1.0, 0.0), radians(-90))
+        ..rotation = new Quaternion.axisAngle(new Vector3(1.0, 1.0, 0.0), radians(180))
+        ..matrix.translate( i * 1.0, 0.0, 0.0);
+      scene.addNode(labelNode);
     }
     for (int i = 1; i <= productItems.length; ++i) {
       GLTFNode productCoord = new GLTFNode.cube()

@@ -3,6 +3,7 @@ import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/animation/animation.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/image.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
@@ -13,7 +14,6 @@ import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/project/project_debugger.dart';
 import 'package:webgl/src/utils/utils_debug.dart' as utilsDebug;
 import 'package:webgl/src/utils/utils_debug.dart';
-import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 
 class GLTFProjectDebugger extends ProjectDebugger{
@@ -141,7 +141,7 @@ class GLTFProjectDebugger extends ProjectDebugger{
 
       for (int i = 0; i < _gltf.cameras.length; i++) {
         print('> $i');
-        final Camera camera = _gltf.cameras[i];
+        final GLTFCamera camera = _gltf.cameras[i];
         print('$camera');
       }
       print('');

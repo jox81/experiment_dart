@@ -11,7 +11,7 @@ import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/lights.dart';
 import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/assets_manager/loaders/image_loader.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';

@@ -9,7 +9,6 @@ import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
-import 'package:webgl/src/webgl_objects/textures/type/2d_texture.dart';
 import 'package:webgl/src/webgl_objects/textures/type/attachment_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
@@ -151,7 +150,7 @@ Future main() async {
   render() {
     gl.enable(WebGL.DEPTH_TEST);
 
-    //Camera
+    //GLTFCamera
     double fieldOfView = Math.pi * 0.25;
     num aspect = canvas.clientWidth / canvas.clientHeight;
     projection = new Matrix4.identity();

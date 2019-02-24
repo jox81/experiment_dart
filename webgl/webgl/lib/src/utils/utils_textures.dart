@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/engine/engine.dart';
@@ -12,7 +12,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_framebuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
-import 'dart:web_gl' as webgl;
+import 'dart:web_gl';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart' as GLEnum;
 
 class TextureUtils {
@@ -63,7 +63,7 @@ class TextureUtils {
   static WebGLTexture createEmptyTexture2D(int size) {
     WebGLTexture texture = new WebGLTexture.texture2d();
 
-    gl.activeTexture(webgl.WebGL.TEXTURE0);
+    gl.activeTexture(WebGL.TEXTURE0);
     GL.activeTexture.texture2d.bind(texture);
 
     GL.activeTexture.texture2d.setParameterInt(
@@ -289,13 +289,13 @@ class TextureUtils {
       List<GLTFNode> models = new List();
 
       //backup camera
-      CameraPerspective baseCam = Engine.mainCamera;
+      GLTFCameraPerspective baseCam = Engine.mainCamera;
       Rectangle<int> previousViewport =
       new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
       GL.activeFrameBuffer.bind(framebufferWithDepthTexture);
 
-      CameraPerspective cameraTexture = new CameraPerspective(radians(45.0), 0.1, 100.0)
+      GLTFCameraPerspective cameraTexture = new GLTFCameraPerspective(radians(45.0), 0.1, 100.0)
         ..targetPosition = new Vector3(0.0, 0.0, -12.0)
         ..translation = new Vector3(5.0, 15.0, 15.0);
 
@@ -350,15 +350,15 @@ class TextureUtils {
   }
 
   // Todo (jpu) : This doesen't work in chromium : readPixel, but ok in chrome
-  static ImageElement createImageFromTexture(webgl.Texture texture, int width, int height) {
+  static ImageElement createImageFromTexture(Texture texture, int width, int height) {
     // Create a framebuffer backed by the texture
     var framebuffer = gl.createFramebuffer();
-    gl.bindFramebuffer(webgl.WebGL.FRAMEBUFFER, framebuffer);
-    gl.framebufferTexture2D(webgl.WebGL.FRAMEBUFFER, webgl.WebGL.COLOR_ATTACHMENT0, webgl.WebGL.TEXTURE_2D, texture, 0);
+    gl.bindFramebuffer(WebGL.FRAMEBUFFER, framebuffer);
+    gl.framebufferTexture2D(WebGL.FRAMEBUFFER, WebGL.COLOR_ATTACHMENT0, WebGL.TEXTURE_2D, texture, 0);
 
     // Read the contents of the framebuffer
     Uint8List data = new Uint8List(width * height * 4);
-    gl.readPixels(0, 0, width, height, webgl.WebGL.RGBA, webgl.WebGL.UNSIGNED_BYTE, data);
+    gl.readPixels(0, 0, width, height, WebGL.RGBA, WebGL.UNSIGNED_BYTE, data);
 
     gl.deleteFramebuffer(framebuffer);
 
@@ -491,10 +491,10 @@ class TextureUtils {
     return texture;
   }
 
-  static webgl.Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
+  static Texture createImageTexture(int textureUnitId, ImageElement imageElement, int magFilter, int minFilter, int wrapS, int wrapT) {
 
     //create texture
-    webgl.Texture texture = gl.createTexture();
+    Texture texture = gl.createTexture();
 
     //bind it to an active texture unit
     gl.activeTexture(textureUnitId);

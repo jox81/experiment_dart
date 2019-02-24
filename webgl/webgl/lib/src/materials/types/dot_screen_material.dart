@@ -21,12 +21,6 @@ class MaterialDotScreen extends Material {
 
   MaterialDotScreen();
 
-  Map<String, bool> getDefines() {
-    Map<String, bool> defines = new Map();
-
-    return defines;
-  }
-
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

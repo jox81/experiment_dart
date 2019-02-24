@@ -17,12 +17,6 @@ class MaterialSkyBox extends Material {
 
   MaterialSkyBox();
 
-  Map<String, bool> getDefines() {
-    Map<String, bool> defines = new Map();
-
-    return defines;
-  }
-
   /// ! vu ceci, il faut que l'objet qui a ce matériaux soit rendu en premier
   void setupBeforeRender(){
     gl.disable(EnableCapabilityType.DEPTH_TEST);

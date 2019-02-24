@@ -3,11 +3,13 @@ import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/gltf/skin.dart';
-import 'package:webgl/src/camera/camera.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
 import 'package:webgl/src/interface/IComponent.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/materials/material.dart';
-import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
+import 'package:webgl/src/materials/types/base_texture_material.dart';
+import 'package:webgl/src/textures/text_style.dart';
+import 'package:webgl/src/textures/text_texture.dart';
 
 @reflector
 class GLTFNode extends GLTFChildOfRootProperty {
@@ -110,6 +112,23 @@ class GLTFNode extends GLTFChildOfRootProperty {
             new GLTFMesh.vector(vector3),
             name: name);
 
+  factory GLTFNode.label(String text, int width, int height, TextStyle textStyle, {String name: ''}){
+    //> create label texture
+    TextTexture labelTexture = new TextTexture(width, height)
+      ..text = text
+      ..textStyle = textStyle
+      ..draw();
+
+    MaterialBaseTexture rectangleTextureMaterial = new MaterialBaseTexture()
+      ..texture = labelTexture;
+
+    GLTFNode nodeQuad = new GLTFNode.quad()
+      ..material = rectangleTextureMaterial
+      ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(180))
+      ..matrix.scale(labelTexture.width * 0.01 , labelTexture.height * 0.01,1.0);
+    return nodeQuad;
+  }
+
   Matrix4 get parentMatrix => parent != null
       ? (parent.parentMatrix * parent.matrix) as Matrix4
       : new Matrix4.identity();
@@ -147,9 +166,9 @@ class GLTFNode extends GLTFChildOfRootProperty {
     _mesh = value;
   }
 
-  Camera _camera;
-  Camera get camera => _camera;
-  set camera(Camera value) {
+  GLTFCamera _camera;
+  GLTFCamera get camera => _camera;
+  set camera(GLTFCamera value) {
     _camera = value;
   }
 

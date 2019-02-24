@@ -23,7 +23,7 @@ Future main() async {
 //    test("application create test2", () async {
 //      Application application = await Application.create(canvas);
 //
-//      Camera camera = new Camera(radians(37.0), 0.1, 100.0)
+//      GLTFCamera camera = new GLTFCamera(radians(37.0), 0.1, 100.0)
 //        ..targetPosition = new Vector3.zero()
 //        ..position = new Vector3(0.0, 0.0, -1.0);
 //      Engine.mainCamera = camera;

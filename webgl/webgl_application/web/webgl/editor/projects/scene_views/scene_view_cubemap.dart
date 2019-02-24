@@ -3,7 +3,7 @@ import 'dart:html';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/asset_library.dart';
 import 'package:webgl/engine.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/gltf/node.dart';

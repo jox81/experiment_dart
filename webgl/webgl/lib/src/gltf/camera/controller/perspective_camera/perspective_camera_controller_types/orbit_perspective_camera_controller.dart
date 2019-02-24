@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'dart:math' as Math;
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/controller/perspective_camera/perspective_camera_controller.dart';
+import 'package:webgl/src/gltf/camera/controller/perspective_camera/perspective_camera_controller.dart';
 
 class OrbitPerspectiveCameraController extends PerspectiveCameraController{
 

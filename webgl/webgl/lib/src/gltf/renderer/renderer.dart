@@ -7,7 +7,6 @@ import 'package:webgl/src/gltf/utils/utils_texture.dart';
 import 'package:webgl/src/lights/types/directional_light.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/introspection/introspection.dart';
-import 'package:webgl/src/utils/utils_text.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
 as GLEnum;
@@ -16,6 +15,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
+import 'package:webgl/webgl.dart';
 
 @reflector
 class GLTFRenderer extends Renderer {
@@ -98,7 +98,6 @@ class GLTFRenderer extends Renderer {
         Engine.mainCamera.projectionMatrix,
         Engine.mainCamera.translation,
         _gltfProject.defaultLight);
-
     {
       if (primitive.indicesAccessor == null ||
           primitive.drawMode == DrawMode.POINTS) {
@@ -121,14 +120,16 @@ class GLTFRenderer extends Renderer {
 
   void _setupPrimitiveBuffers(
       WebGLProgram program, GLTFMeshPrimitive primitive) {
-    _bindVertexArrayData(program, primitive);
+    _bindVertexArrayData(primitive, program);
 
     if (primitive.indicesAccessor != null) {
-      _bindIndices(primitive);
+      _bindIndicesData(primitive, program);
     }
   }
 
-  void _bindIndices(GLTFMeshPrimitive primitive) {
+  void _bindIndicesData(GLTFMeshPrimitive primitive, WebGLProgram program) {
+    String attributName = 'INDICES';
+
     GLTFAccessor accessorIndices = primitive.indicesAccessor;
     TypedData indices;
     if (accessorIndices.componentType == 5123 ||
@@ -136,7 +137,6 @@ class GLTFRenderer extends Renderer {
       indices = accessorIndices.bufferView.buffer.data.buffer.asUint16List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
           accessorIndices.count);
-      //debug.logCurrentFunction(indices.toString());
     } else if (accessorIndices.componentType == 5125) {
       if (renderState.hasIndexUIntExtension == null)
         throw "hasIndexUIntExtension : extension not supported";
@@ -146,11 +146,12 @@ class GLTFRenderer extends Renderer {
     } else {
       throw "_bindIndices : componentType not implemented ${GLEnum.VertexAttribArrayType.getByIndex(accessorIndices.componentType)}";
     }
-    _initBuffer(
-        primitive, 'INDICES', accessorIndices.bufferView.usage, indices);
+
+    program.initBindBuffer(attributName, accessorIndices.bufferView.usage, indices);
+
   }
 
-  void _bindVertexArrayData(WebGLProgram program, GLTFMeshPrimitive primitive) {
+  void _bindVertexArrayData(GLTFMeshPrimitive primitive, WebGLProgram program) {
     for (String attributName in primitive.attributes.keys) {
       GLTFAccessor accessor = primitive.attributes[attributName];
 
@@ -176,77 +177,15 @@ class GLTFRenderer extends Renderer {
               accessor.bufferView.byteLength,
           '${accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
 
-      //debug.logCurrentFunction('$attributName');
-      //debug.logCurrentFunction(verticesInfos.toString());
+      //>
+      program.initBindBuffer(attributName, accessor.bufferView.usage, verticesInfos);
 
       //>
-      _initBuffer(
-          primitive, attributName, accessor.bufferView.usage, verticesInfos);
-
-      //>
-      _setAttribut(program, attributName, accessor);
+      program.setAttribut(attributName, accessor.components, accessor.componentType, accessor.normalized, accessor.byteStride);
     }
   }
 
-  /// BufferType bufferType
-  // Todo (jpu) : is it possible to use only one of the bufferViews
-  void _initBuffer(GLTFMeshPrimitive primitive, String bufferName,
-      int bufferType, TypedData data) {
-    if (primitive.buffers[bufferName] == null) {
-      primitive.buffers[bufferName] = gl.createBuffer();
-      gl.bindBuffer(bufferType, primitive.buffers[bufferName]);
-      gl.bufferData(bufferType, data, BufferUsageType.STATIC_DRAW);
-    } else {
-      gl.bindBuffer(bufferType, primitive.buffers[bufferName]);
-    }
-  }
 
-  /// [componentCount] => ex : 3 (x, y, z)
-  void _setAttribut(
-      WebGLProgram program, String attributName, GLTFAccessor accessor) {
-    //debug.logCurrentFunction('$attributName');
-
-    String shaderAttributName;
-    if (attributName == 'TEXCOORD_0') {
-      shaderAttributName = 'a_UV';
-    } else if (attributName == "COLOR_0") {
-      shaderAttributName = 'a_Color';
-    } else {
-      shaderAttributName = 'a_${UtilsText.capitalize(attributName)}';
-    }
-
-    //>
-    program.attributLocations[attributName] ??=
-        gl.getAttribLocation(program.webGLProgram, shaderAttributName);
-    int attributLocation = program.attributLocations[attributName];
-
-    //if exist
-    if (attributLocation >= 0) {
-      int components = accessor.components;
-
-      /// ShaderVariableType componentType
-      int componentType = accessor.componentType;
-      bool normalized = accessor.normalized;
-
-      // how many bytes to move to the next vertex
-      // 0 = use the correct stride for type and numComponents
-      int stride = accessor.byteStride;
-
-      // start at the beginning of the buffer that contains the sent data in the initBuffer.
-      // Do not take the accesors offset. Actually, one buffer is created by attribut so start at 0
-      int offset = 0;
-
-      //debug.logCurrentFunction(
-      //'gl.vertexAttribPointer($attributLocation, $components, $componentType, $normalized, $stride, $offset);');
-      //debug.logCurrentFunction('$accessor');
-
-      //>
-      gl.vertexAttribPointer(attributLocation, components, componentType,
-          normalized, stride, offset);
-      gl.enableVertexAttribArray(
-          attributLocation); // turn on getting data out of a buffer for this attribute
-    }
-  }
 
 //  ///what is it for ? this show primitives layers drawn
 //  int _countImage = 0;

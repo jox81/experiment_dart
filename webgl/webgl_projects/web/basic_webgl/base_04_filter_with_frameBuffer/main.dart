@@ -48,7 +48,7 @@ Future main() async {
   await AssetLibrary.shaders.loadAll();
   MaterialDotScreen materialDotScreen = new MaterialDotScreen();
   materialDotScreen.texture = new WebGLTexture.fromWebGL(textureRender, webgl.WebGL.TEXTURE_2D);
-  WebGLProgram programFilter = materialDotScreen.getProgram();
+  WebGLProgram programFilter = materialDotScreen.program;
 
   gl.useProgram(programFilter.webGLProgram);
   setAttribut(programFilter.webGLProgram);

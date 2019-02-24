@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:webgl/engine.dart';
 import 'package:webgl/src/gltf/project/project.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:vector_math/vector_math.dart';
 
 Future<GLTFProject> projectSceneViewGltf() async {

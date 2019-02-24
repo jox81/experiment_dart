@@ -10,6 +10,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
 import 'package:webgl/src/utils/utils_debug.dart' as debug;
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
+import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
 @reflector
 abstract class Material {
@@ -24,7 +25,6 @@ abstract class Material {
 
   /// This builds Preprocessors for glsl shader source
   String _definesToString(Map<String, bool> defines) {
-    //debugLog.logCurrentFunction();
     String outStr = '';
     if (defines == null) return outStr;
 
@@ -37,10 +37,15 @@ abstract class Material {
   }
 
   ///Defines glsl preprocessors
-  Map<String, bool> getDefines();
+  Map<String, bool> getDefines() {
+    Map<String, bool> defines = new Map();
+    //add define to override
+    return defines;
+  }
 
-  WebGLProgram getProgram() {
-    //debugLog.logCurrentFunction();
+  WebGLProgram _program;
+  WebGLProgram get program => _program ??= _getProgram();
+  WebGLProgram _getProgram() {
 
     String shaderDefines = _definesToString(defines);
 
@@ -48,53 +53,54 @@ abstract class Material {
     String fsSource = shaderDefines + shaderSource.fsCode;
 
     /// ShaderType type
-    webgl.Shader createShader(int shaderType, String shaderSource) {
-      //debugLog.logCurrentFunction();
-
-      webgl.Shader shader = gl.createShader(shaderType);
-      gl.shaderSource(shader, shaderSource);
-      gl.compileShader(shader);
+    WebGLShader createShader(int shaderType, String shaderSource) {
+      WebGLShader shader = new WebGLShader(shaderType)
+        ..source = shaderSource
+        ..compile();
 
       if (debug.isDebug) {
-        bool compiled = gl.getShaderParameter(
-            shader, ShaderParameters.COMPILE_STATUS) as bool;
+        bool compiled = shader.compileStatus;
         if (!compiled) {
-          String compilationLog = gl.getShaderInfoLog(shader);
+          shader.logShaderInfos();
+          shader.delete();
 
-          throw "Could not compile ${glEnum.ShaderType.getByIndex(shaderType)} shader :\n\n $compilationLog}";
+          throw "Could not compile ${glEnum.ShaderType.getByIndex(shaderType)} shader :\n\n ${shader.infoLog}}";
         }
       }
 
       return shader;
     }
 
-    webgl.Shader vertexShader =
-        createShader(ShaderType.VERTEX_SHADER, vsSource);
-    webgl.Shader fragmentShader =
-        createShader(ShaderType.FRAGMENT_SHADER, fsSource);
-
-    webgl.Program program = gl.createProgram();
-
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragmentShader);
-    gl.linkProgram(program);
-    if (debug.isDebug) {
-      if (gl.getProgramParameter(program, ProgramParameterGlEnum.LINK_STATUS)
-              as bool ==
-          false) {
-        throw "Could not link the shader program! > ${gl.getProgramInfoLog(program)}";
+    WebGLProgram createProgram(WebGLShader vertexShader, WebGLShader fragmentShader) {
+      WebGLProgram program = new WebGLProgram();
+      program.attachShader(vertexShader);
+      program.attachShader(fragmentShader);
+      program.link();
+      if (debug.isDebug) {
+        bool linked = program.linkStatus;
+        if (!linked) {
+          String infoLog = program.infoLog;
+          program.delete();
+          throw "Could not link the shader program! > $infoLog";
+        }
       }
-    }
-    gl.validateProgram(program);
-    if (debug.isDebug) {
-      if (gl.getProgramParameter(
-              program, ProgramParameterGlEnum.VALIDATE_STATUS) as bool ==
-          false) {
-        throw "Could not validate program! > ${gl.getProgramInfoLog(program)} > ${gl.getProgramInfoLog(program)}";
+      program.validate();
+      if (debug.isDebug) {
+        bool validated = program.validateStatus;
+        if (!validated) {
+          String infoLog = program.infoLog;
+          throw "Could not validate program! > $infoLog";
+        }
       }
+
+      return program;
     }
 
-    return new WebGLProgram.fromWebGL(program);
+    WebGLShader vertexShader = createShader(ShaderType.VERTEX_SHADER, vsSource);
+    WebGLShader fragmentShader = createShader(ShaderType.FRAGMENT_SHADER, fsSource);
+    WebGLProgram program = createProgram(vertexShader, fragmentShader);
+
+    return program;
   }
 
   ///Must be called after gl.useProgram
@@ -109,15 +115,13 @@ abstract class Material {
   /// ShaderVariableType componentType
   void setUniform(WebGLProgram program, String uniformName, int componentType,
       dynamic data) {
-    //debugLog.logCurrentFunction(uniformName);
 
     program.uniformLocations[uniformName] ??=
         program.getUniformLocation(uniformName);
     WebGLUniformLocation wrappedUniformLocation =
         program.uniformLocations[uniformName];
 
-//    if(uniformName == ())
-    //let's pass if u_Camera, else it won't drow reflection correctly wrappedUniformLocation.data == data && uniformName != "u_Camera"
+    //let's pass if u_Camera, else it won't draw reflection correctly wrappedUniformLocation.data == data && uniformName != "u_Camera"
     if (wrappedUniformLocation.data == data &&
         uniformName != "u_Camera" &&
         uniformName != "u_ModelMatrix") {

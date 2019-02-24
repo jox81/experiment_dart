@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:vector_math/vector_math.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/controller/node_conrtoller_type/drive_2d_node_controller.dart';
 import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
@@ -18,13 +18,17 @@ import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
 class CubeMapProject extends GLTFProject{
 
+  static Future loadAssets() async {
+    await AssetLibrary.loadDefault();
+    await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
+  }
+
   final String baseDirectory = '';// Todo (jpu) : usage ?
 
   NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
 
   CubeMapProject._();
   static Future<CubeMapProject> build() async {
-    await AssetLibrary.loadDefault();
     await CubeMapProject.loadAssets();
     return await new CubeMapProject._().._setup();
   }
@@ -47,8 +51,8 @@ class CubeMapProject extends GLTFProject{
     scene.backgroundColor = new Vector4(0.839, 0.815, 0.713, 1.0);
 
     //Cameras
-    CameraPerspective camera = new
-    CameraPerspective(radians(37.0), 0.1, 1000.0)
+    GLTFCameraPerspective camera = new
+    GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
       ..translation = new Vector3(20.0, 20.0, 20.0);
     Engine.mainCamera = camera;
@@ -113,9 +117,5 @@ class CubeMapProject extends GLTFProject{
       ..name = 'pyramid'
       ..matrix.translate(7.0, 1.0, 0.0);
     scene.addNode(nodePyramid);
-  }
-
-  static Future loadAssets() async {
-    await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
   }
 }

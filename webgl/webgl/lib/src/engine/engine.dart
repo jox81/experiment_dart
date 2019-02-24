@@ -4,7 +4,8 @@ import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/camera/camera.dart';
-import 'package:webgl/src/camera/types/perspective_camera.dart';
+import 'package:webgl/src/gltf/camera/camera.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';
@@ -29,27 +30,19 @@ abstract class Engine {
   static set currentProject(Project value) =>
       currentEngine.activeProject = value;
 
-  static Camera _mainCamera;
-  static Camera get mainCamera =>
-      _mainCamera ??= new CameraPerspective(radians(37.0), 0.1, 1000.0)
-        ..targetPosition = new Vector3.zero()
-        ..translation = new Vector3(20.0, 20.0, 20.0);
-  static set mainCamera(Camera value) {
-    _mainCamera?.isActive = false;
-    _mainCamera = value;
-    _mainCamera.isActive = true;
-    _mainCamera?.update();
+  static Camera get mainCamera => currentProject.mainCamera;
+  static set mainCamera(GLTFCamera value) {
+    currentProject.mainCamera = value;
   }
-
-  AssetManager get assetsManager => _assetManager;
-
-  final EngineClock _engineClock;
-  final CanvasElement canvas;
-  final AssetManager _assetManager;
 
   final StreamController<num> _onRenderStreamController =
       new StreamController<num>.broadcast();
   Stream<num> get onRender => _onRenderStreamController.stream;
+
+  final EngineClock _engineClock;
+  final CanvasElement canvas;
+  final AssetManager _assetManager;
+  AssetManager get assetsManager => _assetManager;
 
   Project _activeProject;
   Project get activeProject => _activeProject;
@@ -92,6 +85,7 @@ abstract class Engine {
 
     try {
       _interaction.update(currentTime: currentTime);
+      _activeProject.update(currentTime: currentTime);//should this be placed in this order ? later/sooner ?
       animator.update(currentTime: currentTime);
       renderer.render(currentTime: currentTime);
     } catch (ex) {
