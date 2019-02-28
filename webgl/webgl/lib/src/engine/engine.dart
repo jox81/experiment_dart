@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:meta/meta.dart';
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/animation/animation_player.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gltf/camera/camera.dart';
@@ -77,25 +78,29 @@ abstract class Engine {
   void render() {
     if(!_isInitialized) throw new Exception('engine must be init before render');
     GL.resizeCanvas();
-    _render();
+    _renderLoop();
   }
 
-  void _render({num currentTime: 0.0}) {
+  void _renderLoop({num currentTime: 0.0}) {
+    window.requestAnimationFrame((num currentTime) {
+      _render(currentTime);
+      _renderLoop(currentTime: currentTime);
+    });
+  }
+
+  void _render(num currentTime) {
     _engineClock.currentTime = currentTime;
 
     try {
       _interaction.update(currentTime: currentTime);
       _activeProject.update(currentTime: currentTime);//should this be placed in this order ? later/sooner ?
       animator.update(currentTime: currentTime);
+      animationPlayer.play(currentTime : currentTime);
       renderer.render(currentTime: currentTime);
     } catch (ex) {
       print("Error From Engine render method: $ex ${StackTrace.current}");
     }
 
     _onRenderStreamController.add(_engineClock.computeFps());
-
-    window.requestAnimationFrame((num currentTime) {
-      this._render(currentTime: currentTime);
-    });
   }
 }

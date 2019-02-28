@@ -25,19 +25,39 @@ class LabelProject extends GLTFProject{
       ..targetPosition =  new Vector3.zero()
       ..translation = new Vector3(20.0, 20.0, 20.0);
 
+    GLTFNode axis = new GLTFNode.axis();
+    scene.addNode(axis);
+
     //> create label texture
     TextStyle textStyle = new TextStyle();
-    GLTFNode labelNode = new GLTFNode.label("Hello World !", 128, 64, textStyle);
+    labelNode = new GLTFNode.label("Hello World !", 128, 64, textStyle);
+    //
+//    labelNode.rotate(new Quaternion.axisAngle(new Vector3(1.0, 0.0, 0.0), radians(90)));
+//    labelNode.rotation = new Quaternion.axisAngle(new Vector3(0.0, 1.0, 0.0), radians(90));
+
     scene.addNode(labelNode);
   }
+  GLTFNode labelNode;
 
+  bool isPlaying = false;
   void update({num currentTime : 0.0}) {
+    if(!isPlaying){
+      isPlaying = true;
 
+    }
     Vector3 cameraPosition = new Vector3(
         Math.sin(currentTime * speed) * radius,
         1.0,
         Math.cos(currentTime * speed) * radius);
 
-    mainCamera.translation = cameraPosition;
+
+//    labelNode.rotation = new Quaternion.axisAngle(new Vector3(1.0, 0.0, 0.0), radians((currentTime * 0.1) % 360));
+//    mainCamera.translation = cameraPosition;
+
+
+//    labelNode.translate(new Vector3(0.0, 0.0, 0.0));
+  }
+  void play(){
+
   }
 }

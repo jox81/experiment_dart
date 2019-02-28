@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/asset_library.dart';
@@ -13,6 +14,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
+import 'package:webgl/src/utils/utils_geometry.dart';
 
 class PrimitivesProject extends GLTFProject {
 
@@ -48,6 +50,15 @@ class PrimitivesProject extends GLTFProject {
   Future _setup() async {
     nodeInteractionnable.controller = new ColorNodeController();
     addInteractable(nodeInteractionnable);
+
+    canvas.onMouseDown.listen((MouseEvent event){
+      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(mainCamera, event.client.x, event.client.y, nodes);
+      if(node != null) {
+        nodeInteractionnable.node = node;
+        print('node switch > ${node.name}');
+        print('${event.client.x}, ${event.client.y}');
+      }
+    });
 
     scene = new GLTFScene();
     scene.backgroundColor = new Vector4(0.839, 0.815, 0.713, 1.0);

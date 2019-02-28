@@ -30,6 +30,10 @@ class UtilsMath {
     return baseList;
   }
 
+  static num lerp(num v0, num v1, num t) {
+    return v0 + (v1 - v0) * t;
+  }
+
   static Vector3 vector3Lerp(Vector3 v0, Vector3 v1, double t) {
     return v0 + (v1 - v0).scaled(t);
   }

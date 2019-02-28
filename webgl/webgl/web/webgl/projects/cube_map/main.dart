@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:html';
 import 'package:webgl/engine.dart';
 import 'package:webgl/render_project.dart';
+import 'package:webgl/src/project/project.dart';
 import 'projects/scene_view_cubemap.dart';
 
 Future main() async {
@@ -9,7 +10,7 @@ Future main() async {
 
   GLTFEngine engine = new GLTFEngine(canvas);
 
-  CubeMapProject cubeMapProject = await CubeMapProject.build();
+  Project project = await CubeMapProject.build();
 
-  await renderProject(engine, cubeMapProject);
+  await renderProject(engine, project);
 }

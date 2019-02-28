@@ -1,4 +1,5 @@
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
@@ -59,6 +60,11 @@ class GLTFNode extends GLTFChildOfRootProperty {
     this.translation += vector3;
   }
 
+// Todo (jpu) : this doesn't work
+//  void rotate(Quaternion quaternion) {
+//    this.rotation.add(quaternion);
+//  }
+
   GLTFNode({String name: ''}) : super(name) {
     GLTFEngine.currentProject?.addNode(this);
   }
@@ -92,10 +98,11 @@ class GLTFNode extends GLTFChildOfRootProperty {
             new GLTFMesh.sphere(radius: 1.0, segmentV: 32, segmentH: 32),
             name: name);
 
-  GLTFNode.axis({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.axis(),
-            name: name);
+  factory GLTFNode.axis({String name: ''}){
+    GLTFNode result = new GLTFNode._withMesh(new GLTFMesh.axis())
+    ..material = new MaterialBaseVertexColor();
+    return result;
+  }
 
   GLTFNode.axisPoint({String name: ''})
       : this._withMesh(
@@ -124,8 +131,8 @@ class GLTFNode extends GLTFChildOfRootProperty {
 
     GLTFNode nodeQuad = new GLTFNode.quad()
       ..material = rectangleTextureMaterial
-      ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(180))
-      ..matrix.scale(labelTexture.width * 0.01 , labelTexture.height * 0.01,1.0);
+//      ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(180))
+      ..scale = new Vector3(labelTexture.width * 0.01 , labelTexture.height * 0.01,1.0);
     return nodeQuad;
   }
 

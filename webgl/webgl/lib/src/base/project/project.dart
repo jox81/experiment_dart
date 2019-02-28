@@ -1,5 +1,5 @@
 import 'package:webgl/src/project/project.dart';
 
-class BaseProject extends Project{
+abstract class BaseProject extends Project{
 
 }
