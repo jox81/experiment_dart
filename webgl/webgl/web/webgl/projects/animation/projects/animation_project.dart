@@ -83,11 +83,23 @@ class AnimationProject extends GLTFProject {
       ..translation = new Vector3(0.0, 0.0, 3.0);
     scene.addNode(nodeCube2);
 
+    nodeCube.parent = nodeCube2;
+
     nodeCube2.onClick.listen((e){
       print("node2 clicked !!!");
       Animation animation = new Animation.startEnd(5.0, 0.0, 1.0, ease: Ease.easeOutBounce)
         ..onUpdate.listen((num value){
           nodeCube2.translation = new Vector3(0.0, value, 3.0);
+          print('  animation : $value');
+        });
+      animation.play();
+    });
+
+    nodeCube.onClick.listen((e){
+      print("node clicked !!!");
+      Animation animation = new Animation.startEnd(10.0, 0.0, 2.0, ease: Ease.easeOutBounce)
+        ..onUpdate.listen((num value){
+          nodeCube.translation = new Vector3(0.0, 0.0, 3.0 + value);
           print('  animation : $value');
         });
       animation.play();
@@ -119,7 +131,7 @@ class AnimationProject extends GLTFProject {
 //      nodeCube.translation = new Vector3(0.0,0.0,0.0);
 //    })
     ..onUpdate.listen((num value){
-      nodeCube.translation = new Vector3(value, 0.0, 0.0);
+      nodeCube.translation = new Vector3(value, 2.0, 0.0);
 //      print('animation1 : $value');
     });
     animation1.play();
