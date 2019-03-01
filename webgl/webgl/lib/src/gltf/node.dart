@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
@@ -16,6 +18,9 @@ import 'package:webgl/src/textures/text_texture.dart';
 class GLTFNode extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int nodeId = nextId++;
+
+  StreamController onClickController = new StreamController.broadcast();
+  Stream get onClick => onClickController.stream;
 
   Vector3 _translation = new Vector3.all(0.0);
   Vector3 get translation => _translation;
@@ -65,13 +70,12 @@ class GLTFNode extends GLTFChildOfRootProperty {
 //    this.rotation.add(quaternion);
 //  }
 
-  GLTFNode({String name: ''}) : super(name) {
+  GLTFNode({String name: '', GLTFMesh mesh}) : super(name) {
+    this.mesh = mesh;
     GLTFEngine.currentProject?.addNode(this);
   }
 
-  GLTFNode._withMesh(GLTFMesh newMesh, {String name: ''}) : super(name) {
-    mesh = newMesh;
-  }
+  GLTFNode._withMesh(GLTFMesh newMesh, {String name: ''}) : this(name:name, mesh:newMesh);
 
   GLTFNode.triangle({String name: ''})
       : this._withMesh(

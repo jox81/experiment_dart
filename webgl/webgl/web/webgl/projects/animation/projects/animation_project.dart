@@ -55,6 +55,7 @@ class AnimationProject extends GLTFProject {
       GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera, event.client.x, event.client.y, nodes);
       if(node != null) {
         nodeInteractionnable.node = node;
+        node.onClickController.add(event);
         print('node switch > ${node.name}');
         print('${event.client.x}, ${event.client.y}');
       }
@@ -81,6 +82,16 @@ class AnimationProject extends GLTFProject {
       ..name = 'cube2'
       ..translation = new Vector3(0.0, 0.0, 3.0);
     scene.addNode(nodeCube2);
+
+    nodeCube2.onClick.listen((e){
+      print("node2 clicked !!!");
+      Animation animation = new Animation.startEnd(5.0, 0.0, 1.0, ease: Ease.easeOutBounce)
+        ..onUpdate.listen((num value){
+          nodeCube2.translation = new Vector3(0.0, value, 3.0);
+          print('  animation : $value');
+        });
+      animation.play();
+    });
   }
 
   GLTFNode nodeCube;
