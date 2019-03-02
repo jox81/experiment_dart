@@ -30,6 +30,7 @@ class CombinedPerspectiveCameraController implements Interactionable{
     if(currentlyPressedKeys[KeyCode.TWO]) Engine.mainCamera.cameraController = _rotatePerspectiveCameraController;
     if(currentlyPressedKeys[KeyCode.THREE]) Engine.mainCamera.cameraController = _panPerspectiveCameraController;
     if(currentlyPressedKeys[KeyCode.FOUR]) Engine.mainCamera.cameraController = _flyPerspectiveCameraController;
+    if(currentlyPressedKeys[KeyCode.ZERO]) Engine.mainCamera.cameraController = null;
   }
 
   @override
