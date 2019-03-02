@@ -13,11 +13,22 @@ class GLTFScene extends GLTFChildOfRootProperty{
 
   Vector4 backgroundColor = new Vector4(0.2, 0.2, 0.2, 1.0);
 
-  List<GLTFNode> _nodes = <GLTFNode>[];
-  List<GLTFNode> get nodes => _nodes;
+  Set<GLTFNode> _nodes = new Set<GLTFNode>();
+  List<GLTFNode> get nodes => _nodes.toList(growable: false);
   void addNode(GLTFNode node){
     assert(node != null);
     _nodes.add(node);
+    for (GLTFNode childNode in node.children) {
+      addNode(childNode);
+    }
+  }
+
+  void removeNode(GLTFNode node){
+    assert(node != null);
+    for (GLTFNode childNode in node.children) {
+      removeNode(childNode);
+    }
+    _nodes.remove(node);
   }
 
   GLTFScene({String name:''}):super(name){
