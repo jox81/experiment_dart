@@ -15,7 +15,7 @@ class Bloc extends GLTFNode{
       ..translation = new Vector3(0.0, 0.0, 3.0)
       ..onClick.listen((e){
         print("node clicked !!!");
-        Animation animation = new Animation.startEnd(10.0, 0.0, 2.0, ease: Ease.easeOutBounce)
+        Animation animation = new Animation.startEnd(0.0, 5.0, 1.0, ease: Ease.sine)
           ..onUpdate.listen((num value){
             nodeCube.translation = new Vector3(0.0, 0.0, 3.0 + value);
             print('  animation : $value');
@@ -30,7 +30,7 @@ class Bloc extends GLTFNode{
       ..translation = new Vector3(0.0, 0.0, 3.0)
       ..onClick.listen((e){
         print("node2 clicked !!!");
-        Animation animation = new Animation.startEnd(5.0, 0.0, 1.0, ease: Ease.easeOutBounce)
+        Animation animation = new Animation.startEnd(0.0, 5.0, 0.8, ease: Ease.sine)
           ..onUpdate.listen((num value){
             nodeCube2.translation = new Vector3(0.0, value, 3.0);
             print('  animation : $value');
@@ -38,34 +38,5 @@ class Bloc extends GLTFNode{
         animation.play();
       });
     nodeCube.addChild(nodeCube2);
-  }
-
-  Future moveCube() async {
-    Animation animation1 = new Animation.startEnd(0.0, 5.0, 2.0, ease: Ease.easeInQuadratic)
-//    ..onStart.listen((_){
-//      nodeCube.translation = new Vector3(0.0,0.0,0.0);
-//    })
-      ..onUpdate.listen((num value){
-        nodeCube.translation = new Vector3(value, 2.0, 0.0);
-//      print('animation1 : $value');
-      });
-    animation1.play();
-
-//    Animation animation2 = new Animation(2.0)
-//    ..onStart.listen((_){
-//      nodeCube.translate(new Vector3(0.0, 0.0, 0.01));
-////      print(nodeCube.translation);
-//    })
-//    ..onEnd.listen((_){
-//      nodeCube.translation = new Vector3(0.0,5.0,0.0);
-//    });
-//    await animation2.play();
-
-    Animation animation3 = new Animation.startEnd(0.0, 5.0, 2.0, ease: Ease.easeOutBounce)
-      ..onUpdate.listen((num value){
-        nodeCube2.translation = new Vector3(value, 0.0, 3.0);
-        print('  animation3 : $value');
-      });
-    animation3.play();
   }
 }

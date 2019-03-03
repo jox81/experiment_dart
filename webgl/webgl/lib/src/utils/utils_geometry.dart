@@ -7,7 +7,7 @@ import 'package:webgl/src/gltf/node.dart';
 
 class UtilsGeometry{
 
-  /// Permet de retorver un point en WORLD depuis un point en SREEN
+  /// Permet de retrouver un point en WORLD depuis un point en SCREEN
   /// il faut concidérer l'origine de screen en haut à gauche, y pointant vers le bas
   /// ! les coordonnées screen webgl sont en y inversé
   ///Les coordonnées x et y se trouvent sur le plan near de la camera

@@ -1,20 +1,16 @@
 import 'dart:async';
 import 'dart:html' hide Animation;
-import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/asset_library.dart';
 import 'package:webgl/engine.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/controller/node_conrtoller_type/color_node_controller.dart';
 import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
-import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/utils/utils_geometry.dart';
-import 'package:webgl/src/utils/utils_time.dart';
-
 import 'bloc.dart';
 
 class AnimationProject extends GLTFProject {
@@ -23,21 +19,8 @@ class AnimationProject extends GLTFProject {
     await AssetLibrary.loadDefault();
   }
 
-  GLTFPBRMaterial _gLTFPBRMaterial;
-  GLTFPBRMaterial get gLTFPBRMaterial => _gLTFPBRMaterial ??= new GLTFPBRMaterial(
-      pbrMetallicRoughness: new GLTFPbrMetallicRoughness(
-          baseColorFactor: new Float32List.fromList([1.0,1.0,1.0,1.0]),
-          baseColorTexture: null,
-          metallicFactor: 0.0,
-          roughnessFactor: 1.0
-      )
-  );
-
   MaterialBaseColor _materialBaseColor;
   MaterialBaseColor get materialBaseColor => _materialBaseColor ??= new MaterialBaseColor(new Vector4(1.0, 0.0, 0.0, 1.0));
-
-  MaterialPoint _materialPoint;
-  MaterialPoint get materialPoint => _materialPoint ??= new MaterialPoint(pointSize:10.0, color:new Vector4(0.0, 0.66, 1.0, 1.0));
 
   NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
 
@@ -68,35 +51,12 @@ class AnimationProject extends GLTFProject {
     mainCamera = new
     GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..translation = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(0.0, 20.0, 20.0);
 
-    //> materials
-    for (var i = 0; i < 20; ++i) {
-      bloc = new Bloc()
-      ..translation = new Vector3(1.5 * i, 0.0, 0.0);
+    for (var i = -5; i < 5; ++i) {
+      Bloc bloc = new Bloc()
+      ..translation = new Vector3(1.1 * i, 0.0, 0.0);
       scene.addNode(bloc);
     }
-
   }
-
-  Bloc bloc;
-  Bloc bloc2;
-
-  bool isPlaying = false;
-
-  @override
-  void update({num currentTime: 0.0}) async {
-    if(!isPlaying){
-      isPlaying = true;
-
-//      await bloc.moveCube();
-
-      await delayedFuture(5);
-//      print('animation end');
-
-//      await moveCube();
-    }
-  }
-
-
 }
