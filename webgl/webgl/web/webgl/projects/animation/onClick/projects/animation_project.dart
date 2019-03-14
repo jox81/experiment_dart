@@ -119,32 +119,15 @@ class AnimationProject extends GLTFProject {
       await moveCube();
 
       await delayedFuture(5);
-//      print('animation end');
-
-//      await moveCube();
     }
   }
 
   Future moveCube() async {
     Animation animation1 = new Animation.startEnd(0.0, 5.0, 2.0, ease: Ease.easeInQuadratic)
-//    ..onStart.listen((_){
-//      nodeCube.translation = new Vector3(0.0,0.0,0.0);
-//    })
     ..onUpdate.listen((num value){
       nodeCube.translation = new Vector3(value, 2.0, 0.0);
-//      print('animation1 : $value');
     });
     animation1.play();
-
-//    Animation animation2 = new Animation(2.0)
-//    ..onStart.listen((_){
-//      nodeCube.translate(new Vector3(0.0, 0.0, 0.01));
-////      print(nodeCube.translation);
-//    })
-//    ..onEnd.listen((_){
-//      nodeCube.translation = new Vector3(0.0,5.0,0.0);
-//    });
-//    await animation2.play();
 
     Animation animation3 = new Animation.startEnd(0.0, 5.0, 2.0, ease: Ease.easeOutBounce)
     ..onUpdate.listen((num value){
