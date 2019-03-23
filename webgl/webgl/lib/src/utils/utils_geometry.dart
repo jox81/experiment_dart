@@ -135,7 +135,7 @@ class UtilsGeometry{
     num distanceHit;
 
     for(GLTFNode node in nodes){
-      if (node.mesh != null) {
+      if (node.visible && node.enable && node.mesh != null) {
         List<Triangle> triangles = node.mesh.getFaces();
         for(Triangle triangle in triangles) {
           Matrix4 parentMatrix = node.parent != null ? node.parentMatrix : new Matrix4.identity();

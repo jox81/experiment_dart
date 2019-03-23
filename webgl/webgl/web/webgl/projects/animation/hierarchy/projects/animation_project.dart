@@ -40,6 +40,7 @@ class AnimationProject extends GLTFProject {
       if(node != null) {
         nodeInteractionnable.node = node;
         node.onClickController.add(event);
+
         print('node switch > ${node.name}');
         print('${event.client.x}, ${event.client.y}');
       }
@@ -54,7 +55,8 @@ class AnimationProject extends GLTFProject {
       ..translation = new Vector3(0.0, 20.0, 20.0);
 
     for (var i = -5; i < 5; ++i) {
-      Bloc bloc = new Bloc()
+      Bloc bloc;
+      bloc = new Bloc()
       ..translation = new Vector3(1.1 * i, 0.0, 0.0);
       scene.addNode(bloc);
     }

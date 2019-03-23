@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/materials.dart';
@@ -19,8 +20,14 @@ class GLTFNode extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int nodeId = nextId++;
 
-  StreamController onClickController = new StreamController.broadcast();
-  Stream get onClick => onClickController.stream;
+  StreamController<MouseEvent> onClickController = new StreamController<MouseEvent>.broadcast();
+  Stream<MouseEvent> get onClick => onClickController.stream;
+
+  bool _enable;
+  bool get enable => _enable;
+  set enable(bool value) {
+    _enable = value;
+  }
 
   Vector3 _translation = new Vector3.all(0.0);
   Vector3 get translation => _translation;

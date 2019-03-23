@@ -68,6 +68,7 @@ class GLTFRenderer extends Renderer {
   }
 
   void drawNode(GLTFNode node) {
+    if (!node.visible) return;
     if (node.mesh == null) return;
     if (node.mesh.primitives == null) return;
 

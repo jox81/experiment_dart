@@ -19,6 +19,9 @@ class Bloc extends GLTFNode{
           ..onUpdate.listen((num value){
             nodeCube.translation = new Vector3(0.0, 0.0, 3.0 + value);
             print('  animation : $value');
+          })
+          ..onEnd.listen((_){
+            nodeCube2.visible = true;
           });
         animation.play();
       });
@@ -34,6 +37,10 @@ class Bloc extends GLTFNode{
           ..onUpdate.listen((num value){
             nodeCube2.translation = new Vector3(0.0, value, 3.0);
             print('  animation : $value');
+          })
+          ..onEnd.listen((_){
+            nodeCube2.visible = false;
+            nodeCube2.enable = false;
           });
         animation.play();
       });
