@@ -19,7 +19,7 @@ class LabelProject extends BaseProject{
   Matrix4 viewMatrix = new Matrix4.identity();
 
   LabelProject._();
-  static Future build() async {
+  static Future<LabelProject> build() async {
     await AssetLibrary.loadDefault();
     return new LabelProject._().._setup();
   }

@@ -1,3 +1,4 @@
 enum EngineType{
-  GLTF
+  GLTF,
+  Base
 }

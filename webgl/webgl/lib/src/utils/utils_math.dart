@@ -34,7 +34,11 @@ class UtilsMath {
     return v0 + (v1 - v0) * t;
   }
 
-  static Vector3 vector3Lerp(Vector3 v0, Vector3 v1, double t) {
+  static Vector2 lerpVec2(Vector2 v0, Vector2 v1, double t) {
+    return v0 + (v1 - v0).scaled(t);
+  }
+
+  static Vector3 lerpVec3(Vector3 v0, Vector3 v1, double t) {
     return v0 + (v1 - v0).scaled(t);
   }
 

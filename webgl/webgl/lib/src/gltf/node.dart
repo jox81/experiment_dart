@@ -23,7 +23,7 @@ class GLTFNode extends GLTFChildOfRootProperty {
   StreamController<MouseEvent> onClickController = new StreamController<MouseEvent>.broadcast();
   Stream<MouseEvent> get onClick => onClickController.stream;
 
-  bool _enable;
+  bool _enable = true;
   bool get enable => _enable;
   set enable(bool value) {
     _enable = value;
@@ -83,6 +83,16 @@ class GLTFNode extends GLTFChildOfRootProperty {
   }
 
   GLTFNode._withMesh(GLTFMesh newMesh, {String name: ''}) : this(name:name, mesh:newMesh);
+
+  factory GLTFNode.point({String name: ''}){
+    GLTFNode result = new GLTFNode._withMesh(new GLTFMesh.point())
+      ..material =  new MaterialPoint(pointSize:10.0, color:new Vector4(1.0, 1.0, 0.0, 1.0));
+    return result;
+  }
+  GLTFNode.line(List<Vector3> points, {String name: ''})
+      : this._withMesh(
+            new GLTFMesh.line(points),
+            name: name);
 
   GLTFNode.triangle({String name: ''})
       : this._withMesh(

@@ -2,14 +2,16 @@ import 'dart:html';
 import 'dart:typed_data';
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/engine/engine.dart';
+import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
 import 'package:webgl/src/gltf/utils/utils_texture.dart';
 import 'package:webgl/src/lights/types/directional_light.dart';
+import 'package:webgl/src/renderer/render_state.dart';
 import 'package:webgl/src/renderer/renderer.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
-as GLEnum;
+    as GLEnum;
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
@@ -27,9 +29,11 @@ class GLTFRenderer extends Renderer {
     _gltfProject = project;
 
     if (_gltfProject.currentScene == null)
-      throw new Exception("currentScene must be set before init.");
+      throw new Exception(
+          "currentScene mustn't be null in the project before init call : _gltfProject.currentScene");
 
-    renderState.reservedTextureUnits = UtilsTextureGLTF.initTextures(_gltfProject);
+    renderState.reservedTextureUnits =
+        UtilsTextureGLTF.initTextures(_gltfProject);
 
     // Todo (jpu) : pourquoi si je ne le fait pas ici, il y a des soucis de rendu ?!!
     _gltfProject.defaultLight = new DirectionalLight()
@@ -45,6 +49,16 @@ class GLTFRenderer extends Renderer {
 
   set _backgroundColor(Vector4 color) {
     gl.clearColor(color.r, color.g, color.g, color.a);
+  }
+
+  set renderingType(RenderingType renderingType) {
+    renderState.renderingType = renderingType;
+    if(renderState.renderingType == RenderingType.stereo){
+      // turn on scissor test
+      gl.enable(ContextParameter.SCISSOR_TEST);
+    }else{
+      gl.disable(ContextParameter.SCISSOR_TEST);
+    }
   }
 
   void render({num currentTime: 0.0}) {
@@ -90,6 +104,30 @@ class GLTFRenderer extends Renderer {
     _setupPrimitiveBuffers(program, primitive);
 
     primitive.material.setupBeforeRender();
+
+    Vector3 cameraPosition;
+    if (renderState.renderingType == RenderingType.single) {
+      cameraPosition = Engine.mainCamera.translation;
+    } else if (renderState.renderingType == RenderingType.stereo) {
+      if (Engine.mainCamera is GLTFCameraPerspective) {
+        GLTFCameraPerspective camera = Engine.mainCamera;
+        Vector3 offsetVector = new Vector3.zero();
+        cross3(camera.frontDirection, camera.upDirection, offsetVector);
+        offsetVector.normalize();
+
+        cameraPosition = Engine.mainCamera.translation +
+            offsetVector * renderState.offsetScale * (renderState.isLeft ? 1 : -1);
+
+        int halfWidthSize = (gl.canvas.width * .5).toInt();
+        int halfHeightSize = (gl.canvas.height * .5).toInt();
+        gl.scissor(renderState.isLeft ? 0 : halfWidthSize, 0, halfWidthSize, gl.canvas.height);
+        gl.viewport(renderState.isLeft ? 0 : halfWidthSize, (halfHeightSize *.5).toInt(), halfWidthSize, halfHeightSize);
+
+        //flip renderSide
+        renderState.isLeft = !renderState.isLeft;
+      }
+    }
+
     primitive.material.pvMatrix = (Engine.mainCamera.projectionMatrix *
         Engine.mainCamera.viewMatrix) as Matrix4;
     primitive.material.setUniforms(
@@ -97,23 +135,25 @@ class GLTFRenderer extends Renderer {
         modelMatrix,
         Engine.mainCamera.viewMatrix,
         Engine.mainCamera.projectionMatrix,
-        Engine.mainCamera.translation,
+        cameraPosition,
         _gltfProject.defaultLight);
+
     {
       if (primitive.indicesAccessor == null ||
           primitive.drawMode == DrawMode.POINTS) {
-        GLTFAccessor accessorPosition = primitive.positionAccessor;
-        if (accessorPosition == null)
+        GLTFAccessor positionAccessor = primitive.positionAccessor;
+        if (positionAccessor == null)
           throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
-        GL.drawArrays(primitive.drawMode, accessorPosition.byteOffset,
-            accessorPosition.count);
+        GL.drawArrays(primitive.drawMode, positionAccessor.byteOffset,
+            positionAccessor.count);
       } else {
-        GLTFAccessor accessorIndices = primitive.indicesAccessor;
-        GL.drawElements(primitive.drawMode, accessorIndices.count,
-            accessorIndices.componentType, 0);
+        GLTFAccessor indicesAccessor = primitive.indicesAccessor;
+        GL.drawElements(primitive.drawMode, indicesAccessor.count,
+            indicesAccessor.componentType, 0);
       }
 
-      // _drawLayer(canvas);
+      bool debugLayer = false;
+      if (debugLayer) _drawLayer(canvas);
     }
 
     primitive.material.setupAfterRender();
@@ -148,8 +188,8 @@ class GLTFRenderer extends Renderer {
       throw "_bindIndices : componentType not implemented ${GLEnum.VertexAttribArrayType.getByIndex(accessorIndices.componentType)}";
     }
 
-    program.initBindBuffer(attributName, accessorIndices.bufferView.usage, indices);
-
+    program.initBindBuffer(
+        attributName, accessorIndices.bufferView.usage, indices);
   }
 
   void _bindVertexArrayData(GLTFMeshPrimitive primitive, WebGLProgram program) {
@@ -179,24 +219,24 @@ class GLTFRenderer extends Renderer {
           '${accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
 
       //>
-      program.initBindBuffer(attributName, accessor.bufferView.usage, verticesInfos);
+      program.initBindBuffer(
+          attributName, accessor.bufferView.usage, verticesInfos);
 
       //>
-      program.setAttribut(attributName, accessor.components, accessor.componentType, accessor.normalized, accessor.byteStride);
+      program.setAttribut(attributName, accessor.components,
+          accessor.componentType, accessor.normalized, accessor.byteStride);
     }
   }
 
-
-
-//  ///what is it for ? this show primitives layers drawn
-//  int _countImage = 0;
-//  void _drawLayer(CanvasElement canvas) {
-//    if (_countImage < 10) {
-//      String dataUrl = canvas.toDataUrl();
-//      ImageElement image = new ImageElement(src: dataUrl);
-//      DivElement div = querySelector('#debug') as DivElement;
-//      div.children.add(image);
-//      _countImage++;
-//    }
-//  }
+  ///what is it for ? this show primitives layers drawn
+  int _countImage = 0;
+  void _drawLayer(CanvasElement canvas) {
+    if (_countImage < 10) {
+      String dataUrl = canvas.toDataUrl();
+      ImageElement image = new ImageElement(src: dataUrl);
+      DivElement div = querySelector('#debug') as DivElement;
+      div.children.add(image);
+      _countImage++;
+    }
+  }
 }

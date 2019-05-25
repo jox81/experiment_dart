@@ -86,7 +86,7 @@ class GLTFUtilsAnimation{
         Vector3 previous = new Vector3.fromFloat32List(previousValues);
         Vector3 next = new Vector3.fromFloat32List(nextValues);
 
-        Vector3 resultVector3 = UtilsMath.vector3Lerp(previous, next, interpolationValue);
+        Vector3 resultVector3 = UtilsMath.lerpVec3(previous, next, interpolationValue);
         result = resultVector3.storage.buffer;
         break;
       case AnimationChannelTargetPathType.rotation:

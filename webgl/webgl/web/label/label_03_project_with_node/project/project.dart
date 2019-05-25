@@ -10,7 +10,7 @@ class LabelProject extends GLTFProject{
   num speed = 0.001;
 
   LabelProject._();
-  static Future build() async {
+  static Future<LabelProject> build() async {
     await AssetLibrary.loadDefault();
     return new LabelProject._().._setup();
   }

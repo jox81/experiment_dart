@@ -91,7 +91,6 @@ Future main() async {
   ];
 
   String gtltPath = gltfSamplesPaths.first;
-  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
 
-  await renderProjectFromPath(gtltPath, canvas);
+  await new ProjectLauncher().fromPath(gtltPath);
 }

@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:webgl/render_project.dart';
 import 'package:webgl/src/engine/engine_type.dart';
-import 'projects/scene_view_cubemap.dart';
+import 'project/project.dart';
 
 Future main() async {
-  await new ProjectLauncher().fromCreator(CubeMapProject.build, EngineType.GLTF);
+  await new ProjectLauncher().fromCreator(BezierProject.build, EngineType.GLTF);
 }
+

@@ -51,6 +51,7 @@ class Webgl01 {
 
   void initGL(CanvasElement canvas) {
     new Context(canvas,enableExtensions:true,logInfos:false);
+    GLTFEngine engine = new GLTFEngine(canvas);
   }
 
   void setup(){

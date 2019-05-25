@@ -1,14 +1,8 @@
 import 'dart:async';
-import 'dart:html';
-import 'package:webgl/engine.dart';
 import 'package:webgl/render_project.dart';
 import 'projects/project.dart';
+import 'package:webgl/src/engine/engine_type.dart';
 
 Future main() async {
-  CanvasElement canvas = querySelector('#glCanvas') as CanvasElement;
-  GLTFEngine engine = new GLTFEngine(canvas);
-
-  Gantt3dProject cubeMapProject = await Gantt3dProject.build();
-
-  await renderProject(engine, cubeMapProject);
+  await new ProjectLauncher().fromCreator(Gantt3dProject.build, EngineType.GLTF);
 }
