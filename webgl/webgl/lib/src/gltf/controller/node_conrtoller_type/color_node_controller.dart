@@ -7,6 +7,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/materials/material.dart';
 
 class ColorNodeController extends GLTFNodeController{
+  @override
   void onKeyPressed(GLTFNode node, List<bool> currentlyPressedKeys) {
     if(currentlyPressedKeys[KeyCode.EIGHT]) {
       Material material = node.mesh.primitives[0].material;

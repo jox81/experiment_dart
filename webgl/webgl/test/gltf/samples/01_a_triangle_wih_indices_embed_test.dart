@@ -23,7 +23,7 @@ Future main() async {
   setUp(() async {
     String gltfPath = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/01_triangle_with_indices/gltf_embed/Triangle.gltf';
     project = await loadGLTFProject(gltfPath);
-    await project.debug(doProjectLog : false, isDebug:false);
+    project.debug(doProjectLog : false, isDebug:false);
   });
 
   group("TriangleWithIndices Embed", () {

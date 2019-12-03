@@ -17,7 +17,7 @@ Future main() async {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/empty.gltf';;
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 0);
@@ -25,7 +25,7 @@ Future main() async {
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFPBRMaterial> materials = gltf.materials;
       expect(materials.length, 1);
@@ -33,7 +33,7 @@ Future main() async {
     test("base properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
       expect(material.emissiveFactor, <double>[0.0, 1.0, 0.0]);
@@ -44,7 +44,7 @@ Future main() async {
     test("properties pbrMetallicRoughness", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
@@ -65,7 +65,7 @@ Future main() async {
     test("properties normalTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
@@ -77,7 +77,7 @@ Future main() async {
     test("properties occlusionTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 
@@ -89,7 +89,7 @@ Future main() async {
     test("properties emissiveTexture", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFPBRMaterial material = gltf.materials[0];
 

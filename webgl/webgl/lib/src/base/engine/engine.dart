@@ -7,7 +7,7 @@ import 'package:webgl/src/engine/engine.dart';
 class BaseEngine extends Engine {
   static BaseEngine get currentEngine => Engine.currentEngine as BaseEngine;
 
-  static BaseProject get currentProject => currentEngine?.activeProject;
+  static BaseProject get currentProject => currentEngine?.activeProject as BaseProject;
   static set currentProject(BaseProject value) => currentEngine.activeProject = value;
 
   @override

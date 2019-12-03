@@ -11,6 +11,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class MaterialSAO extends Material {
   MaterialSAO();
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.sao;
 
   int get depthTextureMap => null;
@@ -23,6 +24,7 @@ class MaterialSAO extends Material {
   Vector4 get projInfo => new Vector4(1.0, 1.0, 1.0, 0.0);
   double get projScale => 100.0;
 
+  @override
   Map<String, bool> getDefines() {
     Map<String, bool> defines = new Map();
 
@@ -47,6 +49,7 @@ class MaterialSAO extends Material {
     return defines;
   }
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

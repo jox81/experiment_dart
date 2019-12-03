@@ -25,6 +25,7 @@ void test_WEBGL_debug_renderer_info(List<String> extensions) {
     var renderer = gl.getParameter(
         webgl.DebugRendererInfo.UNMASKED_RENDERER_WEBGL);
 
+    print('debugInfo : WEBGL_debug_renderer_info $debugInfo');
     print('vendor : UNMASKED_VENDOR_WEBGL $vendor');
     print('renderer : UNMASKED_RENDERER_WEBGL $renderer');
   }

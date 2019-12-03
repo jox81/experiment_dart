@@ -100,7 +100,7 @@ Future test_loadCustomLibrary() async {
   LoaderWidget loaderWidget = new LoaderWidget();
 
   CanvasElement canvas = new CanvasElement();
-  GLTFEngine engine = new GLTFEngine(canvas);//needed to test GLTFProject loading which add nodes to Engine+, // Todo (jpu) :
+  new GLTFEngine(canvas);//needed to test GLTFProject loading which add nodes to Engine+, // Todo (jpu) :
 
   MyLibrary myLibrary = new MyLibrary();
   myLibrary.onLoadProgress.listen((LoadProgressEvent loadProgressEvent){

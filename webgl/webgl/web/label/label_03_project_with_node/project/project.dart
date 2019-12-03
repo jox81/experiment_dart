@@ -1,4 +1,3 @@
-import 'dart:math' as Math;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/asset_library.dart';
 import 'package:webgl/gltf.dart';
@@ -40,15 +39,16 @@ class LabelProject extends GLTFProject{
   GLTFNode labelNode;
 
   bool isPlaying = false;
+  @override
   void update({num currentTime : 0.0}) {
     if(!isPlaying){
       isPlaying = true;
 
     }
-    Vector3 cameraPosition = new Vector3(
-        Math.sin(currentTime * speed) * radius,
-        1.0,
-        Math.cos(currentTime * speed) * radius);
+//    Vector3 cameraPosition = new Vector3(
+//        Math.sin(currentTime * speed) * radius,
+//        1.0,
+//        Math.cos(currentTime * speed) * radius);
 
 
 //    labelNode.rotation = new Quaternion.axisAngle(new Vector3(1.0, 0.0, 0.0), radians((currentTime * 0.1) % 360));

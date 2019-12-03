@@ -107,7 +107,7 @@ class IntrospectionManager {
         bool showParameter: false,
         bool showMethod: false,
       }) {
-    ClassMirror classMirror = reflector.reflectType(type);
+    ClassMirror classMirror = reflector.reflectType(type) as ClassMirror;
 
     Debug.log('logTypeInfos', () {
       if (showBaseInfo) {
@@ -238,7 +238,7 @@ class IntrospectionManager {
   void getMethodNames(Type type, {bool log: true}) {
     List<String> methodNames = new List();
 
-    ClassMirror classMirror = reflector.reflectType(type);
+    ClassMirror classMirror = reflector.reflectType(type) as ClassMirror;
     for (DeclarationMirror decl in classMirror.instanceMembers.values) {
       if (decl is MethodMirror) {
         String simpleName = decl.simpleName;

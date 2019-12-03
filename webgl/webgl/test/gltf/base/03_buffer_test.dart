@@ -20,7 +20,7 @@ Future main() async {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 0);
     });
@@ -28,7 +28,7 @@ Future main() async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer/valid_full.gltf';
 
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 2);
@@ -43,7 +43,7 @@ Future main() async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/minimal.gltf';
 
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       print(gltf);
 
@@ -60,7 +60,7 @@ Future main() async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/image/valid_full.gltf';
 
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFBuffer> buffers = gltf.buffers;
       expect(buffers.length, 1);

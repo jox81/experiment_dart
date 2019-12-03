@@ -12,10 +12,12 @@ class MaterialPoint extends Material {
   num pointSize;
   Vector4 color;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialPoint;
 
   MaterialPoint({this.pointSize: 1.0, this.color});
 
+  @override
   Map<String, bool> getDefines() {
     Map<String, bool> defines = new Map();
 
@@ -24,6 +26,7 @@ class MaterialPoint extends Material {
     return defines;
   }
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

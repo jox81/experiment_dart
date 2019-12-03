@@ -1,11 +1,9 @@
 import 'dart:typed_data';
-import 'dart:web_gl' as webgl;
 import 'package:vector_math/vector_math.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/property/property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/renderer/render_state.dart';
-import 'package:webgl/src/webgl_objects/webgl_buffer.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';

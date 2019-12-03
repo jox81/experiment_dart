@@ -2,7 +2,6 @@ import 'dart:html';
 import "package:test/test.dart";
 import 'package:webgl/asset_library.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
-import 'package:webgl/src/shaders/shader_source.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';

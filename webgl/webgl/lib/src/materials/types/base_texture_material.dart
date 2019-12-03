@@ -13,10 +13,12 @@ import 'package:webgl/src/webgl_objects/context.dart';
 class MaterialBaseTexture extends Material {
   WebGLTexture texture;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialBaseTexture;
 
   MaterialBaseTexture();
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

@@ -11,6 +11,7 @@ import 'dart:web_gl' as webgl;
 
 @reflector
 class KronosPRBMaterial extends Material {
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.kronosGltfPBRTest;
 
   final bool hasNormalAttribut;
@@ -107,6 +108,7 @@ class KronosPRBMaterial extends Material {
 
   double get metallic => _metallic;
 
+  @override
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();
 
@@ -142,6 +144,7 @@ class KronosPRBMaterial extends Material {
   Float32List vecData4 = new Float32List(4);
   Float32List matrixData4 = new Float32List(16);
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

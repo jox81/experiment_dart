@@ -25,6 +25,7 @@ class GLTFRenderer extends Renderer {
 
   GLTFRenderer(CanvasElement canvas) : super(canvas);
 
+  @override
   void init(covariant GLTFProject project) {
     _gltfProject = project;
 
@@ -61,6 +62,7 @@ class GLTFRenderer extends Renderer {
     }
   }
 
+  @override
   void render({num currentTime: 0.0}) {
     try {
       GL.resizeCanvas();
@@ -110,7 +112,7 @@ class GLTFRenderer extends Renderer {
       cameraPosition = Engine.mainCamera.translation;
     } else if (renderState.renderingType == RenderingType.stereo) {
       if (Engine.mainCamera is GLTFCameraPerspective) {
-        GLTFCameraPerspective camera = Engine.mainCamera;
+        GLTFCameraPerspective camera = Engine.mainCamera as GLTFCameraPerspective;
         Vector3 offsetVector = new Vector3.zero();
         cross3(camera.frontDirection, camera.upDirection, offsetVector);
         offsetVector.normalize();

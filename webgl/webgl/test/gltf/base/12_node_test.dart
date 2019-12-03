@@ -123,7 +123,7 @@ void main() {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/node/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes.length, 0);
@@ -132,7 +132,7 @@ void main() {
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/node/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
 //      print(gltf);
       print(gltf.nodes);
@@ -144,7 +144,7 @@ void main() {
     test("Compare", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/node/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes[0] == nodes[0], true);
@@ -153,7 +153,7 @@ void main() {
     test("Node hierarchy", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/node/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFNode> nodes = gltf.nodes;
       expect(nodes[0].children.length, 1);
@@ -165,7 +165,7 @@ void main() {
     test("Property", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/node/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFNode node = gltf.nodes[0];
       expect(node, isNotNull);

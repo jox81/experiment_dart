@@ -118,13 +118,14 @@ class LabelProject extends BaseProject{
       gl.enable(WebGL.DEPTH_TEST);
 
       double fieldOfView = Math.pi * 0.25;
-      num aspect = canvas.clientWidth / canvas.clientHeight;
+      double aspect = canvas.clientWidth / canvas.clientHeight;
       setPerspectiveMatrix(projectionMatrix, fieldOfView, aspect, 0.0001, 500.0);
     }
 
     render();
   }
 
+  @override
   void update({num currentTime : 0.0}) {
 
     gl.clear(WebGL.COLOR_BUFFER_BIT | WebGL.DEPTH_BUFFER_BIT);
@@ -172,6 +173,7 @@ class RectangleTextureMaterial extends Material{
     ''';
 
   ShaderSource _shaderSource;
+  @override
   ShaderSource get shaderSource => _shaderSource ??= new ShaderSource("rectangleTextureShaderSource", vertexShaderSource, fragmentShaderSource);
 
   RectangleTextureMaterial();

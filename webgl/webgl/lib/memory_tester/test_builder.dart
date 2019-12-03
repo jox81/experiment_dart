@@ -17,7 +17,7 @@ enum ItemType{
 }
 
 MemoryTester _webGLShaderMemoryTester(){
-  MemoryTester tester;
+  MemoryTester<WebGL.Shader> tester;
   tester = new MemoryTester<WebGL.Shader>()
     ..constructNewItem = (() => gl.createShader(
         ShaderType.VERTEX_SHADER))

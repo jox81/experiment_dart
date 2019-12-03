@@ -203,7 +203,7 @@ webgl.Program buildProgram() {
     gl.compileShader(shader);
 
     bool success =
-    gl.getShaderParameter(shader, webgl.WebGL.COMPILE_STATUS);
+    gl.getShaderParameter(shader, webgl.WebGL.COMPILE_STATUS) as bool;
     if (!success) {
       print(gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
@@ -224,7 +224,7 @@ webgl.Program buildProgram() {
     gl.linkProgram(program);
 
     bool success =
-    gl.getProgramParameter(program, webgl.WebGL.LINK_STATUS);
+    gl.getProgramParameter(program, webgl.WebGL.LINK_STATUS) as bool;
     if (!success) {
       print(gl.getProgramInfoLog(program));
       gl.deleteProgram(program);

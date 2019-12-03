@@ -17,14 +17,14 @@ import '../../data/gltf_helper.dart';
 
 String testFolderRelativePath = "../..";
 
-Future main() async {
+FutureOr<void> main() async {
   GLTFProject project;
 
   setUp(() async {
     String gltfPath =
         '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/05_box/gltf_embed/Box.gltf';
     project = await loadGLTFProject(gltfPath);
-    await project.debug(doProjectLog : false, isDebug:false);
+    project.debug(doProjectLog : false, isDebug:false);
   });
 
   group("GLTFCamera Embed", () {

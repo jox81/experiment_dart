@@ -13,7 +13,7 @@ class TextTexture extends WebGLTexture{
   TextStyle textStyle;
 
   /// create an offScreen canvas with a 2D canvas context to render text content
-  CanvasRenderingContext2D  _ctxForMakingTextures = new CanvasElement().getContext("2d",{'alpha':true}) as CanvasRenderingContext2D;
+  CanvasRenderingContext2D  _ctxForMakingTextures = new CanvasElement().getContext("2d",<String, dynamic>{'alpha':true}) as CanvasRenderingContext2D;
   CanvasRenderingContext2D  get ctx => _ctxForMakingTextures;
 
   TextTexture(this.width, this.height):super.texture2d();

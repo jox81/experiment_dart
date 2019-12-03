@@ -52,7 +52,7 @@ class AnimationProject extends GLTFProject {
     addInteractable(nodeInteractionnable);
 
     canvas.onMouseDown.listen((MouseEvent event){
-      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera, event.client.x, event.client.y, nodes);
+      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera as GLTFCameraPerspective, event.client.x, event.client.y, nodes);
       if(node != null) {
         nodeInteractionnable.node = node;
         node.onClickController.add(event);
@@ -88,7 +88,7 @@ class AnimationProject extends GLTFProject {
     nodeCube2.onClick.listen((e){
       print("node2 clicked !!!");
       Animation animation = new Animation.startEnd(5.0, 0.0, 1.0, ease: Ease.easeOutBounce)
-        ..onUpdate.listen((num value){
+        ..onUpdate.listen((double value){
           nodeCube2.translation = new Vector3(0.0, value, 3.0);
           print('  animation : $value');
         });
@@ -124,13 +124,13 @@ class AnimationProject extends GLTFProject {
 
   Future moveCube() async {
     Animation animation1 = new Animation.startEnd(0.0, 5.0, 2.0, ease: Ease.easeInQuadratic)
-    ..onUpdate.listen((num value){
+    ..onUpdate.listen((double value){
       nodeCube.translation = new Vector3(value, 2.0, 0.0);
     });
     animation1.play();
 
     Animation animation3 = new Animation.startEnd(0.0, 5.0, 2.0, ease: Ease.easeOutBounce)
-    ..onUpdate.listen((num value){
+    ..onUpdate.listen((double value){
       nodeCube2.translation = new Vector3(value, 0.0, 3.0);
       print('  animation3 : $value');
     });

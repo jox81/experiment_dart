@@ -12,6 +12,7 @@ class Texture2D extends Texture{
     return _instance;
   }
 
+  @override
   int textureTarget = TextureTarget.TEXTURE_2D;
 
   Texture2D._init(){

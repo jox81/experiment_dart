@@ -8,7 +8,7 @@ import 'package:webgl/src/utils/utils_math.dart';
 ///
 class BezierCurve {
   // gets points across all segments
-  List<Vector3> getPointsOnBezierCurves(List<Vector3> points, tolerance) {
+  List<Vector3> getCurvePoints(List<Vector3> points, double tolerance) {
     List<Vector3> newPoints = [];
     final int numSegments = (points.length - 1) ~/ 3;
     for (int i = 0; i < numSegments; ++i) {
@@ -20,12 +20,12 @@ class BezierCurve {
 
   /// Find all the points of the curve
   ///[numPoints] point counts on the curve
-  ///[epsilon] smothness
+  ///[epsilon] smoothness
   List<Vector3> getPointsOnBezierCurve(
       List<Vector3> points, int offset, int numPoints) {
     List<Vector3> outPoints = [];
     for (int i = 0; i < numPoints; ++i) {
-      final num t = i / (numPoints - 1);
+      final double t = i / (numPoints - 1);
       outPoints.add(_getPointOnBezierCurve(points, offset, t));
     }
     return outPoints;
@@ -33,10 +33,10 @@ class BezierCurve {
 
   /// Find a single point position on the curve using 4 [points] at [t] percentage
   ///[offset] the starting index point
-  Vector3 _getPointOnBezierCurve(List<Vector3> points, int offset, num t) {
+  Vector3 _getPointOnBezierCurve(List<Vector3> points, int offset, double t) {
     assert(points.length >= 4);
 
-    final num invT = (1 - t);
+    final double invT = (1 - t);
     Vector3 p1 = points[offset + 0] * (invT * invT * invT);
     Vector3 p2 = points[offset + 1] * (3 * t * invT * invT);
     Vector3 p3 = points[offset + 2] * (3 * invT * t * t);
@@ -77,7 +77,7 @@ class BezierCurve {
   ///First, this check if the cuvry is too curvy. If so subdivide, if not we'll add the points in.
   ///This algorithm does a good job of making sure we have enough points but it
   ///doesn't do such a great job of getting rid of unneeded points.
-  List<Vector3> getPointsOnBezierCurveWithSplitting(List<Vector3> points, int offset, tolerance, newPoints) {
+  List<Vector3> getPointsOnBezierCurveWithSplitting(List<Vector3> points, int offset, double tolerance, List<Vector3> newPoints) {
     List<Vector3> outPoints = newPoints ?? new List<Vector3>();
     if (flatness(points, offset) < tolerance) {
 
@@ -88,7 +88,7 @@ class BezierCurve {
     } else {
 
       // subdivide
-      final num t = .5;
+      final double t = .5;
       final Vector3 p1 = points[offset + 0];
       final Vector3 p2 = points[offset + 1];
       final Vector3 p3 = points[offset + 2];
@@ -112,7 +112,7 @@ class BezierCurve {
     return outPoints;
   }
 
-  List<Vector3> simplifyPoints(List<Vector3> points, int startIndex, int endIndex, epsilon, [List<Vector3> newPoints]) {
+  List<Vector3> simplifyPoints(List<Vector3> points, int startIndex, int endIndex, double epsilon, [List<Vector3> newPoints]) {
     List<Vector3> outPoints = newPoints ?? new List<Vector3>();
 
     // find the most distance point from the endpoints
@@ -149,7 +149,7 @@ class BezierCurve {
     if (l2 == 0) {
       return p.distanceToSquared(v);
     }
-    num t = ((p[0] - v[0]) * (w[0] - v[0]) + (p[1] - v[1]) * (w[1] - v[1])) / l2;
+    double t = ((p[0] - v[0]) * (w[0] - v[0]) + (p[1] - v[1]) * (w[1] - v[1])) / l2;
     t = Math.max(0, Math.min(1, t));
     return p.distanceToSquared(UtilsMath.lerpVec3(v, w, t));
   }

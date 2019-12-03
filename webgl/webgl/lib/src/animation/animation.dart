@@ -11,19 +11,19 @@ class Animation {
   final num duration;
   final EaseFunction _easeFunction;
 
-  StreamController _onStartController = new StreamController.broadcast();
+  StreamController _onStartController = new StreamController<dynamic>.broadcast();
   Stream get onStart => _onStartController.stream;
 
-  StreamController<num> _onUpdateController = new StreamController<num>.broadcast();
-  Stream<num> get onUpdate => _onUpdateController.stream;
+  StreamController<double> _onUpdateController = new StreamController<double>.broadcast();
+  Stream<double> get onUpdate => _onUpdateController.stream;
 
-  StreamController _onEndController = new StreamController.broadcast();
+  StreamController _onEndController = new StreamController<dynamic>.broadcast();
   Stream get onEnd => _onEndController.stream;
 
   num _startTime;
   num _currentTime;
 
-  Completer _completer = new Completer();
+  Completer _completer = new Completer<dynamic>();
 
   bool _isFirstTime = true;
 
@@ -53,7 +53,7 @@ class Animation {
 
     if(_currentTime < duration * 1000){
       _isPlaying = true;
-      _onUpdateController.add(UtilsMath.lerp(start, end, _easeFunction(_currentTime / (duration * 1000))));
+      _onUpdateController.add(UtilsMath.lerp(start, end, _easeFunction(_currentTime / (duration * 1000))) as double);
     }else{
       _isPlaying = false;
       _completer.complete();

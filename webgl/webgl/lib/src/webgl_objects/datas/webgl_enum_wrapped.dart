@@ -24,7 +24,7 @@ abstract class WebGLEnum {
 //    throw new Exception("can't use mirrors throw by (jer) in webgl_enum_wrapped.dart > classMirror.getField");
     if (typesMap[GLEnum] == null) {
       List<WebGLEnum> _types = new List();
-      ClassMirror classMirror = reflector.reflectType(GLEnum);
+      ClassMirror classMirror = reflector.reflectType(GLEnum) as ClassMirror;
       List<MethodMirror> decls =
           classMirror.staticMembers.values.where((e) => e.isGetter).toList();
 
@@ -43,7 +43,7 @@ abstract class WebGLEnum {
 //    throw new Exception("can't use mirrors throw by (jer) in webgl_enum_wrapped.dart");
     if (typesMap[GLEnum] == null) {
       typesMap[GLEnum] = new List();
-      ClassMirror classMirror = reflector.reflectType(GLEnum);
+      ClassMirror classMirror = reflector.reflectType(GLEnum) as ClassMirror;
       List<MethodMirror> decls =
           classMirror.staticMembers.values.where((e) => e.isGetter).toList();
 

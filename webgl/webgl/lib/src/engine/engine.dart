@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:html';
 import 'package:meta/meta.dart';
-import 'package:vector_math/vector_math.dart';
 import 'package:webgl/src/animation/animation_player.dart';
 import 'package:webgl/src/animation/animator.dart';
 import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/gltf/camera/camera.dart';
-import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/assets_manager/assets_manager.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/engine/engine_clock.dart';

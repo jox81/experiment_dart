@@ -22,6 +22,7 @@ class GLTFProjectDebugger extends ProjectDebugger{
 
   /// [doProjectLog] log gltf items infos
   /// [isDebug] log traces
+  @override
   GLTFProject debug(covariant GLTFProject project, {bool doProjectLog : false, bool isDebug:false}) {
     utilsDebug.isDebug = isDebug;
     _gltf = project;

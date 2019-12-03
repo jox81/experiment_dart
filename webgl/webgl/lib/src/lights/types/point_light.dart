@@ -3,8 +3,10 @@ import 'package:webgl/src/lights/light.dart';
 import 'package:webgl/src/lights/light_type.dart';
 
 class PointLight extends Light{
+  @override
   LightType get lightType => LightType.point;
 
+  @override
   Vector3 translation;
 
   PointLight() {

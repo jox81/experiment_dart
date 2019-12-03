@@ -24,16 +24,16 @@ class AssetLibrary {
 }
 
 class _ImageLibrary extends Library {
-  String _brdfLUTPath = 'packages/webgl/images/utils/brdfLUT.png';
+  final String _brdfLUTPath = 'packages/webgl/images/utils/brdfLUT.png';
   ImageElement get brdfLUT => getImageElement(_brdfLUTPath);
 
-  String _uvPath = 'packages/webgl/images/utils/uv.png';
+  final String _uvPath = 'packages/webgl/images/utils/uv.png';
   ImageElement get uv => getImageElement(_uvPath);
 
-  String _uvGridPath = 'packages/webgl/images/utils/uv_grid.jpg';
+  final String _uvGridPath = 'packages/webgl/images/utils/uv_grid.jpg';
   ImageElement get uvGrid => getImageElement(_uvGridPath);
 
-  String _cratePath = 'packages/webgl/images/crate.gif';
+  final String _cratePath = 'packages/webgl/images/crate.gif';
   ImageElement get crate => getImageElement(_cratePath);
 
   _ImageLibrary() {

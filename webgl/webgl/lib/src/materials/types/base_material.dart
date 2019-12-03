@@ -9,10 +9,12 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 
 @reflector
 class MaterialBase extends Material {
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialBase;
 
   MaterialBase();
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

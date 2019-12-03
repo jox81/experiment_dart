@@ -26,7 +26,7 @@ void main() {
       String gltfPath =
           '${testFolderRelativePath}/gltf/tests/base/data/accessor/get_elements.gltf';
       gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
 
       // All buffers are loaded

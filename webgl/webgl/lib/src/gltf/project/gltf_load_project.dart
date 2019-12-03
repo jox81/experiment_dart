@@ -441,7 +441,7 @@ class GLTFLoadProject extends GLTFProject{
         hasTangent: gltfSource.hasTangent,
         colorCount: gltfSource.colorCount,
         jointsCount: gltfSource.jointsCount,
-        weigthsCount: gltfSource.weigthsCount,
+        weigthsCount: gltfSource.weightsCount,
         texcoordCount: gltfSource.texcoordCount);
 
     //attributs

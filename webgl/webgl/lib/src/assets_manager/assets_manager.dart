@@ -4,7 +4,7 @@ class AssetManager{
 
   AssetManager();
 
-  get onLoadProgress => null;
+  Stream get onLoadProgress => null;
 
   /// should manage libraries and loadprogress
 

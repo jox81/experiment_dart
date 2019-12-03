@@ -11,10 +11,12 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class MaterialBaseColor extends Material {
   Vector4 color;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialBaseColor;
 
   MaterialBaseColor(this.color);
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

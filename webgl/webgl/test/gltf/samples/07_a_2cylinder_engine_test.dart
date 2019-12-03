@@ -18,7 +18,7 @@ Future main() async {
     String gltfPath =
         '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/07_2cylinder_engine/gltf_embed/2CylinderEngine.gltf';
     project = await loadGLTFProject(gltfPath);
-    await project.debug(doProjectLog : false, isDebug:false);
+    project.debug(doProjectLog : false, isDebug:false);
   });
 
   // Todo (jpu) : !! ? trop d'info pour les placer ici

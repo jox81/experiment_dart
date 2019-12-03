@@ -9,6 +9,7 @@ import 'package:webgl/src/webgl_objects/webgl_active_texture.dart';
 
 class WebGLTexture extends EditTexture {
   final WebGL.Texture webGLTexture;
+  @override
   final int textureTarget;
 
   ImageElement _image;

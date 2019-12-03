@@ -9,7 +9,7 @@ class MemoryTester<T>{
   ConstructNewItem<T> constructNewItem;
   DisposeItem disposeItem;
 
-  void construct(count) {
+  void construct(int count) {
     items ??= new List<T>();
 
     window.console.time('MemoryTester : construct');
@@ -42,9 +42,9 @@ class MemoryTester<T>{
 
   Future initialize() async {
 
-    InputElement countInput = querySelector('#count');
-    InputElement constructButton = querySelector('#construct');
-    InputElement disposeButton = querySelector('#dispose');
+    InputElement countInput = querySelector('#count') as InputElement;
+    InputElement constructButton = querySelector('#construct') as InputElement;
+    InputElement disposeButton = querySelector('#dispose') as InputElement;
 
     CanvasElement canvas = new CanvasElement();
     new Context(canvas);

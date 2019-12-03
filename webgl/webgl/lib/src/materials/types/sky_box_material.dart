@@ -13,18 +13,22 @@ import 'package:webgl/src/webgl_objects/context.dart';
 class MaterialSkyBox extends Material {
   WebGLTexture skyboxTexture;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialSkybox;
 
   MaterialSkyBox();
 
   /// ! vu ceci, il faut que l'objet qui a ce matériaux soit rendu en premier
+  @override
   void setupBeforeRender(){
     gl.disable(EnableCapabilityType.DEPTH_TEST);
   }
+  @override
   void setupAfterRender(){
     gl.enable(EnableCapabilityType.DEPTH_TEST);
   }
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

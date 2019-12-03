@@ -15,10 +15,12 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class MaterialPragmaticPBR extends Material {
   PointLight pointLight;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialPBR;
 
   MaterialPragmaticPBR(this.pointLight);
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

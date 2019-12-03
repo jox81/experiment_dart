@@ -12,6 +12,7 @@ class TextureCubeMap extends Texture{
     return _instance;
   }
 
+  @override
   int textureTarget = TextureTarget.TEXTURE_CUBE_MAP;
 
   TextureCubeMap._init(){

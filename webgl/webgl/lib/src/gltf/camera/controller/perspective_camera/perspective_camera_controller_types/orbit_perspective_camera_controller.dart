@@ -78,6 +78,8 @@ class OrbitPerspectiveCameraController extends PerspectiveCameraController{
     }
   }
 
+  @override
+  @override
   void updateFovWithKeys(List<bool> currentlyPressedKeys) {
     num fovAmplitude = 0.01;
     if (currentlyPressedKeys[KeyCode.NUM_MINUS]) {
@@ -88,6 +90,7 @@ class OrbitPerspectiveCameraController extends PerspectiveCameraController{
     }
   }
 
+  @override
   void updateCameraTransformWithKeys(List<bool> currentlyPressedKeys) {
     double orbitAmplitude = 1.0;
     Vector2 direction = new Vector2.zero();

@@ -31,6 +31,7 @@ class UtilsTextureGLTF {
     wrapS = TextureWrapType.REPEAT;
     wrapT = TextureWrapType.REPEAT;
     brdfLUTTexture = new WebGLTexture.fromWebGL(TextureUtils.createImageTexture(TextureUnit.TEXTURE0 + 0, imageElement, magFilter, minFilter, wrapS, wrapT), TextureTarget.TEXTURE_2D);
+    brdfLUTTexture;//may be used ?
 
     //Environnement
     gl.activeTexture(TextureUnit.TEXTURE0 + 1);

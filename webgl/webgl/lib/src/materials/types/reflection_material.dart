@@ -13,10 +13,12 @@ import 'package:webgl/src/webgl_objects/context.dart';
 class MaterialReflection extends Material {
   WebGLTexture skyboxTexture;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialReflection;
 
   MaterialReflection();
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

@@ -20,7 +20,7 @@ class Bloc extends GLTFNode{
             nodeCube.translation = new Vector3(0.0, 0.0, 3.0 + value);
             print('  animation : $value');
           })
-          ..onEnd.listen((_){
+          ..onEnd.listen((dynamic _){
             nodeCube2.visible = true;
           });
         animation.play();
@@ -34,11 +34,11 @@ class Bloc extends GLTFNode{
       ..onClick.listen((e){
         print("node2 clicked !!!");
         Animation animation = new Animation.startEnd(0.0, 5.0, 0.8, ease: Ease.sine)
-          ..onUpdate.listen((num value){
+          ..onUpdate.listen((double value){
             nodeCube2.translation = new Vector3(0.0, value, 3.0);
             print('  animation : $value');
           })
-          ..onEnd.listen((_){
+          ..onEnd.listen((dynamic _){
             nodeCube2.visible = false;
             nodeCube2.enable = false;
           });

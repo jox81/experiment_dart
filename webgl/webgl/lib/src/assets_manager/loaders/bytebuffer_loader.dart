@@ -20,7 +20,7 @@ class ByteBufferLoader extends FileLoader<ByteBuffer>{
     fileReader.readAsArrayBuffer(blob);
     await fileReader.onLoadEnd.first;
 
-    result = new Uint8List.fromList(fileReader.result).buffer;
+    result = new Uint8List.fromList(fileReader.result as List<int>).buffer;
     onLoadEndStreamController.add(progressEvent);
   }
 

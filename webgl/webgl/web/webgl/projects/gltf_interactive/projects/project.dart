@@ -49,7 +49,7 @@ class ArchiInteractive extends GLTFLoadProject{
     });
 
     //get node by name
-    GLTFNode roofNode = scene.nodes.firstWhere((n)=>n.name == 'roof')
+    scene.nodes.firstWhere((n)=>n.name == 'roof')
     ..translate(new Vector3(0,0,0));
   }
 }

@@ -15,7 +15,7 @@ Future main() async {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/sampler/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFSampler> samplers = gltf.samplers;
       expect(samplers.length, 0);
@@ -23,7 +23,7 @@ Future main() async {
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/sampler/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFSampler> samplers = gltf.samplers;
       expect(samplers.length, 1);
@@ -31,7 +31,7 @@ Future main() async {
     test("properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/sampler/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFSampler> samplers = gltf.samplers;
       expect(samplers.length, 1);

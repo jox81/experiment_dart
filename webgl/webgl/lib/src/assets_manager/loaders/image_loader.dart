@@ -35,7 +35,7 @@ class ImageLoader extends FileLoader<ImageElement>{
       });
     fileReader.readAsDataUrl(blob);
     await fileReader.onLoadEnd.first;
-    return fileReader.result;
+    return fileReader.result as String;
   }
 
   ///Load a single image from an URL

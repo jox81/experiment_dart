@@ -4,6 +4,7 @@ import 'package:webgl/src/lights/light_type.dart';
 
 /// Direction from where the light is coming to origin
 class DirectionalLight extends Light{
+  @override
   LightType get lightType => LightType.directional;
 
   Vector3 direction;

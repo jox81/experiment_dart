@@ -16,10 +16,12 @@ class MaterialDepthTexture extends Material {
   num near = 1.0;
   num far = 1000.0;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialDepthTexture;
 
   MaterialDepthTexture();
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

@@ -23,6 +23,7 @@ class GLTFCameraOrthographic extends GLTFCamera{
     update();
   }
 
+  @override
   Vector3 get frontDirection => null;
 
   GLTFCameraOrthographic(){

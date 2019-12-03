@@ -152,7 +152,7 @@ Future main() async {
 
     //GLTFCamera
     double fieldOfView = Math.pi * 0.25;
-    num aspect = canvas.clientWidth / canvas.clientHeight;
+    double aspect = canvas.clientWidth / canvas.clientHeight;
     projection = new Matrix4.identity();
     setPerspectiveMatrix(projection, fieldOfView, aspect, 0.0001, 500.0);
 

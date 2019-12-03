@@ -139,7 +139,7 @@ class UtilsGeometry{
         List<Triangle> triangles = node.mesh.getFaces();
         for(Triangle triangle in triangles) {
           Matrix4 parentMatrix = node.parent != null ? node.parentMatrix : new Matrix4.identity();
-          num distance = ray.intersectsWithTriangle(triangle..transform(parentMatrix * node.matrix));
+          num distance = ray.intersectsWithTriangle(triangle..transform((parentMatrix * node.matrix) as Matrix4));
 
           if(distance != null) {
             if(itemHit == null || distance < distanceHit) {

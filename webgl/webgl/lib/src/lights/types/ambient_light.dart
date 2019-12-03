@@ -3,6 +3,7 @@ import 'package:webgl/src/lights/light.dart';
 import 'package:webgl/src/lights/light_type.dart';
 
 class AmbientLight extends Light{
+  @override
   LightType get lightType => LightType.ambient;
 
   AmbientLight() {

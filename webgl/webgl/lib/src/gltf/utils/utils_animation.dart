@@ -46,7 +46,7 @@ class GLTFUtilsAnimation{
       int previousStartIndex = previousIndex *
           sampler.output.components; //sampler.output.byteOffset +
       previousValues = keyValues.sublist(previousStartIndex,
-          previousStartIndex + sampler.output.components) as Float32List;
+          previousStartIndex + sampler.output.components);
     }
 
     double interpolationValue = nextTime - previousTime != 0.0

@@ -19,6 +19,7 @@ class GLTFCameraPerspective extends GLTFCamera{
 
   //projectionMatrix
   Matrix4 _projectionMatrix = new Matrix4.identity();
+  @override
   Matrix4 get projectionMatrix {
     return (_projectionMatrix * new Matrix4.identity()) as Matrix4;// Why is it needed to update shader uniform!!?
   }
@@ -29,6 +30,7 @@ class GLTFCameraPerspective extends GLTFCamera{
 
   //viewMatrix
   Matrix4 _viewMatrix = new Matrix4.identity();
+  @override
   Matrix4 get viewMatrix {
     return (_viewMatrix * new Matrix4.identity()) as Matrix4; // Why is it needed to update shader shader uniform!!?
   }
@@ -52,6 +54,7 @@ class GLTFCameraPerspective extends GLTFCamera{
     update();
   }
 
+  @override
   Vector3 get frontDirection => targetPosition - translation;
 
   //roll on y
@@ -94,6 +97,7 @@ class GLTFCameraPerspective extends GLTFCamera{
     cameraController = new OrbitPerspectiveCameraController();
   }
 
+  @override
   update() {
     _aspectRatio = GL.viewAspectRatio;
     setPerspectiveMatrix(_projectionMatrix, _yfov, _aspectRatio, znear, zfar);

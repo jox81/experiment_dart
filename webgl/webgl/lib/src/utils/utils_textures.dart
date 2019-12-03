@@ -289,7 +289,7 @@ class TextureUtils {
       List<GLTFNode> models = new List();
 
       //backup camera
-      GLTFCameraPerspective baseCam = Engine.mainCamera;
+      GLTFCameraPerspective baseCam = Engine.mainCamera as GLTFCameraPerspective;
       Rectangle<int> previousViewport =
       new Rectangle(0, 0, gl.drawingBufferWidth.toInt(), gl.drawingBufferHeight.toInt());
 
@@ -366,7 +366,7 @@ class TextureUtils {
     CanvasElement canvas = document.createElement('canvas') as CanvasElement;
     canvas.width = width;
     canvas.height = height;
-    CanvasRenderingContext2D context = canvas.getContext('2d');
+    CanvasRenderingContext2D context = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     // Copy the pixels to a 2D canvas
     ImageData imageData = context.createImageData(width, height);
@@ -400,7 +400,7 @@ class TextureUtils {
     dynamic context = canvas.getContext('2d');
 
     // Copy the pixels to a 2D canvas
-    ImageData imageData = context.createImageData(width, height);
+    ImageData imageData = context.createImageData(width, height) as ImageData;
     imageData.data.setAll(0,data);
     context.putImageData(imageData, 0, 0);
 

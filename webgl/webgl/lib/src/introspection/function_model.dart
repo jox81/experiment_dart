@@ -50,7 +50,7 @@ class FunctionModel{
   }
 
   dynamic invoke(String memberName, List positionalArguments, Map<Symbol, dynamic> namedArguments) {
-    InstanceMirror f = instancesMirror.invoke(memberName, positionalArguments, namedArguments);
+    InstanceMirror f = instancesMirror.invoke(memberName, positionalArguments, namedArguments) as InstanceMirror;
     return f.reflectee;
   }
 }

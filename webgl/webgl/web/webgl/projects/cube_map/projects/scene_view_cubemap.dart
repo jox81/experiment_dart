@@ -23,6 +23,7 @@ class CubeMapProject extends GLTFProject{
     await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
   }
 
+  @override
   final String baseDirectory = '';// Todo (jpu) : usage ?
 
   NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
@@ -39,7 +40,7 @@ class CubeMapProject extends GLTFProject{
     addInteractable(nodeInteractionnable);
 
     canvas.onMouseDown.listen((MouseEvent event){
-      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera, event.client.x, event.client.y, nodes);
+      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera as GLTFCameraPerspective, event.client.x, event.client.y, nodes);
       if(node != null) {
         nodeInteractionnable.node = node;
         print('node switch > ${node.name}');

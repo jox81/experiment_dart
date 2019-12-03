@@ -27,7 +27,7 @@ Future main() async {
   setUp(() async {
     String gltfPath = '${testFolderRelativePath}/gltf/tests/samples/gltf_2_0/04_camera/gltf_embed/Cameras.gltf';
     project = await loadGLTFProject(gltfPath);
-    await project.debug(doProjectLog : false, isDebug:false);
+    project.debug(doProjectLog : false, isDebug:false);
   });
 
   group("GLTFCamera Embed", () {

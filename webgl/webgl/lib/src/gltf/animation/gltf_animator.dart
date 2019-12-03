@@ -12,6 +12,7 @@ class GLTFAnimator extends Animator {
 
   GLTFProject _project;
 
+  @override
   void init(covariant GLTFProject project){
     _project = project;
   }
@@ -19,6 +20,7 @@ class GLTFAnimator extends Animator {
   // Todo (jpu) :
   // - where to use this ? not use for now
   // - do not pass Project ?
+  @override
   void update({num currentTime: 0.0}) {
 
     for (int i = 0; i < _project.animations.length; i++) {

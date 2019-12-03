@@ -9,6 +9,7 @@ class WebGLDictionary extends _ReturnedDictionary {
 class _ReturnedDictionary {
   Map _values;
 
+  @override
   void noSuchMethod(Invocation invocation) {
     // Todo (jpu) : Mirrors
     throw new Exception("can't use mirrors");

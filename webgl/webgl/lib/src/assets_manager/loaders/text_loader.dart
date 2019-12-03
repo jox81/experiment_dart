@@ -19,10 +19,11 @@ class TextLoader extends FileLoader<String> {
     fileReader.readAsText(blob);
     await fileReader.onLoadEnd.first;
 
-    result = fileReader.result;
+    result = fileReader.result as String;
     onLoadEndStreamController.add(progressEvent);
   }
 
+  @override
   void loadSync() {
     Completer completer = new Completer<String>();
 

@@ -63,7 +63,7 @@ abstract class FileLoader<T> {
         print(fsErr);
         return completer.completeError(fsErr);
       } else {
-        Blob blob = request.response;
+        Blob blob = request.response as Blob;
         completer.complete(blob);
       }
     });

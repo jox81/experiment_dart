@@ -13,7 +13,7 @@ void main() {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/mesh/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFMesh> meshes = gltf.meshes;
       expect(meshes.length, 0);
@@ -22,7 +22,7 @@ void main() {
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/mesh/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFMesh> meshes = gltf.meshes;
       expect(meshes.length, 1);
@@ -31,7 +31,7 @@ void main() {
     test("Property primitive", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/mesh/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFMesh mesh = gltf.meshes[0];
       expect(mesh, isNotNull);
@@ -42,7 +42,7 @@ void main() {
     test("Property weights", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/mesh/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFMesh mesh = gltf.meshes[0];
       expect(mesh, isNotNull);
@@ -55,7 +55,7 @@ void main() {
     test("Property primitive", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/mesh/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFMesh mesh = gltf.meshes[0];
       expect(mesh, isNotNull);

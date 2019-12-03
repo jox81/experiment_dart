@@ -25,10 +25,12 @@ abstract class GLTFCamera extends GLTFNode with Camera{
   Vector3 get xAxis => zAxis.cross(upDirection);
   Vector3 get yAxis => zAxis.cross(xAxis);
 
+  @override
   set translation(Vector3 value) {
    super.translation = value;
     update();
   }
+  @override
   set matrix(Matrix4 value) {
    super.matrix = value;
     update();
@@ -49,7 +51,9 @@ abstract class GLTFCamera extends GLTFNode with Camera{
   }
 
   CameraController _cameraController;
+  @override
   CameraController get cameraController => _cameraController;
+  @override
   set cameraController(covariant CameraController value) {
     _cameraController = value;
     _cameraController.camera = this as GLTFCameraPerspective;

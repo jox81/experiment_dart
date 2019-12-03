@@ -34,7 +34,7 @@ abstract class Project{
     _interactionables.add(customInteractionable);
   }
 
-  debug({bool doProjectLog:false, bool isDebug:false}) {
+  void debug({bool doProjectLog:false, bool isDebug:false}) {
     projectDebugger.debug(this, doProjectLog: doProjectLog, isDebug: isDebug);
   }
 

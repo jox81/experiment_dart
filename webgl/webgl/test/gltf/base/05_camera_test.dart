@@ -17,7 +17,7 @@ Future main() async {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFCamera> cameras = gltf.cameras;
       expect(cameras.length, 0);
@@ -26,7 +26,7 @@ Future main() async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf.cameras.length, 2);
     });
@@ -34,7 +34,7 @@ Future main() async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[0], isNotNull);
       expect(gltf.cameras[0] is GLTFCameraPerspective, isTrue);
@@ -50,7 +50,7 @@ Future main() async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/camera/valid_full.gltf';
 
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       expect(gltf.cameras[1], isNotNull);
       expect(gltf.cameras[1] is GLTFCameraOrthographic, isTrue);

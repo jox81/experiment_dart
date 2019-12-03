@@ -36,7 +36,7 @@ class AnimationProject extends GLTFProject {
     addInteractable(nodeInteractionnable);
 
     canvas.onMouseDown.listen((MouseEvent event){
-      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera, event.client.x, event.client.y, nodes);
+      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(Engine.mainCamera as GLTFCameraPerspective, event.client.x, event.client.y, nodes);
       if(node != null) {
         nodeInteractionnable.node = node;
         node.onClickController.add(event);

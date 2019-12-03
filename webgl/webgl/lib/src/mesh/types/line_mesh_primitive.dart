@@ -8,6 +8,10 @@ class LineMeshPrimitive extends MeshPrimitive {
 
     mode = DrawMode.LINE_STRIP;
 
+    setPoints(points);
+  }
+
+  void setPoints(List<Vector3> points) {
     vertices = [];
 
     for(int i = 0; i < points.length; i++){

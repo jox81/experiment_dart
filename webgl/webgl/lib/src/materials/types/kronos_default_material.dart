@@ -11,8 +11,10 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 class KronosDefaultMaterial extends Material {
   KronosDefaultMaterial();
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.kronosGltfDefault;
 
+  @override
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();
 
@@ -44,6 +46,7 @@ class KronosDefaultMaterial extends Material {
     return defines;
   }
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

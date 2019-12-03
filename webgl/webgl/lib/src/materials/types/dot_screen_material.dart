@@ -17,10 +17,12 @@ class MaterialDotScreen extends Material {
   Vector2 center = new Vector2(0.0, 0.0);
   Vector2 texSize = new Vector2(200.0, 200.0);
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.dotScreen;
 
   MaterialDotScreen();
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

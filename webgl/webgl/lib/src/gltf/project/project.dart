@@ -41,16 +41,17 @@ class GLTFProject extends Project{
 
   GLTFProjectDebugger _projectDebugger;
 
+  @override
   GLTFProjectDebugger get projectDebugger => _projectDebugger ??= new GLTFProjectDebugger();
 
   GLTFScene get currentScene =>
       scenes.length > 0 ? scenes[0] : null;
 
   @override
-  GLTFCameraPerspective get mainCamera => super.mainCamera ??=
+  GLTFCameraPerspective get mainCamera => (super.mainCamera ??=
      new GLTFCameraPerspective(radians(37.0), 0.1, 1000.0)
       ..targetPosition = new Vector3.zero()
-      ..translation = new Vector3(20.0, 20.0, 20.0);
+      ..translation = new Vector3(20.0, 20.0, 20.0)) as GLTFCameraPerspective;
 
   DirectionalLight _defaultLight;
   DirectionalLight get defaultLight => _defaultLight;
@@ -110,7 +111,7 @@ class GLTFProject extends Project{
   GLTFCamera getCurrentCamera() {
     GLTFCamera currentCamera;
 
-    bool debugCamera = true;
+    bool debugCamera = false;
 
     if (debugCamera) {
       currentCamera = new GLTFCameraPerspective(radians(47.0), 0.1, 1000.0)
@@ -189,7 +190,8 @@ class GLTFProject extends Project{
     GLTFAnimationSampler.nextId = 0;
   }
 
-  debug({bool doProjectLog, bool isDebug}) {}
+  @override
+  void debug({bool doProjectLog:false, bool isDebug:false}) {}
 
   Map<String, ImageElement> _data = new Map<String, ImageElement>();
 

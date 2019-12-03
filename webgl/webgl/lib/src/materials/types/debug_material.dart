@@ -13,8 +13,10 @@ class MaterialDebug extends Material {
 
   MaterialDebug();
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.debugShader;
 
+  @override
   Map<String, bool> getDefines() {
     //debugLog.logCurrentFunction();
 
@@ -35,6 +37,7 @@ class MaterialDebug extends Material {
     return defines;
   }
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

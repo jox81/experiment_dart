@@ -15,7 +15,7 @@ Future main() async {
     test("Empty array", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer_view/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFBufferView> bufferViews = gltf.bufferViews;
       expect(bufferViews.length, 0);
@@ -23,7 +23,7 @@ Future main() async {
     test("Array length", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer_view/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       List<GLTFBufferView> bufferViews = gltf.bufferViews;
       expect(bufferViews.length, 1);
@@ -31,7 +31,7 @@ Future main() async {
     test("BufferView properties", () async {
       String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/buffer_view/valid_full.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
-      await gltf.debug(doProjectLog : false, isDebug:false);
+      gltf.debug(doProjectLog : false, isDebug:false);
 
       GLTFBufferView bufferView = gltf.bufferViews[0];
       expect(bufferView.byteLength,4);

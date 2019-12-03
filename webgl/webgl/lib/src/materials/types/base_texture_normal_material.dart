@@ -16,10 +16,12 @@ class MaterialBaseTextureNormal extends Material {
   DirectionalLight directionalLight;
   bool useLighting = false;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialBaseTextureNormal;
 
   MaterialBaseTextureNormal();
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

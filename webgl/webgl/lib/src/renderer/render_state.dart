@@ -12,7 +12,7 @@ class RenderState {
   //Single / Stereo
   RenderingType renderingType = RenderingType.single;
   bool isLeft = false;
-  num offsetScale = 10;
+  double offsetScale = 10;
 }
 
 enum RenderingType{

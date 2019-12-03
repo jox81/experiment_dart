@@ -22,10 +22,12 @@ class MaterialCustom extends Material {
 
   SetShaderVariables setShaderUniformsVariables;
 
+  @override
   ShaderSource get shaderSource => AssetLibrary.shaders.materialPoint;
 
   MaterialCustom(this.vShader, this.fShader);
 
+  @override
   void setUniforms(
       WebGLProgram program,
       Matrix4 modelMatrix,

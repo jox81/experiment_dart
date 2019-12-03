@@ -6,7 +6,9 @@ abstract class PerspectiveCameraController extends CameraController{
   bool get isDragging => _isDragging;
 
   GLTFCameraPerspective _camera;
+  @override
   GLTFCameraPerspective get camera => _camera;
+  @override
   set camera(covariant GLTFCameraPerspective value) {
     _camera = value;
   }

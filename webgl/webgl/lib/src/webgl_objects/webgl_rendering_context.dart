@@ -575,7 +575,7 @@ class WebGLRenderingContext{
         bitmask |= mask as int;
       }
     }else {
-      bitmask = masks;
+      bitmask = masks as int;
     }
     
     gl.clear(bitmask);
