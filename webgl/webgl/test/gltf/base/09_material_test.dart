@@ -15,7 +15,7 @@ String testFolderRelativePath = "../..";
 Future main() async {
   group("Material", () {
     test("Empty array", () async {
-      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/empty.gltf';;
+      String gltfPath = '${testFolderRelativePath}/gltf/tests/base/data/material/empty.gltf';
       GLTFProject gltf = await loadGLTFProject(gltfPath);
       gltf.debug(doProjectLog : false, isDebug:false);
 

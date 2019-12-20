@@ -6,7 +6,7 @@ import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-@reflector
+//@reflector
 class GLTFTextureInfo extends GltfProperty {
   int get index => texture.textureId;
 

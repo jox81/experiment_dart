@@ -2,7 +2,7 @@ import 'package:webgl/src/gltf/property/property.dart';
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFPbrMetallicRoughness extends GltfProperty {
   static int nextId = 0;
   final int materialPbrId = nextId++;

@@ -3,7 +3,7 @@ import 'package:webgl/src/gltf/scene.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-@reflector
+//@reflector
 class WebglEdit{
   final GLTFScene scene;
 

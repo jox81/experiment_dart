@@ -1,7 +1,7 @@
 import 'package:webgl/src/gltf/property/property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFAccessorSparseIndices extends GltfProperty {
   final int byteOffset;
   /// ShaderVariableType componentType;

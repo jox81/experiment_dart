@@ -17,7 +17,7 @@ import 'package:webgl/src/utils/utils_textures.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 
-@reflector
+//@reflector
 class MaterialsFactory {
   static void assignMaterialTypeToModel(
       MaterialType materialType, GLTFMesh mesh) {

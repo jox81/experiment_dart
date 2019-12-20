@@ -76,51 +76,40 @@ class PrimitivesProject extends GLTFProject {
 //  MaterialPoint materialPoint = materialLibrary.matrerialPoint;
     //  project.materials.add(material); // Todo (jpu) : don't add ?
 
-
-//  GLTFMesh skyBoxMesh = new GLTFMesh.cube()
-//    ..primitives[0].material = materialLibrary.materialSkyBox;/// ! vu ceci, il faut que l'objet qui a ce matériaux soit rendu en premier
-//  GLTFNode skyBoxNode = new GLTFNode()
-//    ..mesh = skyBoxMesh
+//  CubeGLTFNode skyBoxNode = new CubeGLTFNode()
+//    ..material = materialLibrary.materialSkyBox;/// ! vu ceci, il faut que l'objet qui a ce matériaux soit rendu en premier
 //    ..name = 'quadDepth'
 //    ..matrix.scale(2.0);
 //  scene.addNode(skyBoxNode);
 
     //> meshes
 
-    GLTFMesh meshPoint = new GLTFMesh.point()
-      ..primitives[0].material = materialPoint;
-    GLTFNode nodePoint = new GLTFNode()
-      ..mesh = meshPoint
+    PointGLTFNode nodePoint = new PointGLTFNode()
+      ..material = materialPoint
       ..name = 'point'
       ..translation = new Vector3(5.0, 0.0, 0.0);
     scene.addNode(nodePoint);
 
     // Todo (jpu) :This doesn't show, use another material ? what material doesn't work ?
-    GLTFMesh meshLine = new GLTFMesh.line([
+    LineGLTFNode nodeLine = new LineGLTFNode([
       new Vector3.all(0.0),
       new Vector3(10.0, 0.0, 0.0),
       new Vector3(10.0, 0.0, 10.0),
       new Vector3(10.0, 10.0, 10.0),
     ])
-      ..primitives[0].material = material;
-    GLTFNode nodeLine = new GLTFNode()
-      ..mesh = meshLine
+      ..material = material
       ..name = 'multiline'
       ..translation = new Vector3(-5.0, 0.0, -5.0);
     scene.addNode(nodeLine);
 
-    GLTFMesh meshTriangle = new GLTFMesh.triangle()
-      ..primitives[0].material = material;
-    GLTFNode nodeTriangle = new GLTFNode()
-      ..mesh = meshTriangle
+    TriangleGLTFNode nodeTriangle = new TriangleGLTFNode()
+      ..material = material
       ..name = 'triangle'
       ..translation = new Vector3(0.0, 0.0, -5.0);
     scene.addNode(nodeTriangle);
 
-    GLTFMesh meshQuad = new GLTFMesh.quad()
-      ..primitives[0].material = material;
-    GLTFNode nodeQuad = new GLTFNode()
-      ..mesh = meshQuad
+    QuadGLTFNode nodeQuad = new QuadGLTFNode()
+      ..material = material
       ..name = 'quad'
       ..translation = new Vector3(5.0, 0.0, -5.0);
     scene.addNode(nodeQuad);
@@ -133,20 +122,15 @@ class PrimitivesProject extends GLTFProject {
       ..translation = new Vector3(-5.0, 0.0, 0.0);
     scene.addNode(nodePyramid);
 
-    GLTFMesh meshCube = new GLTFMesh.cube()
-      ..primitives[0].material = new MaterialBaseColor(new Vector4(1.0, 0.0, 1.0, 1.0));;
-    GLTFNode nodeCube = new GLTFNode()
-      ..mesh = meshCube
+    CubeGLTFNode nodeCube = new CubeGLTFNode()
+      ..material = new MaterialBaseColor(new Vector4(1.0, 0.0, 1.0, 1.0))
       ..name = 'cube'
       ..translation = new Vector3(0.0, 0.0, 0.0);
     scene.addNode(nodeCube);
 
     // Todo (jpu) : bug with other primitives with MaterialBaseVertexColor
-    GLTFMesh meshSphere = new GLTFMesh.sphere(
-        meshPrimitiveInfos: new MeshPrimitiveInfos(useColors: false))
-      ..primitives[0].material = material;
-    GLTFNode nodeSphere = new GLTFNode()
-      ..mesh = meshSphere
+    SphereGLTFNode nodeSphere = new SphereGLTFNode()
+      ..material = material
       ..name = 'sphere'
       ..translation = new Vector3(5.0, 0.0, 0.0);
     scene.addNode(nodeSphere);

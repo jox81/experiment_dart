@@ -21,7 +21,7 @@ class BezierCurve2 extends GLTFNode{
   GLTFNode _createCurve() {
     List<Vector3> basePoints = _points.map((n)=> n.translation).toList();
     List<Vector3> curvedPointPositions = getCurvePoints(basePoints, 0.001);
-    GLTFNode curve = new GLTFNode.line(curvedPointPositions, name:'curve');
+    LineGLTFNode curve = new LineGLTFNode(curvedPointPositions, name:'curve');
     return curve;
   }
 

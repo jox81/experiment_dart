@@ -5,8 +5,6 @@ import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/engine/engine.dart';
 import 'package:webgl/src/gltf/controller/node_conrtoller_type/drive_2d_node_controller.dart';
 import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
-import 'package:webgl/src/gltf/mesh/mesh.dart';
-import 'package:webgl/src/mesh/mesh_primitive_infos.dart';
 import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/materials.dart';
@@ -23,19 +21,16 @@ class CubeMapProject extends GLTFProject{
     await AssetLibrary.cubeMaps.load(CubeMapName.pisa);
   }
 
-  @override
-  final String baseDirectory = '';// Todo (jpu) : usage ?
-
-  NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
-
-  CubeMapProject._();
   static Future<CubeMapProject> build() async {
     await CubeMapProject.loadAssets();
     return await new CubeMapProject._().._setup();
   }
 
+  CubeMapProject._();
+
   Future _setup() async{
 
+    NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
     nodeInteractionnable.controller = new Drive2dNodeController();
     addInteractable(nodeInteractionnable);
 
@@ -65,10 +60,8 @@ class CubeMapProject extends GLTFProject{
     MaterialSkyBox materialSkyBox = new MaterialSkyBox();
     materialSkyBox.skyboxTexture = cubeMapTexture;
 
-    GLTFMesh skyBoxMesh = new GLTFMesh.cube(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
-      ..primitives[0].material = materialSkyBox;
-    GLTFNode skyBoxNode = new GLTFNode()
-      ..mesh = skyBoxMesh
+    CubeGLTFNode skyBoxNode = new CubeGLTFNode()
+      ..material = materialSkyBox
       ..name = 'quadDepth'
       ..matrix.scale(1.0);
     scene.addNode(skyBoxNode);
@@ -79,42 +72,33 @@ class CubeMapProject extends GLTFProject{
 //    material = new MaterialBase();
     material = new MaterialReflection()..skyboxTexture = cubeMapTexture;
 
-//    GridMesh grid = new GridMesh();
-//    meshes.add(grid);
+    GridGLTFNode gridNode = new GridGLTFNode();
+    scene.addNode(gridNode);
 
-    GLTFMesh sphereMesh = new GLTFMesh.sphere(
-        radius: 1.0, segmentV: 32, segmentH: 32, meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
-      ..primitives[0].material = material;
-    GLTFNode sphereNode = new GLTFNode.sphere()
-      ..mesh = sphereMesh
+    SphereGLTFNode sphereNode = new SphereGLTFNode()
+      ..material = material
       ..name = 'sphere'
       ..matrix.translate(0.0, 0.0, 0.0)
       ..matrix.scale(1.0);
     scene.addNode(sphereNode);
 
-    GLTFMesh planeMesh = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
-      ..primitives[0].material = material;
-    GLTFNode planeNode = new GLTFNode()
-      ..mesh = planeMesh
+    QuadGLTFNode planeNode = new QuadGLTFNode()
+      ..material = material
       ..name = 'plane'
       ..matrix.translate(2.0, 0.0, 0.0)
       ..matrix.scale(1.0)
       ..matrix.rotateX(radians(-90.0));
     scene.addNode(planeNode);
 
-    GLTFMesh cubeMesh = new GLTFMesh.quad(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
-      ..primitives[0].material = material;
-    GLTFNode cubeNode = new GLTFNode()
-      ..mesh = cubeMesh
+    QuadGLTFNode cubeNode = new QuadGLTFNode()
+      ..material = material
       ..name = 'cube'
       ..matrix.translate(0.0, 1.0, 2.0)
       ..matrix.scale(1.0);
     scene.addNode(cubeNode);
 
-    GLTFMesh meshPyramid = new GLTFMesh.pyramid(meshPrimitiveInfos : new MeshPrimitiveInfos(useNormals: false))
-      ..primitives[0].material = material;
-    GLTFNode nodePyramid = new GLTFNode()
-      ..mesh = meshPyramid
+    PyramidGLTFNode nodePyramid = new PyramidGLTFNode()
+      ..material = material
       ..name = 'pyramid'
       ..matrix.translate(7.0, 1.0, 0.0);
     scene.addNode(nodePyramid);

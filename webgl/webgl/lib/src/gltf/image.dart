@@ -4,7 +4,7 @@ import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFImage extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int sourceId = nextId++;

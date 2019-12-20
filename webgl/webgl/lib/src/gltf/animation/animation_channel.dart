@@ -3,7 +3,7 @@ import 'package:webgl/src/gltf/animation/animation_sampler.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
 ///A channel can be imagined as connecting a "source" [sampler] of the animation data to a [target] node.
-@reflector
+//@reflector
 class GLTFAnimationChannel {
   static int nextId = 0;
   final int channelId = nextId++;

@@ -36,7 +36,7 @@ import 'dart:async';
 import 'package:webgl/src/gltf/pbr_material.dart';
 
 /// Cette classe est utilisée lors du chargement d'un fichier .gltf
-@reflector
+//@reflector
 class GLTFLoadProject extends GLTFProject{
 
   glTF.Gltf _gltfSource;

@@ -6,7 +6,7 @@ import 'package:webgl/src/gltf/pbr_metallic_roughness.dart';
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFPBRMaterial extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int materialId = nextId++;

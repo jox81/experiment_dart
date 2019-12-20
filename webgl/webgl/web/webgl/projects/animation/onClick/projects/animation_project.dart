@@ -71,13 +71,13 @@ class AnimationProject extends GLTFProject {
 
     //> materials
 
-    nodeCube = new GLTFNode.cube()
+    nodeCube = new CubeGLTFNode()
       ..material = new MaterialBaseColor(new Vector4(0.0, 0.0, 1.0, 1.0))
       ..name = 'cube'
       ..translation = new Vector3(0.0, 0.0, 0.0);
     scene.addNode(nodeCube);
 
-    nodeCube2 = new GLTFNode.cube()
+    nodeCube2 = new CubeGLTFNode()
       ..material = new MaterialBaseColor(new Vector4(1.0, 1.0, 0.0, 1.0))
       ..name = 'cube2'
       ..translation = new Vector3(0.0, 0.0, 3.0);
@@ -106,8 +106,8 @@ class AnimationProject extends GLTFProject {
     });
   }
 
-  GLTFNode nodeCube;
-  GLTFNode nodeCube2;
+  CubeGLTFNode nodeCube;
+  CubeGLTFNode nodeCube2;
 
   bool isPlaying = false;
 

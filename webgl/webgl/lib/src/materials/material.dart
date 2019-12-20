@@ -12,7 +12,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_uniform_location.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_shader.dart';
 
-@reflector
+//@reflector
 abstract class Material {
   String name;
 

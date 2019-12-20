@@ -14,7 +14,7 @@ typedef void SetShaderVariables(
     Vector3 cameraPosition,
     DirectionalLight directionalLight);
 
-@reflector
+//@reflector
 class MaterialCustom extends Material {
 
   final String vShader;

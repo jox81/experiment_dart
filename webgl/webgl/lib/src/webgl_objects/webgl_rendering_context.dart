@@ -16,7 +16,7 @@ import 'package:webgl/src/webgl_objects/webgl_parameters.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_renderbuffer.dart';
 
-@reflector
+//@reflector
 class WebGLRenderingContext{
 
   WebGL.RenderingContext gl;
@@ -48,7 +48,7 @@ class WebGLRenderingContext{
   }
 
   //Todo add default parameters
-  factory WebGLRenderingContext.create(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false, bool preserveDrawingBuffer:true}){
+  factory WebGLRenderingContext.create(CanvasElement canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false, bool preserveDrawingBuffer:false}){
     WebGL.RenderingContext gl;
 
     List<String> names = [

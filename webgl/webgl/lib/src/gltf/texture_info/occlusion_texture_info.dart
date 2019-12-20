@@ -2,7 +2,7 @@ import 'package:webgl/src/gltf/texture.dart';
 import 'package:webgl/src/gltf/texture_info/texture_info.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFOcclusionTextureInfo extends GLTFTextureInfo {
   double strength;
 

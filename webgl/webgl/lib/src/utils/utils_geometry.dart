@@ -49,10 +49,8 @@ class UtilsGeometry{
       pickX = i * GL.width;
       UtilsGeometry.unProjectScreenPoint(camera, pickWorld, pickX, pickY, pickZ:pickZ);
 
-      GLTFMesh meshPoint = new GLTFMesh.point()
-        ..primitives[0].material = new MaterialPoint(pointSize:5.0, color: new Vector4(1.0, 0.0, 0.0,1.0));
-      GLTFNode nodePoint = new GLTFNode()
-        ..mesh = meshPoint
+      PointGLTFNode nodePoint = new PointGLTFNode()
+        ..material = new MaterialPoint(pointSize:5.0, color: new Vector4(1.0, 0.0, 0.0,1.0))
         ..translation = pickWorld;
 
       resultPoints.add(nodePoint);
@@ -80,11 +78,8 @@ class UtilsGeometry{
     List<Vector3> vertices = [triangle.point0, triangle.point1, triangle.point2];
 
     for(Vector3 vertex in vertices){
-
-      GLTFMesh meshPoint = new GLTFMesh.point()
-        ..primitives[0].material = material;
-      GLTFNode nodePoint = new GLTFNode()
-        ..mesh = meshPoint
+      PointGLTFNode nodePoint = new PointGLTFNode()
+        ..material = material
         ..translation = vertex;
 
       resultPoints.add(nodePoint);
@@ -110,10 +105,8 @@ class UtilsGeometry{
       double distance = ray.intersectsWithTriangle(triangle);
 
       if(distance != null) {
-        GLTFMesh meshPoint = new GLTFMesh.point()
-          ..primitives[0].material = material;
-        GLTFNode nodePoint = new GLTFNode()
-          ..mesh = meshPoint
+        PointGLTFNode nodePoint = new PointGLTFNode()
+          ..material = material
           ..translation = ray.at(distance);
 
         resultPoints.add(nodePoint);

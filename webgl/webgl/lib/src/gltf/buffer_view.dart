@@ -14,7 +14,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 ///
 /// [usage] define the bufferType : ARRAY_BUFFER | ELEMENT_ARRAY_BUFFER
 ///
-@reflector
+//@reflector
 class GLTFBufferView extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int bufferViewId = nextId++;

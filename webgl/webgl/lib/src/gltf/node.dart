@@ -5,6 +5,7 @@ import 'package:vector_math/vector_math.dart';
 import 'package:webgl/materials.dart';
 import 'package:webgl/src/gltf/engine/gltf_engine.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
+import 'package:webgl/src/gltf/nodes/quad.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/gltf/skin.dart';
 import 'package:webgl/src/gltf/camera/camera.dart';
@@ -15,7 +16,17 @@ import 'package:webgl/src/materials/types/base_texture_material.dart';
 import 'package:webgl/src/textures/text_style.dart';
 import 'package:webgl/src/textures/text_texture.dart';
 
-@reflector
+export 'package:webgl/src/gltf/nodes/line.dart';
+export 'package:webgl/src/gltf/nodes/cube.dart';
+export 'package:webgl/src/gltf/nodes/sphere.dart';
+export 'package:webgl/src/gltf/nodes/quad.dart';
+export 'package:webgl/src/gltf/nodes/triangle.dart';
+export 'package:webgl/src/gltf/nodes/pyramid.dart';
+export 'package:webgl/src/gltf/nodes/vector.dart';
+export 'package:webgl/src/gltf/nodes/point.dart';
+export 'package:webgl/src/gltf/nodes/grid.dart';
+
+//@reflector
 class GLTFNode extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int nodeId = nextId++;
@@ -84,61 +95,11 @@ class GLTFNode extends GLTFChildOfRootProperty {
 
   GLTFNode._withMesh(GLTFMesh newMesh, {String name: ''}) : this(name:name, mesh:newMesh);
 
-  factory GLTFNode.point({String name: ''}){
-    GLTFNode result = new GLTFNode._withMesh(new GLTFMesh.point())
-      ..material =  new MaterialPoint(pointSize:10.0, color:new Vector4(1.0, 1.0, 0.0, 1.0));
-    return result;
-  }
-  GLTFNode.line(List<Vector3> points, {String name: ''})
-      : this._withMesh(
-            new GLTFMesh.line(points),
-            name: name);
-
-  GLTFNode.triangle({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.triangle(),
-            name: name);
-
-  GLTFNode.quad({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.quad(),
-            name: name);
-
-  GLTFNode.pyramid({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.pyramid(),
-            name: name);
-
-  GLTFNode.cube({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.cube(),
-            name: name);
-
-  GLTFNode.sphere({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.sphere(radius: 1.0, segmentV: 32, segmentH: 32),
-            name: name);
-
   factory GLTFNode.axis({String name: ''}){
     GLTFNode result = new GLTFNode._withMesh(new GLTFMesh.axis())
     ..material = new MaterialBaseVertexColor();
     return result;
   }
-
-  GLTFNode.axisPoint({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.axisPoint(),
-            name: name);
-
-  GLTFNode.grid({String name: ''})
-      : this._withMesh(
-            new GLTFMesh.grid(),
-            name: name);
-
-  GLTFNode.vector(Vector3 vector3, {String name: ''})
-      : this._withMesh(
-            new GLTFMesh.vector(vector3),
-            name: name);
 
   factory GLTFNode.label(String text, int width, int height, TextStyle textStyle, {String name: ''}){
     //> create label texture
@@ -150,7 +111,7 @@ class GLTFNode extends GLTFChildOfRootProperty {
     MaterialBaseTexture rectangleTextureMaterial = new MaterialBaseTexture()
       ..texture = labelTexture;
 
-    GLTFNode nodeQuad = new GLTFNode.quad()
+    QuadGLTFNode nodeQuad = new QuadGLTFNode()
       ..material = rectangleTextureMaterial
 //      ..rotation = new Quaternion.axisAngle(new Vector3(0.0, 0.0, 1.0), radians(180))
       ..scale = new Vector3(labelTexture.width * 0.01 , labelTexture.height * 0.01,1.0);

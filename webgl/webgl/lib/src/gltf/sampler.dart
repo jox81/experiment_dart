@@ -3,7 +3,7 @@ import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-@reflector
+//@reflector
 class GLTFSampler extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int samplerId = nextId++;

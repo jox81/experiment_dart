@@ -11,7 +11,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 ///http://marcinignac.com/blog/pragmatic-pbr-setup-and-gamma/
 ///module explained can be found here : https://github.com/vorg/pragmatic-pbr/tree/master/local_modules
 ///base
-@reflector
+//@reflector
 class MaterialPragmaticPBR extends Material {
   PointLight pointLight;
 

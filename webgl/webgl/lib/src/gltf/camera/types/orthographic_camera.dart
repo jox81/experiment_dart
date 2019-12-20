@@ -6,7 +6,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
-@reflector
+//@reflector
 class GLTFCameraOrthographic extends GLTFCamera{
 
   double _ymag;

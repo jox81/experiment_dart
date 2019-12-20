@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 
-@reflector
+//@reflector
 class MaterialReflection extends Material {
   WebGLTexture skyboxTexture;
 

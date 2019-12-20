@@ -11,7 +11,7 @@ import 'package:webgl/src/gltf/pbr_material.dart';
 /// Represent a part of a mesh
 /// [attributs] associate an Accessor by vertex attribute usage : POSITION | NORMAL | TANGENT | TEXCOORD_ | COLOR_ | JOINTS_ | WEIGHTS_
 /// in gltf file the accessor is define by its Id
-@reflector
+//@reflector
 class GLTFMeshPrimitive extends GltfProperty {
   Map<String, GLTFAccessor> attributes = new Map<String, GLTFAccessor>();
 

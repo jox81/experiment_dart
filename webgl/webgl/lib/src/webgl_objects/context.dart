@@ -10,8 +10,8 @@ WebGL.RenderingContext get gl => _GL?.gl;
 // call this WebglContext ?
 class Context{
   final CanvasElement canvas;
-  Context(this.canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false}){
-    _GL = new WebGLRenderingContext.create(canvas, enableExtensions:enableExtensions, initConstant:initConstant, logInfos:logInfos);
+  Context(this.canvas, {bool enableExtensions:false, bool initConstant : false, bool logInfos : false, bool preserveDrawingBuffer : true}){
+    _GL = new WebGLRenderingContext.create(canvas, enableExtensions:enableExtensions, initConstant:initConstant, logInfos:logInfos, preserveDrawingBuffer:preserveDrawingBuffer);
   }
 
   void clear() {

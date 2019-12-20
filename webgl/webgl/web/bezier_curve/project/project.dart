@@ -28,53 +28,53 @@ class BezierProject extends GLTFProject{
 
     //>
 
-    List<GLTFNode> points = [];
+    List<PointGLTFNode> points = [];
 
-    GLTFNode point1 = new GLTFNode.point(name:'point1')
+    PointGLTFNode point1 = new PointGLTFNode(name:'point1')
       ..translation = new Vector3(0.0, 0.0, 0.0);
     (point1.material as MaterialPoint).color = new Vector4(1.0, 0.0, 0.0, 1.0);
     scene.addNode(point1);
     points.add(point1);
 
-    GLTFNode pointControlAfter1 = new GLTFNode.point(name:'pointControlAfter1')
+    PointGLTFNode pointControlAfter1 = new PointGLTFNode(name:'pointControlAfter1')
       ..translation = new Vector3(0.0, 1.0, 0.0);
     (pointControlAfter1.material as MaterialPoint).color = new Vector4(0.5, 0.5, 0.5, 1.0);
     scene.addNode(pointControlAfter1);
     points.add(pointControlAfter1);
 
-    GLTFNode pointControlBefore2 = new GLTFNode.point(name:'pointControlBefore2')
+    PointGLTFNode pointControlBefore2 = new PointGLTFNode(name:'pointControlBefore2')
       ..translation = new Vector3(1.0, 1.0, 0.0);
     (pointControlBefore2.material as MaterialPoint).color = new Vector4(0.5, 0.5, 0.5, 1.0);
     scene.addNode(pointControlBefore2);
     points.add(pointControlBefore2);
 
-    GLTFNode point2 = new GLTFNode.point(name:'point2')
+    PointGLTFNode point2 = new PointGLTFNode(name:'point2')
       ..translation = new Vector3(1.0, 0.0, 0.0);
     (point2.material as MaterialPoint).color = new Vector4(0.0, 1.0, 0.0, 1.0);
     scene.addNode(point2);
     points.add(point2);
 
-    GLTFNode point3 = new GLTFNode.point(name:'point3')
+    PointGLTFNode point3 = new PointGLTFNode(name:'point3')
       ..translation = new Vector3(0.0, 0.0, 1.0);
     scene.addNode(point3);
     points.add(point3);
 
-    GLTFNode point4 = new GLTFNode.point(name:'point4')
+    PointGLTFNode point4 = new PointGLTFNode(name:'point4')
       ..translation = new Vector3(0.0, 1.0, 1.0);
     scene.addNode(point4);
     points.add(point4);
 
-    GLTFNode point5 = new GLTFNode.point(name:'point5')
+    PointGLTFNode point5 = new PointGLTFNode(name:'point5')
       ..translation = new Vector3(1.0, 1.0, 1.0);
     scene.addNode(point5);
     points.add(point5);
 
-    GLTFNode point6 = new GLTFNode.point(name:'point6')
+    PointGLTFNode point6 = new PointGLTFNode(name:'point6')
       ..translation = new Vector3(1.0, 0.0, 1.0);
     scene.addNode(point6);
     points.add(point6);
 
-    GLTFNode point7 = new GLTFNode.point(name:'point7')
+    PointGLTFNode point7 = new PointGLTFNode(name:'point7')
       ..translation = new Vector3(1.0, -2.0, 1.0);
     scene.addNode(point7);
     points.add(point7);

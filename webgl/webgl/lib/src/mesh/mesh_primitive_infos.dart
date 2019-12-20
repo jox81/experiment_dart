@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class MeshPrimitiveInfos{
   final bool useIndices;
   final bool useNormals;

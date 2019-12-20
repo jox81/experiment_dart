@@ -47,7 +47,7 @@ class WebglTestViewport {
   }
 
   void setupMeshes() {
-    GLTFNode node = new GLTFNode.cube()
+    CubeGLTFNode node = new CubeGLTFNode()
       ..material = new MaterialBaseColor(new Vector4(0.0, 0.0, 1.0, 1.0))
       ..name = 'cube'
       ..translation = new Vector3(0.0, 0.0, 0.0);

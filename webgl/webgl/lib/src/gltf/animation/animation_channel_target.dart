@@ -4,7 +4,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 
 /// The Target of the animation
 /// [path] defines the property to animate on the [node]
-@reflector
+//@reflector
 class GLTFAnimationChannelTarget {
 
   final AnimationChannelTargetPathType path;

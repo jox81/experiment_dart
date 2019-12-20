@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'dart:web_gl' as webgl;
 
-@reflector
+//@reflector
 class KronosPRBMaterial extends Material {
   @override
   ShaderSource get shaderSource => AssetLibrary.shaders.kronosGltfPBRTest;

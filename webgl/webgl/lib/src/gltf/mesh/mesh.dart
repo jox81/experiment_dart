@@ -13,7 +13,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-@reflector
+//@reflector
 class GLTFMesh extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int meshId = nextId++;

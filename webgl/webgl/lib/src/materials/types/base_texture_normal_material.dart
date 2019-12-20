@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_objects/webgl_program.dart';
 import 'package:webgl/src/webgl_objects/webgl_texture.dart';
 import 'package:webgl/src/webgl_objects/context.dart';
 
-@reflector
+//@reflector
 class MaterialBaseTextureNormal extends Material {
   WebGLTexture texture;
   Vector3 ambientColor = new Vector3.all(1.0);

@@ -1,7 +1,7 @@
 import 'package:reflectable/reflectable.dart';
 import 'reflector.dart';
 
-@reflector
+//@reflector
 class FunctionModel{
   final Function function;
   final InstanceMirror instancesMirror;

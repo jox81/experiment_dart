@@ -1,6 +1,6 @@
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class AnimationChannelTargetPathType{
   static const AnimationChannelTargetPathType translation = const AnimationChannelTargetPathType("translation");
   static const AnimationChannelTargetPathType rotation = const AnimationChannelTargetPathType("rotation");

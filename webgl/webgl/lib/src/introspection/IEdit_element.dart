@@ -4,7 +4,7 @@ import 'package:webgl/src/introspection/editable_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'reflector.dart';
 
-@reflector
+//@reflector
 abstract class IEditElement {
   String name;
 

@@ -6,7 +6,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/property/child_of_root_property.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFScene extends GLTFChildOfRootProperty{
   static int nextId = 0;
   final int sceneId = nextId++;
@@ -40,10 +40,8 @@ class GLTFScene extends GLTFChildOfRootProperty{
   }
 
   void createMeshByType(MeshType meshType){
-    GLTFMesh mesh = new GLTFMesh.byMeshType(meshType);
-
     GLTFNode nodeQuad = new GLTFNode()
-      ..mesh = mesh
+      ..mesh = new GLTFMesh.byMeshType(meshType)
       ..matrix.translate(0.0, 0.0, 0.0);
     addNode(nodeQuad);
   }

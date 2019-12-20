@@ -5,8 +5,8 @@ analyzer:
   exclude:
     - web/**/*.reflectable.dart
     - test/**/*.reflectable.dart
-#linter:
-#  rules:
+linter:
+  rules:
 #    - always_declare_return_types
 #    - always_put_control_body_on_new_line
 #    - always_put_required_named_parameters_first
@@ -30,7 +30,7 @@ analyzer:
 #    - avoid_slow_async_io
 ##    - avoid_types_on_closure_parameters
 #    - avoid_unused_constructor_parameters
-#    - await_only_futures
+    - await_only_futures
 #    - camel_case_types
 #    - cancel_subscriptions
 #    - cascade_invocations
@@ -93,7 +93,7 @@ analyzer:
 #    - throw_in_finally
 #    - type_annotate_public_apis
 #    - type_init_formals
-#    - unawaited_futures
+    - unawaited_futures
 #    - unnecessary_brace_in_string_interps
 #    - unnecessary_getters_setters
 #    - unnecessary_lambdas

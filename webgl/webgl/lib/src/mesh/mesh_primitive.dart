@@ -14,7 +14,7 @@ import 'package:webgl/src/mesh/types/vector_mesh_primitive.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 
-@reflector
+//@reflector
 class MeshPrimitive {
 
   /// DrawMode mode

@@ -7,7 +7,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 
 // Todo (jpu) : add Gizmo
-@reflector
+//@reflector
 abstract class GLTFCamera extends GLTFNode with Camera{
   static int nextId = 0;
   final int cameraId = nextId++;

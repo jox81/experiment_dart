@@ -19,7 +19,7 @@ import 'package:webgl/src/gltf/node.dart';
 import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/webgl.dart';
 
-@reflector
+//@reflector
 class GLTFRenderer extends Renderer {
   GLTFProject _gltfProject;
 

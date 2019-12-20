@@ -3,7 +3,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 
 //>
 // Todo (jpu) :
-@reflector
+//@reflector
 class GLTFSkin extends GLTFChildOfRootProperty{
   GLTFSkin([String name]):super(name);
 }

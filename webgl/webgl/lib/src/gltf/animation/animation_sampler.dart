@@ -5,7 +5,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 /// [input] accessor defines the timing
 /// [output] accessor defines the values corresponding to the timings
 /// [interpolation] type of easer to use. // Todo (jpu) : Should this be replaced by an enum ?
-@reflector
+//@reflector
 class GLTFAnimationSampler {
   static int nextId = 0;
   final int samplerId = nextId++;

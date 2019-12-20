@@ -94,7 +94,7 @@ const Map<String, int> ACCESSOR_COMPONENT_LENGTHS = const <String, int>{
 ///  stride => 3 * 4 = 12 (VEC3(3 item) * FLOAT 5126 (4 bytes))
 /// Accessor :
 ///   componentType VEC3(3 item) * FLOAT 5126 (4 bytes) * count(2012) = 3 * 4 * 2012 = 24.144 bytes
-@reflector
+//@reflector
 class GLTFAccessor extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int accessorId = nextId++;

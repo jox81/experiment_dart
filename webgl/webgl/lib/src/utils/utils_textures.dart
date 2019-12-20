@@ -307,11 +307,8 @@ class TextureUtils {
       gl.clear(
           ClearBufferMask.COLOR_BUFFER_BIT | ClearBufferMask.DEPTH_BUFFER_BIT);
 
-      GLTFMesh meshQuad = new GLTFMesh.quad()
-        ..name = 'ground'
-        ..primitives[0].material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0));
-      GLTFNode nodeQuad = new GLTFNode()
-        ..mesh = meshQuad
+      QuadGLTFNode nodeQuad = new QuadGLTFNode(name: 'ground')
+        ..material = new MaterialBaseColor(new Vector4(0.0, 0.5, 1.0, 1.0))
         ..translation = new Vector3(0.0, 0.0, -50.0)
         ..matrix.scale(10.0, 1.0, 100.0)
         ..matrix.rotateX(radians(90.0));
@@ -319,10 +316,7 @@ class TextureUtils {
 
       //cubes
       for (int i = 0; i < 20; i++) {
-
-        GLTFMesh meshCube = new GLTFMesh.cube();
-        GLTFNode nodeCube = new GLTFNode()
-          ..mesh = meshCube
+        CubeGLTFNode nodeCube = new CubeGLTFNode()
           ..translation = new Vector3(0.0, 0.0, -4.0 * i.toDouble());
         models.add(nodeCube);
       }

@@ -9,7 +9,7 @@ import 'package:webgl/src/webgl_objects/context.dart';
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/src/utils/utils_math.dart';
 
-@reflector
+//@reflector
 class GLTFCameraPerspective extends GLTFCamera{
   double _aspectRatio = 0.1;
   double get aspectRatio => _aspectRatio;

@@ -15,6 +15,7 @@ import 'package:webgl/src/gltf/asset.dart';
 import 'package:webgl/src/gltf/buffer.dart';
 import 'package:webgl/src/gltf/buffer_view.dart';
 import 'package:webgl/src/gltf/debug_gltf.dart';
+import 'package:webgl/src/gltf/interaction/node_interactionnable.dart';
 import 'package:webgl/src/gltf/pbr_material.dart';
 import 'package:webgl/src/gltf/image.dart';
 import 'package:webgl/src/gltf/mesh/mesh.dart';
@@ -26,6 +27,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 import 'package:webgl/lights.dart';
 import 'package:webgl/src/project/project.dart';
 import 'package:webgl/src/gltf/project/gltf_load_project.dart';
+import 'package:webgl/src/utils/utils_geometry.dart';
 
 // Todo (jpu) : synchronize id's list cohérent?
 // Todo (jpu) : Ajouter des méthodes de Link reférénce ?
@@ -36,7 +38,7 @@ import 'package:webgl/src/gltf/project/gltf_load_project.dart';
 // Todo (jpu) : Acccessor getElement test ?
 // 16/10/2017 : reading .bin files as Uint8List
 
-@reflector
+//@reflector
 class GLTFProject extends Project{
 
   GLTFProjectDebugger _projectDebugger;
@@ -61,6 +63,16 @@ class GLTFProject extends Project{
 
   GLTFProject({bool doReset: true}){
     reset();
+
+    NodeInteractionnable nodeInteractionnable = new NodeInteractionnable();
+    addInteractable(nodeInteractionnable);
+    canvas.onMouseDown.listen((MouseEvent event){
+      GLTFNode node = UtilsGeometry.findNodeFromMouseCoords(mainCamera, event.client.x, event.client.y, nodes);
+      if(node != null) {
+        nodeInteractionnable.node = node;
+        node.onClickController.add(event);
+      }
+    });
   }
   
   factory GLTFProject.create() = GLTFLoadProject;

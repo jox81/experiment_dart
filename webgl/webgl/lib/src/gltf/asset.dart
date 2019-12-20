@@ -2,7 +2,7 @@ import 'dart:html';
 
 import 'package:webgl/src/introspection/introspection.dart';
 
-@reflector
+//@reflector
 class GLTFAsset{
   String version;
 

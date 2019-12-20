@@ -2,7 +2,7 @@ import 'dart:web_gl' as WebGL;
 import 'package:webgl/src/introspection/introspection.dart';
 import 'package:reflectable/reflectable.dart';
 
-@reflector
+//@reflector
 abstract class WebGLEnum {
   final int _index;
   final String _name;
@@ -58,7 +58,7 @@ abstract class WebGLEnum {
 
 //WebGLRenderingContext
 
-@reflector
+//@reflector
 class EnableCapabilityType extends WebGLEnum {
   const EnableCapabilityType(int index, String name) : super(index, name);
 
@@ -90,7 +90,7 @@ class EnableCapabilityType extends WebGLEnum {
       WebGL.WebGL.STENCIL_TEST, 'STENCIL_TEST');
 }
 
-@reflector
+//@reflector
 class FacingType extends WebGLEnum {
   const FacingType(int index, String name) : super(index, name);
   static FacingType getByIndex(int index) =>
@@ -107,7 +107,7 @@ class FacingType extends WebGLEnum {
       const FacingType(WebGL.WebGL.FRONT_AND_BACK, 'FRONT_AND_BACK');
 }
 
-@reflector
+//@reflector
 class ClearBufferMask extends WebGLEnum {
   const ClearBufferMask(int index, String name) : super(index, name);
   static ClearBufferMask getByIndex(int index) =>
@@ -121,7 +121,7 @@ class ClearBufferMask extends WebGLEnum {
       WebGL.WebGL.COLOR_BUFFER_BIT, 'COLOR_BUFFER_BIT');
 }
 
-@reflector
+//@reflector
 class FrontFaceDirection extends WebGLEnum {
   const FrontFaceDirection(int index, String name) : super(index, name);
   static FrontFaceDirection getByIndex(int index) =>
@@ -134,7 +134,7 @@ class FrontFaceDirection extends WebGLEnum {
       const FrontFaceDirection(WebGL.WebGL.CCW, 'CCW');
 }
 
-@reflector
+//@reflector
 class PixelStorgeType extends WebGLEnum {
   const PixelStorgeType(int index, String name) : super(index, name);
   static PixelStorgeType getByIndex(int index) =>
@@ -156,7 +156,7 @@ class PixelStorgeType extends WebGLEnum {
           'UNPACK_COLORSPACE_CONVERSION_WEBGL');
 }
 
-@reflector
+//@reflector
 class DrawMode extends WebGLEnum {
   const DrawMode(int index, String name) : super(index, name);
   static DrawMode getByIndex(int index) =>
@@ -178,7 +178,7 @@ class DrawMode extends WebGLEnum {
       const DrawMode(WebGL.WebGL.TRIANGLES, 'TRIANGLES');
 }
 
-@reflector
+//@reflector
 class BufferElementType extends WebGLEnum {
   const BufferElementType(int index, String name) : super(index, name);
   static BufferElementType getByIndex(int index) =>
@@ -190,7 +190,7 @@ class BufferElementType extends WebGLEnum {
       WebGL.WebGL.UNSIGNED_SHORT, 'UNSIGNED_SHORT');
 }
 
-@reflector
+//@reflector
 class ReadPixelDataFormat extends WebGLEnum {
   const ReadPixelDataFormat(int index, String name) : super(index, name);
   static ReadPixelDataFormat getByIndex(int index) =>
@@ -205,7 +205,7 @@ class ReadPixelDataFormat extends WebGLEnum {
       const ReadPixelDataFormat(WebGL.WebGL.RGBA, 'RGBA');
 }
 
-@reflector
+//@reflector
 class ReadPixelDataType extends WebGLEnum {
   const ReadPixelDataType(int index, String name) : super(index, name);
   static ReadPixelDataType getByIndex(int index) =>
@@ -225,7 +225,7 @@ class ReadPixelDataType extends WebGLEnum {
       const ReadPixelDataType(WebGL.WebGL.FLOAT, 'FLOAT');
 }
 
-@reflector
+//@reflector
 class ComparisonFunction extends WebGLEnum {
   const ComparisonFunction(int index, String name) : super(index, name);
   static ComparisonFunction getByIndex(int index) =>
@@ -250,7 +250,7 @@ class ComparisonFunction extends WebGLEnum {
       const ComparisonFunction(WebGL.WebGL.ALWAYS, 'ALWAYS');
 }
 
-@reflector
+//@reflector
 class ErrorCode extends WebGLEnum {
   const ErrorCode(int index, String name) : super(index, name);
   static ErrorCode getByIndex(int index) =>
@@ -273,7 +273,7 @@ class ErrorCode extends WebGLEnum {
       WebGL.WebGL.CONTEXT_LOST_WEBGL, 'CONTEXT_LOST_WEBGL');
 }
 
-@reflector
+//@reflector
 class HintMode extends WebGLEnum {
   const HintMode(int index, String name) : super(index, name);
   static HintMode getByIndex(int index) =>
@@ -287,7 +287,7 @@ class HintMode extends WebGLEnum {
       const HintMode(WebGL.WebGL.DONT_CARE, 'DONT_CARE');
 }
 
-@reflector
+//@reflector
 class StencilOpMode extends WebGLEnum {
   const StencilOpMode(int index, String name) : super(index, name);
   static StencilOpMode getByIndex(int index) =>
@@ -311,7 +311,7 @@ class StencilOpMode extends WebGLEnum {
       const StencilOpMode(WebGL.WebGL.DECR_WRAP, 'DECR_WRAP');
 }
 
-@reflector
+//@reflector
 class BlendFactorMode extends WebGLEnum {
   const BlendFactorMode(int index, String name) : super(index, name);
   static BlendFactorMode getByIndex(int index) =>
@@ -351,7 +351,7 @@ class BlendFactorMode extends WebGLEnum {
       'ONE_MINUS_CONSTANT_ALPHA');
 }
 
-@reflector
+//@reflector
 class BlendFunctionMode extends WebGLEnum {
   const BlendFunctionMode(int index, String name) : super(index, name);
   static BlendFunctionMode getByIndex(int index) =>
@@ -366,7 +366,7 @@ class BlendFunctionMode extends WebGLEnum {
           'FUNC_REVERSE_SUBTRACT');
 }
 
-@reflector
+//@reflector
 class ContextParameter extends WebGLEnum {
   const ContextParameter(int index, String name) : super(index, name);
   static ContextParameter getByIndex(int index) =>
@@ -581,7 +581,7 @@ class ContextParameter extends WebGLEnum {
 
 //WebGLRenderBuffers
 
-@reflector
+//@reflector
 class RenderBufferParameters extends WebGLEnum {
   const RenderBufferParameters(int index, String name) : super(index, name);
   static RenderBufferParameters getByIndex(int index) =>
@@ -623,7 +623,7 @@ class RenderBufferParameters extends WebGLEnum {
           'RENDERBUFFER_STENCIL_SIZE');
 }
 
-@reflector
+//@reflector
 class RenderBufferTarget extends WebGLEnum {
   const RenderBufferTarget(int index, String name) : super(index, name);
   static RenderBufferTarget getByIndex(int index) =>
@@ -634,7 +634,7 @@ class RenderBufferTarget extends WebGLEnum {
       WebGL.WebGL.RENDERBUFFER, 'RENDERBUFFER');
 }
 
-@reflector
+//@reflector
 class RenderBufferInternalFormatType extends WebGLEnum {
   const RenderBufferInternalFormatType(int index, String name)
       : super(index, name);
@@ -664,7 +664,7 @@ class RenderBufferInternalFormatType extends WebGLEnum {
 
 //WebGLFrameBuffers
 
-@reflector
+//@reflector
 class FrameBufferStatus extends WebGLEnum {
   const FrameBufferStatus(int index, String name) : super(index, name);
   static FrameBufferStatus getByIndex(int index) =>
@@ -689,7 +689,7 @@ class FrameBufferStatus extends WebGLEnum {
           'FRAMEBUFFER_UNSUPPORTED');
 }
 
-@reflector
+//@reflector
 class FrameBufferTarget extends WebGLEnum {
   const FrameBufferTarget(int index, String name) : super(index, name);
   static FrameBufferTarget getByIndex(int index) =>
@@ -699,7 +699,7 @@ class FrameBufferTarget extends WebGLEnum {
       WebGL.WebGL.FRAMEBUFFER, 'FRAMEBUFFER');
 }
 
-@reflector
+//@reflector
 class FrameBufferAttachment extends WebGLEnum {
   const FrameBufferAttachment(int index, String name) : super(index, name);
   static FrameBufferAttachment getByIndex(int index) =>
@@ -717,7 +717,7 @@ class FrameBufferAttachment extends WebGLEnum {
           WebGL.WebGL.STENCIL_ATTACHMENT, 'STENCIL_ATTACHMENT');
 }
 
-@reflector
+//@reflector
 class FrameBufferAttachmentType extends WebGLEnum {
   const FrameBufferAttachmentType(int index, String name) : super(index, name);
   static FrameBufferAttachmentType getByIndex(int index) =>
@@ -734,7 +734,7 @@ class FrameBufferAttachmentType extends WebGLEnum {
       const FrameBufferAttachmentType(WebGL.WebGL.NONE, 'NONE');
 }
 
-@reflector
+//@reflector
 class FrameBufferAttachmentParameters extends WebGLEnum {
   const FrameBufferAttachmentParameters(int index, String name)
       : super(index, name);
@@ -764,7 +764,7 @@ class FrameBufferAttachmentParameters extends WebGLEnum {
           'FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE');
 }
 
-@reflector
+//@reflector
 class TextureAttachmentTarget extends WebGLEnum {
   const TextureAttachmentTarget(int index, String name) : super(index, name);
   static TextureAttachmentTarget getByIndex(int index) =>
@@ -812,7 +812,7 @@ class TextureAttachmentTarget extends WebGLEnum {
 
 //WebGLBuffers
 
-@reflector
+//@reflector
 class BufferType extends WebGLEnum {
   const BufferType(int index, String name) : super(index, name);
   static BufferType getByIndex(int index) =>
@@ -824,7 +824,7 @@ class BufferType extends WebGLEnum {
       WebGL.WebGL.ELEMENT_ARRAY_BUFFER, 'ELEMENT_ARRAY_BUFFER');
 }
 
-@reflector
+//@reflector
 class BufferUsageType extends WebGLEnum {
   const BufferUsageType(int index, String name) : super(index, name);
   static BufferUsageType getByIndex(int index) =>
@@ -838,7 +838,7 @@ class BufferUsageType extends WebGLEnum {
       const BufferUsageType(WebGL.WebGL.STREAM_DRAW, 'STREAM_DRAW');
 }
 
-@reflector
+//@reflector
 class BufferParameters extends WebGLEnum {
   const BufferParameters(int index, String name) : super(index, name);
   static BufferParameters getByIndex(int index) =>
@@ -852,7 +852,7 @@ class BufferParameters extends WebGLEnum {
 
 //WebGLPrograms
 
-@reflector
+//@reflector
 class ProgramParameterGlEnum extends WebGLEnum {
   const ProgramParameterGlEnum(int index, String name) : super(index, name);
   static ProgramParameterGlEnum getByIndex(int index) =>
@@ -879,7 +879,7 @@ class ProgramParameterGlEnum extends WebGLEnum {
           WebGL.WebGL.ACTIVE_UNIFORMS, 'ACTIVE_UNIFORMS');
 }
 
-@reflector
+//@reflector
 class VertexAttribArrayType extends WebGLEnum {
   const VertexAttribArrayType(int index, String name) : super(index, name);
   static VertexAttribArrayType getByIndex(int index) =>
@@ -902,7 +902,7 @@ class VertexAttribArrayType extends WebGLEnum {
 
 //WebGLTextures
 
-@reflector
+//@reflector
 class TextureTarget extends WebGLEnum {
   const TextureTarget(int index, String name) : super(index, name);
   static TextureTarget getByIndex(int index) =>
@@ -914,7 +914,7 @@ class TextureTarget extends WebGLEnum {
       WebGL.WebGL.TEXTURE_CUBE_MAP, 'TEXTURE_CUBE_MAP');
 }
 
-@reflector
+//@reflector
 class TextureUnit extends WebGLEnum {
   const TextureUnit(int index, String name) : super(index, name);
   static TextureUnit getByIndex(int index) =>
@@ -986,7 +986,7 @@ class TextureUnit extends WebGLEnum {
       const TextureUnit(WebGL.WebGL.TEXTURE31, 'TEXTURE31');
 }
 
-@reflector
+//@reflector
 class TextureParameter extends WebGLEnum {
   const TextureParameter(int index, String name) : super(index, name);
   static TextureParameter getByIndex(int index) =>
@@ -1002,12 +1002,12 @@ class TextureParameter extends WebGLEnum {
       WebGL.WebGL.TEXTURE_WRAP_T, 'TEXTURE_WRAP_T');
 }
 
-@reflector
+//@reflector
 abstract class TextureSetParameterType extends WebGLEnum {
   const TextureSetParameterType(int index, String name) : super(index, name);
 }
 
-@reflector
+//@reflector
 class TextureFilterType extends TextureSetParameterType {
   const TextureFilterType(int index, String name) : super(index, name);
 
@@ -1031,7 +1031,7 @@ class TextureFilterType extends TextureSetParameterType {
       WebGL.WebGL.LINEAR_MIPMAP_LINEAR, 'LINEAR_MIPMAP_LINEAR');
 }
 
-@reflector
+//@reflector
 class TextureMagnificationFilterType extends TextureFilterType {
   const TextureMagnificationFilterType(int index, String name)
       : super(index, name);
@@ -1047,7 +1047,7 @@ class TextureMagnificationFilterType extends TextureFilterType {
           WebGL.WebGL.NEAREST, 'NEAREST');
 }
 
-@reflector
+//@reflector
 class TextureMinificationFilterType extends TextureFilterType {
   const TextureMinificationFilterType(int index, String name)
       : super(index, name);
@@ -1078,7 +1078,7 @@ class TextureMinificationFilterType extends TextureFilterType {
           WebGL.WebGL.LINEAR_MIPMAP_LINEAR, 'LINEAR_MIPMAP_LINEAR');
 }
 
-@reflector
+//@reflector
 class TextureWrapType extends TextureSetParameterType {
   const TextureWrapType(int index, String name) : super(index, name);
   static TextureWrapType getByIndex(int index) =>
@@ -1092,7 +1092,7 @@ class TextureWrapType extends TextureSetParameterType {
       WebGL.WebGL.MIRRORED_REPEAT, 'MIRRORED_REPEAT');
 }
 
-@reflector
+//@reflector
 class TextureInternalFormat extends WebGLEnum {
   const TextureInternalFormat(int index, String name) : super(index, name);
   static TextureInternalFormat getByIndex(int index) =>
@@ -1112,7 +1112,7 @@ class TextureInternalFormat extends WebGLEnum {
           WebGL.WebGL.LUMINANCE_ALPHA, 'LUMINANCE_ALPHA');
 }
 
-@reflector
+//@reflector
 class TexelDataType extends WebGLEnum {
   const TexelDataType(int index, String name) : super(index, name);
   static TexelDataType getByIndex(int index) =>
@@ -1130,7 +1130,7 @@ class TexelDataType extends WebGLEnum {
 
 //WebGLShaders
 
-@reflector
+//@reflector
 class ShaderVariableType extends WebGLEnum {
   const ShaderVariableType(int index, String name) : super(index, name);
   static ShaderVariableType getByIndex(int index) =>
@@ -1210,7 +1210,7 @@ class ShaderVariableType extends WebGLEnum {
       const ShaderVariableType(WebGL.WebGL.FLOAT, 'FLOAT');
 }
 
-@reflector
+//@reflector
 class PrecisionType extends WebGLEnum {
   const PrecisionType(int index, String name) : super(index, name);
   static PrecisionType getByIndex(int index) =>
@@ -1230,7 +1230,7 @@ class PrecisionType extends WebGLEnum {
       const PrecisionType(WebGL.WebGL.HIGH_FLOAT, 'HIGH_FLOAT');
 }
 
-@reflector
+//@reflector
 class ShaderType extends WebGLEnum {
   const ShaderType(int index, String name) : super(index, name);
   static ShaderType getByIndex(int index) =>
@@ -1242,7 +1242,7 @@ class ShaderType extends WebGLEnum {
       const ShaderType(WebGL.WebGL.VERTEX_SHADER, 'VERTEX_SHADER');
 }
 
-@reflector
+//@reflector
 class ShaderParameters extends WebGLEnum {
   const ShaderParameters(int index, String name) : super(index, name);
   static ShaderParameters getByIndex(int index) =>
@@ -1256,7 +1256,7 @@ class ShaderParameters extends WebGLEnum {
       const ShaderParameters(WebGL.WebGL.SHADER_TYPE, 'SHADER_TYPE');
 }
 
-@reflector
+//@reflector
 class VertexAttribGlEnum extends WebGLEnum {
   const VertexAttribGlEnum(int index, String name) : super(index, name);
   static VertexAttribGlEnum getByIndex(int index) =>

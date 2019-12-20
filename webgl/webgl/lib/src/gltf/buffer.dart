@@ -7,7 +7,7 @@ import 'package:webgl/src/introspection/introspection.dart';
 ///
 /// [byteLength] defines the length of the bytes used
 ///
-@reflector
+//@reflector
 class GLTFBuffer extends GLTFChildOfRootProperty {
   static int nextId = 0;
   final int bufferId = nextId++;
