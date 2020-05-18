@@ -61,6 +61,8 @@ class ProjectLauncher{
       elementFPSText.text = "${value.toStringAsFixed(2)} fps";
     });
 
+    project.debug(doProjectLog:  true, isDebug: true);
+
     await engine.init(project);
 
     loaderWidget.hide();

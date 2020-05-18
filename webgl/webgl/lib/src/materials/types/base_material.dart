@@ -26,8 +26,9 @@ class MaterialBase extends Material {
         modelMatrix.storage);
     setUniform(program, "u_ViewMatrix", ShaderVariableType.FLOAT_MAT4,
         viewMatrix.storage);
+    Matrix4 u_ModelViewMatrix = (viewMatrix * modelMatrix) as Matrix4;
     setUniform(program, "u_ModelViewMatrix", ShaderVariableType.FLOAT_MAT4,
-        ((viewMatrix * modelMatrix) as Matrix4).storage);
+        u_ModelViewMatrix.storage);
     setUniform(program, "u_ProjectionMatrix", ShaderVariableType.FLOAT_MAT4,
         projectionMatrix.storage);
   }

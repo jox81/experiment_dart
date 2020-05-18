@@ -1,6 +1,7 @@
 precision mediump float;
 
 attribute vec3 a_Position;
+
 #ifdef HAS_NORMALS
 attribute vec4 a_Normal;
 #endif
@@ -22,7 +23,12 @@ varying vec2 v_UV;
 #endif
 
 void main(void) {
+
+    #ifdef USE_FLAT_POSITION
+    gl_Position = vec4(a_Position, 1.0);
+    #else
     gl_Position = u_ProjectionMatrix * u_ViewMatrix * u_ModelMatrix * vec4(a_Position, 1.0);
+    #endif
 
     v_Position = a_Position;
 

@@ -202,8 +202,8 @@ class GLTFProject extends Project{
     GLTFAnimationSampler.nextId = 0;
   }
 
-  @override
-  void debug({bool doProjectLog:false, bool isDebug:false}) {}
+//  @override
+//  void debug({bool doProjectLog:false, bool isDebug:false}) {}
 
   Map<String, ImageElement> _data = new Map<String, ImageElement>();
 

@@ -11,7 +11,7 @@ class ProjectFactory{
       await loader.load();
 
       project = loader.result;
-      project.debug(doProjectLog : false, isDebug:false);
+      project.debug(doProjectLog : true, isDebug:true);
     }
     return project;
   }

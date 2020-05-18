@@ -152,9 +152,7 @@ class GLTFLoadProject extends GLTFProject{
         byteOffset: gltfSource.byteOffset,
         byteStride: gltfSource.byteStride,
         usage: gltfSource.usage != null ? gltfSource.usage.target : null,
-        target: gltfSource.usage != null
-            ? gltfSource.usage.target
-            : null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
+        target: gltfSource.usage != null ? gltfSource.usage.target : null, // Todo (jpu) : bug if -1 and usage == null. What to do ?
         name: gltfSource.name);
 
     return bufferView;
@@ -203,9 +201,10 @@ class GLTFLoadProject extends GLTFProject{
 
   GLTFAccessor _getAccessor(glTF.Accessor accessor) {
     int id = _gltfSource.accessors.indexOf(accessor);
-    return accessors.firstWhere((a) => a.accessorId == id,
+    GLTFAccessor result  = accessors.firstWhere((a) => a.accessorId == id,
         orElse: () => throw new Exception(
             'Attribut accessor can only be bound to an existing project accessor'));
+    return result;
   }
 
   GLTFSampler _createSampler(glTF.Sampler gltfSource) {

@@ -23,6 +23,7 @@ class MaterialDebug extends Material {
     Map<String, bool> defines = new Map();
 
     //primitives infos
+    defines['USE_FLAT_POSITION'] = true;
     defines['HAS_COLORS'] = false;
     defines['HAS_NORMALS'] = true;
     defines['HAS_TANGENTS'] = false;
