@@ -1,22 +1,21 @@
 import 'dart:html';
 import 'dart:typed_data';
+
 import 'package:vector_math/vector_math.dart';
+import 'package:webgl/src/camera/camera.dart';
 import 'package:webgl/src/engine/engine.dart';
+import 'package:webgl/src/gltf/accessor/accessor.dart';
 import 'package:webgl/src/gltf/camera/types/perspective_camera.dart';
 import 'package:webgl/src/gltf/mesh/mesh_primitive.dart';
+import 'package:webgl/src/gltf/node.dart';
+import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/src/gltf/utils/utils_texture.dart';
 import 'package:webgl/src/lights/types/directional_light.dart';
 import 'package:webgl/src/renderer/render_state.dart';
 import 'package:webgl/src/renderer/renderer.dart';
-import 'package:webgl/src/introspection/introspection.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
-import 'package:webgl/src/webgl_objects/datas/webgl_enum_wrapped.dart'
-    as GLEnum;
 import 'package:webgl/src/webgl_objects/context.dart';
+import 'package:webgl/src/webgl_objects/datas/webgl_enum.dart';
 import 'package:webgl/src/webgl_objects/webgl_program.dart';
-import 'package:webgl/src/gltf/accessor/accessor.dart';
-import 'package:webgl/src/gltf/node.dart';
-import 'package:webgl/src/gltf/project/project.dart';
 import 'package:webgl/webgl.dart';
 
 //@reflector
@@ -54,10 +53,10 @@ class GLTFRenderer extends Renderer {
 
   set renderingType(RenderingType renderingType) {
     renderState.renderingType = renderingType;
-    if(renderState.renderingType == RenderingType.stereo){
+    if (renderState.renderingType == RenderingType.stereo) {
       // turn on scissor test
       gl.enable(ContextParameter.SCISSOR_TEST);
-    }else{
+    } else {
       gl.disable(ContextParameter.SCISSOR_TEST);
     }
   }
@@ -107,127 +106,193 @@ class GLTFRenderer extends Renderer {
 
     primitive.material.setupBeforeRender();
 
+    Camera camera = Engine.mainCamera;
     Vector3 cameraPosition;
     if (renderState.renderingType == RenderingType.single) {
-      cameraPosition = Engine.mainCamera.translation;
+      cameraPosition = camera.translation;
     } else if (renderState.renderingType == RenderingType.stereo) {
       if (Engine.mainCamera is GLTFCameraPerspective) {
-        GLTFCameraPerspective camera = Engine.mainCamera as GLTFCameraPerspective;
+        GLTFCameraPerspective camera =
+            Engine.mainCamera as GLTFCameraPerspective;
         Vector3 offsetVector = new Vector3.zero();
         cross3(camera.frontDirection, camera.upDirection, offsetVector);
         offsetVector.normalize();
 
         cameraPosition = Engine.mainCamera.translation +
-            offsetVector * renderState.offsetScale * (renderState.isLeft ? 1 : -1);
+            offsetVector *
+                renderState.offsetScale *
+                (renderState.isLeft ? 1 : -1);
 
         int halfWidthSize = (gl.canvas.width * .5).toInt();
         int halfHeightSize = (gl.canvas.height * .5).toInt();
-        gl.scissor(renderState.isLeft ? 0 : halfWidthSize, 0, halfWidthSize, gl.canvas.height);
-        gl.viewport(renderState.isLeft ? 0 : halfWidthSize, (halfHeightSize *.5).toInt(), halfWidthSize, halfHeightSize);
+        gl.scissor(renderState.isLeft ? 0 : halfWidthSize, 0, halfWidthSize,
+            gl.canvas.height);
+        gl.viewport(renderState.isLeft ? 0 : halfWidthSize,
+            (halfHeightSize * .5).toInt(), halfWidthSize, halfHeightSize);
 
         //flip renderSide
         renderState.isLeft = !renderState.isLeft;
       }
     }
 
-    primitive.material.pvMatrix = (Engine.mainCamera.projectionMatrix *
-        Engine.mainCamera.viewMatrix) as Matrix4;
+    primitive.material.pvMatrix = (camera.projectionMatrix *
+        camera.viewMatrix) as Matrix4;
     primitive.material.setUniforms(
         program,
         modelMatrix,
-        Engine.mainCamera.viewMatrix,
-        Engine.mainCamera.projectionMatrix,
+        camera.viewMatrix,
+        camera.projectionMatrix,
         cameraPosition,
         _gltfProject.defaultLight);
 
-    {
-      if (primitive.indicesAccessor == null ||
-          primitive.drawMode == DrawMode.POINTS) {
-        GLTFAccessor positionAccessor = primitive.positionAccessor;
-        if (positionAccessor == null)
-          throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
-        GL.drawArrays(primitive.drawMode, positionAccessor.byteOffset,
-            positionAccessor.count);
-      } else {
-        GLTFAccessor indicesAccessor = primitive.indicesAccessor;
-        GL.drawElements(primitive.drawMode, indicesAccessor.count,
-            indicesAccessor.componentType, 0);
-      }
-
-      bool debugLayer = false;
-      if (debugLayer) _drawLayer(canvas);
-    }
+    rawDraws(primitive);
 
     primitive.material.setupAfterRender();
   }
 
   void _setupPrimitiveBuffers(
       WebGLProgram program, GLTFMeshPrimitive primitive) {
-    _bindVertexArrayData(primitive, program);
-
-    if (primitive.indicesAccessor != null) {
-      _bindIndicesData(primitive, program);
+    this._bindAllVertexArrayData(primitive, program);
+    if (primitive.hasIndice) {
+      this._bindIndicesArrayData(primitive, program);
     }
   }
 
-  void _bindIndicesData(GLTFMeshPrimitive primitive, WebGLProgram program) {
-    String attributName = 'INDICES';
+  void _bindIndicesArrayData(
+      GLTFMeshPrimitive primitive, WebGLProgram program) {
+    IndicesArrayDataInfos bindBufferInfos =
+        this.getIndicesArrayDataInfos(primitive);
+    program.initBindBuffer(bindBufferInfos.attributName, bindBufferInfos.usage,
+        bindBufferInfos.indices);
+  }
 
+  IndicesArrayDataInfos getIndicesArrayDataInfos(GLTFMeshPrimitive primitive) {
     GLTFAccessor accessorIndices = primitive.indicesAccessor;
+
+    String attributName = 'INDICES';
     TypedData indices;
+    int usage = accessorIndices.bufferView.usage;
+
     if (accessorIndices.componentType == 5123 ||
         accessorIndices.componentType == 5121) {
       indices = accessorIndices.bufferView.buffer.data.buffer.asUint16List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
           accessorIndices.count);
     } else if (accessorIndices.componentType == 5125) {
-      if (renderState.hasIndexUIntExtension == null)
-        throw "hasIndexUIntExtension : extension not supported";
+      if (this.renderState.hasIndexUIntExtension == null)
+        throw 'hasIndexUIntExtension : extension not supported';
       indices = accessorIndices.bufferView.buffer.data.buffer.asUint32List(
           accessorIndices.bufferView.byteOffset + accessorIndices.byteOffset,
           accessorIndices.count);
     } else {
-      throw "_bindIndices : componentType not implemented ${GLEnum.VertexAttribArrayType.getByIndex(accessorIndices.componentType)}";
+      throw '_bindIndices : componentType not implemented ${VertexAttribArrayType.getByIndex(
+        accessorIndices.componentType,
+      )}';
     }
 
-    program.initBindBuffer(
-        attributName, accessorIndices.bufferView.usage, indices);
+    IndicesArrayDataInfos result = new IndicesArrayDataInfos();
+    result.attributName = attributName;
+    result.usage = usage;
+    result.indices = indices;
+
+    return result;
   }
 
-  void _bindVertexArrayData(GLTFMeshPrimitive primitive, WebGLProgram program) {
+  void _bindAllVertexArrayData(
+      GLTFMeshPrimitive primitive, WebGLProgram program) {
     for (String attributName in primitive.attributes.keys) {
       GLTFAccessor accessor = primitive.attributes[attributName];
 
-      if (accessor.bufferView == null) throw 'bufferView must be defined';
-      if (accessor.bufferView.buffer == null) throw 'buffer must be defined';
-
-      Float32List verticesInfos = accessor.bufferView.buffer.data.buffer
-          .asFloat32List(
-              accessor.byteOffset + accessor.bufferView.byteOffset,
-              accessor.count *
-                  (accessor.byteStride ~/ accessor.componentLength));
-
-      //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
-      assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
-              accessor.componentLength ==
-          0);
-
-      //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
-      assert(
-          accessor.byteOffset +
-                  accessor.byteStride * (accessor.count - 1) +
-                  (accessor.components * accessor.componentLength) <=
-              accessor.bufferView.byteLength,
-          '${accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + (accessor.components * accessor.componentLength)} <= ${accessor.bufferView.byteLength}');
+      this._checkIfDatasAreCorrects(accessor);
 
       //>
-      program.initBindBuffer(
-          attributName, accessor.bufferView.usage, verticesInfos);
+      VertexArrayDataInfos vertexArrayDataInfos = new VertexArrayDataInfos();
+      vertexArrayDataInfos.attributName = attributName;
+      vertexArrayDataInfos.components = accessor.components; //vertexCoordLength
+      vertexArrayDataInfos.componentType = accessor.componentType;
+      vertexArrayDataInfos.normalized = accessor.normalized;
+      vertexArrayDataInfos.stride = accessor.byteStride;
+      vertexArrayDataInfos.usage = accessor.bufferView.usage;
+      vertexArrayDataInfos.verticesInfos = primitive.getVerticesInfos(accessor);
 
       //>
-      program.setAttribut(attributName, accessor.components,
-          accessor.componentType, accessor.normalized, accessor.byteStride);
+      this.bindSingleVertexArrayData(program, vertexArrayDataInfos);
     }
+  }
+
+  void _checkIfDatasAreCorrects(GLTFAccessor accessor) {
+    if (accessor.bufferView == null) throw 'bufferView must be defined';
+    if (accessor.bufferView.buffer == null) throw 'buffer must be defined';
+    //The offset of an accessor into a bufferView and the offset of an accessor into a buffer must be a multiple of the size of the accessor's component type.
+    assert((accessor.bufferView.byteOffset + accessor.byteOffset) %
+            accessor.componentLength ==
+        0);
+    //Each accessor must fit its bufferView, so next expression must be less than or equal to bufferView.length
+    if (!(accessor.byteOffset +
+            accessor.byteStride * (accessor.count - 1) +
+            accessor.components * accessor.componentLength <=
+        accessor.bufferView.byteLength)) {
+      throw '${accessor.byteOffset + accessor.byteStride * (accessor.count - 1) + accessor.components * accessor.componentLength} <= ${accessor.bufferView.byteLength}';
+    }
+  }
+
+  void bindSingleVertexArrayData(
+      WebGLProgram program, VertexArrayDataInfos vertexArrayDataInfos) {
+    program.initBindBuffer(vertexArrayDataInfos.attributName,
+        vertexArrayDataInfos.usage, vertexArrayDataInfos.verticesInfos);
+    program.setAttribut(
+        vertexArrayDataInfos.attributName,
+        vertexArrayDataInfos.components,
+        vertexArrayDataInfos.componentType,
+        vertexArrayDataInfos.normalized,
+        vertexArrayDataInfos.stride);
+  }
+
+  void rawDraws(GLTFMeshPrimitive primitive) {
+    int drawMode = primitive.drawMode;
+
+    if (!primitive.hasIndice || drawMode == DrawMode.POINTS) {
+      DrawArraysInfos drawArraysInfos = this.getDrawArraysInfos(primitive);
+      GL.drawArrays(drawArraysInfos.drawMode, drawArraysInfos.firstVertexIndex,
+          drawArraysInfos.vertexCount);
+    } else {
+      DrawElementInfos drawElementInfos = this.getDrawElementInfos(primitive);
+      GL.drawElements(
+        drawElementInfos.drawMode,
+        drawElementInfos.count,
+        drawElementInfos.type,
+        drawElementInfos.offset,
+      );
+    }
+
+    bool debugLayer = false;
+    if (debugLayer) _drawLayer(canvas);
+  }
+
+  DrawArraysInfos getDrawArraysInfos(GLTFMeshPrimitive primitive) {
+    GLTFAccessor positionAccessor = primitive.positionAccessor;
+    if (positionAccessor == null) {
+      throw 'Mesh attribut Position accessor must almost have POSITION data defined :)';
+    }
+
+    DrawArraysInfos result = new DrawArraysInfos();
+    result.drawMode = primitive.drawMode;
+    result.firstVertexIndex = positionAccessor.byteOffset;
+    result.vertexCount = positionAccessor.count;
+
+    return result;
+  }
+
+  DrawElementInfos getDrawElementInfos(GLTFMeshPrimitive primitive) {
+    GLTFAccessor indicesAccessor = primitive.indicesAccessor;
+
+    DrawElementInfos result = new DrawElementInfos();
+    result.drawMode = primitive.drawMode;
+    result.count = indicesAccessor.count;
+    result.type = indicesAccessor.componentType;
+    result.offset = 0;
+
+    return result;
   }
 
   ///what is it for ? this show primitives layers drawn
@@ -241,4 +306,33 @@ class GLTFRenderer extends Renderer {
       _countImage++;
     }
   }
+}
+
+class DrawElementInfos {
+  int drawMode;
+  int count;
+  int type;
+  int offset;
+}
+
+class DrawArraysInfos {
+  int drawMode;
+  int firstVertexIndex;
+  int vertexCount;
+}
+
+class VertexArrayDataInfos {
+  String attributName;
+  int usage;
+  int components;
+  int componentType;
+  bool normalized;
+  int stride;
+  Float32List verticesInfos;
+}
+
+class IndicesArrayDataInfos {
+  String attributName;
+  int usage;
+  TypedData indices;
 }

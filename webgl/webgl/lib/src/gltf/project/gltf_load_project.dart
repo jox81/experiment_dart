@@ -393,9 +393,12 @@ class GLTFLoadProject extends GLTFProject{
 
   GLTFNode _getNode(glTF.Node node) {
     int id = _gltfSource.nodes.indexOf(node);
-    return nodes.firstWhere((n) => n.nodeId == id,
+    GLTFNode result =
+     nodes.firstWhere((n) => n.nodeId == id,
         orElse: () => throw new Exception(
             'Node can only be binded to Nodes existing in project'));
+
+    return result;
   }
 
   GLTFScene _createScene(glTF.Scene gltfSource) {
